@@ -1,30 +1,30 @@
-# Plan de Estudio - AWS Certified Developer Associate (DVA-C02)
+# Study Plan - AWS Certified Developer Associate (DVA-C02)
 
-## Progreso General
+## Overall Progress
 
 ```
-[░░░░░░░░░░░░░░░░░░░░] 0/33 secciones | 0/~390 lecciones
-XP Total: 0
+[░░░░░░░░░░░░░░░░░░░░] 0/33 sections | 0/~390 lessons
+Total XP: 0
 ```
 
-> **Nota:** El numero exacto de lecciones por seccion se ira completando a medida que avance en el curso.
-> Las secciones y lecciones estan basadas en el curso de Stephane Maarek en Udemy.
-> Marcar con [x] cada leccion completada e incluir el score del quiz.
+> **Note:** The exact number of lessons per section will be filled in as the course progresses.
+> Sections and lessons are based on Stephane Maarek's Udemy course.
+> Mark each completed lesson with [x] and include the quiz score.
 
 ---
 
-## Seccion 1: Course Introduction
+## Section 1: Course Introduction
 - [ ] 1.1 - Course Introduction
 
-## Seccion 2: Code & Slides Download
+## Section 2: Code & Slides Download
 - [ ] 2.1 - Code & Slides Download
 
-## Seccion 3: Getting Started with AWS
+## Section 3: Getting Started with AWS
 - [ ] 3.1 - AWS Cloud Overview - Regions & AZ
 - [ ] 3.2 - Tour of the Console & Services in AWS
 - [ ] 3.3 - About the UI changes in the course
 
-## Seccion 4: IAM & AWS CLI
+## Section 4: IAM & AWS CLI
 - [ ] 4.1 - IAM Introduction: Users, Groups, Policies
 - [ ] 4.2 - IAM Policies
 - [ ] 4.3 - IAM MFA Overview
@@ -37,7 +37,7 @@ XP Total: 0
 - [ ] 4.10 - IAM Best Practices
 - [ ] 4.11 - IAM Summary
 
-## Seccion 5: EC2 Fundamentals
+## Section 5: EC2 Fundamentals
 - [ ] 5.1 - AWS Budget Setup
 - [ ] 5.2 - EC2 Basics
 - [ ] 5.3 - Create an EC2 Instance with EC2 User Data
@@ -51,7 +51,7 @@ XP Total: 0
 - [ ] 5.11 - EC2 Instance Purchasing Options
 - [ ] 5.12 - EC2 Instance Purchasing Options Hands On
 
-## Seccion 6: EC2 Instance Storage
+## Section 6: EC2 Instance Storage
 - [ ] 6.1 - EBS Overview
 - [ ] 6.2 - EBS Hands On
 - [ ] 6.3 - EBS Snapshots
@@ -66,7 +66,7 @@ XP Total: 0
 - [ ] 6.12 - Amazon EFS Hands On
 - [ ] 6.13 - EBS vs EFS
 
-## Seccion 7: ELB & ASG - Elastic Load Balancing & Auto Scaling Groups
+## Section 7: ELB & ASG - Elastic Load Balancing & Auto Scaling Groups
 - [ ] 7.1 - High Availability and Scalability
 - [ ] 7.2 - Elastic Load Balancing Overview
 - [ ] 7.3 - Classic Load Balancer (CLB)
@@ -84,7 +84,7 @@ XP Total: 0
 - [ ] 7.15 - ASG - Scaling Policies
 - [ ] 7.16 - ASG - Scaling Policies Hands On
 
-## Seccion 8: RDS + Aurora + ElastiCache
+## Section 8: RDS + Aurora + ElastiCache
 - [ ] 8.1 - Amazon RDS Overview
 - [ ] 8.2 - RDS Read Replicas vs Multi AZ
 - [ ] 8.3 - Amazon RDS Hands On
@@ -99,7 +99,7 @@ XP Total: 0
 - [ ] 8.12 - ElastiCache Strategies
 - [ ] 8.13 - Amazon MemoryDB for Redis
 
-## Seccion 9: Route 53
+## Section 9: Route 53
 - [ ] 9.1 - Route 53 Overview
 - [ ] 9.2 - Route 53 - Registering a domain
 - [ ] 9.3 - Route 53 - Record Types
@@ -110,7 +110,7 @@ XP Total: 0
 - [ ] 9.8 - Route 53 - Health Checks
 - [ ] 9.9 - Route 53 - Routing Policies Hands On
 
-## Seccion 10: VPC Fundamentals
+## Section 10: VPC Fundamentals
 - [ ] 10.1 - VPC Overview
 - [ ] 10.2 - VPC, Subnets, IGW and NAT
 - [ ] 10.3 - NACL, SG, VPC Flow Logs
@@ -118,7 +118,7 @@ XP Total: 0
 - [ ] 10.5 - Three Tier Architecture
 - [ ] 10.6 - VPC Cheat Sheet & Closing Comments
 
-## Seccion 11: Amazon S3 Introduction
+## Section 11: Amazon S3 Introduction
 - [ ] 11.1 - S3 Overview
 - [ ] 11.2 - S3 Hands On
 - [ ] 11.3 - S3 Security: Bucket Policy
@@ -132,7 +132,7 @@ XP Total: 0
 - [ ] 11.11 - S3 Storage Classes Overview
 - [ ] 11.12 - S3 Storage Classes Hands On
 
-## Seccion 12: AWS CLI, SDK, IAM Roles & Policies
+## Section 12: AWS CLI, SDK, IAM Roles & Policies
 - [ ] 12.1 - AWS CLI Configurations
 - [ ] 12.2 - AWS CLI on EC2
 - [ ] 12.3 - AWS CLI Practice with S3
@@ -145,7 +145,7 @@ XP Total: 0
 - [ ] 12.10 - AWS Credentials Provider & Chain
 - [ ] 12.11 - AWS Signature v4 Signing
 
-## Seccion 13: Advanced Amazon S3
+## Section 13: Advanced Amazon S3
 - [ ] 13.1 - S3 Lifecycle Rules
 - [ ] 13.2 - S3 Lifecycle Rules Hands On
 - [ ] 13.3 - S3 Event Notifications
@@ -155,7 +155,7 @@ XP Total: 0
 - [ ] 13.7 - S3 Batch Operations
 - [ ] 13.8 - S3 Object Tags & Metadata
 
-## Seccion 14: Amazon S3 Security
+## Section 14: Amazon S3 Security
 - [ ] 14.1 - S3 Encryption
 - [ ] 14.2 - S3 Encryption Hands On
 - [ ] 14.3 - S3 Default Encryption
@@ -169,7 +169,7 @@ XP Total: 0
 - [ ] 14.11 - S3 Access Points
 - [ ] 14.12 - S3 Object Lambda
 
-## Seccion 15: CloudFront
+## Section 15: CloudFront
 - [ ] 15.1 - CloudFront Overview
 - [ ] 15.2 - CloudFront Hands On
 - [ ] 15.3 - CloudFront - Caching & Caching Policies
@@ -182,7 +182,7 @@ XP Total: 0
 - [ ] 15.10 - CloudFront - Advanced Concepts
 - [ ] 15.11 - CloudFront - Real Time Logs
 
-## Seccion 16: ECS, ECR & Fargate - Docker in AWS
+## Section 16: ECS, ECR & Fargate - Docker in AWS
 - [ ] 16.1 - Docker Introduction
 - [ ] 16.2 - Amazon ECS
 - [ ] 16.3 - Creating ECS Cluster Hands On
@@ -194,7 +194,7 @@ XP Total: 0
 - [ ] 16.9 - Amazon EKS Overview
 - [ ] 16.10 - AWS App Runner
 
-## Seccion 17: AWS Elastic Beanstalk
+## Section 17: AWS Elastic Beanstalk
 - [ ] 17.1 - Beanstalk Overview
 - [ ] 17.2 - Beanstalk Hands On
 - [ ] 17.3 - Beanstalk - Deployment Modes
@@ -208,7 +208,7 @@ XP Total: 0
 - [ ] 17.11 - Beanstalk with Docker
 - [ ] 17.12 - Beanstalk Advanced Concepts
 
-## Seccion 18: AWS CloudFormation
+## Section 18: AWS CloudFormation
 - [ ] 18.1 - CloudFormation Overview
 - [ ] 18.2 - CloudFormation Create Stack Hands On
 - [ ] 18.3 - CloudFormation Update & Delete Stack Hands On
@@ -229,7 +229,7 @@ XP Total: 0
 - [ ] 18.18 - CloudFormation - Dynamic References
 - [ ] 18.19 - CloudFormation - StackSets
 
-## Seccion 19: AWS Integration & Messaging: SQS, SNS & Kinesis
+## Section 19: AWS Integration & Messaging: SQS, SNS & Kinesis
 - [ ] 19.1 - Introduction to Messaging
 - [ ] 19.2 - Amazon SQS - Overview
 - [ ] 19.3 - SQS - Standard Queue Hands On
@@ -257,7 +257,7 @@ XP Total: 0
 - [ ] 19.25 - Kinesis Data Firehose Hands On
 - [ ] 19.26 - Data Ordering for Kinesis vs SQS FIFO
 
-## Seccion 20: AWS Monitoring & Audit: CloudWatch, X-Ray and CloudTrail
+## Section 20: AWS Monitoring & Audit: CloudWatch, X-Ray and CloudTrail
 - [ ] 20.1 - CloudWatch Metrics
 - [ ] 20.2 - CloudWatch Custom Metrics
 - [ ] 20.3 - CloudWatch Logs
@@ -278,7 +278,7 @@ XP Total: 0
 - [ ] 20.18 - CloudTrail Hands On
 - [ ] 20.19 - CloudTrail vs CloudWatch vs X-Ray
 
-## Seccion 21: AWS Serverless: Lambda
+## Section 21: AWS Serverless: Lambda
 - [ ] 21.1 - Serverless Introduction
 - [ ] 21.2 - Lambda Overview
 - [ ] 21.3 - Lambda Hands On
@@ -315,7 +315,7 @@ XP Total: 0
 - [ ] 21.34 - Lambda - CodeGuru Integration
 - [ ] 21.35 - Lambda Limits & Best Practices
 
-## Seccion 22: AWS Serverless: DynamoDB
+## Section 22: AWS Serverless: DynamoDB
 - [ ] 22.1 - DynamoDB Overview
 - [ ] 22.2 - DynamoDB Basics Hands On
 - [ ] 22.3 - DynamoDB - WCU & RCU - Throughput
@@ -343,7 +343,7 @@ XP Total: 0
 - [ ] 22.25 - DynamoDB - Operations
 - [ ] 22.26 - DynamoDB - Security & Other
 
-## Seccion 23: AWS Serverless: API Gateway
+## Section 23: AWS Serverless: API Gateway
 - [ ] 23.1 - API Gateway Overview
 - [ ] 23.2 - API Gateway Basics Hands On
 - [ ] 23.3 - API Gateway - Stages and Deployment
@@ -368,7 +368,7 @@ XP Total: 0
 - [ ] 23.22 - API Gateway - Websocket API
 - [ ] 23.23 - API Gateway - Architecture
 
-## Seccion 24: AWS Serverless: SAM - Serverless Application Model
+## Section 24: AWS Serverless: SAM - Serverless Application Model
 - [ ] 24.1 - SAM Overview
 - [ ] 24.2 - SAM - Creating First Project
 - [ ] 24.3 - SAM - Deploying SAM Project
@@ -378,7 +378,7 @@ XP Total: 0
 - [ ] 24.7 - SAM - SAM Local Capabilities
 - [ ] 24.8 - SAM - SAM Section Summary
 
-## Seccion 25: AWS CDK - Cloud Development Kit
+## Section 25: AWS CDK - Cloud Development Kit
 - [ ] 25.1 - CDK Overview
 - [ ] 25.2 - CDK Hands On
 - [ ] 25.3 - CDK - Constructs
@@ -386,7 +386,7 @@ XP Total: 0
 - [ ] 25.5 - CDK - Testing
 - [ ] 25.6 - CDK - Testing Hands On
 
-## Seccion 26: Cognito: User Pools, Identity Pools & Sync
+## Section 26: Cognito: User Pools, Identity Pools & Sync
 - [ ] 26.1 - Cognito Overview
 - [ ] 26.2 - Cognito User Pools
 - [ ] 26.3 - Cognito User Pools Hands On
@@ -394,7 +394,7 @@ XP Total: 0
 - [ ] 26.5 - Cognito Identity Pools
 - [ ] 26.6 - Cognito Identity Pools Hands On
 
-## Seccion 27: Other Serverless: Step Functions & AppSync
+## Section 27: Other Serverless: Step Functions & AppSync
 - [ ] 27.1 - Step Functions Overview
 - [ ] 27.2 - Step Functions Hands On
 - [ ] 27.3 - Step Functions - Error Handling
@@ -405,13 +405,13 @@ XP Total: 0
 - [ ] 27.8 - AppSync Hands On
 - [ ] 27.9 - AWS Amplify
 
-## Seccion 28: Advanced Identity
+## Section 28: Advanced Identity
 - [ ] 28.1 - STS Overview
 - [ ] 28.2 - Advanced IAM
 - [ ] 28.3 - Granting a User Permissions to Pass a Role to an AWS Service
 - [ ] 28.4 - AWS Directory Services
 
-## Seccion 29: AWS Security & Encryption: KMS, SSM Parameter Store, IAM & STS
+## Section 29: AWS Security & Encryption: KMS, SSM Parameter Store, IAM & STS
 - [ ] 29.1 - Encryption 101
 - [ ] 29.2 - KMS Overview
 - [ ] 29.3 - KMS Hands On
@@ -429,7 +429,7 @@ XP Total: 0
 - [ ] 29.15 - CodeBuild Security
 - [ ] 29.16 - Nitro Enclaves
 
-## Seccion 30: AWS Other Services
+## Section 30: AWS Other Services
 - [ ] 30.1 - Other Services Overview
 - [ ] 30.2 - SES
 - [ ] 30.3 - Amazon OpenSearch
@@ -440,7 +440,7 @@ XP Total: 0
 - [ ] 30.8 - AWS AppConfig
 - [ ] 30.9 - CloudWatch Evidently
 
-## Seccion 31: AWS CI/CD: CodeCommit, CodePipeline, CodeBuild, CodeDeploy
+## Section 31: AWS CI/CD: CodeCommit, CodePipeline, CodeBuild, CodeDeploy
 - [ ] 31.1 - CI/CD Introduction
 - [ ] 31.2 - CodeCommit Overview
 - [ ] 31.3 - CodeCommit Hands On
@@ -457,10 +457,10 @@ XP Total: 0
 - [ ] 31.14 - CodeGuru
 - [ ] 31.15 - CodeGuru Hands On
 
-## Seccion 32: Exam Preparation
+## Section 32: Exam Preparation
 - [ ] 32.1 - State of Learning Checkpoint
 - [ ] 32.2 - Exam Tips
 - [ ] 32.3 - Exam Walkthrough
 
-## Seccion 33: Congratulations
+## Section 33: Congratulations
 - [ ] 33.1 - Congratulations!

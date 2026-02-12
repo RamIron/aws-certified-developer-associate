@@ -1,34 +1,34 @@
 # AWS Certified Developer Associate (DVA-C02) - Study Notes
 
-Repositorio de notas de estudio para la certificacion **AWS Certified Developer Associate (DVA-C02)**.
+Study notes repository for the **AWS Certified Developer Associate (DVA-C02)** certification.
 
-## Curso
+## Course
 
 [Ultimate AWS Certified Developer Associate 2026 DVA-C02](https://www.udemy.com/course/aws-certified-developer-associate-dva-c01/) - Stephane Maarek
 
-## Metodologia
+## Methodology
 
-Utilizo **Claude Code** como herramienta de estudio:
+Using **Claude Code** as a study tool:
 
-1. Pego el transcript de cada leccion del curso
-2. Claude desglosa los conceptos clave paso a paso (Modo Wizard)
-3. Quiz interactivo al finalizar cada leccion
-4. Seguimiento automatico de progreso y XP
+1. Paste each lesson's video transcript
+2. Claude breaks down key concepts step by step (Wizard Mode)
+3. Interactive quiz at the end of each lesson
+4. Automatic progress and XP tracking
 
-## Estructura
+## Structure
 
 ```
 .
-├── CLAUDE.md           # Instrucciones para Claude Code
-├── STUDY_PLAN.md       # Plan de estudio con checkboxes de progreso
+├── CLAUDE.md           # Instructions for Claude Code
+├── STUDY_PLAN.md       # Study plan with progress checkboxes
 ├── progress/
-│   └── quiz-results.md # Historial detallado de quizzes y XP
+│   └── quiz-results.md # Detailed quiz history and XP
 └── transcripts/
-    ├── 3-IAM-CLI/      # Seccion 3: IAM & AWS CLI
-    ├── 4-EC2/          # Seccion 4: EC2 Fundamentals
-    └── ...             # Demas secciones
+    ├── 3-IAM-CLI/      # Section 3: IAM & AWS CLI
+    ├── 4-EC2/          # Section 4: EC2 Fundamentals
+    └── ...             # Other sections
 ```
 
-## Progreso
+## Progress
 
-Ver [STUDY_PLAN.md](STUDY_PLAN.md) para el progreso detallado.
+See [STUDY_PLAN.md](STUDY_PLAN.md) for detailed progress.

@@ -1,21 +1,21 @@
-# Resultados de Quizzes - AWS Developer Associate DVA-C02
+# Quiz Results - AWS Developer Associate DVA-C02
 
-## Resumen
+## Summary
 
-| Metrica | Valor |
-|---------|-------|
-| XP Total | 0 |
-| Lecciones completadas | 0 |
-| Quizzes perfectos (100%) | 0 |
-| Lecciones para repasar | 0 |
+| Metric | Value |
+|--------|-------|
+| Total XP | 0 |
+| Lessons completed | 0 |
+| Perfect quizzes (100%) | 0 |
+| Lessons to review | 0 |
 
-## Historial de Sesiones
+## Session History
 
-| Fecha | Seccion | Leccion | XP | Resultado |
-|-------|---------|---------|----|-----------|
+| Date | Section | Lesson | XP | Result |
+|------|---------|--------|----|--------|
 
 ---
 
-## Detalle por Leccion
+## Detail Per Lesson
 
-*(Los resultados detallados de cada quiz se iran agregando aqui a medida que avance en el curso)*
+*(Detailed quiz results will be added here as the course progresses)*
