@@ -4,6 +4,10 @@
 
 Claude can create and modify files and subdirectories in this repository to record study notes, transcripts, and progress.
 
+## Git Commits
+
+- Do NOT include `Co-Authored-By` in commit messages for this repo.
+
 ## Student Profile
 
 - Developer in Uruguay, working for Vairix (offshore services for US clients)
@@ -74,8 +78,8 @@ Indicate the next lesson and wait for the user.
 ## Current State
 
 - **Current section:** Section 3 - Getting Started with AWS
-- **Current section:** Section 4 - IAM & AWS CLI
-- **Current lesson:** 3.3 - About the UI changes in the course (skipped)
-- **Next lesson:** 4.1 - IAM Introduction: Users, Groups, Policies
-- **Total XP:** 100
-- **Lessons completed:** 9
+- **Current section:** Section 5 - EC2 Fundamentals
+- **Current lesson:** 4.20 - IAM Summary (completed)
+- **Next lesson:** 5.1 - AWS Budget Setup
+- **Total XP:** 475
+- **Lessons completed:** 28

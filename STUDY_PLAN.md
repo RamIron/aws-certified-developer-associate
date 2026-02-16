@@ -3,8 +3,8 @@
 ## Overall Progress
 
 ```
-[░░░░░░░░░░░░░░░░░░░░] 1/33 sections | 9/~390 lessons
-Total XP: 100
+[░░░░░░░░░░░░░░░░░░░░] 2/33 sections | 28/~390 lessons
+Total XP: 225
 ```
 
 > **Note:** The exact number of lessons per section will be filled in as the course progresses.
@@ -30,17 +30,26 @@ Total XP: 100
 - [x] 3.3 - About the UI changes in the course (skipped - console UI overview)
 
 ## Section 4: IAM & AWS CLI
-- [ ] 4.1 - IAM Introduction: Users, Groups, Policies
-- [ ] 4.2 - IAM Policies
-- [ ] 4.3 - IAM MFA Overview
-- [ ] 4.4 - AWS Access Keys, CLI and SDK
-- [ ] 4.5 - AWS CLI Setup on Mac/Windows/Linux
-- [ ] 4.6 - AWS CLI Hands On
-- [ ] 4.7 - AWS CloudShell
-- [ ] 4.8 - IAM Roles for AWS Services
-- [ ] 4.9 - IAM Security Tools
-- [ ] 4.10 - IAM Best Practices
-- [ ] 4.11 - IAM Summary
+- [x] 4.1 - IAM Introduction: Users, Groups, Policies (PERFECT 100%)
+- [x] 4.2 - IAM Users & Groups Hands On (skipped - hands-on walkthrough)
+- [x] 4.3 - AWS Console Simultaneous Sign-in (skipped - console feature)
+- [x] 4.4 - IAM Policies (REVIEW 67%)
+- [x] 4.5 - IAM Policies Hands On (skipped - hands-on walkthrough)
+- [x] 4.6 - IAM MFA Overview (PERFECT 100%)
+- [x] 4.7 - IAM MFA Hands On (skipped - hands-on walkthrough)
+- [x] 4.8 - AWS Access Keys, CLI and SDK (PERFECT 100%)
+- [x] 4.9 - AWS CLI Setup on Windows (skipped - not applicable)
+- [x] 4.10 - AWS CLI Setup on Mac (skipped - already installed)
+- [x] 4.11 - AWS CLI Setup on Linux (skipped - not applicable)
+- [x] 4.12 - AWS CLI Hands On (skipped - hands-on walkthrough)
+- [x] 4.13 - AWS CloudShell (skipped - console feature)
+- [x] 4.14 - IAM Roles for AWS Services (PERFECT 100%)
+- [x] 4.15 - IAM Roles Hands On (skipped - hands-on walkthrough)
+- [x] 4.16 - IAM Security Tools (PERFECT 100%)
+- [x] 4.17 - IAM Security Tools Hands On (skipped - hands-on walkthrough)
+- [x] 4.18 - IAM Best Practices (skipped - summary of previous lessons)
+- [x] 4.19 - Shared Responsibility Model for IAM (skipped - CCP focused)
+- [x] 4.20 - IAM Summary (skipped - recap)
 
 ## Section 5: EC2 Fundamentals
 - [ ] 5.1 - AWS Budget Setup
