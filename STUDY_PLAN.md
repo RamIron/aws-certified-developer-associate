@@ -3,8 +3,8 @@
 ## Overall Progress
 
 ```
-[░░░░░░░░░░░░░░░░░░░░] 0/33 sections | 0/~390 lessons
-Total XP: 0
+[░░░░░░░░░░░░░░░░░░░░] 1/33 sections | 9/~390 lessons
+Total XP: 100
 ```
 
 > **Note:** The exact number of lessons per section will be filled in as the course progresses.
@@ -14,15 +14,20 @@ Total XP: 0
 ---
 
 ## Section 1: Course Introduction
-- [ ] 1.1 - Course Introduction
+- [x] 1.1 - Course Introduction (intro - no quiz)
+- [x] 1.2 - Creating an AWS Account (intro - no quiz)
+- [x] 1.3 - Important Message (intro - no quiz)
+- [x] 1.4 - About your instructor (intro - no quiz)
+- [x] 1.5 - Course Tips (intro - no quiz)
+- [x] 1.6 - AWS Account Setup (intro - no quiz)
 
 ## Section 2: Code & Slides Download
 - [ ] 2.1 - Code & Slides Download
 
 ## Section 3: Getting Started with AWS
-- [ ] 3.1 - AWS Cloud Overview - Regions & AZ
-- [ ] 3.2 - Tour of the Console & Services in AWS
-- [ ] 3.3 - About the UI changes in the course
+- [x] 3.1 - AWS Cloud Overview - Regions & AZ (PERFECT 100%)
+- [x] 3.2 - Tour of the Console & Services in AWS (skipped - console UI overview)
+- [x] 3.3 - About the UI changes in the course (skipped - console UI overview)
 
 ## Section 4: IAM & AWS CLI
 - [ ] 4.1 - IAM Introduction: Users, Groups, Policies

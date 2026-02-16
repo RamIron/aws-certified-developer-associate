@@ -4,18 +4,22 @@
 
 | Metric | Value |
 |--------|-------|
-| Total XP | 0 |
-| Lessons completed | 0 |
-| Perfect quizzes (100%) | 0 |
+| Total XP | 100 |
+| Lessons completed | 1 |
+| Perfect quizzes (100%) | 1 |
 | Lessons to review | 0 |
 
 ## Session History
 
 | Date | Section | Lesson | XP | Result |
 |------|---------|--------|----|--------|
+| 2026-02-16 | 3 | 3.1 - AWS Cloud Overview - Regions & AZ | 100 | PERFECT |
 
 ---
 
 ## Detail Per Lesson
 
-*(Detailed quiz results will be added here as the course progresses)*
+### 3.1 - AWS Cloud Overview - Regions & AZ
+- **Score:** 4/4 (100%)
+- **XP:** +100
+- **Status:** PERFECT

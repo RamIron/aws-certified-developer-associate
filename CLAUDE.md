@@ -73,8 +73,9 @@ Indicate the next lesson and wait for the user.
 
 ## Current State
 
-- **Current section:** Not started yet
-- **Current lesson:** None
-- **Next lesson:** Section 1, Lesson 1 (Course Introduction)
-- **Total XP:** 0
-- **Lessons completed:** 0
+- **Current section:** Section 3 - Getting Started with AWS
+- **Current section:** Section 4 - IAM & AWS CLI
+- **Current lesson:** 3.3 - About the UI changes in the course (skipped)
+- **Next lesson:** 4.1 - IAM Introduction: Users, Groups, Policies
+- **Total XP:** 100
+- **Lessons completed:** 9
