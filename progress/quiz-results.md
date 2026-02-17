@@ -4,9 +4,9 @@
 
 | Metric | Value |
 |--------|-------|
-| Total XP | 475 |
-| Lessons completed | 7 |
-| Perfect quizzes (100%) | 6 |
+| Total XP | 825 |
+| Lessons completed | 11 |
+| Perfect quizzes (100%) | 9 |
 | Lessons to review | 1 |
 
 ## Session History
@@ -20,6 +20,10 @@
 | 2026-02-16 | 4 | 4.7 - AWS Access Keys, CLI and SDK | 75 | PERFECT |
 | 2026-02-16 | 4 | 4.14 - IAM Roles for AWS Services | 50 | PERFECT |
 | 2026-02-16 | 4 | 4.16 - IAM Security Tools | 50 | PERFECT |
+| 2026-02-17 | 5 | 5.2 - EC2 Basics | 50 | PERFECT |
+| 2026-02-17 | 5 | 5.4 - EC2 Instance Types Basics | 125 | PERFECT |
+| 2026-02-17 | 5 | 5.5 - Security Groups & Classic Ports | 100 | PERFECT |
+| 2026-02-17 | 5 | 5.14 - EC2 Instance Purchasing Options | 75 | PASSED |
 
 ---
 
@@ -60,3 +64,24 @@
 - **Score:** 2/2 (100%)
 - **XP:** +50
 - **Status:** PERFECT
+
+### 5.2 - EC2 Basics
+- **Score:** 2/2 (100%)
+- **XP:** +50
+- **Status:** PERFECT
+
+### 5.4 - EC2 Instance Types Basics
+- **Score:** 5/5 (100%)
+- **XP:** +125
+- **Status:** PERFECT
+
+### 5.5 - Security Groups & Classic Ports Overview
+- **Score:** 4/4 (100%)
+- **XP:** +100
+- **Status:** PERFECT
+
+### 5.14 - EC2 Instance Purchasing Options
+- **Score:** 3/4 (75%)
+- **XP:** +75
+- **Status:** PASSED
+- **Missed:** Q4 - Capacity Reservations have no discount, they charge on-demand rates

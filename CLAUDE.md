@@ -77,9 +77,8 @@ Indicate the next lesson and wait for the user.
 
 ## Current State
 
-- **Current section:** Section 3 - Getting Started with AWS
 - **Current section:** Section 5 - EC2 Fundamentals
-- **Current lesson:** 4.20 - IAM Summary (completed)
-- **Next lesson:** 5.1 - AWS Budget Setup
-- **Total XP:** 475
+- **Current lesson:** 5.14 - EC2 Instance Purchasing Options (completed)
+- **Next lesson:** Section 6 - EC2 Instance Storage
+- **Total XP:** 825
 - **Lessons completed:** 28

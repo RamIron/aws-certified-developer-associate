@@ -4,7 +4,7 @@
 
 ```
 [░░░░░░░░░░░░░░░░░░░░] 2/33 sections | 28/~390 lessons
-Total XP: 225
+Total XP: 825
 ```
 
 > **Note:** The exact number of lessons per section will be filled in as the course progresses.
@@ -52,18 +52,20 @@ Total XP: 225
 - [x] 4.20 - IAM Summary (skipped - recap)
 
 ## Section 5: EC2 Fundamentals
-- [ ] 5.1 - AWS Budget Setup
-- [ ] 5.2 - EC2 Basics
-- [ ] 5.3 - Create an EC2 Instance with EC2 User Data
-- [ ] 5.4 - EC2 Instance Types Basics
-- [ ] 5.5 - Security Groups & Classic Ports Overview
-- [ ] 5.6 - Security Groups Hands On
-- [ ] 5.7 - SSH Overview
-- [ ] 5.8 - SSH on Mac/Linux
-- [ ] 5.9 - EC2 Instance Connect
-- [ ] 5.10 - EC2 Instance Roles Demo
-- [ ] 5.11 - EC2 Instance Purchasing Options
-- [ ] 5.12 - EC2 Instance Purchasing Options Hands On
+- [x] 5.1 - AWS Budget Setup (skipped - billing walkthrough)
+- [x] 5.2 - EC2 Basics (PERFECT 100%)
+- [x] 5.3 - Create an EC2 Instance with EC2 User Data to have a Website Hands On (skipped - hands-on walkthrough)
+- [x] 5.4 - EC2 Instance Types Basics (PERFECT 100%)
+- [x] 5.5 - Security Groups & Classic Ports Overview (PERFECT 100%)
+- [x] 5.6 - Security Groups Hands On (skipped - hands-on walkthrough)
+- [x] 5.7 - SSH Overview (skipped - already configured)
+- [x] 5.8 - How to SSH using Linux or Mac (skipped - already configured)
+- [x] 5.9 - How to SSH using Windows (skipped - not applicable)
+- [x] 5.10 - How to SSH using Windows 10 (skipped - not applicable)
+- [x] 5.11 - SSH Troubleshooting (skipped - already configured)
+- [x] 5.12 - EC2 Instance Connect (skipped - hands-on walkthrough)
+- [x] 5.13 - EC2 Instance Roles Demo (skipped - hands-on walkthrough)
+- [x] 5.14 - EC2 Instance Purchasing Options (PASSED 75%)
 
 ## Section 6: EC2 Instance Storage
 - [ ] 6.1 - EBS Overview
