@@ -82,23 +82,27 @@ Total XP: 1475
 - [x] 6.12 - EFS vs EBS (PERFECT 100%)
 - [x] 6.13 - EBS & EFS - Section Cleanup (skipped - console cleanup walkthrough)
 
-## Section 7: ELB & ASG - Elastic Load Balancing & Auto Scaling Groups
+## Section 7: AWS Fundamentals: ELB + ASG
 - [ ] 7.1 - High Availability and Scalability
-- [ ] 7.2 - Elastic Load Balancing Overview
-- [ ] 7.3 - Classic Load Balancer (CLB)
+- [ ] 7.2 - Elastic Load Balancing (ELB) Overview
+- [ ] 7.3 - Note: About the Classic Load Balancer (CLB)
 - [ ] 7.4 - Application Load Balancer (ALB)
-- [ ] 7.5 - ALB Hands On
-- [ ] 7.6 - Network Load Balancer (NLB)
-- [ ] 7.7 - NLB Hands On
-- [ ] 7.8 - Gateway Load Balancer (GWLB)
-- [ ] 7.9 - ELB - Sticky Sessions
-- [ ] 7.10 - ELB - Cross Zone Load Balancing
-- [ ] 7.11 - ELB - SSL Certificates
-- [ ] 7.12 - ELB - Connection Draining
-- [ ] 7.13 - Auto Scaling Groups (ASG) Overview
-- [ ] 7.14 - ASG Hands On
-- [ ] 7.15 - ASG - Scaling Policies
-- [ ] 7.16 - ASG - Scaling Policies Hands On
+- [ ] 7.5 - Application Load Balancer (ALB) - Hands On - Part 1
+- [ ] 7.6 - Application Load Balancer (ALB) - Hands On - Part 2
+- [ ] 7.7 - Network Load Balancer (NLB)
+- [ ] 7.8 - Network Load Balancer (NLB) - Hands On
+- [ ] 7.9 - Gateway Load Balancer (GWLB)
+- [ ] 7.10 - Elastic Load Balancer - Sticky Sessions
+- [ ] 7.11 - Elastic Load Balancer - Cross Zone Load Balancing
+- [ ] 7.12 - Elastic Load Balancer - SSL Certificates
+- [ ] 7.13 - Elastic Load Balancer - SSL Certificates - Hands On
+- [ ] 7.14 - Elastic Load Balancer - Connection Draining
+- [ ] 7.15 - Auto Scaling Groups (ASG) Overview
+- [ ] 7.16 - Auto Scaling Groups Hands On
+- [ ] 7.17 - Auto Scaling Groups - Scaling Policies
+- [ ] 7.18 - Auto Scaling Groups - Scaling Policies Hands On
+- [ ] 7.19 - Auto Scaling Groups - Instance Refresh
+- [ ] 7.20 - High Availability & Scalability Quiz
 
 ## Section 8: RDS + Aurora + ElastiCache
 - [ ] 8.1 - Amazon RDS Overview
