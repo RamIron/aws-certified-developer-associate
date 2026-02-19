@@ -79,6 +79,17 @@
 **Boot volumes:** SSD only (gp2, gp3, io1, io2)
 **>16K IOPS:** io1 or io2; **>64K IOPS:** io2 Block Express only; **max IOPS:** requires Nitro EC2
 
+**IOPS ceiling trap — "how high can you go?":**
+
+| Storage Option     | Max IOPS         |
+|--------------------|------------------|
+| gp2 / gp3          | 16,000           |
+| io1                | 64,000           |
+| io2 Block Express  | 256,000          |
+| EC2 Instance Store | Millions (3.3M+) |
+
+> Need **>256,000 IOPS**? → Only **EC2 Instance Store**. io2 Block Express is the top EBS option but still has a hard ceiling.
+
 **gp2 IOPS cap trap:**
 - gp2 IOPS cap = **16,000** (reached at ~5,334 GiB / ~5.2 TB)
 - If your volume is already >5.2 TB, **increasing size will NOT add more IOPS**
