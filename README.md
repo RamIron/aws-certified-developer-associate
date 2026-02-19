@@ -11,6 +11,7 @@ Study notes for AWS DVA-C02, assisted by Claude.
 ```
 
 **Current section:** 7 - AWS Fundamentals: ELB + ASG
+
 **Next section:** 8 - AWS Fundamentals: RDS + Aurora + ElastiCache
 
 ---
