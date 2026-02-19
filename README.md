@@ -1,6 +1,19 @@
-# AWS Certified Developer Associate (DVA-C02) - Study Notes
+# AWS Certified Developer Associate
 
-Study notes repository for the **AWS Certified Developer Associate (DVA-C02)** certification.
+<img src="https://images.credly.com/size/340x340/images/b9feab85-1a43-4f6c-99a5-631b88d5461b/image.png" width="150" alt="AWS Certified Developer Associate">
+
+Study notes for AWS DVA-C02, assisted by Claude.
+
+## 📊 Progress
+
+```
+██░░░░░░░░░░░░░░░░░░░░░░░░░░░░ 7% (29/~390 lessons)
+```
+
+**Current section:** 6 - EC2 Instance Storage (in progress)
+**Next lesson:** 6.9 - EBS Multi-Attach
+
+---
 
 ## Course
 
