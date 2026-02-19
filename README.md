@@ -10,8 +10,8 @@ Study notes for AWS DVA-C02, assisted by Claude.
 ████░░░░░░░░░░░░░░░░░░░░░░░░░░ 12% (60/483 lessons)
 ```
 
-**Current section:** 7 - ELB & ASG (starting)
-**Next lesson:** 7.1 - High Availability and Scalability
+**Current section:** 7 - AWS Fundamentals: ELB + ASG
+**Next section:** 8 - AWS Fundamentals: RDS + Aurora + ElastiCache
 
 ---
 
