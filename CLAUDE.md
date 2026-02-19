@@ -47,6 +47,13 @@ Update `progress/quiz-results.md` and `STUDY_PLAN.md`.
 ### Step 7: Next lesson
 Indicate the next lesson and wait for the user.
 
+### Step 8: Section summary (when a section is fully completed)
+Create a `SECTION-{N}-SUMMARY.md` file inside the section's transcripts folder.
+It should aggregate all lesson notes from that section into a single reference file:
+- List all lessons (completed, skipped)
+- Combine all key concepts, tables, and diagrams
+- Include a consolidated Exam Tips section at the bottom
+
 ## Wizard Mode (Teaching Format)
 
 1. Extract 3-6 key concepts from the lesson
