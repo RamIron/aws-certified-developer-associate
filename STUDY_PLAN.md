@@ -3,7 +3,7 @@
 ## Overall Progress
 
 ```
-[█░░░░░░░░░░░░░░░░░░░] 3/33 sections | 54/483 lessons
+[█░░░░░░░░░░░░░░░░░░░] 3/33 sections | 60/483 lessons
 Total XP: 1475
 ```
 
