@@ -43,6 +43,7 @@ A reference for acronyms and English terms encountered in the course, with Spani
 | NAT     | Network Address Translation              | Traducción de direcciones de red                 |
 | NoSQL   | Not Only SQL                             | No solo SQL                                      |
 | OLTP    | Online Transaction Processing            | Procesamiento de transacciones en línea          |
+| RAID    | Redundant Array of Independent Disks     | Conjunto redundante de discos independientes     |
 | RAM     | Random Access Memory                     | Memoria de acceso aleatorio                      |
 | RDP     | Remote Desktop Protocol                  | Protocolo de escritorio remoto                   |
 | SDK     | Software Development Kit                 | Kit de desarrollo de software                    |

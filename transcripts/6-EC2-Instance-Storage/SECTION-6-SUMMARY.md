@@ -79,6 +79,13 @@
 **Boot volumes:** SSD only (gp2, gp3, io1, io2)
 **>16K IOPS:** io1 or io2; **>64K IOPS:** io2 Block Express only; **max IOPS:** requires Nitro EC2
 
+**gp2 IOPS cap trap:**
+- gp2 IOPS cap = **16,000** (reached at ~5,334 GiB / ~5.2 TB)
+- If your volume is already >5.2 TB, **increasing size will NOT add more IOPS**
+- Solutions when gp2 is maxed: switch to io1/io2, or use **RAID 0**
+
+**RAID 0** — stripes data across multiple EBS volumes, combining their IOPS and throughput. Trade-off: no redundancy (one volume fails = all data lost).
+
 **Volume type decision tree:**
 ```
 Need a BOOT volume?
