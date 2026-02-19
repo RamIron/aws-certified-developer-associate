@@ -17,6 +17,7 @@ A reference for acronyms and English terms encountered in the course, with Spani
 | BYOL    | Bring Your Own License                   | Trae tu propia licencia                          |
 | CIDR    | Classless Inter-Domain Routing           | Enrutamiento entre dominios sin clases           |
 | CLI     | Command Line Interface                   | Interfaz de línea de comandos                    |
+| CMS     | Content Management System                | Sistema de gestión de contenido                  |
 | CPU     | Central Processing Unit                  | Unidad central de procesamiento                  |
 | CSV     | Comma-Separated Values                   | Valores separados por comas                      |
 | DNS     | Domain Name System                       | Sistema de nombres de dominio                    |

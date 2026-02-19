@@ -3,8 +3,8 @@
 ## Overall Progress
 
 ```
-[░░░░░░░░░░░░░░░░░░░░] 2/33 sections | 54/483 lessons
-Total XP: 1250
+[█░░░░░░░░░░░░░░░░░░░] 3/33 sections | 54/483 lessons
+Total XP: 1475
 ```
 
 > **Note:** The exact number of lessons per section will be filled in as the course progresses.
@@ -76,11 +76,11 @@ Total XP: 1250
 - [x] 6.6 - AMI Hands On (skipped - hands-on walkthrough)
 - [x] 6.7 - EC2 Instance Store (PERFECT 100%)
 - [x] 6.8 - EBS Volume Types (PERFECT 100%)
-- [ ] 6.9 - EBS Multi-Attach
-- [ ] 6.10 - Amazon EFS
-- [ ] 6.11 - Amazon EFS - Hands On
-- [ ] 6.12 - EFS vs EBS
-- [ ] 6.13 - EBS & EFS - Section Cleanup
+- [x] 6.9 - EBS Multi-Attach (PERFECT 100%)
+- [x] 6.10 - Amazon EFS (PASSED 75%)
+- [x] 6.11 - Amazon EFS - Hands On (skipped - hands-on walkthrough)
+- [x] 6.12 - EFS vs EBS (PERFECT 100%)
+- [x] 6.13 - EBS & EFS - Section Cleanup (skipped - console cleanup walkthrough)
 
 ## Section 7: ELB & ASG - Elastic Load Balancing & Auto Scaling Groups
 - [ ] 7.1 - High Availability and Scalability

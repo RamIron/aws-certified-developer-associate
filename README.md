@@ -10,8 +10,8 @@ Study notes for AWS DVA-C02, assisted by Claude.
 ███░░░░░░░░░░░░░░░░░░░░░░░░░░░ 11% (54/483 lessons)
 ```
 
-**Current section:** 6 - EC2 Instance Storage (in progress)
-**Next lesson:** 6.9 - EBS Multi-Attach
+**Current section:** 7 - ELB & ASG (starting)
+**Next lesson:** 7.1 - High Availability and Scalability
 
 ---
 

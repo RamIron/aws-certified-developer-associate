@@ -4,10 +4,10 @@
 
 | Metric | Value |
 |--------|-------|
-| Total XP | 1250 |
-| Lessons completed | 16 |
-| Perfect quizzes (100%) | 14 |
-| Lessons to review | 1 |
+| Total XP | 1475 |
+| Lessons completed | 19 |
+| Perfect quizzes (100%) | 16 |
+| Lessons to review | 2 |
 
 ## Session History
 
@@ -29,6 +29,9 @@
 | 2026-02-19 | 6 | 6.5 - AMI Overview | 75 | PERFECT |
 | 2026-02-19 | 6 | 6.7 - EC2 Instance Store | 75 | PERFECT |
 | 2026-02-19 | 6 | 6.8 - EBS Volume Types | 100 | PERFECT |
+| 2026-02-19 | 6 | 6.9 - EBS Multi-Attach | 75 | PERFECT |
+| 2026-02-19 | 6 | 6.10 - Amazon EFS | 75 | PASSED |
+| 2026-02-19 | 6 | 6.12 - EFS vs EBS | 75 | PERFECT |
 
 ---
 
@@ -114,4 +117,20 @@
 ### 6.8 - EBS Volume Types
 - **Score:** 4/4 (100%)
 - **XP:** +100
+- **Status:** PERFECT
+
+### 6.9 - EBS Multi-Attach
+- **Score:** 3/3 (100%)
+- **XP:** +75
+- **Status:** PERFECT
+
+### 6.10 - Amazon EFS
+- **Score:** 3/4 (75%)
+- **XP:** +75
+- **Status:** PASSED
+- **Missed:** Q2 - confused Elastic (throughput mode) with Max I/O (performance mode)
+
+### 6.12 - EFS vs EBS
+- **Score:** 3/3 (100%)
+- **XP:** +75
 - **Status:** PERFECT

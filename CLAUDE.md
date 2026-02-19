@@ -85,7 +85,7 @@ It should aggregate all lesson notes from that section into a single reference f
 ## Current State
 
 - **Current section:** Section 5 - EC2 Fundamentals
-- **Current lesson:** 6.8 - EBS Volume Types (completed)
-- **Next lesson:** 6.9 - EBS Multi-Attach
-- **Total XP:** 1250
-- **Lessons completed:** 29
+- **Current section:** Section 6 - EC2 Instance Storage (completed)
+- **Next lesson:** 7.1 - High Availability and Scalability
+- **Total XP:** 1475
+- **Lessons completed:** 33
