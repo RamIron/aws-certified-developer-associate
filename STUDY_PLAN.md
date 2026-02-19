@@ -4,7 +4,7 @@
 
 ```
 [░░░░░░░░░░░░░░░░░░░░] 2/33 sections | 28/~390 lessons
-Total XP: 825
+Total XP: 1250
 ```
 
 > **Note:** The exact number of lessons per section will be filled in as the course progresses.
@@ -68,19 +68,19 @@ Total XP: 825
 - [x] 5.14 - EC2 Instance Purchasing Options (PASSED 75%)
 
 ## Section 6: EC2 Instance Storage
-- [ ] 6.1 - EBS Overview
-- [ ] 6.2 - EBS Hands On
-- [ ] 6.3 - EBS Snapshots
-- [ ] 6.4 - EBS Snapshots Hands On
-- [ ] 6.5 - AMI Overview
-- [ ] 6.6 - AMI Hands On
-- [ ] 6.7 - EC2 Instance Store
-- [ ] 6.8 - EBS Volume Types
+- [x] 6.1 - EBS Overview (PERFECT 100%)
+- [x] 6.2 - EBS Hands On (skipped - hands-on walkthrough)
+- [x] 6.3 - EBS Snapshots (PERFECT 100%)
+- [x] 6.4 - EBS Snapshots - Hands On (skipped - hands-on walkthrough)
+- [x] 6.5 - AMI Overview (PERFECT 100%)
+- [x] 6.6 - AMI Hands On (skipped - hands-on walkthrough)
+- [x] 6.7 - EC2 Instance Store (PERFECT 100%)
+- [x] 6.8 - EBS Volume Types (PERFECT 100%)
 - [ ] 6.9 - EBS Multi-Attach
-- [ ] 6.10 - EBS Encryption
-- [ ] 6.11 - Amazon EFS
-- [ ] 6.12 - Amazon EFS Hands On
-- [ ] 6.13 - EBS vs EFS
+- [ ] 6.10 - Amazon EFS
+- [ ] 6.11 - Amazon EFS - Hands On
+- [ ] 6.12 - EFS vs EBS
+- [ ] 6.13 - EBS & EFS - Section Cleanup
 
 ## Section 7: ELB & ASG - Elastic Load Balancing & Auto Scaling Groups
 - [ ] 7.1 - High Availability and Scalability

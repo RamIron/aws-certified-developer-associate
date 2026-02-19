@@ -78,7 +78,7 @@ Indicate the next lesson and wait for the user.
 ## Current State
 
 - **Current section:** Section 5 - EC2 Fundamentals
-- **Current lesson:** 5.14 - EC2 Instance Purchasing Options (completed)
-- **Next lesson:** Section 6 - EC2 Instance Storage
-- **Total XP:** 825
-- **Lessons completed:** 28
+- **Current lesson:** 6.8 - EBS Volume Types (completed)
+- **Next lesson:** 6.9 - EBS Multi-Attach
+- **Total XP:** 1250
+- **Lessons completed:** 29

@@ -23,6 +23,7 @@ A reference for acronyms and English terms encountered in the course, with Spani
 | EBS     | Elastic Block Store                      | Almacenamiento en bloque elástico                |
 | EC2     | Elastic Compute Cloud                    | Nube de cómputo elástica                         |
 | EFS     | Elastic File System                      | Sistema de archivos elástico                     |
+| ETL     | Extract, Transform, Load                 | Extraer, transformar, cargar                     |
 | ELB     | Elastic Load Balancer                    | Balanceador de carga elástico                    |
 | FTP     | File Transfer Protocol                   | Protocolo de transferencia de archivos           |
 | HDD     | Hard Disk Drive                          | Disco duro                                       |
@@ -32,6 +33,7 @@ A reference for acronyms and English terms encountered in the course, with Spani
 | IaaS    | Infrastructure as a Service              | Infraestructura como servicio                    |
 | IAM     | Identity and Access Management           | Gestión de identidad y acceso                    |
 | IGW     | Internet Gateway                         | Puerta de enlace a internet                      |
+| IOPS    | Input/Output Operations Per Second       | Operaciones de entrada/salida por segundo        |
 | IoT     | Internet of Things                       | Internet de las cosas                            |
 | IP      | Internet Protocol                        | Protocolo de internet                            |
 | JSON    | JavaScript Object Notation               | Notación de objetos JavaScript                   |
@@ -63,11 +65,13 @@ A reference for acronyms and English terms encountered in the course, with Spani
 | Bootstrap / Bootstrapping | Arranque automático / inicialización         |
 | Burst                     | Ráfaga                                       |
 | Compliance                | Cumplimiento normativo                       |
+| Ephemeral                 | Efímero (temporal, se pierde al apagar)      |
 | Failover                  | Conmutación por error                        |
 | Fault tolerance           | Tolerancia a fallos                          |
 | Inbound / Outbound        | Entrante / Saliente                          |
 | Inline policy             | Política directa / integrada                 |
 | On-premises               | En las instalaciones (infraestructura local) |
+| Slight                    | Leve / ligero                                |
 | Steady-state              | Estado estable / constante                   |
 | Tenancy                   | Arrendamiento / tenencia                     |
 | Throughput                | Rendimiento / velocidad de transferencia     |

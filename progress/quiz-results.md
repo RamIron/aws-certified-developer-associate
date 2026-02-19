@@ -4,9 +4,9 @@
 
 | Metric | Value |
 |--------|-------|
-| Total XP | 825 |
-| Lessons completed | 11 |
-| Perfect quizzes (100%) | 9 |
+| Total XP | 1250 |
+| Lessons completed | 16 |
+| Perfect quizzes (100%) | 14 |
 | Lessons to review | 1 |
 
 ## Session History
@@ -24,6 +24,11 @@
 | 2026-02-17 | 5 | 5.4 - EC2 Instance Types Basics | 125 | PERFECT |
 | 2026-02-17 | 5 | 5.5 - Security Groups & Classic Ports | 100 | PERFECT |
 | 2026-02-17 | 5 | 5.14 - EC2 Instance Purchasing Options | 75 | PASSED |
+| 2026-02-19 | 6 | 6.1 - EBS Overview | 100 | PERFECT |
+| 2026-02-19 | 6 | 6.3 - EBS Snapshots | 75 | PERFECT |
+| 2026-02-19 | 6 | 6.5 - AMI Overview | 75 | PERFECT |
+| 2026-02-19 | 6 | 6.7 - EC2 Instance Store | 75 | PERFECT |
+| 2026-02-19 | 6 | 6.8 - EBS Volume Types | 100 | PERFECT |
 
 ---
 
@@ -85,3 +90,28 @@
 - **XP:** +75
 - **Status:** PASSED
 - **Missed:** Q4 - Capacity Reservations have no discount, they charge on-demand rates
+
+### 6.1 - EBS Overview
+- **Score:** 4/4 (100%)
+- **XP:** +100
+- **Status:** PERFECT
+
+### 6.3 - EBS Snapshots
+- **Score:** 3/3 (100%)
+- **XP:** +75
+- **Status:** PERFECT
+
+### 6.5 - AMI Overview
+- **Score:** 3/3 (100%)
+- **XP:** +75
+- **Status:** PERFECT
+
+### 6.7 - EC2 Instance Store
+- **Score:** 3/3 (100%)
+- **XP:** +75
+- **Status:** PERFECT
+
+### 6.8 - EBS Volume Types
+- **Score:** 4/4 (100%)
+- **XP:** +100
+- **Status:** PERFECT
