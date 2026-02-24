@@ -84,9 +84,7 @@ It should aggregate all lesson notes from that section into a single reference f
 
 ## Current State
 
-- **Current section:** Section 5 - EC2 Fundamentals
-- **Current section:** Section 7 - AWS Fundamentals: ELB + ASG
-- **Current lesson:** 7.11 - ELB Cross Zone Load Balancing (completed)
-- **Next lesson:** 7.12 - Elastic Load Balancer - SSL Certificates
-- **Total XP:** 2100
-- **Lessons completed:** 44
+- **Current section:** Section 7 - AWS Fundamentals: ELB + ASG (completed)
+- **Next section:** Section 8 - AWS Fundamentals: RDS + Aurora + ElastiCache
+- **Total XP:** 2400
+- **Lessons completed:** 50

@@ -4,10 +4,10 @@
 
 | Metric | Value |
 |--------|-------|
-| Total XP | 2100 |
-| Lessons completed | 26 |
-| Perfect quizzes (100%) | 23 |
-| Lessons to review | 2 |
+| Total XP | 2400 |
+| Lessons completed | 31 |
+| Perfect quizzes (100%) | 26 |
+| Lessons to review | 4 |
 
 ## Session History
 
@@ -39,6 +39,11 @@
 | 2026-02-24 | 7 | 7.9 - Gateway Load Balancer (GWLB) | 75 | PERFECT |
 | 2026-02-24 | 7 | 7.10 - ELB Sticky Sessions | 75 | PERFECT |
 | 2026-02-24 | 7 | 7.11 - ELB Cross Zone Load Balancing | 75 | PERFECT |
+| 2026-02-24 | 7 | 7.12 - ELB SSL Certificates | 75 | PERFECT |
+| 2026-02-24 | 7 | 7.14 - ELB Connection Draining | 75 | PERFECT |
+| 2026-02-24 | 7 | 7.15 - Auto Scaling Groups (ASG) Overview | 50 | REVIEW |
+| 2026-02-24 | 7 | 7.17 - ASG Scaling Policies | 75 | PERFECT |
+| 2026-02-24 | 7 | 7.19 - ASG Instance Refresh | 25 | REVIEW |
 
 ---
 
@@ -176,3 +181,30 @@
 - **Score:** 3/3 (100%)
 - **XP:** +75
 - **Status:** PERFECT
+
+### 7.12 - ELB SSL Certificates
+- **Score:** 3/3 (100%)
+- **XP:** +75
+- **Status:** PERFECT
+
+### 7.14 - ELB Connection Draining
+- **Score:** 3/3 (100%)
+- **XP:** +75
+- **Status:** PERFECT
+
+### 7.15 - Auto Scaling Groups (ASG) Overview
+- **Score:** 2/3 (67%)
+- **XP:** +50
+- **Status:** REVIEW
+- **Missed:** Q3 - Confused where to update AMI; correct answer is launch template (the blueprint for new instances)
+
+### 7.17 - ASG Scaling Policies
+- **Score:** 3/3 (100%)
+- **XP:** +75
+- **Status:** PERFECT
+
+### 7.19 - ASG Instance Refresh
+- **Score:** 1/2 (50%)
+- **XP:** +25
+- **Status:** REVIEW
+- **Missed:** Q2 - If new instance fails health checks during refresh, the refresh pauses (can't maintain minimum healthy percentage). Warm-up time doesn't auto-extend.

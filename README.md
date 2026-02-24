@@ -7,12 +7,12 @@ Study notes for AWS DVA-C02, assisted by Claude.
 ## 📊 Progress
 
 ```
-████░░░░░░░░░░░░░░░░░░░░░░░░░░ 15% (71/483 lessons)
+█████░░░░░░░░░░░░░░░░░░░░░░░░░ 17% (80/483 lessons)
 ```
 
-**Current section:** 7 - AWS Fundamentals: ELB + ASG
+**Current section:** 8 - AWS Fundamentals: RDS + Aurora + ElastiCache
 
-**Next section:** 8 - AWS Fundamentals: RDS + Aurora + ElastiCache
+**Next section:** 9 - Route 53
 
 ---
 

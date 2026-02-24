@@ -3,8 +3,8 @@
 ## Overall Progress
 
 ```
-[█░░░░░░░░░░░░░░░░░░░] 3/33 sections | 71/483 lessons
-Total XP: 2100
+[████░░░░░░░░░░░░░░░░] 4/33 sections | 80/483 lessons
+Total XP: 2400
 ```
 
 > **Note:** The exact number of lessons per section will be filled in as the course progresses.
@@ -94,15 +94,15 @@ Total XP: 2100
 - [x] 7.9 - Gateway Load Balancer (GWLB) (PERFECT 100%)
 - [x] 7.10 - Elastic Load Balancer - Sticky Sessions (PERFECT 100%)
 - [x] 7.11 - Elastic Load Balancer - Cross Zone Load Balancing (PERFECT 100%)
-- [ ] 7.12 - Elastic Load Balancer - SSL Certificates
-- [ ] 7.13 - Elastic Load Balancer - SSL Certificates - Hands On
-- [ ] 7.14 - Elastic Load Balancer - Connection Draining
-- [ ] 7.15 - Auto Scaling Groups (ASG) Overview
-- [ ] 7.16 - Auto Scaling Groups Hands On
-- [ ] 7.17 - Auto Scaling Groups - Scaling Policies
-- [ ] 7.18 - Auto Scaling Groups - Scaling Policies Hands On
-- [ ] 7.19 - Auto Scaling Groups - Instance Refresh
-- [ ] 7.20 - High Availability & Scalability Quiz
+- [x] 7.12 - Elastic Load Balancer - SSL Certificates (PERFECT 100%)
+- [x] 7.13 - Elastic Load Balancer - SSL Certificates - Hands On (skipped - hands-on walkthrough)
+- [x] 7.14 - Elastic Load Balancer - Connection Draining (PERFECT 100%)
+- [x] 7.15 - Auto Scaling Groups (ASG) Overview (REVIEW 67%)
+- [x] 7.16 - Auto Scaling Groups Hands On (skipped - hands-on walkthrough)
+- [x] 7.17 - Auto Scaling Groups - Scaling Policies (PERFECT 100%)
+- [x] 7.18 - Auto Scaling Groups - Scaling Policies Hands On (skipped - hands-on walkthrough)
+- [x] 7.19 - Auto Scaling Groups - Instance Refresh (REVIEW 50%)
+- [x] 7.20 - High Availability & Scalability Quiz (Udemy quiz - 14/20)
 
 ## Section 8: RDS + Aurora + ElastiCache
 - [ ] 8.1 - Amazon RDS Overview

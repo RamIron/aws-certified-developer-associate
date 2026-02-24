@@ -8,6 +8,7 @@ A reference for acronyms and English terms encountered in the course, with Spani
 
 | Acronym | Full English Name                        | Español                                          |
 |---------|------------------------------------------|--------------------------------------------------|
+| ACM     | AWS Certificate Manager                  | Administrador de certificados de AWS             |
 | ALB     | Application Load Balancer                | Balanceador de carga de aplicación               |
 | AMI     | Amazon Machine Image                     | Imagen de máquina de Amazon                      |
 | API     | Application Programming Interface        | Interfaz de programación de aplicaciones         |
@@ -55,10 +56,13 @@ A reference for acronyms and English terms encountered in the course, with Spani
 | RDP     | Remote Desktop Protocol                  | Protocolo de escritorio remoto                   |
 | SDK     | Software Development Kit                 | Kit de desarrollo de software                    |
 | SFTP    | Secure File Transfer Protocol            | Protocolo seguro de transferencia de archivos    |
+| SNI     | Server Name Indication                   | Indicación de nombre de servidor                 |
 | SQL     | Structured Query Language                | Lenguaje de consulta estructurado                |
 | SSD     | Solid State Drive                        | Disco de estado sólido                           |
 | SSH     | Secure Shell                             | Shell seguro                                     |
+| SSL     | Secure Sockets Layer                     | Capa de conexión segura                          |
 | TCP     | Transmission Control Protocol            | Protocolo de control de transmisión              |
+| TLS     | Transport Layer Security                 | Seguridad de la capa de transporte               |
 | U2F     | Universal 2nd Factor                     | Segundo factor universal                         |
 | UDP     | User Datagram Protocol                   | Protocolo de datagramas de usuario               |
 | vCPU    | Virtual CPU                              | CPU virtual                                      |
@@ -75,8 +79,10 @@ A reference for acronyms and English terms encountered in the course, with Spani
 | Bootstrap / Bootstrapping | Arranque automático / inicialización         |
 | Burst                     | Ráfaga                                       |
 | Compliance                | Cumplimiento normativo                       |
+| Deemed                    | Considerado / estimado                       |
 | Ephemeral                 | Efímero (temporal, se pierde al apagar)      |
 | Failover                  | Conmutación por error                        |
+| Forecast                  | Pronóstico / previsión                       |
 | Fault tolerance           | Tolerancia a fallos                          |
 | Inbound / Outbound        | Entrante / Saliente                          |
 | Inline policy             | Política directa / integrada                 |
