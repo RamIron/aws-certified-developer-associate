@@ -85,7 +85,8 @@ It should aggregate all lesson notes from that section into a single reference f
 ## Current State
 
 - **Current section:** Section 5 - EC2 Fundamentals
-- **Current section:** Section 6 - EC2 Instance Storage (completed)
-- **Next lesson:** 7.1 - High Availability and Scalability
-- **Total XP:** 1475
-- **Lessons completed:** 33
+- **Current section:** Section 7 - AWS Fundamentals: ELB + ASG
+- **Current lesson:** 7.4 - Application Load Balancer (ALB) (completed)
+- **Next lesson:** 7.5 - Application Load Balancer (ALB) - Hands On - Part 1
+- **Total XP:** 1750
+- **Lessons completed:** 37

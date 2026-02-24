@@ -4,7 +4,7 @@
 
 ```
 [█░░░░░░░░░░░░░░░░░░░] 3/33 sections | 60/483 lessons
-Total XP: 1475
+Total XP: 1750
 ```
 
 > **Note:** The exact number of lessons per section will be filled in as the course progresses.
@@ -83,10 +83,10 @@ Total XP: 1475
 - [x] 6.13 - EBS & EFS - Section Cleanup (skipped - console cleanup walkthrough)
 
 ## Section 7: AWS Fundamentals: ELB + ASG
-- [ ] 7.1 - High Availability and Scalability
-- [ ] 7.2 - Elastic Load Balancing (ELB) Overview
-- [ ] 7.3 - Note: About the Classic Load Balancer (CLB)
-- [ ] 7.4 - Application Load Balancer (ALB)
+- [x] 7.1 - High Availability and Scalability (PERFECT 100%)
+- [x] 7.2 - Elastic Load Balancing (ELB) Overview (PERFECT 100%)
+- [x] 7.3 - Note: About the Classic Load Balancer (CLB) (skipped - CLB deprecated, not on exam)
+- [x] 7.4 - Application Load Balancer (ALB) (PERFECT 100%)
 - [ ] 7.5 - Application Load Balancer (ALB) - Hands On - Part 1
 - [ ] 7.6 - Application Load Balancer (ALB) - Hands On - Part 2
 - [ ] 7.7 - Network Load Balancer (NLB)

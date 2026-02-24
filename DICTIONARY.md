@@ -8,6 +8,7 @@ A reference for acronyms and English terms encountered in the course, with Spani
 
 | Acronym | Full English Name                        | Español                                          |
 |---------|------------------------------------------|--------------------------------------------------|
+| ALB     | Application Load Balancer                | Balanceador de carga de aplicación               |
 | AMI     | Amazon Machine Image                     | Imagen de máquina de Amazon                      |
 | API     | Application Programming Interface        | Interfaz de programación de aplicaciones         |
 | ARN     | Amazon Resource Name                     | Nombre de recurso de Amazon                      |
@@ -23,10 +24,12 @@ A reference for acronyms and English terms encountered in the course, with Spani
 | DNS     | Domain Name System                       | Sistema de nombres de dominio                    |
 | EBS     | Elastic Block Store                      | Almacenamiento en bloque elástico                |
 | EC2     | Elastic Compute Cloud                    | Nube de cómputo elástica                         |
+| ECS     | Elastic Container Service                | Servicio de contenedores elástico                |
 | EFS     | Elastic File System                      | Sistema de archivos elástico                     |
 | ETL     | Extract, Transform, Load                 | Extraer, transformar, cargar                     |
 | ELB     | Elastic Load Balancer                    | Balanceador de carga elástico                    |
 | FTP     | File Transfer Protocol                   | Protocolo de transferencia de archivos           |
+| GWLB    | Gateway Load Balancer                    | Balanceador de carga de puerta de enlace         |
 | HDD     | Hard Disk Drive                          | Disco duro                                       |
 | HPC     | High-Performance Computing               | Computación de alto rendimiento                  |
 | HTTP    | HyperText Transfer Protocol              | Protocolo de transferencia de hipertexto         |
@@ -41,10 +44,13 @@ A reference for acronyms and English terms encountered in the course, with Spani
 | MFA     | Multi-Factor Authentication              | Autenticación multifactor                        |
 | ML      | Machine Learning                         | Aprendizaje automático                           |
 | NAT     | Network Address Translation              | Traducción de direcciones de red                 |
+| NLB     | Network Load Balancer                    | Balanceador de carga de red                      |
 | NoSQL   | Not Only SQL                             | No solo SQL                                      |
 | OLTP    | Online Transaction Processing            | Procesamiento de transacciones en línea          |
+| OSI     | Open Systems Interconnection             | Interconexión de sistemas abiertos               |
 | RAID    | Redundant Array of Independent Disks     | Conjunto redundante de discos independientes     |
 | RAM     | Random Access Memory                     | Memoria de acceso aleatorio                      |
+| RDS     | Relational Database Service              | Servicio de base de datos relacional             |
 | RDP     | Remote Desktop Protocol                  | Protocolo de escritorio remoto                   |
 | SDK     | Software Development Kit                 | Kit de desarrollo de software                    |
 | SFTP    | Secure File Transfer Protocol            | Protocolo seguro de transferencia de archivos    |

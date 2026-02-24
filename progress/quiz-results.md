@@ -4,9 +4,9 @@
 
 | Metric | Value |
 |--------|-------|
-| Total XP | 1475 |
-| Lessons completed | 19 |
-| Perfect quizzes (100%) | 16 |
+| Total XP | 1750 |
+| Lessons completed | 22 |
+| Perfect quizzes (100%) | 19 |
 | Lessons to review | 2 |
 
 ## Session History
@@ -32,6 +32,9 @@
 | 2026-02-19 | 6 | 6.9 - EBS Multi-Attach | 75 | PERFECT |
 | 2026-02-19 | 6 | 6.10 - Amazon EFS | 75 | PASSED |
 | 2026-02-19 | 6 | 6.12 - EFS vs EBS | 75 | PERFECT |
+| 2026-02-23 | 7 | 7.1 - High Availability and Scalability | 75 | PERFECT |
+| 2026-02-23 | 7 | 7.2 - Elastic Load Balancing (ELB) Overview | 100 | PERFECT |
+| 2026-02-23 | 7 | 7.4 - Application Load Balancer (ALB) | 100 | PERFECT |
 
 ---
 
@@ -133,4 +136,19 @@
 ### 6.12 - EFS vs EBS
 - **Score:** 3/3 (100%)
 - **XP:** +75
+- **Status:** PERFECT
+
+### 7.1 - High Availability and Scalability
+- **Score:** 3/3 (100%)
+- **XP:** +75
+- **Status:** PERFECT
+
+### 7.2 - Elastic Load Balancing (ELB) Overview
+- **Score:** 4/4 (100%)
+- **XP:** +100
+- **Status:** PERFECT
+
+### 7.4 - Application Load Balancer (ALB)
+- **Score:** 4/4 (100%)
+- **XP:** +100
 - **Status:** PERFECT
