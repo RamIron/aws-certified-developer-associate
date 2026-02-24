@@ -3,8 +3,8 @@
 ## Overall Progress
 
 ```
-[█░░░░░░░░░░░░░░░░░░░] 3/33 sections | 64/483 lessons
-Total XP: 1750
+[█░░░░░░░░░░░░░░░░░░░] 3/33 sections | 71/483 lessons
+Total XP: 2100
 ```
 
 > **Note:** The exact number of lessons per section will be filled in as the course progresses.
@@ -87,13 +87,13 @@ Total XP: 1750
 - [x] 7.2 - Elastic Load Balancing (ELB) Overview (PERFECT 100%)
 - [x] 7.3 - Note: About the Classic Load Balancer (CLB) (skipped - CLB deprecated, not on exam)
 - [x] 7.4 - Application Load Balancer (ALB) (PERFECT 100%)
-- [ ] 7.5 - Application Load Balancer (ALB) - Hands On - Part 1
-- [ ] 7.6 - Application Load Balancer (ALB) - Hands On - Part 2
-- [ ] 7.7 - Network Load Balancer (NLB)
-- [ ] 7.8 - Network Load Balancer (NLB) - Hands On
-- [ ] 7.9 - Gateway Load Balancer (GWLB)
-- [ ] 7.10 - Elastic Load Balancer - Sticky Sessions
-- [ ] 7.11 - Elastic Load Balancer - Cross Zone Load Balancing
+- [x] 7.5 - Application Load Balancer (ALB) - Hands On - Part 1 (skipped - hands-on walkthrough)
+- [x] 7.6 - Application Load Balancer (ALB) - Hands On - Part 2 (skipped - hands-on walkthrough)
+- [x] 7.7 - Network Load Balancer (NLB) (PERFECT 100%)
+- [x] 7.8 - Network Load Balancer (NLB) - Hands On (skipped - hands-on walkthrough)
+- [x] 7.9 - Gateway Load Balancer (GWLB) (PERFECT 100%)
+- [x] 7.10 - Elastic Load Balancer - Sticky Sessions (PERFECT 100%)
+- [x] 7.11 - Elastic Load Balancer - Cross Zone Load Balancing (PERFECT 100%)
 - [ ] 7.12 - Elastic Load Balancer - SSL Certificates
 - [ ] 7.13 - Elastic Load Balancer - SSL Certificates - Hands On
 - [ ] 7.14 - Elastic Load Balancer - Connection Draining

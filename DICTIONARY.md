@@ -35,6 +35,7 @@ A reference for acronyms and English terms encountered in the course, with Spani
 | HTTP    | HyperText Transfer Protocol              | Protocolo de transferencia de hipertexto         |
 | HTTPS   | HyperText Transfer Protocol Secure       | Protocolo de transferencia de hipertexto seguro  |
 | IaaS    | Infrastructure as a Service              | Infraestructura como servicio                    |
+| IDPS    | Intrusion Detection & Prevention System  | Sistema de detección y prevención de intrusiones |
 | IAM     | Identity and Access Management           | Gestión de identidad y acceso                    |
 | IGW     | Internet Gateway                         | Puerta de enlace a internet                      |
 | IOPS    | Input/Output Operations Per Second       | Operaciones de entrada/salida por segundo        |
@@ -70,6 +71,7 @@ A reference for acronyms and English terms encountered in the course, with Spani
 
 | English                   | Español                                      |
 |---------------------------|----------------------------------------------|
+| Appliance (virtual)       | Dispositivo virtual (software de red)        |
 | Bootstrap / Bootstrapping | Arranque automático / inicialización         |
 | Burst                     | Ráfaga                                       |
 | Compliance                | Cumplimiento normativo                       |

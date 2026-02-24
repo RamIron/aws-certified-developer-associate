@@ -86,7 +86,7 @@ It should aggregate all lesson notes from that section into a single reference f
 
 - **Current section:** Section 5 - EC2 Fundamentals
 - **Current section:** Section 7 - AWS Fundamentals: ELB + ASG
-- **Current lesson:** 7.4 - Application Load Balancer (ALB) (completed)
-- **Next lesson:** 7.5 - Application Load Balancer (ALB) - Hands On - Part 1
-- **Total XP:** 1750
-- **Lessons completed:** 37
+- **Current lesson:** 7.11 - ELB Cross Zone Load Balancing (completed)
+- **Next lesson:** 7.12 - Elastic Load Balancer - SSL Certificates
+- **Total XP:** 2100
+- **Lessons completed:** 44

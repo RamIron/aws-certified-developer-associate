@@ -4,9 +4,9 @@
 
 | Metric | Value |
 |--------|-------|
-| Total XP | 1750 |
-| Lessons completed | 22 |
-| Perfect quizzes (100%) | 19 |
+| Total XP | 2100 |
+| Lessons completed | 26 |
+| Perfect quizzes (100%) | 23 |
 | Lessons to review | 2 |
 
 ## Session History
@@ -35,6 +35,10 @@
 | 2026-02-23 | 7 | 7.1 - High Availability and Scalability | 75 | PERFECT |
 | 2026-02-23 | 7 | 7.2 - Elastic Load Balancing (ELB) Overview | 100 | PERFECT |
 | 2026-02-23 | 7 | 7.4 - Application Load Balancer (ALB) | 100 | PERFECT |
+| 2026-02-24 | 7 | 7.7 - Network Load Balancer (NLB) | 125 | PERFECT |
+| 2026-02-24 | 7 | 7.9 - Gateway Load Balancer (GWLB) | 75 | PERFECT |
+| 2026-02-24 | 7 | 7.10 - ELB Sticky Sessions | 75 | PERFECT |
+| 2026-02-24 | 7 | 7.11 - ELB Cross Zone Load Balancing | 75 | PERFECT |
 
 ---
 
@@ -151,4 +155,24 @@
 ### 7.4 - Application Load Balancer (ALB)
 - **Score:** 4/4 (100%)
 - **XP:** +100
+- **Status:** PERFECT
+
+### 7.7 - Network Load Balancer (NLB)
+- **Score:** 5/5 (100%)
+- **XP:** +125
+- **Status:** PERFECT
+
+### 7.9 - Gateway Load Balancer (GWLB)
+- **Score:** 3/3 (100%)
+- **XP:** +75
+- **Status:** PERFECT
+
+### 7.10 - ELB Sticky Sessions
+- **Score:** 3/3 (100%)
+- **XP:** +75
+- **Status:** PERFECT
+
+### 7.11 - ELB Cross Zone Load Balancing
+- **Score:** 3/3 (100%)
+- **XP:** +75
 - **Status:** PERFECT
