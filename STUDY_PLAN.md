@@ -5,6 +5,8 @@
 ```
 [█████░░░░░░░░░░░░░░░] 8/34 sections | 92/483 lessons
 Total XP: 3075
+
+Videos: 82/446 | Articles: 5/8 | Quizzes: 5/29
 ```
 
 > **Note:** The exact number of lessons per section will be filled in as the course progresses.

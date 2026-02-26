@@ -10,6 +10,8 @@ Study notes for AWS DVA-C02, assisted by Claude.
 ██████░░░░░░░░░░░░░░░░░░░░░░░░ 19% (92/483 lessons)
 ```
 
+📹 Videos: 82/446 · 📄 Articles: 5/8 · ❓ Quizzes: 5/29
+
 **Current section:** 9 - Route 53
 
 **XP:** 3,075
