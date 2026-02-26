@@ -4,9 +4,9 @@
 
 | Metric | Value |
 |--------|-------|
-| Total XP | 2400 |
-| Lessons completed | 31 |
-| Perfect quizzes (100%) | 26 |
+| Total XP | 3075 |
+| Lessons completed | 39 |
+| Perfect quizzes (100%) | 34 |
 | Lessons to review | 4 |
 
 ## Session History
@@ -44,6 +44,14 @@
 | 2026-02-24 | 7 | 7.15 - Auto Scaling Groups (ASG) Overview | 50 | REVIEW |
 | 2026-02-24 | 7 | 7.17 - ASG Scaling Policies | 75 | PERFECT |
 | 2026-02-24 | 7 | 7.19 - ASG Instance Refresh | 25 | REVIEW |
+| 2026-02-24 | 8 | 8.1 - Amazon RDS Overview | 75 | PERFECT |
+| 2026-02-24 | 8 | 8.2 - RDS Read Replicas vs Multi AZ | 100 | PERFECT |
+| 2026-02-24 | 8 | 8.4 - Amazon Aurora | 125 | PERFECT |
+| 2026-02-24 | 8 | 8.6 - RDS & Aurora Security | 75 | PERFECT |
+| 2026-02-25 | 8 | 8.7 - RDS Proxy | 75 | PERFECT |
+| 2026-02-25 | 8 | 8.8 - ElastiCache Overview | 75 | PERFECT |
+| 2026-02-26 | 8 | 8.10 - ElastiCache Strategies | 100 | PERFECT |
+| 2026-02-26 | 8 | 8.11 - Amazon MemoryDB for Redis | 50 | PERFECT |
 
 ---
 
@@ -208,3 +216,43 @@
 - **XP:** +25
 - **Status:** REVIEW
 - **Missed:** Q2 - If new instance fails health checks during refresh, the refresh pauses (can't maintain minimum healthy percentage). Warm-up time doesn't auto-extend.
+
+### 8.1 - Amazon RDS Overview
+- **Score:** 3/3 (100%)
+- **XP:** +75
+- **Status:** PERFECT
+
+### 8.2 - RDS Read Replicas vs Multi AZ
+- **Score:** 4/4 (100%)
+- **XP:** +100
+- **Status:** PERFECT
+
+### 8.4 - Amazon Aurora
+- **Score:** 5/5 (100%)
+- **XP:** +125
+- **Status:** PERFECT
+
+### 8.6 - RDS & Aurora Security
+- **Score:** 3/3 (100%)
+- **XP:** +75
+- **Status:** PERFECT
+
+### 8.7 - RDS Proxy
+- **Score:** 3/3 (100%)
+- **XP:** +75
+- **Status:** PERFECT
+
+### 8.8 - ElastiCache Overview
+- **Score:** 3/3 (100%)
+- **XP:** +75
+- **Status:** PERFECT
+
+### 8.10 - ElastiCache Strategies
+- **Score:** 4/4 (100%)
+- **XP:** +100
+- **Status:** PERFECT
+
+### 8.11 - Amazon MemoryDB for Redis
+- **Score:** 2/2 (100%)
+- **XP:** +50
+- **Status:** PERFECT

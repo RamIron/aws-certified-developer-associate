@@ -3,8 +3,8 @@
 ## Overall Progress
 
 ```
-[████░░░░░░░░░░░░░░░░] 4/33 sections | 80/483 lessons
-Total XP: 2400
+[████░░░░░░░░░░░░░░░░] 8/34 sections | 92/483 lessons
+Total XP: 2775
 ```
 
 > **Note:** The exact number of lessons per section will be filled in as the course progresses.
@@ -105,19 +105,18 @@ Total XP: 2400
 - [x] 7.20 - High Availability & Scalability Quiz (Udemy quiz - 14/20)
 
 ## Section 8: RDS + Aurora + ElastiCache
-- [ ] 8.1 - Amazon RDS Overview
-- [ ] 8.2 - RDS Read Replicas vs Multi AZ
-- [ ] 8.3 - Amazon RDS Hands On
-- [ ] 8.4 - RDS Custom
-- [ ] 8.5 - Amazon Aurora
-- [ ] 8.6 - Amazon Aurora Hands On
-- [ ] 8.7 - RDS & Aurora - Backup and Monitoring
-- [ ] 8.8 - RDS & Aurora Security
-- [ ] 8.9 - RDS Proxy
-- [ ] 8.10 - ElastiCache Overview
-- [ ] 8.11 - ElastiCache Hands On
-- [ ] 8.12 - ElastiCache Strategies
-- [ ] 8.13 - Amazon MemoryDB for Redis
+- [x] 8.1 - Amazon RDS Overview (PERFECT 100%)
+- [x] 8.2 - RDS Read Replicas vs Multi AZ (PERFECT 100%)
+- [x] 8.3 - Amazon RDS Hands On (skipped - hands-on walkthrough)
+- [x] 8.4 - Amazon Aurora (PERFECT 100%)
+- [x] 8.5 - Amazon Aurora - Hands On (skipped - hands-on walkthrough)
+- [x] 8.6 - RDS & Aurora Security (PERFECT 100%)
+- [x] 8.7 - RDS Proxy (PERFECT 100%)
+- [x] 8.8 - ElastiCache Overview (PERFECT 100%)
+- [x] 8.9 - ElastiCache Hands On (skipped - hands-on walkthrough)
+- [x] 8.10 - ElastiCache Strategies (PERFECT 100%)
+- [x] 8.11 - Amazon MemoryDB for Redis - Overview (PERFECT 100%)
+- [x] 8.12 - RDS, Aurora, & ElastiCache Quiz (Udemy quiz - 16/22)
 
 ## Section 9: Route 53
 - [ ] 9.1 - Route 53 Overview

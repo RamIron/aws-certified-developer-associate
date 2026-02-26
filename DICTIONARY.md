@@ -9,6 +9,7 @@ A reference for acronyms and English terms encountered in the course, with Spani
 | Acronym | Full English Name                        | Español                                          |
 |---------|------------------------------------------|--------------------------------------------------|
 | ACM     | AWS Certificate Manager                  | Administrador de certificados de AWS             |
+| AOF     | Append-Only File                         | Archivo de solo escritura secuencial             |
 | ALB     | Application Load Balancer                | Balanceador de carga de aplicación               |
 | AMI     | Amazon Machine Image                     | Imagen de máquina de Amazon                      |
 | API     | Application Programming Interface        | Interfaz de programación de aplicaciones         |
@@ -40,6 +41,7 @@ A reference for acronyms and English terms encountered in the course, with Spani
 | IAM     | Identity and Access Management           | Gestión de identidad y acceso                    |
 | IGW     | Internet Gateway                         | Puerta de enlace a internet                      |
 | IOPS    | Input/Output Operations Per Second       | Operaciones de entrada/salida por segundo        |
+| KMS     | Key Management Service                   | Servicio de gestión de claves                    |
 | IoT     | Internet of Things                       | Internet de las cosas                            |
 | IP      | Internet Protocol                        | Protocolo de internet                            |
 | JSON    | JavaScript Object Notation               | Notación de objetos JavaScript                   |
@@ -91,6 +93,7 @@ A reference for acronyms and English terms encountered in the course, with Spani
 | Steady-state              | Estado estable / constante                   |
 | Tenancy                   | Arrendamiento / tenencia                     |
 | Throughput                | Rendimiento / velocidad de transferencia     |
+| Trade-off                 | Compromiso / contrapartida (ganar algo a costa de otro) |
 | Throttling                | Limitación de velocidad / estrangulamiento   |
 | Upfront (payment)         | Pago por adelantado                          |
 | Workload                  | Carga de trabajo                             |
