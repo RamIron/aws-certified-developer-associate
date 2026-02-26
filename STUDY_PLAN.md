@@ -3,8 +3,8 @@
 ## Overall Progress
 
 ```
-[████░░░░░░░░░░░░░░░░] 8/34 sections | 92/483 lessons
-Total XP: 2775
+[█████░░░░░░░░░░░░░░░] 8/34 sections | 92/483 lessons
+Total XP: 3075
 ```
 
 > **Note:** The exact number of lessons per section will be filled in as the course progresses.
