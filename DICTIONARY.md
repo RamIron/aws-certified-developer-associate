@@ -31,6 +31,7 @@ A reference for acronyms and English terms encountered in the course, with Spani
 | ETL     | Extract, Transform, Load                 | Extraer, transformar, cargar                     |
 | ELB     | Elastic Load Balancer                    | Balanceador de carga elástico                    |
 | FTP     | File Transfer Protocol                   | Protocolo de transferencia de archivos           |
+| FQDN    | Fully Qualified Domain Name              | Nombre de dominio completamente cualificado      |
 | GWLB    | Gateway Load Balancer                    | Balanceador de carga de puerta de enlace         |
 | HDD     | Hard Disk Drive                          | Disco duro                                       |
 | HPC     | High-Performance Computing               | Computación de alto rendimiento                  |
@@ -59,12 +60,17 @@ A reference for acronyms and English terms encountered in the course, with Spani
 | SDK     | Software Development Kit                 | Kit de desarrollo de software                    |
 | SFTP    | Secure File Transfer Protocol            | Protocolo seguro de transferencia de archivos    |
 | SNI     | Server Name Indication                   | Indicación de nombre de servidor                 |
+| SLA     | Service Level Agreement                  | Acuerdo de nivel de servicio                     |
+| SOA     | Start of Authority                       | Inicio de autoridad (registro administrativo DNS)|
+| SLD     | Second Level Domain                      | Dominio de segundo nivel                         |
 | SQL     | Structured Query Language                | Lenguaje de consulta estructurado                |
 | SSD     | Solid State Drive                        | Disco de estado sólido                           |
 | SSH     | Secure Shell                             | Shell seguro                                     |
 | SSL     | Secure Sockets Layer                     | Capa de conexión segura                          |
 | TCP     | Transmission Control Protocol            | Protocolo de control de transmisión              |
+| TLD     | Top Level Domain                         | Dominio de nivel superior                        |
 | TLS     | Transport Layer Security                 | Seguridad de la capa de transporte               |
+| TTL     | Time to Live                             | Tiempo de vida                                   |
 | U2F     | Universal 2nd Factor                     | Segundo factor universal                         |
 | UDP     | User Datagram Protocol                   | Protocolo de datagramas de usuario               |
 | vCPU    | Virtual CPU                              | CPU virtual                                      |

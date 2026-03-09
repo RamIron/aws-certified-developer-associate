@@ -84,8 +84,8 @@ It should aggregate all lesson notes from that section into a single reference f
 
 ## Current State
 
-- **Current section:** Section 8 - AWS Fundamentals: RDS + Aurora + ElastiCache (completed)
-- **Current lesson:** 8.12 - RDS, Aurora, & ElastiCache Quiz (completed)
-- **Next lesson:** 9.1 - Route 53 Overview (Section 9)
-- **Total XP:** 3075
-- **Lessons completed:** 60
+- **Current section:** Section 9 - Route 53
+- **Current lesson:** 9.12 - Route 53 - Health Checks Hands On (skipped)
+- **Next lesson:** 9.13 - Routing Policy - Failover
+- **Total XP:** 3525
+- **Lessons completed:** 68

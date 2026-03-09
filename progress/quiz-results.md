@@ -4,10 +4,10 @@
 
 | Metric | Value |
 |--------|-------|
-| Total XP | 3075 |
-| Lessons completed | 39 |
-| Perfect quizzes (100%) | 34 |
-| Lessons to review | 4 |
+| Total XP | 3525 |
+| Lessons completed | 47 |
+| Perfect quizzes (100%) | 41 |
+| Lessons to review | 5 |
 
 ## Session History
 
@@ -52,6 +52,14 @@
 | 2026-02-25 | 8 | 8.8 - ElastiCache Overview | 75 | PERFECT |
 | 2026-02-26 | 8 | 8.10 - ElastiCache Strategies | 100 | PERFECT |
 | 2026-02-26 | 8 | 8.11 - Amazon MemoryDB for Redis | 50 | PERFECT |
+| 2026-02-26 | 9 | 9.1 - What is a DNS? | 50 | PERFECT |
+| 2026-02-26 | 9 | 9.2 - Route 53 Overview | 50 | REVIEW |
+| 2026-03-09 | 9 | 9.6 - Route 53 - TTL | 50 | PERFECT |
+| 2026-03-09 | 9 | 9.7 - Route 53 - CNAME vs Alias | 75 | PERFECT |
+| 2026-03-09 | 9 | 9.8 - Routing Policy - Simple | 50 | PERFECT |
+| 2026-03-09 | 9 | 9.9 - Routing Policy - Weighted | 50 | PERFECT |
+| 2026-03-09 | 9 | 9.10 - Routing Policy - Latency | 50 | PERFECT |
+| 2026-03-09 | 9 | 9.11 - Route 53 Health Checks | 75 | PERFECT |
 
 ---
 
@@ -255,4 +263,45 @@
 ### 8.11 - Amazon MemoryDB for Redis
 - **Score:** 2/2 (100%)
 - **XP:** +50
+- **Status:** PERFECT
+
+### 9.1 - What is a DNS?
+- **Score:** 2/2 (100%)
+- **XP:** +50
+- **Status:** PERFECT
+
+### 9.2 - Route 53 Overview
+- **Score:** 2/3 (67%)
+- **XP:** +50
+- **Status:** REVIEW
+- **Missed:** Q1 - Route 53 is the only AWS service with 100% availability SLA (not about domain registration uniqueness)
+
+### 9.6 - Route 53 - TTL
+- **Score:** 2/2 (100%)
+- **XP:** +50
+- **Status:** PERFECT
+
+### 9.7 - Route 53 - CNAME vs Alias
+- **Score:** 3/3 (100%)
+- **XP:** +75
+- **Status:** PERFECT
+
+### 9.8 - Routing Policy - Simple
+- **Score:** 2/2 (100%)
+- **XP:** +50
+- **Status:** PERFECT
+
+### 9.9 - Routing Policy - Weighted
+- **Score:** 2/2 (100%)
+- **XP:** +50
+- **Status:** PERFECT
+
+### 9.10 - Routing Policy - Latency
+- **Score:** 2/2 (100%)
+- **XP:** +50
+- **Status:** PERFECT
+
+### 9.11 - Route 53 Health Checks
+- **Score:** 3/3 (100%)
+- **XP:** +75
 - **Status:** PERFECT

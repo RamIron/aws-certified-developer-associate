@@ -4,7 +4,7 @@
 
 ```
 [█████░░░░░░░░░░░░░░░] 8/34 sections | 92/483 lessons
-Total XP: 3075
+Total XP: 3525
 
 Videos: 82/446 | Articles: 5/8 | Quizzes: 5/29
 ```
@@ -121,15 +121,27 @@ Videos: 82/446 | Articles: 5/8 | Quizzes: 5/29
 - [x] 8.12 - RDS, Aurora, & ElastiCache Quiz (Udemy quiz - 16/22)
 
 ## Section 9: Route 53
-- [ ] 9.1 - Route 53 Overview
-- [ ] 9.2 - Route 53 - Registering a domain
-- [ ] 9.3 - Route 53 - Record Types
-- [ ] 9.4 - Route 53 - Creating Records
-- [ ] 9.5 - Route 53 - TTL
-- [ ] 9.6 - Route 53 - CNAME vs Alias
-- [ ] 9.7 - Route 53 - Routing Policies
-- [ ] 9.8 - Route 53 - Health Checks
-- [ ] 9.9 - Route 53 - Routing Policies Hands On
+- [x] 9.1 - What is a DNS? (PERFECT 100%)
+- [x] 9.2 - Route 53 Overview (REVIEW 67%)
+- [x] 9.3 - Route 53 - Registering a domain (skipped - hands-on walkthrough)
+- [x] 9.4 - Route 53 - Creating our first records (skipped - hands-on walkthrough)
+- [x] 9.5 - Route 53 - EC2 Setup (skipped - hands-on walkthrough)
+- [x] 9.6 - Route 53 - TTL (PERFECT 100%)
+- [x] 9.7 - Route 53 - CNAME vs Alias (PERFECT 100%)
+- [x] 9.8 - Routing Policy - Simple (PERFECT 100%)
+- [x] 9.9 - Routing Policy - Weighted (PERFECT 100%)
+- [x] 9.10 - Routing Policy - Latency (PERFECT 100%)
+- [x] 9.11 - Route 53 Health Checks (PERFECT 100%)
+- [x] 9.12 - Route 53 - Health Checks Hands On (skipped - hands-on walkthrough)
+- [ ] 9.13 - Routing Policy - Failover
+- [ ] 9.14 - Routing Policy - Geolocation
+- [ ] 9.15 - Routing Policy - Geoproximity
+- [ ] 9.16 - Routing Policy - Traffic Flow & Geoproximity Hands On
+- [ ] 9.17 - Routing Policy - IP-based
+- [ ] 9.18 - Routing Policy - Multi Value
+- [ ] 9.19 - 3rd Party Domains & Route 53
+- [ ] 9.20 - Route 53 - Section Cleanup
+- [ ] 9.21 - Route 53 Quiz
 
 ## Section 10: VPC Fundamentals
 - [ ] 10.1 - VPC Overview
