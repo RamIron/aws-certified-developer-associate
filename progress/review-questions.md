@@ -33,3 +33,13 @@ Questions from Udemy section quizzes that need review.
 - ALB's SG = only the ALB can reach port 80 (most precise)
 
 **Key:** Security Groups can reference other Security Groups — this is more secure than using CIDR ranges.
+
+## Section 11 - Amazon S3 Introduction
+
+### Q4 - Glacier Deep Archive has NO Expedited retrieval
+**Question:** Which is NOT a Glacier Deep Archive retrieval mode?
+
+**Answer:** Expedited (1-5 minutes) — this only exists for Glacier **Flexible** Retrieval.
+
+- Glacier Flexible: Expedited (1-5 min), Standard (3-5 hr), Bulk (5-12 hr)
+- Glacier Deep Archive: Standard (12 hr), Bulk (48 hr) — **only 2 tiers, no Expedited**
