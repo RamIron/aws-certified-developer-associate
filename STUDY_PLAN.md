@@ -169,17 +169,15 @@ Videos: 121/446 | Articles: 5/8 | Quizzes: 8/29
 - [x] 11.14 - Amazon S3 Quiz (skipped - Udemy quiz)
 
 ## Section 12: AWS CLI, SDK, IAM Roles & Policies
-- [ ] 12.1 - AWS CLI Configurations
-- [ ] 12.2 - AWS CLI on EC2
-- [ ] 12.3 - AWS CLI Practice with S3
-- [ ] 12.4 - IAM Roles and Policies Hands On
-- [ ] 12.5 - AWS Policy Simulator
-- [ ] 12.6 - AWS EC2 Instance Metadata
-- [ ] 12.7 - AWS CLI with MFA
-- [ ] 12.8 - AWS SDK Overview
-- [ ] 12.9 - Exponential Backoff & Service Limit Increase
-- [ ] 12.10 - AWS Credentials Provider & Chain
-- [ ] 12.11 - AWS Signature v4 Signing
+- [ ] 12.1 - AWS EC2 Instance Metadata
+- [ ] 12.2 - AWS EC2 Instance Metadata - Hands On
+- [ ] 12.3 - AWS CLI Profiles
+- [ ] 12.4 - AWS CLI with MFA
+- [ ] 12.5 - AWS SDK Overview
+- [ ] 12.6 - Exponential Backoff & Service Limit Increase
+- [ ] 12.7 - AWS Credentials Provider & Chain
+- [ ] 12.8 - AWS Signature v4 Signing (Sigv4)
+- [ ] 12.9 - AWS IAM, CLI, & SDK Quiz
 
 ## Section 13: Advanced Amazon S3
 - [ ] 13.1 - S3 Lifecycle Rules
