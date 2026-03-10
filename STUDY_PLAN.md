@@ -3,10 +3,10 @@
 ## Overall Progress
 
 ```
-[██████░░░░░░░░░░░░░░] 10/34 sections | 120/483 lessons
-Total XP: 4000
+[██████░░░░░░░░░░░░░░] 11/34 sections | 134/483 lessons
+Total XP: 4250
 
-Videos: 108/446 | Articles: 5/8 | Quizzes: 7/29
+Videos: 121/446 | Articles: 5/8 | Quizzes: 8/29
 ```
 
 > **Note:** The exact number of lessons per section will be filled in as the course progresses.
@@ -153,18 +153,20 @@ Videos: 108/446 | Articles: 5/8 | Quizzes: 7/29
 - [x] 10.7 - VPC Quiz (skipped - Udemy quiz)
 
 ## Section 11: Amazon S3 Introduction
-- [ ] 11.1 - S3 Overview
-- [ ] 11.2 - S3 Hands On
-- [ ] 11.3 - S3 Security: Bucket Policy
-- [ ] 11.4 - S3 Security: Bucket Policy Hands On
-- [ ] 11.5 - S3 Website Overview
-- [ ] 11.6 - S3 Website Hands On
-- [ ] 11.7 - S3 Versioning
-- [ ] 11.8 - S3 Versioning Hands On
-- [ ] 11.9 - S3 Replication
-- [ ] 11.10 - S3 Replication Hands On
-- [ ] 11.11 - S3 Storage Classes Overview
-- [ ] 11.12 - S3 Storage Classes Hands On
+- [x] 11.1 - S3 Overview (PERFECT 100%)
+- [x] 11.2 - S3 Hands On (skipped - hands-on walkthrough)
+- [x] 11.3 - S3 Security: Bucket Policy (PERFECT 100%)
+- [x] 11.4 - S3 Security: Bucket Policy Hands On (skipped - hands-on walkthrough)
+- [x] 11.5 - S3 Website Overview (PERFECT 100%)
+- [x] 11.6 - S3 Website Hands On (skipped - hands-on walkthrough)
+- [x] 11.7 - S3 Versioning (PERFECT 100%)
+- [x] 11.8 - S3 Versioning - Hands On (skipped - hands-on walkthrough)
+- [x] 11.9 - S3 Replication (PERFECT 100%)
+- [x] 11.10 - S3 Replication Notes (PERFECT 100% - merged into 11.9 notes)
+- [x] 11.11 - S3 Replication - Hands On (skipped - hands-on walkthrough)
+- [x] 11.12 - S3 Storage Classes Overview (REVIEW 0%)
+- [x] 11.13 - S3 Storage Classes Hands On (skipped - hands-on walkthrough)
+- [x] 11.14 - Amazon S3 Quiz (skipped - Udemy quiz)
 
 ## Section 12: AWS CLI, SDK, IAM Roles & Policies
 - [ ] 12.1 - AWS CLI Configurations

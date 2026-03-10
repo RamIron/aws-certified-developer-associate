@@ -4,10 +4,10 @@
 
 | Metric | Value |
 |--------|-------|
-| Total XP | 4000 |
-| Lessons completed | 57 |
-| Perfect quizzes (100%) | 50 |
-| Lessons to review | 6 |
+| Total XP | 4250 |
+| Lessons completed | 63 |
+| Perfect quizzes (100%) | 55 |
+| Lessons to review | 7 |
 
 ## Session History
 
@@ -70,6 +70,12 @@
 | 2026-03-09 | 10 | 10.3 - NACL, SG, VPC Flow Logs | 50 | PERFECT |
 | 2026-03-09 | 10 | 10.4 - VPC Peering, Endpoints, VPN, DX | 50 | PERFECT |
 | 2026-03-09 | 10 | 10.6 - Three Tier Architecture | 50 | PERFECT |
+| 2026-03-10 | 11 | 11.1 - S3 Overview | 50 | PERFECT |
+| 2026-03-10 | 11 | 11.3 - S3 Security: Bucket Policy | 50 | PERFECT |
+| 2026-03-10 | 11 | 11.7 - S3 Versioning | 50 | PERFECT |
+| 2026-03-10 | 11 | 11.9 - S3 Replication | 50 | PERFECT |
+| 2026-03-10 | 11 | 11.10 - S3 Replication Notes | 50 | PERFECT |
+| 2026-03-10 | 11 | 11.12 - S3 Storage Classes Overview | 0 | REVIEW |
 
 ---
 
@@ -366,3 +372,36 @@
 - **Score:** 2/2 (100%)
 - **XP:** +50
 - **Status:** PERFECT
+
+### 11.1 - S3 Overview
+- **Score:** 2/2 (100%)
+- **XP:** +50
+- **Status:** PERFECT
+
+### 11.3 - S3 Security: Bucket Policy
+- **Score:** 2/2 (100%)
+- **XP:** +50
+- **Status:** PERFECT
+
+### 11.7 - S3 Versioning
+- **Score:** 2/2 (100%)
+- **XP:** +50
+- **Status:** PERFECT
+
+### 11.9 - S3 Replication
+- **Score:** 2/2 (100%)
+- **XP:** +50
+- **Status:** PERFECT
+
+### 11.10 - S3 Replication Notes
+- **Score:** 2/2 (100%)
+- **XP:** +50
+- **Status:** PERFECT
+
+### 11.12 - S3 Storage Classes Overview
+- **Score:** 0/3 (0%)
+- **XP:** +0
+- **Status:** REVIEW
+- **Missed:** Q1 - Millisecond retrieval = Glacier Instant (not Flexible)
+- **Missed:** Q2 - Durability is 11 nines for ALL classes (Deep Archive min = 180 days, not 90)
+- **Missed:** Q3 - Unknown access patterns = Intelligent-Tiering (auto-moves, no manual management)

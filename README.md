@@ -7,14 +7,14 @@ Study notes for AWS DVA-C02, assisted by Claude.
 ## 📊 Progress
 
 ```
-███████░░░░░░░░░░░░░░░░░░░░░░░ 25% (120/483 lessons)
+████████░░░░░░░░░░░░░░░░░░░░░░ 28% (134/483 lessons)
 ```
 
-📹 Videos: 108/446 · 📄 Articles: 5/8 · ❓ Quizzes: 7/29
+📹 Videos: 121/446 · 📄 Articles: 5/8 · ❓ Quizzes: 8/29
 
-**Current section:** 11 - Amazon S3 Introduction
+**Current section:** 12 - AWS CLI, SDK, IAM Roles & Policies
 
-**XP:** 4,000
+**XP:** 4,250
 
 ---
 

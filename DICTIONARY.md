@@ -23,6 +23,7 @@ A reference for acronyms and English terms encountered in the course, with Spani
 | CLI     | Command Line Interface                   | Interfaz de línea de comandos                    |
 | CMS     | Content Management System                | Sistema de gestión de contenido                  |
 | CPU     | Central Processing Unit                  | Unidad central de procesamiento                  |
+| CRR     | Cross-Region Replication                 | Replicación entre regiones                       |
 | CSV     | Comma-Separated Values                   | Valores separados por comas                      |
 | DNS     | Domain Name System                       | Sistema de nombres de dominio                    |
 | EBS     | Elastic Block Store                      | Almacenamiento en bloque elástico                |
@@ -68,6 +69,7 @@ A reference for acronyms and English terms encountered in the course, with Spani
 | SQL     | Structured Query Language                | Lenguaje de consulta estructurado                |
 | SSD     | Solid State Drive                        | Disco de estado sólido                           |
 | SSH     | Secure Shell                             | Shell seguro                                     |
+| SRR     | Same-Region Replication                  | Replicación en la misma región                   |
 | SSL     | Secure Sockets Layer                     | Capa de conexión segura                          |
 | TCP     | Transmission Control Protocol            | Protocolo de control de transmisión              |
 | TLD     | Top Level Domain                         | Dominio de nivel superior                        |
