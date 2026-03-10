@@ -3,10 +3,10 @@
 ## Overall Progress
 
 ```
-[█████░░░░░░░░░░░░░░░] 9/34 sections | 109/483 lessons
+[█████░░░░░░░░░░░░░░░] 9/34 sections | 113/483 lessons
 Total XP: 3800
 
-Videos: 99/446 | Articles: 5/8 | Quizzes: 6/29
+Videos: 102/446 | Articles: 5/8 | Quizzes: 6/29
 ```
 
 > **Note:** The exact number of lessons per section will be filled in as the course progresses.
