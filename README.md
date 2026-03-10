@@ -12,7 +12,7 @@ Study notes for AWS DVA-C02, assisted by Claude.
 
 📹 Videos: 108/446 · 📄 Articles: 5/8 · ❓ Quizzes: 7/29
 
-**Current section:** 10 - VPC Fundamentals (completed)
+**Current section:** 11 - Amazon S3 Introduction
 
 **XP:** 4,000
 
