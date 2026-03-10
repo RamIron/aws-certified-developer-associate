@@ -3,10 +3,10 @@
 ## Overall Progress
 
 ```
-[█████░░░░░░░░░░░░░░░] 9/34 sections | 113/483 lessons
-Total XP: 3800
+[██████░░░░░░░░░░░░░░] 10/34 sections | 120/483 lessons
+Total XP: 4000
 
-Videos: 102/446 | Articles: 5/8 | Quizzes: 6/29
+Videos: 108/446 | Articles: 5/8 | Quizzes: 7/29
 ```
 
 > **Note:** The exact number of lessons per section will be filled in as the course progresses.
@@ -144,12 +144,13 @@ Videos: 102/446 | Articles: 5/8 | Quizzes: 6/29
 - [x] 9.21 - Route 53 Quiz (skipped - Udemy quiz)
 
 ## Section 10: VPC Fundamentals
-- [ ] 10.1 - VPC Overview
-- [ ] 10.2 - VPC, Subnets, IGW and NAT
-- [ ] 10.3 - NACL, SG, VPC Flow Logs
-- [ ] 10.4 - VPC Peering, Endpoints, VPN, DX
-- [ ] 10.5 - Three Tier Architecture
-- [ ] 10.6 - VPC Cheat Sheet & Closing Comments
+- [x] 10.1 - VPC Fundamentals - Section Introduction (intro - no quiz)
+- [x] 10.2 - VPC, Subnets, IGW and NAT (PERFECT 100%)
+- [x] 10.3 - NACL, SG, VPC Flow Logs (PERFECT 100%)
+- [x] 10.4 - VPC Peering, Endpoints, VPN, DX (PERFECT 100%)
+- [x] 10.5 - VPC Cheat Sheet & Closing Comments (skipped - summary/recap)
+- [x] 10.6 - Three Tier Architecture (PERFECT 100%)
+- [x] 10.7 - VPC Quiz (skipped - Udemy quiz)
 
 ## Section 11: Amazon S3 Introduction
 - [ ] 11.1 - S3 Overview

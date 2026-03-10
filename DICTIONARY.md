@@ -10,6 +10,7 @@ A reference for acronyms and English terms encountered in the course, with Spani
 |---------|------------------------------------------|--------------------------------------------------|
 | ACM     | AWS Certificate Manager                  | Administrador de certificados de AWS             |
 | AOF     | Append-Only File                         | Archivo de solo escritura secuencial             |
+| ACL     | Access Control List                      | Lista de control de acceso                       |
 | ALB     | Application Load Balancer                | Balanceador de carga de aplicación               |
 | AMI     | Amazon Machine Image                     | Imagen de máquina de Amazon                      |
 | API     | Application Programming Interface        | Interfaz de programación de aplicaciones         |
@@ -30,6 +31,7 @@ A reference for acronyms and English terms encountered in the course, with Spani
 | EFS     | Elastic File System                      | Sistema de archivos elástico                     |
 | ETL     | Extract, Transform, Load                 | Extraer, transformar, cargar                     |
 | ELB     | Elastic Load Balancer                    | Balanceador de carga elástico                    |
+| ENI     | Elastic Network Interface                | Interfaz de red elástica                         |
 | FTP     | File Transfer Protocol                   | Protocolo de transferencia de archivos           |
 | FQDN    | Fully Qualified Domain Name              | Nombre de dominio completamente cualificado      |
 | GWLB    | Gateway Load Balancer                    | Balanceador de carga de puerta de enlace         |

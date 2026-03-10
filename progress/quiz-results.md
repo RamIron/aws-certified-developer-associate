@@ -4,9 +4,9 @@
 
 | Metric | Value |
 |--------|-------|
-| Total XP | 3800 |
-| Lessons completed | 53 |
-| Perfect quizzes (100%) | 46 |
+| Total XP | 4000 |
+| Lessons completed | 57 |
+| Perfect quizzes (100%) | 50 |
 | Lessons to review | 6 |
 
 ## Session History
@@ -66,6 +66,10 @@
 | 2026-03-09 | 9 | 9.17 - Routing Policy - IP-based | 50 | PERFECT |
 | 2026-03-09 | 9 | 9.18 - Routing Policy - Multi Value | 50 | PERFECT |
 | 2026-03-09 | 9 | 9.19 - 3rd Party Domains & Route 53 | 50 | PERFECT |
+| 2026-03-09 | 10 | 10.2 - VPC, Subnets, IGW and NAT | 50 | PERFECT |
+| 2026-03-09 | 10 | 10.3 - NACL, SG, VPC Flow Logs | 50 | PERFECT |
+| 2026-03-09 | 10 | 10.4 - VPC Peering, Endpoints, VPN, DX | 50 | PERFECT |
+| 2026-03-09 | 10 | 10.6 - Three Tier Architecture | 50 | PERFECT |
 
 ---
 
@@ -339,6 +343,26 @@
 - **Status:** PERFECT
 
 ### 9.19 - 3rd Party Domains & Route 53
+- **Score:** 2/2 (100%)
+- **XP:** +50
+- **Status:** PERFECT
+
+### 10.2 - VPC, Subnets, IGW and NAT
+- **Score:** 2/2 (100%)
+- **XP:** +50
+- **Status:** PERFECT
+
+### 10.3 - NACL, SG, VPC Flow Logs
+- **Score:** 2/2 (100%)
+- **XP:** +50
+- **Status:** PERFECT
+
+### 10.4 - VPC Peering, Endpoints, VPN, DX
+- **Score:** 2/2 (100%)
+- **XP:** +50
+- **Status:** PERFECT
+
+### 10.6 - Three Tier Architecture
 - **Score:** 2/2 (100%)
 - **XP:** +50
 - **Status:** PERFECT

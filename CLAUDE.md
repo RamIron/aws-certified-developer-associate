@@ -84,7 +84,7 @@ It should aggregate all lesson notes from that section into a single reference f
 
 ## Current State
 
-- **Current section:** Section 9 - Route 53 (COMPLETED)
-- **Next section:** Section 10
-- **Total XP:** 3800
-- **Lessons completed:** 77
+- **Current section:** Section 10 - VPC Fundamentals (COMPLETED)
+- **Next section:** Section 11
+- **Total XP:** 4000
+- **Lessons completed:** 84
