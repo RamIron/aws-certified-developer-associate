@@ -3,10 +3,10 @@
 ## Overall Progress
 
 ```
-[█████░░░░░░░░░░░░░░░] 8/34 sections | 92/483 lessons
-Total XP: 3525
+[█████░░░░░░░░░░░░░░░] 9/34 sections | 109/483 lessons
+Total XP: 3800
 
-Videos: 82/446 | Articles: 5/8 | Quizzes: 5/29
+Videos: 99/446 | Articles: 5/8 | Quizzes: 6/29
 ```
 
 > **Note:** The exact number of lessons per section will be filled in as the course progresses.
@@ -133,15 +133,15 @@ Videos: 82/446 | Articles: 5/8 | Quizzes: 5/29
 - [x] 9.10 - Routing Policy - Latency (PERFECT 100%)
 - [x] 9.11 - Route 53 Health Checks (PERFECT 100%)
 - [x] 9.12 - Route 53 - Health Checks Hands On (skipped - hands-on walkthrough)
-- [ ] 9.13 - Routing Policy - Failover
-- [ ] 9.14 - Routing Policy - Geolocation
-- [ ] 9.15 - Routing Policy - Geoproximity
-- [ ] 9.16 - Routing Policy - Traffic Flow & Geoproximity Hands On
-- [ ] 9.17 - Routing Policy - IP-based
-- [ ] 9.18 - Routing Policy - Multi Value
-- [ ] 9.19 - 3rd Party Domains & Route 53
-- [ ] 9.20 - Route 53 - Section Cleanup
-- [ ] 9.21 - Route 53 Quiz
+- [x] 9.13 - Routing Policy - Failover (REVIEW 50%)
+- [x] 9.14 - Routing Policy - Geolocation (PERFECT 100%)
+- [x] 9.15 - Routing Policy - Geoproximity (PERFECT 100%)
+- [x] 9.16 - Routing Policy - Traffic Flow & Geoproximity Hands On (skipped - hands-on walkthrough)
+- [x] 9.17 - Routing Policy - IP-based (PERFECT 100%)
+- [x] 9.18 - Routing Policy - Multi Value (PERFECT 100%)
+- [x] 9.19 - 3rd Party Domains & Route 53 (PERFECT 100%)
+- [x] 9.20 - Route 53 - Section Cleanup (skipped - hands-on cleanup)
+- [x] 9.21 - Route 53 Quiz (skipped - Udemy quiz)
 
 ## Section 10: VPC Fundamentals
 - [ ] 10.1 - VPC Overview

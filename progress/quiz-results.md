@@ -4,10 +4,10 @@
 
 | Metric | Value |
 |--------|-------|
-| Total XP | 3525 |
-| Lessons completed | 47 |
-| Perfect quizzes (100%) | 41 |
-| Lessons to review | 5 |
+| Total XP | 3800 |
+| Lessons completed | 53 |
+| Perfect quizzes (100%) | 46 |
+| Lessons to review | 6 |
 
 ## Session History
 
@@ -60,6 +60,12 @@
 | 2026-03-09 | 9 | 9.9 - Routing Policy - Weighted | 50 | PERFECT |
 | 2026-03-09 | 9 | 9.10 - Routing Policy - Latency | 50 | PERFECT |
 | 2026-03-09 | 9 | 9.11 - Route 53 Health Checks | 75 | PERFECT |
+| 2026-03-09 | 9 | 9.13 - Routing Policy - Failover | 25 | REVIEW |
+| 2026-03-09 | 9 | 9.14 - Routing Policy - Geolocation | 50 | PERFECT |
+| 2026-03-09 | 9 | 9.15 - Routing Policy - Geoproximity | 50 | PERFECT |
+| 2026-03-09 | 9 | 9.17 - Routing Policy - IP-based | 50 | PERFECT |
+| 2026-03-09 | 9 | 9.18 - Routing Policy - Multi Value | 50 | PERFECT |
+| 2026-03-09 | 9 | 9.19 - 3rd Party Domains & Route 53 | 50 | PERFECT |
 
 ---
 
@@ -304,4 +310,35 @@
 ### 9.11 - Route 53 Health Checks
 - **Score:** 3/3 (100%)
 - **XP:** +75
+- **Status:** PERFECT
+
+### 9.13 - Routing Policy - Failover
+- **Score:** 1/2 (50%)
+- **XP:** +25
+- **Status:** REVIEW
+- **Missed:** Q1 - If primary ALB is "running fine" but Route 53 always returns secondary, the issue is security group blocking health checker IPs (not missing health check, which is mandatory for failover)
+
+### 9.14 - Routing Policy - Geolocation
+- **Score:** 2/2 (100%)
+- **XP:** +50
+- **Status:** PERFECT
+
+### 9.15 - Routing Policy - Geoproximity
+- **Score:** 2/2 (100%)
+- **XP:** +50
+- **Status:** PERFECT
+
+### 9.17 - Routing Policy - IP-based
+- **Score:** 2/2 (100%)
+- **XP:** +50
+- **Status:** PERFECT
+
+### 9.18 - Routing Policy - Multi Value
+- **Score:** 2/2 (100%)
+- **XP:** +50
+- **Status:** PERFECT
+
+### 9.19 - 3rd Party Domains & Route 53
+- **Score:** 2/2 (100%)
+- **XP:** +50
 - **Status:** PERFECT
