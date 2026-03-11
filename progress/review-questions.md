@@ -43,3 +43,39 @@ Questions from Udemy section quizzes that need review.
 
 - Glacier Flexible: Expedited (1-5 min), Standard (3-5 hr), Bulk (5-12 hr)
 - Glacier Deep Archive: Standard (12 hr), Bulk (48 hr) — **only 2 tiers, no Expedited**
+
+## Section 12 - AWS CLI, SDK, IAM Roles & Policies
+
+### Q5 - EC2 instance needs S3 permissions
+**Question:** EC2 instance wants to upload objects to S3 using PutObject but lacks permissions. What should you do?
+
+**Answer:** Ask an administrator to attach an IAM Policy to the **IAM Role** on the EC2 instance.
+
+- IAM Role = a set of permissions an AWS service can assume (like a uniform)
+- You attach **IAM Policies** to the Role to define what it can do
+- EC2 uses Roles through **Instance Profiles**
+- NEVER use personal credentials or env vars on EC2 — always IAM Roles
+
+**Key:** Inside AWS = IAM Roles. EC2 needs permissions → attach a policy to its Role.
+
+### Q6 - API Authorization Exceptions vs colleague
+**Question:** Colleague can run the app fine, you get API Authorization Exceptions. What should you do?
+
+**Answer:** Compare both IAM Policies using **AWS Policy Simulator** to understand the differences.
+
+- **Policy Simulator** = tool to test IAM policies and see what's allowed/denied without making real API calls
+- If same app works for one person but not another → it's a **permissions difference**
+- Policy Simulator helps you find exactly which action is being denied and why
+
+**Key:** Authorization issues between users → compare policies with Policy Simulator.
+
+### Q7 - IAM Role credentials on EC2
+**Question:** When you have an IAM Role attached to EC2 and run CLI commands from inside, AWS CLI uses the \_\_\_\_\_ to get \_\_\_\_\_ credentials.
+
+**Answer:** Instance **Metadata**, **temporary**.
+
+- Metadata = info about the instance (IPs, role name, credentials)
+- User data = the launch script (bootstrap)
+- Credentials from IAM Roles are always **temporary** (they expire and auto-rotate)
+
+**Key:** Metadata ≠ User data. Role credentials are always temporary.
