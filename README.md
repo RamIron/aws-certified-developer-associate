@@ -7,14 +7,14 @@ Study notes for AWS DVA-C02, assisted by Claude.
 ## 📊 Progress
 
 ```
-█████████░░░░░░░░░░░░░░░░░░░░░ 30% (143/483 lessons)
+█████████░░░░░░░░░░░░░░░░░░░░░ 31% (150/483 lessons)
 ```
 
-📹 Videos: 129/446 · 📄 Articles: 5/8 · ❓ Quizzes: 9/29
+📹 Videos: 135/446 · 📄 Articles: 5/8 · ❓ Quizzes: 10/29
 
-**Current section:** 13 - Advanced Amazon S3
+**Current section:** 14 - Amazon S3 Security
 
-**XP:** 4,550
+**XP:** 4,800
 
 ---
 

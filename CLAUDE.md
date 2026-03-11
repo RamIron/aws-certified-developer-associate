@@ -84,6 +84,6 @@ It should aggregate all lesson notes from that section into a single reference f
 
 ## Current State
 
-- **Current section:** Section 13 - Advanced Amazon S3
-- **Total XP:** 4550
-- **Lessons completed:** 99
+- **Current section:** Section 14 - Amazon S3 Security
+- **Total XP:** 4800
+- **Lessons completed:** 106

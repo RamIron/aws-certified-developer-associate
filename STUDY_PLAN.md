@@ -3,10 +3,10 @@
 ## Overall Progress
 
 ```
-[██████░░░░░░░░░░░░░░] 12/34 sections | 143/483 lessons
-Total XP: 4550
+[██████░░░░░░░░░░░░░░] 13/34 sections | 150/483 lessons
+Total XP: 4800
 
-Videos: 129/446 | Articles: 5/8 | Quizzes: 9/29
+Videos: 135/446 | Articles: 5/8 | Quizzes: 10/29
 ```
 
 > **Note:** The exact number of lessons per section will be filled in as the course progresses.
@@ -180,14 +180,13 @@ Videos: 129/446 | Articles: 5/8 | Quizzes: 9/29
 - [x] 12.9 - AWS IAM, CLI, & SDK Quiz (skipped - Udemy quiz)
 
 ## Section 13: Advanced Amazon S3
-- [ ] 13.1 - S3 Lifecycle Rules
-- [ ] 13.2 - S3 Lifecycle Rules Hands On
-- [ ] 13.3 - S3 Event Notifications
-- [ ] 13.4 - S3 Event Notifications Hands On
-- [ ] 13.5 - S3 Performance
-- [ ] 13.6 - S3 Select & Glacier Select
-- [ ] 13.7 - S3 Batch Operations
-- [ ] 13.8 - S3 Object Tags & Metadata
+- [x] 13.1 - S3 Lifecycle Rules (with S3 Analytics) (PERFECT 100%)
+- [x] 13.2 - S3 Lifecycle Rules - Hands On (skipped - hands-on walkthrough)
+- [x] 13.3 - S3 Event Notifications (PERFECT 100%)
+- [x] 13.4 - S3 Event Notifications - Hands On (skipped - hands-on walkthrough)
+- [x] 13.5 - S3 Performance (PERFECT 100%)
+- [x] 13.6 - S3 Object Tags & Metadata (REVIEW 50%)
+- [x] 13.7 - Amazon S3 Advanced Quiz (skipped - Udemy quiz)
 
 ## Section 14: Amazon S3 Security
 - [ ] 14.1 - S3 Encryption

@@ -4,10 +4,10 @@
 
 | Metric | Value |
 |--------|-------|
-| Total XP | 4550 |
-| Lessons completed | 68 |
-| Perfect quizzes (100%) | 59 |
-| Lessons to review | 8 |
+| Total XP | 4800 |
+| Lessons completed | 72 |
+| Perfect quizzes (100%) | 62 |
+| Lessons to review | 9 |
 
 ## Session History
 
@@ -81,6 +81,10 @@
 | 2026-03-10 | 12 | 12.6 - Exponential Backoff & Service Limit Increase | 75 | PERFECT |
 | 2026-03-10 | 12 | 12.7 - AWS Credentials Provider Chain | 50 | REVIEW |
 | 2026-03-10 | 12 | 12.8 - AWS Signature v4 Signing (Sigv4) | 50 | PERFECT |
+| 2026-03-11 | 13 | 13.1 - S3 Lifecycle Rules | 75 | PERFECT |
+| 2026-03-11 | 13 | 13.3 - S3 Event Notifications | 75 | PERFECT |
+| 2026-03-11 | 13 | 13.5 - S3 Performance | 75 | PERFECT |
+| 2026-03-11 | 13 | 13.6 - S3 Object Tags & Metadata | 25 | REVIEW |
 
 ---
 
@@ -436,3 +440,24 @@
 - **Score:** 2/2 (100%)
 - **XP:** +50
 - **Status:** PERFECT
+
+### 13.1 - S3 Lifecycle Rules
+- **Score:** 3/3 (100%)
+- **XP:** +75
+- **Status:** PERFECT
+
+### 13.3 - S3 Event Notifications
+- **Score:** 3/3 (100%)
+- **XP:** +75
+- **Status:** PERFECT
+
+### 13.5 - S3 Performance
+- **Score:** 3/3 (100%)
+- **XP:** +75
+- **Status:** PERFECT
+
+### 13.6 - S3 Object Tags & Metadata
+- **Score:** 1/2 (50%)
+- **XP:** +25
+- **Status:** REVIEW
+- **Missed:** Q1 - Fine-grained permissions on individual objects = S3 Object Tags (not prefixes). Tags allow IAM policies per-object, prefixes are folder-based.
