@@ -4,10 +4,10 @@
 
 | Metric | Value |
 |--------|-------|
-| Total XP | 4250 |
-| Lessons completed | 63 |
-| Perfect quizzes (100%) | 55 |
-| Lessons to review | 7 |
+| Total XP | 4550 |
+| Lessons completed | 68 |
+| Perfect quizzes (100%) | 59 |
+| Lessons to review | 8 |
 
 ## Session History
 
@@ -76,6 +76,11 @@
 | 2026-03-10 | 11 | 11.9 - S3 Replication | 50 | PERFECT |
 | 2026-03-10 | 11 | 11.10 - S3 Replication Notes | 50 | PERFECT |
 | 2026-03-10 | 11 | 11.12 - S3 Storage Classes Overview | 0 | REVIEW |
+| 2026-03-10 | 12 | 12.1 - AWS EC2 Instance Metadata | 75 | PERFECT |
+| 2026-03-10 | 12 | 12.4 - AWS CLI with MFA | 50 | PERFECT |
+| 2026-03-10 | 12 | 12.6 - Exponential Backoff & Service Limit Increase | 75 | PERFECT |
+| 2026-03-10 | 12 | 12.7 - AWS Credentials Provider Chain | 50 | REVIEW |
+| 2026-03-10 | 12 | 12.8 - AWS Signature v4 Signing (Sigv4) | 50 | PERFECT |
 
 ---
 
@@ -405,3 +410,29 @@
 - **Missed:** Q1 - Millisecond retrieval = Glacier Instant (not Flexible)
 - **Missed:** Q2 - Durability is 11 nines for ALL classes (Deep Archive min = 180 days, not 90)
 - **Missed:** Q3 - Unknown access patterns = Intelligent-Tiering (auto-moves, no manual management)
+
+### 12.1 - AWS EC2 Instance Metadata
+- **Score:** 3/3 (100%)
+- **XP:** +75
+- **Status:** PERFECT
+
+### 12.4 - AWS CLI with MFA
+- **Score:** 2/2 (100%)
+- **XP:** +50
+- **Status:** PERFECT
+
+### 12.6 - Exponential Backoff & Service Limit Increase
+- **Score:** 3/3 (100%)
+- **XP:** +75
+- **Status:** PERFECT
+
+### 12.7 - AWS Credentials Provider Chain
+- **Score:** 2/3 (67%)
+- **XP:** +50
+- **Status:** REVIEW
+- **Missed:** Q2 - Inside AWS = IAM Roles (not env vars). Env vars are for outside AWS (laptop, CI/CD).
+
+### 12.8 - AWS Signature v4 Signing (Sigv4)
+- **Score:** 2/2 (100%)
+- **XP:** +50
+- **Status:** PERFECT

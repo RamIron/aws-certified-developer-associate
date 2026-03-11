@@ -84,6 +84,6 @@ It should aggregate all lesson notes from that section into a single reference f
 
 ## Current State
 
-- **Current section:** Section 12 - AWS CLI, SDK, IAM Roles & Policies
-- **Total XP:** 4250
-- **Lessons completed:** 90
+- **Current section:** Section 13 - Advanced Amazon S3
+- **Total XP:** 4550
+- **Lessons completed:** 99

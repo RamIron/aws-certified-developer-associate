@@ -3,10 +3,10 @@
 ## Overall Progress
 
 ```
-[██████░░░░░░░░░░░░░░] 11/34 sections | 134/483 lessons
-Total XP: 4250
+[██████░░░░░░░░░░░░░░] 12/34 sections | 143/483 lessons
+Total XP: 4550
 
-Videos: 121/446 | Articles: 5/8 | Quizzes: 8/29
+Videos: 129/446 | Articles: 5/8 | Quizzes: 9/29
 ```
 
 > **Note:** The exact number of lessons per section will be filled in as the course progresses.
@@ -169,15 +169,15 @@ Videos: 121/446 | Articles: 5/8 | Quizzes: 8/29
 - [x] 11.14 - Amazon S3 Quiz (skipped - Udemy quiz)
 
 ## Section 12: AWS CLI, SDK, IAM Roles & Policies
-- [ ] 12.1 - AWS EC2 Instance Metadata
-- [ ] 12.2 - AWS EC2 Instance Metadata - Hands On
-- [ ] 12.3 - AWS CLI Profiles
-- [ ] 12.4 - AWS CLI with MFA
-- [ ] 12.5 - AWS SDK Overview
-- [ ] 12.6 - Exponential Backoff & Service Limit Increase
-- [ ] 12.7 - AWS Credentials Provider & Chain
-- [ ] 12.8 - AWS Signature v4 Signing (Sigv4)
-- [ ] 12.9 - AWS IAM, CLI, & SDK Quiz
+- [x] 12.1 - AWS EC2 Instance Metadata (PERFECT 100%)
+- [x] 12.2 - AWS EC2 Instance Metadata - Hands On (skipped - hands-on walkthrough)
+- [x] 12.3 - AWS CLI Profiles (skipped - practical tip, not on exam)
+- [x] 12.4 - AWS CLI with MFA (PERFECT 100%)
+- [x] 12.5 - AWS SDK Overview (skipped - brief intro, covered later with Lambda)
+- [x] 12.6 - Exponential Backoff & Service Limit Increase (PERFECT 100%)
+- [x] 12.7 - AWS Credentials Provider & Chain (REVIEW 67%)
+- [x] 12.8 - AWS Signature v4 Signing (Sigv4) (PERFECT 100%)
+- [x] 12.9 - AWS IAM, CLI, & SDK Quiz (skipped - Udemy quiz)
 
 ## Section 13: Advanced Amazon S3
 - [ ] 13.1 - S3 Lifecycle Rules

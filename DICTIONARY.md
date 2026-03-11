@@ -44,6 +44,7 @@ A reference for acronyms and English terms encountered in the course, with Spani
 | IDPS    | Intrusion Detection & Prevention System  | Sistema de detección y prevención de intrusiones |
 | IAM     | Identity and Access Management           | Gestión de identidad y acceso                    |
 | IGW     | Internet Gateway                         | Puerta de enlace a internet                      |
+| IMDS    | Instance Metadata Service                | Servicio de metadatos de instancia               |
 | IOPS    | Input/Output Operations Per Second       | Operaciones de entrada/salida por segundo        |
 | KMS     | Key Management Service                   | Servicio de gestión de claves                    |
 | IoT     | Internet of Things                       | Internet de las cosas                            |
@@ -70,6 +71,8 @@ A reference for acronyms and English terms encountered in the course, with Spani
 | SSD     | Solid State Drive                        | Disco de estado sólido                           |
 | SSH     | Secure Shell                             | Shell seguro                                     |
 | SRR     | Same-Region Replication                  | Replicación en la misma región                   |
+| SSRF    | Server-Side Request Forgery              | Falsificación de solicitud del lado del servidor |
+| STS     | Security Token Service                   | Servicio de token de seguridad                   |
 | SSL     | Secure Sockets Layer                     | Capa de conexión segura                          |
 | TCP     | Transmission Control Protocol            | Protocolo de control de transmisión              |
 | TLD     | Top Level Domain                         | Dominio de nivel superior                        |
