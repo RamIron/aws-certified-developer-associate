@@ -190,17 +190,20 @@ Videos: 135/446 | Articles: 5/8 | Quizzes: 10/29
 
 ## Section 14: Amazon S3 Security
 - [ ] 14.1 - S3 Encryption
-- [ ] 14.2 - S3 Encryption Hands On
-- [ ] 14.3 - S3 Default Encryption
-- [ ] 14.4 - S3 CORS
-- [ ] 14.5 - S3 CORS Hands On
-- [ ] 14.6 - S3 MFA Delete
-- [ ] 14.7 - S3 Access Logs
-- [ ] 14.8 - S3 Access Logs Hands On
-- [ ] 14.9 - S3 Pre-signed URLs
-- [ ] 14.10 - S3 Pre-signed URLs Hands On
-- [ ] 14.11 - S3 Access Points
-- [ ] 14.12 - S3 Object Lambda
+- [ ] 14.2 - About DSSE-KMS
+- [ ] 14.3 - S3 Encryption - Hands On
+- [ ] 14.4 - S3 Default Encryption
+- [ ] 14.5 - S3 CORS
+- [ ] 14.6 - S3 CORS - Hands On
+- [ ] 14.7 - S3 MFA Delete
+- [ ] 14.8 - S3 MFA Delete - Hands On
+- [ ] 14.9 - S3 Access Logs
+- [ ] 14.10 - S3 Access Logs - Hands On
+- [ ] 14.11 - S3 Pre-signed URLs
+- [ ] 14.12 - S3 Pre-signed URLs - Hands On
+- [ ] 14.13 - S3 Access Points
+- [ ] 14.14 - S3 Object Lambda
+- [ ] 14.15 - Amazon S3 Security Quiz
 
 ## Section 15: CloudFront
 - [ ] 15.1 - CloudFront Overview

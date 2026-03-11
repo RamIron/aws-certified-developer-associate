@@ -16,6 +16,47 @@ Study notes for AWS DVA-C02, assisted by Claude.
 
 **XP:** 4,800
 
+### Course Sections
+
+| Section | Duration | Done |
+|---------|----------|------|
+| 1: Course Introduction | 12 min | ✅ |
+| 2: Code & Slides Download | 1 min | ✅ |
+| 3: Getting Started with AWS | 13 min | ✅ |
+| 4: IAM & AWS CLI | 58 min | ✅ |
+| 5: EC2 Fundamentals | 1h 20 min | ✅ |
+| 6: EC2 Instance Storage | 56 min | ✅ |
+| 7: AWS Fundamentals: ELB + ASG | 1h 36 min | ✅ |
+| 8: AWS Fundamentals: RDS + Aurora + ElastiCache | 1h 4 min | ✅ |
+| 9: Route 53 | 1h 30 min | ✅ |
+| 10: VPC Fundamentals | 25 min | ✅ |
+| 11: Amazon S3 Introduction | 48 min | ✅ |
+| 12: AWS CLI, SDK, IAM Roles & Policies | 31 min | ✅ |
+| 13: Advanced Amazon S3 | 23 min | ✅ |
+| 14: Amazon S3 Security | 49 min | |
+| 15: CloudFront | 49 min | |
+| 16: ECS, ECR & Fargate - Docker in AWS | 1h 19 min | |
+| 17: AWS Elastic Beanstalk | 59 min | |
+| 18: AWS CloudFormation | 1h 11 min | |
+| 19: AWS Integration & Messaging: SQS, SNS & Kinesis | 1h 42 min | |
+| 20: AWS Monitoring & Audit: CloudWatch, X-Ray & CloudTrail | 1h 45 min | |
+| 21: AWS Serverless: Lambda | 3h 4 min | |
+| 22: AWS Serverless: DynamoDB | 1h 46 min | |
+| 23: AWS Serverless: API Gateway | 1h 22 min | |
+| 24: AWS CICD: CodeCommit, CodePipeline, CodeBuild, CodeDeploy | 1h 38 min | |
+| 25: AWS Serverless: SAM | 35 min | |
+| 26: Cloud Development Kit (CDK) | 26 min | |
+| 27: Cognito: User Pools, Identity Pools & Sync | 39 min | |
+| 28: Other Serverless: Step Functions & AppSync | 58 min | |
+| 29: Advanced Identity | 23 min | |
+| 30: AWS Security & Encryption: KMS, Encryption SDK, SSM Parameter Store, IAM & STS | 1h 29 min | |
+| 31: AWS Other Services | 34 min | |
+| 32: AWS Final Cleanup | 3 min | |
+| 33: Preparing for the Exam | 21 min | |
+| 34: Congratulations | 9 min | |
+| **Completed** | **~9h 17 min** | |
+| **Remaining** | **~22 hours** | |
+
 ---
 
 ## Course
