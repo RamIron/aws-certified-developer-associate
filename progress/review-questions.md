@@ -79,3 +79,37 @@ Questions from Udemy section quizzes that need review.
 - Credentials from IAM Roles are always **temporary** (they expire and auto-rotate)
 
 **Key:** Metadata ≠ User data. Role credentials are always temporary.
+
+## Section 15 - CloudFront
+
+### Q8 - OAC vs Signed URL for paid content
+**Question:** Paid content in S3, distributed globally via CloudFront, S3 configured to only exchange data with CloudFront. Which feature securely distributes the paid content?
+
+**Answer:** CloudFront **Signed URL** (not OAC).
+
+- **OAC** = secures S3↔CloudFront connection (already done in the question setup)
+- **Signed URL** = controls which **users** can access the content
+- OAC answers "who can reach S3?" → only CloudFront
+- Signed URL answers "who can reach CloudFront content?" → only authorized users
+
+**Key:** "paid/premium content distribution" → Signed URL. OAC is infrastructure security, not user-level access control.
+
+### Q9 - CloudFront vs S3 CRR for dynamic content
+**Question:** Highly dynamic content in S3 us-east-1, need low latency in ap-southeast-1. What to use?
+
+**Answer:** **S3 Cross-Region Replication** (not CloudFront).
+
+- CloudFront = static content, cached (may be stale), global
+- S3 CRR = dynamic content, near real-time sync, specific regions
+
+**Key:** "highly dynamic" = changes frequently = needs fresh data = CRR. "Static worldwide" = CloudFront.
+
+### Q10 - Trusted Key Group vs CloudFront Key Pair
+**Question:** Recommended signer for CloudFront Signed URLs/Cookies?
+
+**Answer:** **Trusted Key Group** (not CloudFront Key Pair).
+
+- Trusted Key Group = any IAM user can manage, API support, key rotation
+- CloudFront Key Pair = root account only, console only, no APIs
+
+**Key:** Trusted Key Group = recommended (modern, automatable). CloudFront Key Pair = old way (root only).
