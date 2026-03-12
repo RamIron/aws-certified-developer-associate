@@ -84,6 +84,6 @@ It should aggregate all lesson notes from that section into a single reference f
 
 ## Current State
 
-- **Current section:** Section 15 - CloudFront
-- **Total XP:** 5075
-- **Lessons completed:** 121
+- **Current section:** Section 16 - ECS, ECR & Fargate - Docker in AWS
+- **Total XP:** 5550
+- **Lessons completed:** 134

@@ -3,10 +3,10 @@
 ## Overall Progress
 
 ```
-[███████░░░░░░░░░░░░░] 14/34 sections | 165/483 lessons
-Total XP: 5075
+[████████░░░░░░░░░░░░] 15/34 sections | 178/483 lessons
+Total XP: 5550
 
-Videos: 148/446 | Articles: 6/8 | Quizzes: 11/29
+Videos: 160/446 | Articles: 6/8 | Quizzes: 12/29
 ```
 
 > **Note:** The exact number of lessons per section will be filled in as the course progresses.
@@ -206,17 +206,19 @@ Videos: 148/446 | Articles: 6/8 | Quizzes: 11/29
 - [x] 14.15 - Amazon S3 Security Quiz (skipped - Udemy quiz)
 
 ## Section 15: CloudFront
-- [ ] 15.1 - CloudFront Overview
-- [ ] 15.2 - CloudFront Hands On
-- [ ] 15.3 - CloudFront - Caching & Caching Policies
-- [ ] 15.4 - CloudFront - Cache Invalidation
-- [ ] 15.5 - CloudFront - Cache Behaviors
-- [ ] 15.6 - CloudFront - ALB as an Origin
-- [ ] 15.7 - CloudFront - Geo Restriction
-- [ ] 15.8 - CloudFront - Signed URL / Cookies
-- [ ] 15.9 - CloudFront - Signed URL - Key Groups Hands On
-- [ ] 15.10 - CloudFront - Advanced Concepts
-- [ ] 15.11 - CloudFront - Real Time Logs
+- [x] 15.1 - CloudFront - Overview (PERFECT 100%)
+- [x] 15.2 - CloudFront Hands On (skipped - hands-on)
+- [x] 15.3 - CloudFront - Caching & Caching Policies (PERFECT 100%)
+- [x] 15.4 - CloudFront - Cache Invalidations (PERFECT 100%)
+- [x] 15.5 - CloudFront - Cache Behaviors (PERFECT 100%)
+- [x] 15.6 - CloudFront - Caching & Caching Invalidations - Hands On (skipped - hands-on)
+- [x] 15.7 - CloudFront - ALB/EC2 as an Origin (PERFECT 100%)
+- [x] 15.8 - CloudFront - Geo Restriction (skipped - low exam relevance)
+- [x] 15.9 - CloudFront Signed URL / Cookies (PERFECT 100%)
+- [x] 15.10 - CloudFront Signed URL - Key Groups + Hands On (skipped - hands-on, key info added to 15.9)
+- [x] 15.11 - CloudFront Advanced Concepts (PERFECT 100%)
+- [x] 15.12 - CloudFront - Real Time Logs (skipped - low exam relevance)
+- [x] 15.13 - CloudFront Quiz (skipped - Udemy quiz)
 
 ## Section 16: ECS, ECR & Fargate - Docker in AWS
 - [ ] 16.1 - Docker Introduction

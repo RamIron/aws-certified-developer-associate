@@ -4,9 +4,9 @@
 
 | Metric | Value |
 |--------|-------|
-| Total XP | 5075 |
-| Lessons completed | 77 |
-| Perfect quizzes (100%) | 66 |
+| Total XP | 5550 |
+| Lessons completed | 84 |
+| Perfect quizzes (100%) | 73 |
 | Lessons to review | 10 |
 
 ## Session History
@@ -90,6 +90,13 @@
 | 2026-03-11 | 14 | 14.11 - S3 Pre-signed URLs | 25 | REVIEW |
 | 2026-03-11 | 14 | 14.13 - S3 Access Points | 50 | PERFECT |
 | 2026-03-11 | 14 | 14.14 - S3 Object Lambda | 50 | PERFECT |
+| 2026-03-12 | 15 | 15.1 - CloudFront Overview | 75 | PERFECT |
+| 2026-03-12 | 15 | 15.3 - CloudFront Caching & Caching Policies | 75 | PERFECT |
+| 2026-03-12 | 15 | 15.4 - CloudFront Cache Invalidations | 50 | PERFECT |
+| 2026-03-12 | 15 | 15.5 - CloudFront Cache Behaviors | 75 | PERFECT |
+| 2026-03-12 | 15 | 15.7 - CloudFront ALB/EC2 as an Origin | 50 | PERFECT |
+| 2026-03-12 | 15 | 15.9 - CloudFront Signed URL / Cookies | 75 | PERFECT |
+| 2026-03-12 | 15 | 15.11 - CloudFront Advanced Concepts | 75 | PERFECT |
 
 ---
 
@@ -491,4 +498,39 @@
 ### 14.14 - S3 Object Lambda
 - **Score:** 2/2 (100%)
 - **XP:** +50
+- **Status:** PERFECT
+
+### 15.1 - CloudFront Overview
+- **Score:** 3/3 (100%)
+- **XP:** +75
+- **Status:** PERFECT
+
+### 15.3 - CloudFront Caching & Caching Policies
+- **Score:** 3/3 (100%)
+- **XP:** +75
+- **Status:** PERFECT
+
+### 15.4 - CloudFront Cache Invalidations
+- **Score:** 2/2 (100%)
+- **XP:** +50
+- **Status:** PERFECT
+
+### 15.5 - CloudFront Cache Behaviors
+- **Score:** 3/3 (100%)
+- **XP:** +75
+- **Status:** PERFECT
+
+### 15.7 - CloudFront ALB/EC2 as an Origin
+- **Score:** 2/2 (100%)
+- **XP:** +50
+- **Status:** PERFECT
+
+### 15.9 - CloudFront Signed URL / Cookies
+- **Score:** 3/3 (100%)
+- **XP:** +75
+- **Status:** PERFECT
+
+### 15.11 - CloudFront Advanced Concepts
+- **Score:** 3/3 (100%)
+- **XP:** +75
 - **Status:** PERFECT

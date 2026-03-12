@@ -22,10 +22,12 @@ A reference for acronyms and English terms encountered in the course, with Spani
 | CIDR    | Classless Inter-Domain Routing           | Enrutamiento entre dominios sin clases           |
 | CLI     | Command Line Interface                   | Interfaz de línea de comandos                    |
 | CMS     | Content Management System                | Sistema de gestión de contenido                  |
+| CDN     | Content Delivery Network                  | Red de distribución de contenido                 |
 | CORS    | Cross-Origin Resource Sharing             | Intercambio de recursos entre orígenes           |
 | CPU     | Central Processing Unit                  | Unidad central de procesamiento                  |
 | CRR     | Cross-Region Replication                 | Replicación entre regiones                       |
 | CSV     | Comma-Separated Values                   | Valores separados por comas                      |
+| DDoS    | Distributed Denial of Service            | Denegación de servicio distribuida               |
 | DNS     | Domain Name System                       | Sistema de nombres de dominio                    |
 | EBS     | Elastic Block Store                      | Almacenamiento en bloque elástico                |
 | EC2     | Elastic Compute Cloud                    | Nube de cómputo elástica                         |
@@ -56,6 +58,7 @@ A reference for acronyms and English terms encountered in the course, with Spani
 | NAT     | Network Address Translation              | Traducción de direcciones de red                 |
 | NLB     | Network Load Balancer                    | Balanceador de carga de red                      |
 | NoSQL   | Not Only SQL                             | No solo SQL                                      |
+| OAC     | Origin Access Control                    | Control de acceso al origen                      |
 | OLTP    | Online Transaction Processing            | Procesamiento de transacciones en línea          |
 | OSI     | Open Systems Interconnection             | Interconexión de sistemas abiertos               |
 | PII     | Personally Identifiable Information      | Información de identificación personal           |
