@@ -7,14 +7,14 @@ Study notes for AWS DVA-C02, assisted by Claude.
 ## 📊 Progress
 
 ```
-█████████░░░░░░░░░░░░░░░░░░░░░ 31% (150/483 lessons)
+██████████░░░░░░░░░░░░░░░░░░░░ 34% (165/483 lessons)
 ```
 
-📹 Videos: 135/446 · 📄 Articles: 5/8 · ❓ Quizzes: 10/29
+📹 Videos: 148/446 · 📄 Articles: 6/8 · ❓ Quizzes: 11/29
 
-**Current section:** 14 - Amazon S3 Security
+**Current section:** 15 - CloudFront
 
-**XP:** 4,800
+**XP:** 5,075
 
 ### Course Sections
 
@@ -33,7 +33,7 @@ Study notes for AWS DVA-C02, assisted by Claude.
 | 11: Amazon S3 Introduction | 48 min | ✅ |
 | 12: AWS CLI, SDK, IAM Roles & Policies | 31 min | ✅ |
 | 13: Advanced Amazon S3 | 23 min | ✅ |
-| 14: Amazon S3 Security | 49 min | |
+| 14: Amazon S3 Security | 49 min | ✅ |
 | 15: CloudFront | 49 min | |
 | 16: ECS, ECR & Fargate - Docker in AWS | 1h 19 min | |
 | 17: AWS Elastic Beanstalk | 59 min | |
@@ -54,8 +54,8 @@ Study notes for AWS DVA-C02, assisted by Claude.
 | 32: AWS Final Cleanup | 3 min | |
 | 33: Preparing for the Exam | 21 min | |
 | 34: Congratulations | 9 min | |
-| **Completed** | **~9h 17 min** | |
-| **Remaining** | **~22 hours** | |
+| **Completed** | **~10h 6 min** | |
+| **Remaining** | **~21h 11 min** | |
 
 ---
 

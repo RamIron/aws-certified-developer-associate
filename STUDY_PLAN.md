@@ -3,10 +3,10 @@
 ## Overall Progress
 
 ```
-[██████░░░░░░░░░░░░░░] 13/34 sections | 150/483 lessons
-Total XP: 4800
+[███████░░░░░░░░░░░░░] 14/34 sections | 165/483 lessons
+Total XP: 5075
 
-Videos: 135/446 | Articles: 5/8 | Quizzes: 10/29
+Videos: 148/446 | Articles: 6/8 | Quizzes: 11/29
 ```
 
 > **Note:** The exact number of lessons per section will be filled in as the course progresses.
@@ -189,21 +189,21 @@ Videos: 135/446 | Articles: 5/8 | Quizzes: 10/29
 - [x] 13.7 - Amazon S3 Advanced Quiz (skipped - Udemy quiz)
 
 ## Section 14: Amazon S3 Security
-- [ ] 14.1 - S3 Encryption
-- [ ] 14.2 - About DSSE-KMS
-- [ ] 14.3 - S3 Encryption - Hands On
-- [ ] 14.4 - S3 Default Encryption
-- [ ] 14.5 - S3 CORS
-- [ ] 14.6 - S3 CORS - Hands On
-- [ ] 14.7 - S3 MFA Delete
-- [ ] 14.8 - S3 MFA Delete - Hands On
-- [ ] 14.9 - S3 Access Logs
-- [ ] 14.10 - S3 Access Logs - Hands On
-- [ ] 14.11 - S3 Pre-signed URLs
-- [ ] 14.12 - S3 Pre-signed URLs - Hands On
-- [ ] 14.13 - S3 Access Points
-- [ ] 14.14 - S3 Object Lambda
-- [ ] 14.15 - Amazon S3 Security Quiz
+- [x] 14.1 - S3 Encryption (PERFECT 100%)
+- [x] 14.2 - About DSSE-KMS (skipped - article, not on exam)
+- [x] 14.3 - S3 Encryption - Hands On (skipped - hands-on walkthrough)
+- [x] 14.4 - S3 Default Encryption (skipped - short, merged into 14.1 notes)
+- [x] 14.5 - S3 CORS (PERFECT 100%)
+- [x] 14.6 - S3 CORS - Hands On (skipped - hands-on walkthrough)
+- [x] 14.7 - S3 MFA Delete (skipped - short, notes created)
+- [x] 14.8 - S3 MFA Delete - Hands On (skipped - hands-on walkthrough)
+- [x] 14.9 - S3 Access Logs (skipped - short, notes created)
+- [x] 14.10 - S3 Access Logs - Hands On (skipped - hands-on walkthrough)
+- [x] 14.11 - S3 Pre-signed URLs (PERFECT 100%)
+- [x] 14.12 - S3 Pre-signed URLs - Hands On (skipped - hands-on walkthrough)
+- [x] 14.13 - S3 Access Points (PERFECT 100%)
+- [x] 14.14 - S3 Object Lambda (PERFECT 100%)
+- [x] 14.15 - Amazon S3 Security Quiz (skipped - Udemy quiz)
 
 ## Section 15: CloudFront
 - [ ] 15.1 - CloudFront Overview

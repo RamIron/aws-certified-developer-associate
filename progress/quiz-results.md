@@ -4,10 +4,10 @@
 
 | Metric | Value |
 |--------|-------|
-| Total XP | 4800 |
-| Lessons completed | 72 |
-| Perfect quizzes (100%) | 62 |
-| Lessons to review | 9 |
+| Total XP | 5075 |
+| Lessons completed | 77 |
+| Perfect quizzes (100%) | 66 |
+| Lessons to review | 10 |
 
 ## Session History
 
@@ -85,6 +85,11 @@
 | 2026-03-11 | 13 | 13.3 - S3 Event Notifications | 75 | PERFECT |
 | 2026-03-11 | 13 | 13.5 - S3 Performance | 75 | PERFECT |
 | 2026-03-11 | 13 | 13.6 - S3 Object Tags & Metadata | 25 | REVIEW |
+| 2026-03-11 | 14 | 14.1 - S3 Encryption | 100 | PERFECT |
+| 2026-03-11 | 14 | 14.5 - S3 CORS | 50 | PERFECT |
+| 2026-03-11 | 14 | 14.11 - S3 Pre-signed URLs | 25 | REVIEW |
+| 2026-03-11 | 14 | 14.13 - S3 Access Points | 50 | PERFECT |
+| 2026-03-11 | 14 | 14.14 - S3 Object Lambda | 50 | PERFECT |
 
 ---
 
@@ -461,3 +466,29 @@
 - **XP:** +25
 - **Status:** REVIEW
 - **Missed:** Q1 - Fine-grained permissions on individual objects = S3 Object Tags (not prefixes). Tags allow IAM policies per-object, prefixes are folder-based.
+
+### 14.1 - S3 Encryption
+- **Score:** 4/4 (100%)
+- **XP:** +100
+- **Status:** PERFECT
+
+### 14.5 - S3 CORS
+- **Score:** 2/2 (100%)
+- **XP:** +50
+- **Status:** PERFECT
+
+### 14.11 - S3 Pre-signed URLs
+- **Score:** 1/2 (50%)
+- **XP:** +25
+- **Status:** REVIEW
+- **Missed:** Q2 - Console max = 12h, CLI max = 168h (7 days). Confused the two.
+
+### 14.13 - S3 Access Points
+- **Score:** 2/2 (100%)
+- **XP:** +50
+- **Status:** PERFECT
+
+### 14.14 - S3 Object Lambda
+- **Score:** 2/2 (100%)
+- **XP:** +50
+- **Status:** PERFECT

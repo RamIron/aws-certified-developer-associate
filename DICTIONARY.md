@@ -22,6 +22,7 @@ A reference for acronyms and English terms encountered in the course, with Spani
 | CIDR    | Classless Inter-Domain Routing           | Enrutamiento entre dominios sin clases           |
 | CLI     | Command Line Interface                   | Interfaz de línea de comandos                    |
 | CMS     | Content Management System                | Sistema de gestión de contenido                  |
+| CORS    | Cross-Origin Resource Sharing             | Intercambio de recursos entre orígenes           |
 | CPU     | Central Processing Unit                  | Unidad central de procesamiento                  |
 | CRR     | Cross-Region Replication                 | Replicación entre regiones                       |
 | CSV     | Comma-Separated Values                   | Valores separados por comas                      |
@@ -57,6 +58,7 @@ A reference for acronyms and English terms encountered in the course, with Spani
 | NoSQL   | Not Only SQL                             | No solo SQL                                      |
 | OLTP    | Online Transaction Processing            | Procesamiento de transacciones en línea          |
 | OSI     | Open Systems Interconnection             | Interconexión de sistemas abiertos               |
+| PII     | Personally Identifiable Information      | Información de identificación personal           |
 | RAID    | Redundant Array of Independent Disks     | Conjunto redundante de discos independientes     |
 | RAM     | Random Access Memory                     | Memoria de acceso aleatorio                      |
 | RDS     | Relational Database Service              | Servicio de base de datos relacional             |
@@ -71,6 +73,7 @@ A reference for acronyms and English terms encountered in the course, with Spani
 | SSD     | Solid State Drive                        | Disco de estado sólido                           |
 | SSH     | Secure Shell                             | Shell seguro                                     |
 | SRR     | Same-Region Replication                  | Replicación en la misma región                   |
+| SSE     | Server-Side Encryption                   | Cifrado del lado del servidor                    |
 | SSRF    | Server-Side Request Forgery              | Falsificación de solicitud del lado del servidor |
 | STS     | Security Token Service                   | Servicio de token de seguridad                   |
 | SSL     | Secure Sockets Layer                     | Capa de conexión segura                          |
@@ -102,6 +105,7 @@ A reference for acronyms and English terms encountered in the course, with Spani
 | Inbound / Outbound        | Entrante / Saliente                          |
 | Inline policy             | Política directa / integrada                 |
 | On-premises               | En las instalaciones (infraestructura local) |
+| Redact                    | Censurar / ocultar información sensible      |
 | Slight                    | Leve / ligero                                |
 | Steady-state              | Estado estable / constante                   |
 | Tenancy                   | Arrendamiento / tenencia                     |
