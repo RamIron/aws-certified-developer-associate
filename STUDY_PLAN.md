@@ -3,10 +3,10 @@
 ## Overall Progress
 
 ```
-[████████░░░░░░░░░░░░] 15/34 sections | 178/483 lessons
-Total XP: 5550
+[████████░░░░░░░░░░░░] 16/34 sections | 195/483 lessons
+Total XP: 6050
 
-Videos: 160/446 | Articles: 6/8 | Quizzes: 12/29
+Videos: 176/446 | Articles: 6/8 | Quizzes: 13/29
 ```
 
 > **Note:** The exact number of lessons per section will be filled in as the course progresses.
@@ -221,16 +221,23 @@ Videos: 160/446 | Articles: 6/8 | Quizzes: 12/29
 - [x] 15.13 - CloudFront Quiz (skipped - Udemy quiz)
 
 ## Section 16: ECS, ECR & Fargate - Docker in AWS
-- [ ] 16.1 - Docker Introduction
-- [ ] 16.2 - Amazon ECS
-- [ ] 16.3 - Creating ECS Cluster Hands On
-- [ ] 16.4 - Creating ECS Service Hands On
-- [ ] 16.5 - Amazon ECS - Auto Scaling
-- [ ] 16.6 - Amazon ECS - Rolling Updates
-- [ ] 16.7 - Amazon ECS - Solutions Architectures
-- [ ] 16.8 - Amazon ECR
-- [ ] 16.9 - Amazon EKS Overview
-- [ ] 16.10 - AWS App Runner
+- [x] 16.1 - Docker Introduction (PERFECT 100%)
+- [x] 16.2 - Amazon ECS (PERFECT 100%)
+- [x] 16.3 - Creating ECS Cluster Hands On (skipped - hands-on)
+- [x] 16.4 - Creating ECS Service Hands On (skipped - hands-on)
+- [x] 16.5 - Amazon ECS - Auto Scaling (REVIEW 33%)
+- [x] 16.6 - Amazon ECS - Rolling Updates (PERFECT 100%)
+- [x] 16.7 - Amazon ECS - Solutions Architectures (PERFECT 100%)
+- [x] 16.8 - Amazon ECS Task Definitions - Deep Dive (PERFECT 100%)
+- [x] 16.9 - Amazon ECS Task Definitions - Hands On (skipped - hands-on)
+- [x] 16.10 - Amazon ECS - Task Placements (PASSED 67%)
+- [x] 16.11 - Amazon ECS - Clean Up - Hands On (skipped - hands-on)
+- [x] 16.12 - Amazon ECR (no quiz - simple concept)
+- [x] 16.13 - Amazon ECR - Hands On (skipped - hands-on)
+- [x] 16.14 - AWS CoPilot - Overview (skipped - low exam relevance)
+- [x] 16.15 - AWS CoPilot - Hands On (skipped - hands-on)
+- [x] 16.16 - Amazon EKS (PERFECT 100%)
+- [x] 16.17 - Containers on AWS Quiz (skipped - Udemy quiz)
 
 ## Section 17: AWS Elastic Beanstalk
 - [ ] 17.1 - Beanstalk Overview

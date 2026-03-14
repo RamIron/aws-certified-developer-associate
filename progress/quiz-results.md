@@ -4,10 +4,10 @@
 
 | Metric | Value |
 |--------|-------|
-| Total XP | 5550 |
-| Lessons completed | 84 |
-| Perfect quizzes (100%) | 73 |
-| Lessons to review | 10 |
+| Total XP | 6050 |
+| Lessons completed | 94 |
+| Perfect quizzes (100%) | 80 |
+| Lessons to review | 11 |
 
 ## Session History
 
@@ -97,6 +97,14 @@
 | 2026-03-12 | 15 | 15.7 - CloudFront ALB/EC2 as an Origin | 50 | PERFECT |
 | 2026-03-12 | 15 | 15.9 - CloudFront Signed URL / Cookies | 75 | PERFECT |
 | 2026-03-12 | 15 | 15.11 - CloudFront Advanced Concepts | 75 | PERFECT |
+| 2026-03-13 | 16 | 16.1 - Docker Introduction | 75 | PERFECT |
+| 2026-03-13 | 16 | 16.2 - Amazon ECS | 100 | PERFECT |
+| 2026-03-14 | 16 | 16.5 - ECS Auto Scaling | 25 | REVIEW |
+| 2026-03-14 | 16 | 16.6 - ECS Rolling Updates | 50 | PERFECT |
+| 2026-03-14 | 16 | 16.7 - ECS Solutions Architectures | 50 | PERFECT |
+| 2026-03-14 | 16 | 16.8 - ECS Task Definitions Deep Dive | 75 | PERFECT |
+| 2026-03-14 | 16 | 16.10 - ECS Task Placements | 50 | PASSED |
+| 2026-03-14 | 16 | 16.16 - Amazon EKS | 75 | PERFECT |
 
 ---
 
@@ -531,6 +539,49 @@
 - **Status:** PERFECT
 
 ### 15.11 - CloudFront Advanced Concepts
+- **Score:** 3/3 (100%)
+- **XP:** +75
+- **Status:** PERFECT
+
+### 16.1 - Docker Introduction
+- **Score:** 3/3 (100%)
+- **XP:** +75
+- **Status:** PERFECT
+
+### 16.2 - Amazon ECS
+- **Score:** 4/4 (100%)
+- **XP:** +100
+- **Status:** PERFECT
+
+### 16.5 - ECS Auto Scaling
+- **Score:** 1/3 (33%)
+- **XP:** +25
+- **Status:** REVIEW
+- **Missed:** Q1 - Predictable traffic pattern ("every weekday at 9 AM") → Scheduled Scaling, not Capacity Provider (which is for EC2 launch type)
+- **Missed:** Q3 - Tasks stuck in PENDING = not enough EC2 capacity → Capacity Provider (adds EC2 instances), not increasing desired count (makes it worse)
+
+### 16.6 - ECS Rolling Updates
+- **Score:** 2/2 (100%)
+- **XP:** +50
+- **Status:** PERFECT
+
+### 16.7 - ECS Solutions Architectures
+- **Score:** 2/2 (100%)
+- **XP:** +50
+- **Status:** PERFECT
+
+### 16.8 - ECS Task Definitions Deep Dive
+- **Score:** 3/3 (100%)
+- **XP:** +75
+- **Status:** PERFECT
+
+### 16.10 - ECS Task Placements
+- **Score:** 2/3 (67%)
+- **XP:** +50
+- **Status:** PASSED
+- **Missed:** Q3 - "No two tasks on same instance" = distinctInstance constraint (hard rule), not memberOf (filters by instance attributes like type)
+
+### 16.16 - Amazon EKS
 - **Score:** 3/3 (100%)
 - **XP:** +75
 - **Status:** PERFECT
