@@ -113,3 +113,62 @@ Questions from Udemy section quizzes that need review.
 - CloudFront Key Pair = root account only, console only, no APIs
 
 **Key:** Trusted Key Group = recommended (modern, automatable). CloudFront Key Pair = old way (root only).
+
+## Section 16 - ECS, ECR & Fargate
+
+### Q11 - ECS_ENABLE_TASK_IAM_ROLE config
+**Question:** You have a Classic ECS cluster and want to enable IAM roles for ECS tasks so they can make API requests to AWS services. Which config option should you enable in `/etc/ecs/ecs.config`?
+
+**Answer:** `ECS_ENABLE_TASK_IAM_ROLE` (set to `true`).
+
+- This setting is in `/etc/ecs/ecs.config` on the EC2 instance
+- The ECS Agent reads this config file on startup
+- Without it, ECS tasks cannot assume their own IAM Task Roles
+- Only relevant for **EC2 launch type** (Fargate handles this automatically)
+
+**Key:** EC2 launch type needs `ECS_ENABLE_TASK_IAM_ROLE=true` in `/etc/ecs/ecs.config` for Task Roles to work. Not covered in the course transcript.
+
+### Q12 - CodeBuild authorization failure pushing to ECR
+**Question:** CodePipeline build stage uses CodeBuild to build Docker images and push to ECR. The build stage fails with an authorization issue. What is the issue?
+
+**Answer:** The **CodeBuild Service Role** lacks permissions to push to ECR.
+
+- CodeBuild uses its own IAM Service Role
+- That role needs ECR permissions (`ecr:GetAuthorizationToken`, `ecr:PutImage`, etc.)
+- Same pattern: whoever pushes/pulls from ECR needs **IAM permissions**
+
+**Key:** ECR authorization error = check IAM permissions of whoever is calling ECR (CodeBuild role, ECS task role, IAM user, etc.).
+
+### Q13 - Second container fails to start on same EC2 instance
+**Question:** Two copies of the same Docker container on the same EC2 instance. First starts fine, second fails. CPU and RAM are sufficient. What's the problem?
+
+**Answer:** The **host port is hardcoded** in the task definition (e.g., host port 80). The first container takes port 80, the second can't bind to the same port → conflict.
+
+- Fix: set host port to **0** (Dynamic Host Port Mapping) → Docker assigns random ports
+- Use an **ALB** to discover the dynamic ports automatically
+
+**Key:** "Second container fails on same instance, enough CPU/RAM" = host port conflict. Use host port 0 for dynamic mapping.
+
+### Q14 - EC2 instance can't register with ECS cluster (NOT question)
+**Question:** A newly launched EC2 instance can't register with your ECS cluster. What is NOT a reason?
+
+**Answer:** "The security group does not allow inbound traffic" is **NOT** a reason.
+
+- ECS registration is an **outbound** call (agent → ECS service), so inbound rules don't matter
+- Valid reasons: ECS Agent not running, wrong AMI (not ECS-optimized), missing IAM permissions
+
+**Key:** ECS registration = outbound API call. Inbound security group rules are irrelevant for registration.
+
+### Q15 - Pull Docker images from private ECR
+**Question:** Which AWS CLI command to pull Docker images from a private ECR repository?
+
+**Answer:**
+```bash
+aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ECR_URL
+docker pull $ECR_IMAGE_URL
+```
+
+- First authenticate Docker CLI with ECR using `get-login-password`
+- Then `docker pull` to download the image
+
+**Key:** `aws ecr get-login-password` → `docker login` → `docker pull`. Always authenticate first.
