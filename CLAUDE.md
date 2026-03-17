@@ -84,6 +84,6 @@ It should aggregate all lesson notes from that section into a single reference f
 
 ## Current State
 
-- **Current section:** Section 17 - AWS Elastic Beanstalk
-- **Total XP:** 6050
-- **Lessons completed:** 151
+- **Current section:** Section 18 - AWS CloudFormation
+- **Total XP:** 6550
+- **Lessons completed:** 165

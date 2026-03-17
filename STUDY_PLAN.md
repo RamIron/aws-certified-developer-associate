@@ -3,10 +3,10 @@
 ## Overall Progress
 
 ```
-[████████░░░░░░░░░░░░] 16/34 sections | 195/483 lessons
-Total XP: 6050
+[██████████░░░░░░░░░░] 17/34 sections | 209/483 lessons
+Total XP: 6550
 
-Videos: 176/446 | Articles: 6/8 | Quizzes: 13/29
+Videos: 189/446 | Articles: 6/8 | Quizzes: 14/29
 ```
 
 > **Note:** The exact number of lessons per section will be filled in as the course progresses.
@@ -239,19 +239,21 @@ Videos: 176/446 | Articles: 6/8 | Quizzes: 13/29
 - [x] 16.16 - Amazon EKS (PERFECT 100%)
 - [x] 16.17 - Containers on AWS Quiz (skipped - Udemy quiz)
 
-## Section 17: AWS Elastic Beanstalk
-- [ ] 17.1 - Beanstalk Overview
-- [ ] 17.2 - Beanstalk Hands On
-- [ ] 17.3 - Beanstalk - Deployment Modes
-- [ ] 17.4 - Beanstalk Deployment Modes Hands On
-- [ ] 17.5 - Beanstalk - CLI & Deployment Process
-- [ ] 17.6 - Beanstalk Lifecycle Policy
-- [ ] 17.7 - Beanstalk Extensions
-- [ ] 17.8 - Beanstalk & CloudFormation
-- [ ] 17.9 - Beanstalk Cloning
-- [ ] 17.10 - Beanstalk Migrations
-- [ ] 17.11 - Beanstalk with Docker
-- [ ] 17.12 - Beanstalk Advanced Concepts
+## Section 17: AWS Elastic Beanstalk ✓
+- [x] 17.1 - AWS Elastic Beanstalk - Section Introduction (skipped - intro)
+- [x] 17.2 - Elastic Beanstalk Overview (High level) (PERFECT 100%)
+- [x] 17.3 - Beanstalk First Environment (skipped - hands-on)
+- [x] 17.4 - Beanstalk Second Environment (skipped - hands-on)
+- [x] 17.5 - Beanstalk Deployment Modes (PERFECT 100%)
+- [x] 17.6 - Beanstalk Deployment Modes Hands On (skipped - hands-on)
+- [x] 17.7 - Beanstalk CLI and Deployment Process (skipped - low exam relevance)
+- [x] 17.8 - Beanstalk Lifecycle Policy Overview + Hands On (PERFECT 100%)
+- [x] 17.9 - Beanstalk Extensions (PERFECT 100%)
+- [x] 17.10 - Beanstalk & CloudFormation (PERFECT 100%)
+- [x] 17.11 - Beanstalk Cloning (PERFECT 100%)
+- [x] 17.12 - Beanstalk Migrations (PERFECT 100%)
+- [x] 17.13 - Beanstalk Cleanup (skipped - hands-on cleanup)
+- [x] 17.14 - Elastic Beanstalk Quiz (skipped - Udemy quiz)
 
 ## Section 18: AWS CloudFormation
 - [ ] 18.1 - CloudFormation Overview
