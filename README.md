@@ -54,8 +54,8 @@ Study notes for AWS DVA-C02, assisted by Claude.
 | 32: AWS Final Cleanup | 3 min | |
 | 33: Preparing for the Exam | 21 min | |
 | 34: Congratulations | 9 min | |
-| **Completed** | **~12h 14 min** | |
-| **Remaining** | **~19h 3 min** | |
+| **Completed** | **~13h 13 min** | |
+| **Remaining** | **~18h 4 min** | |
 
 ---
 
