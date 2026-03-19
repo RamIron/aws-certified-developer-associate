@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Section 15 — Amazon CloudFront</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #0f172a; color: #f8fafc; font-family: 'Inter', sans-serif; font-size: 14px; line-height: 1.6; min-height: 100vh; }
+    .hero { background: linear-gradient(135deg, #1e293b 0%, #0f172a 60%, #1a1a2e 100%); border-bottom: 1px solid #334155; padding: 48px 32px 40px; text-align: center; }
+    .hero-eyebrow { font-size: 13px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #f97316; margin-bottom: 12px; }
+    h1 { font-size: clamp(26px, 4vw, 40px); font-weight: 800; color: #f8fafc; margin-bottom: 8px; letter-spacing: -0.02em; }
+    .hero-subtitle { font-size: 15px; color: #94a3b8; margin-bottom: 20px; }
+    .xp-badge { display: inline-flex; align-items: center; gap: 6px; background: linear-gradient(135deg, #f97316, #ea580c); color: #fff; font-size: 13px; font-weight: 700; padding: 8px 18px; border-radius: 999px; }
+    .page-body { max-width: 1100px; margin: 0 auto; padding: 48px 24px; display: flex; flex-direction: column; gap: 40px; }
+    .section-label { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: #f97316; margin-bottom: 16px; }
+    .card { background: #1e293b; border-radius: 12px; border: 1px solid #334155; padding: 24px; }
+    .card-title { font-size: 18px; font-weight: 700; color: #f8fafc; margin-bottom: 16px; }
+    .callout { border-radius: 10px; padding: 16px 20px; font-size: 14px; line-height: 1.65; border-left: 4px solid; }
+    .callout.warning { background: rgba(249,115,22,0.08); border-color: #f97316; color: #fed7aa; }
+    .callout.warning strong { color: #fb923c; }
+    .callout.info { background: rgba(99,102,241,0.08); border-color: #6366f1; color: #c7d2fe; }
+    .callout.success { background: rgba(16,185,129,0.08); border-color: #10b981; color: #6ee7b7; }
+    .callout.danger { background: rgba(239,68,68,0.08); border-color: #ef4444; color: #fca5a5; }
+    .data-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    .data-table th { background: #1e2d4a; color: #94a3b8; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; padding: 10px 14px; text-align: left; }
+    .data-table td { padding: 10px 14px; border-bottom: 1px solid #1e293b; color: #cbd5e1; }
+    .data-table tr:last-child td { border-bottom: none; }
+    .data-table tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+    .tip-card { background: #0f172a; border-left: 3px solid #f97316; border-radius: 0 8px 8px 0; padding: 12px 16px; font-size: 14px; }
+    .tip-trigger { color: #64748b; }
+    .tip-answer { color: #f8fafc; font-weight: 700; }
+    .anim-demo { background: #0f172a; border-radius: 12px; padding: 20px; min-height: 120px; }
+    .anim-controls { display: flex; align-items: center; gap: 12px; margin-top: 16px; flex-wrap: wrap; }
+    .nav-btn { background: transparent; border: 2px solid #f97316; color: #f97316; padding: 8px 18px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px; transition: all 0.2s; font-family: 'Inter', sans-serif; }
+    .nav-btn:hover:not(:disabled) { background: #f97316; color: #0f172a; }
+    .nav-btn:disabled { opacity: 0.3; cursor: default; }
+    .restart-btn { background: transparent; border: 1px solid #475569; color: #94a3b8; padding: 6px 14px; border-radius: 8px; cursor: pointer; font-size: 13px; margin-left: auto; transition: all 0.2s; font-family: 'Inter', sans-serif; }
+    .restart-btn:hover { border-color: #94a3b8; color: #e2e8f0; }
+    .step-dots { display: flex; gap: 6px; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: #334155; transition: background 0.3s; }
+    .dot.active { background: #f97316; }
+    .step-counter { color: #94a3b8; font-size: 13px; }
+    @keyframes fadeScale { from { opacity: 0; transform: scale(0.97); } to { opacity: 1; transform: scale(1); } }
+    .anim-demo > * { animation: fadeScale 0.25s ease; }
+    .mono { font-family: 'Fira Code', monospace; }
+    code { font-family: 'Fira Code', monospace; font-size: 13px; background: rgba(248,114,22,0.1); color: #fb923c; padding: 2px 6px; border-radius: 4px; }
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+    .service-card { background: #0f172a; border: 1px solid #334155; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 8px; }
+    .service-icon { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; flex-shrink: 0; }
+    .service-name { font-size: 16px; font-weight: 700; color: #f8fafc; }
+    .service-desc { font-size: 13px; color: #94a3b8; line-height: 1.5; }
+    .compare-col { background: #0f172a; border: 1px solid #334155; border-radius: 10px; padding: 18px; }
+    .compare-col-title { font-size: 15px; font-weight: 700; margin-bottom: 12px; }
+    .compare-col ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .compare-col ul li { font-size: 13px; color: #94a3b8; padding-left: 14px; position: relative; }
+    .compare-col ul li::before { content: '›'; position: absolute; left: 0; color: #f97316; }
+    .arch-flow { display: flex; align-items: center; flex-wrap: wrap; gap: 0; margin-bottom: 8px; }
+    .arch-node { padding: 10px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; text-align: center; }
+    .arch-arrow { color: #475569; font-size: 16px; padding: 0 8px; }
+    .table-wrapper { overflow-x: auto; border-radius: 10px; border: 1px solid #334155; }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 13px; font-weight: 600; }
+    .badge-green { background: rgba(16,185,129,0.15); color: #6ee7b7; }
+    .badge-red { background: rgba(239,68,68,0.12); color: #fca5a5; }
+    .badge-blue { background: rgba(59,130,246,0.15); color: #93c5fd; }
+    .badge-orange { background: rgba(249,115,22,0.15); color: #fed7aa; }
+    .tips-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 12px; }
+    .step-title { font-size: 15px; font-weight: 700; color: #f8fafc; margin-bottom: 4px; }
+    .step-desc { font-size: 13px; color: #94a3b8; margin-bottom: 12px; }
+    .divider { border: none; border-top: 1px solid #1e293b; margin: 4px 0; }
+    .feature-card { background: #0f172a; border: 1px solid #334155; border-radius: 10px; padding: 16px; }
+    .feature-card-title { font-size: 14px; font-weight: 700; color: #f97316; margin-bottom: 8px; }
+    .feature-card p, .feature-card li { font-size: 13px; color: #94a3b8; line-height: 1.5; }
+    .feature-card ul { list-style: none; display: flex; flex-direction: column; gap: 5px; padding-left: 0; }
+    .feature-card ul li { padding-left: 12px; position: relative; }
+    .feature-card ul li::before { content: '–'; position: absolute; left: 0; color: #475569; }
+    /* CloudFront-specific styles */
+    .cf-node { padding: 8px 14px; border-radius: 8px; font-size: 13px; font-weight: 600; text-align: center; }
+    .cf-node.user { background: rgba(99,102,241,0.18); border: 1px solid #6366f1; color: #a5b4fc; }
+    .cf-node.edge { background: rgba(249,115,22,0.15); border: 1px solid #f97316; color: #fed7aa; }
+    .cf-node.origin { background: rgba(16,185,129,0.15); border: 1px solid #10b981; color: #6ee7b7; }
+    .cf-node.secondary { background: rgba(239,68,68,0.12); border: 1px solid #ef4444; color: #fca5a5; }
+    .cf-node.neutral { background: rgba(148,163,184,0.1); border: 1px solid #475569; color: #94a3b8; }
+    .cf-arrow { color: #475569; font-size: 18px; padding: 0 4px; }
+    .flow-row { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin: 6px 0; }
+    .hit-label { display: inline-flex; align-items: center; padding: 3px 10px; border-radius: 4px; font-size: 13px; font-weight: 700; }
+    .hit-label.hit { background: rgba(16,185,129,0.15); color: #6ee7b7; }
+    .hit-label.miss { background: rgba(239,68,68,0.12); color: #fca5a5; }
+    .behavior-row { display: flex; align-items: center; gap: 12px; padding: 10px 14px; border-radius: 8px; margin-bottom: 8px; background: #0f172a; }
+    .behavior-pattern { font-family: 'Fira Code', monospace; font-size: 13px; color: #fb923c; min-width: 100px; }
+    .behavior-arrow { color: #475569; }
+    .behavior-origin { font-size: 13px; font-weight: 600; color: #f8fafc; }
+    .behavior-note { font-size: 13px; color: #64748b; margin-left: auto; }
+  </style>
+</head>
+<body>
+
+  <!-- =========================================================
+       HERO
+  ========================================================= -->
+  <header class="hero">
+    <div class="hero-eyebrow">AWS Developer Associate · Section 15</div>
+    <h1>Amazon CloudFront</h1>
+    <p class="hero-subtitle">CDN · Edge Locations · Caching · Cache Policies · Signed URLs · Origin Groups · Field-Level Encryption</p>
+    <div class="xp-badge">&#10003; Section complete · Quiz passed</div>
+  </header>
+
+  <main class="page-body">
+
+    <!-- =========================================================
+         SECTION 1 — CloudFront Overview
+    ========================================================= -->
+    <section>
+      <div class="section-label">01 — CloudFront Overview</div>
+      <div class="card">
+        <div class="card-title">What is CloudFront?</div>
+        <p style="font-size: 14px; color: #94a3b8; margin-bottom: 16px;">
+          CloudFront is AWS's CDN (Content Delivery Network). On the exam, <strong style="color: #f8fafc;">CDN = CloudFront</strong>.
+          It caches content at ~216 Points of Presence (edge locations) worldwide, serving users from the nearest edge for low latency.
+        </p>
+
+        <div class="grid-3" style="margin-bottom: 20px;">
+          <div class="service-card">
+            <div class="service-icon" style="background: rgba(249,115,22,0.15);">&#127757;</div>
+            <div class="service-name">~216 Edge Locations</div>
+            <div class="service-desc">Content cached globally. Users served from nearest PoP. Dramatically reduces latency for worldwide audiences.</div>
+          </div>
+          <div class="service-card">
+            <div class="service-icon" style="background: rgba(239,68,68,0.12);">&#128737;</div>
+            <div class="service-name">DDoS Protection</div>
+            <div class="service-desc">Built-in via AWS Shield (Standard). Integration with AWS WAF for layer 7 rules and bot protection.</div>
+          </div>
+          <div class="service-card">
+            <div class="service-icon" style="background: rgba(16,185,129,0.12);">&#128274;</div>
+            <div class="service-name">HTTPS + OAC</div>
+            <div class="service-desc">HTTPS everywhere. Origin Access Control (OAC) restricts S3 buckets to CloudFront-only access.</div>
+          </div>
+        </div>
+
+        <!-- CloudFront Origins -->
+        <div style="margin-bottom: 16px;">
+          <div style="font-size: 14px; font-weight: 700; color: #f8fafc; margin-bottom: 12px;">CloudFront Origins — What CloudFront Can Serve From</div>
+          <div class="table-wrapper">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Origin Type</th>
+                  <th>Examples</th>
+                  <th>Access / Security</th>
+                  <th>Notes</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong style="color: #f8fafc;">S3 Bucket</strong></td>
+                  <td>Static files, media, backups</td>
+                  <td><span class="badge badge-blue">OAC + bucket policy</span></td>
+                  <td>Can also use CloudFront for uploads (PUT/POST)</td>
+                </tr>
+                <tr>
+                  <td><strong style="color: #f8fafc;">VPC Origin</strong></td>
+                  <td>Private ALB, NLB, EC2 in private subnets</td>
+                  <td><span class="badge badge-green">Most secure (recommended)</span></td>
+                  <td>No public exposure; resources stay private</td>
+                </tr>
+                <tr>
+                  <td><strong style="color: #f8fafc;">Custom HTTP</strong></td>
+                  <td>S3 website endpoint, public ALB, any HTTP server</td>
+                  <td><span class="badge badge-orange">Direct HTTP</span></td>
+                  <td>Origin must be publicly accessible</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- CloudFront vs S3 CRR -->
+        <div style="font-size: 14px; font-weight: 700; color: #f8fafc; margin-bottom: 12px;">CloudFront vs S3 Cross-Region Replication</div>
+        <div class="grid-2">
+          <div class="compare-col">
+            <div class="compare-col-title" style="color: #f97316;">CloudFront</div>
+            <ul>
+              <li>~216 edge locations worldwide</li>
+              <li>TTL ~1 day (cached content may be slightly stale)</li>
+              <li>Best for static content that needs global reach</li>
+              <li>Files cached at the edge, great cache hit ratio</li>
+              <li>Content available everywhere with no manual setup per region</li>
+            </ul>
+          </div>
+          <div class="compare-col">
+            <div class="compare-col-title" style="color: #6366f1;">S3 Cross-Region Replication (CRR)</div>
+            <ul>
+              <li>Must be configured for each specific region</li>
+              <li>Near real-time replication — data always fresh</li>
+              <li>Best for dynamic content or low-latency access in a few specific regions</li>
+              <li>Read-only in destination regions</li>
+              <li>No caching — requests go to the replicated bucket</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         SECTION 2 — Cache Key & Policies
+    ========================================================= -->
+    <section>
+      <div class="section-label">02 — Caching: Cache Key &amp; Policies</div>
+      <div class="card">
+        <div class="card-title">How CloudFront Caching Works</div>
+        <p style="font-size: 14px; color: #94a3b8; margin-bottom: 16px;">
+          CloudFront caches responses at edge locations. The <strong style="color: #f8fafc;">Cache Key</strong> determines what counts as a unique cached item.
+          By default it is just the hostname + URL path. You can extend it via Cache Policy.
+        </p>
+
+        <div class="callout info" style="margin-bottom: 20px;">
+          <strong>Default Cache Key:</strong> <code>hostname + resource portion of URL</code> (e.g. <code>d123.cloudfront.net/images/cat.jpg</code>).
+          Adding more dimensions (headers, cookies, query strings) creates a more granular cache key but reduces your cache hit ratio.
+        </div>
+
+        <!-- Cache Policy vs Origin Request Policy -->
+        <div style="font-size: 14px; font-weight: 700; color: #f8fafc; margin-bottom: 12px;">Cache Policy vs Origin Request Policy</div>
+        <div class="table-wrapper" style="margin-bottom: 20px;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Policy</th>
+                <th>What It Controls</th>
+                <th>Affects Cache Key?</th>
+                <th>Forwarded to Origin?</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong style="color: #f8fafc;">Cache Policy</strong></td>
+                <td>Cache Key composition + TTL (min, max, default)</td>
+                <td><span class="badge badge-green">Yes</span></td>
+                <td><span class="badge badge-green">Yes</span></td>
+              </tr>
+              <tr>
+                <td><strong style="color: #f8fafc;">Origin Request Policy</strong></td>
+                <td>Additional data sent to origin (headers, cookies, query strings NOT in cache key)</td>
+                <td><span class="badge badge-red">No</span></td>
+                <td><span class="badge badge-green">Yes</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Cache Behaviors -->
+        <div style="font-size: 14px; font-weight: 700; color: #f8fafc; margin-bottom: 12px;">Cache Behaviors — Route URL Patterns to Different Origins</div>
+        <p style="font-size: 14px; color: #94a3b8; margin-bottom: 12px;">
+          Cache Behaviors let you route different URL patterns to different origins with different TTLs, headers, and cache settings.
+          The <strong style="color: #f8fafc;">most specific pattern matches first</strong>. The default <code>/*</code> is always evaluated last.
+        </p>
+
+        <div style="margin-bottom: 16px;">
+          <div class="behavior-row">
+            <div class="behavior-pattern">/api/*</div>
+            <div class="behavior-arrow">&#8594;</div>
+            <div class="behavior-origin">EC2 / Application Server</div>
+            <div class="behavior-note">Dynamic: short TTL, forward all cookies &amp; headers</div>
+          </div>
+          <div class="behavior-row">
+            <div class="behavior-pattern">/login</div>
+            <div class="behavior-arrow">&#8594;</div>
+            <div class="behavior-origin">EC2 (auth service)</div>
+            <div class="behavior-note">Sets signed cookies for subsequent static requests</div>
+          </div>
+          <div class="behavior-row">
+            <div class="behavior-pattern">/*</div>
+            <div class="behavior-arrow">&#8594;</div>
+            <div class="behavior-origin">S3 Bucket</div>
+            <div class="behavior-note">Default: static assets, long TTL, cache cookies from /login</div>
+          </div>
+        </div>
+
+        <!-- Cache Invalidation -->
+        <div class="feature-card">
+          <div class="feature-card-title">Cache Invalidation — Force-Refresh Edge Caches</div>
+          <p style="margin-bottom: 8px;">When you update origin content, edges still serve stale cached versions until TTL expires. Invalidation force-removes files from all edge locations immediately.</p>
+          <ul>
+            <li><code>/*</code> — invalidate all cached content</li>
+            <li><code>/images/*</code> — invalidate a specific path pattern</li>
+            <li><code>/index.html</code> — invalidate a single file</li>
+          </ul>
+          <div style="margin-top: 8px; font-size: 13px; color: #475569;">Exam trigger: "Updated origin but users still see old content" → answer is Cache Invalidation.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         SECTION 3 — Cache Hit vs Miss Flow
+    ========================================================= -->
+    <section>
+      <div class="section-label">03 — Cache Hit vs Cache Miss</div>
+      <div class="card">
+        <div class="card-title">How Edge Caching Flows Work</div>
+        <p style="font-size: 14px; color: #94a3b8; margin-bottom: 20px;">
+          Understanding the difference between a cache hit and cache miss is fundamental — they follow different request paths.
+        </p>
+
+        <!-- Cache HIT -->
+        <div style="margin-bottom: 18px;">
+          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+            <span class="hit-label hit">CACHE HIT</span>
+            <span style="font-size: 13px; color: #64748b;">Content already at edge — no origin call needed</span>
+          </div>
+          <div class="flow-row">
+            <div class="cf-node user">User<br/><span style="font-size: 13px; font-weight: 400;">Makes request</span></div>
+            <div class="cf-arrow">&#8594;</div>
+            <div class="cf-node edge">Edge Location<br/><span style="font-size: 13px; font-weight: 400;">Content cached!</span></div>
+            <div class="cf-arrow">&#8594;</div>
+            <div class="cf-node user">User<br/><span style="font-size: 13px; font-weight: 400;">Fast response (&lt;20ms)</span></div>
+          </div>
+        </div>
+
+        <!-- Cache MISS -->
+        <div>
+          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+            <span class="hit-label miss">CACHE MISS</span>
+            <span style="font-size: 13px; color: #64748b;">Edge fetches from origin, caches it, then returns to user</span>
+          </div>
+          <div class="flow-row">
+            <div class="cf-node user">User<br/><span style="font-size: 13px; font-weight: 400;">Makes request</span></div>
+            <div class="cf-arrow">&#8594;</div>
+            <div class="cf-node edge">Edge Location<br/><span style="font-size: 13px; font-weight: 400;">Not cached</span></div>
+            <div class="cf-arrow">&#8594;</div>
+            <div class="cf-node origin">Origin<br/><span style="font-size: 13px; font-weight: 400;">S3 / EC2 / ALB</span></div>
+            <div class="cf-arrow">&#8594;</div>
+            <div class="cf-node edge">Edge Location<br/><span style="font-size: 13px; font-weight: 400;">Caches response</span></div>
+            <div class="cf-arrow">&#8594;</div>
+            <div class="cf-node user">User<br/><span style="font-size: 13px; font-weight: 400;">Gets response</span></div>
+          </div>
+          <div style="font-size: 13px; color: #64748b; margin-top: 8px;">Subsequent requests from any user → Cache HIT at that edge for the TTL duration.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         SECTION 4 — VPC Origins vs Public Origins
+    ========================================================= -->
+    <section>
+      <div class="section-label">04 — VPC Origins vs Public Origins</div>
+      <div class="card">
+        <div class="card-title">Connecting CloudFront to Private Resources</div>
+        <p style="font-size: 14px; color: #94a3b8; margin-bottom: 16px;">
+          VPC Origins is the modern, recommended approach for connecting CloudFront to ALBs, NLBs, and EC2 instances.
+          It keeps your origin resources private and removes the need for public IPs.
+        </p>
+
+        <div class="table-wrapper" style="margin-bottom: 16px;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th></th>
+                <th>VPC Origins (Recommended)</th>
+                <th>Public Origins (Legacy)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="color: #94a3b8; font-weight: 600;">Subnet</td>
+                <td>Private subnets — no public exposure</td>
+                <td>Must be in public subnets with public IPs</td>
+              </tr>
+              <tr>
+                <td style="color: #94a3b8; font-weight: 600;">Security</td>
+                <td><span class="badge badge-green">Most secure</span> — traffic stays within AWS</td>
+                <td>Must whitelist CloudFront IP ranges in Security Groups</td>
+              </tr>
+              <tr>
+                <td style="color: #94a3b8; font-weight: 600;">IP Management</td>
+                <td>None required — private access</td>
+                <td>Must track and update CloudFront IP list in SGs</td>
+              </tr>
+              <tr>
+                <td style="color: #94a3b8; font-weight: 600;">Supported</td>
+                <td>ALB, NLB, EC2 instances</td>
+                <td>Public ALB, public EC2, custom HTTP endpoints</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout success">
+          <strong>Exam signal:</strong> "Most secure CloudFront to ALB setup" or "CloudFront without exposing ALB publicly" → answer is <strong>VPC Origins</strong>.
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         SECTION 5 — Signed URLs & Signed Cookies (Animated)
+    ========================================================= -->
+    <section>
+      <div class="section-label">05 — Signed URLs &amp; Signed Cookies</div>
+      <div class="card">
+        <div class="card-title">Controlling Access to CloudFront Content</div>
+        <p style="font-size: 14px; color: #94a3b8; margin-bottom: 20px;">
+          Signed URLs and Signed Cookies restrict who can access cached CloudFront content.
+          Knowing WHEN to use each — and how they differ from S3 Pre-signed URLs — is a common exam topic.
+        </p>
+
+        <!-- Animated Step-through -->
+        <div class="anim-demo" id="signed-demo">
+          <!-- Rendered by JS -->
+        </div>
+        <div class="anim-controls">
+          <button class="nav-btn" id="signed-demo-prev" onclick="prev('signed-demo')">&#8592; Prev</button>
+          <button class="nav-btn" id="signed-demo-next" onclick="next('signed-demo')">Next &#8594;</button>
+          <div class="step-dots" id="signed-demo-dots"></div>
+          <span class="step-counter" id="signed-demo-counter"></span>
+          <button class="restart-btn" onclick="restart('signed-demo')">&#8635; Restart</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         SECTION 6 — Advanced Features
+    ========================================================= -->
+    <section>
+      <div class="section-label">06 — Advanced Features</div>
+      <div class="card">
+        <div class="card-title">Price Classes, Origin Groups, Field-Level Encryption &amp; More</div>
+        <p style="font-size: 14px; color: #94a3b8; margin-bottom: 20px;">
+          These advanced features each have a specific exam trigger pattern. Know what problem each one solves.
+        </p>
+
+        <div class="grid-2" style="margin-bottom: 20px;">
+
+          <div class="feature-card">
+            <div class="feature-card-title">Price Classes — Cost Control</div>
+            <p style="margin-bottom: 8px;">Control which edge locations serve your distribution to manage cost.</p>
+            <ul>
+              <li><strong style="color: #f8fafc;">Class 100</strong> — North America + Europe only. Cheapest option.</li>
+              <li><strong style="color: #f8fafc;">Class 200</strong> — Most regions except the most expensive.</li>
+              <li><strong style="color: #f8fafc;">Class All</strong> — All edge locations worldwide. Best performance, highest cost.</li>
+            </ul>
+            <div style="margin-top: 8px; font-size: 13px; color: #64748b;">Exam: "Cheapest CloudFront setup" → Price Class 100</div>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-card-title">Origin Groups — Failover &amp; DR</div>
+            <p style="margin-bottom: 8px;">Define a primary + secondary origin. CloudFront automatically fails over on HTTP errors (5xx).</p>
+            <ul>
+              <li>Provides high availability and failover</li>
+              <li>Combined with S3 CRR = regional disaster recovery</li>
+              <li>Primary fails → CloudFront switches to secondary seamlessly</li>
+            </ul>
+            <div style="margin-top: 8px; font-size: 13px; color: #64748b;">Exam: "CloudFront regional DR" → Origin Groups + S3 CRR</div>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-card-title">Field-Level Encryption</div>
+            <p style="margin-bottom: 8px;">Encrypt specific POST fields at the edge using your public key. Only your web server (with the private key) can decrypt.</p>
+            <ul>
+              <li>Encrypt up to 10 fields per request</li>
+              <li>CloudFront, ALB, and other layers cannot read the encrypted fields</li>
+              <li>Protects sensitive data (credit cards, SSNs) in transit through the stack</li>
+              <li>Encrypted all the way from edge to application</li>
+            </ul>
+            <div style="margin-top: 8px; font-size: 13px; color: #64748b;">Exam: "Encrypt sensitive fields, only app server decrypts" → Field-Level Encryption</div>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-card-title">Real-Time Logs</div>
+            <p style="margin-bottom: 8px;">CloudFront can deliver real-time access logs to a single destination.</p>
+            <ul>
+              <li>Only destination: <strong style="color: #f8fafc;">Kinesis Data Streams</strong></li>
+              <li>Configurable sampling rate (% of requests to log)</li>
+              <li>Can filter by specific cache behaviors/paths</li>
+              <li>From Kinesis: forward to Lambda, S3, OpenSearch, etc.</li>
+            </ul>
+            <div style="margin-top: 8px; font-size: 13px; color: #64748b;">Exam: "CloudFront real-time logs" → Kinesis Data Streams (only option)</div>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-card-title">Geo Restriction</div>
+            <p style="margin-bottom: 8px;">Block or allow users based on country. Uses a third-party Geo-IP database to determine origin country.</p>
+            <ul>
+              <li><strong style="color: #f8fafc;">Allowlist</strong> — Only listed countries can access</li>
+              <li><strong style="color: #f8fafc;">Blocklist</strong> — Listed countries are blocked (403)</li>
+              <li>Country determined by Geo-IP database (not 100% accurate)</li>
+              <li>Use case: copyright law compliance by geography</li>
+            </ul>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-card-title">OAC — Origin Access Control</div>
+            <p style="margin-bottom: 8px;">Restricts S3 bucket access so only CloudFront can fetch objects. Replaces the older OAI (Origin Access Identity).</p>
+            <ul>
+              <li>S3 bucket policy grants CloudFront service principal access</li>
+              <li>Bucket can be completely private — no public URLs</li>
+              <li>OAC supports SSE-KMS encrypted S3 objects (OAI did not)</li>
+              <li>OAC is the current recommended approach (not OAI)</li>
+            </ul>
+            <div style="margin-top: 8px; font-size: 13px; color: #64748b;">Exam: "Secure S3 behind CloudFront" → OAC + S3 bucket policy</div>
+          </div>
+
+        </div>
+
+        <!-- Origin Groups Architecture -->
+        <div style="background: #0f172a; border-radius: 10px; padding: 16px;">
+          <div style="font-size: 13px; color: #64748b; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.08em;">Origin Groups Failover Architecture</div>
+          <div class="flow-row">
+            <div class="cf-node user">User<br/><span style="font-size: 13px; font-weight: 400;">Request</span></div>
+            <div class="cf-arrow">&#8594;</div>
+            <div class="cf-node edge">CloudFront<br/><span style="font-size: 13px; font-weight: 400;">Origin Group</span></div>
+            <div class="cf-arrow">&#8594;</div>
+            <div class="cf-node origin">Primary Origin<br/><span style="font-size: 13px; font-weight: 400;">S3 us-east-1</span></div>
+          </div>
+          <div style="margin: 8px 0 8px 120px; font-size: 13px; color: #ef4444;">Primary fails (5xx) &#8595;</div>
+          <div class="flow-row">
+            <div class="cf-node user" style="opacity: 0; pointer-events: none;">User<br/><span style="font-size: 13px;">spacer</span></div>
+            <div class="cf-arrow" style="opacity: 0;">&#8594;</div>
+            <div class="cf-node edge">CloudFront<br/><span style="font-size: 13px; font-weight: 400;">Automatic failover</span></div>
+            <div class="cf-arrow">&#8594;</div>
+            <div class="cf-node secondary">Secondary Origin<br/><span style="font-size: 13px; font-weight: 400;">S3 CRR eu-west-1</span></div>
+          </div>
+          <div style="font-size: 13px; color: #64748b; margin-top: 8px;">With S3 CRR keeping secondary in sync = regional disaster recovery solution.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         SECTION 7 — Exam Tips
+    ========================================================= -->
+    <section>
+      <div class="section-label">07 — Exam Tips &amp; Quick Recall</div>
+      <div class="card">
+        <div class="card-title">Section 15 Exam Cheat Sheet</div>
+        <div class="tips-grid">
+
+          <div class="tip-card">
+            <div class="tip-trigger">See "CDN" on exam &rarr;</div>
+            <div class="tip-answer">CloudFront — always</div>
+          </div>
+
+          <div class="tip-card">
+            <div class="tip-trigger">Secure S3 origin behind CloudFront &rarr;</div>
+            <div class="tip-answer">OAC (Origin Access Control) + S3 bucket policy granting CloudFront service principal</div>
+          </div>
+
+          <div class="tip-card">
+            <div class="tip-trigger">CloudFront to private ALB/EC2, most secure &rarr;</div>
+            <div class="tip-answer">VPC Origin — resources stay in private subnets, no public exposure needed</div>
+          </div>
+
+          <div class="tip-card">
+            <div class="tip-trigger">Default Cache Key &rarr;</div>
+            <div class="tip-answer">hostname + resource URL path only</div>
+          </div>
+
+          <div class="tip-card">
+            <div class="tip-trigger">Cache Policy vs Origin Request Policy &rarr;</div>
+            <div class="tip-answer">Cache Policy = Cache Key + TTL (forwarded to origin). Origin Request Policy = forwarded to origin but NOT in cache key</div>
+          </div>
+
+          <div class="tip-card">
+            <div class="tip-trigger">Users see old content after update &rarr;</div>
+            <div class="tip-answer">Cache Invalidation — use /* for all or /path/* for specific paths</div>
+          </div>
+
+          <div class="tip-card">
+            <div class="tip-trigger">Different URL patterns, different origins &rarr;</div>
+            <div class="tip-answer">Cache Behaviors — most specific match wins, /* default always evaluated last</div>
+          </div>
+
+          <div class="tip-card">
+            <div class="tip-trigger">Signed URL vs Signed Cookie &rarr;</div>
+            <div class="tip-answer">Signed URL = one file access | Signed Cookie = multiple files / subscription</div>
+          </div>
+
+          <div class="tip-card">
+            <div class="tip-trigger">S3 behind CloudFront with OAC, need signed access &rarr;</div>
+            <div class="tip-answer">CloudFront Signed URL (NOT S3 Pre-signed URL — bypasses CloudFront)</div>
+          </div>
+
+          <div class="tip-card">
+            <div class="tip-trigger">S3 without CloudFront, need temporary access &rarr;</div>
+            <div class="tip-answer">S3 Pre-signed URL</div>
+          </div>
+
+          <div class="tip-card">
+            <div class="tip-trigger">Signed URL key management &rarr;</div>
+            <div class="tip-answer">Trusted Key Groups (recommended — any IAM user, API-manageable). Avoid CloudFront Key Pairs (root only, no APIs)</div>
+          </div>
+
+          <div class="tip-card">
+            <div class="tip-trigger">Cheapest CloudFront setup &rarr;</div>
+            <div class="tip-answer">Price Class 100 (NA + Europe only)</div>
+          </div>
+
+          <div class="tip-card">
+            <div class="tip-trigger">CloudFront regional disaster recovery &rarr;</div>
+            <div class="tip-answer">Origin Groups (primary + secondary) + S3 CRR to keep secondary in sync</div>
+          </div>
+
+          <div class="tip-card">
+            <div class="tip-trigger">Encrypt specific fields, only app server decrypts &rarr;</div>
+            <div class="tip-answer">Field-Level Encryption — up to 10 fields, public key at edge, private key at web server</div>
+          </div>
+
+          <div class="tip-card">
+            <div class="tip-trigger">CloudFront real-time logs destination &rarr;</div>
+            <div class="tip-answer">Kinesis Data Streams — the only supported real-time log destination</div>
+          </div>
+
+          <div class="tip-card">
+            <div class="tip-trigger">Block users by country &rarr;</div>
+            <div class="tip-answer">Geo Restriction — allowlist or blocklist, determined by Geo-IP database</div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- =========================================================
+       JAVASCRIPT — Animation Demos
+  ========================================================= -->
+  <script>
+    var DEMOS = {
+      'signed-demo': {
+        steps: [
+          {
+            body: '<div>' +
+              '<div class="step-title">Signed URLs — One File, Precise Access Control</div>' +
+              '<div class="step-desc">Use a Signed URL when you want to grant temporary access to a SINGLE specific file. Each URL carries expiration, allowed IP range, and trusted signer information baked in.</div>' +
+              '<div class="grid-2" style="margin-top: 12px;">' +
+                '<div class="feature-card">' +
+                  '<div class="feature-card-title">What a Signed URL Contains</div>' +
+                  '<ul>' +
+                    '<li>Expiration timestamp (absolute date/time)</li>' +
+                    '<li>Optional IP address range restriction</li>' +
+                    '<li>CloudFront distribution + path it covers</li>' +
+                    '<li>Cryptographic signature from trusted key group</li>' +
+                  '</ul>' +
+                '</div>' +
+                '<div class="feature-card">' +
+                  '<div class="feature-card-title">Best Use Cases</div>' +
+                  '<ul>' +
+                    '<li>Premium single-file download (paid e-book, video)</li>' +
+                    '<li>One-time access link to a document</li>' +
+                    '<li>Short-lived download link sent via email</li>' +
+                    '<li>Any scenario: "access this exact file for N minutes"</li>' +
+                  '</ul>' +
+                '</div>' +
+              '</div>' +
+              '<div class="callout info" style="margin-top: 14px;"><strong>Remember:</strong> Signed URL = 1 file. If the user needs access to multiple files, generate multiple Signed URLs — or use a Signed Cookie instead.</div>' +
+            '</div>'
+          },
+          {
+            body: '<div>' +
+              '<div class="step-title">Signed Cookies — Multiple Files, Subscription-Style Access</div>' +
+              '<div class="step-desc">Use Signed Cookies when you want to grant temporary access to a SET of files. The cookie is set once and applies to all matching CloudFront requests, without changing URLs.</div>' +
+              '<div class="grid-2" style="margin-top: 12px;">' +
+                '<div class="feature-card">' +
+                  '<div class="feature-card-title">How Signed Cookies Work</div>' +
+                  '<ul>' +
+                    '<li>App sets 3 CloudFront cookies on the user\'s browser after auth</li>' +
+                    '<li>Browser automatically sends cookies on all subsequent CloudFront requests</li>' +
+                    '<li>CloudFront validates cookies before serving each resource</li>' +
+                    '<li>User does not need individual signed URLs per resource</li>' +
+                  '</ul>' +
+                '</div>' +
+                '<div class="feature-card">' +
+                  '<div class="feature-card-title">Best Use Cases</div>' +
+                  '<ul>' +
+                    '<li>Paid subscription: access all content in /premium/*</li>' +
+                    '<li>Streaming platform: user subscribes, all videos accessible</li>' +
+                    '<li>You cannot or do not want to change existing URLs</li>' +
+                    '<li>Granting access to multiple files under a pattern</li>' +
+                  '</ul>' +
+                '</div>' +
+              '</div>' +
+              '<div class="callout success" style="margin-top: 14px;"><strong>Exam Signal:</strong> "Premium subscription" or "access to all content" or "multiple files" → Signed Cookies.</div>' +
+            '</div>'
+          },
+          {
+            body: '<div>' +
+              '<div class="step-title">CloudFront Signed URL vs S3 Pre-signed URL</div>' +
+              '<div class="step-desc">These are different mechanisms with different use cases. Confusing them is a common exam trap.</div>' +
+              '<div class="table-wrapper" style="margin-top: 12px;">' +
+                '<table class="data-table">' +
+                  '<thead><tr><th></th><th>CloudFront Signed URL</th><th>S3 Pre-signed URL</th></tr></thead>' +
+                  '<tbody>' +
+                    '<tr><td style="color: #94a3b8;">Works with</td><td>ANY CloudFront origin (S3, EC2, ALB)</td><td>S3 only</td></tr>' +
+                    '<tr><td style="color: #94a3b8;">Routing</td><td>Via CDN edge locations (cached)</td><td>Direct to S3 — bypasses CloudFront</td></tr>' +
+                    '<tr><td style="color: #94a3b8;">Use when</td><td>S3 is behind CloudFront with OAC</td><td>No CloudFront in the architecture</td></tr>' +
+                    '<tr><td style="color: #94a3b8;">Key management</td><td>Trusted Key Groups (IAM users)</td><td>IAM user/role credentials</td></tr>' +
+                  '</tbody>' +
+                '</table>' +
+              '</div>' +
+              '<div class="callout danger" style="margin-top: 14px;"><strong>Critical Trap:</strong> If S3 is behind CloudFront with OAC (bucket is private), S3 Pre-signed URLs will NOT work correctly — the user would bypass CloudFront and hit S3 directly, which rejects unauthenticated requests. Use CloudFront Signed URLs instead.</div>' +
+            '</div>'
+          },
+          {
+            body: '<div>' +
+              '<div class="step-title">Trusted Key Groups vs CloudFront Key Pairs</div>' +
+              '<div class="step-desc">There are two ways to manage the keys used to sign CloudFront URLs and cookies. One is modern and recommended; the other is legacy and should be avoided.</div>' +
+              '<div class="grid-2" style="margin-top: 12px;">' +
+                '<div class="feature-card" style="border-color: #10b981;">' +
+                  '<div class="feature-card-title" style="color: #6ee7b7;">Trusted Key Groups (Recommended)</div>' +
+                  '<ul>' +
+                    '<li>Any IAM user can create and manage keys</li>' +
+                    '<li>Fully API-manageable and automatable</li>' +
+                    '<li>Supports key rotation workflows</li>' +
+                    '<li>No root account involvement required</li>' +
+                    '<li>Follows IAM least-privilege principles</li>' +
+                  '</ul>' +
+                '</div>' +
+                '<div class="feature-card" style="border-color: #ef4444;">' +
+                  '<div class="feature-card-title" style="color: #fca5a5;">CloudFront Key Pairs (Legacy — Avoid)</div>' +
+                  '<ul>' +
+                    '<li>Requires root account credentials to manage</li>' +
+                    '<li>No API support — manual console process</li>' +
+                    '<li>Cannot be automated or rotated via CI/CD</li>' +
+                    '<li>Root account usage violates AWS security best practices</li>' +
+                    '<li>AWS recommends migrating to Key Groups</li>' +
+                  '</ul>' +
+                '</div>' +
+              '</div>' +
+              '<div class="callout warning" style="margin-top: 14px;"><strong>Exam Answer:</strong> "Recommended way to manage CloudFront signing keys" → <strong>Trusted Key Groups</strong>. If you see "root account key pairs" — that\'s the wrong answer.</div>' +
+            '</div>'
+          }
+        ]
+      }
+    };
+
+    var states = {};
+
+    function renderStep(id, step) {
+      var demo = DEMOS[id];
+      var total = demo.steps.length;
+      document.getElementById(id).innerHTML = demo.steps[step].body;
+      document.getElementById(id + '-counter').textContent = 'Step ' + (step + 1) + ' / ' + total;
+      document.querySelectorAll('[id^="' + id + '-dot-"]').forEach(function(d, i) { d.classList.toggle('active', i === step); });
+      document.getElementById(id + '-prev').disabled = step === 0;
+      document.getElementById(id + '-next').disabled = step === total - 1;
+      states[id] = step;
+    }
+
+    function prev(id) { if (states[id] > 0) renderStep(id, states[id] - 1); }
+    function next(id) { if (states[id] < DEMOS[id].steps.length - 1) renderStep(id, states[id] + 1); }
+    function restart(id) { renderStep(id, 0); }
+
+    Object.keys(DEMOS).forEach(function(id) {
+      states[id] = 0;
+      var dotsEl = document.getElementById(id + '-dots');
+      dotsEl.innerHTML = DEMOS[id].steps.map(function(_, i) { return '<div class="dot" id="' + id + '-dot-' + i + '"></div>'; }).join('');
+      renderStep(id, 0);
+    });
+  </script>
+
+</body>
+</html>

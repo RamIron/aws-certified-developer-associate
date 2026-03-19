@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Section 13 — Advanced Amazon S3</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #0f172a; color: #f8fafc; font-family: 'Inter', sans-serif; font-size: 14px; line-height: 1.6; min-height: 100vh; }
+    .hero { background: linear-gradient(135deg, #1e293b 0%, #0f172a 60%, #1a1a2e 100%); border-bottom: 1px solid #334155; padding: 48px 32px 40px; text-align: center; }
+    .hero-eyebrow { font-size: 13px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #f97316; margin-bottom: 12px; }
+    h1 { font-size: clamp(26px, 4vw, 40px); font-weight: 800; color: #f8fafc; margin-bottom: 8px; letter-spacing: -0.02em; }
+    .hero-subtitle { font-size: 15px; color: #94a3b8; margin-bottom: 20px; }
+    .xp-badge { display: inline-flex; align-items: center; gap: 6px; background: linear-gradient(135deg, #f97316, #ea580c); color: #fff; font-size: 13px; font-weight: 700; padding: 8px 18px; border-radius: 999px; }
+    .page-body { max-width: 1100px; margin: 0 auto; padding: 48px 24px; display: flex; flex-direction: column; gap: 40px; }
+    .section-label { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: #f97316; margin-bottom: 16px; }
+    .card { background: #1e293b; border-radius: 12px; border: 1px solid #334155; padding: 24px; }
+    .card-title { font-size: 18px; font-weight: 700; color: #f8fafc; margin-bottom: 16px; }
+    .callout { border-radius: 10px; padding: 16px 20px; font-size: 14px; line-height: 1.65; border-left: 4px solid; }
+    .callout.warning { background: rgba(249,115,22,0.08); border-color: #f97316; color: #fed7aa; }
+    .callout.warning strong { color: #fb923c; }
+    .callout.info { background: rgba(99,102,241,0.08); border-color: #6366f1; color: #c7d2fe; }
+    .callout.success { background: rgba(16,185,129,0.08); border-color: #10b981; color: #6ee7b7; }
+    .callout.danger { background: rgba(239,68,68,0.08); border-color: #ef4444; color: #fca5a5; }
+    .data-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    .data-table th { background: #1e2d4a; color: #94a3b8; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; padding: 10px 14px; text-align: left; }
+    .data-table td { padding: 10px 14px; border-bottom: 1px solid #1e293b; color: #cbd5e1; }
+    .data-table tr:last-child td { border-bottom: none; }
+    .data-table tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+    .tip-card { background: #0f172a; border-left: 3px solid #f97316; border-radius: 0 8px 8px 0; padding: 12px 16px; font-size: 14px; }
+    .tip-trigger { color: #64748b; }
+    .tip-answer { color: #f8fafc; font-weight: 700; }
+    .anim-demo { background: #0f172a; border-radius: 12px; padding: 20px; min-height: 120px; }
+    .anim-controls { display: flex; align-items: center; gap: 12px; margin-top: 16px; flex-wrap: wrap; }
+    .nav-btn { background: transparent; border: 2px solid #f97316; color: #f97316; padding: 8px 18px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px; transition: all 0.2s; font-family: 'Inter', sans-serif; }
+    .nav-btn:hover:not(:disabled) { background: #f97316; color: #0f172a; }
+    .nav-btn:disabled { opacity: 0.3; cursor: default; }
+    .restart-btn { background: transparent; border: 1px solid #475569; color: #94a3b8; padding: 6px 14px; border-radius: 8px; cursor: pointer; font-size: 13px; margin-left: auto; transition: all 0.2s; font-family: 'Inter', sans-serif; }
+    .restart-btn:hover { border-color: #94a3b8; color: #e2e8f0; }
+    .step-dots { display: flex; gap: 6px; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: #334155; transition: background 0.3s; }
+    .dot.active { background: #f97316; }
+    .step-counter { color: #94a3b8; font-size: 13px; }
+    @keyframes fadeScale { from { opacity: 0; transform: scale(0.97); } to { opacity: 1; transform: scale(1); } }
+    .anim-demo > * { animation: fadeScale 0.25s ease; }
+    .mono { font-family: 'Fira Code', monospace; }
+    code { font-family: 'Fira Code', monospace; font-size: 13px; background: rgba(248,114,22,0.1); color: #fb923c; padding: 2px 6px; border-radius: 4px; }
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+    .service-card { background: #0f172a; border: 1px solid #334155; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 8px; }
+    .service-icon { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; flex-shrink: 0; }
+    .service-name { font-size: 16px; font-weight: 700; color: #f8fafc; }
+    .service-desc { font-size: 13px; color: #94a3b8; line-height: 1.5; }
+    .compare-col { background: #0f172a; border: 1px solid #334155; border-radius: 10px; padding: 18px; }
+    .compare-col-title { font-size: 15px; font-weight: 700; margin-bottom: 12px; }
+    .compare-col ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .compare-col ul li { font-size: 13px; color: #94a3b8; padding-left: 14px; position: relative; }
+    .compare-col ul li::before { content: '›'; position: absolute; left: 0; color: #f97316; }
+    .arch-flow { display: flex; align-items: center; flex-wrap: wrap; gap: 0; margin-bottom: 8px; }
+    .arch-node { padding: 10px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; text-align: center; }
+    .arch-arrow { color: #475569; font-size: 16px; padding: 0 8px; }
+    .table-wrapper { overflow-x: auto; border-radius: 10px; border: 1px solid #334155; }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 13px; font-weight: 600; }
+    .badge-green { background: rgba(16,185,129,0.15); color: #6ee7b7; }
+    .badge-red { background: rgba(239,68,68,0.12); color: #fca5a5; }
+    .badge-blue { background: rgba(59,130,246,0.15); color: #93c5fd; }
+    .tips-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 12px; }
+    .step-title { font-size: 15px; font-weight: 700; color: #f8fafc; margin-bottom: 4px; }
+    .step-desc { font-size: 13px; color: #94a3b8; margin-bottom: 12px; }
+    .divider { border: none; border-top: 1px solid #1e293b; margin: 4px 0; }
+    .feature-card { background: #0f172a; border: 1px solid #334155; border-radius: 10px; padding: 16px; }
+    .feature-card-title { font-size: 14px; font-weight: 700; color: #f97316; margin-bottom: 8px; }
+    .feature-card p, .feature-card li { font-size: 13px; color: #94a3b8; line-height: 1.5; }
+    .feature-card ul { list-style: none; display: flex; flex-direction: column; gap: 5px; padding-left: 0; }
+    .feature-card ul li { padding-left: 12px; position: relative; }
+    .feature-card ul li::before { content: '–'; position: absolute; left: 0; color: #475569; }
+    /* Local extras */
+    .lifecycle-flow { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; padding: 14px; background: #0f172a; border-radius: 10px; border: 1px solid #334155; }
+    .lc-node { padding: 8px 14px; border-radius: 8px; font-size: 13px; font-weight: 600; text-align: center; white-space: nowrap; }
+    .lc-arrow { color: #475569; font-size: 18px; }
+    .perf-stat { background: #0f172a; border: 1px solid #334155; border-radius: 10px; padding: 18px; display: flex; flex-direction: column; gap: 6px; }
+    .perf-stat-value { font-size: 22px; font-weight: 800; color: #f97316; }
+    .perf-stat-label { font-size: 13px; color: #94a3b8; }
+    .perf-stat-detail { font-size: 13px; color: #64748b; }
+    .tag-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+    .tag-pill { display: inline-flex; align-items: center; gap: 6px; background: #1e293b; border: 1px solid #334155; border-radius: 999px; padding: 4px 12px; font-size: 13px; color: #94a3b8; font-family: 'Fira Code', monospace; }
+    .tag-pill strong { color: #fb923c; }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════ HERO ═══ -->
+<header class="hero">
+  <div class="hero-eyebrow">AWS Certified Developer Associate</div>
+  <h1>Section 13 — Advanced Amazon S3</h1>
+  <p class="hero-subtitle">Lifecycle Rules · Event Notifications · S3 Performance · Object Tags &amp; Metadata</p>
+  <div class="xp-badge">&#9733; Section complete &middot; Quiz passed</div>
+</header>
+
+<main class="page-body">
+
+  <!-- ════════════════════════════════════ 1. LIFECYCLE RULES ═══ -->
+  <section>
+    <div class="section-label">Topic 1 — S3 Lifecycle Rules</div>
+    <div class="card">
+      <div class="card-title">Automating Object Transitions &amp; Expiration</div>
+
+      <div style="display: flex; flex-direction: column; gap: 16px;">
+
+        <!-- Two action types table -->
+        <div class="table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Action Type</th>
+                <th>What It Does</th>
+                <th>Example</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="badge badge-blue">Transition Actions</span></td>
+                <td>Move objects to a cheaper storage class after a period of time</td>
+                <td>Standard → Standard-IA after 60 days → Glacier after 6 months</td>
+              </tr>
+              <tr>
+                <td><span class="badge badge-red">Expiration Actions</span></td>
+                <td>Permanently delete objects (or versions) after a period of time</td>
+                <td>Delete access logs after 365 days; delete incomplete multi-part uploads</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Example lifecycle flow -->
+        <div>
+          <div style="font-size: 14px; font-weight: 700; color: #f8fafc; margin-bottom: 10px;">Example: Source Images Lifecycle</div>
+          <div class="lifecycle-flow">
+            <div class="lc-node" style="background: #1e2d4a; color: #93c5fd;">S3 Standard</div>
+            <div class="lc-arrow">›</div>
+            <div class="lc-node" style="background: #0f2a1e; color: #6ee7b7; border: 1px dashed #10b981;">After 60 days<br>Standard-IA</div>
+            <div class="lc-arrow">›</div>
+            <div class="lc-node" style="background: #1a1a2e; color: #c084fc; border: 1px dashed #7c3aed;">After 6 months<br>Glacier</div>
+            <div class="lc-arrow">›</div>
+            <div class="lc-node" style="background: #2a1a1a; color: #fca5a5; border: 1px dashed #ef4444;">After 1 year<br>Glacier Deep Archive</div>
+          </div>
+        </div>
+
+        <!-- Rule scope & exam scenarios -->
+        <div class="grid-2">
+          <div class="feature-card">
+            <div class="feature-card-title">Rule Scope Options</div>
+            <ul>
+              <li>Entire bucket</li>
+              <li>By prefix (e.g., <code>/images/</code>)</li>
+              <li>By object tags (e.g., <code>department=finance</code>)</li>
+            </ul>
+          </div>
+          <div class="feature-card">
+            <div class="feature-card-title">Common Exam Scenario</div>
+            <p>Source images in <code>/images/</code> prefix → Glacier after 60 days. Thumbnails in <code>/thumbs/</code> prefix → One-Zone-IA → expire after 60 days. Use <strong style="color:#f8fafc;">separate prefix-based rules</strong> for each.</p>
+          </div>
+        </div>
+
+        <!-- Versioning + lifecycle -->
+        <div class="callout info">
+          <strong>Versioning + Lifecycle:</strong> Enable versioning to protect against accidental deletes. Then create lifecycle rules for <em>non-current versions</em>: Standard-IA after 30 days → Glacier Deep Archive after 90 days. This enables cost-effective recovery without keeping live copies in Standard storage.
+        </div>
+
+        <!-- S3 Analytics -->
+        <div>
+          <div style="font-size: 14px; font-weight: 700; color: #f8fafc; margin-bottom: 10px;">S3 Analytics — Storage Class Analysis</div>
+          <div class="grid-3">
+            <div class="feature-card">
+              <div class="feature-card-title">What it does</div>
+              <p>Analyzes object access patterns and <strong style="color:#f8fafc;">recommends when to transition</strong> from Standard to Standard-IA.</p>
+            </div>
+            <div class="feature-card" style="border-color: #ef4444;">
+              <div class="feature-card-title" style="color:#f87171;">Limitations</div>
+              <ul>
+                <li>Only Standard &amp; Standard-IA</li>
+                <li>Does NOT work for One-Zone-IA</li>
+                <li>Does NOT work for Glacier tiers</li>
+              </ul>
+            </div>
+            <div class="feature-card">
+              <div class="feature-card-title">Output &amp; Timing</div>
+              <p>CSV report updated <strong style="color:#f8fafc;">daily</strong>. Takes <strong style="color:#f8fafc;">24–48 hours</strong> to start generating data after enabling.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════ 2. EVENT NOTIFICATIONS — ANIMATED ═══ -->
+  <section>
+    <div class="section-label">Topic 2 — S3 Event Notifications</div>
+    <div class="card">
+      <div class="card-title">Reacting to S3 Events in Real Time</div>
+      <p style="color: #94a3b8; font-size: 14px; margin-bottom: 16px;">Step through the event notification system — from event triggers, to direct destinations, to EventBridge routing.</p>
+
+      <div class="anim-demo" id="events-demo"></div>
+      <div class="anim-controls">
+        <button class="nav-btn" id="events-demo-prev" onclick="prev('events-demo')">&#8592; Prev</button>
+        <button class="nav-btn" id="events-demo-next" onclick="next('events-demo')">Next &#8594;</button>
+        <div class="step-dots" id="events-demo-dots"></div>
+        <span class="step-counter" id="events-demo-counter"></span>
+        <button class="restart-btn" onclick="restart('events-demo')">&#8635; Restart</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════ 3. S3 PERFORMANCE ═══ -->
+  <section>
+    <div class="section-label">Topic 3 — S3 Performance</div>
+    <div class="card">
+      <div class="card-title">Baseline Throughput, Upload &amp; Download Optimization</div>
+
+      <div style="display: flex; flex-direction: column; gap: 20px;">
+
+        <!-- Baseline stats -->
+        <div>
+          <div style="font-size: 14px; font-weight: 700; color: #f8fafc; margin-bottom: 12px;">Baseline Performance (per prefix)</div>
+          <div class="grid-4">
+            <div class="perf-stat">
+              <div class="perf-stat-value">100–200 ms</div>
+              <div class="perf-stat-label">First byte latency</div>
+              <div class="perf-stat-detail">Time to first byte</div>
+            </div>
+            <div class="perf-stat">
+              <div class="perf-stat-value">3,500 /s</div>
+              <div class="perf-stat-label">PUT / COPY / POST / DELETE</div>
+              <div class="perf-stat-detail">Write operations per second per prefix</div>
+            </div>
+            <div class="perf-stat">
+              <div class="perf-stat-value">5,500 /s</div>
+              <div class="perf-stat-label">GET / HEAD</div>
+              <div class="perf-stat-detail">Read operations per second per prefix</div>
+            </div>
+            <div class="perf-stat" style="border-color: #f97316;">
+              <div class="perf-stat-value" style="color: #6ee7b7;">&#215;N</div>
+              <div class="perf-stat-label">Multiplied by prefixes</div>
+              <div class="perf-stat-detail">Spread objects across prefixes to multiply total throughput</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout warning">
+          <strong>Key insight:</strong> There is <em>no limit on the number of prefixes</em>. If you spread objects across 4 prefixes, you get 4 &times; 5,500 = <strong>22,000 GET/s</strong> total. Design your key naming strategy around this.
+        </div>
+
+        <!-- Upload optimization -->
+        <div>
+          <div style="font-size: 14px; font-weight: 700; color: #f8fafc; margin-bottom: 12px;">Upload Optimization</div>
+          <div class="table-wrapper">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Feature</th>
+                  <th>What It Does</th>
+                  <th>Threshold</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong style="color: #f8fafc;">Multi-Part Upload</strong></td>
+                  <td>Splits file into parts, uploads them in parallel, then reassembles. Speeds up large uploads and allows retry of individual parts.</td>
+                  <td><span class="badge badge-blue">Recommended &gt;100 MB</span><br><span class="badge badge-red" style="margin-top: 4px; display: inline-block;">REQUIRED &gt;5 GB</span></td>
+                </tr>
+                <tr>
+                  <td><strong style="color: #f8fafc;">Transfer Acceleration</strong></td>
+                  <td>Upload to the nearest <strong>AWS Edge Location</strong>, which then routes the data over AWS's private backbone to the target bucket region. Minimizes public internet latency.</td>
+                  <td>Best for long-distance uploads (e.g., US user uploading to ap-southeast-1). Compatible with Multi-Part Upload.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Download optimization -->
+        <div>
+          <div style="font-size: 14px; font-weight: 700; color: #f8fafc; margin-bottom: 12px;">Download Optimization — Byte-Range Fetches</div>
+          <div class="grid-2">
+            <div class="feature-card">
+              <div class="feature-card-title">Parallel Downloads</div>
+              <p>Request specific byte ranges of an object simultaneously from multiple threads. Significantly improves download throughput for large files. If a range request fails, retry only that range — not the entire file.</p>
+            </div>
+            <div class="feature-card">
+              <div class="feature-card-title">Partial File Reads</div>
+              <p>Retrieve only the header of a file (first N bytes) without downloading the entire object. Useful for reading file metadata, magic bytes, or CSV headers stored in S3 at minimal cost.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════ 4. TAGS & METADATA ═══ -->
+  <section>
+    <div class="section-label">Topic 4 — S3 Object Tags &amp; Metadata</div>
+    <div class="card">
+      <div class="card-title">Attaching Attributes to S3 Objects</div>
+
+      <div style="display: flex; flex-direction: column; gap: 16px;">
+
+        <div class="grid-2">
+          <!-- Metadata -->
+          <div class="compare-col">
+            <div class="compare-col-title" style="color: #93c5fd;">User-Defined Metadata</div>
+            <ul>
+              <li>Key-value pairs set at upload time (in request headers)</li>
+              <li>Key <strong>must</strong> start with <code>x-amz-meta-</code></li>
+              <li>Retrieved with the object via HEAD or GET request</li>
+              <li>Cannot be changed without re-uploading the object</li>
+              <li>Example: <code>x-amz-meta-author: alice</code></li>
+            </ul>
+          </div>
+          <!-- Tags -->
+          <div class="compare-col">
+            <div class="compare-col-title" style="color: #6ee7b7;">Object Tags</div>
+            <ul>
+              <li>Key-value pairs assignable after upload (can be changed)</li>
+              <li>Up to 10 tags per object</li>
+              <li>Used for fine-grained IAM permissions</li>
+              <li>Used for analytics and lifecycle rules</li>
+              <li>Example: <code>department = finance</code></li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- IAM tag example -->
+        <div style="background: #0f172a; border: 1px solid #334155; border-radius: 10px; padding: 18px;">
+          <div style="font-size: 14px; font-weight: 700; color: #f8fafc; margin-bottom: 10px;">Using Tags for IAM Permissions</div>
+          <div style="font-family: 'Fira Code', monospace; font-size: 13px; color: #6ee7b7; background: #1a1a2e; padding: 12px 16px; border-radius: 8px; line-height: 1.7;">
+            {<br>
+            &nbsp;&nbsp;"Condition": {<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;"StringEquals": {<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"s3:ExistingObjectTag/department": "finance"<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+            &nbsp;&nbsp;}<br>
+            }
+          </div>
+          <div style="font-size: 13px; color: #94a3b8; margin-top: 10px;">This condition restricts access to objects tagged <code>department = finance</code> only. Finance team IAM users get access; others are denied.</div>
+        </div>
+
+        <!-- CRITICAL: No search -->
+        <div class="callout danger">
+          <strong>Critical Exam Point — Neither metadata nor tags are searchable in S3.</strong><br>
+          You cannot query S3 like a database. To find objects by metadata or tag values, you must build an external index in <strong>DynamoDB</strong>, query DynamoDB first to get the S3 key, then fetch the object from S3.
+        </div>
+
+        <!-- DynamoDB index pattern -->
+        <div>
+          <div style="font-size: 14px; font-weight: 700; color: #f8fafc; margin-bottom: 10px;">Search Pattern with DynamoDB</div>
+          <div class="arch-flow">
+            <div class="arch-node" style="background: #1e2d4a; color: #93c5fd;">App writes object<br>to S3</div>
+            <div class="arch-arrow">›</div>
+            <div class="arch-node" style="background: #1e293b; color: #f8fafc;">Lambda triggered<br>by S3 event</div>
+            <div class="arch-arrow">›</div>
+            <div class="arch-node" style="background: #0f2a1e; color: #6ee7b7;">Write metadata +<br>S3 key to DynamoDB</div>
+          </div>
+          <div class="arch-flow" style="margin-top: 10px;">
+            <div class="arch-node" style="background: #1e2d4a; color: #93c5fd;">User searches<br>"department=finance"</div>
+            <div class="arch-arrow">›</div>
+            <div class="arch-node" style="background: #0f2a1e; color: #6ee7b7;">Query DynamoDB<br>→ get S3 key</div>
+            <div class="arch-arrow">›</div>
+            <div class="arch-node" style="background: #1e2d4a; color: #93c5fd;">Fetch object<br>from S3</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════ EXAM TIPS ═══ -->
+  <section>
+    <div class="section-label">Exam Quick-Fire Tips</div>
+    <div class="tips-grid">
+
+      <div class="tip-card">
+        <div class="tip-trigger">Scenario: "Lifecycle rule types"</div>
+        <hr class="divider" />
+        <div class="tip-answer">&#8594; Transition (move to cheaper class) and Expiration (delete)</div>
+      </div>
+
+      <div class="tip-card">
+        <div class="tip-trigger">Scenario: "S3 Analytics recommendation"</div>
+        <hr class="divider" />
+        <div class="tip-answer">&#8594; Only for Standard &amp; Standard-IA. CSV report. Takes 24–48h to start.</div>
+      </div>
+
+      <div class="tip-card">
+        <div class="tip-trigger">Scenario: "Trigger Lambda when object uploaded to S3"</div>
+        <hr class="divider" />
+        <div class="tip-answer">&#8594; S3 Event Notification → Lambda. Lambda needs a resource policy (not IAM role).</div>
+      </div>
+
+      <div class="tip-card">
+        <div class="tip-trigger">Scenario: "S3 event to SNS or SQS"</div>
+        <hr class="divider" />
+        <div class="tip-answer">&#8594; Set a resource-based policy on the SNS topic / SQS queue to allow S3 to publish.</div>
+      </div>
+
+      <div class="tip-card">
+        <div class="tip-trigger">Scenario: "S3 event to multiple destinations simultaneously"</div>
+        <hr class="divider" />
+        <div class="tip-answer">&#8594; Use EventBridge (routes to 18+ AWS services, advanced filtering, archiving).</div>
+      </div>
+
+      <div class="tip-card">
+        <div class="tip-trigger">Scenario: "S3 performance baseline"</div>
+        <hr class="divider" />
+        <div class="tip-answer">&#8594; 3,500 PUT/s and 5,500 GET/s per prefix. Multiply by spreading prefixes.</div>
+      </div>
+
+      <div class="tip-card">
+        <div class="tip-trigger">Scenario: "Upload a 10 GB file to S3"</div>
+        <hr class="divider" />
+        <div class="tip-answer">&#8594; Multi-Part Upload is REQUIRED for files over 5 GB (recommended over 100 MB).</div>
+      </div>
+
+      <div class="tip-card">
+        <div class="tip-trigger">Scenario: "User in Australia uploading to S3 bucket in eu-west-1"</div>
+        <hr class="divider" />
+        <div class="tip-answer">&#8594; Transfer Acceleration — uploads to nearby edge, private AWS backbone to bucket.</div>
+      </div>
+
+      <div class="tip-card">
+        <div class="tip-trigger">Scenario: "Download large file faster / read only first 100 bytes"</div>
+        <hr class="divider" />
+        <div class="tip-answer">&#8594; Byte-Range Fetches — parallel range requests or partial file retrieval.</div>
+      </div>
+
+      <div class="tip-card">
+        <div class="tip-trigger">Scenario: "Different IAM permissions per S3 object"</div>
+        <hr class="divider" />
+        <div class="tip-answer">&#8594; Apply object tags, then use IAM condition <code>s3:ExistingObjectTag/key = value</code>.</div>
+      </div>
+
+      <div class="tip-card">
+        <div class="tip-trigger">Scenario: "Search S3 objects by metadata or tag"</div>
+        <hr class="divider" />
+        <div class="tip-answer">&#8594; NOT possible natively in S3. Must build DynamoDB index and query there first.</div>
+      </div>
+
+      <div class="tip-card">
+        <div class="tip-trigger">Scenario: "S3 Analytics does NOT work for…"</div>
+        <hr class="divider" />
+        <div class="tip-answer">&#8594; One-Zone-IA and any Glacier tier. Only Standard ↔ Standard-IA analysis.</div>
+      </div>
+
+    </div>
+  </section>
+
+</main>
+
+<!-- ═══════════════════════════════════════ JAVASCRIPT ═══ -->
+<script>
+var DEMOS = {
+  'events-demo': {
+    steps: [
+      {
+        body: '<div style="display:flex;flex-direction:column;gap:16px;">' +
+          '<div class="step-title">Step 1 — What Triggers an S3 Event?</div>' +
+          '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;">' +
+            '<div style="background:#1e293b;border:1px solid #334155;border-radius:10px;padding:14px;">' +
+              '<div style="font-size:13px;font-weight:700;color:#93c5fd;margin-bottom:6px;">Object Created</div>' +
+              '<div style="font-size:13px;color:#94a3b8;">PUT, POST, COPY, CompleteMultipartUpload</div>' +
+            '</div>' +
+            '<div style="background:#1e293b;border:1px solid #334155;border-radius:10px;padding:14px;">' +
+              '<div style="font-size:13px;font-weight:700;color:#fca5a5;margin-bottom:6px;">Object Removed</div>' +
+              '<div style="font-size:13px;color:#94a3b8;">Delete, versioned delete markers</div>' +
+            '</div>' +
+            '<div style="background:#1e293b;border:1px solid #334155;border-radius:10px;padding:14px;">' +
+              '<div style="font-size:13px;font-weight:700;color:#6ee7b7;margin-bottom:6px;">Object Restored</div>' +
+              '<div style="font-size:13px;color:#94a3b8;">Restored from Glacier tier</div>' +
+            '</div>' +
+            '<div style="background:#1e293b;border:1px solid #334155;border-radius:10px;padding:14px;">' +
+              '<div style="font-size:13px;font-weight:700;color:#c084fc;margin-bottom:6px;">Replication</div>' +
+              '<div style="font-size:13px;color:#94a3b8;">Replication events, failed replications</div>' +
+            '</div>' +
+          '</div>' +
+          '<div style="background:rgba(99,102,241,0.08);border-left:4px solid #6366f1;border-radius:10px;padding:14px 18px;font-size:13px;color:#c7d2fe;"><strong>Filtering:</strong> Notifications can be scoped by prefix (e.g., <code>images/</code>) and/or suffix (e.g., <code>.jpg</code>). Events outside the filter are silently ignored.</div>' +
+        '</div>'
+      },
+      {
+        body: '<div style="display:flex;flex-direction:column;gap:16px;">' +
+          '<div class="step-title">Step 2 — Direct Destinations (SNS, SQS, Lambda)</div>' +
+          '<div style="display:flex;flex-direction:column;gap:10px;">' +
+            '<div style="display:flex;align-items:center;gap:12px;background:#1e293b;border:1px solid #334155;border-radius:10px;padding:14px;">' +
+              '<div style="min-width:80px;text-align:center;background:#1a1a2e;border-radius:8px;padding:8px;font-size:13px;font-weight:700;color:#c084fc;">SNS</div>' +
+              '<div style="flex:1;font-size:13px;color:#94a3b8;">Object event → SNS topic → fan-out to email subscribers, SQS queues, Lambda. <strong style="color:#f8fafc;">Requires SNS Resource Access Policy</strong> allowing s3.amazonaws.com to publish.</div>' +
+            '</div>' +
+            '<div style="display:flex;align-items:center;gap:12px;background:#1e293b;border:1px solid #334155;border-radius:10px;padding:14px;">' +
+              '<div style="min-width:80px;text-align:center;background:#0f2a1e;border-radius:8px;padding:8px;font-size:13px;font-weight:700;color:#6ee7b7;">SQS</div>' +
+              '<div style="flex:1;font-size:13px;color:#94a3b8;">Object event → SQS queue → workers poll and process. <strong style="color:#f8fafc;">Requires SQS Resource Access Policy</strong> allowing s3.amazonaws.com to send messages.</div>' +
+            '</div>' +
+            '<div style="display:flex;align-items:center;gap:12px;background:#1e293b;border:1px solid #334155;border-radius:10px;padding:14px;">' +
+              '<div style="min-width:80px;text-align:center;background:#1e2d4a;border-radius:8px;padding:8px;font-size:13px;font-weight:700;color:#fb923c;">Lambda</div>' +
+              '<div style="flex:1;font-size:13px;color:#94a3b8;">Object event → Lambda function → custom processing. <strong style="color:#f8fafc;">Requires Lambda Resource Policy</strong> (not IAM role) allowing s3.amazonaws.com to invoke.</div>' +
+            '</div>' +
+          '</div>' +
+          '<div style="background:rgba(249,115,22,0.08);border-left:4px solid #f97316;border-radius:10px;padding:14px 18px;font-size:13px;color:#fed7aa;"><strong>Key pattern:</strong> For all three destinations, the permission is set on the <em>destination resource</em>, not on the S3 bucket. Delivery is typically within seconds but can be a minute or more.</div>' +
+        '</div>'
+      },
+      {
+        body: '<div style="display:flex;flex-direction:column;gap:16px;">' +
+          '<div class="step-title">Step 3 — EventBridge Destination (Advanced Routing)</div>' +
+          '<div style="display:flex;flex-direction:column;gap:10px;">' +
+            '<div class="arch-flow">' +
+              '<div class="arch-node" style="background:#1e2d4a;color:#93c5fd;">S3 Object Event</div>' +
+              '<div class="arch-arrow">›</div>' +
+              '<div class="arch-node" style="background:#1e293b;color:#f8fafc;">EventBridge<br>(automatic, no config)</div>' +
+              '<div class="arch-arrow">›</div>' +
+              '<div style="display:flex;flex-direction:column;gap:6px;">' +
+                '<div class="arch-node" style="background:#0f2a1e;color:#6ee7b7;min-width:120px;">Lambda</div>' +
+                '<div class="arch-node" style="background:#1a1a2e;color:#c084fc;min-width:120px;">Step Functions</div>' +
+                '<div class="arch-node" style="background:#1e2d4a;color:#93c5fd;min-width:120px;">Kinesis Data Streams</div>' +
+                '<div class="arch-node" style="background:#1e293b;color:#94a3b8;min-width:120px;">+ 15 more services</div>' +
+              '</div>' +
+            '</div>' +
+            '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-top:4px;">' +
+              '<div style="background:#0f2a1e;border:1px solid #10b981;border-radius:8px;padding:12px;font-size:13px;color:#6ee7b7;"><strong>Advanced filtering</strong><br><span style="color:#94a3b8;">Filter on object size, name patterns, metadata, object tags</span></div>' +
+              '<div style="background:#0f2a1e;border:1px solid #10b981;border-radius:8px;padding:12px;font-size:13px;color:#6ee7b7;"><strong>Multiple targets</strong><br><span style="color:#94a3b8;">Route one event to 18+ AWS services simultaneously</span></div>' +
+              '<div style="background:#0f2a1e;border:1px solid #10b981;border-radius:8px;padding:12px;font-size:13px;color:#6ee7b7;"><strong>Archive &amp; replay</strong><br><span style="color:#94a3b8;">Store all events and replay them later for debugging or recovery</span></div>' +
+              '<div style="background:#0f2a1e;border:1px solid #10b981;border-radius:8px;padding:12px;font-size:13px;color:#6ee7b7;"><strong>More reliable delivery</strong><br><span style="color:#94a3b8;">Guaranteed delivery with retry logic and dead-letter queues</span></div>' +
+            '</div>' +
+          '</div>' +
+          '<div style="background:rgba(16,185,129,0.08);border-left:4px solid #10b981;border-radius:10px;padding:14px 18px;font-size:13px;color:#6ee7b7;"><strong>When to choose EventBridge:</strong> Multiple destinations, complex filtering, archiving events, or routing to services beyond SNS/SQS/Lambda. S3 sends <em>all events</em> to EventBridge automatically once enabled — no per-event configuration needed.</div>' +
+        '</div>'
+      }
+    ]
+  }
+};
+
+var states = {};
+
+function renderStep(id, step) {
+  var demo = DEMOS[id];
+  var total = demo.steps.length;
+  document.getElementById(id).innerHTML = demo.steps[step].body;
+  document.getElementById(id + '-counter').textContent = 'Step ' + (step + 1) + ' / ' + total;
+  document.querySelectorAll('[id^="' + id + '-dot-"]').forEach(function(d, i) { d.classList.toggle('active', i === step); });
+  document.getElementById(id + '-prev').disabled = step === 0;
+  document.getElementById(id + '-next').disabled = step === total - 1;
+  states[id] = step;
+}
+
+function prev(id) { if (states[id] > 0) renderStep(id, states[id] - 1); }
+function next(id) { if (states[id] < DEMOS[id].steps.length - 1) renderStep(id, states[id] + 1); }
+function restart(id) { renderStep(id, 0); }
+
+Object.keys(DEMOS).forEach(function(id) {
+  states[id] = 0;
+  var dotsEl = document.getElementById(id + '-dots');
+  dotsEl.innerHTML = DEMOS[id].steps.map(function(_, i) { return '<div class="dot" id="' + id + '-dot-' + i + '"></div>'; }).join('');
+  renderStep(id, 0);
+});
+</script>
+
+</body>
+</html>

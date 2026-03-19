@@ -1,0 +1,736 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Section 3 — Getting Started with AWS</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap");
+
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        background: #0f172a;
+        color: #e2e8f0;
+        line-height: 1.6;
+        padding: 0 0 64px;
+      }
+
+      /* ── HERO ── */
+      .hero {
+        background: linear-gradient(135deg, #1e293b 0%, #0f172a 60%, #1a1a2e 100%);
+        border-bottom: 1px solid #334155;
+        padding: 48px 32px 40px;
+        text-align: center;
+      }
+      .hero-eyebrow {
+        font-size: 13px;
+        font-weight: 600;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: #f97316;
+        margin-bottom: 12px;
+      }
+      h1 {
+        font-size: clamp(26px, 4vw, 40px);
+        font-weight: 800;
+        color: #f8fafc;
+        margin-bottom: 8px;
+        letter-spacing: -0.02em;
+      }
+      .hero-subtitle {
+        font-size: 15px;
+        color: #94a3b8;
+        margin-bottom: 20px;
+        font-weight: 400;
+      }
+      .xp-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: linear-gradient(135deg, #f97316, #ea580c);
+        color: #fff;
+        font-size: 13px;
+        font-weight: 700;
+        padding: 8px 18px;
+        border-radius: 999px;
+        letter-spacing: 0.01em;
+      }
+
+      .container {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 40px 24px 0;
+      }
+
+      /* ── SECTION CARDS ── */
+      .card {
+        background: #1e293b;
+        border-radius: 16px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        border: 1px solid #334155;
+      }
+      .card-header {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 1.5rem;
+      }
+      .badge {
+        background: #f97316;
+        color: #0f172a;
+        font-weight: 800;
+        font-size: 13px;
+        padding: 0.25rem 0.65rem;
+        border-radius: 6px;
+      }
+      h2 {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: #f8fafc;
+      }
+      h3 {
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: #d2d2d2;
+        margin: 1.5rem 0 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+      }
+      p {
+        color: #d2d2d2;
+        font-size: 0.9rem;
+        margin-bottom: 0.75rem;
+      }
+      p strong {
+        color: #e2e8f0;
+      }
+
+      /* ── CONCEPT CARDS GRID ── */
+      .concept-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 0.9rem;
+      }
+      .concept-card {
+        background: #0f172a;
+        border-radius: 12px;
+        padding: 1.1rem 1.2rem;
+        border: 1px solid #1e293b;
+      }
+      .concept-card .icon {
+        font-size: 1.4rem;
+        margin-bottom: 0.5rem;
+      }
+      .concept-card h4 {
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: #f8fafc;
+        margin-bottom: 0.3rem;
+      }
+      .concept-card p {
+        font-size: 13px;
+        color: #d2d2d2;
+        margin: 0;
+      }
+
+      /* ── CALLOUTS ── */
+      .callout {
+        border-radius: 8px;
+        padding: 0.75rem 1rem;
+        margin: 1rem 0;
+        font-size: 0.85rem;
+      }
+      .callout.warning {
+        background: #451a0322;
+        border: 1px dashed #f97316;
+        color: #fdba74;
+      }
+      .callout.danger {
+        background: #7f1d1d22;
+        border: 1px solid #dc262644;
+        color: #fca5a5;
+      }
+      .callout.info {
+        background: #1e3a5f22;
+        border-left: 3px solid #3b82f6;
+        color: #93c5fd;
+      }
+      .callout.success {
+        background: #064e3b22;
+        border-left: 3px solid #10b981;
+        color: #6ee7b7;
+      }
+
+      /* ── FLOW BOXES ── */
+      .flow-boxes {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        flex-wrap: wrap;
+      }
+      .fbox {
+        background: #1e293b;
+        border-radius: 6px;
+        padding: 0.3rem 0.65rem;
+        font-size: 13px;
+        font-weight: 600;
+        color: #e2e8f0;
+        border: 1px solid #334155;
+      }
+      .arrow-sym {
+        color: #334155;
+        font-size: 1.1rem;
+      }
+
+      /* ── INFRA VISUAL ── */
+      .infra-visual {
+        background: #0f172a;
+        border-radius: 14px;
+        padding: 1.5rem;
+        margin: 1rem 0;
+        border: 1px solid #1e293b;
+      }
+      .region-box {
+        border: 2px solid #f97316;
+        border-radius: 12px;
+        padding: 1.2rem;
+        position: relative;
+      }
+      .region-label {
+        font-size: 13px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: #f97316;
+        margin-bottom: 1rem;
+      }
+      .az-row {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.75rem;
+      }
+      .az-box {
+        border: 1px solid #3b82f6;
+        border-radius: 10px;
+        padding: 0.9rem;
+        background: #0a1628;
+      }
+      .az-label {
+        font-size: 13px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: #60a5fa;
+        margin-bottom: 0.65rem;
+      }
+      .dc-row {
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
+      }
+      .dc-box {
+        background: #1e293b;
+        border: 1px solid #334155;
+        border-radius: 6px;
+        padding: 0.3rem 0.6rem;
+        font-size: 13px;
+        font-weight: 600;
+        color: #94a3b8;
+        text-align: center;
+      }
+      .az-connector {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.3rem;
+        margin-top: 0.75rem;
+        padding-top: 0.75rem;
+        border-top: 1px dashed #1e293b;
+        font-size: 13px;
+        color: #475569;
+      }
+      .conn-line {
+        flex: 1;
+        height: 1px;
+        background: #1e293b;
+      }
+      .conn-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: #3b82f6;
+        flex-shrink: 0;
+      }
+
+      /* ── PRIORITY CARDS (numbered) ── */
+      .priority-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 0.9rem;
+        margin-top: 0.5rem;
+      }
+      .priority-card {
+        background: #0f172a;
+        border-radius: 12px;
+        padding: 1.1rem 1.2rem;
+        border: 1px solid #1e293b;
+        display: flex;
+        gap: 0.9rem;
+        align-items: flex-start;
+      }
+      .priority-num {
+        flex-shrink: 0;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background: #f97316;
+        color: #0f172a;
+        font-weight: 800;
+        font-size: 13px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 1px;
+      }
+      .priority-body h4 {
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: #f8fafc;
+        margin-bottom: 0.25rem;
+      }
+      .priority-body p {
+        font-size: 13px;
+        color: #94a3b8;
+        margin: 0;
+      }
+
+      /* ── GLOBAL vs REGIONAL GRID ── */
+      .scope-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        margin-top: 0.5rem;
+      }
+      .scope-card {
+        background: #0f172a;
+        border-radius: 12px;
+        padding: 1.2rem;
+        border: 1px solid #1e293b;
+      }
+      .scope-card h4 {
+        font-size: 0.85rem;
+        font-weight: 700;
+        margin-bottom: 0.9rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid #1e293b;
+      }
+      .scope-card.global h4 {
+        color: #f97316;
+      }
+      .scope-card.regional h4 {
+        color: #60a5fa;
+      }
+      .scope-card ul {
+        list-style: none;
+        padding: 0;
+      }
+      .scope-card li {
+        font-size: 13px;
+        color: #d2d2d2;
+        padding: 0.22rem 0;
+        padding-left: 1.1rem;
+        position: relative;
+      }
+      .scope-card.global li::before {
+        content: "🌐";
+        position: absolute;
+        left: 0;
+        font-size: 13px;
+        top: 0.3rem;
+      }
+      .scope-card.regional li::before {
+        content: "📍";
+        position: absolute;
+        left: 0;
+        font-size: 13px;
+        top: 0.3rem;
+      }
+
+      /* ── EXAM TIPS ── */
+      .tips-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 0.7rem;
+      }
+      .tip {
+        background: #0f172a;
+        border-left: 3px solid #f97316;
+        border-radius: 0 8px 8px 0;
+        padding: 0.65rem 1rem;
+        font-size: 0.83rem;
+      }
+      .tip .trigger {
+        color: #64748b;
+      }
+      .tip .arrow {
+        color: #334155;
+        margin: 0 0.25rem;
+      }
+      .tip .answer {
+        color: #f8fafc;
+        font-weight: 700;
+      }
+
+      /* ── EDGE LOCATIONS ── */
+      .edge-visual {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        background: #0f172a;
+        border-radius: 12px;
+        padding: 1.2rem;
+        margin: 1rem 0;
+        flex-wrap: wrap;
+      }
+      .edge-stat {
+        flex: 1;
+        min-width: 130px;
+        text-align: center;
+        padding: 0.75rem;
+        background: #1e293b;
+        border-radius: 10px;
+        border: 1px solid #334155;
+      }
+      .edge-stat .num {
+        font-size: 1.6rem;
+        font-weight: 800;
+        color: #f97316;
+        line-height: 1;
+        margin-bottom: 0.25rem;
+      }
+      .edge-stat .desc {
+        font-size: 13px;
+        color: #64748b;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+      }
+      .edge-arrow {
+        font-size: 1.4rem;
+        color: #334155;
+        flex-shrink: 0;
+      }
+
+      @media (max-width: 680px) {
+        body {
+          padding: 1rem;
+        }
+        h1 {
+          font-size: 1.6rem;
+        }
+        .scope-grid {
+          grid-template-columns: 1fr;
+        }
+        .az-row {
+          grid-template-columns: 1fr;
+        }
+        .edge-visual {
+          flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="hero">
+      <div class="hero-eyebrow">AWS Certified Developer Associate</div>
+      <h1>Section 3 — Getting Started with AWS</h1>
+      <div class="hero-subtitle">AWS Regions · Availability Zones · Edge Locations · Global vs Regional</div>
+      <div class="xp-badge">⚡ +50 XP &nbsp;·&nbsp; 1 / 1 quiz PERFECT &nbsp;·&nbsp; Section complete</div>
+    </div>
+    <div class="container">
+
+      <!-- ══════════════ 1. GLOBAL INFRASTRUCTURE ══════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">1</span>
+          <h2>AWS Global Infrastructure</h2>
+        </div>
+
+        <p>
+          AWS is distributed across the globe in a layered hierarchy: <strong>Regions</strong> contain
+          <strong>Availability Zones</strong>, which contain <strong>data centers</strong>. On top of this,
+          <strong>Edge Locations</strong> extend reach for content delivery.
+        </p>
+
+        <!-- Infra Visual -->
+        <div class="infra-visual">
+          <div style="font-size: 13px; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1rem;">
+            Infrastructure Hierarchy
+          </div>
+          <div class="region-box">
+            <div class="region-label">Region — e.g. us-east-1 (N. Virginia)</div>
+            <div class="az-row">
+              <div class="az-box">
+                <div class="az-label">AZ-1a</div>
+                <div class="dc-row">
+                  <div class="dc-box">Data Center A</div>
+                  <div class="dc-box">Data Center B</div>
+                </div>
+              </div>
+              <div class="az-box">
+                <div class="az-label">AZ-1b</div>
+                <div class="dc-row">
+                  <div class="dc-box">Data Center C</div>
+                  <div class="dc-box">Data Center D</div>
+                </div>
+              </div>
+              <div class="az-box">
+                <div class="az-label">AZ-1c</div>
+                <div class="dc-row">
+                  <div class="dc-box">Data Center E</div>
+                  <div class="dc-box">Data Center F</div>
+                </div>
+              </div>
+            </div>
+            <div class="az-connector">
+              <div class="conn-line"></div>
+              <div class="conn-dot"></div>
+              <span style="font-size: 13px; color: #475569; padding: 0 0.5rem;">High-bandwidth · Ultra-low-latency networking between AZs</span>
+              <div class="conn-dot"></div>
+              <div class="conn-line"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="concept-grid">
+          <div class="concept-card">
+            <div class="icon">🗺</div>
+            <h4>Region</h4>
+            <p>
+              A cluster of data centers in a specific geographic area. Named like
+              <strong>us-east-1</strong>, <strong>eu-west-3</strong>. AWS has 30+ regions globally.
+            </p>
+          </div>
+          <div class="concept-card">
+            <div class="icon">🏢</div>
+            <h4>Availability Zone (AZ)</h4>
+            <p>
+              One or more discrete data centers within a region, each with redundant power,
+              networking, and connectivity. Typically <strong>3 per region</strong> (range: 3–6).
+            </p>
+          </div>
+          <div class="concept-card">
+            <div class="icon">🛡</div>
+            <h4>AZ Isolation</h4>
+            <p>
+              AZs are physically <strong>isolated</strong> from each other — separated by
+              meaningful distance to prevent disaster cascading across AZs.
+            </p>
+          </div>
+          <div class="concept-card">
+            <div class="icon">⚡</div>
+            <h4>AZ Connectivity</h4>
+            <p>
+              Despite isolation, AZs within a region are connected via <strong>high-bandwidth,
+              ultra-low-latency</strong> private networking — fast enough to act as one logical unit.
+            </p>
+          </div>
+        </div>
+
+        <h3>Points of Presence / Edge Locations</h3>
+
+        <div class="edge-visual">
+          <div class="edge-stat">
+            <div class="num">400+</div>
+            <div class="desc">Points of Presence</div>
+          </div>
+          <div class="edge-arrow">→</div>
+          <div class="edge-stat">
+            <div class="num">90+</div>
+            <div class="desc">Cities</div>
+          </div>
+          <div class="edge-arrow">→</div>
+          <div class="edge-stat">
+            <div class="num">40+</div>
+            <div class="desc">Countries</div>
+          </div>
+          <div class="edge-arrow">→</div>
+          <div class="edge-stat">
+            <div class="num" style="font-size: 1rem; padding-top: 0.4rem;">CloudFront</div>
+            <div class="desc">Used by (CDN)</div>
+          </div>
+        </div>
+
+        <div class="callout info">
+          Edge Locations are <strong>NOT</strong> the same as Regions or AZs. They exist solely to
+          cache content closer to end users via <strong>CloudFront</strong> (AWS CDN). They are far more
+          numerous than regions.
+        </div>
+      </div>
+
+      <!-- ══════════════ 2. HOW TO CHOOSE A REGION ══════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">2</span>
+          <h2>How to Choose a Region</h2>
+        </div>
+
+        <p>
+          Not all regions are equal. Evaluate these four factors <strong>in priority order</strong>
+          when deciding where to deploy your workload:
+        </p>
+
+        <div class="priority-grid">
+          <div class="priority-card">
+            <div class="priority-num">1</div>
+            <div class="priority-body">
+              <h4>Compliance</h4>
+              <p>
+                Data governance and legal requirements come first. Some regulations require data
+                to stay within a specific country (e.g., GDPR in Europe). This is non-negotiable.
+              </p>
+            </div>
+          </div>
+          <div class="priority-card">
+            <div class="priority-num">2</div>
+            <div class="priority-body">
+              <h4>Latency</h4>
+              <p>
+                Deploy close to your users. If most users are in Brazil, choose
+                <strong>sa-east-1</strong>. Less distance = fewer milliseconds = better UX.
+              </p>
+            </div>
+          </div>
+          <div class="priority-card">
+            <div class="priority-num">3</div>
+            <div class="priority-body">
+              <h4>Service Availability</h4>
+              <p>
+                Not all AWS services are available in all regions. Newer services often launch
+                in us-east-1 first. Verify the service you need exists in your chosen region.
+              </p>
+            </div>
+          </div>
+          <div class="priority-card">
+            <div class="priority-num">4</div>
+            <div class="priority-body">
+              <h4>Pricing</h4>
+              <p>
+                AWS pricing varies by region. The same EC2 instance type can cost differently
+                in us-east-1 vs ap-southeast-1. Factor in costs last, after compliance and UX.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout warning" style="margin-top: 1.25rem;">
+          ⚠ On the exam, if a question asks what to consider first when choosing a region — the answer
+          is <strong>Compliance</strong>, not latency or cost.
+        </div>
+      </div>
+
+      <!-- ══════════════ 3. GLOBAL vs REGIONAL SERVICES ══════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">3</span>
+          <h2>Global vs Regional Services</h2>
+        </div>
+
+        <p>
+          Some AWS services operate <strong>globally</strong> (no region selection needed),
+          while most are <strong>regional</strong> (you deploy per region).
+        </p>
+
+        <div class="scope-grid">
+          <div class="scope-card global">
+            <h4>🌐 Global Services</h4>
+            <ul>
+              <li>IAM — Identity and Access Management</li>
+              <li>Route 53 — DNS service</li>
+              <li>CloudFront — Content Delivery Network</li>
+              <li>WAF — Web Application Firewall</li>
+            </ul>
+          </div>
+          <div class="scope-card regional">
+            <h4>📍 Regional Services</h4>
+            <ul>
+              <li>EC2 — Compute instances</li>
+              <li>Lambda — Serverless functions</li>
+              <li>Elastic Beanstalk — App deployment</li>
+              <li>RDS — Relational databases</li>
+              <li>S3 — Object storage (bucket is regional)</li>
+              <li>DynamoDB — NoSQL database</li>
+              <li>ECS / EKS — Container services</li>
+              <li>VPC — Virtual Private Cloud</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="callout info" style="margin-top: 1rem;">
+          <strong>S3 nuance:</strong> S3 bucket names are globally unique, but the bucket itself is
+          created in a specific region. The S3 console may appear global but data lives regionally.
+        </div>
+      </div>
+
+      <!-- ══════════════ 4. EXAM TIPS ══════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">4</span>
+          <h2>Exam Tips</h2>
+        </div>
+
+        <div class="tips-grid">
+          <div class="tip">
+            <span class="trigger">"IAM is a ___ service"</span>
+            <span class="arrow">→</span>
+            <span class="answer">Global (no region selection)</span>
+          </div>
+          <div class="tip">
+            <span class="trigger">"Region ="</span>
+            <span class="arrow">→</span>
+            <span class="answer">Cluster of data centers</span>
+          </div>
+          <div class="tip">
+            <span class="trigger">"AZs are ___ from each other"</span>
+            <span class="arrow">→</span>
+            <span class="answer">Isolated — prevents disaster cascading</span>
+          </div>
+          <div class="tip">
+            <span class="trigger">"AZs are connected with"</span>
+            <span class="arrow">→</span>
+            <span class="answer">High-bandwidth, ultra-low-latency networking</span>
+          </div>
+          <div class="tip">
+            <span class="trigger">"Edge locations are used by"</span>
+            <span class="arrow">→</span>
+            <span class="answer">CloudFront (CDN)</span>
+          </div>
+          <div class="tip">
+            <span class="trigger">"How many AZs per region"</span>
+            <span class="arrow">→</span>
+            <span class="answer">3 to 6 (usually 3)</span>
+          </div>
+          <div class="tip">
+            <span class="trigger">"Choose region based on"</span>
+            <span class="arrow">→</span>
+            <span class="answer">Compliance &gt; Latency &gt; Service availability &gt; Pricing</span>
+          </div>
+          <div class="tip">
+            <span class="trigger">"How many Edge Locations exist"</span>
+            <span class="arrow">→</span>
+            <span class="answer">400+ PoPs in 90+ cities, 40+ countries</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

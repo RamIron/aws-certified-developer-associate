@@ -84,6 +84,6 @@ It should aggregate all lesson notes from that section into a single reference f
 
 ## Current State
 
-- **Current section:** Section 18 - AWS CloudFormation
-- **Total XP:** 6550
-- **Lessons completed:** 165
+- **Current section:** Section 19 - AWS Integration & Messaging: SQS, SNS & Kinesis
+- **Total XP:** 7425
+- **Lessons completed:** 183

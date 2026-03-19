@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Section 8 — RDS, Aurora & ElastiCache</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #0f172a; color: #f8fafc; font-family: 'Inter', sans-serif; font-size: 14px; line-height: 1.6; min-height: 100vh; }
+
+    /* HERO */
+    .hero { background: linear-gradient(135deg, #1e293b 0%, #0f172a 60%, #1a1a2e 100%); border-bottom: 1px solid #334155; padding: 48px 32px 40px; text-align: center; }
+    .hero-eyebrow { font-size: 13px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #f97316; margin-bottom: 12px; }
+    h1 { font-size: clamp(26px, 4vw, 40px); font-weight: 800; color: #f8fafc; margin-bottom: 8px; letter-spacing: -0.02em; }
+    .hero-subtitle { font-size: 15px; color: #94a3b8; margin-bottom: 20px; }
+    .xp-badge { display: inline-flex; align-items: center; gap: 6px; background: linear-gradient(135deg, #f97316, #ea580c); color: #fff; font-size: 13px; font-weight: 700; padding: 8px 18px; border-radius: 999px; }
+
+    /* LAYOUT */
+    .page-body { max-width: 1100px; margin: 0 auto; padding: 48px 24px; display: flex; flex-direction: column; gap: 40px; }
+    .section-label { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: #f97316; margin-bottom: 16px; }
+
+    /* CARDS */
+    .card { background: #1e293b; border-radius: 12px; border: 1px solid #334155; padding: 24px; }
+    .card-title { font-size: 18px; font-weight: 700; color: #f8fafc; margin-bottom: 16px; }
+
+    /* CALLOUTS */
+    .callout { border-radius: 10px; padding: 16px 20px; font-size: 14px; line-height: 1.65; border-left: 4px solid; }
+    .callout.warning { background: rgba(249,115,22,0.08); border-color: #f97316; color: #fed7aa; }
+    .callout.warning strong { color: #fb923c; }
+    .callout.info { background: rgba(99,102,241,0.08); border-color: #6366f1; color: #c7d2fe; }
+    .callout.success { background: rgba(16,185,129,0.08); border-color: #10b981; color: #6ee7b7; }
+    .callout.danger { background: rgba(239,68,68,0.08); border-color: #ef4444; color: #fca5a5; }
+
+    /* TABLES */
+    .data-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    .data-table th { background: #1e2d4a; color: #94a3b8; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; padding: 10px 14px; text-align: left; }
+    .data-table td { padding: 10px 14px; border-bottom: 1px solid #1e293b; color: #cbd5e1; }
+    .data-table tr:last-child td { border-bottom: none; }
+    .data-table tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+    .table-wrapper { overflow-x: auto; border-radius: 10px; border: 1px solid #334155; }
+
+    /* TIP CARDS */
+    .tip-card { background: #0f172a; border-left: 3px solid #f97316; border-radius: 0 8px 8px 0; padding: 12px 16px; font-size: 14px; }
+    .tip-trigger { color: #64748b; }
+    .tip-answer { color: #f8fafc; font-weight: 700; }
+
+    /* ANIMATION DEMO */
+    .anim-demo { background: #0f172a; border-radius: 12px; padding: 20px; min-height: 120px; }
+    .anim-controls { display: flex; align-items: center; gap: 12px; margin-top: 16px; flex-wrap: wrap; }
+    .nav-btn { background: transparent; border: 2px solid #f97316; color: #f97316; padding: 8px 18px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px; transition: all 0.2s; font-family: 'Inter', sans-serif; }
+    .nav-btn:hover:not(:disabled) { background: #f97316; color: #0f172a; }
+    .nav-btn:disabled { opacity: 0.3; cursor: default; }
+    .restart-btn { background: transparent; border: 1px solid #475569; color: #94a3b8; padding: 6px 14px; border-radius: 8px; cursor: pointer; font-size: 13px; margin-left: auto; transition: all 0.2s; font-family: 'Inter', sans-serif; }
+    .restart-btn:hover { border-color: #94a3b8; color: #e2e8f0; }
+    .step-dots { display: flex; gap: 6px; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: #334155; transition: background 0.3s; }
+    .dot.active { background: #f97316; }
+    .step-counter { color: #94a3b8; font-size: 13px; }
+    @keyframes fadeScale { from { opacity: 0; transform: scale(0.97); } to { opacity: 1; transform: scale(1); } }
+    .anim-demo > * { animation: fadeScale 0.25s ease; }
+
+    /* TYPOGRAPHY & UTILITIES */
+    .mono { font-family: 'Fira Code', monospace; }
+    code { font-family: 'Fira Code', monospace; font-size: 13px; background: rgba(248,114,22,0.1); color: #fb923c; padding: 2px 6px; border-radius: 4px; }
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+    .service-card { background: #0f172a; border: 1px solid #334155; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 8px; }
+    .service-icon { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; flex-shrink: 0; }
+    .service-name { font-size: 16px; font-weight: 700; color: #f8fafc; }
+    .service-desc { font-size: 13px; color: #94a3b8; line-height: 1.5; }
+    .compare-col { background: #0f172a; border: 1px solid #334155; border-radius: 10px; padding: 18px; }
+    .compare-col-title { font-size: 15px; font-weight: 700; margin-bottom: 12px; }
+    .compare-col ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .compare-col ul li { font-size: 13px; color: #94a3b8; padding-left: 14px; position: relative; }
+    .compare-col ul li::before { content: '›'; position: absolute; left: 0; color: #f97316; }
+    .arch-flow { display: flex; align-items: center; flex-wrap: wrap; gap: 0; margin-bottom: 8px; }
+    .arch-node { padding: 10px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; text-align: center; }
+    .arch-arrow { color: #475569; font-size: 16px; padding: 0 8px; }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 13px; font-weight: 600; }
+    .badge-green { background: rgba(16,185,129,0.15); color: #6ee7b7; }
+    .badge-red { background: rgba(239,68,68,0.12); color: #fca5a5; }
+    .badge-blue { background: rgba(59,130,246,0.15); color: #93c5fd; }
+    .tips-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 12px; }
+    .step-title { font-size: 15px; font-weight: 700; color: #f8fafc; margin-bottom: 4px; }
+    .step-desc { font-size: 13px; color: #94a3b8; margin-bottom: 12px; }
+    .divider { border: none; border-top: 1px solid #1e293b; margin: 4px 0; }
+
+    /* SECTION-SPECIFIC */
+    .engine-chip { display: inline-flex; align-items: center; gap: 6px; background: #1e293b; border: 1px solid #334155; border-radius: 6px; padding: 6px 12px; font-size: 13px; font-weight: 500; color: #cbd5e1; }
+    .engines-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+    .aurora-stat { background: #0f172a; border: 1px solid #334155; border-radius: 10px; padding: 16px; text-align: center; }
+    .aurora-stat-num { font-size: 28px; font-weight: 800; color: #f97316; line-height: 1.1; }
+    .aurora-stat-label { font-size: 13px; color: #94a3b8; margin-top: 4px; }
+    .flow-box { background: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 10px 14px; font-size: 13px; font-weight: 600; color: #f8fafc; text-align: center; }
+    .flow-connector { display: flex; align-items: center; justify-content: center; color: #475569; font-size: 20px; padding: 0 4px; }
+    .strategy-tag { display: inline-block; padding: 3px 10px; border-radius: 4px; font-size: 13px; font-weight: 700; margin-bottom: 8px; }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     HERO
+═══════════════════════════════════════════════════════════════ -->
+<header class="hero">
+  <div class="hero-eyebrow">AWS Certified Developer Associate · Section 8</div>
+  <h1>RDS, Aurora &amp; ElastiCache</h1>
+  <div class="hero-subtitle">Managed Databases · Read Replicas · Multi-AZ · Aurora · RDS Proxy · ElastiCache · MemoryDB</div>
+  <div class="xp-badge">&#9733; Section complete &nbsp;·&nbsp; Quiz passed 16/22</div>
+</header>
+
+<main class="page-body">
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       1. RDS OVERVIEW
+  ═══════════════════════════════════════════════════════════════ -->
+  <section>
+    <div class="section-label">1 · RDS Overview</div>
+    <div class="card">
+      <div class="card-title">Amazon RDS — Relational Database Service</div>
+      <p style="color:#94a3b8; font-size:14px; margin-bottom:16px;">
+        Fully managed relational DB service. AWS handles OS patching, backups, monitoring, and scaling.
+        You cannot SSH into the underlying EC2 instance (except RDS Custom).
+        Storage is EBS-backed with <strong style="color:#f8fafc;">Storage Auto Scaling</strong>.
+      </p>
+
+      <div class="section-label" style="margin-bottom:10px;">7 Supported Engines</div>
+      <div class="engines-row">
+        <span class="engine-chip">PostgreSQL</span>
+        <span class="engine-chip">MySQL</span>
+        <span class="engine-chip">MariaDB</span>
+        <span class="engine-chip">Oracle</span>
+        <span class="engine-chip">SQL Server</span>
+        <span class="engine-chip">IBM DB2</span>
+        <span class="engine-chip" style="border-color:#f97316; color:#fb923c;">Aurora ★</span>
+      </div>
+
+      <hr class="divider" style="margin: 20px 0;" />
+
+      <div class="section-label" style="margin-bottom:10px;">Storage Auto Scaling — Trigger Conditions</div>
+      <div class="grid-3" style="margin-top:0;">
+        <div class="callout info">
+          <strong>Free storage &lt; 10%</strong><br/>
+          Threshold that triggers expansion
+        </div>
+        <div class="callout info">
+          <strong>Low storage &gt; 5 min</strong><br/>
+          Condition must persist 5+ minutes
+        </div>
+        <div class="callout info">
+          <strong>6-hour cooldown</strong><br/>
+          Minimum time between auto-scale events
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       2. READ REPLICAS vs MULTI-AZ
+  ═══════════════════════════════════════════════════════════════ -->
+  <section>
+    <div class="section-label">2 · Read Replicas vs Multi-AZ</div>
+    <div class="card">
+      <div class="card-title">Feature Comparison</div>
+      <div class="table-wrapper">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Feature</th>
+              <th>Read Replicas</th>
+              <th>Multi-AZ</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Primary Purpose</strong></td>
+              <td>Scale reads (performance)</td>
+              <td>Disaster recovery (HA)</td>
+            </tr>
+            <tr>
+              <td><strong>Replication</strong></td>
+              <td><span class="badge badge-blue">Asynchronous</span></td>
+              <td><span class="badge badge-green">Synchronous</span></td>
+            </tr>
+            <tr>
+              <td><strong>Consistency</strong></td>
+              <td>Eventually consistent</td>
+              <td>Fully consistent</td>
+            </tr>
+            <tr>
+              <td><strong>Max Count</strong></td>
+              <td>15 replicas</td>
+              <td>1 standby</td>
+            </tr>
+            <tr>
+              <td><strong>Readable?</strong></td>
+              <td><span class="badge badge-green">Yes</span> (SELECT only)</td>
+              <td><span class="badge badge-red">No</span> (standby only)</td>
+            </tr>
+            <tr>
+              <td><strong>Cross-Region?</strong></td>
+              <td><span class="badge badge-green">Yes</span></td>
+              <td><span class="badge badge-red">No</span></td>
+            </tr>
+            <tr>
+              <td><strong>Network Cost</strong></td>
+              <td>Free same-region · Paid cross-region</td>
+              <td>N/A</td>
+            </tr>
+            <tr>
+              <td><strong>Failover Target?</strong></td>
+              <td>Can be promoted manually</td>
+              <td>Automatic failover to standby</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout success" style="margin-top:16px;">
+        <strong>Zero-Downtime Migration:</strong> Converting Single-AZ to Multi-AZ takes a snapshot of the primary, restores it as a new standby, then establishes synchronous replication — all with no downtime.
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       3. AMAZON AURORA
+  ═══════════════════════════════════════════════════════════════ -->
+  <section>
+    <div class="section-label">3 · Amazon Aurora</div>
+    <div class="card">
+      <div class="card-title">AWS Proprietary — MySQL &amp; PostgreSQL Compatible</div>
+
+      <div class="grid-4" style="margin-bottom:20px;">
+        <div class="aurora-stat">
+          <div class="aurora-stat-num">5x</div>
+          <div class="aurora-stat-label">faster than MySQL</div>
+        </div>
+        <div class="aurora-stat">
+          <div class="aurora-stat-num">3x</div>
+          <div class="aurora-stat-label">faster than PostgreSQL</div>
+        </div>
+        <div class="aurora-stat">
+          <div class="aurora-stat-num">256 TB</div>
+          <div class="aurora-stat-label">max storage (auto-grows from 10 GB)</div>
+        </div>
+        <div class="aurora-stat">
+          <div class="aurora-stat-num">&lt;30s</div>
+          <div class="aurora-stat-label">failover time</div>
+        </div>
+      </div>
+
+      <div class="grid-2" style="margin-bottom:16px;">
+        <div class="compare-col">
+          <div class="compare-col-title" style="color:#f97316;">Storage Architecture</div>
+          <ul>
+            <li>6 copies across 3 Availability Zones</li>
+            <li>4 out of 6 copies needed for writes</li>
+            <li>3 out of 6 copies needed for reads</li>
+            <li>Self-healing peer-to-peer replication</li>
+            <li>Storage is striped across 100s of volumes</li>
+          </ul>
+        </div>
+        <div class="compare-col">
+          <div class="compare-col-title" style="color:#6366f1;">Endpoints</div>
+          <ul>
+            <li><strong style="color:#f8fafc;">Writer Endpoint</strong> — always points to master</li>
+            <li><strong style="color:#f8fafc;">Reader Endpoint</strong> — load-balanced across all read replicas</li>
+            <li>Up to 15 read replicas</li>
+            <li>Replica lag under 10ms</li>
+            <li>~20% more expensive than standard RDS</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="callout warning">
+        <strong>Backtrack:</strong> Restore the Aurora DB to any point in time without relying on backups. Rewind the database in-place — no need to create a new cluster. Configured at cluster creation time.
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       4. RDS & AURORA SECURITY
+  ═══════════════════════════════════════════════════════════════ -->
+  <section>
+    <div class="section-label">4 · RDS &amp; Aurora Security</div>
+    <div class="card">
+      <div class="card-title">Security Layers</div>
+      <div class="table-wrapper">
+        <table class="data-table">
+          <thead>
+            <tr><th>Layer</th><th>Detail</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>At-Rest Encryption</strong></td>
+              <td>KMS-AES-256. Must be defined at launch. Unencrypted master = unencrypted replicas.</td>
+            </tr>
+            <tr>
+              <td><strong>In-Flight Encryption</strong></td>
+              <td>TLS enabled by default for all connections</td>
+            </tr>
+            <tr>
+              <td><strong>Authentication</strong></td>
+              <td>Username/password <em>or</em> IAM roles (for MySQL &amp; PostgreSQL)</td>
+            </tr>
+            <tr>
+              <td><strong>Network</strong></td>
+              <td>Security Groups control inbound/outbound traffic</td>
+            </tr>
+            <tr>
+              <td><strong>SSH Access</strong></td>
+              <td><span class="badge badge-red">Not available</span> — except RDS Custom</td>
+            </tr>
+            <tr>
+              <td><strong>Audit Logs</strong></td>
+              <td>Can be enabled → forwarded to CloudWatch Logs for long-term retention</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout danger" style="margin-top:16px;">
+        <strong>Encrypting an existing unencrypted DB:</strong> You cannot enable encryption on a running instance.
+        The process is: take a snapshot of the unencrypted DB → restore the snapshot as a new <em>encrypted</em> DB → update connection strings.
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       5. RDS PROXY
+  ═══════════════════════════════════════════════════════════════ -->
+  <section>
+    <div class="section-label">5 · RDS Proxy</div>
+    <div class="card">
+      <div class="card-title">Connection Pooling for RDS &amp; Aurora</div>
+
+      <div class="grid-2" style="margin-bottom:16px;">
+        <div class="compare-col">
+          <div class="compare-col-title" style="color:#10b981;">Key Benefits</div>
+          <ul>
+            <li>Pools &amp; shares DB connections</li>
+            <li>Reduces DB stress from too many open connections</li>
+            <li>66% faster failover time</li>
+            <li>Serverless — scales automatically</li>
+            <li>IAM Authentication + Secrets Manager integration</li>
+            <li>VPC only — never publicly accessible</li>
+          </ul>
+        </div>
+        <div class="compare-col">
+          <div class="compare-col-title" style="color:#f97316;">Supported Engines</div>
+          <ul>
+            <li><span class="badge badge-green">MySQL</span></li>
+            <li><span class="badge badge-green">PostgreSQL</span></li>
+            <li><span class="badge badge-green">MariaDB</span></li>
+            <li><span class="badge badge-green">SQL Server</span></li>
+            <li><span class="badge badge-green">Aurora MySQL &amp; PostgreSQL</span></li>
+            <li><span class="badge badge-red">NOT Oracle</span> &nbsp; <span class="badge badge-red">NOT IBM DB2</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Lambda + RDS Proxy flow -->
+      <div class="section-label" style="margin-bottom:10px;">The Lambda + RDS Problem → Proxy Solution</div>
+      <div style="display:flex; align-items:center; flex-wrap:wrap; gap:6px; margin-bottom:12px;">
+        <div class="flow-box" style="background:rgba(99,102,241,0.15); border-color:#6366f1;">Lambda Functions<br/><span style="color:#94a3b8; font-size:13px;">(1000s of concurrent)</span></div>
+        <div class="flow-connector">→</div>
+        <div class="flow-box" style="background:rgba(16,185,129,0.12); border-color:#10b981;">RDS Proxy<br/><span style="color:#94a3b8; font-size:13px;">(connection pool)</span></div>
+        <div class="flow-connector">→</div>
+        <div class="flow-box" style="background:rgba(249,115,22,0.12); border-color:#f97316;">RDS / Aurora<br/><span style="color:#94a3b8; font-size:13px;">(limited connections)</span></div>
+      </div>
+      <div class="callout warning">
+        <strong>Exam pattern:</strong> Whenever you see <em>Lambda + RDS</em>, the answer is <strong>RDS Proxy</strong>.
+        Lambda can open thousands of concurrent connections — without a proxy, this overwhelms the DB.
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       6. ELASTICACHE — REDIS vs MEMCACHED
+  ═══════════════════════════════════════════════════════════════ -->
+  <section>
+    <div class="section-label">6 · ElastiCache — Redis vs Memcached</div>
+    <div class="card">
+      <div class="card-title">Managed In-Memory Caching</div>
+      <div class="table-wrapper">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Feature</th>
+              <th>Redis</th>
+              <th>Memcached</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>High Availability</strong></td>
+              <td><span class="badge badge-green">Multi-AZ auto-failover</span></td>
+              <td><span class="badge badge-red">No HA</span></td>
+            </tr>
+            <tr>
+              <td><strong>Read Scaling</strong></td>
+              <td><span class="badge badge-green">Read replicas</span></td>
+              <td><span class="badge badge-red">No replicas</span></td>
+            </tr>
+            <tr>
+              <td><strong>Data Durability</strong></td>
+              <td><span class="badge badge-green">AOF persistence</span></td>
+              <td><span class="badge badge-red">No persistence</span></td>
+            </tr>
+            <tr>
+              <td><strong>Backup &amp; Restore</strong></td>
+              <td><span class="badge badge-green">Yes</span></td>
+              <td>Serverless version only</td>
+            </tr>
+            <tr>
+              <td><strong>Data Structures</strong></td>
+              <td>Sets, sorted sets, hashes, lists, streams</td>
+              <td>Simple key-value only</td>
+            </tr>
+            <tr>
+              <td><strong>Architecture</strong></td>
+              <td>Replication (primary + replicas)</td>
+              <td>Sharding (horizontal partitioning)</td>
+            </tr>
+            <tr>
+              <td><strong>Multi-threaded</strong></td>
+              <td><span class="badge badge-red">No</span></td>
+              <td><span class="badge badge-green">Yes</span></td>
+            </tr>
+            <tr>
+              <td><strong>Best For</strong></td>
+              <td>Leaderboards, sessions, pub/sub, durable cache</td>
+              <td>Simple caching, high throughput, multi-thread</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout info" style="margin-top:16px;">
+        <strong>Key Reminder:</strong> ElastiCache requires application code changes to work. The application must be programmed to check the cache before hitting the DB.
+        IAM auth is NOT supported in ElastiCache — use Redis AUTH or Memcached SASL.
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       7. CACHING STRATEGIES (ANIMATED DEMO)
+  ═══════════════════════════════════════════════════════════════ -->
+  <section>
+    <div class="section-label">7 · ElastiCache Caching Strategies</div>
+    <div class="card">
+      <div class="card-title">Caching Strategies — Step-by-Step</div>
+
+      <div class="anim-demo" id="demo-cache"></div>
+      <div class="anim-controls">
+        <button class="nav-btn" id="demo-cache-prev" onclick="prev('demo-cache')">&#9664; Prev</button>
+        <button class="nav-btn" id="demo-cache-next" onclick="next('demo-cache')">Next &#9654;</button>
+        <div class="step-dots" id="demo-cache-dots"></div>
+        <span class="step-counter" id="demo-cache-counter"></span>
+        <button class="restart-btn" onclick="restart('demo-cache')">&#8635; Restart</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       8. MEMORYDB FOR REDIS
+  ═══════════════════════════════════════════════════════════════ -->
+  <section>
+    <div class="section-label">8 · MemoryDB for Redis</div>
+    <div class="card">
+      <div class="card-title">Durable In-Memory Database (Not a Cache)</div>
+
+      <div class="grid-4" style="margin-bottom:16px;">
+        <div class="aurora-stat">
+          <div class="aurora-stat-num">160M+</div>
+          <div class="aurora-stat-label">requests/sec throughput</div>
+        </div>
+        <div class="aurora-stat">
+          <div class="aurora-stat-num">100 TB+</div>
+          <div class="aurora-stat-label">data storage capacity</div>
+        </div>
+        <div class="aurora-stat">
+          <div class="aurora-stat-num">Multi-AZ</div>
+          <div class="aurora-stat-label">transaction log durability</div>
+        </div>
+        <div class="aurora-stat">
+          <div class="aurora-stat-num">Redis</div>
+          <div class="aurora-stat-label">compatible API</div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="callout success">
+          <strong>Use MemoryDB when:</strong> You need a <em>durable</em>, Redis-compatible <em>primary database</em> (not just a cache) with ultra-fast performance. It stores the entire dataset in memory AND persists using a Multi-AZ transaction log.
+        </div>
+        <div class="callout warning">
+          <strong>ElastiCache vs MemoryDB:</strong> ElastiCache is a cache in front of a DB. MemoryDB <em>replaces</em> the DB entirely. If the question says "durable in-memory database," the answer is MemoryDB.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       EXAM TIPS
+  ═══════════════════════════════════════════════════════════════ -->
+  <section>
+    <div class="section-label">Exam Tips — See X, Think Y</div>
+    <div class="tips-grid">
+      <div class="tip-card">
+        <div class="tip-trigger">See: "leaderboard"</div>
+        <div class="tip-answer">→ Redis sorted sets</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-trigger">See: "Lambda + RDS"</div>
+        <div class="tip-answer">→ RDS Proxy (connection pooling)</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-trigger">See: "reduce read load on DB"</div>
+        <div class="tip-answer">→ ElastiCache</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-trigger">See: "durable in-memory database"</div>
+        <div class="tip-answer">→ MemoryDB for Redis</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-trigger">See: "connection pooling"</div>
+        <div class="tip-answer">→ RDS Proxy</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-trigger">See: "stateless app / session store"</div>
+        <div class="tip-answer">→ ElastiCache</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-trigger">Read Replicas vs Multi-AZ replication</div>
+        <div class="tip-answer">Replicas = async &nbsp;|&nbsp; Multi-AZ = sync</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-trigger">See: "Single AZ → Multi AZ conversion"</div>
+        <div class="tip-answer">→ Zero downtime (snapshot → restore → sync)</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-trigger">Aurora: storage architecture</div>
+        <div class="tip-answer">→ 6 copies / 3 AZs · 4/6 writes · 3/6 reads</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-trigger">Aurora: endpoints</div>
+        <div class="tip-answer">→ Writer (master) + Reader (load-balanced replicas)</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-trigger">Aurora: failover time</div>
+        <div class="tip-answer">→ Under 30 seconds · Backtrack for point-in-time</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-trigger">RDS Proxy: not supported engines</div>
+        <div class="tip-answer">→ NOT Oracle, NOT IBM DB2. VPC only (never public)</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-trigger">See: "encrypt existing unencrypted RDS"</div>
+        <div class="tip-answer">→ Snapshot → restore as encrypted</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-trigger">Lazy Loading cache miss cost</div>
+        <div class="tip-answer">→ 3 round trips (cache read + DB read + cache write)</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-trigger">Write Through vs Lazy Loading</div>
+        <div class="tip-answer">Write-through: never stale, 2 calls on write · Lazy: possible stale, 3 calls on miss</div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     JAVASCRIPT — ANIMATION DEMOS
+═══════════════════════════════════════════════════════════════ -->
+<script>
+var DEMOS = {
+  'demo-cache': {
+    steps: [
+      {
+        body: '<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;"><span class="strategy-tag" style="background:rgba(99,102,241,0.2);color:#a5b4fc;">Strategy 1 of 2</span><span style="font-size:13px;color:#64748b;">Lazy Loading (Cache-Aside)</span></div>'
+          + '<div class="step-title">Step 1 — Cache Miss</div>'
+          + '<div class="step-desc">Application checks ElastiCache first. The key does not exist. Cache returns null (miss).</div>'
+          + '<div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px;">'
+          + '<div class="flow-box" style="background:rgba(99,102,241,0.15);border-color:#6366f1;">App</div>'
+          + '<div class="flow-connector">→ read →</div>'
+          + '<div class="flow-box" style="background:rgba(239,68,68,0.1);border-color:#ef4444;">ElastiCache<br/><span style="color:#f87171;font-size:13px;">MISS ✗</span></div>'
+          + '</div>'
+          + '<div class="callout danger" style="margin-top:14px;"><strong>Cache MISS:</strong> Data not in cache. App must go to the database next. This is a 3-call round trip.</div>'
+      },
+      {
+        body: '<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;"><span class="strategy-tag" style="background:rgba(99,102,241,0.2);color:#a5b4fc;">Strategy 1 of 2</span><span style="font-size:13px;color:#64748b;">Lazy Loading (Cache-Aside)</span></div>'
+          + '<div class="step-title">Step 2 — Read from Database</div>'
+          + '<div class="step-desc">On a miss, the application fetches data from the primary database (RDS). This is the slow path.</div>'
+          + '<div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px;">'
+          + '<div class="flow-box" style="background:rgba(99,102,241,0.15);border-color:#6366f1;">App</div>'
+          + '<div class="flow-connector">→ query →</div>'
+          + '<div class="flow-box" style="background:rgba(249,115,22,0.12);border-color:#f97316;">RDS<br/><span style="color:#fdba74;font-size:13px;">returns data</span></div>'
+          + '</div>'
+          + '<div class="callout warning" style="margin-top:14px;"><strong>Downside:</strong> Stale data is possible — if the DB is updated, the cache still holds the old value until it expires (TTL-based invalidation).</div>'
+      },
+      {
+        body: '<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;"><span class="strategy-tag" style="background:rgba(99,102,241,0.2);color:#a5b4fc;">Strategy 1 of 2</span><span style="font-size:13px;color:#64748b;">Lazy Loading (Cache-Aside)</span></div>'
+          + '<div class="step-title">Step 3 — Populate Cache &amp; Return</div>'
+          + '<div class="step-desc">App writes the DB result to ElastiCache. Future reads for this key are fast (cache HIT).</div>'
+          + '<div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px;">'
+          + '<div class="flow-box" style="background:rgba(99,102,241,0.15);border-color:#6366f1;">App</div>'
+          + '<div class="flow-connector">→ write →</div>'
+          + '<div class="flow-box" style="background:rgba(16,185,129,0.12);border-color:#10b981;">ElastiCache<br/><span style="color:#6ee7b7;font-size:13px;">HIT next time ✓</span></div>'
+          + '</div>'
+          + '<div class="callout success" style="margin-top:14px;"><strong>Summary:</strong> Lazy Loading — 3 calls on first miss, 1 call on subsequent hits. Only requested data is cached. Possible stale data. Good for read-heavy workloads.</div>'
+      },
+      {
+        body: '<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;"><span class="strategy-tag" style="background:rgba(16,185,129,0.2);color:#6ee7b7;">Strategy 2 of 2</span><span style="font-size:13px;color:#64748b;">Write Through</span></div>'
+          + '<div class="step-title">Step 1 — Application Writes to Database</div>'
+          + '<div class="step-desc">When data is written/updated, the app writes to the primary database first as normal.</div>'
+          + '<div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px;">'
+          + '<div class="flow-box" style="background:rgba(99,102,241,0.15);border-color:#6366f1;">App</div>'
+          + '<div class="flow-connector">→ write →</div>'
+          + '<div class="flow-box" style="background:rgba(249,115,22,0.12);border-color:#f97316;">RDS<br/><span style="color:#fdba74;font-size:13px;">persisted</span></div>'
+          + '</div>'
+          + '<div class="callout info" style="margin-top:14px;"><strong>Same write operation:</strong> In Write Through, every write to the DB is also immediately written to the cache in the same operation.</div>'
+      },
+      {
+        body: '<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;"><span class="strategy-tag" style="background:rgba(16,185,129,0.2);color:#6ee7b7;">Strategy 2 of 2</span><span style="font-size:13px;color:#64748b;">Write Through</span></div>'
+          + '<div class="step-title">Step 2 — Also Write to ElastiCache</div>'
+          + '<div class="step-desc">Immediately after writing to DB, the same data is written into ElastiCache. Cache always reflects the latest DB state.</div>'
+          + '<div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px;">'
+          + '<div class="flow-box" style="background:rgba(99,102,241,0.15);border-color:#6366f1;">App</div>'
+          + '<div class="flow-connector">→ write →</div>'
+          + '<div class="flow-box" style="background:rgba(16,185,129,0.12);border-color:#10b981;">ElastiCache<br/><span style="color:#6ee7b7;font-size:13px;">updated</span></div>'
+          + '</div>'
+          + '<div class="callout warning" style="margin-top:14px;"><strong>Downside:</strong> Write penalty — every write is 2 operations instead of 1. Cache may hold lots of data that is never actually read (cache churn).</div>'
+      },
+      {
+        body: '<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;"><span class="strategy-tag" style="background:rgba(16,185,129,0.2);color:#6ee7b7;">Strategy 2 of 2</span><span style="font-size:13px;color:#64748b;">Write Through</span></div>'
+          + '<div class="step-title">Step 3 — Cache HIT on Every Read</div>'
+          + '<div class="step-desc">Reads always hit the cache. Data is never stale because it was updated the moment the DB was updated.</div>'
+          + '<div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px;">'
+          + '<div class="flow-box" style="background:rgba(99,102,241,0.15);border-color:#6366f1;">App</div>'
+          + '<div class="flow-connector">→ read →</div>'
+          + '<div class="flow-box" style="background:rgba(16,185,129,0.12);border-color:#10b981;">ElastiCache<br/><span style="color:#6ee7b7;font-size:13px;">HIT always ✓</span></div>'
+          + '</div>'
+          + '<div class="callout success" style="margin-top:14px;"><strong>Summary:</strong> Write Through — 2 calls on every write, reads are always fast and never stale. Best for write-then-read patterns. Combine with Lazy Loading for best results.</div>'
+      }
+    ]
+  }
+};
+
+var states = {};
+
+function renderStep(id, step) {
+  var demo = DEMOS[id];
+  var total = demo.steps.length;
+  document.getElementById(id).innerHTML = demo.steps[step].body;
+  document.getElementById(id + '-counter').textContent = 'Step ' + (step + 1) + ' / ' + total;
+  document.querySelectorAll('[id^="' + id + '-dot-"]').forEach(function(d, i) {
+    d.classList.toggle('active', i === step);
+  });
+  document.getElementById(id + '-prev').disabled = step === 0;
+  document.getElementById(id + '-next').disabled = step === total - 1;
+  states[id] = step;
+}
+
+function prev(id) { if (states[id] > 0) renderStep(id, states[id] - 1); }
+function next(id) { if (states[id] < DEMOS[id].steps.length - 1) renderStep(id, states[id] + 1); }
+function restart(id) { renderStep(id, 0); }
+
+Object.keys(DEMOS).forEach(function(id) {
+  states[id] = 0;
+  var dotsEl = document.getElementById(id + '-dots');
+  dotsEl.innerHTML = DEMOS[id].steps.map(function(_, i) {
+    return '<div class="dot" id="' + id + '-dot-' + i + '"></div>';
+  }).join('');
+  renderStep(id, 0);
+});
+</script>
+
+</body>
+</html>

@@ -129,6 +129,25 @@
 
 ---
 
+## Tricky Quiz Questions
+
+### Q: Full capacity + quick rollback deployment option
+**Trap:** "Rolling with Additional Batches" also maintains full capacity, so it's easy to pick it. The differentiator is **rollback speed** — Rolling with Additional Batches requires another full rolling update to revert. Immutable just terminates the new ASG instantly.
+**Answer: Immutable**
+
+### Q: Create a test environment similar to production
+**Trap:** Remembering "RDS data is not copied" and treating it as a limitation — but the question only asks for a similar environment structure, not a copy of production data. RDS data not being copied is fine for testing.
+**Wrong instinct:** "Manually create another environment" — Cloning does this automatically. "Download CloudFormation template" — that's a workaround, not a Beanstalk feature.
+**Answer: Elastic Beanstalk Cloning**
+
+### Q: Slow deploys due to dependency resolution on each instance
+**Not explicitly covered in the course.** Each EC2 instance downloads the zip and resolves dependencies from the internet on every deploy — that's what's slow.
+**Fix:** Bundle dependencies **inside the zip file** before uploading. Beanstalk unpacks everything locally with no package manager calls.
+**Trap:** Putting dependencies in S3 doesn't help — S3 is already where Beanstalk stores the zip. The problem is the install step on each instance.
+**Answer: Package dependencies in the zip file**
+
+---
+
 ## Consolidated Exam Tips
 
 - Beanstalk = **managed service**, developer only worries about **code**

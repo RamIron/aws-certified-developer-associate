@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Section 10 — VPC Fundamentals | AWS Developer Associate</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #0f172a; color: #f8fafc; font-family: 'Inter', sans-serif; font-size: 14px; line-height: 1.6; min-height: 100vh; }
+    .hero { background: linear-gradient(135deg, #1e293b 0%, #0f172a 60%, #1a1a2e 100%); border-bottom: 1px solid #334155; padding: 48px 32px 40px; text-align: center; }
+    .hero-eyebrow { font-size: 13px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #f97316; margin-bottom: 12px; }
+    h1 { font-size: clamp(26px, 4vw, 40px); font-weight: 800; color: #f8fafc; margin-bottom: 8px; letter-spacing: -0.02em; }
+    .hero-subtitle { font-size: 15px; color: #94a3b8; margin-bottom: 20px; }
+    .xp-badge { display: inline-flex; align-items: center; gap: 6px; background: linear-gradient(135deg, #f97316, #ea580c); color: #fff; font-size: 13px; font-weight: 700; padding: 8px 18px; border-radius: 999px; }
+    .page-body { max-width: 1100px; margin: 0 auto; padding: 48px 24px; display: flex; flex-direction: column; gap: 40px; }
+    .section-label { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: #f97316; margin-bottom: 16px; }
+    .card { background: #1e293b; border-radius: 12px; border: 1px solid #334155; padding: 24px; }
+    .card-title { font-size: 18px; font-weight: 700; color: #f8fafc; margin-bottom: 16px; }
+    .callout { border-radius: 10px; padding: 16px 20px; font-size: 14px; line-height: 1.65; border-left: 4px solid; }
+    .callout.warning { background: rgba(249,115,22,0.08); border-color: #f97316; color: #fed7aa; }
+    .callout.warning strong { color: #fb923c; }
+    .callout.info { background: rgba(99,102,241,0.08); border-color: #6366f1; color: #c7d2fe; }
+    .callout.success { background: rgba(16,185,129,0.08); border-color: #10b981; color: #6ee7b7; }
+    .callout.danger { background: rgba(239,68,68,0.08); border-color: #ef4444; color: #fca5a5; }
+    .data-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    .data-table th { background: #1e2d4a; color: #94a3b8; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; padding: 10px 14px; text-align: left; }
+    .data-table td { padding: 10px 14px; border-bottom: 1px solid #1e293b; color: #cbd5e1; }
+    .data-table tr:last-child td { border-bottom: none; }
+    .data-table tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+    .tip-card { background: #0f172a; border-left: 3px solid #f97316; border-radius: 0 8px 8px 0; padding: 12px 16px; font-size: 14px; }
+    .tip-trigger { color: #64748b; }
+    .tip-answer { color: #f8fafc; font-weight: 700; }
+    .anim-demo { background: #0f172a; border-radius: 12px; padding: 20px; min-height: 120px; }
+    .anim-controls { display: flex; align-items: center; gap: 12px; margin-top: 16px; flex-wrap: wrap; }
+    .nav-btn { background: transparent; border: 2px solid #f97316; color: #f97316; padding: 8px 18px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px; transition: all 0.2s; font-family: 'Inter', sans-serif; }
+    .nav-btn:hover:not(:disabled) { background: #f97316; color: #0f172a; }
+    .nav-btn:disabled { opacity: 0.3; cursor: default; }
+    .restart-btn { background: transparent; border: 1px solid #475569; color: #94a3b8; padding: 6px 14px; border-radius: 8px; cursor: pointer; font-size: 13px; margin-left: auto; transition: all 0.2s; font-family: 'Inter', sans-serif; }
+    .restart-btn:hover { border-color: #94a3b8; color: #e2e8f0; }
+    .step-dots { display: flex; gap: 6px; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: #334155; transition: background 0.3s; }
+    .dot.active { background: #f97316; }
+    .step-counter { color: #94a3b8; font-size: 13px; }
+    @keyframes fadeScale { from { opacity: 0; transform: scale(0.97); } to { opacity: 1; transform: scale(1); } }
+    .anim-demo > * { animation: fadeScale 0.25s ease; }
+    .mono { font-family: 'Fira Code', monospace; }
+    code { font-family: 'Fira Code', monospace; font-size: 13px; background: rgba(248,114,22,0.1); color: #fb923c; padding: 2px 6px; border-radius: 4px; }
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+    .service-card { background: #0f172a; border: 1px solid #334155; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 8px; }
+    .service-icon { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; flex-shrink: 0; }
+    .service-name { font-size: 16px; font-weight: 700; color: #f8fafc; }
+    .service-desc { font-size: 13px; color: #94a3b8; line-height: 1.5; }
+    .compare-col { background: #0f172a; border: 1px solid #334155; border-radius: 10px; padding: 18px; }
+    .compare-col-title { font-size: 15px; font-weight: 700; margin-bottom: 12px; }
+    .compare-col ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .compare-col ul li { font-size: 13px; color: #94a3b8; padding-left: 14px; position: relative; }
+    .compare-col ul li::before { content: '›'; position: absolute; left: 0; color: #f97316; }
+    .arch-flow { display: flex; align-items: center; flex-wrap: wrap; gap: 0; margin-bottom: 8px; }
+    .arch-node { padding: 10px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; text-align: center; }
+    .arch-arrow { color: #475569; font-size: 16px; padding: 0 8px; }
+    .table-wrapper { overflow-x: auto; border-radius: 10px; border: 1px solid #334155; }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 13px; font-weight: 600; }
+    .badge-green { background: rgba(16,185,129,0.15); color: #6ee7b7; }
+    .badge-red { background: rgba(239,68,68,0.12); color: #fca5a5; }
+    .badge-blue { background: rgba(59,130,246,0.15); color: #93c5fd; }
+    .tips-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 12px; }
+    .step-title { font-size: 15px; font-weight: 700; color: #f8fafc; margin-bottom: 4px; }
+    .step-desc { font-size: 13px; color: #94a3b8; margin-bottom: 12px; }
+    .divider { border: none; border-top: 1px solid #1e293b; margin: 4px 0; }
+    .feature-card { background: #0f172a; border: 1px solid #334155; border-radius: 10px; padding: 16px; }
+    .feature-card-title { font-size: 14px; font-weight: 700; color: #f97316; margin-bottom: 8px; }
+    .feature-card p, .feature-card li { font-size: 13px; color: #94a3b8; line-height: 1.5; }
+    .feature-card ul { list-style: none; display: flex; flex-direction: column; gap: 5px; padding-left: 0; }
+    .feature-card ul li { padding-left: 12px; position: relative; }
+    .feature-card ul li::before { content: '–'; position: absolute; left: 0; color: #475569; }
+
+    /* Section-specific styles */
+    .node-blue { background: rgba(59,130,246,0.15); border: 1px solid #3b82f6; color: #93c5fd; }
+    .node-green { background: rgba(16,185,129,0.15); border: 1px solid #10b981; color: #6ee7b7; }
+    .node-orange { background: rgba(249,115,22,0.15); border: 1px solid #f97316; color: #fed7aa; }
+    .node-purple { background: rgba(139,92,246,0.15); border: 1px solid #8b5cf6; color: #ddd6fe; }
+    .node-red { background: rgba(239,68,68,0.15); border: 1px solid #ef4444; color: #fca5a5; }
+    .node-gray { background: rgba(71,85,105,0.3); border: 1px solid #475569; color: #94a3b8; }
+    .flow-label { font-size: 13px; color: #64748b; margin-bottom: 6px; }
+    .blocked-arrow { color: #ef4444; font-size: 16px; padding: 0 8px; }
+    .vpc-subnet-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .subnet-box { border-radius: 10px; padding: 16px; }
+    .subnet-public { background: rgba(16,185,129,0.07); border: 1px solid #10b981; }
+    .subnet-private { background: rgba(99,102,241,0.07); border: 1px solid #6366f1; }
+    .subnet-label { font-size: 13px; font-weight: 700; margin-bottom: 8px; }
+    .subnet-public .subnet-label { color: #6ee7b7; }
+    .subnet-private .subnet-label { color: #a5b4fc; }
+    .subnet-detail { font-size: 13px; color: #94a3b8; }
+    .peering-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; align-items: center; }
+    .peering-line { display: flex; align-items: center; justify-content: center; font-size: 22px; }
+    .peering-blocked { display: flex; align-items: center; justify-content: center; font-size: 13px; color: #ef4444; font-weight: 600; }
+    .tier-row { display: flex; align-items: stretch; gap: 12px; }
+    .tier-label-col { display: flex; align-items: center; justify-content: center; width: 90px; flex-shrink: 0; }
+    .tier-label { font-size: 13px; font-weight: 700; text-align: center; padding: 8px 10px; border-radius: 8px; }
+    .tier-public { background: rgba(16,185,129,0.15); color: #6ee7b7; border: 1px solid #10b981; }
+    .tier-private { background: rgba(99,102,241,0.15); color: #a5b4fc; border: 1px solid #6366f1; }
+    .tier-content { flex: 1; background: #0f172a; border: 1px solid #334155; border-radius: 10px; padding: 16px; }
+    .tier-title { font-size: 14px; font-weight: 700; color: #f8fafc; margin-bottom: 6px; }
+    .tier-detail { font-size: 13px; color: #94a3b8; }
+    .tier-rows { display: flex; flex-direction: column; gap: 10px; }
+  </style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-eyebrow">AWS Certified Developer Associate · Section 10</div>
+  <h1>VPC Fundamentals</h1>
+  <p class="hero-subtitle">Virtual Private Cloud &middot; Subnets &middot; IGW &middot; NAT &middot; NACL &middot; Security Groups &middot; VPC Endpoints &middot; Peering</p>
+  <span class="xp-badge">&#9733; Section complete &middot; Quiz passed</span>
+</header>
+
+<main class="page-body">
+
+  <!-- ============================================================
+       SECTION 1: VPC & SUBNETS OVERVIEW
+       ============================================================ -->
+  <section>
+    <div class="section-label">1 &mdash; VPC &amp; Subnets Overview</div>
+    <div class="card">
+      <div class="card-title">What Is a VPC?</div>
+      <p style="font-size:14px;color:#94a3b8;margin-bottom:20px;">A VPC (Virtual Private Cloud) is your private network inside AWS. You define the IP range, create subnets, and control routing and access.</p>
+
+      <div class="grid-2" style="margin-bottom:20px;">
+        <div class="feature-card">
+          <div class="feature-card-title">VPC — Regional Resource</div>
+          <ul>
+            <li>Spans ALL Availability Zones in a region</li>
+            <li>You define a CIDR block (e.g., <code>10.0.0.0/16</code>)</li>
+            <li>Max 5 VPCs per region (soft limit)</li>
+            <li>Each AWS account gets a default VPC</li>
+          </ul>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card-title">Subnet — AZ-Level Resource</div>
+          <ul>
+            <li>Lives inside one specific AZ</li>
+            <li>Sub-range of the VPC CIDR (e.g., <code>10.0.1.0/24</code>)</li>
+            <li>AWS reserves 5 IPs per subnet (first 4 + last 1)</li>
+            <li>Public or Private depending on route table</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="vpc-subnet-grid" style="margin-bottom:20px;">
+        <div class="subnet-box subnet-public">
+          <div class="subnet-label">Public Subnet</div>
+          <div class="subnet-detail">Has a route to an <strong style="color:#6ee7b7;">Internet Gateway</strong> in its route table. Resources can be accessed from the internet (if allowed by SG). Use for: ELB, Bastion hosts, NAT Gateway.</div>
+        </div>
+        <div class="subnet-box subnet-private">
+          <div class="subnet-label">Private Subnet</div>
+          <div class="subnet-detail">No route to an Internet Gateway. Isolated from the public internet. Use for: application servers, databases, caches. Can reach internet <em>outbound only</em> via NAT.</div>
+        </div>
+      </div>
+
+      <div class="callout info">
+        <strong>Default VPC:</strong> Every AWS account has one. All subnets are public (one per AZ). CIDR block is <code>172.31.0.0/16</code>. Instances launched here get both a public and private IP by default. Safe to use for learning — do NOT delete it.
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECTION 2: INTERNET GATEWAY & NAT — ANIMATED DEMO
+       ============================================================ -->
+  <section>
+    <div class="section-label">2 &mdash; Internet Gateway &amp; NAT Gateway</div>
+    <div class="card">
+      <div class="card-title">Traffic Flow: Public vs Private Subnets</div>
+
+      <div class="anim-demo" id="igw-nat"></div>
+      <div class="anim-controls">
+        <button class="nav-btn" id="igw-nat-prev" onclick="prev('igw-nat')">&#9664; Prev</button>
+        <button class="nav-btn" id="igw-nat-next" onclick="next('igw-nat')">Next &#9654;</button>
+        <div class="step-dots" id="igw-nat-dots"></div>
+        <span class="step-counter" id="igw-nat-counter"></span>
+        <button class="restart-btn" onclick="restart('igw-nat')">&#x21BA; Restart</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECTION 3: NACL vs SECURITY GROUP — ANIMATED DEMO
+       ============================================================ -->
+  <section>
+    <div class="section-label">3 &mdash; NACL vs Security Groups</div>
+    <div class="card">
+      <div class="card-title">Two Layers of Traffic Filtering</div>
+      <p style="font-size:14px;color:#94a3b8;margin-bottom:20px;">AWS provides two distinct firewall mechanisms. Understanding the difference is critical for the exam.</p>
+
+      <div class="anim-demo" id="nacl-sg"></div>
+      <div class="anim-controls">
+        <button class="nav-btn" id="nacl-sg-prev" onclick="prev('nacl-sg')">&#9664; Prev</button>
+        <button class="nav-btn" id="nacl-sg-next" onclick="next('nacl-sg')">Next &#9654;</button>
+        <div class="step-dots" id="nacl-sg-dots"></div>
+        <span class="step-counter" id="nacl-sg-counter"></span>
+        <button class="restart-btn" onclick="restart('nacl-sg')">&#x21BA; Restart</button>
+      </div>
+
+      <!-- Full Comparison Table -->
+      <div class="table-wrapper" style="margin-top:24px;">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Attribute</th>
+              <th>NACL (Network ACL)</th>
+              <th>Security Group</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong style="color:#f8fafc;">Level</strong></td>
+              <td>Subnet boundary</td>
+              <td>Instance / ENI boundary</td>
+            </tr>
+            <tr>
+              <td><strong style="color:#f8fafc;">Rule types</strong></td>
+              <td><span class="badge badge-red">Allow</span> <span class="badge badge-red">Deny</span></td>
+              <td><span class="badge badge-green">Allow only</span></td>
+            </tr>
+            <tr>
+              <td><strong style="color:#f8fafc;">Stateful?</strong></td>
+              <td><span class="badge badge-red">Stateless</span> — must allow return traffic</td>
+              <td><span class="badge badge-green">Stateful</span> — return traffic auto-allowed</td>
+            </tr>
+            <tr>
+              <td><strong style="color:#f8fafc;">Rule references</strong></td>
+              <td>IP addresses / CIDR only</td>
+              <td>IPs, CIDRs, or other Security Groups</td>
+            </tr>
+            <tr>
+              <td><strong style="color:#f8fafc;">Rule evaluation</strong></td>
+              <td>Rules evaluated in number order (lowest first)</td>
+              <td>All rules evaluated together</td>
+            </tr>
+            <tr>
+              <td><strong style="color:#f8fafc;">Default behavior</strong></td>
+              <td>Default NACL allows everything. Custom NACL denies everything.</td>
+              <td>Denies all inbound, allows all outbound</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECTION 4: VPC FLOW LOGS
+       ============================================================ -->
+  <section>
+    <div class="section-label">4 &mdash; VPC Flow Logs</div>
+    <div class="card">
+      <div class="card-title">Capturing IP Traffic for Visibility &amp; Troubleshooting</div>
+      <p style="font-size:14px;color:#94a3b8;margin-bottom:20px;">VPC Flow Logs capture metadata about all IP traffic going to and from network interfaces. They are the primary tool for diagnosing connectivity issues.</p>
+
+      <div class="grid-3" style="margin-bottom:20px;">
+        <div class="service-card">
+          <div class="service-icon" style="background:rgba(59,130,246,0.15);color:#93c5fd;">VPC</div>
+          <div class="service-name">VPC Level</div>
+          <div class="service-desc">Captures all traffic for every ENI in the entire VPC. Broadest scope.</div>
+        </div>
+        <div class="service-card">
+          <div class="service-icon" style="background:rgba(139,92,246,0.15);color:#ddd6fe;">SUB</div>
+          <div class="service-name">Subnet Level</div>
+          <div class="service-desc">Captures all traffic for ENIs within a specific subnet.</div>
+        </div>
+        <div class="service-card">
+          <div class="service-icon" style="background:rgba(16,185,129,0.15);color:#6ee7b7;">ENI</div>
+          <div class="service-name">ENI Level</div>
+          <div class="service-desc">Captures traffic for a single Elastic Network Interface. Most granular.</div>
+        </div>
+      </div>
+
+      <div class="grid-2" style="margin-bottom:20px;">
+        <div class="feature-card">
+          <div class="feature-card-title">What Gets Captured</div>
+          <ul>
+            <li>ALLOWED and DENIED traffic both logged</li>
+            <li>Source IP, destination IP, port, protocol</li>
+            <li>Packet count, byte count, time window</li>
+            <li>ACCEPT or REJECT action recorded</li>
+            <li>AWS managed service traffic: ELB, RDS, ElastiCache, Redshift, NAT Gateway, Transit Gateway</li>
+          </ul>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card-title">Destinations</div>
+          <ul>
+            <li><strong style="color:#f8fafc;">Amazon S3</strong> — cost-effective long-term storage, queryable with Athena</li>
+            <li><strong style="color:#f8fafc;">CloudWatch Logs</strong> — real-time monitoring, metric filters</li>
+            <li><strong style="color:#f8fafc;">Kinesis Data Firehose</strong> — stream to third-party analytics tools</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="callout warning">
+        <strong>Exam trap:</strong> Flow Logs do NOT capture traffic to/from the AWS DNS server (169.254.169.253), the link-local address (169.254.169.254 for metadata), or DHCP traffic. Use Flow Logs to diagnose NACL vs Security Group issues — look for ACCEPT vs REJECT in the logs.
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECTION 5: VPC PEERING
+       ============================================================ -->
+  <section>
+    <div class="section-label">5 &mdash; VPC Peering</div>
+    <div class="card">
+      <div class="card-title">Connecting VPCs Privately via the AWS Network</div>
+      <p style="font-size:14px;color:#94a3b8;margin-bottom:20px;">VPC Peering lets two VPCs communicate as if they were on the same private network — no internet involved. It works within the same account, across accounts, and across regions.</p>
+
+      <div class="grid-2" style="margin-bottom:20px;">
+        <div class="feature-card">
+          <div class="feature-card-title">Requirements &amp; Constraints</div>
+          <ul>
+            <li>IP CIDR ranges must NOT overlap</li>
+            <li>NOT transitive — each pair needs its own peering connection</li>
+            <li>Both VPCs need updated route tables after peering</li>
+            <li>Works across different AWS accounts</li>
+            <li>Works across different regions</li>
+          </ul>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card-title">Non-Transitivity Explained</div>
+          <p style="margin-bottom:10px;">If A&ndash;B peered and B&ndash;C peered, A cannot reach C automatically. You must create A&ndash;C peering separately.</p>
+          <!-- Peering visual -->
+          <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px;">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <span class="arch-node node-blue" style="font-size:13px;padding:6px 12px;">VPC-A</span>
+              <span style="color:#10b981;font-size:18px;">&#8594;&#8592;</span>
+              <span class="arch-node node-green" style="font-size:13px;padding:6px 12px;">VPC-B</span>
+              <span class="badge badge-green" style="margin-left:4px;">Peered</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <span class="arch-node node-blue" style="font-size:13px;padding:6px 12px;">VPC-A</span>
+              <span style="color:#10b981;font-size:18px;">&#8594;&#8592;</span>
+              <span class="arch-node node-purple" style="font-size:13px;padding:6px 12px;">VPC-C</span>
+              <span class="badge badge-green" style="margin-left:4px;">Peered</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <span class="arch-node node-green" style="font-size:13px;padding:6px 12px;">VPC-B</span>
+              <span style="color:#ef4444;font-size:18px;">&#10005;</span>
+              <span class="arch-node node-purple" style="font-size:13px;padding:6px 12px;">VPC-C</span>
+              <span class="badge badge-red" style="margin-left:4px;">No path!</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout info">
+        <strong>Key exam point:</strong> VPC Peering is NOT transitive. If you need any-to-any connectivity between many VPCs, consider <strong>AWS Transit Gateway</strong> instead (hub-and-spoke model, supports transitive routing).
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECTION 6: VPC ENDPOINTS
+       ============================================================ -->
+  <section>
+    <div class="section-label">6 &mdash; VPC Endpoints</div>
+    <div class="card">
+      <div class="card-title">Private Access to AWS Services — No Internet Required</div>
+      <p style="font-size:14px;color:#94a3b8;margin-bottom:20px;">VPC Endpoints let resources in your private subnets reach AWS services without traffic ever leaving the AWS network.</p>
+
+      <div class="grid-2" style="margin-bottom:20px;">
+        <div class="compare-col">
+          <div class="compare-col-title" style="color:#10b981;">Gateway Endpoint</div>
+          <ul>
+            <li>Supports <strong style="color:#f8fafc;">S3 and DynamoDB ONLY</strong></li>
+            <li>Implemented as a route in the VPC route table</li>
+            <li>No ENI — no per-hour cost (completely FREE)</li>
+            <li>Associated with specific route tables in specific subnets</li>
+            <li>Does not require a private DNS name</li>
+          </ul>
+        </div>
+        <div class="compare-col">
+          <div class="compare-col-title" style="color:#6366f1;">Interface Endpoint (PrivateLink)</div>
+          <ul>
+            <li>Supports <strong style="color:#f8fafc;">all other AWS services</strong> (SQS, SNS, KMS, etc.)</li>
+            <li>Creates an ENI in your subnet — uses private IP</li>
+            <li>Billed per hour + per GB of data processed</li>
+            <li>Provides private DNS name for the service</li>
+            <li>Can be used from Direct Connect / Site-to-Site VPN</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="callout success">
+        <strong>Free tip for the exam:</strong> Gateway Endpoint for S3 is free AND the recommended approach for EC2/Lambda in private subnets needing S3 access. Interface Endpoints cost money but support every service.
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECTION 7: SITE-TO-SITE VPN vs DIRECT CONNECT
+       ============================================================ -->
+  <section>
+    <div class="section-label">7 &mdash; Site-to-Site VPN vs Direct Connect</div>
+    <div class="card">
+      <div class="card-title">Connecting On-Premises Networks to AWS</div>
+      <p style="font-size:14px;color:#94a3b8;margin-bottom:20px;">When your corporate data center needs to communicate with your AWS VPC, you have two main options.</p>
+
+      <div class="table-wrapper" style="margin-bottom:20px;">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Attribute</th>
+              <th>Site-to-Site VPN</th>
+              <th>Direct Connect (DX)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong style="color:#f8fafc;">Path</strong></td>
+              <td>Public internet (encrypted via IPSec)</td>
+              <td>Dedicated private fiber — bypasses internet</td>
+            </tr>
+            <tr>
+              <td><strong style="color:#f8fafc;">Setup time</strong></td>
+              <td><span class="badge badge-green">Minutes</span></td>
+              <td><span class="badge badge-red">At least 1 month</span> (physical provisioning)</td>
+            </tr>
+            <tr>
+              <td><strong style="color:#f8fafc;">Bandwidth</strong></td>
+              <td>Limited by internet connection</td>
+              <td>1 Gbps, 10 Gbps, or 100 Gbps options</td>
+            </tr>
+            <tr>
+              <td><strong style="color:#f8fafc;">Cost</strong></td>
+              <td>Low</td>
+              <td>Higher (port-hour + data transfer)</td>
+            </tr>
+            <tr>
+              <td><strong style="color:#f8fafc;">Use case</strong></td>
+              <td>Quick setup, backup connectivity, low-throughput</td>
+              <td>High-throughput, consistent latency, compliance</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout warning">
+        <strong>AWS-side component for VPN:</strong> Virtual Private Gateway (VGW) attached to the VPC, plus a Customer Gateway (CGW) on the on-premises side. Direct Connect uses a Direct Connect Gateway to connect to one or more VPCs.
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECTION 8: THREE-TIER ARCHITECTURE
+       ============================================================ -->
+  <section>
+    <div class="section-label">8 &mdash; Three-Tier Architecture</div>
+    <div class="card">
+      <div class="card-title">Classic Web Application Layout in a VPC</div>
+      <p style="font-size:14px;color:#94a3b8;margin-bottom:20px;">AWS best practice distributes web applications across three tiers with specific subnet placement for security and scalability.</p>
+
+      <div class="tier-rows" style="margin-bottom:20px;">
+        <div class="tier-row">
+          <div class="tier-label-col">
+            <span class="tier-label tier-public">PUBLIC</span>
+          </div>
+          <div class="tier-content">
+            <div class="tier-title">Tier 1 — Web / Load Balancer</div>
+            <div class="tier-detail">
+              <strong style="color:#f8fafc;">Elastic Load Balancer (ELB)</strong> — publicly accessible, spread across multiple public subnets in different AZs. Receives internet traffic and distributes to application tier. Also: Bastion hosts if needed.
+            </div>
+          </div>
+        </div>
+        <div class="tier-row">
+          <div class="tier-label-col">
+            <span class="tier-label tier-private">PRIVATE</span>
+          </div>
+          <div class="tier-content">
+            <div class="tier-title">Tier 2 — Application (EC2 in ASG)</div>
+            <div class="tier-detail">
+              <strong style="color:#f8fafc;">EC2 instances in Auto Scaling Group</strong> — private subnets across AZs. Security group only allows inbound from the ELB security group. EFS can mount here for shared file storage (e.g., WordPress images). Outbound via NAT Gateway.
+            </div>
+          </div>
+        </div>
+        <div class="tier-row">
+          <div class="tier-label-col">
+            <span class="tier-label tier-private">PRIVATE</span>
+          </div>
+          <div class="tier-content">
+            <div class="tier-title">Tier 3 — Data (RDS + ElastiCache)</div>
+            <div class="tier-detail">
+              <strong style="color:#f8fafc;">RDS</strong> (with Multi-AZ standby) and <strong style="color:#f8fafc;">ElastiCache</strong> (Redis/Memcached) — deepest private subnets. Security groups only allow inbound from EC2 security groups. No internet access whatsoever.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout info">
+        <strong>LAMP Stack / WordPress note:</strong> Linux + Apache + MySQL (RDS) + PHP on EC2. WordPress stores media/uploads on <strong>Amazon EFS</strong> (shared across all EC2 instances in the ASG). ElastiCache (Redis) handles session data and query caching.
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECTION 9: EXAM TIPS
+       ============================================================ -->
+  <section>
+    <div class="section-label">9 &mdash; Exam Tips &amp; Flash Cards</div>
+    <div class="tips-grid">
+      <div class="tip-card">
+        <div class="tip-trigger">If the question says "public subnet" →</div>
+        <hr class="divider" />
+        <div class="tip-answer">Route table has a route to an Internet Gateway</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-trigger">Private subnet needs outbound internet access →</div>
+        <hr class="divider" />
+        <div class="tip-answer">NAT Gateway (deployed in PUBLIC subnet, not private)</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-trigger">NAT Gateway vs NAT Instance →</div>
+        <hr class="divider" />
+        <div class="tip-answer">NAT Gateway = AWS-managed, highly available. NAT Instance = self-managed EC2 (legacy, avoid)</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-trigger">Subnet-level firewall, can DENY traffic →</div>
+        <hr class="divider" />
+        <div class="tip-answer">NACL — stateless, evaluates allow AND deny rules in order</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-trigger">Instance-level firewall, return traffic auto-allowed →</div>
+        <hr class="divider" />
+        <div class="tip-answer">Security Group — stateful, allow rules only</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-trigger">Need to troubleshoot "why can't EC2 reach service X?" →</div>
+        <hr class="divider" />
+        <div class="tip-answer">Enable VPC Flow Logs — check ACCEPT vs REJECT records</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-trigger">Connect two VPCs privately, same or cross-account →</div>
+        <hr class="divider" />
+        <div class="tip-answer">VPC Peering — no overlapping CIDRs, NOT transitive</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-trigger">EC2 in private subnet needs to reach S3 or DynamoDB →</div>
+        <hr class="divider" />
+        <div class="tip-answer">Gateway VPC Endpoint (FREE, no internet needed)</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-trigger">Private access to SQS, SNS, KMS, etc. from VPC →</div>
+        <hr class="divider" />
+        <div class="tip-answer">Interface VPC Endpoint (PrivateLink, creates ENI)</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-trigger">On-premises to AWS — need it NOW, low bandwidth ok →</div>
+        <hr class="divider" />
+        <div class="tip-answer">Site-to-Site VPN (minutes to set up, over public internet)</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-trigger">On-premises to AWS — dedicated, consistent, high-speed →</div>
+        <hr class="divider" />
+        <div class="tip-answer">Direct Connect (1+ month to provision, private fiber)</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-trigger">Three-tier: what goes in public vs private subnets? →</div>
+        <hr class="divider" />
+        <div class="tip-answer">PUBLIC: ELB only. PRIVATE: EC2 (app), RDS, ElastiCache (data)</div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============================================================
+     JAVASCRIPT — ALL ANIMATED DEMOS
+     ============================================================ -->
+<script>
+var DEMOS = {
+  'igw-nat': {
+    steps: [
+      {
+        body: `
+          <div class="step-title">Step 1 — Public Subnet: Bidirectional Internet via IGW</div>
+          <div class="step-desc">An EC2 instance in a public subnet has a route to the Internet Gateway. Traffic flows both ways.</div>
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <div class="arch-flow">
+              <span class="arch-node node-green">EC2 (Public Subnet)</span>
+              <span class="arch-arrow">→</span>
+              <span class="arch-node node-orange">Route Table</span>
+              <span class="arch-arrow">→</span>
+              <span class="arch-node node-blue">Internet Gateway</span>
+              <span class="arch-arrow">↔</span>
+              <span class="arch-node node-gray">Internet</span>
+            </div>
+            <div class="callout success" style="margin-top:8px;">The route table has an entry: <code>0.0.0.0/0 → igw-xxxx</code>. The EC2 must also have a public IP or Elastic IP. Security Group must allow the traffic.</div>
+          </div>
+        `
+      },
+      {
+        body: `
+          <div class="step-title">Step 2 — Private Subnet Problem: No Route Out</div>
+          <div class="step-desc">An EC2 in a private subnet has no route to the Internet Gateway. It is completely isolated from the internet.</div>
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <div class="arch-flow">
+              <span class="arch-node node-purple">EC2 (Private Subnet)</span>
+              <span class="arch-arrow">→</span>
+              <span class="arch-node node-orange">Route Table</span>
+              <span class="blocked-arrow">✗</span>
+              <span class="arch-node node-gray" style="opacity:0.4;">Internet Gateway</span>
+              <span class="arch-arrow" style="opacity:0.3;">→</span>
+              <span class="arch-node node-gray" style="opacity:0.4;">Internet</span>
+            </div>
+            <div class="callout danger" style="margin-top:8px;">No route to IGW exists. The instance cannot download packages, call external APIs, or be reached from outside. This is intentional for databases and app servers.</div>
+          </div>
+        `
+      },
+      {
+        body: `
+          <div class="step-title">Step 3 — NAT Gateway: Outbound-Only Internet Access</div>
+          <div class="step-desc">NAT Gateway is deployed in a PUBLIC subnet. Private instances route through it for outbound traffic, but inbound internet cannot reach them.</div>
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <div class="arch-flow">
+              <span class="arch-node node-purple">EC2 (Private)</span>
+              <span class="arch-arrow">→</span>
+              <span class="arch-node node-orange">NAT Gateway<br/><span style="font-size:13px;font-weight:400;color:#fed7aa;">(Public Subnet)</span></span>
+              <span class="arch-arrow">→</span>
+              <span class="arch-node node-blue">IGW</span>
+              <span class="arch-arrow">→</span>
+              <span class="arch-node node-gray">Internet</span>
+            </div>
+            <div class="arch-flow">
+              <span class="arch-node node-gray">Internet</span>
+              <span class="blocked-arrow">✗</span>
+              <span class="arch-node node-purple" style="opacity:0.5;">EC2 (Private)</span>
+            </div>
+            <div class="callout info">Private subnet route table gets: <code>0.0.0.0/0 → nat-xxxx</code>. NAT Gateway itself has an Elastic IP. It is fully managed by AWS — no patching needed. Charged per hour + per GB.</div>
+          </div>
+        `
+      },
+      {
+        body: `
+          <div class="step-title">Step 4 — NAT Gateway vs NAT Instance Comparison</div>
+          <div class="step-desc">NAT Gateway is the modern recommended approach. NAT Instance is legacy and self-managed.</div>
+          <div class="grid-2" style="gap:12px;">
+            <div class="compare-col">
+              <div class="compare-col-title" style="color:#10b981;">NAT Gateway (Recommended)</div>
+              <ul>
+                <li>Managed by AWS — no maintenance</li>
+                <li>Automatically scales bandwidth (up to 45 Gbps)</li>
+                <li>High availability within AZ (deploy in each AZ for full HA)</li>
+                <li>Cannot be used as Bastion host</li>
+                <li>No Security Groups to manage</li>
+              </ul>
+            </div>
+            <div class="compare-col">
+              <div class="compare-col-title" style="color:#94a3b8;">NAT Instance (Legacy)</div>
+              <ul>
+                <li>You manage the EC2 instance</li>
+                <li>Must disable source/dest check manually</li>
+                <li>Bandwidth limited by instance type</li>
+                <li>Can be used as a Bastion host</li>
+                <li>Must manage Security Groups yourself</li>
+              </ul>
+            </div>
+          </div>
+        `
+      }
+    ]
+  },
+
+  'nacl-sg': {
+    steps: [
+      {
+        body: `
+          <div class="step-title">Step 1 — First Layer: NACL at the Subnet Boundary</div>
+          <div class="step-desc">Every packet entering or leaving a subnet passes through the NACL first. Rules are evaluated in order from lowest number to highest.</div>
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <div class="arch-flow">
+              <span class="arch-node node-gray">Internet Request</span>
+              <span class="arch-arrow">→</span>
+              <span class="arch-node node-orange">NACL<br/><span style="font-size:13px;font-weight:400;color:#fed7aa;">Subnet Level</span></span>
+              <span class="arch-arrow">→</span>
+              <span class="arch-node node-gray" style="opacity:0.5;">(if allowed)</span>
+            </div>
+            <div class="callout warning">NACL evaluates rules in order (rule #100, #200, etc.). First matching rule wins. If no rule matches, traffic is DENIED by the catch-all <code>*</code> rule. NACL can both ALLOW and DENY — use deny rules to explicitly block known bad IPs.</div>
+          </div>
+        `
+      },
+      {
+        body: `
+          <div class="step-title">Step 2 — Second Layer: Security Group at the Instance</div>
+          <div class="step-desc">If NACL allows the traffic, it then hits the Security Group attached to the EC2 instance (or ENI).</div>
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <div class="arch-flow">
+              <span class="arch-node node-gray">Packet (passed NACL)</span>
+              <span class="arch-arrow">→</span>
+              <span class="arch-node node-blue">Security Group<br/><span style="font-size:13px;font-weight:400;color:#93c5fd;">Instance Level</span></span>
+              <span class="arch-arrow">→</span>
+              <span class="arch-node node-green">EC2 Instance</span>
+            </div>
+            <div class="callout info">Security Group has ALLOW rules only. All rules are evaluated together (no ordering). If no rule allows the traffic, it is dropped silently. You can reference other Security Group IDs (e.g., allow traffic from ELB SG only).</div>
+          </div>
+        `
+      },
+      {
+        body: `
+          <div class="step-title">Step 3 — Return Traffic: Stateful vs Stateless</div>
+          <div class="step-desc">The most important behavioral difference on the exam: how each layer handles response traffic.</div>
+          <div class="grid-2" style="gap:12px;">
+            <div class="compare-col">
+              <div class="compare-col-title" style="color:#6ee7b7;">Security Group — STATEFUL</div>
+              <ul>
+                <li>Tracks connection state</li>
+                <li>Inbound rule allows port 80</li>
+                <li>Response on ephemeral port automatically allowed</li>
+                <li>You only write rules for the direction you initiate</li>
+              </ul>
+            </div>
+            <div class="compare-col">
+              <div class="compare-col-title" style="color:#fca5a5;">NACL — STATELESS</div>
+              <ul>
+                <li>Does NOT track connection state</li>
+                <li>Inbound port 80 allowed — not enough!</li>
+                <li>Must ALSO add outbound rule for ephemeral ports (1024–65535)</li>
+                <li>Every direction needs explicit rules</li>
+              </ul>
+            </div>
+          </div>
+        `
+      }
+    ]
+  }
+};
+
+var states = {};
+function renderStep(id, step) {
+  var demo = DEMOS[id];
+  var total = demo.steps.length;
+  document.getElementById(id).innerHTML = demo.steps[step].body;
+  document.getElementById(id + '-counter').textContent = 'Step ' + (step + 1) + ' / ' + total;
+  document.querySelectorAll('[id^="' + id + '-dot-"]').forEach(function(d, i) { d.classList.toggle('active', i === step); });
+  document.getElementById(id + '-prev').disabled = step === 0;
+  document.getElementById(id + '-next').disabled = step === total - 1;
+  states[id] = step;
+}
+function prev(id) { if (states[id] > 0) renderStep(id, states[id] - 1); }
+function next(id) { if (states[id] < DEMOS[id].steps.length - 1) renderStep(id, states[id] + 1); }
+function restart(id) { renderStep(id, 0); }
+Object.keys(DEMOS).forEach(function(id) {
+  states[id] = 0;
+  var dotsEl = document.getElementById(id + '-dots');
+  dotsEl.innerHTML = DEMOS[id].steps.map(function(_, i) { return '<div class="dot" id="' + id + '-dot-' + i + '"></div>'; }).join('');
+  renderStep(id, 0);
+});
+</script>
+
+</body>
+</html>

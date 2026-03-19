@@ -3,10 +3,10 @@
 ## Overall Progress
 
 ```
-[██████████░░░░░░░░░░] 17/34 sections | 209/483 lessons
-Total XP: 6550
+[███████████░░░░░░░░░] 18/34 sections | 228/483 lessons
+Total XP: 7425
 
-Videos: 189/446 | Articles: 6/8 | Quizzes: 14/29
+Videos: 207/446 | Articles: 6/8 | Quizzes: 15/29
 ```
 
 > **Note:** The exact number of lessons per section will be filled in as the course progresses.
@@ -255,26 +255,26 @@ Videos: 189/446 | Articles: 6/8 | Quizzes: 14/29
 - [x] 17.13 - Beanstalk Cleanup (skipped - hands-on cleanup)
 - [x] 17.14 - Elastic Beanstalk Quiz (skipped - Udemy quiz)
 
-## Section 18: AWS CloudFormation
-- [ ] 18.1 - CloudFormation Overview
-- [ ] 18.2 - CloudFormation Create Stack Hands On
-- [ ] 18.3 - CloudFormation Update & Delete Stack Hands On
-- [ ] 18.4 - YAML Crash Course
-- [ ] 18.5 - CloudFormation - Resources
-- [ ] 18.6 - CloudFormation - Parameters
-- [ ] 18.7 - CloudFormation - Mappings
-- [ ] 18.8 - CloudFormation - Outputs & Exports
-- [ ] 18.9 - CloudFormation - Conditions
-- [ ] 18.10 - CloudFormation - Intrinsic Functions
-- [ ] 18.11 - CloudFormation - Rollbacks
-- [ ] 18.12 - CloudFormation - Service Role
-- [ ] 18.13 - CloudFormation - Capabilities
-- [ ] 18.14 - CloudFormation - Deletion Policy
-- [ ] 18.15 - CloudFormation - Stack Policies
-- [ ] 18.16 - CloudFormation - Termination Protection
-- [ ] 18.17 - CloudFormation - Custom Resources
-- [ ] 18.18 - CloudFormation - Dynamic References
-- [ ] 18.19 - CloudFormation - StackSets
+## Section 18: AWS CloudFormation ✓
+- [x] 18.1 - CloudFormation Overview (PERFECT 100%)
+- [x] 18.2 - CloudFormation Create Stack Hands On (skipped - hands-on walkthrough)
+- [x] 18.3 - CloudFormation Update & Delete Stack Hands On (skipped - hands-on walkthrough)
+- [x] 18.4 - YAML Crash Course (skipped - reference lesson)
+- [x] 18.5 - CloudFormation - Resources (PERFECT 100%)
+- [x] 18.6 - CloudFormation - Parameters (PERFECT 100%)
+- [x] 18.7 - CloudFormation - Mappings (PERFECT 100%)
+- [x] 18.8 - CloudFormation - Outputs & Exports (PERFECT 100%)
+- [x] 18.9 - CloudFormation - Conditions (PERFECT 100%)
+- [x] 18.10 - CloudFormation - Intrinsic Functions (PERFECT 100%)
+- [x] 18.11 - CloudFormation - Rollbacks (PERFECT 100%)
+- [x] 18.12 - CloudFormation - Service Role (PERFECT 100%)
+- [x] 18.13 - CloudFormation - Capabilities (PERFECT 100%)
+- [x] 18.14 - CloudFormation - Deletion Policy (PERFECT 100%)
+- [x] 18.15 - CloudFormation - Stack Policies (PERFECT 100%)
+- [x] 18.16 - CloudFormation - Termination Protection (skipped quiz - very short lesson)
+- [x] 18.17 - CloudFormation - Custom Resources (PERFECT 100%)
+- [x] 18.18 - CloudFormation - StackSets (skipped quiz - high-level only)
+- [x] CloudFormation Quiz (Udemy quiz - completed)
 
 ## Section 19: AWS Integration & Messaging: SQS, SNS & Kinesis
 - [ ] 19.1 - Introduction to Messaging

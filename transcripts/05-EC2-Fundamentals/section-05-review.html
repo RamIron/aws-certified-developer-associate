@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Section 5 — EC2 Fundamentals</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #0f172a;
+      color: #e2e8f0;
+      line-height: 1.6;
+      padding: 0 0 64px;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(135deg, #1e293b 0%, #0f172a 60%, #1a1a2e 100%);
+      border-bottom: 1px solid #334155;
+      padding: 48px 32px 40px;
+      text-align: center;
+    }
+    .hero-eyebrow {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #f97316;
+      margin-bottom: 12px;
+    }
+    .hero h1 {
+      font-size: clamp(26px, 4vw, 40px);
+      font-weight: 800;
+      color: #f8fafc;
+      margin-bottom: 8px;
+      letter-spacing: -0.02em;
+    }
+    .hero-subtitle {
+      font-size: 15px;
+      color: #94a3b8;
+      margin-bottom: 20px;
+      font-weight: 400;
+    }
+    .xp-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: linear-gradient(135deg, #f97316, #ea580c);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 8px 18px;
+      border-radius: 999px;
+      letter-spacing: 0.01em;
+    }
+
+    /* ── LAYOUT ── */
+    .page-body {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px 24px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+
+    /* ── SECTION BLOCKS ── */
+    .section-block {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .section-title {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #f97316;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #334155;
+    }
+    .section-heading {
+      font-size: 20px;
+      font-weight: 700;
+      color: #f8fafc;
+    }
+
+    /* ── CALLOUT BOXES ── */
+    .callout {
+      border-radius: 10px;
+      padding: 16px 20px;
+      font-size: 14px;
+      line-height: 1.65;
+      border-left: 4px solid;
+    }
+    .callout.warning {
+      background: rgba(249, 115, 22, 0.08);
+      border-color: #f97316;
+      color: #fed7aa;
+    }
+    .callout.warning strong { color: #fb923c; }
+    .callout.info {
+      background: rgba(99, 102, 241, 0.08);
+      border-color: #6366f1;
+      color: #c7d2fe;
+    }
+    .callout.info strong { color: #a5b4fc; }
+    .callout-title {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      display: block;
+    }
+    .callout.warning .callout-title { color: #f97316; }
+    .callout.info .callout-title { color: #818cf8; }
+
+    /* ── WEAK POINTS ── */
+    .weak-point-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 4px 0;
+    }
+    .weak-point-item::before {
+      content: '⚠';
+      color: #f97316;
+      font-size: 13px;
+      margin-top: 2px;
+      flex-shrink: 0;
+    }
+
+    /* ── CONCEPT CARDS ── */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 14px;
+    }
+    .concept-card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 10px;
+      padding: 16px 18px;
+    }
+    .concept-card .card-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: #f97316;
+      margin-bottom: 4px;
+      letter-spacing: 0.04em;
+    }
+    .concept-card .card-body {
+      font-size: 13.5px;
+      color: #cbd5e1;
+      line-height: 1.55;
+    }
+    .concept-card code {
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 4px;
+      padding: 1px 6px;
+      font-size: 13px;
+      color: #7dd3fc;
+      font-family: 'Courier New', monospace;
+    }
+
+    /* ── INSTANCE TYPE CATEGORY CARDS ── */
+    .instance-type-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 14px;
+    }
+    .itype-card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 10px;
+      padding: 18px;
+      border-top: 3px solid;
+    }
+    .itype-card.general { border-top-color: #22d3ee; }
+    .itype-card.compute { border-top-color: #f97316; }
+    .itype-card.memory  { border-top-color: #a78bfa; }
+    .itype-card.storage { border-top-color: #4ade80; }
+
+    .itype-card .itype-name {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .itype-card.general .itype-name { color: #22d3ee; }
+    .itype-card.compute .itype-name { color: #f97316; }
+    .itype-card.memory  .itype-name { color: #a78bfa; }
+    .itype-card.storage .itype-name { color: #4ade80; }
+
+    .itype-card .itype-classes {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      color: #64748b;
+      margin-bottom: 8px;
+    }
+    .itype-card .itype-desc {
+      font-size: 13px;
+      color: #94a3b8;
+      line-height: 1.5;
+    }
+    .itype-card .itype-mnemonic {
+      margin-top: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #475569;
+      font-style: italic;
+    }
+
+    /* ── SECURITY GROUPS ── */
+    .sg-rules-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .sg-rule-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 12px 16px;
+    }
+    .sg-rule-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #f97316;
+      margin-top: 5px;
+      flex-shrink: 0;
+    }
+    .sg-rule-text {
+      font-size: 13.5px;
+      color: #cbd5e1;
+      line-height: 1.5;
+    }
+    .sg-rule-text strong { color: #f8fafc; }
+
+    /* ── TROUBLESHOOT TWO-COL ── */
+    .troubleshoot-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    @media (max-width: 600px) { .troubleshoot-grid { grid-template-columns: 1fr; } }
+    .troubleshoot-card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 10px;
+      padding: 18px;
+    }
+    .troubleshoot-card .t-issue {
+      font-size: 13px;
+      font-weight: 700;
+      color: #fbbf24;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .troubleshoot-card .t-cause {
+      font-size: 14px;
+      color: #e2e8f0;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .troubleshoot-card .t-detail {
+      font-size: 12.5px;
+      color: #64748b;
+    }
+    .t-icon-block { font-size: 16px; }
+    .t-block { border-left: 3px solid #ef4444; }
+    .t-refused { border-left: 3px solid #22d3ee; }
+
+    /* ── PORTS TABLE ── */
+    .ports-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13.5px;
+    }
+    .ports-table thead tr {
+      background: #1e293b;
+    }
+    .ports-table thead th {
+      padding: 10px 16px;
+      text-align: left;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #64748b;
+      border-bottom: 1px solid #334155;
+    }
+    .ports-table tbody tr {
+      border-bottom: 1px solid #1e293b;
+      transition: background 0.15s;
+    }
+    .ports-table tbody tr:hover { background: #1e293b; }
+    .ports-table tbody td {
+      padding: 10px 16px;
+      color: #cbd5e1;
+    }
+    .ports-table tbody td:first-child {
+      font-weight: 700;
+      color: #7dd3fc;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+    }
+    .port-protocol {
+      display: inline-flex;
+      align-items: center;
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 4px;
+      padding: 2px 8px;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      color: #94a3b8;
+    }
+    .table-wrapper {
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    /* ── PURCHASING OPTIONS ── */
+    .purchasing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 14px;
+    }
+    .purchasing-card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 10px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .purchasing-card .p-name {
+      font-size: 15px;
+      font-weight: 700;
+      color: #f8fafc;
+    }
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .chip {
+      font-size: 13px;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 999px;
+      letter-spacing: 0.04em;
+    }
+    .chip.green  { background: rgba(34, 197, 94, 0.15);  color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.3); }
+    .chip.yellow { background: rgba(251, 191, 36, 0.12); color: #fbbf24; border: 1px solid rgba(251, 191, 36, 0.3); }
+    .chip.red    { background: rgba(239, 68, 68, 0.12);  color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
+    .chip.blue   { background: rgba(125, 211, 252, 0.1); color: #7dd3fc; border: 1px solid rgba(125, 211, 252, 0.3); }
+    .chip.purple { background: rgba(167, 139, 250, 0.12); color: #c4b5fd; border: 1px solid rgba(167, 139, 250, 0.3); }
+    .chip.gray   { background: rgba(100, 116, 139, 0.15); color: #94a3b8; border: 1px solid rgba(100, 116, 139, 0.3); }
+    .chip.orange { background: rgba(249, 115, 22, 0.12); color: #fb923c; border: 1px solid rgba(249, 115, 22, 0.3); }
+
+    .purchasing-card .p-best-for {
+      font-size: 12.5px;
+      color: #64748b;
+      line-height: 1.45;
+    }
+    .purchasing-card .p-best-for strong { color: #94a3b8; }
+
+    /* ── EXAM TIPS ── */
+    .exam-tips-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 12px;
+    }
+    .exam-tip-card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .exam-tip-card .tip-q {
+      font-size: 12.5px;
+      color: #64748b;
+      font-weight: 500;
+    }
+    .exam-tip-card .tip-q::before { content: 'Q: '; color: #475569; font-weight: 700; }
+    .exam-tip-card .tip-a {
+      font-size: 13.5px;
+      color: #e2e8f0;
+      font-weight: 600;
+    }
+    .exam-tip-card .tip-a::before { content: 'A: '; color: #f97316; font-weight: 700; }
+
+    /* ── DIVIDER ── */
+    .divider {
+      height: 1px;
+      background: #1e293b;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-eyebrow">AWS Certified Developer Associate</div>
+    <h1>Section 5 — EC2 Fundamentals</h1>
+    <div class="hero-subtitle">Instance Types · Security Groups · Purchasing Options</div>
+    <div class="xp-badge">⚡ +275 XP · 4/4 quizzes · Section complete</div>
+  </div>
+
+  <div class="page-body">
+
+    <!-- WEAK POINTS -->
+    <div class="section-block">
+      <div class="callout warning">
+        <span class="callout-title">Weak Points — Review These First</span>
+        <div class="weak-point-item">
+          <span><strong>5.14 EC2 Purchasing Options — 75%</strong> · Confused Spot vs Reserved use cases</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 1. EC2 BASICS -->
+    <div class="section-block">
+      <div class="section-title">01 — EC2 Basics</div>
+      <div class="card-grid">
+        <div class="concept-card">
+          <div class="card-label">Service Model</div>
+          <div class="card-body"><strong style="color:#f8fafc">IaaS</strong> = Infrastructure as a Service — you rent virtual machines from AWS. You manage the OS and above.</div>
+        </div>
+        <div class="concept-card">
+          <div class="card-label">User Data</div>
+          <div class="card-body">Bootstrap script that runs <strong style="color:#f8fafc">ONCE</strong> at first launch only, executed as <strong style="color:#f8fafc">root</strong>. Used to install software, configure settings on boot.</div>
+        </div>
+        <div class="concept-card">
+          <div class="card-label">EC2 Ecosystem</div>
+          <div class="card-body">
+            EC2 instances (compute)<br>
+            EBS volumes (block storage)<br>
+            ELB (load balancing)<br>
+            Auto Scaling Groups
+          </div>
+        </div>
+        <div class="concept-card">
+          <div class="card-label">Instance Naming</div>
+          <div class="card-body">
+            <code>m5.2xlarge</code><br><br>
+            <strong style="color:#f8fafc">m</strong> = instance class<br>
+            <strong style="color:#f8fafc">5</strong> = generation<br>
+            <strong style="color:#f8fafc">2xlarge</strong> = size within class
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. INSTANCE TYPE CATEGORIES -->
+    <div class="section-block">
+      <div class="section-title">02 — Instance Type Categories</div>
+      <div class="instance-type-grid">
+        <div class="itype-card general">
+          <div class="itype-name">General Purpose</div>
+          <div class="itype-classes">t, m families</div>
+          <div class="itype-desc">Balanced compute, memory, and network. Best for web servers, code repos, small databases.</div>
+          <div class="itype-mnemonic">"Jack of all trades"</div>
+        </div>
+        <div class="itype-card compute">
+          <div class="itype-name">Compute Optimized</div>
+          <div class="itype-classes">C family (c5, c6g...)</div>
+          <div class="itype-desc">High-performance processors. Best for batch processing, media transcoding, HPC, ML inference, gaming servers.</div>
+          <div class="itype-mnemonic">"CPU go brrrr"</div>
+        </div>
+        <div class="itype-card memory">
+          <div class="itype-name">Memory Optimized</div>
+          <div class="itype-classes">R, X1, z1 families</div>
+          <div class="itype-desc">Large datasets in RAM. Best for in-memory databases (Redis), real-time processing of big unstructured data.</div>
+          <div class="itype-mnemonic">"R = RAM"</div>
+        </div>
+        <div class="itype-card storage">
+          <div class="itype-name">Storage Optimized</div>
+          <div class="itype-classes">I, D, H1 families</div>
+          <div class="itype-desc">High sequential read/write to large datasets on local storage. Best for OLTP, NoSQL, data warehousing, Hadoop.</div>
+          <div class="itype-mnemonic">"I = I/O, D = Disk, H = HDD"</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. SECURITY GROUPS -->
+    <div class="section-block">
+      <div class="section-title">03 — Security Groups</div>
+
+      <div class="sg-rules-list">
+        <div class="sg-rule-item">
+          <div class="sg-rule-dot"></div>
+          <div class="sg-rule-text">Only <strong>ALLOW rules</strong> — you cannot write explicit deny rules in a security group</div>
+        </div>
+        <div class="sg-rule-item">
+          <div class="sg-rule-dot"></div>
+          <div class="sg-rule-text">Live <strong>OUTSIDE the EC2 instance</strong> — EC2 never sees blocked traffic; it is dropped at the SG level</div>
+        </div>
+        <div class="sg-rule-item">
+          <div class="sg-rule-dot"></div>
+          <div class="sg-rule-text"><strong>Default behavior:</strong> all inbound traffic BLOCKED, all outbound traffic ALLOWED</div>
+        </div>
+        <div class="sg-rule-item">
+          <div class="sg-rule-dot"></div>
+          <div class="sg-rule-text">Can reference <strong>other Security Groups</strong> as a source/destination — not just IP ranges or CIDR blocks</div>
+        </div>
+        <div class="sg-rule-item">
+          <div class="sg-rule-dot"></div>
+          <div class="sg-rule-text"><strong>Stateful:</strong> return traffic is automatically allowed. If inbound is allowed, the response is allowed outbound</div>
+        </div>
+      </div>
+
+      <div style="margin-top: 8px;">
+        <div class="section-heading" style="font-size:14px; color:#94a3b8; margin-bottom: 12px; font-weight:600;">Troubleshooting Guide</div>
+        <div class="troubleshoot-grid">
+          <div class="troubleshoot-card t-block">
+            <div class="t-issue"><span class="t-icon-block">🔴</span> Symptom: Timeout</div>
+            <div class="t-cause">Security Group is BLOCKING</div>
+            <div class="t-detail">Connection times out = traffic never reaches the instance. Check your inbound SG rules — the port or source IP is not allowed.</div>
+          </div>
+          <div class="troubleshoot-card t-refused">
+            <div class="t-issue"><span class="t-icon-block">🟡</span> Symptom: Connection Refused</div>
+            <div class="t-cause">Application Problem</div>
+            <div class="t-detail">Traffic REACHED the instance. The SG is fine. The app is not running, crashed, or is listening on wrong port.</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top: 8px;">
+        <div class="section-heading" style="font-size:14px; color:#94a3b8; margin-bottom: 12px; font-weight:600;">Classic Ports to Know</div>
+        <div class="table-wrapper">
+          <table class="ports-table">
+            <thead>
+              <tr>
+                <th>Port</th>
+                <th>Protocol</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>22</td>
+                <td><span class="port-protocol">TCP</span></td>
+                <td>SSH — Secure Shell login into Linux instances</td>
+              </tr>
+              <tr>
+                <td>21</td>
+                <td><span class="port-protocol">TCP</span></td>
+                <td>FTP — File Transfer Protocol (upload files)</td>
+              </tr>
+              <tr>
+                <td>22</td>
+                <td><span class="port-protocol">TCP</span></td>
+                <td>SFTP — Secure FTP (also uses port 22, over SSH)</td>
+              </tr>
+              <tr>
+                <td>80</td>
+                <td><span class="port-protocol">TCP</span></td>
+                <td>HTTP — Unsecured web traffic</td>
+              </tr>
+              <tr>
+                <td>443</td>
+                <td><span class="port-protocol">TCP</span></td>
+                <td>HTTPS — Secured web traffic (TLS/SSL)</td>
+              </tr>
+              <tr>
+                <td>3389</td>
+                <td><span class="port-protocol">TCP</span></td>
+                <td>RDP — Remote Desktop Protocol (Windows instances)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. PURCHASING OPTIONS -->
+    <div class="section-block">
+      <div class="section-title">04 — EC2 Purchasing Options</div>
+
+      <div class="purchasing-grid">
+
+        <div class="purchasing-card">
+          <div class="p-name">On-Demand</div>
+          <div class="chips">
+            <span class="chip gray">No Discount</span>
+            <span class="chip gray">No Commitment</span>
+          </div>
+          <div class="p-best-for"><strong>Best for:</strong> Short-term, unpredictable workloads. Pay by the second (Linux/Windows) or hour.</div>
+        </div>
+
+        <div class="purchasing-card">
+          <div class="p-name">Reserved Instances</div>
+          <div class="chips">
+            <span class="chip green">~72% Discount</span>
+            <span class="chip blue">1 or 3 Years</span>
+          </div>
+          <div class="p-best-for"><strong>Best for:</strong> Steady-state workloads with predictable usage — databases, web servers with constant traffic.</div>
+        </div>
+
+        <div class="purchasing-card">
+          <div class="p-name">Convertible Reserved</div>
+          <div class="chips">
+            <span class="chip yellow">~66% Discount</span>
+            <span class="chip blue">1 or 3 Years</span>
+          </div>
+          <div class="p-best-for"><strong>Best for:</strong> Steady-state but need flexibility to change instance type, OS, or tenancy during the term.</div>
+        </div>
+
+        <div class="purchasing-card">
+          <div class="p-name">Savings Plans</div>
+          <div class="chips">
+            <span class="chip green">~70% Discount</span>
+            <span class="chip blue">1 or 3 Years</span>
+          </div>
+          <div class="p-best-for"><strong>Best for:</strong> Commit to a $/hour spend. Flexible on instance size, OS, and region. Excess billed on-demand.</div>
+        </div>
+
+        <div class="purchasing-card">
+          <div class="p-name">Spot Instances</div>
+          <div class="chips">
+            <span class="chip green">~90% Discount</span>
+            <span class="chip red">Can be interrupted</span>
+          </div>
+          <div class="p-best-for"><strong>Best for:</strong> Batch jobs, data analysis, image processing, distributed resilient workloads. NEVER use for DBs.</div>
+        </div>
+
+        <div class="purchasing-card">
+          <div class="p-name">Dedicated Hosts</div>
+          <div class="chips">
+            <span class="chip red">Most Expensive</span>
+            <span class="chip blue">On-Demand or 1–3y</span>
+          </div>
+          <div class="p-best-for"><strong>Best for:</strong> Bring Your Own License (BYOL), compliance requirements. You get visibility into physical sockets and cores.</div>
+        </div>
+
+        <div class="purchasing-card">
+          <div class="p-name">Dedicated Instances</div>
+          <div class="chips">
+            <span class="chip gray">No Discount</span>
+            <span class="chip gray">No Commitment</span>
+          </div>
+          <div class="p-best-for"><strong>Best for:</strong> Hardware dedicated to your account (no hardware sharing with other AWS customers) but no BYOL support.</div>
+        </div>
+
+        <div class="purchasing-card">
+          <div class="p-name">Capacity Reservations</div>
+          <div class="chips">
+            <span class="chip gray">No Discount</span>
+            <span class="chip gray">No Commitment</span>
+          </div>
+          <div class="p-best-for"><strong>Best for:</strong> Reserve AZ capacity for any duration. You pay full on-demand rate whether or not instances are running.</div>
+        </div>
+
+      </div>
+
+      <div class="callout info" style="margin-top: 8px;">
+        <span class="callout-title">Hotel Analogy</span>
+        <strong>On-Demand</strong> = walk in, full price &nbsp;|&nbsp;
+        <strong>Reserved</strong> = book 1–3 years, big discount &nbsp;|&nbsp;
+        <strong>Savings Plan</strong> = commit to $X/month, change room type freely &nbsp;|&nbsp;
+        <strong>Spot</strong> = last-minute deal, can be kicked out if hotel needs the room &nbsp;|&nbsp;
+        <strong>Dedicated Host</strong> = rent the whole building (bring your own license) &nbsp;|&nbsp;
+        <strong>Capacity Reservation</strong> = reserve a room you might not use, still pay full price
+      </div>
+    </div>
+
+    <!-- 5. EXAM TIPS -->
+    <div class="section-block">
+      <div class="section-title">05 — Exam Tips</div>
+      <div class="exam-tips-grid">
+
+        <div class="exam-tip-card">
+          <div class="tip-q">When does User Data run?</div>
+          <div class="tip-a">Once at first boot only, executed as root</div>
+        </div>
+
+        <div class="exam-tip-card">
+          <div class="tip-q">What service type is EC2?</div>
+          <div class="tip-a">IaaS — Infrastructure as a Service</div>
+        </div>
+
+        <div class="exam-tip-card">
+          <div class="tip-q">Timeout connecting to EC2</div>
+          <div class="tip-a">Security group is blocking — check inbound rules</div>
+        </div>
+
+        <div class="exam-tip-card">
+          <div class="tip-q">Connection refused on EC2</div>
+          <div class="tip-a">App problem — traffic reached the instance, check the application</div>
+        </div>
+
+        <div class="exam-tip-card">
+          <div class="tip-q">SSH port / RDP port</div>
+          <div class="tip-a">22 (Linux SSH) · 3389 (Windows RDP)</div>
+        </div>
+
+        <div class="exam-tip-card">
+          <div class="tip-q">Cheapest EC2 option</div>
+          <div class="tip-a">Spot (~90% off) — but can be interrupted at any time</div>
+        </div>
+
+        <div class="exam-tip-card">
+          <div class="tip-q">NEVER use Spot for...</div>
+          <div class="tip-a">Databases or critical/stateful workloads — interruption risk</div>
+        </div>
+
+        <div class="exam-tip-card">
+          <div class="tip-q">Dedicated Host vs Dedicated Instance</div>
+          <div class="tip-a">Host = whole physical server (BYOL/compliance). Instance = isolated hardware, shared within your account</div>
+        </div>
+
+        <div class="exam-tip-card">
+          <div class="tip-q">Capacity Reservation discount?</div>
+          <div class="tip-a">None — it only guarantees AZ capacity availability</div>
+        </div>
+
+        <div class="exam-tip-card">
+          <div class="tip-q">Savings Plans vs Reserved</div>
+          <div class="tip-a">Savings Plans: lock instance family + region, flexible size/OS. Reserved: lock specific type + region + OS</div>
+        </div>
+
+      </div>
+    </div>
+
+  </div><!-- end page-body -->
+
+</body>
+</html>

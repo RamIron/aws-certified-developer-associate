@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Section 12 — AWS CLI, SDK, IAM Roles &amp; Policies</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #0f172a; color: #f8fafc; font-family: 'Inter', sans-serif; font-size: 14px; line-height: 1.6; min-height: 100vh; }
+    .hero { background: linear-gradient(135deg, #1e293b 0%, #0f172a 60%, #1a1a2e 100%); border-bottom: 1px solid #334155; padding: 48px 32px 40px; text-align: center; }
+    .hero-eyebrow { font-size: 13px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #f97316; margin-bottom: 12px; }
+    h1 { font-size: clamp(26px, 4vw, 40px); font-weight: 800; color: #f8fafc; margin-bottom: 8px; letter-spacing: -0.02em; }
+    .hero-subtitle { font-size: 15px; color: #94a3b8; margin-bottom: 20px; }
+    .xp-badge { display: inline-flex; align-items: center; gap: 6px; background: linear-gradient(135deg, #f97316, #ea580c); color: #fff; font-size: 13px; font-weight: 700; padding: 8px 18px; border-radius: 999px; }
+    .page-body { max-width: 1100px; margin: 0 auto; padding: 48px 24px; display: flex; flex-direction: column; gap: 40px; }
+    .section-label { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: #f97316; margin-bottom: 16px; }
+    .card { background: #1e293b; border-radius: 12px; border: 1px solid #334155; padding: 24px; }
+    .card-title { font-size: 18px; font-weight: 700; color: #f8fafc; margin-bottom: 16px; }
+    .callout { border-radius: 10px; padding: 16px 20px; font-size: 14px; line-height: 1.65; border-left: 4px solid; }
+    .callout.warning { background: rgba(249,115,22,0.08); border-color: #f97316; color: #fed7aa; }
+    .callout.warning strong { color: #fb923c; }
+    .callout.info { background: rgba(99,102,241,0.08); border-color: #6366f1; color: #c7d2fe; }
+    .callout.success { background: rgba(16,185,129,0.08); border-color: #10b981; color: #6ee7b7; }
+    .callout.danger { background: rgba(239,68,68,0.08); border-color: #ef4444; color: #fca5a5; }
+    .data-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    .data-table th { background: #1e2d4a; color: #94a3b8; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; padding: 10px 14px; text-align: left; }
+    .data-table td { padding: 10px 14px; border-bottom: 1px solid #1e293b; color: #cbd5e1; }
+    .data-table tr:last-child td { border-bottom: none; }
+    .data-table tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+    .tip-card { background: #0f172a; border-left: 3px solid #f97316; border-radius: 0 8px 8px 0; padding: 12px 16px; font-size: 14px; }
+    .tip-trigger { color: #64748b; }
+    .tip-answer { color: #f8fafc; font-weight: 700; }
+    .anim-demo { background: #0f172a; border-radius: 12px; padding: 20px; min-height: 120px; }
+    .anim-controls { display: flex; align-items: center; gap: 12px; margin-top: 16px; flex-wrap: wrap; }
+    .nav-btn { background: transparent; border: 2px solid #f97316; color: #f97316; padding: 8px 18px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px; transition: all 0.2s; font-family: 'Inter', sans-serif; }
+    .nav-btn:hover:not(:disabled) { background: #f97316; color: #0f172a; }
+    .nav-btn:disabled { opacity: 0.3; cursor: default; }
+    .restart-btn { background: transparent; border: 1px solid #475569; color: #94a3b8; padding: 6px 14px; border-radius: 8px; cursor: pointer; font-size: 13px; margin-left: auto; transition: all 0.2s; font-family: 'Inter', sans-serif; }
+    .restart-btn:hover { border-color: #94a3b8; color: #e2e8f0; }
+    .step-dots { display: flex; gap: 6px; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: #334155; transition: background 0.3s; }
+    .dot.active { background: #f97316; }
+    .step-counter { color: #94a3b8; font-size: 13px; }
+    @keyframes fadeScale { from { opacity: 0; transform: scale(0.97); } to { opacity: 1; transform: scale(1); } }
+    .anim-demo > * { animation: fadeScale 0.25s ease; }
+    .mono { font-family: 'Fira Code', monospace; }
+    code { font-family: 'Fira Code', monospace; font-size: 13px; background: rgba(248,114,22,0.1); color: #fb923c; padding: 2px 6px; border-radius: 4px; }
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+    .service-card { background: #0f172a; border: 1px solid #334155; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 8px; }
+    .service-icon { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; flex-shrink: 0; }
+    .service-name { font-size: 16px; font-weight: 700; color: #f8fafc; }
+    .service-desc { font-size: 13px; color: #94a3b8; line-height: 1.5; }
+    .compare-col { background: #0f172a; border: 1px solid #334155; border-radius: 10px; padding: 18px; }
+    .compare-col-title { font-size: 15px; font-weight: 700; margin-bottom: 12px; }
+    .compare-col ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .compare-col ul li { font-size: 13px; color: #94a3b8; padding-left: 14px; position: relative; }
+    .compare-col ul li::before { content: '›'; position: absolute; left: 0; color: #f97316; }
+    .arch-flow { display: flex; align-items: center; flex-wrap: wrap; gap: 0; margin-bottom: 8px; }
+    .arch-node { padding: 10px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; text-align: center; }
+    .arch-arrow { color: #475569; font-size: 16px; padding: 0 8px; }
+    .table-wrapper { overflow-x: auto; border-radius: 10px; border: 1px solid #334155; }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 13px; font-weight: 600; }
+    .badge-green { background: rgba(16,185,129,0.15); color: #6ee7b7; }
+    .badge-red { background: rgba(239,68,68,0.12); color: #fca5a5; }
+    .badge-blue { background: rgba(59,130,246,0.15); color: #93c5fd; }
+    .tips-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 12px; }
+    .step-title { font-size: 15px; font-weight: 700; color: #f8fafc; margin-bottom: 4px; }
+    .step-desc { font-size: 13px; color: #94a3b8; margin-bottom: 12px; }
+    .divider { border: none; border-top: 1px solid #1e293b; margin: 4px 0; }
+    .feature-card { background: #0f172a; border: 1px solid #334155; border-radius: 10px; padding: 16px; }
+    .feature-card-title { font-size: 14px; font-weight: 700; color: #f97316; margin-bottom: 8px; }
+    .feature-card p, .feature-card li { font-size: 13px; color: #94a3b8; line-height: 1.5; }
+    .feature-card ul { list-style: none; display: flex; flex-direction: column; gap: 5px; padding-left: 0; }
+    .feature-card ul li { padding-left: 12px; position: relative; }
+    .feature-card ul li::before { content: '–'; position: absolute; left: 0; color: #475569; }
+    /* Local extras */
+    .imds-url { display: inline-block; font-family: 'Fira Code', monospace; font-size: 14px; background: #0f172a; border: 1px solid #f97316; color: #fb923c; padding: 6px 14px; border-radius: 8px; letter-spacing: 0.04em; }
+    .chain-step { display: flex; align-items: flex-start; gap: 16px; padding: 14px 16px; border-radius: 10px; background: #0f172a; border: 1px solid #334155; }
+    .chain-num { min-width: 32px; height: 32px; border-radius: 50%; background: #f97316; color: #0f172a; font-weight: 800; font-size: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .chain-body { display: flex; flex-direction: column; gap: 4px; }
+    .chain-label { font-size: 14px; font-weight: 700; color: #f8fafc; }
+    .chain-detail { font-size: 13px; color: #94a3b8; }
+    .priority-badge { font-size: 13px; font-weight: 600; padding: 2px 10px; border-radius: 999px; }
+    .priority-high { background: rgba(249,115,22,0.15); color: #fb923c; }
+    .priority-low { background: rgba(100,116,139,0.2); color: #94a3b8; }
+    .sigv4-box { background: #0f172a; border: 1px solid #334155; border-radius: 10px; padding: 18px; display: flex; flex-direction: column; gap: 10px; }
+    .sigv4-method { font-size: 14px; font-weight: 700; color: #f8fafc; margin-bottom: 6px; }
+    .sigv4-detail { font-size: 13px; color: #94a3b8; }
+    .mfa-step { display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: #0f172a; border-radius: 8px; border: 1px solid #334155; }
+    .mfa-step-num { min-width: 28px; height: 28px; background: #6366f1; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; color: #fff; flex-shrink: 0; }
+    .mfa-step-text { font-size: 13px; color: #c7d2fe; }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════ HERO ═══ -->
+<header class="hero">
+  <div class="hero-eyebrow">AWS Certified Developer Associate</div>
+  <h1>Section 12 — AWS CLI, SDK, IAM Roles &amp; Policies</h1>
+  <p class="hero-subtitle">EC2 Metadata · IMDSv2 · CLI with MFA · Exponential Backoff · Credentials Chain · SigV4</p>
+  <div class="xp-badge">&#9733; Section complete &middot; Quiz passed</div>
+</header>
+
+<main class="page-body">
+
+  <!-- ═══════════════════════════════════════════ 1. IMDS ═══ -->
+  <section>
+    <div class="section-label">Topic 1 — EC2 Instance Metadata (IMDS)</div>
+    <div class="card">
+      <div class="card-title">How Instances Learn About Themselves</div>
+
+      <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px;">
+        <div class="callout info">
+          <strong>Core concept:</strong> IMDS lets an EC2 instance learn about itself <em>without</em> an IAM Role. The data is available at the link-local address <span class="imds-url">http://169.254.169.254</span> — only reachable from inside the instance.
+        </div>
+
+        <div class="grid-2">
+          <div class="feature-card">
+            <div class="feature-card-title">What you CAN retrieve</div>
+            <ul>
+              <li>Instance ID, type, AMI ID</li>
+              <li>Public IP and private IP</li>
+              <li>IAM Role <strong>name</strong></li>
+              <li>Temporary credentials for the role</li>
+              <li>User Data (launch script)</li>
+            </ul>
+          </div>
+          <div class="feature-card" style="border-color: #ef4444;">
+            <div class="feature-card-title" style="color: #f87171;">What you CANNOT retrieve</div>
+            <ul>
+              <li>IAM <strong>Policy</strong> attached to the role</li>
+              <li>Any data from other instances</li>
+            </ul>
+            <p style="margin-top: 10px; font-size: 13px; color: #fca5a5;">Exam trap: IMDS gives the role <em>name</em>, never the policy document.</p>
+          </div>
+        </div>
+
+        <div class="callout warning">
+          <strong>Metadata vs User Data:</strong> Metadata = information <em>about</em> the instance (IP, role, type). User Data = the bootstrap script that ran at launch. Both accessible via 169.254.169.254 but at different paths.
+        </div>
+      </div>
+
+      <!-- IMDSv1 vs IMDSv2 table -->
+      <div style="margin-bottom: 20px;">
+        <div style="font-size: 14px; font-weight: 700; color: #f8fafc; margin-bottom: 12px;">IMDSv1 vs IMDSv2</div>
+        <div class="table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Version</th>
+                <th>How It Works</th>
+                <th>Security</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="badge badge-red">IMDSv1</span></td>
+                <td>Direct <code>GET</code> to <code>/latest/meta-data/</code></td>
+                <td>Less secure — no session required</td>
+                <td>Still works but discouraged</td>
+              </tr>
+              <tr>
+                <td><span class="badge badge-green">IMDSv2</span></td>
+                <td><code>PUT</code> to get token → <code>GET</code> with token header</td>
+                <td>Session-oriented, resistant to SSRF</td>
+                <td>Default since 2023 (recommended)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- IMDSv2 flow -->
+      <div>
+        <div style="font-size: 14px; font-weight: 700; color: #f8fafc; margin-bottom: 12px;">IMDSv2 Request Flow</div>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <div class="arch-flow">
+            <div class="arch-node" style="background: #1e2d4a; color: #93c5fd;">Step 1</div>
+            <div class="arch-arrow">›</div>
+            <div class="arch-node" style="background: #1e293b; color: #f8fafc; font-family: 'Fira Code', monospace; font-size: 13px;">PUT /latest/api/token<br><span style="color: #94a3b8; font-size: 13px;">X-aws-ec2-metadata-token-ttl-seconds: 21600</span></div>
+            <div class="arch-arrow">›</div>
+            <div class="arch-node" style="background: #0f2a1e; color: #6ee7b7;">Token returned</div>
+          </div>
+          <div class="arch-flow">
+            <div class="arch-node" style="background: #1e2d4a; color: #93c5fd;">Step 2</div>
+            <div class="arch-arrow">›</div>
+            <div class="arch-node" style="background: #1e293b; color: #f8fafc; font-family: 'Fira Code', monospace; font-size: 13px;">GET /latest/meta-data/<br><span style="color: #94a3b8; font-size: 13px;">X-aws-ec2-metadata-token: &lt;token&gt;</span></div>
+            <div class="arch-arrow">›</div>
+            <div class="arch-node" style="background: #0f2a1e; color: #6ee7b7;">Metadata returned</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════ 2. CLI + MFA ═══ -->
+  <section>
+    <div class="section-label">Topic 2 — AWS CLI with MFA</div>
+    <div class="card">
+      <div class="card-title">Using MFA Authentication from the CLI</div>
+
+      <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px;">
+        <div class="callout info">
+          <strong>Key mechanism:</strong> To make CLI calls that require MFA, you must call <strong>STS GetSessionToken</strong>. This returns temporary credentials you use for subsequent calls. Your long-term credentials alone are not enough.
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px;">
+        <div class="mfa-step">
+          <div class="mfa-step-num">1</div>
+          <div class="mfa-step-text">Call <code>aws sts get-session-token</code> with <code>--serial-number &lt;MFA-device-ARN&gt;</code> and <code>--token-code &lt;6-digit-code&gt;</code></div>
+        </div>
+        <div class="mfa-step">
+          <div class="mfa-step-num">2</div>
+          <div class="mfa-step-text">STS returns: <strong>AccessKeyId</strong> + <strong>SecretAccessKey</strong> + <strong>SessionToken</strong> + <strong>Expiration</strong></div>
+        </div>
+        <div class="mfa-step">
+          <div class="mfa-step-num">3</div>
+          <div class="mfa-step-text">Set <code>AWS_ACCESS_KEY_ID</code>, <code>AWS_SECRET_ACCESS_KEY</code>, <code>AWS_SESSION_TOKEN</code> from the response and make your API calls</div>
+        </div>
+      </div>
+
+      <div class="callout warning">
+        <strong>Exam pattern:</strong> "MFA with CLI" always points to <strong>STS GetSessionToken</strong>. The serial number is the ARN of the virtual MFA device registered with the IAM user.
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════ 3. Exponential Backoff — ANIMATED ═══ -->
+  <section>
+    <div class="section-label">Topic 3 — Exponential Backoff &amp; Service Limits</div>
+    <div class="card">
+      <div class="card-title">API Rate Limits, Service Quotas &amp; Retry Strategy</div>
+      <p style="color: #94a3b8; font-size: 14px; margin-bottom: 16px;">Step through each concept below. Understanding the difference between limit types determines the correct solution.</p>
+
+      <div class="anim-demo" id="backoff-demo"></div>
+      <div class="anim-controls">
+        <button class="nav-btn" id="backoff-demo-prev" onclick="prev('backoff-demo')">&#8592; Prev</button>
+        <button class="nav-btn" id="backoff-demo-next" onclick="next('backoff-demo')">Next &#8594;</button>
+        <div class="step-dots" id="backoff-demo-dots"></div>
+        <span class="step-counter" id="backoff-demo-counter"></span>
+        <button class="restart-btn" onclick="restart('backoff-demo')">&#8635; Restart</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════ 4. Credentials Provider Chain — ANIMATED ═══ -->
+  <section>
+    <div class="section-label">Topic 4 — AWS Credentials Provider Chain</div>
+    <div class="card">
+      <div class="card-title">Credential Resolution Order (First Match Wins)</div>
+      <p style="color: #94a3b8; font-size: 14px; margin-bottom: 16px;">The CLI and SDK check sources in a fixed order. The first source that provides credentials wins — step through to see each level.</p>
+
+      <div class="anim-demo" id="creds-demo"></div>
+      <div class="anim-controls">
+        <button class="nav-btn" id="creds-demo-prev" onclick="prev('creds-demo')">&#8592; Prev</button>
+        <button class="nav-btn" id="creds-demo-next" onclick="next('creds-demo')">Next &#8594;</button>
+        <div class="step-dots" id="creds-demo-dots"></div>
+        <span class="step-counter" id="creds-demo-counter"></span>
+        <button class="restart-btn" onclick="restart('creds-demo')">&#8635; Restart</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════ 5. SigV4 ═══ -->
+  <section>
+    <div class="section-label">Topic 5 — AWS Signature Version 4 (SigV4)</div>
+    <div class="card">
+      <div class="card-title">How Every AWS API Request Gets Authenticated</div>
+
+      <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px;">
+        <div class="callout info">
+          <strong>What is SigV4?</strong> Every request to AWS APIs must be <strong>cryptographically signed</strong> using SigV4. The AWS CLI and SDKs handle this automatically — you only need to understand it for custom HTTP clients and pre-signed URLs.
+        </div>
+      </div>
+
+      <div class="grid-2" style="margin-bottom: 16px;">
+        <div class="sigv4-box">
+          <div class="sigv4-method">Method 1 — Authorization HTTP Header</div>
+          <div style="font-family: 'Fira Code', monospace; font-size: 13px; color: #fb923c; background: #1a1a2e; padding: 10px 14px; border-radius: 8px; line-height: 1.7; overflow-x: auto;">
+            Authorization: AWS4-HMAC-SHA256<br>
+            Credential=AKID/20231201/us-east-1/s3/aws4_request,<br>
+            SignedHeaders=host;x-amz-date,<br>
+            Signature=abc123...
+          </div>
+          <div class="sigv4-detail">Used by the AWS CLI and SDK for all regular API calls.</div>
+        </div>
+        <div class="sigv4-box">
+          <div class="sigv4-method">Method 2 — Query String Parameter</div>
+          <div style="font-family: 'Fira Code', monospace; font-size: 13px; color: #fb923c; background: #1a1a2e; padding: 10px 14px; border-radius: 8px; line-height: 1.7; overflow-x: auto;">
+            https://bucket.s3.amazonaws.com/file.pdf<br>
+            ?X-Amz-Algorithm=AWS4-HMAC-SHA256<br>
+            &amp;X-Amz-Credential=...&amp;X-Amz-Expires=3600<br>
+            &amp;X-Amz-Signature=abc123...
+          </div>
+          <div class="sigv4-detail">Used by <strong>S3 pre-signed URLs</strong>. The signature is embedded directly in the URL.</div>
+        </div>
+      </div>
+
+      <div class="callout success">
+        <strong>Exam shortcut:</strong> "Pre-signed URL" → always uses <code>X-Amz-Signature</code> in the query string (Method 2). Regular SDK/CLI calls → always use the <code>Authorization</code> HTTP header (Method 1).
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════ EXAM TIPS ═══ -->
+  <section>
+    <div class="section-label">Exam Quick-Fire Tips</div>
+    <div class="tips-grid">
+
+      <div class="tip-card">
+        <div class="tip-trigger">Scenario: "What is the IMDS URL?"</div>
+        <hr class="divider" />
+        <div class="tip-answer">&#8594; 169.254.169.254 (link-local, instance-only)</div>
+      </div>
+
+      <div class="tip-card">
+        <div class="tip-trigger">Scenario: "IMDS returns the role — can it return the policy?"</div>
+        <hr class="divider" />
+        <div class="tip-answer">&#8594; NO. Role name only — never the policy document.</div>
+      </div>
+
+      <div class="tip-card">
+        <div class="tip-trigger">Scenario: "IMDSv2 requires…"</div>
+        <hr class="divider" />
+        <div class="tip-answer">&#8594; PUT to get session token first, then GET with X-aws-ec2-metadata-token header</div>
+      </div>
+
+      <div class="tip-card">
+        <div class="tip-trigger">Scenario: "Use MFA with CLI"</div>
+        <hr class="divider" />
+        <div class="tip-answer">&#8594; Call STS GetSessionToken with --serial-number + --token-code</div>
+      </div>
+
+      <div class="tip-card">
+        <div class="tip-trigger">Scenario: "App gets ThrottlingException"</div>
+        <hr class="divider" />
+        <div class="tip-answer">&#8594; Implement Exponential Backoff (doubles wait: 1s → 2s → 4s...)</div>
+      </div>
+
+      <div class="tip-card">
+        <div class="tip-trigger">Scenario: "When should I retry?"</div>
+        <hr class="divider" />
+        <div class="tip-answer">&#8594; Retry on 5XX errors and ThrottlingException. NEVER retry 4XX (fix the code).</div>
+      </div>
+
+      <div class="tip-card">
+        <div class="tip-trigger">Scenario: "SDK vs custom HTTP — who handles backoff?"</div>
+        <hr class="divider" />
+        <div class="tip-answer">&#8594; SDK has it built-in. Custom HTTP calls = you implement it yourself.</div>
+      </div>
+
+      <div class="tip-card">
+        <div class="tip-trigger">Scenario: "EC2 app has too many IAM permissions"</div>
+        <hr class="divider" />
+        <div class="tip-answer">&#8594; Leftover environment variables (AWS_ACCESS_KEY_ID etc.) override Instance Profile — unset them.</div>
+      </div>
+
+      <div class="tip-card">
+        <div class="tip-trigger">Scenario: "Credentials from env vars vs Instance Profile"</div>
+        <hr class="divider" />
+        <div class="tip-answer">&#8594; Env vars WIN (higher priority). Instance Profile is lowest priority.</div>
+      </div>
+
+      <div class="tip-card">
+        <div class="tip-trigger">Scenario: "App running inside AWS — where to put credentials?"</div>
+        <hr class="divider" />
+        <div class="tip-answer">&#8594; IAM Roles (never store keys in code or env vars inside AWS)</div>
+      </div>
+
+      <div class="tip-card">
+        <div class="tip-trigger">Scenario: "App running outside AWS — where to put credentials?"</div>
+        <hr class="divider" />
+        <div class="tip-answer">&#8594; Environment variables or named profiles (~/.aws/credentials)</div>
+      </div>
+
+      <div class="tip-card">
+        <div class="tip-trigger">Scenario: "Pre-signed URL — what signature mechanism?"</div>
+        <hr class="divider" />
+        <div class="tip-answer">&#8594; SigV4 with X-Amz-Signature in the query string (not in header)</div>
+      </div>
+
+    </div>
+  </section>
+
+</main>
+
+<!-- ═══════════════════════════════════════ JAVASCRIPT ═══ -->
+<script>
+var DEMOS = {
+  'backoff-demo': {
+    steps: [
+      {
+        body: '<div style="display:flex;flex-direction:column;gap:16px;">' +
+          '<div class="step-title">Two Types of AWS Limits</div>' +
+          '<div class="grid-2">' +
+            '<div style="background:#1e293b;border:1px solid #334155;border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:8px;">' +
+              '<div style="font-size:14px;font-weight:700;color:#93c5fd;">API Rate Limits</div>' +
+              '<div style="font-size:13px;color:#94a3b8;">Limit on how many API calls per second. Example: <code>DescribeInstances</code> = 100 calls/sec for EC2.</div>' +
+              '<div style="font-size:13px;color:#94a3b8;">When exceeded: you receive <span style="color:#fca5a5;font-weight:700;">ThrottlingException</span></div>' +
+              '<div style="font-size:13px;color:#6ee7b7;font-weight:600;">Solution: Exponential Backoff</div>' +
+            '</div>' +
+            '<div style="background:#1e293b;border:1px solid #334155;border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:8px;">' +
+              '<div style="font-size:14px;font-weight:700;color:#c084fc;">Service Quotas</div>' +
+              '<div style="font-size:13px;color:#94a3b8;">Limit on number of resources. Example: 1,150 on-demand EC2 instances per region.</div>' +
+              '<div style="font-size:13px;color:#94a3b8;">These are <strong style="color:#f8fafc;">soft limits</strong> — can be increased.</div>' +
+              '<div style="font-size:13px;color:#6ee7b7;font-weight:600;">Solution: Request increase via Support or Service Quotas API</div>' +
+            '</div>' +
+          '</div>' +
+          '<div style="background:rgba(99,102,241,0.08);border-left:4px solid #6366f1;border-radius:10px;padding:14px 18px;font-size:13px;color:#c7d2fe;">These are <strong>different problems with different solutions</strong>. Confusing them is a common exam trap.</div>' +
+        '</div>'
+      },
+      {
+        body: '<div style="display:flex;flex-direction:column;gap:16px;">' +
+          '<div class="step-title">Exponential Backoff — API Rate Limit Solution</div>' +
+          '<div style="font-size:13px;color:#94a3b8;margin-bottom:4px;">Each retry waits <strong style="color:#f8fafc;">twice as long</strong> as the previous. This prevents overwhelming the service while retrying.</div>' +
+          '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">' +
+            '<div style="background:#f97316;color:#0f172a;font-weight:700;padding:10px 16px;border-radius:8px;font-size:13px;text-align:center;">Attempt 1<br><span style="font-size:13px;">0s wait</span></div>' +
+            '<div style="color:#475569;font-size:16px;">›</div>' +
+            '<div style="background:#ea580c;color:#fff;font-weight:700;padding:10px 16px;border-radius:8px;font-size:13px;text-align:center;">Retry 1<br><span style="font-size:13px;">1s wait</span></div>' +
+            '<div style="color:#475569;font-size:16px;">›</div>' +
+            '<div style="background:#c2410c;color:#fff;font-weight:700;padding:10px 16px;border-radius:8px;font-size:13px;text-align:center;">Retry 2<br><span style="font-size:13px;">2s wait</span></div>' +
+            '<div style="color:#475569;font-size:16px;">›</div>' +
+            '<div style="background:#9a3412;color:#fff;font-weight:700;padding:10px 16px;border-radius:8px;font-size:13px;text-align:center;">Retry 3<br><span style="font-size:13px;">4s wait</span></div>' +
+            '<div style="color:#475569;font-size:16px;">›</div>' +
+            '<div style="background:#7c2d12;color:#fed7aa;font-weight:700;padding:10px 16px;border-radius:8px;font-size:13px;text-align:center;">Retry 4<br><span style="font-size:13px;">8s wait</span></div>' +
+            '<div style="color:#475569;font-size:16px;">›</div>' +
+            '<div style="background:#1e293b;color:#94a3b8;font-weight:700;padding:10px 16px;border-radius:8px;font-size:13px;text-align:center;border:1px dashed #475569;">Retry N<br><span style="font-size:13px;">2^N seconds</span></div>' +
+          '</div>' +
+          '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:4px;">' +
+            '<div style="background:rgba(16,185,129,0.08);border-left:4px solid #10b981;border-radius:10px;padding:12px 16px;font-size:13px;color:#6ee7b7;"><strong>DO retry on:</strong> 5XX server errors, ThrottlingException</div>' +
+            '<div style="background:rgba(239,68,68,0.08);border-left:4px solid #ef4444;border-radius:10px;padding:12px 16px;font-size:13px;color:#fca5a5;"><strong>NEVER retry on:</strong> 4XX client errors — these mean your request is wrong. Fix the code.</div>' +
+          '</div>' +
+        '</div>'
+      },
+      {
+        body: '<div style="display:flex;flex-direction:column;gap:16px;">' +
+          '<div class="step-title">Implementation &amp; Quota Increases</div>' +
+          '<div class="grid-2">' +
+            '<div style="background:#1e293b;border:1px solid #334155;border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:8px;">' +
+              '<div style="font-size:14px;font-weight:700;color:#6ee7b7;">AWS SDK</div>' +
+              '<div style="font-size:13px;color:#94a3b8;">Exponential Backoff is <strong style="color:#f8fafc;">built-in automatically</strong>. You do not need to implement it. The SDK retries on ThrottlingException and 5XX errors by default.</div>' +
+            '</div>' +
+            '<div style="background:#1e293b;border:1px solid #334155;border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:8px;">' +
+              '<div style="font-size:14px;font-weight:700;color:#fbbf24;">Custom HTTP Client</div>' +
+              '<div style="font-size:13px;color:#94a3b8;">You are responsible for implementing Exponential Backoff yourself. AWS does not inject it automatically outside of the SDK.</div>' +
+            '</div>' +
+          '</div>' +
+          '<div style="background:#1e293b;border:1px solid #334155;border-radius:10px;padding:18px;">' +
+            '<div style="font-size:14px;font-weight:700;color:#c084fc;margin-bottom:8px;">Service Quota Increase</div>' +
+            '<div style="display:flex;flex-direction:column;gap:8px;">' +
+              '<div style="font-size:13px;color:#94a3b8;padding-left:14px;position:relative;"><span style="position:absolute;left:0;color:#f97316;">›</span> Open an AWS Support ticket requesting the limit increase for a specific service and region</div>' +
+              '<div style="font-size:13px;color:#94a3b8;padding-left:14px;position:relative;"><span style="position:absolute;left:0;color:#f97316;">›</span> Programmatically: use the <strong style="color:#f8fafc;">Service Quotas API</strong> (<code>request-service-quota-increase</code>)</div>' +
+            '</div>' +
+          '</div>' +
+        '</div>'
+      }
+    ]
+  },
+
+  'creds-demo': {
+    steps: [
+      {
+        body: '<div style="display:flex;flex-direction:column;gap:14px;">' +
+          '<div class="step-title">Priority 1 (Highest) — Command Line Options</div>' +
+          '<div style="background:#1e293b;border:2px solid #f97316;border-radius:10px;padding:18px;">' +
+            '<div style="font-family:\'Fira Code\',monospace;font-size:13px;color:#fb923c;background:#0f172a;padding:10px 14px;border-radius:8px;margin-bottom:10px;">aws s3 ls --region us-east-1 --profile myprofile</div>' +
+            '<div style="font-size:13px;color:#94a3b8;">Flags passed directly on the CLI override everything else: <code>--region</code>, <code>--output</code>, <code>--profile</code>. These always win when explicitly specified.</div>' +
+          '</div>' +
+          '<div style="background:rgba(249,115,22,0.08);border-left:4px solid #f97316;border-radius:10px;padding:14px 18px;font-size:13px;color:#fed7aa;"><strong>Remember:</strong> First match wins — if you pass <code>--profile</code> on the command line, all lower-priority sources are ignored for this invocation.</div>' +
+        '</div>'
+      },
+      {
+        body: '<div style="display:flex;flex-direction:column;gap:14px;">' +
+          '<div class="step-title">Priority 2 — Environment Variables</div>' +
+          '<div style="background:#1e293b;border:2px solid #6366f1;border-radius:10px;padding:18px;">' +
+            '<div style="display:flex;flex-direction:column;gap:6px;font-family:\'Fira Code\',monospace;font-size:13px;color:#a5b4fc;background:#0f172a;padding:10px 14px;border-radius:8px;margin-bottom:10px;">' +
+              '<div>export AWS_ACCESS_KEY_ID=AKIAIOSFODNN7EXAMPLE</div>' +
+              '<div>export AWS_SECRET_ACCESS_KEY=wJalrXUtnFEMI/K7MDENG/...</div>' +
+              '<div>export AWS_SESSION_TOKEN=FwoGZXIvYXdz...  <span style="color:#475569;"># for temp creds</span></div>' +
+            '</div>' +
+            '<div style="font-size:13px;color:#94a3b8;">Set in the shell environment. Commonly used in CI/CD pipelines and container environments. Used by both CLI and SDK.</div>' +
+          '</div>' +
+          '<div style="background:rgba(239,68,68,0.08);border-left:4px solid #ef4444;border-radius:10px;padding:14px 18px;font-size:13px;color:#fca5a5;"><strong>Exam trap:</strong> An EC2 instance with env vars set + an Instance Profile attached → the env vars WIN. The Instance Profile (lowest priority) is completely ignored.</div>' +
+        '</div>'
+      },
+      {
+        body: '<div style="display:flex;flex-direction:column;gap:14px;">' +
+          '<div class="step-title">Priority 3 — CLI Credentials File</div>' +
+          '<div style="background:#1e293b;border:2px solid #334155;border-radius:10px;padding:18px;">' +
+            '<div style="font-size:13px;color:#94a3b8;margin-bottom:10px;">File: <code>~/.aws/credentials</code> — shared across AWS CLI and all AWS SDKs</div>' +
+            '<div style="font-family:\'Fira Code\',monospace;font-size:13px;color:#6ee7b7;background:#0f172a;padding:10px 14px;border-radius:8px;">' +
+              '[default]<br>aws_access_key_id = AKIAIOSFODNN7EXAMPLE<br>aws_secret_access_key = wJalrXUtnFEMI...<br><br>[myprofile]<br>aws_access_key_id = AKIAI44QH8DHBEXAMPLE<br>aws_secret_access_key = je7MtGbClwBF...'+
+            '</div>' +
+          '</div>' +
+          '<div style="font-size:13px;color:#94a3b8;padding:10px 14px;background:#0f172a;border-radius:8px;border:1px solid #334155;">Select a profile with <code>--profile myprofile</code> or <code>AWS_PROFILE=myprofile</code></div>' +
+        '</div>'
+      },
+      {
+        body: '<div style="display:flex;flex-direction:column;gap:14px;">' +
+          '<div class="step-title">Priority 4 — CLI Config File</div>' +
+          '<div style="background:#1e293b;border:2px solid #334155;border-radius:10px;padding:18px;">' +
+            '<div style="font-size:13px;color:#94a3b8;margin-bottom:10px;">File: <code>~/.aws/config</code> — stores region, output format, and optionally credentials</div>' +
+            '<div style="font-family:\'Fira Code\',monospace;font-size:13px;color:#6ee7b7;background:#0f172a;padding:10px 14px;border-radius:8px;">' +
+              '[default]<br>region = us-east-1<br>output = json<br><br>[profile myprofile]<br>region = eu-west-1<br>output = table' +
+            '</div>' +
+          '</div>' +
+          '<div style="font-size:13px;color:#94a3b8;padding:10px 14px;background:#0f172a;border-radius:8px;border:1px solid #334155;">Note: profile sections in config use <code>[profile name]</code> (with "profile" prefix), while credentials file uses <code>[name]</code> directly.</div>' +
+        '</div>'
+      },
+      {
+        body: '<div style="display:flex;flex-direction:column;gap:14px;">' +
+          '<div class="step-title">Priority 5 — Container Credentials (ECS)</div>' +
+          '<div style="background:#1e293b;border:2px solid #334155;border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:8px;">' +
+            '<div style="font-size:13px;color:#94a3b8;">When running inside an <strong style="color:#f8fafc;">ECS task</strong>, the SDK fetches credentials from the task IAM Role via the container credentials endpoint.</div>' +
+            '<div class="arch-flow" style="margin-bottom:0;">' +
+              '<div class="arch-node" style="background:#0f2a1e;color:#6ee7b7;">ECS Task</div>' +
+              '<div class="arch-arrow">›</div>' +
+              '<div class="arch-node" style="background:#1e293b;color:#f8fafc;">Task IAM Role</div>' +
+              '<div class="arch-arrow">›</div>' +
+              '<div class="arch-node" style="background:#0f2a1e;color:#6ee7b7;">Temp Credentials</div>' +
+            '</div>' +
+          '</div>' +
+          '<div style="background:rgba(16,185,129,0.08);border-left:4px solid #10b981;border-radius:10px;padding:14px 18px;font-size:13px;color:#6ee7b7;">Best practice for ECS: always use a Task IAM Role instead of passing credentials via environment variables.</div>' +
+        '</div>'
+      },
+      {
+        body: '<div style="display:flex;flex-direction:column;gap:14px;">' +
+          '<div class="step-title">Priority 6 (Lowest) — EC2 Instance Profile</div>' +
+          '<div style="background:#1e293b;border:2px solid #334155;border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:8px;">' +
+            '<div style="font-size:13px;color:#94a3b8;">The IAM Role attached to the EC2 instance. The SDK retrieves temporary credentials from IMDS automatically.</div>' +
+            '<div class="arch-flow" style="margin-bottom:0;">' +
+              '<div class="arch-node" style="background:#1e2d4a;color:#93c5fd;">EC2 Instance</div>' +
+              '<div class="arch-arrow">›</div>' +
+              '<div class="arch-node" style="background:#1e293b;color:#f8fafc;">IMDS 169.254.169.254</div>' +
+              '<div class="arch-arrow">›</div>' +
+              '<div class="arch-node" style="background:#0f2a1e;color:#6ee7b7;">Role Credentials</div>' +
+            '</div>' +
+          '</div>' +
+          '<div style="background:rgba(249,115,22,0.08);border-left:4px solid #f97316;border-radius:10px;padding:14px 18px;font-size:13px;color:#fed7aa;"><strong>Classic exam scenario:</strong> EC2 has both env vars (broad permissions) and an Instance Profile (restricted role) → env vars win → app has too many permissions → <strong>FIX: unset the environment variables</strong>.</div>' +
+          '<div style="background:rgba(16,185,129,0.08);border-left:4px solid #10b981;border-radius:10px;padding:14px 18px;font-size:13px;color:#6ee7b7;"><strong>Best practice:</strong> Inside AWS → always use IAM Roles. Outside AWS → env vars or named profiles. Never hardcode credentials.</div>' +
+        '</div>'
+      }
+    ]
+  }
+};
+
+var states = {};
+
+function renderStep(id, step) {
+  var demo = DEMOS[id];
+  var total = demo.steps.length;
+  document.getElementById(id).innerHTML = demo.steps[step].body;
+  document.getElementById(id + '-counter').textContent = 'Step ' + (step + 1) + ' / ' + total;
+  document.querySelectorAll('[id^="' + id + '-dot-"]').forEach(function(d, i) { d.classList.toggle('active', i === step); });
+  document.getElementById(id + '-prev').disabled = step === 0;
+  document.getElementById(id + '-next').disabled = step === total - 1;
+  states[id] = step;
+}
+
+function prev(id) { if (states[id] > 0) renderStep(id, states[id] - 1); }
+function next(id) { if (states[id] < DEMOS[id].steps.length - 1) renderStep(id, states[id] + 1); }
+function restart(id) { renderStep(id, 0); }
+
+Object.keys(DEMOS).forEach(function(id) {
+  states[id] = 0;
+  var dotsEl = document.getElementById(id + '-dots');
+  dotsEl.innerHTML = DEMOS[id].steps.map(function(_, i) { return '<div class="dot" id="' + id + '-dot-' + i + '"></div>'; }).join('');
+  renderStep(id, 0);
+});
+</script>
+
+</body>
+</html>

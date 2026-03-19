@@ -1,0 +1,1404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Section 16 — ECS, ECR &amp; Fargate | AWS Developer Associate</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #0f172a;
+      color: #f8fafc;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      background: linear-gradient(135deg, #1e293b 0%, #0f172a 60%, #1a1a2e 100%);
+      border-bottom: 1px solid #334155;
+      padding: 48px 32px 40px;
+      text-align: center;
+    }
+    .hero-eyebrow {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #f97316;
+      margin-bottom: 12px;
+    }
+    h1 {
+      font-size: clamp(26px, 4vw, 40px);
+      font-weight: 800;
+      color: #f8fafc;
+      margin-bottom: 8px;
+      letter-spacing: -0.02em;
+    }
+    .hero-subtitle {
+      font-size: 15px;
+      color: #94a3b8;
+      margin-bottom: 20px;
+    }
+    .xp-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: linear-gradient(135deg, #f97316, #ea580c);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 8px 18px;
+      border-radius: 999px;
+    }
+
+    /* ── Page body ── */
+    .page-body {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 48px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+
+    /* ── Section label ── */
+    .section-label {
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #f97316;
+      margin-bottom: 16px;
+    }
+
+    /* ── Card ── */
+    .card {
+      background: #1e293b;
+      border-radius: 12px;
+      border: 1px solid #334155;
+      padding: 24px;
+    }
+
+    .card-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #f8fafc;
+      margin-bottom: 16px;
+    }
+
+    /* ── Callout boxes ── */
+    .callout {
+      border-radius: 10px;
+      padding: 16px 20px;
+      font-size: 14px;
+      line-height: 1.65;
+      border-left: 4px solid;
+    }
+    .callout.warning { background: rgba(249,115,22,0.08); border-color: #f97316; color: #fed7aa; }
+    .callout.warning strong { color: #fb923c; }
+    .callout.info { background: rgba(99,102,241,0.08); border-color: #6366f1; color: #c7d2fe; }
+    .callout.success { background: rgba(16,185,129,0.08); border-color: #10b981; color: #6ee7b7; }
+    .callout.danger { background: rgba(239,68,68,0.08); border-color: #ef4444; color: #fca5a5; }
+
+    /* ── Tables ── */
+    .data-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    .data-table th { background: #1e2d4a; color: #94a3b8; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; padding: 10px 14px; text-align: left; }
+    .data-table td { padding: 10px 14px; border-bottom: 1px solid #1e293b; color: #cbd5e1; }
+    .data-table tr:last-child td { border-bottom: none; }
+    .data-table tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+
+    /* ── Tip cards ── */
+    .tip-card {
+      background: #0f172a;
+      border-left: 3px solid #f97316;
+      border-radius: 0 8px 8px 0;
+      padding: 12px 16px;
+      font-size: 14px;
+    }
+    .tip-trigger { color: #64748b; }
+    .tip-answer { color: #f8fafc; font-weight: 700; }
+
+    /* ── Animation demos ── */
+    .anim-demo {
+      background: #0f172a;
+      border-radius: 12px;
+      padding: 20px;
+      min-height: 120px;
+    }
+    .anim-controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
+    .nav-btn {
+      background: transparent;
+      border: 2px solid #f97316;
+      color: #f97316;
+      padding: 8px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 13px;
+      transition: all 0.2s;
+      font-family: 'Inter', sans-serif;
+    }
+    .nav-btn:hover:not(:disabled) { background: #f97316; color: #0f172a; }
+    .nav-btn:disabled { opacity: 0.3; cursor: default; }
+    .restart-btn {
+      background: transparent;
+      border: 1px solid #475569;
+      color: #94a3b8;
+      padding: 6px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 13px;
+      margin-left: auto;
+      transition: all 0.2s;
+      font-family: 'Inter', sans-serif;
+    }
+    .restart-btn:hover { border-color: #94a3b8; color: #e2e8f0; }
+    .step-dots { display: flex; gap: 6px; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: #334155; transition: background 0.3s; }
+    .dot.active { background: #f97316; }
+    .step-counter { color: #94a3b8; font-size: 13px; }
+
+    @keyframes fadeScale {
+      from { opacity: 0; transform: scale(0.97); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+    .anim-demo > * { animation: fadeScale 0.25s ease; }
+
+    /* ── Utility ── */
+    .mono { font-family: 'Fira Code', monospace; }
+
+    code {
+      font-family: 'Fira Code', monospace;
+      font-size: 13px;
+      background: rgba(248,114,22,0.1);
+      color: #fb923c;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    /* ── Grid helpers ── */
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+
+    /* ── Service icon cards ── */
+    .service-card {
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      align-items: flex-start;
+    }
+    .service-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .service-name { font-size: 16px; font-weight: 700; color: #f8fafc; }
+    .service-desc { font-size: 13px; color: #94a3b8; line-height: 1.5; }
+
+    /* ── Docker workflow ── */
+    .docker-flow {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0;
+    }
+    .flow-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      padding: 12px 14px;
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      font-size: 13px;
+      text-align: center;
+      min-width: 100px;
+    }
+    .flow-step .step-label { color: #f8fafc; font-weight: 600; font-size: 13px; }
+    .flow-step .step-cmd { color: #f97316; font-family: 'Fira Code', monospace; font-size: 13px; }
+    .flow-arrow {
+      color: #475569;
+      font-size: 18px;
+      padding: 0 6px;
+      flex-shrink: 0;
+    }
+
+    /* ── Launch type cards ── */
+    .launch-card {
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 10px;
+      padding: 20px;
+    }
+    .launch-card-title {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .launch-card ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .launch-card ul li { font-size: 14px; color: #94a3b8; padding-left: 16px; position: relative; }
+    .launch-card ul li::before { content: '▸'; position: absolute; left: 0; color: #f97316; }
+
+    /* ── Stack viz ── */
+    .stack-viz {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      align-items: center;
+    }
+    .stack-box {
+      width: 100%;
+      max-width: 260px;
+      padding: 10px 16px;
+      border-radius: 8px;
+      text-align: center;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    /* ── IAM role cards ── */
+    .iam-card {
+      border-radius: 10px;
+      padding: 18px;
+      border: 1px solid;
+    }
+    .iam-card-title { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+    .iam-card-sub { font-size: 13px; margin-bottom: 10px; opacity: 0.8; }
+    .iam-card ul { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+    .iam-card ul li { font-size: 13px; padding-left: 14px; position: relative; }
+    .iam-card ul li::before { content: '•'; position: absolute; left: 0; }
+
+    /* ── Task def feature cards ── */
+    .feature-card {
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 10px;
+      padding: 16px;
+    }
+    .feature-card-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #f97316;
+      margin-bottom: 8px;
+    }
+    .feature-card p, .feature-card li { font-size: 13px; color: #94a3b8; line-height: 1.5; }
+    .feature-card ul { list-style: none; display: flex; flex-direction: column; gap: 5px; padding-left: 0; }
+    .feature-card ul li { padding-left: 12px; position: relative; }
+    .feature-card ul li::before { content: '–'; position: absolute; left: 0; color: #475569; }
+
+    /* ── Rolling update task boxes ── */
+    .task-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .task-box {
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 52px;
+    }
+    .task-v1 { background: #1e3a5f; color: #93c5fd; border: 1px solid rgba(37,99,235,0.3); }
+    .task-v2 { background: #431407; color: #fb923c; border: 1px solid rgba(249,115,22,0.3); }
+
+    /* ── Placement servers ── */
+    .placement-grid {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .server-box {
+      flex: 1;
+      min-width: 140px;
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 10px;
+      padding: 14px;
+    }
+    .server-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: #64748b;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .task-chip {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      margin: 3px;
+    }
+    .chip-blue { background: #1e3a5f; color: #93c5fd; }
+    .chip-orange { background: #431407; color: #fb923c; }
+    .chip-new { background: #f97316; color: #0f172a; }
+
+    /* ── Architecture flows ── */
+    .arch-flow {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0;
+      margin-bottom: 8px;
+    }
+    .arch-node {
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      text-align: center;
+    }
+    .arch-arrow {
+      color: #475569;
+      font-size: 16px;
+      padding: 0 8px;
+    }
+
+    /* ── Scaling metrics ── */
+    .metric-card {
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 10px;
+      padding: 16px;
+      text-align: center;
+    }
+    .metric-icon { font-size: 28px; margin-bottom: 8px; }
+    .metric-name { font-size: 14px; font-weight: 700; color: #f8fafc; margin-bottom: 4px; }
+    .metric-src { font-size: 13px; color: #64748b; }
+
+    /* ── Persistence cards ── */
+    .persist-card {
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 10px;
+      padding: 20px;
+    }
+    .persist-card-title { font-size: 16px; font-weight: 700; margin-bottom: 10px; }
+    .persist-card p { font-size: 14px; color: #94a3b8; margin-bottom: 8px; }
+    .persist-card ul { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+    .persist-card ul li { font-size: 13px; color: #94a3b8; padding-left: 14px; position: relative; }
+    .persist-card ul li::before { content: '✓'; position: absolute; left: 0; color: #10b981; }
+
+    /* ── Tips grid ── */
+    .tips-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 12px;
+    }
+
+    /* ── Step anatomy for rolling/placement demos ── */
+    .scenario-label {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #94a3b8;
+      margin-bottom: 6px;
+    }
+    .step-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #f8fafc;
+      margin-bottom: 4px;
+    }
+    .step-desc {
+      font-size: 13px;
+      color: #94a3b8;
+      margin-bottom: 12px;
+    }
+    .capacity-bar {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      font-size: 13px;
+      color: #64748b;
+      margin-top: 8px;
+    }
+    .cap-tag {
+      background: #1e293b;
+      border: 1px solid rgba(99,102,241,0.45);
+      border-radius: 6px;
+      padding: 3px 10px;
+      font-size: 13px;
+      color: #a5b4fc;
+    }
+    .cap-tag.cap-orange { border-color: #f97316; color: #f97316; }
+    .cap-tag.cap-blue { border-color: #3b82f6; color: #93c5fd; }
+
+    /* ── ECR CLI block ── */
+    .cli-block {
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 16px;
+      font-family: 'Fira Code', monospace;
+      font-size: 13px;
+      color: #cbd5e1;
+      line-height: 1.8;
+    }
+    .cli-comment { color: #475569; }
+    .cli-cmd { color: #fb923c; }
+
+    /* ── Compare cols ── */
+    .compare-col {
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 10px;
+      padding: 18px;
+    }
+    .compare-col-title { font-size: 15px; font-weight: 700; margin-bottom: 12px; }
+    .compare-col ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .compare-col ul li { font-size: 13px; color: #94a3b8; padding-left: 14px; position: relative; }
+    .compare-col ul li::before { content: '›'; position: absolute; left: 0; color: #f97316; }
+
+    /* ── LB table wrapper ── */
+    .table-wrapper { overflow-x: auto; border-radius: 10px; border: 1px solid #334155; }
+
+    /* ── Divider ── */
+    .divider { border: none; border-top: 1px solid #1e293b; margin: 4px 0; }
+
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .badge-green { background: rgba(16,185,129,0.15); color: #6ee7b7; }
+    .badge-red { background: rgba(239,68,68,0.12); color: #fca5a5; }
+    .badge-yellow { background: rgba(234,179,8,0.12); color: #fde68a; }
+  </style>
+</head>
+<body>
+
+<!-- ── Hero ── -->
+<div class="hero">
+  <div class="hero-eyebrow">AWS Certified Developer Associate</div>
+  <h1>Section 16 — ECS, ECR &amp; Fargate</h1>
+  <div class="hero-subtitle">Docker · ECS · ECR · Fargate · EKS · Task Placements · Auto Scaling</div>
+  <div class="xp-badge">&#9889; Section complete &nbsp;·&nbsp; Quiz passed</div>
+</div>
+
+<div class="page-body">
+
+  <!-- ═══════════════════════════════════════════ 1. Overview ═══ -->
+  <div>
+    <div class="section-label">1 — AWS Container Services Overview</div>
+    <div class="card">
+      <div class="card-title">Container Orchestration on AWS</div>
+      <div class="grid-4" style="margin-bottom: 16px;">
+
+        <div class="service-card">
+          <div class="service-icon" style="background: rgba(249,115,22,0.12); color: #f97316;">ECS</div>
+          <div class="service-name">Amazon ECS</div>
+          <div class="service-desc">AWS-native container orchestration. Run containers on EC2 or Fargate.</div>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon" style="background: rgba(99,102,241,0.12); color: #818cf8;">EKS</div>
+          <div class="service-name">Amazon EKS</div>
+          <div class="service-desc">Managed Kubernetes. Open-source, cloud-agnostic container orchestration.</div>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon" style="background: rgba(16,185,129,0.12); color: #10b981; font-size: 20px;">&#9889;</div>
+          <div class="service-name">AWS Fargate</div>
+          <div class="service-desc">Serverless compute engine for containers. No EC2 management required.</div>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon" style="background: rgba(234,179,8,0.12); color: #facc15;">ECR</div>
+          <div class="service-name">Amazon ECR</div>
+          <div class="service-desc">Elastic Container Registry. Store, manage and deploy Docker images.</div>
+        </div>
+
+      </div>
+      <div class="service-card" style="flex-direction: row; align-items: center; gap: 14px; max-width: 400px; background: #1e293b;">
+        <div class="service-icon" style="background: rgba(139,92,246,0.12); color: #a78bfa; width: 36px; height: 36px; font-size: 13px;">CP</div>
+        <div>
+          <div class="service-name" style="font-size: 14px;">AWS Copilot</div>
+          <div class="service-desc">CLI tool to build, release and operate containerized apps on ECS/Fargate.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ 2. Docker Basics ═══ -->
+  <div>
+    <div class="section-label">2 — Docker Basics</div>
+    <div class="card">
+      <div class="card-title">Image vs Container &amp; Build Workflow</div>
+
+      <div class="grid-2" style="margin-bottom: 24px;">
+        <div style="background: #0f172a; border: 1px solid #334155; border-radius: 10px; padding: 18px;">
+          <div style="font-size: 14px; font-weight: 700; color: #93c5fd; margin-bottom: 8px;">Docker Image</div>
+          <p style="font-size: 14px; color: #94a3b8;">A <strong style="color: #f8fafc;">blueprint</strong> — read-only, stored in a registry. Built from a Dockerfile. Portable across any environment.</p>
+        </div>
+        <div style="background: #0f172a; border: 1px solid #334155; border-radius: 10px; padding: 18px;">
+          <div style="font-size: 14px; font-weight: 700; color: #fb923c; margin-bottom: 8px;">Docker Container</div>
+          <p style="font-size: 14px; color: #94a3b8;">A <strong style="color: #f8fafc;">running instance</strong> of an image. Isolated process with own filesystem, network, and memory.</p>
+        </div>
+      </div>
+
+      <div class="section-label" style="margin-bottom: 12px;">Build &amp; Deploy Workflow</div>
+      <div class="docker-flow">
+        <div class="flow-step">
+          <span class="step-label">Dockerfile</span>
+          <span class="step-cmd" style="color: #64748b;">source</span>
+        </div>
+        <div class="flow-arrow">&#8594;</div>
+        <div class="flow-step">
+          <span class="step-label">Build</span>
+          <span class="step-cmd">docker build</span>
+        </div>
+        <div class="flow-arrow">&#8594;</div>
+        <div class="flow-step">
+          <span class="step-label">Image</span>
+          <span class="step-cmd" style="color: #64748b;">local</span>
+        </div>
+        <div class="flow-arrow">&#8594;</div>
+        <div class="flow-step">
+          <span class="step-label">Push</span>
+          <span class="step-cmd">docker push</span>
+        </div>
+        <div class="flow-arrow">&#8594;</div>
+        <div class="flow-step">
+          <span class="step-label">Registry</span>
+          <span class="step-cmd" style="color: #64748b;">ECR / Hub</span>
+        </div>
+        <div class="flow-arrow">&#8594;</div>
+        <div class="flow-step">
+          <span class="step-label">Pull</span>
+          <span class="step-cmd">docker pull</span>
+        </div>
+        <div class="flow-arrow">&#8594;</div>
+        <div class="flow-step">
+          <span class="step-label">Run</span>
+          <span class="step-cmd">docker run</span>
+        </div>
+        <div class="flow-arrow">&#8594;</div>
+        <div class="flow-step">
+          <span class="step-label">Container</span>
+          <span class="step-cmd" style="color: #64748b;">running</span>
+        </div>
+      </div>
+
+      <div class="callout success" style="margin-top: 20px;">
+        <strong>"Works on my machine"</strong> — The classic developer problem. Containers solve this by packaging the application and all its dependencies into a portable image that runs identically everywhere.
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ 3. Launch Types ═══ -->
+  <div>
+    <div class="section-label">3 — ECS Launch Types</div>
+    <div class="card">
+      <div class="card-title">EC2 Launch Type vs Fargate</div>
+
+      <div class="grid-2" style="margin-bottom: 24px;">
+        <div class="launch-card">
+          <div class="launch-card-title" style="color: #93c5fd;">EC2 Launch Type</div>
+          <ul>
+            <li>You provision &amp; manage EC2 instances</li>
+            <li>ECS Agent must run on each instance</li>
+            <li>Task scaling + EC2 instance scaling</li>
+            <li>More control, more operational overhead</li>
+            <li>Supports GPU workloads</li>
+            <li>Cost optimized with Reserved/Spot EC2</li>
+          </ul>
+        </div>
+        <div class="launch-card">
+          <div class="launch-card-title" style="color: #6ee7b7;">Fargate Launch Type</div>
+          <ul>
+            <li>AWS manages the underlying infrastructure</li>
+            <li>Serverless — no EC2 instances to manage</li>
+            <li>Task scaling only (no EC2 scaling needed)</li>
+            <li>Preferred on the exam for simplicity</li>
+            <li>Each task gets its own unique ENI</li>
+            <li>Pay per task vCPU &amp; memory</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="section-label" style="margin-bottom: 12px;">ECS Hierarchy</div>
+      <div class="grid-2">
+        <div class="stack-viz" style="gap: 6px;">
+          <div class="stack-box" style="background: rgba(99,102,241,0.15); border: 1px solid #6366f1; color: #c7d2fe;">ECS Cluster</div>
+          <div style="color: #475569; font-size: 18px; text-align: center;">&#8595;</div>
+          <div class="stack-box" style="background: rgba(249,115,22,0.12); border: 1px solid #f97316; color: #fed7aa;">ECS Service (desired count)</div>
+          <div style="color: #475569; font-size: 18px; text-align: center;">&#8595;</div>
+          <div class="stack-box" style="background: rgba(16,185,129,0.12); border: 1px solid #10b981; color: #6ee7b7;">ECS Task (running containers)</div>
+        </div>
+        <div class="callout info" style="align-self: center;">
+          <strong>Service</strong> maintains a desired count of tasks running at all times. If a task fails, the service replaces it automatically. A task runs one or more containers defined by a task definition.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ 4. IAM Roles ═══ -->
+  <div>
+    <div class="section-label">4 — IAM Roles for ECS</div>
+    <div class="card">
+      <div class="card-title">Three Critical IAM Roles</div>
+
+      <div class="grid-3" style="margin-bottom: 20px;">
+        <div class="iam-card" style="background: rgba(59,130,246,0.06); border-color: rgba(59,130,246,0.4); color: #bfdbfe;">
+          <div class="iam-card-title" style="color: #93c5fd;">EC2 Instance Profile</div>
+          <div class="iam-card-sub">EC2 Launch Type ONLY</div>
+          <ul>
+            <li style="color: rgba(147,197,253,0.7);">Register instance with ECS cluster</li>
+            <li style="color: rgba(147,197,253,0.7);">Pull images from ECR</li>
+            <li style="color: rgba(147,197,253,0.7);">Write logs to CloudWatch</li>
+            <li style="color: rgba(147,197,253,0.7);">Used by the ECS Agent on the host</li>
+          </ul>
+        </div>
+        <div class="iam-card" style="background: rgba(249,115,22,0.06); border-color: rgba(249,115,22,0.4); color: #fed7aa;">
+          <div class="iam-card-title" style="color: #fb923c;">ECS Task Role</div>
+          <div class="iam-card-sub">Both EC2 &amp; Fargate</div>
+          <ul>
+            <li style="color: rgba(251,146,60,0.7);">Attached to individual tasks</li>
+            <li style="color: rgba(251,146,60,0.7);">Access S3, DynamoDB, RDS, etc.</li>
+            <li style="color: rgba(251,146,60,0.7);">Different tasks can have different roles</li>
+            <li style="color: rgba(251,146,60,0.7);">Defined in task definition JSON</li>
+          </ul>
+        </div>
+        <div class="iam-card" style="background: rgba(139,92,246,0.06); border-color: rgba(139,92,246,0.4); color: #ddd6fe;">
+          <div class="iam-card-title" style="color: #a78bfa;">Task Execution Role</div>
+          <div class="iam-card-sub">Both EC2 &amp; Fargate</div>
+          <ul>
+            <li style="color: rgba(167,139,250,0.7);">Pull images from ECR</li>
+            <li style="color: rgba(167,139,250,0.7);">Fetch secrets from SSM / Secrets Manager</li>
+            <li style="color: rgba(167,139,250,0.7);">Write logs to CloudWatch</li>
+            <li style="color: rgba(167,139,250,0.7);">Used during task startup (bootstrap)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="callout warning">
+        <strong>Hotel Analogy:</strong> The EC2 Instance Profile is the <strong>hotel manager</strong> — runs the building infrastructure. ECS Task Role is the <strong>guest key card</strong> — grants access to specific rooms (AWS services) per guest (task). Task Execution Role is the <strong>concierge</strong> — handles setup tasks like fetching secrets and pulling images.
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ 5. Task Definitions ═══ -->
+  <div>
+    <div class="section-label">5 — ECS Task Definitions Deep Dive</div>
+    <div class="card">
+      <div class="card-title">Task Definition — JSON Blueprint</div>
+
+      <div class="grid-3" style="margin-bottom: 20px;">
+        <div class="feature-card">
+          <div class="feature-card-title">Core Fields</div>
+          <ul>
+            <li>Docker image URL</li>
+            <li>CPU &amp; Memory allocation</li>
+            <li>Port mappings</li>
+            <li>IAM Task Role</li>
+            <li>Environment variables</li>
+            <li>Logging configuration</li>
+          </ul>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card-title">Port Mapping</div>
+          <p><strong style="color: #f8fafc;">EC2 Launch Type:</strong> Dynamic Host Port — set host port to <code>0</code>, ALB auto-discovers. Allows multiple tasks per instance.</p>
+          <p style="margin-top: 8px;"><strong style="color: #f8fafc;">Fargate:</strong> Unique ENI per task. No host port needed — container port only.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card-title">Container Limits</div>
+          <p><strong style="color: #f8fafc;">Up to 10 containers</strong> per task definition.</p>
+          <p style="margin-top: 8px;">At least <strong style="color: #fb923c;">1 essential container</strong> required — if it stops, the whole task stops.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card-title">Environment Variables</div>
+          <ul>
+            <li>Hardcoded (not recommended for secrets)</li>
+            <li>SSM Parameter Store reference</li>
+            <li>Secrets Manager reference</li>
+            <li>S3 file (bulk env vars)</li>
+          </ul>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card-title">Sidecar Pattern</div>
+          <p>Multiple containers in a task share a <strong style="color: #f8fafc;">bind mount</strong>. Sidecar reads/writes from the same volume as the main app container — no networking needed between them.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card-title">Logging</div>
+          <p>Configure <code>awslogs</code> driver to send container stdout/stderr directly to <strong style="color: #f8fafc;">CloudWatch Logs</strong>. Requires <code>logs:CreateLogStream</code> permission.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ 6. Rolling Updates ═══ -->
+  <div>
+    <div class="section-label">6 — ECS Rolling Updates</div>
+    <div class="card">
+      <div class="card-title">Rolling Deployment — Min/Max Capacity Controls</div>
+      <p style="color: #94a3b8; margin-bottom: 20px; font-size: 14px;">
+        Rolling updates use <strong style="color: #f8fafc;">Minimum healthy percent</strong> and <strong style="color: #f8fafc;">Maximum percent</strong> to control how many tasks can be running during a deployment.
+      </p>
+
+      <div style="margin-bottom: 32px;">
+        <div style="font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #f97316; margin-bottom: 12px;">Scenario A — Min 50%, Max 100%</div>
+        <div style="font-size: 14px; color: #64748b; margin-bottom: 12px;">Can drop to 50% capacity. Cannot exceed 100%. Terminates first, then creates.</div>
+        <div class="anim-demo" id="rolling-a"></div>
+        <div class="anim-controls">
+          <button class="nav-btn" id="rolling-a-prev" onclick="prev('rolling-a')">&#9664; Prev</button>
+          <button class="nav-btn" id="rolling-a-next" onclick="next('rolling-a')">Next &#9654;</button>
+          <div class="step-dots" id="rolling-a-dots"></div>
+          <span class="step-counter" id="rolling-a-counter"></span>
+          <button class="restart-btn" onclick="restart('rolling-a')">&#8635; Restart</button>
+        </div>
+      </div>
+
+      <div style="border-top: 1px solid #334155; padding-top: 28px;">
+        <div style="font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #f97316; margin-bottom: 12px;">Scenario B — Min 100%, Max 150%</div>
+        <div style="font-size: 14px; color: #64748b; margin-bottom: 12px;">Must keep 100% running at all times. Can overprovision to 150%. Creates first, then terminates. Zero capacity loss.</div>
+        <div class="anim-demo" id="rolling-b"></div>
+        <div class="anim-controls">
+          <button class="nav-btn" id="rolling-b-prev" onclick="prev('rolling-b')">&#9664; Prev</button>
+          <button class="nav-btn" id="rolling-b-next" onclick="next('rolling-b')">Next &#9654;</button>
+          <div class="step-dots" id="rolling-b-dots"></div>
+          <span class="step-counter" id="rolling-b-counter"></span>
+          <button class="restart-btn" onclick="restart('rolling-b')">&#8635; Restart</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ 7. Auto Scaling ═══ -->
+  <div>
+    <div class="section-label">7 — ECS Auto Scaling</div>
+    <div class="card">
+      <div class="card-title">Scale ECS Tasks Automatically</div>
+
+      <div class="section-label" style="margin-bottom: 12px;">Scaling Metrics (CloudWatch)</div>
+      <div class="grid-3" style="margin-bottom: 24px;">
+        <div class="metric-card">
+          <div class="metric-icon">&#128293;</div>
+          <div class="metric-name">CPU Utilization</div>
+          <div class="metric-src">ECSServiceAverageCPUUtilization</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-icon">&#128190;</div>
+          <div class="metric-name">Memory Utilization</div>
+          <div class="metric-src">ECSServiceAverageMemoryUtilization</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-icon">&#127760;</div>
+          <div class="metric-name">ALB Request Count</div>
+          <div class="metric-src">Per Target (from ALB)</div>
+        </div>
+      </div>
+
+      <div class="section-label" style="margin-bottom: 12px;">Scaling Policies</div>
+      <div class="grid-3" style="margin-bottom: 20px;">
+        <div class="feature-card">
+          <div class="feature-card-title">Target Tracking</div>
+          <p>Set a target value for a metric (e.g., CPU = 60%). ECS auto-adjusts task count to maintain that target.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card-title">Step Scaling</div>
+          <p>Scale by specific amounts based on CloudWatch Alarm thresholds. More granular control than target tracking.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card-title">Scheduled Scaling</div>
+          <p>Pre-scale for known traffic patterns (e.g., every Monday morning). Anticipate demand before it arrives.</p>
+        </div>
+      </div>
+
+      <div class="callout warning">
+        <strong>EC2 Launch Type — Cluster Capacity Provider:</strong> Auto Scaling on ECS tasks is not enough — you also need more EC2 instances. Use an <strong>ECS Cluster Capacity Provider</strong> (backed by an ASG) to automatically provision EC2 capacity when tasks can't be placed. A plain ASG alone is not sufficient.
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ 8. Task Placements ═══ -->
+  <div>
+    <div class="section-label">8 — ECS Task Placements</div>
+    <div class="card">
+      <div class="card-title">Task Placement Strategies &amp; Constraints</div>
+      <p style="color: #94a3b8; margin-bottom: 24px; font-size: 14px;">Only applies to EC2 Launch Type (Fargate manages placement automatically). ECS evaluates: satisfies CPU/memory → satisfies constraints → satisfies strategy.</p>
+
+      <div style="font-size: 15px; font-weight: 700; color: #f8fafc; margin-bottom: 20px; padding-bottom: 8px; border-bottom: 1px solid #334155;">Placement Strategies</div>
+
+      <!-- Binpack -->
+      <div style="margin-bottom: 28px;">
+        <div style="font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #f97316; margin-bottom: 8px;">Binpack — Cost Saving</div>
+        <div class="anim-demo" id="binpack"></div>
+        <div class="anim-controls">
+          <button class="nav-btn" id="binpack-prev" onclick="prev('binpack')">&#9664; Prev</button>
+          <button class="nav-btn" id="binpack-next" onclick="next('binpack')">Next &#9654;</button>
+          <div class="step-dots" id="binpack-dots"></div>
+          <span class="step-counter" id="binpack-counter"></span>
+          <button class="restart-btn" onclick="restart('binpack')">&#8635; Restart</button>
+        </div>
+      </div>
+
+      <!-- Spread -->
+      <div style="margin-bottom: 28px; border-top: 1px solid #334155; padding-top: 24px;">
+        <div style="font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #f97316; margin-bottom: 8px;">Spread — High Availability</div>
+        <div class="anim-demo" id="spread"></div>
+        <div class="anim-controls">
+          <button class="nav-btn" id="spread-prev" onclick="prev('spread')">&#9664; Prev</button>
+          <button class="nav-btn" id="spread-next" onclick="next('spread')">Next &#9654;</button>
+          <div class="step-dots" id="spread-dots"></div>
+          <span class="step-counter" id="spread-counter"></span>
+          <button class="restart-btn" onclick="restart('spread')">&#8635; Restart</button>
+        </div>
+      </div>
+
+      <!-- Random -->
+      <div style="margin-bottom: 32px; border-top: 1px solid #334155; padding-top: 24px;">
+        <div style="font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #f97316; margin-bottom: 8px;">Random — No Optimization</div>
+        <div class="anim-demo" id="random"></div>
+        <div class="anim-controls">
+          <button class="nav-btn" id="random-prev" onclick="prev('random')">&#9664; Prev</button>
+          <button class="nav-btn" id="random-next" onclick="next('random')">Next &#9654;</button>
+          <div class="step-dots" id="random-dots"></div>
+          <span class="step-counter" id="random-counter"></span>
+          <button class="restart-btn" onclick="restart('random')">&#8635; Restart</button>
+        </div>
+      </div>
+
+      <!-- Constraints — static -->
+      <div style="border-top: 1px solid #334155; padding-top: 24px;">
+        <div style="font-size: 15px; font-weight: 700; color: #f8fafc; margin-bottom: 16px;">Placement Constraints</div>
+        <div style="font-size: 14px; color: #94a3b8; margin-bottom: 16px;">Hard rules — task placement fails if constraint cannot be satisfied.</div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
+          <div style="background: #0f172a; border: 1px solid #f9731640; border-radius: 10px; padding: 20px;">
+            <div style="font-size: 13px; font-weight: 700; color: #f97316; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px;">distinctInstance</div>
+            <div style="font-size: 14px; color: #cbd5e1; margin-bottom: 12px;">Places each task on a <strong style="color: #f8fafc;">different EC2 instance</strong>. If all instances already have a task of this type, placement fails.</div>
+            <div class="placement-grid" style="margin-bottom: 0;">
+              <div class="server-box" style="border-color: #f97316;">
+                <div class="server-label" style="color: #f97316;">Instance 1</div>
+                <span class="task-chip chip-orange">Task A</span>
+              </div>
+              <div class="server-box" style="border-color: #f97316;">
+                <div class="server-label" style="color: #f97316;">Instance 2</div>
+                <span class="task-chip chip-orange">Task A</span>
+              </div>
+              <div class="server-box">
+                <div class="server-label">Instance 3</div>
+                <span class="task-chip chip-new">NEW →</span>
+              </div>
+            </div>
+          </div>
+          <div style="background: #0f172a; border: 1px solid #6366f140; border-radius: 10px; padding: 20px;">
+            <div style="font-size: 13px; font-weight: 700; color: #818cf8; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px;">memberOf</div>
+            <div style="font-size: 14px; color: #cbd5e1; margin-bottom: 12px;">Uses <strong style="color: #f8fafc;">Cluster Query Language</strong> to restrict placement. Example: only place on <code style="font-family: 'Fira Code', monospace; font-size: 13px; background: #1e293b; padding: 2px 6px; border-radius: 4px; color: #7dd3fc;">t2.*</code> instance types.</div>
+            <div class="placement-grid" style="margin-bottom: 0;">
+              <div class="server-box" style="border-color: #6366f1;">
+                <div class="server-label" style="color: #818cf8;">t2.micro ✓</div>
+                <span class="task-chip" style="background: #312e81; color: #c7d2fe; border: 1px solid #6366f1;">Task</span>
+              </div>
+              <div class="server-box" style="border-color: #6366f1;">
+                <div class="server-label" style="color: #818cf8;">t2.large ✓</div>
+                <span class="task-chip chip-new">NEW →</span>
+              </div>
+              <div class="server-box" style="opacity: 0.45;">
+                <div class="server-label">c5.large ✗</div>
+                <span style="font-size: 13px; color: #475569;">fails memberOf</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ 9. Solutions Architectures ═══ -->
+  <div>
+    <div class="section-label">9 — ECS Solutions Architectures</div>
+    <div class="card">
+      <div class="card-title">Common Integration Patterns</div>
+
+      <div style="display: flex; flex-direction: column; gap: 20px;">
+
+        <div>
+          <div class="section-label" style="margin-bottom: 10px;">Event-Driven Processing</div>
+          <div class="arch-flow">
+            <div class="arch-node" style="background: rgba(249,115,22,0.12); border: 1px solid #f97316; color: #fed7aa;">S3 Upload</div>
+            <div class="arch-arrow">&#8594;</div>
+            <div class="arch-node" style="background: rgba(99,102,241,0.12); border: 1px solid #6366f1; color: #c7d2fe;">EventBridge Rule</div>
+            <div class="arch-arrow">&#8594;</div>
+            <div class="arch-node" style="background: rgba(16,185,129,0.12); border: 1px solid #10b981; color: #6ee7b7;">ECS Fargate Task</div>
+            <div class="arch-arrow">&#8594;</div>
+            <div class="arch-node" style="background: rgba(59,130,246,0.12); border: 1px solid #3b82f6; color: #93c5fd;">Result to S3/DynamoDB</div>
+          </div>
+          <p style="font-size: 13px; color: #64748b; margin-top: 6px;">Trigger a one-off ECS task to process files on upload. No always-on containers needed.</p>
+        </div>
+
+        <hr class="divider" />
+
+        <div>
+          <div class="section-label" style="margin-bottom: 10px;">Scheduled / Batch Jobs</div>
+          <div class="arch-flow">
+            <div class="arch-node" style="background: rgba(139,92,246,0.12); border: 1px solid #8b5cf6; color: #ddd6fe;">EventBridge Schedule</div>
+            <div class="arch-arrow">&#8594;</div>
+            <div class="arch-node" style="background: rgba(16,185,129,0.12); border: 1px solid #10b981; color: #6ee7b7;">ECS Fargate Task</div>
+            <div class="arch-arrow">&#8594;</div>
+            <div class="arch-node" style="background: rgba(59,130,246,0.12); border: 1px solid #3b82f6; color: #93c5fd;">Report / DynamoDB</div>
+          </div>
+          <p style="font-size: 13px; color: #64748b; margin-top: 6px;">Cron-style batch processing — nightly reports, data aggregation, cleanup jobs.</p>
+        </div>
+
+        <hr class="divider" />
+
+        <div>
+          <div class="section-label" style="margin-bottom: 10px;">Queue-Driven Auto Scaling</div>
+          <div class="arch-flow">
+            <div class="arch-node" style="background: rgba(234,179,8,0.12); border: 1px solid #eab308; color: #fde68a;">SQS Queue</div>
+            <div class="arch-arrow">&#8594;</div>
+            <div class="arch-node" style="background: rgba(99,102,241,0.12); border: 1px solid #6366f1; color: #c7d2fe;">CloudWatch Metric<br/><span style="font-size: 13px; color: #64748b;">Queue Depth</span></div>
+            <div class="arch-arrow">&#8594;</div>
+            <div class="arch-node" style="background: rgba(249,115,22,0.12); border: 1px solid #f97316; color: #fed7aa;">ECS Service</div>
+            <div class="arch-arrow">&#8596;</div>
+            <div class="arch-node" style="background: rgba(16,185,129,0.12); border: 1px solid #10b981; color: #6ee7b7;">Auto Scaling</div>
+          </div>
+          <p style="font-size: 13px; color: #64748b; margin-top: 6px;">Scale ECS tasks based on SQS queue depth. More messages = more tasks processing the queue.</p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ 10. ECR ═══ -->
+  <div>
+    <div class="section-label">10 — Amazon ECR</div>
+    <div class="card">
+      <div class="card-title">Elastic Container Registry</div>
+
+      <div class="grid-2" style="margin-bottom: 20px;">
+        <div>
+          <div class="section-label" style="margin-bottom: 10px;">Key Facts</div>
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <div style="background: #0f172a; border: 1px solid #334155; border-radius: 8px; padding: 12px 16px; font-size: 14px; color: #94a3b8;">
+              <strong style="color: #f8fafc;">Private &amp; Public registries</strong> — private via IAM, public via ECR Public Gallery
+            </div>
+            <div style="background: #0f172a; border: 1px solid #334155; border-radius: 8px; padding: 12px 16px; font-size: 14px; color: #94a3b8;">
+              <strong style="color: #f8fafc;">Backed by S3</strong> — images stored in S3 behind the scenes
+            </div>
+            <div style="background: #0f172a; border: 1px solid #334155; border-radius: 8px; padding: 12px 16px; font-size: 14px; color: #94a3b8;">
+              <strong style="color: #f8fafc;">Permission error?</strong> Check IAM policy for ECR access
+            </div>
+            <div style="background: #0f172a; border: 1px solid #334155; border-radius: 8px; padding: 12px 16px; font-size: 14px; color: #94a3b8;">
+              <strong style="color: #f8fafc;">Image scanning</strong> — vulnerability scanning on push
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="section-label" style="margin-bottom: 10px;">CLI Authentication Flow</div>
+          <div class="cli-block">
+            <span class="cli-comment"># 1. Get login token</span><br/>
+            <span class="cli-cmd">aws ecr get-login-password \<br/>&nbsp;&nbsp;--region eu-west-1 | \<br/>&nbsp;&nbsp;docker login \<br/>&nbsp;&nbsp;--username AWS \<br/>&nbsp;&nbsp;--password-stdin \<br/>&nbsp;&nbsp;123456.dkr.ecr.eu-west-1.amazonaws.com</span>
+            <br/><br/>
+            <span class="cli-comment"># 2. Push image</span><br/>
+            <span class="cli-cmd">docker push 123456.dkr.ecr.../myapp:v1</span>
+            <br/><br/>
+            <span class="cli-comment"># 3. Pull image</span><br/>
+            <span class="cli-cmd">docker pull 123456.dkr.ecr.../myapp:v1</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ 11. EKS ═══ -->
+  <div>
+    <div class="section-label">11 — Amazon EKS</div>
+    <div class="card">
+      <div class="card-title">ECS vs EKS — When to use which</div>
+
+      <div class="grid-2" style="margin-bottom: 20px;">
+        <div class="compare-col">
+          <div class="compare-col-title" style="color: #f97316;">Amazon ECS</div>
+          <ul>
+            <li>AWS-native, proprietary orchestration</li>
+            <li>Unit of work: <strong style="color: #f8fafc;">ECS Task</strong> (container)</li>
+            <li>Tight AWS service integration</li>
+            <li>Simpler to set up and operate</li>
+            <li>Exam default for "least overhead"</li>
+          </ul>
+        </div>
+        <div class="compare-col">
+          <div class="compare-col-title" style="color: #818cf8;">Amazon EKS</div>
+          <ul>
+            <li>Managed Kubernetes — open-source standard</li>
+            <li>Unit of work: <strong style="color: #f8fafc;">EKS Pod</strong> (group of containers)</li>
+            <li>Cloud-agnostic, works across cloud providers</li>
+            <li>Use when: already running Kubernetes</li>
+            <li>Use when: migrating from on-prem K8s</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="section-label" style="margin-bottom: 12px;">EKS Node Types</div>
+      <div class="grid-3" style="margin-bottom: 20px;">
+        <div class="feature-card">
+          <div class="feature-card-title">Managed Node Groups</div>
+          <p>AWS creates and manages EC2 nodes (part of an ASG). Nodes are tagged for Kubernetes automatically.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card-title">Self-Managed Nodes</div>
+          <p>You create, register, and manage EC2 nodes. Use custom AMIs. More control but more ops overhead.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card-title">Fargate Mode</div>
+          <p>No nodes at all — AWS runs each pod serverlessly. Great for bursty, unpredictable workloads.</p>
+        </div>
+      </div>
+
+      <div class="callout warning">
+        <strong>EKS + Fargate Storage:</strong> When using EKS with Fargate, the ONLY supported persistent storage option is <strong>Amazon EFS</strong>. EBS volumes are not supported with Fargate pods.
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ 12. Data Persistence ═══ -->
+  <div>
+    <div class="section-label">12 — Data Persistence</div>
+    <div class="card">
+      <div class="card-title">Storage Options for ECS Tasks</div>
+      <div class="grid-2">
+        <div class="persist-card">
+          <div class="persist-card-title" style="color: #6ee7b7;">Amazon EFS</div>
+          <p>Network file system — shared, persistent storage.</p>
+          <ul>
+            <li>Persistent across task restarts</li>
+            <li>Shared across multiple tasks simultaneously</li>
+            <li>Works across multiple AZs</li>
+            <li>Compatible with EC2 and Fargate launch types</li>
+            <li>EKS + Fargate: EFS is the ONLY persistent option</li>
+          </ul>
+          <div class="callout success" style="margin-top: 12px; font-size: 13px;">
+            <strong>Fargate + EFS = Fully Serverless</strong> — serverless compute + serverless storage
+          </div>
+        </div>
+        <div class="persist-card">
+          <div class="persist-card-title" style="color: #93c5fd;">Bind Mounts</div>
+          <p>Ephemeral volume shared within a single task.</p>
+          <ul>
+            <li>Temporary — lost when task stops</li>
+            <li>Shared between containers in the same task</li>
+            <li>Works with EC2 and Fargate</li>
+            <li>Perfect for sidecar pattern</li>
+            <li>No cross-task or cross-AZ sharing</li>
+          </ul>
+          <div class="callout info" style="margin-top: 12px; font-size: 13px;">
+            <strong>Sidecar sharing data:</strong> Main app writes to bind mount, sidecar reads it. No network call needed.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ 13. Load Balancer ═══ -->
+  <div>
+    <div class="section-label">13 — Load Balancer Integration</div>
+    <div class="card">
+      <div class="card-title">ECS + Load Balancer Options</div>
+      <div class="table-wrapper">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Load Balancer</th>
+              <th>Supported</th>
+              <th>EC2 Launch</th>
+              <th>Fargate</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong style="color: #6ee7b7;">ALB — Application</strong></td>
+              <td><span class="badge badge-green">Recommended</span></td>
+              <td><span class="badge badge-green">Yes</span></td>
+              <td><span class="badge badge-green">Yes</span></td>
+              <td>Dynamic port mapping, path-based routing, best for HTTP/HTTPS</td>
+            </tr>
+            <tr>
+              <td><strong style="color: #fde68a;">NLB — Network</strong></td>
+              <td><span class="badge badge-yellow">Specific use</span></td>
+              <td><span class="badge badge-green">Yes</span></td>
+              <td><span class="badge badge-green">Yes</span></td>
+              <td>High throughput, TCP/UDP, AWS PrivateLink only</td>
+            </tr>
+            <tr>
+              <td><strong style="color: #fca5a5;">CLB — Classic</strong></td>
+              <td><span class="badge badge-red">Not recommended</span></td>
+              <td><span class="badge badge-yellow">Limited</span></td>
+              <td><span class="badge badge-red">No</span></td>
+              <td>Legacy. Does NOT work with Fargate. Avoid for new architectures.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout info" style="margin-top: 16px;">
+        <strong>Dynamic Port Mapping (EC2):</strong> Set the host port to <code>0</code> in the task definition. ECS picks a random available port. The ALB queries ECS to discover the actual port for each task — allowing multiple tasks of the same type on one instance.
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ 14. Exam Tips ═══ -->
+  <div>
+    <div class="section-label">14 — Exam Tips</div>
+    <div class="card">
+      <div class="card-title">Quick-Recall Exam Tips</div>
+      <div class="tips-grid">
+
+        <div class="tip-card">
+          <div class="tip-trigger">Least operational overhead for containers</div>
+          <div class="tip-answer">Fargate (serverless, no EC2 to manage)</div>
+        </div>
+
+        <div class="tip-card">
+          <div class="tip-trigger">Store Docker images on AWS</div>
+          <div class="tip-answer">ECR (Elastic Container Registry)</div>
+        </div>
+
+        <div class="tip-card">
+          <div class="tip-trigger">Already using Kubernetes / multi-cloud</div>
+          <div class="tip-answer">EKS (managed Kubernetes)</div>
+        </div>
+
+        <div class="tip-card">
+          <div class="tip-trigger">ECS auto scaling metrics (3)</div>
+          <div class="tip-answer">CPU Utilization, Memory Utilization, ALB Request Count Per Target</div>
+        </div>
+
+        <div class="tip-card">
+          <div class="tip-trigger">Tasks stuck in PENDING state</div>
+          <div class="tip-answer">Capacity Provider — need more EC2 capacity in the cluster</div>
+        </div>
+
+        <div class="tip-card">
+          <div class="tip-trigger">Cost saving placement strategy</div>
+          <div class="tip-answer">Binpack (fill one instance before using another)</div>
+        </div>
+
+        <div class="tip-card">
+          <div class="tip-trigger">High availability placement strategy</div>
+          <div class="tip-answer">Spread (distribute across AZs and instances)</div>
+        </div>
+
+        <div class="tip-card">
+          <div class="tip-trigger">distinctInstance constraint</div>
+          <div class="tip-answer">One task per EC2 instance (hard constraint)</div>
+        </div>
+
+        <div class="tip-card">
+          <div class="tip-trigger">Process S3 uploads with Docker containers</div>
+          <div class="tip-answer">EventBridge rule triggers ECS Fargate Task (event-driven)</div>
+        </div>
+
+        <div class="tip-card">
+          <div class="tip-trigger">Fargate + EFS combined</div>
+          <div class="tip-answer">Fully serverless: serverless compute + serverless storage</div>
+        </div>
+
+        <div class="tip-card">
+          <div class="tip-trigger">CLB + Fargate</div>
+          <div class="tip-answer">NOT supported — use ALB instead</div>
+        </div>
+
+        <div class="tip-card">
+          <div class="tip-trigger">EKS + Fargate persistent storage</div>
+          <div class="tip-answer">EFS ONLY (EBS not supported with Fargate pods)</div>
+        </div>
+
+        <div class="tip-card">
+          <div class="tip-trigger">Container secrets / env vars from AWS</div>
+          <div class="tip-answer">SSM Parameter Store or Secrets Manager (referenced in task definition)</div>
+        </div>
+
+        <div class="tip-card">
+          <div class="tip-trigger">Sidecar pattern data sharing</div>
+          <div class="tip-answer">Bind mounts — containers in same task share ephemeral volume</div>
+        </div>
+
+        <div class="tip-card">
+          <div class="tip-trigger">Rolling update Min 100%</div>
+          <div class="tip-answer">No capacity loss — new tasks start before old ones stop</div>
+        </div>
+
+        <div class="tip-card">
+          <div class="tip-trigger">EC2 Dynamic Port Mapping</div>
+          <div class="tip-answer">Set host port = 0, ALB queries ECS to discover actual port</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div><!-- end .page-body -->
+
+<script>
+var DEMOS = {
+  'rolling-a': {
+    steps: [
+      {
+        body: '<div class="step-title">Step 1 — Initial State</div><div class="step-desc">4 tasks running v1. Min=50% → must keep at least 2 running. Max=100% → no more than 4 total at any time. Deployment starts.</div><div class="task-grid"><div class="task-box task-v1">v1</div><div class="task-box task-v1">v1</div><div class="task-box task-v1">v1</div><div class="task-box task-v1">v1</div></div><div class="capacity-bar"><span class="cap-tag cap-blue">Running: 4 / 4</span><span class="cap-tag">Min 50% = 2 tasks</span><span class="cap-tag">Max 100% = 4 tasks</span></div>'
+      },
+      {
+        body: '<div class="step-title">Step 2 — Terminate 2 v1 tasks</div><div class="step-desc">ECS terminates 2 old tasks first. Now at the minimum (50% = 2 tasks). Cannot remove more until new v2 tasks are healthy.</div><div class="task-grid"><div class="task-box task-v1">v1</div><div class="task-box task-v1">v1</div></div><div class="capacity-bar"><span class="cap-tag cap-blue">Running: 2 / 4</span><span class="cap-tag cap-orange">At Min 50%</span><span class="cap-tag">2 free slots available</span></div>'
+      },
+      {
+        body: '<div class="step-title">Step 3 — Start 2 v2 tasks</div><div class="step-desc">ECS launches 2 new v2 tasks. Back to Max 100% (4 total). Both v1 and v2 serve traffic simultaneously during the transition.</div><div class="task-grid"><div class="task-box task-v1">v1</div><div class="task-box task-v1">v1</div><div class="task-box task-v2">v2</div><div class="task-box task-v2">v2</div></div><div class="capacity-bar"><span class="cap-tag cap-blue">Running: 4 / 4</span><span class="cap-tag cap-orange">At Max 100%</span><span class="cap-tag">Mixed v1 + v2</span></div>'
+      },
+      {
+        body: '<div class="step-title">Step 4 — Terminate remaining 2 v1 tasks</div><div class="step-desc">Remove the last 2 v1 tasks. Back down to 2 (Min 50%). Only v2 running now, but we need 2 more to restore full capacity.</div><div class="task-grid"><div class="task-box task-v2">v2</div><div class="task-box task-v2">v2</div></div><div class="capacity-bar"><span class="cap-tag cap-blue">Running: 2 / 4</span><span class="cap-tag cap-orange">At Min 50%</span><span class="cap-tag">Only v2</span></div>'
+      },
+      {
+        body: '<div class="step-title">Step 5 — Start 2 more v2. Done!</div><div class="step-desc">Launch the final 2 v2 tasks. Full capacity restored. All 4 tasks running v2. Deployment complete with brief capacity dips at 50%.</div><div class="task-grid"><div class="task-box task-v2">v2</div><div class="task-box task-v2">v2</div><div class="task-box task-v2">v2</div><div class="task-box task-v2">v2</div></div><div class="capacity-bar"><span class="cap-tag cap-orange">Running: 4 / 4</span><span class="cap-tag" style="background:#064e3b22;color:#6ee7b7;border-color:#10b98144;">✓ Deployment complete</span><span class="cap-tag">All v2</span></div>'
+      }
+    ]
+  },
+  'rolling-b': {
+    steps: [
+      {
+        body: '<div class="step-title">Step 1 — Initial State</div><div class="step-desc">4 tasks running v1. Min=100% → cannot terminate ANY old task yet. Max=150% → can run up to 6 total. Creates new tasks first.</div><div class="task-grid"><div class="task-box task-v1">v1</div><div class="task-box task-v1">v1</div><div class="task-box task-v1">v1</div><div class="task-box task-v1">v1</div></div><div class="capacity-bar"><span class="cap-tag cap-blue">Running: 4 / 4</span><span class="cap-tag">Min 100% = keep all 4</span><span class="cap-tag">Max 150% = up to 6</span></div>'
+      },
+      {
+        body: '<div class="step-title">Step 2 — Start 2 v2 tasks (no terminations yet)</div><div class="step-desc">ECS launches 2 new v2 tasks. Now at 6 = Max 150%. All 4 v1 tasks still running — zero capacity loss. v2 starts receiving traffic alongside v1.</div><div class="task-grid"><div class="task-box task-v1">v1</div><div class="task-box task-v1">v1</div><div class="task-box task-v1">v1</div><div class="task-box task-v1">v1</div><div class="task-box task-v2">v2</div><div class="task-box task-v2">v2</div></div><div class="capacity-bar"><span class="cap-tag cap-orange">Running: 6 / max 6</span><span class="cap-tag cap-orange">At Max 150%</span><span class="cap-tag">v1 + v2 both live</span></div>'
+      },
+      {
+        body: '<div class="step-title">Step 3 — Terminate 2 v1 to free slots</div><div class="step-desc">At Max 150% (6 tasks), ECS can\'t launch more. It terminates 2 v1 tasks first — bringing it back to 4 = Min 100%. Now 2 free slots are available for more v2.</div><div class="task-grid"><div class="task-box task-v1">v1</div><div class="task-box task-v1">v1</div><div class="task-box task-v2">v2</div><div class="task-box task-v2">v2</div></div><div class="capacity-bar"><span class="cap-tag cap-blue">Running: 4 / 4</span><span class="cap-tag cap-orange">At Min 100%</span><span class="cap-tag">2 free slots available</span></div>'
+      },
+      {
+        body: '<div class="step-title">Step 4 — Start 2 more v2</div><div class="step-desc">With 2 free slots available, ECS launches 2 more v2 tasks. Back to 6 = Max 150%. Only 2 v1 tasks remain. More than halfway through the rollout.</div><div class="task-grid"><div class="task-box task-v1">v1</div><div class="task-box task-v1">v1</div><div class="task-box task-v2">v2</div><div class="task-box task-v2">v2</div><div class="task-box task-v2">v2</div><div class="task-box task-v2">v2</div></div><div class="capacity-bar"><span class="cap-tag cap-orange">Running: 6 / max 6</span><span class="cap-tag cap-orange">At Max 150%</span><span class="cap-tag">Mostly v2 now</span></div>'
+      },
+      {
+        body: '<div class="step-title">Step 5 — Remove final v1 tasks. Done!</div><div class="step-desc">Terminate the last 2 v1 tasks. All 4 running v2. Zero downtime throughout — Min 100% guaranteed full capacity was always available at every single step.</div><div class="task-grid"><div class="task-box task-v2">v2</div><div class="task-box task-v2">v2</div><div class="task-box task-v2">v2</div><div class="task-box task-v2">v2</div></div><div class="capacity-bar"><span class="cap-tag cap-orange">Running: 4 / 4</span><span class="cap-tag" style="background:#064e3b22;color:#6ee7b7;border-color:#10b98144;">✓ Zero downtime</span><span class="cap-tag">All v2</span></div>'
+      }
+    ]
+  },
+  'binpack': {
+    steps: [
+      {
+        body: '<div class="step-title">Step 1 — Initial state: 3 tasks placed</div><div class="step-desc">Binpack fills one instance before moving to the next. All 3 tasks went to Instance 1. Instance 2 and 3 sit idle, saving costs.</div><div class="placement-grid"><div class="server-box"><div class="server-label">Instance 1 (1a) ← packing here</div><span class="task-chip chip-blue">Task</span><span class="task-chip chip-blue">Task</span><span class="task-chip chip-blue">Task</span></div><div class="server-box" style="opacity:0.5;"><div class="server-label">Instance 2 (1b)</div><span style="font-size:13px;color:#475569;">— idle —</span></div><div class="server-box" style="opacity:0.5;"><div class="server-label">Instance 3 (1c)</div><span style="font-size:13px;color:#475569;">— idle —</span></div></div>'
+      },
+      {
+        body: '<div class="step-title">Step 2 — New task arrives → packs into Instance 1</div><div class="step-desc">Instance 1 still has capacity, so the new task goes there. Instance 2 and 3 remain idle. One instance running, two billed instances saved.</div><div class="placement-grid"><div class="server-box" style="border-color:#f97316;"><div class="server-label">Instance 1 (1a) ← new task here</div><span class="task-chip chip-blue">Task</span><span class="task-chip chip-blue">Task</span><span class="task-chip chip-blue">Task</span><span class="task-chip chip-new">NEW</span></div><div class="server-box" style="opacity:0.5;"><div class="server-label">Instance 2 (1b)</div><span style="font-size:13px;color:#475569;">— idle —</span></div><div class="server-box" style="opacity:0.5;"><div class="server-label">Instance 3 (1c)</div><span style="font-size:13px;color:#475569;">— idle —</span></div></div><div class="callout warning" style="margin-top:12px;font-size:13px;"><strong>Cost saving:</strong> Binpack minimizes the number of active instances → fewer EC2 charges.</div>'
+      },
+      {
+        body: '<div class="step-title">Step 3 — Instance 1 full → overflow to Instance 2</div><div class="step-desc">Instance 1 is at max capacity. New tasks now start filling Instance 2. Instance 3 still untouched. This is the key exam pattern: fill first, then overflow.</div><div class="placement-grid"><div class="server-box"><div class="server-label">Instance 1 (1a) — FULL</div><span class="task-chip chip-blue">Task</span><span class="task-chip chip-blue">Task</span><span class="task-chip chip-blue">Task</span><span class="task-chip chip-blue">Task</span></div><div class="server-box" style="border-color:#f97316;"><div class="server-label">Instance 2 (1b) ← now filling</div><span class="task-chip chip-new">NEW</span><span class="task-chip chip-new">NEW</span></div><div class="server-box" style="opacity:0.5;"><div class="server-label">Instance 3 (1c)</div><span style="font-size:13px;color:#475569;">— idle —</span></div></div>'
+      }
+    ]
+  },
+  'spread': {
+    steps: [
+      {
+        body: '<div class="step-title">Step 1 — Initial state: 3 tasks, one per AZ</div><div class="step-desc">Spread distributes tasks across a specified field (AZ, instanceId, etc.). Each AZ starts with exactly one task — if any AZ goes down, the other two keep serving traffic.</div><div class="placement-grid"><div class="server-box"><div class="server-label">Instance 1 (us-east-1a)</div><span class="task-chip chip-blue">Task</span></div><div class="server-box"><div class="server-label">Instance 2 (us-east-1b)</div><span class="task-chip chip-blue">Task</span></div><div class="server-box"><div class="server-label">Instance 3 (us-east-1c)</div><span class="task-chip chip-blue">Task</span></div></div><div class="capacity-bar"><span class="cap-tag cap-blue">Total: 3 tasks</span><span class="cap-tag">1 per AZ — perfectly balanced</span></div>'
+      },
+      {
+        body: '<div class="step-title">Step 2 — New task → least-loaded AZ (tied, picks 1a)</div><div class="step-desc">All AZs are tied at 1 task each. ECS picks any — Instance 1 here. Now 1a has 2, others have 1. Slightly imbalanced, but spread will self-correct on the next placement.</div><div class="placement-grid"><div class="server-box" style="border-color:#f97316;"><div class="server-label">Instance 1 (us-east-1a) ← chosen</div><span class="task-chip chip-blue">Task</span><span class="task-chip chip-new">NEW</span></div><div class="server-box"><div class="server-label">Instance 2 (us-east-1b)</div><span class="task-chip chip-blue">Task</span></div><div class="server-box"><div class="server-label">Instance 3 (us-east-1c)</div><span class="task-chip chip-blue">Task</span></div></div><div class="capacity-bar"><span class="cap-tag cap-blue">Total: 4 tasks</span><span class="cap-tag">1a=2 · 1b=1 · 1c=1</span></div>'
+      },
+      {
+        body: '<div class="step-title">Step 3 — New task → least-loaded is 1b or 1c (picks 1b)</div><div class="step-desc">1a has 2 tasks, 1b and 1c each have 1. Spread picks a least-loaded AZ — Instance 2 here. Now 1a=2, 1b=2, 1c=1. One more task will re-balance completely.</div><div class="placement-grid"><div class="server-box"><div class="server-label">Instance 1 (us-east-1a)</div><span class="task-chip chip-blue">Task</span><span class="task-chip chip-blue">Task</span></div><div class="server-box" style="border-color:#f97316;"><div class="server-label">Instance 2 (us-east-1b) ← chosen</div><span class="task-chip chip-blue">Task</span><span class="task-chip chip-new">NEW</span></div><div class="server-box"><div class="server-label">Instance 3 (us-east-1c)</div><span class="task-chip chip-blue">Task</span></div></div><div class="capacity-bar"><span class="cap-tag cap-blue">Total: 5 tasks</span><span class="cap-tag">1a=2 · 1b=2 · 1c=1</span></div>'
+      },
+      {
+        body: '<div class="step-title">Step 4 — New task → 1c is least-loaded → balanced again</div><div class="step-desc">1c has only 1 task while others have 2 — it\'s the clear least-loaded AZ. Task goes to 1c. Back to perfect balance: 2 tasks per AZ. Spread keeps correcting itself.</div><div class="placement-grid"><div class="server-box"><div class="server-label">Instance 1 (us-east-1a)</div><span class="task-chip chip-blue">Task</span><span class="task-chip chip-blue">Task</span></div><div class="server-box"><div class="server-label">Instance 2 (us-east-1b)</div><span class="task-chip chip-blue">Task</span><span class="task-chip chip-blue">Task</span></div><div class="server-box" style="border-color:#f97316;"><div class="server-label">Instance 3 (us-east-1c) ← chosen</div><span class="task-chip chip-blue">Task</span><span class="task-chip chip-new">NEW</span></div></div><div class="capacity-bar"><span class="cap-tag cap-blue">Total: 6 tasks</span><span class="cap-tag cap-orange">2 per AZ — balanced again ✓</span></div>'
+      },
+      {
+        body: '<div class="step-title">Step 5 — New task → tied at 2 each, picks 1a again</div><div class="step-desc">All AZs tied at 2. ECS picks any — 1a again. Cycle repeats: slight imbalance, then correction on next placement. This is the spread algorithm working as designed.</div><div class="placement-grid"><div class="server-box" style="border-color:#f97316;"><div class="server-label">Instance 1 (us-east-1a) ← chosen</div><span class="task-chip chip-blue">Task</span><span class="task-chip chip-blue">Task</span><span class="task-chip chip-new">NEW</span></div><div class="server-box"><div class="server-label">Instance 2 (us-east-1b)</div><span class="task-chip chip-blue">Task</span><span class="task-chip chip-blue">Task</span></div><div class="server-box"><div class="server-label">Instance 3 (us-east-1c)</div><span class="task-chip chip-blue">Task</span><span class="task-chip chip-blue">Task</span></div></div><div class="capacity-bar"><span class="cap-tag cap-blue">Total: 7 tasks</span><span class="cap-tag">1a=3 · 1b=2 · 1c=2</span></div>'
+      },
+      {
+        body: '<div class="step-title">Step 6 — New task → 1b (least-loaded, tied with 1c)</div><div class="step-desc">1a has 3, 1b and 1c have 2. Spread picks 1b. Now 1a=3, 1b=3, 1c=2. One more to go.</div><div class="placement-grid"><div class="server-box"><div class="server-label">Instance 1 (us-east-1a)</div><span class="task-chip chip-blue">Task</span><span class="task-chip chip-blue">Task</span><span class="task-chip chip-blue">Task</span></div><div class="server-box" style="border-color:#f97316;"><div class="server-label">Instance 2 (us-east-1b) ← chosen</div><span class="task-chip chip-blue">Task</span><span class="task-chip chip-blue">Task</span><span class="task-chip chip-new">NEW</span></div><div class="server-box"><div class="server-label">Instance 3 (us-east-1c)</div><span class="task-chip chip-blue">Task</span><span class="task-chip chip-blue">Task</span></div></div><div class="capacity-bar"><span class="cap-tag cap-blue">Total: 8 tasks</span><span class="cap-tag">1a=3 · 1b=3 · 1c=2</span></div>'
+      },
+      {
+        body: '<div class="step-title">Step 7 — New task → 1c (least-loaded) → balanced again</div><div class="step-desc">1c has 2, others have 3. Task goes to 1c. 3 tasks per AZ — perfectly balanced once more. No matter how many tasks you add, spread keeps correcting toward even distribution.</div><div class="placement-grid"><div class="server-box"><div class="server-label">Instance 1 (us-east-1a)</div><span class="task-chip chip-blue">Task</span><span class="task-chip chip-blue">Task</span><span class="task-chip chip-blue">Task</span></div><div class="server-box"><div class="server-label">Instance 2 (us-east-1b)</div><span class="task-chip chip-blue">Task</span><span class="task-chip chip-blue">Task</span><span class="task-chip chip-blue">Task</span></div><div class="server-box" style="border-color:#f97316;"><div class="server-label">Instance 3 (us-east-1c) ← chosen</div><span class="task-chip chip-blue">Task</span><span class="task-chip chip-blue">Task</span><span class="task-chip chip-new">NEW</span></div></div><div class="capacity-bar"><span class="cap-tag cap-blue">Total: 9 tasks</span><span class="cap-tag cap-orange">3 per AZ — balanced again ✓</span></div><div class="callout success" style="margin-top:12px;font-size:13px;"><strong>High availability:</strong> Every AZ always has tasks. One full AZ failure = 2/3 of capacity still running.</div>'
+      }
+    ]
+  },
+  'random': {
+    steps: [
+      {
+        body: '<div class="step-title">Step 1 — Deploy 4 tasks: both 1a slots filled first</div><div class="step-desc">Random picks any eligible instance. No pattern. This time Instance 1 got 2 tasks, Instance 2 got 1, Instance 3 got 1 — purely by chance. Could have been any distribution.</div><div class="placement-grid"><div class="server-box"><div class="server-label">Instance 1 (us-east-1a)</div><span class="task-chip chip-blue">Task</span><span class="task-chip chip-blue">Task</span></div><div class="server-box"><div class="server-label">Instance 2 (us-east-1b)</div><span class="task-chip chip-blue">Task</span></div><div class="server-box"><div class="server-label">Instance 3 (us-east-1c)</div><span class="task-chip chip-blue">Task</span></div></div><div class="capacity-bar"><span class="cap-tag cap-blue">Total: 4 tasks</span><span class="cap-tag">1a=2 · 1b=1 · 1c=1</span></div>'
+      },
+      {
+        body: '<div class="step-title">Step 2 — +2 tasks: both randomly land on 1a</div><div class="step-desc">Two more tasks added. Both happened to land on Instance 1 — no logic, no balancing. 1a now has 4, others still 1. This is random: it can cluster heavily on one instance.</div><div class="placement-grid"><div class="server-box" style="border-color:#f97316;"><div class="server-label">Instance 1 (us-east-1a) ← both landed here</div><span class="task-chip chip-blue">Task</span><span class="task-chip chip-blue">Task</span><span class="task-chip chip-new">NEW</span><span class="task-chip chip-new">NEW</span></div><div class="server-box"><div class="server-label">Instance 2 (us-east-1b)</div><span class="task-chip chip-blue">Task</span></div><div class="server-box"><div class="server-label">Instance 3 (us-east-1c)</div><span class="task-chip chip-blue">Task</span></div></div><div class="capacity-bar"><span class="cap-tag cap-blue">Total: 6 tasks</span><span class="cap-tag">1a=4 · 1b=1 · 1c=1 — uneven!</span></div>'
+      },
+      {
+        body: '<div class="step-title">Step 3 — +2 tasks: split across 1b and 1c this time</div><div class="step-desc">Next 2 tasks land on 1b and 1c. Instance 1 is untouched. No awareness of the existing imbalance — random doesn\'t try to correct, it just picks randomly.</div><div class="placement-grid"><div class="server-box"><div class="server-label">Instance 1 (us-east-1a)</div><span class="task-chip chip-blue">Task</span><span class="task-chip chip-blue">Task</span><span class="task-chip chip-blue">Task</span><span class="task-chip chip-blue">Task</span></div><div class="server-box" style="border-color:#f97316;"><div class="server-label">Instance 2 (us-east-1b) ← 1 new</div><span class="task-chip chip-blue">Task</span><span class="task-chip chip-new">NEW</span></div><div class="server-box" style="border-color:#f97316;"><div class="server-label">Instance 3 (us-east-1c) ← 1 new</div><span class="task-chip chip-blue">Task</span><span class="task-chip chip-new">NEW</span></div></div><div class="capacity-bar"><span class="cap-tag cap-blue">Total: 8 tasks</span><span class="cap-tag">1a=4 · 1b=2 · 1c=2 — still uneven</span></div>'
+      },
+      {
+        body: '<div class="step-title">Step 4 — +2 tasks: both go to 1b (cluster again)</div><div class="step-desc">Two new tasks — both randomly chose Instance 2. No correction, no awareness. After 10 total tasks: 1a=4, 1b=4, 1c=2. Random can leave instances under- or over-loaded with no guarantee either way.</div><div class="placement-grid"><div class="server-box"><div class="server-label">Instance 1 (us-east-1a)</div><span class="task-chip chip-blue">Task</span><span class="task-chip chip-blue">Task</span><span class="task-chip chip-blue">Task</span><span class="task-chip chip-blue">Task</span></div><div class="server-box" style="border-color:#f97316;"><div class="server-label">Instance 2 (us-east-1b) ← both landed here</div><span class="task-chip chip-blue">Task</span><span class="task-chip chip-blue">Task</span><span class="task-chip chip-new">NEW</span><span class="task-chip chip-new">NEW</span></div><div class="server-box"><div class="server-label">Instance 3 (us-east-1c)</div><span class="task-chip chip-blue">Task</span><span class="task-chip chip-blue">Task</span></div></div><div class="capacity-bar"><span class="cap-tag cap-blue">Total: 10 tasks</span><span class="cap-tag">1a=4 · 1b=4 · 1c=2</span></div><div class="callout info" style="margin-top:12px;font-size:13px;">No cost saving (not binpack), no HA guarantee (not spread). Use when you simply need tasks running and don\'t care about placement.</div>'
+      }
+    ]
+  }
+};
+
+var states = {};
+
+function renderStep(id, step) {
+  var demo = DEMOS[id];
+  var total = demo.steps.length;
+  document.getElementById(id).innerHTML = demo.steps[step].body;
+  document.getElementById(id + '-counter').textContent = 'Step ' + (step + 1) + ' / ' + total;
+  document.querySelectorAll('[id^="' + id + '-dot-"]').forEach(function(d, i) {
+    d.classList.toggle('active', i === step);
+  });
+  document.getElementById(id + '-prev').disabled = step === 0;
+  document.getElementById(id + '-next').disabled = step === total - 1;
+  states[id] = step;
+}
+
+function prev(id) {
+  if (states[id] > 0) renderStep(id, states[id] - 1);
+}
+
+function next(id) {
+  if (states[id] < DEMOS[id].steps.length - 1) renderStep(id, states[id] + 1);
+}
+
+function restart(id) {
+  renderStep(id, 0);
+}
+
+Object.keys(DEMOS).forEach(function(id) {
+  states[id] = 0;
+  var dotsEl = document.getElementById(id + '-dots');
+  if (dotsEl) {
+    dotsEl.innerHTML = DEMOS[id].steps.map(function(_, i) {
+      return '<span class="dot" id="' + id + '-dot-' + i + '"></span>';
+    }).join('');
+  }
+  renderStep(id, 0);
+});
+</script>
+</body>
+</html>

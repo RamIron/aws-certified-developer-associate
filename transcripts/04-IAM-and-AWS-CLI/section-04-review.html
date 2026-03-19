@@ -1,0 +1,1157 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Section 4 — IAM &amp; AWS CLI</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap");
+
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        background: #0f172a;
+        color: #e2e8f0;
+        line-height: 1.6;
+        padding: 0 0 64px;
+      }
+
+      /* ── HERO ── */
+      .hero {
+        background: linear-gradient(135deg, #1e293b 0%, #0f172a 60%, #1a1a2e 100%);
+        border-bottom: 1px solid #334155;
+        padding: 48px 32px 40px;
+        text-align: center;
+      }
+      .hero-eyebrow {
+        font-size: 13px;
+        font-weight: 600;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: #f97316;
+        margin-bottom: 12px;
+      }
+      h1 {
+        font-size: clamp(26px, 4vw, 40px);
+        font-weight: 800;
+        color: #f8fafc;
+        margin-bottom: 8px;
+        letter-spacing: -0.02em;
+      }
+      .hero-subtitle {
+        font-size: 15px;
+        color: #94a3b8;
+        margin-bottom: 20px;
+        font-weight: 400;
+      }
+      .xp-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: linear-gradient(135deg, #f97316, #ea580c);
+        color: #fff;
+        font-size: 13px;
+        font-weight: 700;
+        padding: 8px 18px;
+        border-radius: 999px;
+        letter-spacing: 0.01em;
+      }
+
+      .container {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 40px 24px 0;
+      }
+
+      /* ── WEAK POINT ALERT ── */
+      .weak-alert {
+        background: #3b0a0a;
+        border: 1px solid #ef444466;
+        border-radius: 12px;
+        padding: 1rem 1.25rem;
+        margin-bottom: 2rem;
+        display: flex;
+        gap: 0.9rem;
+        align-items: flex-start;
+      }
+      .weak-alert .alert-icon {
+        font-size: 1.3rem;
+        flex-shrink: 0;
+        margin-top: 1px;
+      }
+      .weak-alert .alert-body h4 {
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: #fca5a5;
+        margin-bottom: 0.4rem;
+      }
+      .weak-alert .alert-body p {
+        font-size: 0.82rem;
+        color: #f87171;
+        margin: 0;
+      }
+      .weak-pct {
+        display: inline-block;
+        background: #7f1d1d;
+        color: #fca5a5;
+        font-weight: 800;
+        font-size: 13px;
+        padding: 0.1rem 0.5rem;
+        border-radius: 4px;
+        margin-right: 0.4rem;
+      }
+
+      /* ── SECTION CARDS ── */
+      .card {
+        background: #1e293b;
+        border-radius: 16px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        border: 1px solid #334155;
+      }
+      .card-header {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 1.5rem;
+      }
+      .badge {
+        background: #f97316;
+        color: #0f172a;
+        font-weight: 800;
+        font-size: 13px;
+        padding: 0.25rem 0.65rem;
+        border-radius: 6px;
+      }
+      h2 {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: #f8fafc;
+      }
+      h3 {
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: #d2d2d2;
+        margin: 1.5rem 0 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+      }
+      p {
+        color: #d2d2d2;
+        font-size: 0.9rem;
+        margin-bottom: 0.75rem;
+      }
+      p strong {
+        color: #e2e8f0;
+      }
+
+      /* ── CONCEPT CARDS GRID ── */
+      .concept-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 0.9rem;
+      }
+      .concept-card {
+        background: #0f172a;
+        border-radius: 12px;
+        padding: 1.1rem 1.2rem;
+        border: 1px solid #1e293b;
+      }
+      .concept-card .icon {
+        font-size: 1.4rem;
+        margin-bottom: 0.5rem;
+      }
+      .concept-card h4 {
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: #f8fafc;
+        margin-bottom: 0.3rem;
+      }
+      .concept-card p {
+        font-size: 13px;
+        color: #d2d2d2;
+        margin: 0;
+      }
+
+      /* ── CALLOUTS ── */
+      .callout {
+        border-radius: 8px;
+        padding: 0.75rem 1rem;
+        margin: 1rem 0;
+        font-size: 0.85rem;
+      }
+      .callout.warning {
+        background: #451a0322;
+        border: 1px dashed #f97316;
+        color: #fdba74;
+      }
+      .callout.danger {
+        background: #7f1d1d22;
+        border: 1px solid #dc262644;
+        color: #fca5a5;
+      }
+      .callout.info {
+        background: #1e3a5f22;
+        border-left: 3px solid #3b82f6;
+        color: #93c5fd;
+      }
+      .callout.success {
+        background: #064e3b22;
+        border-left: 3px solid #10b981;
+        color: #6ee7b7;
+      }
+
+      /* ── IAM HIERARCHY VISUAL ── */
+      .iam-visual {
+        background: #0f172a;
+        border-radius: 14px;
+        padding: 1.5rem;
+        margin: 1rem 0;
+        border: 1px solid #1e293b;
+      }
+      .iam-root {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 0.5rem;
+      }
+      .iam-root-box {
+        background: #3b0a0a;
+        border: 2px solid #ef4444;
+        border-radius: 10px;
+        padding: 0.5rem 1.4rem;
+        font-size: 13px;
+        font-weight: 800;
+        color: #fca5a5;
+        text-align: center;
+      }
+      .iam-root-sub {
+        font-size: 13px;
+        font-weight: 400;
+        color: #f87171;
+        display: block;
+        margin-top: 0.1rem;
+      }
+      .iam-connector-down {
+        display: flex;
+        justify-content: center;
+        height: 20px;
+        position: relative;
+      }
+      .iam-connector-down::after {
+        content: "";
+        position: absolute;
+        left: 50%;
+        top: 0;
+        bottom: 0;
+        width: 2px;
+        background: #334155;
+      }
+      .iam-groups-row {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.75rem;
+        margin-bottom: 0.5rem;
+      }
+      .iam-group-box {
+        border-radius: 10px;
+        padding: 0.85rem;
+        text-align: center;
+      }
+      .iam-group-box.admins {
+        background: #1e3a5f;
+        border: 1px solid #3b82f6;
+      }
+      .iam-group-box.devs {
+        background: #064e3b;
+        border: 1px solid #10b981;
+      }
+      .iam-group-box.ops {
+        background: #422006;
+        border: 1px solid #f59e0b;
+      }
+      .iam-group-label {
+        font-size: 13px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        margin-bottom: 0.65rem;
+      }
+      .iam-group-box.admins .iam-group-label { color: #60a5fa; }
+      .iam-group-box.devs .iam-group-label { color: #34d399; }
+      .iam-group-box.ops .iam-group-label { color: #fcd34d; }
+      .iam-users-row {
+        display: flex;
+        justify-content: center;
+        gap: 0.4rem;
+        flex-wrap: wrap;
+      }
+      .iam-user-pill {
+        border-radius: 6px;
+        padding: 0.2rem 0.55rem;
+        font-size: 13px;
+        font-weight: 700;
+      }
+      .iam-group-box.admins .iam-user-pill {
+        background: #1e3a5f;
+        color: #93c5fd;
+        border: 1px solid #3b82f6;
+      }
+      .iam-group-box.devs .iam-user-pill {
+        background: #064e3b;
+        color: #6ee7b7;
+        border: 1px solid #10b981;
+      }
+      .iam-group-box.ops .iam-user-pill {
+        background: #422006;
+        color: #fde68a;
+        border: 1px solid #f59e0b;
+      }
+      .iam-alice-note {
+        text-align: center;
+        font-size: 13px;
+        color: #64748b;
+        margin-top: 0.75rem;
+        padding-top: 0.75rem;
+        border-top: 1px dashed #1e293b;
+      }
+      .iam-alice-note strong {
+        color: #a78bfa;
+      }
+
+      /* ── POLICY JSON CODE BLOCK ── */
+      .code-block {
+        background: #020617;
+        border-radius: 10px;
+        padding: 1rem 1.25rem;
+        font-family: "Fira Code", "Courier New", monospace;
+        font-size: 13px;
+        line-height: 1.9;
+        border: 1px solid #1e293b;
+        overflow-x: auto;
+        margin: 0.75rem 0;
+      }
+      .ck { color: #60a5fa; }
+      .cv { color: #34d399; }
+      .cs { color: #fb923c; }
+      .cc { color: #475569; }
+
+      /* ── POLICY FIELDS TABLE ── */
+      .fields-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 0.75rem 0;
+        font-size: 0.82rem;
+      }
+      .fields-table th {
+        background: #0f172a;
+        color: #64748b;
+        font-weight: 700;
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        padding: 0.6rem 0.9rem;
+        text-align: left;
+        border-bottom: 1px solid #334155;
+      }
+      .fields-table td {
+        padding: 0.6rem 0.9rem;
+        border-bottom: 1px solid #1e293b;
+        color: #d2d2d2;
+        vertical-align: top;
+      }
+      .fields-table tr:last-child td {
+        border-bottom: none;
+      }
+      .fields-table td:first-child {
+        font-family: "Fira Code", monospace;
+        font-size: 13px;
+        color: #60a5fa;
+        white-space: nowrap;
+      }
+      .fields-table td:nth-child(2) {
+        color: #fb923c;
+        font-weight: 600;
+        white-space: nowrap;
+      }
+
+      /* ── MFA CONCEPT CARDS ── */
+      .mfa-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 0.9rem;
+        margin-top: 0.5rem;
+      }
+      .mfa-card {
+        background: #0f172a;
+        border-radius: 12px;
+        padding: 1.1rem 1.2rem;
+        border: 1px solid #1e293b;
+      }
+      .mfa-card .icon {
+        font-size: 1.4rem;
+        margin-bottom: 0.5rem;
+      }
+      .mfa-card h4 {
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: #f8fafc;
+        margin-bottom: 0.25rem;
+      }
+      .mfa-type-chip {
+        display: inline-block;
+        font-size: 13px;
+        font-weight: 700;
+        padding: 0.1rem 0.45rem;
+        border-radius: 4px;
+        margin-bottom: 0.5rem;
+      }
+      .chip-software {
+        background: #1e3a5f;
+        color: #93c5fd;
+      }
+      .chip-physical {
+        background: #064e3b;
+        color: #6ee7b7;
+      }
+      .chip-govcloud {
+        background: #422006;
+        color: #fcd34d;
+      }
+      .mfa-card p {
+        font-size: 13px;
+        color: #94a3b8;
+        margin: 0;
+      }
+
+      /* ── ACCESS METHOD CARDS ── */
+      .access-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.9rem;
+        margin-top: 0.5rem;
+      }
+      .access-card {
+        background: #0f172a;
+        border-radius: 12px;
+        padding: 1.2rem;
+        border: 1px solid #1e293b;
+      }
+      .access-card h4 {
+        font-size: 0.9rem;
+        font-weight: 700;
+        color: #f8fafc;
+        margin-bottom: 0.75rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .access-flow {
+        display: flex;
+        flex-direction: column;
+        gap: 0.3rem;
+        margin-bottom: 0.75rem;
+      }
+      .access-step {
+        background: #1e293b;
+        border-radius: 6px;
+        padding: 0.3rem 0.65rem;
+        font-size: 13px;
+        font-weight: 600;
+        color: #94a3b8;
+        border: 1px solid #334155;
+        text-align: center;
+      }
+      .access-step.auth {
+        background: #1c1028;
+        color: #c4b5fd;
+        border-color: #7c3aed44;
+      }
+      .access-step.result {
+        background: #0d2818;
+        color: #6ee7b7;
+        border-color: #10b98144;
+      }
+      .access-card p {
+        font-size: 13px;
+        color: #64748b;
+        margin: 0;
+      }
+      .access-down {
+        font-size: 13px;
+        color: #334155;
+        text-align: center;
+        padding: 0.1rem 0;
+      }
+
+      /* ── ROLES GRID ── */
+      .roles-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 0.9rem;
+      }
+      .role-card {
+        background: #0f172a;
+        border-radius: 12px;
+        padding: 1.1rem 1.2rem;
+        border: 1px solid #1e293b;
+        border-top: 2px solid #8b5cf6;
+      }
+      .role-card .icon {
+        font-size: 1.3rem;
+        margin-bottom: 0.45rem;
+      }
+      .role-card h4 {
+        font-size: 0.83rem;
+        font-weight: 700;
+        color: #c4b5fd;
+        margin-bottom: 0.25rem;
+      }
+      .role-card p {
+        font-size: 13px;
+        color: #94a3b8;
+        margin: 0;
+      }
+
+      /* ── SECURITY TOOLS COMPARISON ── */
+      .tools-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        margin-top: 0.5rem;
+      }
+      .tool-card {
+        background: #0f172a;
+        border-radius: 12px;
+        padding: 1.2rem;
+        border: 1px solid #1e293b;
+      }
+      .tool-card h4 {
+        font-size: 0.85rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        color: #f8fafc;
+      }
+      .tool-scope-chip {
+        display: inline-block;
+        font-size: 13px;
+        font-weight: 700;
+        padding: 0.12rem 0.5rem;
+        border-radius: 4px;
+        margin-bottom: 0.75rem;
+      }
+      .chip-account {
+        background: #422006;
+        color: #fcd34d;
+      }
+      .chip-user {
+        background: #1e3a5f;
+        color: #93c5fd;
+      }
+      .tool-card ul {
+        list-style: none;
+        padding: 0;
+      }
+      .tool-card li {
+        font-size: 13px;
+        color: #d2d2d2;
+        padding: 0.22rem 0;
+        padding-left: 1rem;
+        position: relative;
+      }
+      .tool-card li::before {
+        content: "→";
+        position: absolute;
+        left: 0;
+        color: #475569;
+        font-size: 13px;
+      }
+
+      /* ── FLOW BOXES ── */
+      .flow-boxes {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        flex-wrap: wrap;
+      }
+      .fbox {
+        background: #1e293b;
+        border-radius: 6px;
+        padding: 0.3rem 0.65rem;
+        font-size: 13px;
+        font-weight: 600;
+        color: #e2e8f0;
+        border: 1px solid #334155;
+      }
+      .arrow-sym {
+        color: #334155;
+        font-size: 1.1rem;
+      }
+
+      /* ── EXAM TIPS ── */
+      .tips-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 0.7rem;
+      }
+      .tip {
+        background: #0f172a;
+        border-left: 3px solid #f97316;
+        border-radius: 0 8px 8px 0;
+        padding: 0.65rem 1rem;
+        font-size: 0.83rem;
+      }
+      .tip .trigger {
+        color: #64748b;
+      }
+      .tip .arrow {
+        color: #334155;
+        margin: 0 0.25rem;
+      }
+      .tip .answer {
+        color: #f8fafc;
+        font-weight: 700;
+      }
+
+      /* ── KEY VALUE CHIPS ── */
+      .key-val {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 0.4rem;
+        flex-wrap: wrap;
+      }
+      .kv-key {
+        font-family: "Fira Code", monospace;
+        font-size: 13px;
+        color: #fb923c;
+        background: #1c0d02;
+        padding: 0.15rem 0.5rem;
+        border-radius: 4px;
+        border: 1px solid #f9731622;
+        white-space: nowrap;
+      }
+      .kv-eq {
+        color: #475569;
+        font-size: 13px;
+      }
+      .kv-val {
+        font-size: 13px;
+        color: #94a3b8;
+      }
+
+      @media (max-width: 680px) {
+        body {
+          padding: 1rem;
+        }
+        h1 {
+          font-size: 1.6rem;
+        }
+        .tools-grid,
+        .access-grid {
+          grid-template-columns: 1fr;
+        }
+        .iam-groups-row {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="hero">
+      <div class="hero-eyebrow">AWS Certified Developer Associate</div>
+      <h1>Section 4 — IAM &amp; AWS CLI</h1>
+      <div class="hero-subtitle">Identity · Policies · MFA · Roles · Security Tools</div>
+      <div class="xp-badge">⚡ +275 XP &nbsp;·&nbsp; 5 / 5 quizzes &nbsp;·&nbsp; Section complete</div>
+    </div>
+    <div class="container">
+
+      <!-- ══════════════ WEAK POINT ALERT ══════════════ -->
+      <div class="weak-alert">
+        <div class="alert-icon">🔴</div>
+        <div class="alert-body">
+          <h4>Weak Point — Review Before Exam</h4>
+          <p>
+            <span class="weak-pct">67%</span>
+            <strong>4.4 IAM Policies</strong> — Confused inline vs group policy inheritance.
+            Pay special attention to Section 2 (Policies) in this review.
+          </p>
+        </div>
+      </div>
+
+      <!-- ══════════════ 1. IAM BASICS ══════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">1</span>
+          <h2>IAM Basics</h2>
+        </div>
+
+        <div class="concept-grid" style="margin-bottom: 1.25rem;">
+          <div class="concept-card">
+            <div class="icon">🌐</div>
+            <h4>Global Service</h4>
+            <p>
+              IAM is not region-specific. Users, groups, roles, and policies you create are
+              available across all AWS regions.
+            </p>
+          </div>
+          <div class="concept-card">
+            <div class="icon">👑</div>
+            <h4>Root Account</h4>
+            <p>
+              Created automatically when you open an AWS account. Has <strong>unlimited power</strong>.
+              Only use for initial setup — never share, never use daily.
+            </p>
+          </div>
+          <div class="concept-card">
+            <div class="icon">👤</div>
+            <h4>Users</h4>
+            <p>
+              Represent individual people or services. One user = one person.
+              Users have no permissions by default.
+            </p>
+          </div>
+          <div class="concept-card">
+            <div class="icon">👥</div>
+            <h4>Groups</h4>
+            <p>
+              Organize users together. Policies attached to a group are <strong>inherited</strong>
+              by all users in it. Groups can only contain users — <strong>not other groups</strong>.
+            </p>
+          </div>
+        </div>
+
+        <!-- IAM Hierarchy Visual -->
+        <div class="iam-visual">
+          <div style="font-size: 13px; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1rem;">
+            IAM Hierarchy — Users, Groups &amp; Membership
+          </div>
+          <div class="iam-root">
+            <div class="iam-root-box">
+              Root Account
+              <span class="iam-root-sub">Only for initial setup · Never use daily</span>
+            </div>
+          </div>
+          <div class="iam-connector-down"></div>
+          <div class="iam-groups-row">
+            <div class="iam-group-box admins">
+              <div class="iam-group-label">Admins Group</div>
+              <div class="iam-users-row">
+                <span class="iam-user-pill">Alice</span>
+                <span class="iam-user-pill">Bob</span>
+              </div>
+            </div>
+            <div class="iam-group-box devs">
+              <div class="iam-group-label">Developers Group</div>
+              <div class="iam-users-row">
+                <span class="iam-user-pill">Charlie</span>
+                <span class="iam-user-pill">Alice</span>
+              </div>
+            </div>
+            <div class="iam-group-box ops">
+              <div class="iam-group-label">Operations Group</div>
+              <div class="iam-users-row">
+                <span class="iam-user-pill">Dave</span>
+              </div>
+            </div>
+          </div>
+          <div class="iam-alice-note">
+            <strong>Alice</strong> is a member of both Admins and Developers groups — a user can belong to
+            <strong>zero or multiple groups simultaneously</strong>.
+          </div>
+        </div>
+
+        <div class="callout warning">
+          ⚠ Groups can only contain <strong>users</strong> — never other groups. This is a common
+          exam trap.
+        </div>
+      </div>
+
+      <!-- ══════════════ 2. IAM POLICIES ══════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">2</span>
+          <h2>IAM Policies</h2>
+        </div>
+
+        <p>
+          Policies are <strong>JSON documents</strong> that define what actions are allowed or denied
+          on which AWS resources. They are the core of IAM permissions.
+        </p>
+
+        <h3>Policy JSON Structure</h3>
+
+        <div class="code-block">
+<span class="cc">{</span>
+  <span class="ck">"Version"</span>: <span class="cs">"2012-10-17"</span>,
+  <span class="ck">"Statement"</span>: [
+    <span class="cc">{</span>
+      <span class="ck">"Effect"</span>:    <span class="cs">"Allow"</span>,                                      <span class="cc">// Allow or Deny</span>
+      <span class="ck">"Principal"</span>: <span class="cc">{ "AWS": </span><span class="cs">"arn:aws:iam::123456789012:root"</span> <span class="cc">}</span>, <span class="cc">// Who</span>
+      <span class="ck">"Action"</span>:    <span class="cs">"s3:GetObject"</span>,                             <span class="cc">// API call(s)</span>
+      <span class="ck">"Resource"</span>:  <span class="cs">"arn:aws:s3:::my-bucket/*"</span>,              <span class="cc">// What resource</span>
+      <span class="ck">"Condition"</span>: <span class="cc">{ ... }</span>                                   <span class="cc">// Optional: when to apply</span>
+    <span class="cc">}</span>
+  ]
+<span class="cc">}</span>
+        </div>
+
+        <h3>Policy Fields Reference</h3>
+
+        <table class="fields-table">
+          <thead>
+            <tr>
+              <th>Field</th>
+              <th>Values</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Effect</td>
+              <td>Allow / Deny</td>
+              <td>Whether the statement grants or blocks access</td>
+            </tr>
+            <tr>
+              <td>Principal</td>
+              <td>Account / User / Role ARN</td>
+              <td>Who the policy applies to (only in resource-based policies)</td>
+            </tr>
+            <tr>
+              <td>Action</td>
+              <td>e.g. s3:GetObject, ec2:*</td>
+              <td>The specific API calls being permitted or denied</td>
+            </tr>
+            <tr>
+              <td>Resource</td>
+              <td>ARN or * (wildcard)</td>
+              <td>The AWS resource(s) the action targets</td>
+            </tr>
+            <tr>
+              <td>Condition</td>
+              <td>Key-value expressions</td>
+              <td>Optional — restricts when the policy applies (IP, time, MFA, etc.)</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>Policy Inheritance — Weak Point</h3>
+
+        <div class="callout danger">
+          🔴 <strong>Weak point area:</strong> Understand how policies stack.
+          <ul style="margin: 0.5rem 0 0 1rem; font-size: 0.83rem; line-height: 1.8;">
+            <li><strong>Group policy</strong> — attached to a group; all users in that group inherit it automatically.</li>
+            <li><strong>Inline policy</strong> — attached directly to a single user; applies only to that user.</li>
+            <li><strong>Both apply simultaneously</strong> — a user's effective permissions = all group policies + all inline policies combined.</li>
+            <li><strong>Deny overrides Allow</strong> — an explicit Deny anywhere will block the action, even if another policy Allows it.</li>
+          </ul>
+        </div>
+
+        <div class="callout info">
+          <strong>Best practice:</strong> Assign permissions via <strong>groups</strong>, not individual users.
+          Inline policies are exceptions — use them sparingly. Apply the
+          <strong>least privilege principle</strong>: grant only what is needed.
+        </div>
+      </div>
+
+      <!-- ══════════════ 3. PASSWORD POLICY & MFA ══════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">3</span>
+          <h2>Password Policy &amp; MFA</h2>
+        </div>
+
+        <p>
+          AWS lets you enforce a <strong>password policy</strong> for IAM users: minimum length,
+          required character types, expiration rules, and prevent password reuse.
+          MFA adds a second layer of security.
+        </p>
+
+        <h3>MFA Device Types</h3>
+
+        <div class="mfa-grid">
+          <div class="mfa-card">
+            <div class="icon">📱</div>
+            <h4>Virtual MFA Device</h4>
+            <span class="mfa-type-chip chip-software">Software</span>
+            <p>
+              Authenticator apps like Google Authenticator or Authy. One device can hold
+              <strong>multiple MFA tokens</strong> for different accounts.
+            </p>
+          </div>
+          <div class="mfa-card">
+            <div class="icon">🔑</div>
+            <h4>U2F Security Key</h4>
+            <span class="mfa-type-chip chip-physical">Physical</span>
+            <p>
+              Hardware USB key (e.g. <strong>YubiKey</strong> by Yubico). One physical key
+              can support <strong>multiple IAM users</strong> across multiple accounts.
+            </p>
+          </div>
+          <div class="mfa-card">
+            <div class="icon">🔒</div>
+            <h4>Hardware Key Fob</h4>
+            <span class="mfa-type-chip chip-physical">Physical</span>
+            <p>
+              Dedicated hardware token by <strong>Gemalto</strong> (third-party provider).
+              Generates a time-based one-time password.
+            </p>
+          </div>
+          <div class="mfa-card">
+            <div class="icon">🏛</div>
+            <h4>GovCloud Key Fob</h4>
+            <span class="mfa-type-chip chip-govcloud">GovCloud Only</span>
+            <p>
+              Hardware token by <strong>SurePassID</strong>. Available exclusively for
+              <strong>AWS GovCloud (US)</strong> regions.
+            </p>
+          </div>
+        </div>
+
+        <div class="callout success" style="margin-top: 1rem;">
+          Always enable MFA for the root account. This is non-negotiable security hygiene — root
+          account compromise gives unlimited access to everything in your AWS account.
+        </div>
+      </div>
+
+      <!-- ══════════════ 4. THREE WAYS TO ACCESS AWS ══════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">4</span>
+          <h2>Three Ways to Access AWS</h2>
+        </div>
+
+        <div class="access-grid">
+          <div class="access-card">
+            <h4>🖥 Console</h4>
+            <div class="access-flow">
+              <div class="access-step">Username</div>
+              <div class="access-down">+</div>
+              <div class="access-step">Password</div>
+              <div class="access-down">+</div>
+              <div class="access-step auth">MFA (optional)</div>
+              <div class="access-down">↓</div>
+              <div class="access-step result">Web Interface</div>
+            </div>
+            <p>Browser-based. Best for visual exploration and one-time tasks.</p>
+          </div>
+          <div class="access-card">
+            <h4>⌨ CLI</h4>
+            <div class="access-flow">
+              <div class="access-step">Access Key ID</div>
+              <div class="access-down">+</div>
+              <div class="access-step">Secret Access Key</div>
+              <div class="access-down">↓</div>
+              <div class="access-step result">Terminal Commands</div>
+            </div>
+            <p>aws-cli tool. Built on Python SDK (Boto3). Ideal for scripts and automation.</p>
+          </div>
+          <div class="access-card">
+            <h4>📦 SDK</h4>
+            <div class="access-flow">
+              <div class="access-step">Access Key ID</div>
+              <div class="access-down">+</div>
+              <div class="access-step">Secret Access Key</div>
+              <div class="access-down">↓</div>
+              <div class="access-step result">Application Code</div>
+            </div>
+            <p>Language-specific libraries. JavaScript, Python, Java, Go, .NET, etc.</p>
+          </div>
+        </div>
+
+        <h3>Access Key Concepts</h3>
+
+        <div style="display: flex; flex-direction: column; gap: 0.4rem; margin-top: 0.25rem;">
+          <div class="key-val">
+            <span class="kv-key">Access Key ID</span>
+            <span class="kv-eq">≈</span>
+            <span class="kv-val">Username — identifies who you are</span>
+          </div>
+          <div class="key-val">
+            <span class="kv-key">Secret Access Key</span>
+            <span class="kv-eq">≈</span>
+            <span class="kv-val">Password — proves you own the key</span>
+          </div>
+        </div>
+
+        <div class="callout danger" style="margin-top: 0.9rem;">
+          🚨 <strong>Never share access keys.</strong> Never commit them to git. Each user manages their own keys —
+          you can only view the Secret Access Key once at creation time. If lost, delete and recreate.
+        </div>
+
+        <div class="callout info">
+          The <strong>AWS CLI</strong> is built on top of the <strong>Python SDK (Boto3)</strong>. When you run
+          <code style="font-family: 'Fira Code', monospace; font-size: 13px; background: #0f172a; padding: 0.1rem 0.35rem; border-radius: 4px;">aws s3 ls</code>,
+          it ultimately calls the same API as Boto3's <code style="font-family: 'Fira Code', monospace; font-size: 13px; background: #0f172a; padding: 0.1rem 0.35rem; border-radius: 4px;">s3.list_buckets()</code>.
+        </div>
+      </div>
+
+      <!-- ══════════════ 5. IAM ROLES ══════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">5</span>
+          <h2>IAM Roles</h2>
+        </div>
+
+        <p>
+          Roles are like users, but designed for <strong>AWS services</strong> — not people.
+          When a service assumes a role, AWS provides <strong>temporary credentials</strong>
+          automatically. No access keys needed (or allowed).
+        </p>
+
+        <div class="roles-grid">
+          <div class="role-card">
+            <div class="icon">🖥</div>
+            <h4>EC2 Instance Role</h4>
+            <p>
+              Allows EC2 instances to call AWS APIs (e.g., read from S3, write to DynamoDB)
+              without storing credentials on the instance.
+            </p>
+          </div>
+          <div class="role-card">
+            <div class="icon">λ</div>
+            <h4>Lambda Function Role</h4>
+            <p>
+              Lambda automatically assumes an execution role on invocation. Defines what
+              AWS services the Lambda function is allowed to call.
+            </p>
+          </div>
+          <div class="role-card">
+            <div class="icon">🏗</div>
+            <h4>CloudFormation Role</h4>
+            <p>
+              Grants CloudFormation permission to create, update, or delete AWS resources
+              on your behalf when deploying stacks.
+            </p>
+          </div>
+          <div class="role-card">
+            <div class="icon">🔄</div>
+            <h4>Cross-Account Role</h4>
+            <p>
+              Allows principals in one AWS account to assume a role in another account,
+              providing controlled cross-account access without sharing credentials.
+            </p>
+          </div>
+        </div>
+
+        <div class="callout danger" style="margin-top: 1rem;">
+          🚨 <strong>NEVER put access keys on an EC2 instance.</strong> If the instance is compromised,
+          those keys are compromised. Use an <strong>IAM Role</strong> instead — EC2 gets temporary,
+          automatically rotating credentials with no manual key management.
+        </div>
+      </div>
+
+      <!-- ══════════════ 6. IAM SECURITY TOOLS ══════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">6</span>
+          <h2>IAM Security Tools</h2>
+        </div>
+
+        <p>
+          AWS provides two built-in tools to audit IAM permissions and enforce
+          the <strong>least privilege principle</strong>.
+        </p>
+
+        <div class="tools-grid">
+          <div class="tool-card">
+            <h4>Credentials Report</h4>
+            <span class="tool-scope-chip chip-account">Account-level</span>
+            <ul>
+              <li>Lists all IAM users in the account</li>
+              <li>Shows credential status for each user</li>
+              <li>Includes password age, last used, MFA enabled</li>
+              <li>Shows access key age and last rotation</li>
+              <li>Download as CSV from IAM console</li>
+              <li>Use to identify stale or risky credentials</li>
+            </ul>
+          </div>
+          <div class="tool-card">
+            <h4>Access Advisor</h4>
+            <span class="tool-scope-chip chip-user">User-level</span>
+            <ul>
+              <li>Shows service-level permission access history</li>
+              <li>Displays when each service was last accessed</li>
+              <li>Available per user, group, role, or policy</li>
+              <li>Identify services never accessed → remove them</li>
+              <li>Primary tool for enforcing least privilege</li>
+              <li>Data retained for up to 400 days</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="callout success" style="margin-top: 1rem;">
+          <strong>Least privilege workflow:</strong> Use Access Advisor to see what services a user
+          actually accessed → remove permissions for everything they never used.
+        </div>
+      </div>
+
+      <!-- ══════════════ 7. EXAM TIPS ══════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">7</span>
+          <h2>Exam Tips</h2>
+        </div>
+
+        <div class="tips-grid">
+          <div class="tip">
+            <span class="trigger">"IAM is"</span>
+            <span class="arrow">→</span>
+            <span class="answer">Global service (no region selection)</span>
+          </div>
+          <div class="tip">
+            <span class="trigger">"Groups can contain"</span>
+            <span class="arrow">→</span>
+            <span class="answer">Users only — NOT other groups</span>
+          </div>
+          <div class="tip">
+            <span class="trigger">"A user can be in"</span>
+            <span class="arrow">→</span>
+            <span class="answer">Zero or multiple groups simultaneously</span>
+          </div>
+          <div class="tip">
+            <span class="trigger">"Roles are for"</span>
+            <span class="arrow">→</span>
+            <span class="answer">AWS services (not people) — temporary credentials</span>
+          </div>
+          <div class="tip">
+            <span class="trigger">"NEVER put on EC2"</span>
+            <span class="arrow">→</span>
+            <span class="answer">Access keys — use IAM Roles instead</span>
+          </div>
+          <div class="tip">
+            <span class="trigger">"Connection timeout to EC2"</span>
+            <span class="arrow">→</span>
+            <span class="answer">Security Group is blocking the port</span>
+          </div>
+          <div class="tip">
+            <span class="trigger">"Connection refused on EC2"</span>
+            <span class="arrow">→</span>
+            <span class="answer">App problem — traffic reached the instance</span>
+          </div>
+          <div class="tip">
+            <span class="trigger">"Credentials Report scope"</span>
+            <span class="arrow">→</span>
+            <span class="answer">Account-level (all users + credential status)</span>
+          </div>
+          <div class="tip">
+            <span class="trigger">"Access Advisor scope"</span>
+            <span class="arrow">→</span>
+            <span class="answer">User-level (one user's service access history)</span>
+          </div>
+          <div class="tip">
+            <span class="trigger">"Least privilege tool"</span>
+            <span class="arrow">→</span>
+            <span class="answer">Access Advisor — remove unused service permissions</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

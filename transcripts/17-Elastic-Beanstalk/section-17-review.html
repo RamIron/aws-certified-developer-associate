@@ -1,0 +1,1877 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Section 17 — AWS Elastic Beanstalk</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap");
+
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        background: #0f172a;
+        color: #e2e8f0;
+        line-height: 1.6;
+        padding: 0 0 64px;
+      }
+
+      /* ── HERO ── */
+      .hero {
+        background: linear-gradient(135deg, #1e293b 0%, #0f172a 60%, #1a1a2e 100%);
+        border-bottom: 1px solid #334155;
+        padding: 48px 32px 40px;
+        text-align: center;
+      }
+      .hero-eyebrow {
+        font-size: 13px;
+        font-weight: 600;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: #f97316;
+        margin-bottom: 12px;
+      }
+      h1 {
+        font-size: clamp(26px, 4vw, 40px);
+        font-weight: 800;
+        color: #f8fafc;
+        margin-bottom: 8px;
+        letter-spacing: -0.02em;
+      }
+      .hero-subtitle {
+        font-size: 15px;
+        color: #94a3b8;
+        margin-bottom: 20px;
+        font-weight: 400;
+      }
+      .xp-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: linear-gradient(135deg, #f97316, #ea580c);
+        color: #fff;
+        font-size: 13px;
+        font-weight: 700;
+        padding: 8px 18px;
+        border-radius: 999px;
+        letter-spacing: 0.01em;
+      }
+
+      .container {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 40px 24px 0;
+      }
+
+      /* ── SECTION CARDS ── */
+      .card {
+        background: #1e293b;
+        border-radius: 16px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        border: 1px solid #334155;
+      }
+      .card-header {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 1.5rem;
+      }
+      .badge {
+        background: #f97316;
+        color: #0f172a;
+        font-weight: 800;
+        font-size: 13px;
+        padding: 0.25rem 0.65rem;
+        border-radius: 6px;
+      }
+      h2 {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: #f8fafc;
+      }
+      h3 {
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: #d2d2d2;
+        margin: 1.5rem 0 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+      }
+
+      p {
+        color: #d2d2d2;
+        font-size: 0.9rem;
+        margin-bottom: 0.75rem;
+      }
+      p strong {
+        color: #e2e8f0;
+      }
+
+      /* ── CONCEPT CARDS GRID ── */
+      .concept-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 0.9rem;
+      }
+      .concept-card {
+        background: #0f172a;
+        border-radius: 12px;
+        padding: 1.1rem 1.2rem;
+        border: 1px solid #1e293b;
+      }
+      .concept-card .icon {
+        font-size: 1.4rem;
+        margin-bottom: 0.5rem;
+      }
+      .concept-card h4 {
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: #f8fafc;
+        margin-bottom: 0.3rem;
+      }
+      .concept-card p {
+        font-size: 13px;
+        color: #d2d2d2;
+        margin: 0;
+      }
+
+      /* ── TIER COMPARISON ── */
+      .tier-compare {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        margin-top: 0.5rem;
+      }
+      .tier-card {
+        background: #0f172a;
+        border-radius: 12px;
+        padding: 1.2rem;
+        border: 1px solid #1e293b;
+      }
+      .tier-card h4 {
+        font-size: 0.85rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+      }
+      .tier-card.web h4 {
+        color: #60a5fa;
+      }
+      .tier-card.worker h4 {
+        color: #34d399;
+      }
+      .flow-boxes {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        flex-wrap: wrap;
+      }
+      .fbox {
+        background: #1e293b;
+        border-radius: 6px;
+        padding: 0.3rem 0.65rem;
+        font-size: 13px;
+        font-weight: 600;
+        color: #e2e8f0;
+        border: 1px solid #334155;
+      }
+      .arrow {
+        color: #334155;
+        font-size: 1.1rem;
+      }
+
+      /* ── CALLOUTS ── */
+      .callout {
+        border-radius: 8px;
+        padding: 0.75rem 1rem;
+        margin: 1rem 0;
+        font-size: 0.85rem;
+      }
+      .callout.warning {
+        background: #451a0322;
+        border: 1px dashed #f97316;
+        color: #fdba74;
+      }
+      .callout.danger {
+        background: #7f1d1d22;
+        border: 1px solid #dc262644;
+        color: #fca5a5;
+      }
+      .callout.info {
+        background: #1e3a5f22;
+        border-left: 3px solid #3b82f6;
+        color: #93c5fd;
+      }
+      .callout.success {
+        background: #064e3b22;
+        border-left: 3px solid #10b981;
+        color: #6ee7b7;
+      }
+
+      /* ── DEPLOYMENT MODE SUMMARY CARDS ── */
+      .modes-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(155px, 1fr));
+        gap: 0.75rem;
+        margin-bottom: 2rem;
+      }
+      .mode-card {
+        background: #0f172a;
+        border-radius: 12px;
+        padding: 1rem;
+        border: 1px solid #1e293b;
+        border-top: 3px solid var(--mode-color, #334155);
+      }
+      .mode-card h4 {
+        font-size: 0.82rem;
+        font-weight: 700;
+        color: #f8fafc;
+        margin-bottom: 0.8rem;
+      }
+      .mode-metric {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 13px;
+        padding: 0.18rem 0;
+      }
+      .mode-metric .lbl {
+        color: #d2d2d2;
+      }
+      .chip {
+        font-size: 13px;
+        font-weight: 700;
+        padding: 0.15rem 0.45rem;
+        border-radius: 4px;
+        white-space: nowrap;
+      }
+      .chip.red {
+        background: #7f1d1d;
+        color: #fca5a5;
+      }
+      .chip.green {
+        background: #064e3b;
+        color: #6ee7b7;
+      }
+      .chip.yellow {
+        background: #422006;
+        color: #fcd34d;
+      }
+      .chip.blue {
+        background: #1e3a5f;
+        color: #93c5fd;
+      }
+      .chip.gray {
+        background: #1e293b;
+        color: #64748b;
+      }
+
+      /* ── INSTANCE BOXES ── */
+      @keyframes fadeScale {
+        from {
+          opacity: 0;
+          transform: scale(0.75);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+      @keyframes blink {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.35;
+        }
+      }
+      .inst {
+        width: 52px;
+        height: 52px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        font-size: 13px;
+        flex-shrink: 0;
+        animation: fadeScale 0.35s ease forwards;
+      }
+      .inst.v1 {
+        background: #1e3a5f;
+        color: #60a5fa;
+        border: 2px solid #3b82f6;
+      }
+      .inst.v2 {
+        background: #431407;
+        color: #fb923c;
+        border: 2px solid #f97316;
+      }
+      .inst.off {
+        background: #111827;
+        color: #374151;
+        border: 2px dashed #1e293b;
+      }
+      .inst.temp {
+        background: #064e3b;
+        color: #34d399;
+        border: 2px solid #10b981;
+      }
+      .inst.upd {
+        background: #422006;
+        color: #fcd34d;
+        border: 2px solid #f59e0b;
+        animation: blink 0.9s infinite;
+      }
+      .instance-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: center;
+        min-height: 52px;
+      }
+
+      /* ── ASG BOX ── */
+      .asg-box {
+        flex: 1;
+        min-width: 140px;
+        background: #0f172a;
+        border-radius: 10px;
+        padding: 0.9rem 1rem;
+        border: 1px solid #1e293b;
+      }
+      .asg-label {
+        font-size: 13px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        margin-bottom: 0.65rem;
+      }
+      .asg-label.main {
+        color: #60a5fa;
+      }
+      .asg-label.temp {
+        color: #34d399;
+      }
+      .asg-label.blue {
+        color: #93c5fd;
+      }
+      .asg-label.green {
+        color: #34d399;
+      }
+      .dual-asg {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+
+      /* ── TRAFFIC BAR ── */
+      .traffic-wrap {
+        margin-top: 0.75rem;
+      }
+      .traffic-label {
+        font-size: 13px;
+        color: #d2d2d2;
+        margin-bottom: 0.3rem;
+      }
+      .traffic-bar {
+        display: flex;
+        height: 26px;
+        border-radius: 8px;
+        overflow: hidden;
+      }
+      .tbar-v1,
+      .tbar-v2 {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 13px;
+        font-weight: 700;
+        transition: width 0.7s ease;
+        overflow: hidden;
+      }
+      .tbar-v1 {
+        background: #1e3a5f;
+        color: #60a5fa;
+      }
+      .tbar-v2 {
+        background: #431407;
+        color: #fb923c;
+      }
+
+      /* ── ANIMATED DEMO ── */
+      .demo-wrap {
+        background: #0f172a;
+        border-radius: 12px;
+        padding: 1.4rem;
+        margin: 0.5rem 0 1.5rem;
+      }
+      .demo-title {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        margin-bottom: 1rem;
+      }
+      .demo-title h4 {
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: #f8fafc;
+      }
+      .mode-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+      .anim-body {
+        min-height: 100px;
+        margin-bottom: 0.75rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.9rem;
+      }
+      .step-desc {
+        font-size: 0.83rem;
+        color: #d2d2d2;
+        background: #1e293b;
+        border-left: 3px solid #334155;
+        border-radius: 0 8px 8px 0;
+        padding: 0.5rem 0.85rem;
+        min-height: 2.2rem;
+        line-height: 1.5;
+        transition: border-color 0.3s;
+      }
+      .hl-v1 {
+        color: #60a5fa;
+        font-weight: 700;
+      }
+      .hl-v2 {
+        color: #fb923c;
+        font-weight: 700;
+      }
+      .hl-d {
+        color: #f87171;
+        font-weight: 700;
+      }
+      .hl-ok {
+        color: #34d399;
+        font-weight: 700;
+      }
+      .hl-tmp {
+        color: #a78bfa;
+        font-weight: 700;
+      }
+
+      .anim-controls {
+        display: flex;
+        align-items: center;
+        gap: 0.85rem;
+        flex-wrap: wrap;
+      }
+      .nav-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+        background: transparent;
+        color: #f97316;
+        border: 1px solid #f97316;
+        border-radius: 8px;
+        padding: 0.4rem 0.9rem;
+        font-weight: 700;
+        font-size: 0.82rem;
+        cursor: pointer;
+        transition: background 0.2s;
+        font-family: "Inter", sans-serif;
+        white-space: nowrap;
+      }
+      .nav-btn:hover:not(:disabled) {
+        background: #f9731618;
+      }
+      .nav-btn:disabled {
+        opacity: 0.22;
+        cursor: default;
+      }
+      .restart-btn {
+        background: transparent;
+        color: #475569;
+        border: 1px solid #1e293b;
+        border-radius: 8px;
+        padding: 0.4rem 0.75rem;
+        font-size: 13px;
+        cursor: pointer;
+        transition: color 0.2s, border-color 0.2s;
+        font-family: "Inter", sans-serif;
+        margin-left: auto;
+      }
+      .restart-btn:hover {
+        color: #94a3b8;
+        border-color: #334155;
+      }
+      .step-dots {
+        display: flex;
+        gap: 5px;
+      }
+      .sdot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #1e293b;
+        transition:
+          background 0.3s,
+          transform 0.3s;
+      }
+      .sdot.active {
+        background: #f97316;
+        transform: scale(1.3);
+      }
+      .step-counter {
+        font-size: 13px;
+        color: #d2d2d2;
+        margin-left: auto;
+      }
+
+      /* ── CODE BLOCK ── */
+      .code-block {
+        background: #020617;
+        border-radius: 10px;
+        padding: 1rem 1.25rem;
+        font-family: "Fira Code", "Courier New", monospace;
+        font-size: 13px;
+        line-height: 1.9;
+        border: 1px solid #1e293b;
+        overflow-x: auto;
+        margin: 0.75rem 0;
+      }
+      .ck {
+        color: #60a5fa;
+      }
+      .cv {
+        color: #34d399;
+      }
+      .cs {
+        color: #fb923c;
+      }
+      .cc {
+        color: #334155;
+      }
+
+      /* ── STEP FLOW (migrations) ── */
+      .step-flow {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+      }
+      .flow-step {
+        display: flex;
+        gap: 0;
+        align-items: flex-start;
+      }
+      .flow-num {
+        flex-shrink: 0;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: #f97316;
+        color: #0f172a;
+        font-weight: 800;
+        font-size: 13px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 2px;
+        z-index: 1;
+      }
+      .flow-num.special {
+        background: #ef4444;
+      }
+      .flow-text {
+        flex: 1;
+        font-size: 0.85rem;
+        color: #cbd5e1;
+        padding: 0.1rem 0 1.1rem 1rem;
+        margin-left: 0.6rem;
+        border-left: 1px dashed #1e293b;
+      }
+      .flow-step:last-child .flow-text {
+        border-left: 1px solid transparent;
+        padding-bottom: 0;
+      }
+      .flow-text strong {
+        color: #f8fafc;
+      }
+      .flow-text .note {
+        font-size: 13px;
+        color: #d2d2d2;
+        display: block;
+        margin-top: 0.2rem;
+      }
+
+      /* ── LIFECYCLE VISUAL ── */
+      .lifecycle-bar {
+        position: relative;
+        background: #0f172a;
+        border-radius: 10px;
+        padding: 1.5rem 1.2rem;
+        margin: 1rem 0;
+      }
+      .lc-limit {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 0.75rem;
+      }
+      .lc-fill {
+        flex: 1;
+        height: 20px;
+        border-radius: 6px;
+        background: linear-gradient(to right, #1e3a5f, #f97316);
+        position: relative;
+      }
+      .lc-fill::after {
+        content: "1000";
+        position: absolute;
+        right: -2rem;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 13px;
+        font-weight: 700;
+        color: #f87171;
+      }
+      .lc-label {
+        font-size: 13px;
+        color: #d2d2d2;
+        white-space: nowrap;
+      }
+
+      /* ── EXAM TIPS ── */
+      .tips-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 0.7rem;
+      }
+      .tip {
+        background: #0f172a;
+        border-left: 3px solid #f97316;
+        border-radius: 0 8px 8px 0;
+        padding: 0.65rem 1rem;
+        font-size: 0.83rem;
+      }
+      .tip .trigger {
+        color: #64748b;
+      }
+      .tip .arrow {
+        color: #334155;
+        margin: 0 0.25rem;
+      }
+      .tip .answer {
+        color: #f8fafc;
+        font-weight: 700;
+      }
+
+      /* ── PRESERVATION TABLE ── */
+      .preserve-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.75rem;
+        margin: 0.75rem 0;
+      }
+      .pcard {
+        background: #0f172a;
+        border-radius: 10px;
+        padding: 1rem;
+      }
+      .pcard h4 {
+        font-size: 13px;
+        font-weight: 700;
+        margin-bottom: 0.7rem;
+      }
+      .pcard.yes h4 {
+        color: #34d399;
+      }
+      .pcard.no h4 {
+        color: #f87171;
+      }
+      .pcard ul {
+        list-style: none;
+        padding: 0;
+      }
+      .pcard li {
+        font-size: 13px;
+        color: #d2d2d2;
+        padding: 0.2rem 0;
+        padding-left: 1.1rem;
+        position: relative;
+      }
+      .pcard.yes li::before {
+        content: "✓";
+        position: absolute;
+        left: 0;
+        color: #34d399;
+        font-weight: 700;
+      }
+      .pcard.no li::before {
+        content: "✗";
+        position: absolute;
+        left: 0;
+        color: #f87171;
+        font-weight: 700;
+      }
+
+      @media (max-width: 680px) {
+        body {
+          padding: 1rem;
+        }
+        h1 {
+          font-size: 1.6rem;
+        }
+        .tier-compare,
+        .preserve-grid {
+          grid-template-columns: 1fr;
+        }
+        .dual-asg {
+          flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="hero">
+      <div class="hero-eyebrow">AWS Certified Developer Associate</div>
+      <h1>Section 17 — AWS Elastic Beanstalk</h1>
+      <div class="hero-subtitle">Managed deployments · 6 deployment modes · EB extensions · Migrations</div>
+      <div class="xp-badge">⚡ +500 XP &nbsp;·&nbsp; 7 / 7 quizzes PERFECT &nbsp;·&nbsp; Section complete</div>
+    </div>
+    <div class="container">
+
+      <!-- ══════════════ 1. OVERVIEW ══════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">1</span>
+          <h2>What is Elastic Beanstalk?</h2>
+        </div>
+
+        <div class="concept-grid">
+          <div class="concept-card">
+            <div class="icon">👨‍💻</div>
+            <h4>Developer-centric</h4>
+            <p>
+              You only worry about the code. Beanstalk handles provisioning,
+              scaling, and monitoring.
+            </p>
+          </div>
+          <div class="concept-card">
+            <div class="icon">🔧</div>
+            <h4>Managed service</h4>
+            <p>
+              Reuses EC2, ASG, ELB, RDS, ElastiCache under the hood. You don't
+              manage them directly.
+            </p>
+          </div>
+          <div class="concept-card">
+            <div class="icon">💸</div>
+            <h4>Free to use</h4>
+            <p>
+              Beanstalk itself costs nothing. You pay for the underlying
+              resources (EC2, RDS, etc.).
+            </p>
+          </div>
+          <div class="concept-card">
+            <div class="icon">🏗</div>
+            <h4>Powered by CloudFormation</h4>
+            <p>
+              Each environment = one CloudFormation stack. Beanstalk creates and
+              manages it for you.
+            </p>
+          </div>
+        </div>
+
+        <h3>Components</h3>
+        <div class="concept-grid">
+          <div class="concept-card">
+            <h4>Application</h4>
+            <p>
+              Top-level container for all environments, versions, and configs.
+            </p>
+          </div>
+          <div class="concept-card">
+            <h4>App Version</h4>
+            <p>
+              An iteration of your code — v1, v2, v3… stored as a zip in S3.
+            </p>
+          </div>
+          <div class="concept-card">
+            <h4>Environment</h4>
+            <p>
+              A collection of AWS resources running
+              <strong>one</strong> application version at a time.
+            </p>
+          </div>
+          <div class="concept-card">
+            <h4>Tier</h4>
+            <p>Web Server (HTTP) or Worker (SQS background processing).</p>
+          </div>
+        </div>
+
+        <h3>Tiers</h3>
+        <div class="tier-compare">
+          <div class="tier-card web">
+            <h4>🌐 Web Server Tier</h4>
+            <div class="flow-boxes">
+              <div class="fbox">Users</div>
+              <span class="arrow">→</span>
+              <div class="fbox">ELB</div>
+              <span class="arrow">→</span>
+              <div class="fbox">ASG</div>
+              <span class="arrow">→</span>
+              <div class="fbox">EC2</div>
+            </div>
+            <p style="margin-top: 0.75rem; font-size: 13px">
+              Handles HTTP requests. Classic web application setup.
+            </p>
+          </div>
+          <div class="tier-card worker">
+            <h4>⚙️ Worker Tier</h4>
+            <div class="flow-boxes">
+              <div class="fbox">SQS Queue</div>
+              <span class="arrow">→</span>
+              <div class="fbox">ASG</div>
+              <span class="arrow">→</span>
+              <div class="fbox">EC2</div>
+            </div>
+            <p style="margin-top: 0.75rem; font-size: 13px">
+              Processes background jobs. Scales based on
+              <strong>queue depth</strong>.
+            </p>
+          </div>
+        </div>
+
+        <div class="callout warning" style="margin-top: 1rem">
+          ⚠ RDS created <strong>inside</strong> Beanstalk = tied to environment
+          lifecycle. Delete the environment → delete the database. Create RDS
+          <strong>outside</strong> for production.
+        </div>
+      </div>
+
+      <!-- ══════════════ 2. DEPLOYMENT MODES ══════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">2</span>
+          <h2>Deployment Modes</h2>
+        </div>
+
+        <!-- Quick reference grid -->
+        <div class="modes-grid">
+          <div class="mode-card" style="--mode-color: #ef4444">
+            <h4>All at Once</h4>
+            <div class="mode-metric">
+              <span class="lbl">Downtime</span><span class="chip red">YES</span>
+            </div>
+            <div class="mode-metric">
+              <span class="lbl">Capacity</span
+              ><span class="chip red">Zero</span>
+            </div>
+            <div class="mode-metric">
+              <span class="lbl">Cost</span><span class="chip green">None</span>
+            </div>
+            <div class="mode-metric">
+              <span class="lbl">Rollback</span
+              ><span class="chip yellow">Redeploy</span>
+            </div>
+            <div class="mode-metric">
+              <span class="lbl">Speed</span
+              ><span class="chip green">Fastest</span>
+            </div>
+          </div>
+          <div class="mode-card" style="--mode-color: #3b82f6">
+            <h4>Rolling</h4>
+            <div class="mode-metric">
+              <span class="lbl">Downtime</span
+              ><span class="chip green">No</span>
+            </div>
+            <div class="mode-metric">
+              <span class="lbl">Capacity</span
+              ><span class="chip red">Below</span>
+            </div>
+            <div class="mode-metric">
+              <span class="lbl">Cost</span><span class="chip green">None</span>
+            </div>
+            <div class="mode-metric">
+              <span class="lbl">Rollback</span
+              ><span class="chip yellow">Manual</span>
+            </div>
+            <div class="mode-metric">
+              <span class="lbl">Speed</span
+              ><span class="chip yellow">Slow</span>
+            </div>
+          </div>
+          <div class="mode-card" style="--mode-color: #06b6d4">
+            <h4>Rolling + Batch</h4>
+            <div class="mode-metric">
+              <span class="lbl">Downtime</span
+              ><span class="chip green">No</span>
+            </div>
+            <div class="mode-metric">
+              <span class="lbl">Capacity</span
+              ><span class="chip green">At capacity</span>
+            </div>
+            <div class="mode-metric">
+              <span class="lbl">Cost</span
+              ><span class="chip yellow">Small extra</span>
+            </div>
+            <div class="mode-metric">
+              <span class="lbl">Rollback</span
+              ><span class="chip yellow">Manual</span>
+            </div>
+            <div class="mode-metric">
+              <span class="lbl">Speed</span
+              ><span class="chip yellow">Slow</span>
+            </div>
+          </div>
+          <div class="mode-card" style="--mode-color: #10b981">
+            <h4>Immutable</h4>
+            <div class="mode-metric">
+              <span class="lbl">Downtime</span
+              ><span class="chip green">No</span>
+            </div>
+            <div class="mode-metric">
+              <span class="lbl">Capacity</span><span class="chip red">2x</span>
+            </div>
+            <div class="mode-metric">
+              <span class="lbl">Cost</span><span class="chip red">High</span>
+            </div>
+            <div class="mode-metric">
+              <span class="lbl">Rollback</span
+              ><span class="chip green">Quick</span>
+            </div>
+            <div class="mode-metric">
+              <span class="lbl">Speed</span
+              ><span class="chip red">Longest</span>
+            </div>
+          </div>
+          <div class="mode-card" style="--mode-color: #8b5cf6">
+            <h4>Blue / Green</h4>
+            <div class="mode-metric">
+              <span class="lbl">Downtime</span
+              ><span class="chip green">No</span>
+            </div>
+            <div class="mode-metric">
+              <span class="lbl">Capacity</span
+              ><span class="chip red">2x envs</span>
+            </div>
+            <div class="mode-metric">
+              <span class="lbl">Cost</span><span class="chip red">High</span>
+            </div>
+            <div class="mode-metric">
+              <span class="lbl">Rollback</span
+              ><span class="chip green">Swap URL</span>
+            </div>
+            <div class="mode-metric">
+              <span class="lbl">DNS change</span
+              ><span class="chip red">YES ⚠</span>
+            </div>
+          </div>
+          <div class="mode-card" style="--mode-color: #f97316">
+            <h4>Traffic Splitting</h4>
+            <div class="mode-metric">
+              <span class="lbl">Downtime</span
+              ><span class="chip green">No</span>
+            </div>
+            <div class="mode-metric">
+              <span class="lbl">Capacity</span><span class="chip red">2x</span>
+            </div>
+            <div class="mode-metric">
+              <span class="lbl">Cost</span><span class="chip red">High</span>
+            </div>
+            <div class="mode-metric">
+              <span class="lbl">Rollback</span
+              ><span class="chip green">Automatic</span>
+            </div>
+            <div class="mode-metric">
+              <span class="lbl">Type</span><span class="chip blue">Canary</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── ANIMATED DEMOS ── -->
+
+        <!-- All at Once -->
+        <div class="demo-wrap">
+          <div class="demo-title">
+            <div class="mode-dot" style="background: #ef4444"></div>
+            <h4>All at Once</h4>
+            <span class="chip red" style="margin-left: auto">Downtime</span>
+          </div>
+          <div id="aao" class="anim-body">
+            <!-- rendered by JS -->
+          </div>
+          <div class="anim-controls">
+            <button class="nav-btn" id="aao-prev" onclick="prev('aao')">◀ Prev</button>
+            <button class="nav-btn" id="aao-next" onclick="next('aao')">Next ▶</button>
+            <div class="step-dots" id="aao-dots"></div>
+            <span class="step-counter" id="aao-counter"></span>
+            <button class="restart-btn" onclick="restart('aao')">↺ Restart</button>
+          </div>
+        </div>
+
+        <!-- Rolling -->
+        <div class="demo-wrap">
+          <div class="demo-title">
+            <div class="mode-dot" style="background: #3b82f6"></div>
+            <h4>Rolling</h4>
+            <span class="chip yellow" style="margin-left: auto"
+              >Below capacity during deploy</span
+            >
+          </div>
+          <div id="rol" class="anim-body"></div>
+          <div class="anim-controls">
+            <button class="nav-btn" id="rol-prev" onclick="prev('rol')">◀ Prev</button>
+            <button class="nav-btn" id="rol-next" onclick="next('rol')">Next ▶</button>
+            <div class="step-dots" id="rol-dots"></div>
+            <span class="step-counter" id="rol-counter"></span>
+            <button class="restart-btn" onclick="restart('rol')">↺ Restart</button>
+          </div>
+        </div>
+
+        <!-- Rolling + Extra Batch -->
+        <div class="demo-wrap">
+          <div class="demo-title">
+            <div class="mode-dot" style="background: #06b6d4"></div>
+            <h4>Rolling with Additional Batches</h4>
+            <span class="chip green" style="margin-left: auto"
+              >Always at capacity</span
+            >
+          </div>
+          <div id="reb" class="anim-body"></div>
+          <div class="anim-controls">
+            <button class="nav-btn" id="reb-prev" onclick="prev('reb')">◀ Prev</button>
+            <button class="nav-btn" id="reb-next" onclick="next('reb')">Next ▶</button>
+            <div class="step-dots" id="reb-dots"></div>
+            <span class="step-counter" id="reb-counter"></span>
+            <button class="restart-btn" onclick="restart('reb')">↺ Restart</button>
+          </div>
+        </div>
+
+        <!-- Immutable -->
+        <div class="demo-wrap">
+          <div class="demo-title">
+            <div class="mode-dot" style="background: #10b981"></div>
+            <h4>Immutable</h4>
+            <span class="chip green" style="margin-left: auto"
+              >Temp ASG · Quick rollback</span
+            >
+          </div>
+          <div id="imm" class="anim-body"></div>
+          <div class="anim-controls">
+            <button class="nav-btn" id="imm-prev" onclick="prev('imm')">◀ Prev</button>
+            <button class="nav-btn" id="imm-next" onclick="next('imm')">Next ▶</button>
+            <div class="step-dots" id="imm-dots"></div>
+            <span class="step-counter" id="imm-counter"></span>
+            <button class="restart-btn" onclick="restart('imm')">↺ Restart</button>
+          </div>
+        </div>
+
+        <!-- Traffic Splitting -->
+        <div class="demo-wrap">
+          <div class="demo-title">
+            <div class="mode-dot" style="background: #f97316"></div>
+            <h4>Traffic Splitting (Canary)</h4>
+            <span class="chip blue" style="margin-left: auto"
+              >ALB · Automated rollback</span
+            >
+          </div>
+          <div id="trs" class="anim-body"></div>
+          <div class="anim-controls">
+            <button class="nav-btn" id="trs-prev" onclick="prev('trs')">◀ Prev</button>
+            <button class="nav-btn" id="trs-next" onclick="next('trs')">Next ▶</button>
+            <div class="step-dots" id="trs-dots"></div>
+            <span class="step-counter" id="trs-counter"></span>
+            <button class="restart-btn" onclick="restart('trs')">↺ Restart</button>
+          </div>
+        </div>
+
+        <!-- Blue / Green -->
+        <div class="demo-wrap">
+          <div class="demo-title">
+            <div class="mode-dot" style="background: #8b5cf6"></div>
+            <h4>Blue / Green</h4>
+            <span class="chip red" style="margin-left: auto"
+              >Route 53 · DNS change · Manual</span
+            >
+          </div>
+          <div id="blg" class="anim-body"></div>
+          <div class="anim-controls">
+            <button class="nav-btn" id="blg-prev" onclick="prev('blg')">◀ Prev</button>
+            <button class="nav-btn" id="blg-next" onclick="next('blg')">Next ▶</button>
+            <div class="step-dots" id="blg-dots"></div>
+            <span class="step-counter" id="blg-counter"></span>
+            <button class="restart-btn" onclick="restart('blg')">↺ Restart</button>
+          </div>
+        </div>
+
+        <div class="callout info">
+          <strong>Blue/Green vs Traffic Splitting:</strong> Both split traffic
+          between two sets of instances. Blue/Green uses
+          <strong>Route 53</strong> (DNS change, manual, separate environment).
+          Traffic Splitting uses <strong>ALB</strong> (no DNS change, automated
+          rollback, Beanstalk feature).
+        </div>
+      </div>
+
+      <!-- ══════════════ 3. LIFECYCLE POLICY ══════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">3</span>
+          <h2>Lifecycle Policy</h2>
+        </div>
+
+        <p>
+          Beanstalk stores application versions in S3. The limit is
+          <strong>1000</strong>. Without cleanup, you eventually can't deploy.
+        </p>
+
+        <div class="lifecycle-bar">
+          <div class="lc-limit">
+            <span class="lc-label">Versions stored</span>
+            <div class="lc-fill"></div>
+            <span
+              style="
+                font-size: 13px;
+                color: #f87171;
+                font-weight: 700;
+                margin-left: 2.5rem;
+              "
+              >LIMIT</span
+            >
+          </div>
+          <p style="font-size: 13px; color: #d2d2d2; margin: 0">
+            At 1000 versions → new deployments are
+            <span style="color: #f87171; font-weight: 700">BLOCKED</span> until
+            old ones are removed.
+          </p>
+        </div>
+
+        <div class="concept-grid" style="margin-top: 1rem">
+          <div class="concept-card">
+            <div class="icon">🔢</div>
+            <h4>By Count</h4>
+            <p>
+              Keep only the last N versions (e.g., keep last 200). Older ones
+              are deleted.
+            </p>
+          </div>
+          <div class="concept-card">
+            <div class="icon">📅</div>
+            <h4>By Time</h4>
+            <p>
+              Delete versions older than N days (e.g., older than 180 days).
+            </p>
+          </div>
+          <div class="concept-card">
+            <div class="icon">🛡</div>
+            <h4>Active = Protected</h4>
+            <p>
+              Versions currently deployed to an environment are
+              <strong>never deleted</strong>.
+            </p>
+          </div>
+          <div class="concept-card">
+            <div class="icon">📦</div>
+            <h4>S3 Source Bundle</h4>
+            <p>
+              Choose to <strong>retain</strong> (audit trail) or
+              <strong>delete</strong> (save cost) the S3 zip file.
+            </p>
+          </div>
+        </div>
+
+        <div class="callout info" style="margin-top: 1rem">
+          Lifecycle cleanup runs via a
+          <strong>Beanstalk service role</strong> that needs IAM permissions to
+          delete from S3.
+        </div>
+      </div>
+
+      <!-- ══════════════ 4. EB EXTENSIONS ══════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">4</span>
+          <h2>EB Extensions</h2>
+        </div>
+
+        <p>
+          Every setting in the Beanstalk console can also be configured as
+          <strong>code</strong> inside your source zip. This is
+          infrastructure-as-code for Beanstalk.
+        </p>
+
+        <h3>Three Rules (all required)</h3>
+        <div class="concept-grid">
+          <div class="concept-card">
+            <div class="icon">📁</div>
+            <h4>Directory</h4>
+            <p>
+              Must be in <strong>.ebextensions/</strong> at the root of your
+              source code. The dot matters.
+            </p>
+          </div>
+          <div class="concept-card">
+            <div class="icon">📄</div>
+            <h4>File extension</h4>
+            <p>
+              Files must end in <strong>.config</strong> (e.g.,
+              environment-variables.config, logging.config).
+            </p>
+          </div>
+          <div class="concept-card">
+            <div class="icon">✏️</div>
+            <h4>Format</h4>
+            <p>
+              Content must be <strong>YAML or JSON</strong>. The .config
+              extension doesn't restrict format.
+            </p>
+          </div>
+        </div>
+
+        <h3>Example: Setting environment variables</h3>
+        <div class="code-block">
+          <span class="cc"># .ebextensions/environment-variables.config</span>
+          <span class="ck">option_settings</span>:
+          <span class="ck">aws:elasticbeanstalk:application:environment</span>:
+          <span class="ck">DB_URL</span>:
+          <span class="cs"
+            >"jdbc:postgresql://my-rds.amazonaws.com:5432/mydb"</span
+          >
+          <span class="ck">DB_USER</span>: <span class="cs">"admin"</span>
+          <span class="ck">NODE_ENV</span>: <span class="cs">"production"</span>
+        </div>
+
+        <div class="callout warning">
+          ⚠ Resources created via EB Extensions (RDS, ElastiCache, DynamoDB) are
+          <strong>tied to the environment</strong>. Delete the environment →
+          those resources are deleted too.
+        </div>
+      </div>
+
+      <!-- ══════════════ 5. CLOUDFORMATION ══════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">5</span>
+          <h2>CloudFormation Under the Hood</h2>
+        </div>
+
+        <p>
+          Beanstalk doesn't provision resources directly — it creates a
+          <strong>CloudFormation stack</strong> for each environment.
+          CloudFormation does the actual work.
+        </p>
+
+        <div class="concept-grid">
+          <div class="concept-card">
+            <div class="icon">🔍</div>
+            <h4>1 Env = 1 Stack</h4>
+            <p>
+              Each Beanstalk environment maps to exactly one CloudFormation
+              stack. Visible in the CF console.
+            </p>
+          </div>
+          <div class="concept-card">
+            <div class="icon">⚙️</div>
+            <h4>What it creates</h4>
+            <p>
+              ASG, Launch Config, ELB, Target Groups, Security Groups,
+              CloudWatch Alarms, Scaling Policies.
+            </p>
+          </div>
+          <div class="concept-card">
+            <div class="icon">🚀</div>
+            <h4>Power unlock</h4>
+            <p>
+              EB Extensions + CloudFormation = provision
+              <strong>any</strong> AWS resource beyond the console UI.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════ 6. CLONING ══════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">6</span>
+          <h2>Cloning</h2>
+        </div>
+        <p>
+          Clone an existing environment to get an
+          <strong>identical copy</strong>. Useful for creating test/staging from
+          production in one click.
+        </p>
+
+        <div class="preserve-grid">
+          <div class="pcard yes">
+            <h4>✓ Preserved</h4>
+            <ul>
+              <li>Load balancer type &amp; config</li>
+              <li>RDS database configuration (type, size, settings)</li>
+              <li>All environment variables</li>
+              <li>Instance type &amp; all resource settings</li>
+              <li>Application version</li>
+            </ul>
+          </div>
+          <div class="pcard no">
+            <h4>✗ NOT Preserved</h4>
+            <ul>
+              <li>RDS <strong>data</strong> (empty database)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════ 7. MIGRATIONS ══════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">7</span>
+          <h2>Migrations</h2>
+        </div>
+
+        <h3>Load Balancer Migration</h3>
+        <div class="callout danger">
+          You <strong>cannot change the LB type</strong> after an environment is
+          created — only its configuration. You also
+          <strong>cannot use Clone</strong> for this: clone copies the LB type
+          too.
+        </div>
+
+        <div class="step-flow" style="margin-top: 1rem">
+          <div class="flow-step">
+            <div class="flow-num">1</div>
+            <div class="flow-text">
+              <strong>Create a new environment manually</strong> with the same
+              config but the desired LB type (e.g., Classic → ALB).
+              <span class="note"
+                >Cannot clone — that copies the old LB type.</span
+              >
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-num">2</div>
+            <div class="flow-text">
+              <strong>Deploy the application</strong> to the new environment.
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-num">3</div>
+            <div class="flow-text">
+              <strong>Shift traffic</strong> via CNAME swap or Route 53 DNS
+              update.
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-num">4</div>
+            <div class="flow-text">
+              <strong>Terminate the old environment</strong> once traffic is
+              fully migrated.
+            </div>
+          </div>
+        </div>
+
+        <h3 style="margin-top: 2rem">RDS Decoupling (from Beanstalk)</h3>
+        <p>
+          If RDS was created <strong>inside</strong> Beanstalk, it will be
+          deleted with the environment. Here's how to safely decouple it:
+        </p>
+
+        <div class="step-flow" style="margin-top: 1rem">
+          <div class="flow-step">
+            <div class="flow-num">1</div>
+            <div class="flow-text">
+              <strong>Take an RDS snapshot</strong> — safety net in case
+              anything goes wrong.
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-num">2</div>
+            <div class="flow-text">
+              <strong>Enable RDS deletion protection</strong> in the RDS
+              console. This prevents deletion no matter what.
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-num">3</div>
+            <div class="flow-text">
+              <strong>Create a new Beanstalk environment</strong> — without RDS
+              this time.
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-num">4</div>
+            <div class="flow-text">
+              <strong>Point the new env to the existing RDS</strong> using an
+              environment variable (DB connection string).
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-num">5</div>
+            <div class="flow-text">
+              <strong>CNAME swap</strong> (or Route 53) to send all traffic to
+              the new environment. Verify everything works.
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-num">6</div>
+            <div class="flow-text">
+              <strong>Terminate the old environment.</strong> CloudFormation
+              tries to delete RDS → blocked by deletion protection.
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-num special">7</div>
+            <div class="flow-text">
+              <strong>CloudFormation stack → DELETE_FAILED</strong> — this is
+              <em>expected and correct</em>. Deletion protection worked.
+              <span class="note"
+                >Go to CloudFormation and manually delete the stack.</span
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="callout success" style="margin-top: 1rem">
+          ✓ RDS now lives independently, connected to the new Beanstalk
+          environment via env variable.
+        </div>
+      </div>
+
+      <!-- ══════════════ 8. EXAM TIPS ══════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">8</span>
+          <h2>Exam Quick Reference</h2>
+        </div>
+        <div class="tips-grid">
+          <div class="tip">
+            <span class="trigger">"Only mode with downtime"</span
+            ><span class="arrow">→</span><span class="answer">All at Once</span>
+          </div>
+          <div class="tip">
+            <span class="trigger">"No downtime + no extra cost"</span
+            ><span class="arrow">→</span><span class="answer">Rolling</span>
+          </div>
+          <div class="tip">
+            <span class="trigger">"Always at capacity + minimal cost"</span
+            ><span class="arrow">→</span
+            ><span class="answer">Rolling with additional batches</span>
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              >"Temp ASG + quick rollback + willing to pay"</span
+            ><span class="arrow">→</span><span class="answer">Immutable</span>
+          </div>
+          <div class="tip">
+            <span class="trigger">"Canary testing"</span
+            ><span class="arrow">→</span
+            ><span class="answer">Traffic Splitting</span>
+          </div>
+          <div class="tip">
+            <span class="trigger">"Only mode with DNS change"</span
+            ><span class="arrow">→</span><span class="answer">Blue/Green</span>
+          </div>
+          <div class="tip">
+            <span class="trigger">"ALB splits traffic, automated rollback"</span
+            ><span class="arrow">→</span
+            ><span class="answer">Traffic Splitting (not Blue/Green)</span>
+          </div>
+          <div class="tip">
+            <span class="trigger">"Route 53 weighted policy, manual"</span
+            ><span class="arrow">→</span><span class="answer">Blue/Green</span>
+          </div>
+          <div class="tip">
+            <span class="trigger">"EB extensions file requirements"</span
+            ><span class="arrow">→</span
+            ><span class="answer">.ebextensions/ · .config · YAML or JSON</span>
+          </div>
+          <div class="tip">
+            <span class="trigger">"1000 version limit"</span
+            ><span class="arrow">→</span
+            ><span class="answer">Lifecycle Policy (by count or time)</span>
+          </div>
+          <div class="tip">
+            <span class="trigger">"Active version never deleted by"</span
+            ><span class="arrow">→</span
+            ><span class="answer">Lifecycle Policy</span>
+          </div>
+          <div class="tip">
+            <span class="trigger">"Beanstalk uses ___ under the hood"</span
+            ><span class="arrow">→</span
+            ><span class="answer">CloudFormation</span>
+          </div>
+          <div class="tip">
+            <span class="trigger">"Cannot change LB type → solution"</span
+            ><span class="arrow">→</span
+            ><span class="answer">New env manually (can't clone)</span>
+          </div>
+          <div class="tip">
+            <span class="trigger">"DELETE_FAILED after terminating env"</span
+            ><span class="arrow">→</span
+            ><span class="answer"
+              >Expected — RDS deletion protection worked. Delete CF stack
+              manually.</span
+            >
+          </div>
+          <div class="tip">
+            <span class="trigger">"Worker tier scales based on"</span
+            ><span class="arrow">→</span
+            ><span class="answer">SQS queue depth</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- /container -->
+
+    <script>
+      // ── INSTANCE BUILDERS ──
+      const I = (lbl, cls) => `<div class="inst ${cls}">${lbl}</div>`;
+      const V1 = (n) => Array.from({ length: n }, () => I("v1", "v1")).join("");
+      const V2 = (n) => Array.from({ length: n }, () => I("v2", "v2")).join("");
+      const OF = (n) => Array.from({ length: n }, () => I("—", "off")).join("");
+      const TM = (n) =>
+        Array.from({ length: n }, () => I("v2", "temp")).join("");
+      const R = (...a) => `<div class="instance-row">${a.join("")}</div>`;
+      const ASG = (lbl, cls, content) =>
+        `<div class="asg-box"><div class="asg-label ${cls}">${lbl}</div>${content}</div>`;
+      const DUAL = (...a) => `<div class="dual-asg">${a.join("")}</div>`;
+      const TBAR = (p1, p2) => {
+        const s1 =
+          p1 > 0
+            ? `<div class="tbar-v1" style="width:${p1}%">${p1 > 12 ? `v1 · ${p1}%` : ""}</div>`
+            : "";
+        const s2 =
+          p2 > 0
+            ? `<div class="tbar-v2" style="width:${p2}%">${p2 > 12 ? `v2 · ${p2}%` : ""}</div>`
+            : "";
+        return `<div class="traffic-wrap"><div class="traffic-label">Traffic distribution</div><div class="traffic-bar">${s1}${s2}</div></div>`;
+      };
+      const DESC = (html, color = "#334155") =>
+        `<div class="step-desc" style="border-left-color:${color}">${html}</div>`;
+
+      // ── DEMO DEFINITIONS ──
+      const DEMOS = {
+        aao: {
+          color: "#ef4444",
+          steps: [
+            {
+              body:
+                R(V1(4)) +
+                DESC(
+                  '<span class="hl-v1">4 instances</span> running v1 — all healthy',
+                ),
+            },
+            {
+              body:
+                R(OF(4)) +
+                DESC(
+                  '<span class="hl-d">⚠ ALL instances stopped simultaneously — DOWNTIME!</span> No requests served.',
+                  "#ef4444",
+                ),
+            },
+            {
+              body:
+                R(V2(4)) +
+                DESC(
+                  '<span class="hl-v2">All 4 updated to v2</span> — complete. Fastest deployment method.',
+                  "#10b981",
+                ),
+            },
+          ],
+        },
+        rol: {
+          color: "#3b82f6",
+          steps: [
+            {
+              body:
+                R(V1(4)) +
+                DESC(
+                  '<span class="hl-v1">4 instances</span> running v1 — full capacity (4/4)',
+                ),
+            },
+            {
+              body:
+                R(OF(2), V1(2)) +
+                DESC(
+                  '<span class="hl-d">Batch 1 stops</span> — capacity drops to <strong>2/4</strong> (below capacity)',
+                ),
+            },
+            {
+              body:
+                R(V2(2), V1(2)) +
+                DESC(
+                  '<span class="hl-v2">Batch 1 updated to v2</span> — v1 and v2 running simultaneously. Back to 4/4.',
+                ),
+            },
+            {
+              body:
+                R(V2(2), OF(2)) +
+                DESC(
+                  '<span class="hl-d">Batch 2 stops</span> — below capacity again (2/4)',
+                ),
+            },
+            {
+              body:
+                R(V2(4)) +
+                DESC(
+                  '<span class="hl-ok">All instances on v2</span> — no downtime, no extra cost. Both versions ran simultaneously.',
+                  "#10b981",
+                ),
+            },
+          ],
+        },
+        reb: {
+          color: "#06b6d4",
+          steps: [
+            {
+              body:
+                R(V1(4)) +
+                DESC('<span class="hl-v1">4 instances</span> running v1'),
+            },
+            {
+              body:
+                R(V1(4), TM(2)) +
+                DESC(
+                  '<span class="hl-tmp">Extra batch of 2 new instances deployed first</span> → now <strong>6 instances</strong>. Always at capacity!',
+                ),
+            },
+            {
+              body:
+                R(V2(2), V1(2), TM(2)) +
+                DESC(
+                  '<span class="hl-v2">First original batch updated</span> — 6 instances still running. v1 and v2 coexist.',
+                ),
+            },
+            {
+              body:
+                R(V2(4), TM(2)) +
+                DESC(
+                  '<span class="hl-v2">All originals updated</span> — 6 instances all on v2',
+                ),
+            },
+            {
+              body:
+                R(V2(4)) +
+                DESC(
+                  '<span class="hl-ok">Extra batch removed</span> — back to 4 instances. Always at capacity, small extra cost for the temp batch.',
+                  "#10b981",
+                ),
+            },
+          ],
+        },
+        imm: {
+          color: "#10b981",
+          steps: [
+            {
+              body:
+                DUAL(
+                  ASG("Main ASG", "main", R(V1(3))),
+                  ASG(
+                    "Temp ASG",
+                    "temp",
+                    '<div style="font-size:0.78rem;color:#1e293b;padding:0.5rem 0">— empty —</div>',
+                  ),
+                ) +
+                DESC(
+                  '<span class="hl-v1">Main ASG with 3 v1 instances.</span> New temp ASG will be created.',
+                ),
+            },
+            {
+              body:
+                DUAL(
+                  ASG("Main ASG", "main", R(V1(3))),
+                  ASG("Temp ASG (new)", "temp", R(TM(1))),
+                ) +
+                DESC(
+                  '<span class="hl-tmp">1 v2 instance deployed to Temp ASG</span> — health check test. Main ASG untouched.',
+                ),
+            },
+            {
+              body:
+                DUAL(
+                  ASG("Main ASG", "main", R(V1(3))),
+                  ASG("Temp ASG (new)", "temp", R(TM(3))),
+                ) +
+                DESC(
+                  '<span class="hl-tmp">Health checks pass</span> — all 3 v2 instances deployed to Temp ASG. Total: 6 instances (double capacity).',
+                ),
+            },
+            {
+              body:
+                DUAL(ASG("Main ASG (merging)", "main", R(V1(3), V2(3)))) +
+                DESC(
+                  '<span class="hl-v2">Temp ASG merged into Main</span> — 6 instances running. Old v1 terminating...',
+                ),
+            },
+            {
+              body:
+                DUAL(ASG("Main ASG", "main", R(V2(3)))) +
+                DESC(
+                  '<span class="hl-ok">Complete — 3 v2 instances.</span> Rollback = just terminate temp ASG (never happened if healthy).',
+                  "#10b981",
+                ),
+            },
+          ],
+        },
+        trs: {
+          color: "#f97316",
+          steps: [
+            {
+              body:
+                DUAL(
+                  ASG("Main ASG · v1", "main", R(V1(3))),
+                  ASG(
+                    "Temp ASG · v2",
+                    "temp",
+                    '<div style="font-size:0.78rem;color:#1e293b;padding:0.5rem 0">— not yet —</div>',
+                  ),
+                ) +
+                TBAR(100, 0) +
+                DESC(
+                  '<span class="hl-v1">100% traffic to v1</span> via ALB. No temp ASG yet.',
+                ),
+            },
+            {
+              body:
+                DUAL(
+                  ASG("Main ASG · v1", "main", R(V1(3))),
+                  ASG("Temp ASG · v2", "temp", R(TM(3))),
+                ) +
+                TBAR(90, 10) +
+                DESC(
+                  '<span class="hl-tmp">ALB routes 10% to new Temp ASG</span> running v2 — canary testing in production!',
+                ),
+            },
+            {
+              body:
+                DUAL(
+                  ASG("Main ASG · v2", "main", R(V2(3))),
+                  ASG(
+                    "",
+                    "temp",
+                    '<div style="font-size:0.78rem;color:#1e293b;padding:0.5rem 0">— terminated —</div>',
+                  ),
+                ) +
+                TBAR(0, 100) +
+                DESC(
+                  '<span class="hl-ok">v2 healthy — Beanstalk auto-migrates v2 to Main ASG, terminates v1 and temp ASG.</span>',
+                  "#10b981",
+                ),
+            },
+          ],
+        },
+        blg: {
+          color: "#8b5cf6",
+          steps: [
+            {
+              body:
+                DUAL(
+                  ASG("Blue Env · v1 (active)", "blue", R(V1(3))),
+                  ASG(
+                    "Green Env · v2",
+                    "green",
+                    '<div style="font-size:0.78rem;color:#1e293b;padding:0.5rem 0">— not created —</div>',
+                  ),
+                ) +
+                TBAR(100, 0) +
+                DESC(
+                  '<span class="hl-v1">Blue environment = 100% traffic</span> via Route 53 weighted policy.',
+                ),
+            },
+            {
+              body:
+                DUAL(
+                  ASG("Blue Env · v1", "blue", R(V1(3))),
+                  ASG("Green Env · v2 (new)", "green", R(V2(3))),
+                ) +
+                TBAR(90, 10) +
+                DESC(
+                  '<span class="hl-tmp">Green environment created manually.</span> Route 53 weighted policy sends 10% for testing.',
+                ),
+            },
+            {
+              body:
+                DUAL(
+                  ASG("Blue Env · v1", "blue", R(V1(3))),
+                  ASG("Green Env · v2 (active)", "green", R(V2(3))),
+                ) +
+                TBAR(0, 100) +
+                DESC(
+                  '<span class="hl-ok">Swap URLs — Green becomes primary (100%).</span> Blue kept as standby for rollback. <strong>DNS change!</strong>',
+                  "#10b981",
+                ),
+            },
+          ],
+        },
+      };
+
+      // ── ANIMATION ENGINE ──
+      const states = {};
+
+      function initDemo(id) {
+        states[id] = 0;
+        buildDots(id, DEMOS[id].steps.length);
+        renderStep(id, 0);
+      }
+
+      function buildDots(id, count) {
+        const el = document.getElementById(`${id}-dots`);
+        el.innerHTML = Array.from(
+          { length: count },
+          (_, i) => `<div class="sdot" id="${id}-dot-${i}"></div>`,
+        ).join("");
+      }
+
+      function renderStep(id, step) {
+        const demo = DEMOS[id];
+        const total = demo.steps.length;
+        const body = document.getElementById(id);
+        const counter = document.getElementById(`${id}-counter`);
+
+        body.innerHTML = demo.steps[step].body;
+        counter.textContent = `Step ${step + 1} / ${total}`;
+
+        document.querySelectorAll(`[id^="${id}-dot-"]`).forEach((d, i) => {
+          d.classList.toggle("active", i === step);
+        });
+
+        const desc = body.querySelector(".step-desc");
+        if (desc) desc.style.borderLeftColor = demo.color;
+
+        const prevBtn = document.getElementById(`${id}-prev`);
+        const nextBtn = document.getElementById(`${id}-next`);
+        if (prevBtn) prevBtn.disabled = step === 0;
+        if (nextBtn) nextBtn.disabled = step === total - 1;
+
+        states[id] = step;
+      }
+
+      function prev(id) {
+        if (states[id] > 0) renderStep(id, states[id] - 1);
+      }
+
+      function next(id) {
+        const total = DEMOS[id].steps.length;
+        if (states[id] < total - 1) renderStep(id, states[id] + 1);
+      }
+
+      function restart(id) {
+        renderStep(id, 0);
+      }
+
+      // ── INIT ──
+      Object.keys(DEMOS).forEach(initDemo);
+    </script>
+  </body>
+</html>

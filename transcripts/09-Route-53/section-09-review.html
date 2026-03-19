@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Section 9 — Route 53</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #0f172a; color: #f8fafc; font-family: 'Inter', sans-serif; font-size: 14px; line-height: 1.6; min-height: 100vh; }
+
+    /* HERO */
+    .hero { background: linear-gradient(135deg, #1e293b 0%, #0f172a 60%, #1a1a2e 100%); border-bottom: 1px solid #334155; padding: 48px 32px 40px; text-align: center; }
+    .hero-eyebrow { font-size: 13px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #f97316; margin-bottom: 12px; }
+    h1 { font-size: clamp(26px, 4vw, 40px); font-weight: 800; color: #f8fafc; margin-bottom: 8px; letter-spacing: -0.02em; }
+    .hero-subtitle { font-size: 15px; color: #94a3b8; margin-bottom: 20px; }
+    .xp-badge { display: inline-flex; align-items: center; gap: 6px; background: linear-gradient(135deg, #f97316, #ea580c); color: #fff; font-size: 13px; font-weight: 700; padding: 8px 18px; border-radius: 999px; }
+
+    /* LAYOUT */
+    .page-body { max-width: 1100px; margin: 0 auto; padding: 48px 24px; display: flex; flex-direction: column; gap: 40px; }
+    .section-label { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: #f97316; margin-bottom: 16px; }
+
+    /* CARDS */
+    .card { background: #1e293b; border-radius: 12px; border: 1px solid #334155; padding: 24px; }
+    .card-title { font-size: 18px; font-weight: 700; color: #f8fafc; margin-bottom: 16px; }
+
+    /* CALLOUTS */
+    .callout { border-radius: 10px; padding: 16px 20px; font-size: 14px; line-height: 1.65; border-left: 4px solid; }
+    .callout.warning { background: rgba(249,115,22,0.08); border-color: #f97316; color: #fed7aa; }
+    .callout.warning strong { color: #fb923c; }
+    .callout.info { background: rgba(99,102,241,0.08); border-color: #6366f1; color: #c7d2fe; }
+    .callout.success { background: rgba(16,185,129,0.08); border-color: #10b981; color: #6ee7b7; }
+    .callout.danger { background: rgba(239,68,68,0.08); border-color: #ef4444; color: #fca5a5; }
+
+    /* TABLES */
+    .data-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    .data-table th { background: #1e2d4a; color: #94a3b8; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; padding: 10px 14px; text-align: left; }
+    .data-table td { padding: 10px 14px; border-bottom: 1px solid #1e293b; color: #cbd5e1; }
+    .data-table tr:last-child td { border-bottom: none; }
+    .data-table tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+    .table-wrapper { overflow-x: auto; border-radius: 10px; border: 1px solid #334155; }
+
+    /* TIP CARDS */
+    .tip-card { background: #0f172a; border-left: 3px solid #f97316; border-radius: 0 8px 8px 0; padding: 12px 16px; font-size: 14px; }
+    .tip-trigger { color: #64748b; }
+    .tip-answer { color: #f8fafc; font-weight: 700; }
+
+    /* ANIMATION DEMO */
+    .anim-demo { background: #0f172a; border-radius: 12px; padding: 20px; min-height: 120px; }
+    .anim-controls { display: flex; align-items: center; gap: 12px; margin-top: 16px; flex-wrap: wrap; }
+    .nav-btn { background: transparent; border: 2px solid #f97316; color: #f97316; padding: 8px 18px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px; transition: all 0.2s; font-family: 'Inter', sans-serif; }
+    .nav-btn:hover:not(:disabled) { background: #f97316; color: #0f172a; }
+    .nav-btn:disabled { opacity: 0.3; cursor: default; }
+    .restart-btn { background: transparent; border: 1px solid #475569; color: #94a3b8; padding: 6px 14px; border-radius: 8px; cursor: pointer; font-size: 13px; margin-left: auto; transition: all 0.2s; font-family: 'Inter', sans-serif; }
+    .restart-btn:hover { border-color: #94a3b8; color: #e2e8f0; }
+    .step-dots { display: flex; gap: 6px; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: #334155; transition: background 0.3s; }
+    .dot.active { background: #f97316; }
+    .step-counter { color: #94a3b8; font-size: 13px; }
+    @keyframes fadeScale { from { opacity: 0; transform: scale(0.97); } to { opacity: 1; transform: scale(1); } }
+    .anim-demo > * { animation: fadeScale 0.25s ease; }
+
+    /* TYPOGRAPHY & UTILITIES */
+    .mono { font-family: 'Fira Code', monospace; }
+    code { font-family: 'Fira Code', monospace; font-size: 13px; background: rgba(248,114,22,0.1); color: #fb923c; padding: 2px 6px; border-radius: 4px; }
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+    .service-card { background: #0f172a; border: 1px solid #334155; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 8px; }
+    .service-icon { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; flex-shrink: 0; }
+    .service-name { font-size: 16px; font-weight: 700; color: #f8fafc; }
+    .service-desc { font-size: 13px; color: #94a3b8; line-height: 1.5; }
+    .compare-col { background: #0f172a; border: 1px solid #334155; border-radius: 10px; padding: 18px; }
+    .compare-col-title { font-size: 15px; font-weight: 700; margin-bottom: 12px; }
+    .compare-col ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .compare-col ul li { font-size: 13px; color: #94a3b8; padding-left: 14px; position: relative; }
+    .compare-col ul li::before { content: '›'; position: absolute; left: 0; color: #f97316; }
+    .arch-flow { display: flex; align-items: center; flex-wrap: wrap; gap: 0; margin-bottom: 8px; }
+    .arch-node { padding: 10px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; text-align: center; }
+    .arch-arrow { color: #475569; font-size: 16px; padding: 0 8px; }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 13px; font-weight: 600; }
+    .badge-green { background: rgba(16,185,129,0.15); color: #6ee7b7; }
+    .badge-red { background: rgba(239,68,68,0.12); color: #fca5a5; }
+    .badge-blue { background: rgba(59,130,246,0.15); color: #93c5fd; }
+    .badge-purple { background: rgba(139,92,246,0.15); color: #c4b5fd; }
+    .tips-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 12px; }
+    .step-title { font-size: 15px; font-weight: 700; color: #f8fafc; margin-bottom: 4px; }
+    .step-desc { font-size: 13px; color: #94a3b8; margin-bottom: 12px; }
+    .divider { border: none; border-top: 1px solid #1e293b; margin: 4px 0; }
+
+    /* SECTION-SPECIFIC */
+    .stat-box { background: #0f172a; border: 1px solid #334155; border-radius: 10px; padding: 16px; text-align: center; }
+    .stat-num { font-size: 28px; font-weight: 800; color: #f97316; line-height: 1.1; }
+    .stat-label { font-size: 13px; color: #94a3b8; margin-top: 4px; }
+    .record-chip { display: inline-flex; align-items: center; gap: 8px; background: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 10px 14px; }
+    .record-type { font-family: 'Fira Code', monospace; font-size: 14px; font-weight: 600; color: #fb923c; }
+    .record-desc { font-size: 13px; color: #94a3b8; }
+    .policy-tag { display: inline-block; padding: 3px 10px; border-radius: 4px; font-size: 13px; font-weight: 700; margin-bottom: 10px; }
+    .flow-box { background: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 10px 14px; font-size: 13px; font-weight: 600; color: #f8fafc; text-align: center; }
+    .flow-connector { display: flex; align-items: center; justify-content: center; color: #475569; font-size: 20px; padding: 0 4px; }
+    .hc-type { background: #0f172a; border: 1px solid #334155; border-radius: 10px; padding: 16px; }
+    .hc-type-name { font-size: 15px; font-weight: 700; color: #f8fafc; margin-bottom: 6px; }
+    .hc-type-detail { font-size: 13px; color: #94a3b8; }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     HERO
+═══════════════════════════════════════════════════════════════ -->
+<header class="hero">
+  <div class="hero-eyebrow">AWS Certified Developer Associate · Section 9</div>
+  <h1>Route 53</h1>
+  <div class="hero-subtitle">DNS · Hosted Zones · Routing Policies · Health Checks · TTL · CNAME vs Alias</div>
+  <div class="xp-badge">&#9733; Section complete &nbsp;·&nbsp; Quiz passed</div>
+</header>
+
+<main class="page-body">
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       1. ROUTE 53 OVERVIEW
+  ═══════════════════════════════════════════════════════════════ -->
+  <section>
+    <div class="section-label">1 · Route 53 Overview</div>
+    <div class="card">
+      <div class="card-title">Fully Managed Authoritative DNS + Domain Registrar</div>
+
+      <div class="grid-4" style="margin-bottom:20px;">
+        <div class="stat-box">
+          <div class="stat-num">100%</div>
+          <div class="stat-label">Availability SLA — only AWS service with this guarantee</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num">Port 53</div>
+          <div class="stat-label">The name is a reference to DNS port 53</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num">$0.50</div>
+          <div class="stat-label">per month per hosted zone</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num">Registrar</div>
+          <div class="stat-label">Can register domains (not just manage DNS)</div>
+        </div>
+      </div>
+
+      <!-- Record Types -->
+      <div class="section-label" style="margin-bottom:12px;">DNS Record Types</div>
+      <div class="grid-4" style="margin-bottom:16px;">
+        <div class="record-chip">
+          <span class="record-type">A</span>
+          <span class="record-desc">Hostname → IPv4</span>
+        </div>
+        <div class="record-chip">
+          <span class="record-type">AAAA</span>
+          <span class="record-desc">Hostname → IPv6</span>
+        </div>
+        <div class="record-chip">
+          <span class="record-type">CNAME</span>
+          <span class="record-desc">Hostname → Hostname (not zone apex)</span>
+        </div>
+        <div class="record-chip">
+          <span class="record-type">NS</span>
+          <span class="record-desc">Name servers for hosted zone</span>
+        </div>
+      </div>
+
+      <!-- Hosted Zones -->
+      <div class="section-label" style="margin-bottom:12px;">Hosted Zones</div>
+      <div class="grid-2">
+        <div class="compare-col">
+          <div class="compare-col-title" style="color:#10b981;">Public Hosted Zone</div>
+          <ul>
+            <li>Resolves public domain names on the internet</li>
+            <li>Accessible from anywhere on the internet</li>
+            <li>Example: <code>api.example.com</code></li>
+          </ul>
+        </div>
+        <div class="compare-col">
+          <div class="compare-col-title" style="color:#6366f1;">Private Hosted Zone</div>
+          <ul>
+            <li>Resolves private domain names within VPC</li>
+            <li>Only accessible from associated VPCs</li>
+            <li>Example: <code>api.internal.corp</code></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       2. TTL
+  ═══════════════════════════════════════════════════════════════ -->
+  <section>
+    <div class="section-label">2 · TTL — Time to Live</div>
+    <div class="card">
+      <div class="card-title">How Long Clients Cache a DNS Record</div>
+
+      <div class="grid-2" style="margin-bottom:16px;">
+        <div class="compare-col">
+          <div class="compare-col-title" style="color:#f97316;">High TTL (e.g. 24 hours)</div>
+          <ul>
+            <li>Cheaper — fewer Route 53 queries</li>
+            <li>Slow to update — clients cache old record</li>
+            <li>Risk: changing IP takes hours to propagate</li>
+          </ul>
+        </div>
+        <div class="compare-col">
+          <div class="compare-col-title" style="color:#6366f1;">Low TTL (e.g. 60 seconds)</div>
+          <ul>
+            <li>More expensive — more queries per second</li>
+            <li>Records change fast — clients pick up quickly</li>
+            <li>Use before planned DNS changes</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="callout warning">
+        <strong>Exam Strategy:</strong> Before making a DNS change, lower the TTL, wait for the high TTL to expire so all clients have refreshed, then make the change. After propagation is confirmed, raise TTL back up.
+      </div>
+      <div class="callout info" style="margin-top:12px;">
+        <strong>Exception:</strong> TTL is mandatory for all record types <em>except</em> Alias records, which have their TTL managed automatically by Route 53.
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       3. CNAME vs ALIAS
+  ═══════════════════════════════════════════════════════════════ -->
+  <section>
+    <div class="section-label">3 · CNAME vs Alias</div>
+    <div class="card">
+      <div class="card-title">Two Ways to Map a Hostname</div>
+      <div class="table-wrapper" style="margin-bottom:16px;">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Feature</th>
+              <th>CNAME</th>
+              <th>Alias</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Points to</strong></td>
+              <td>Any hostname (including non-AWS)</td>
+              <td>AWS resources only</td>
+            </tr>
+            <tr>
+              <td><strong>Zone Apex (root domain)?</strong></td>
+              <td><span class="badge badge-red">NOT allowed</span></td>
+              <td><span class="badge badge-green">Works</span></td>
+            </tr>
+            <tr>
+              <td><strong>Cost</strong></td>
+              <td>Charged per DNS query</td>
+              <td><span class="badge badge-green">FREE</span></td>
+            </tr>
+            <tr>
+              <td><strong>Health Checks</strong></td>
+              <td><span class="badge badge-red">No native support</span></td>
+              <td><span class="badge badge-green">Yes</span></td>
+            </tr>
+            <tr>
+              <td><strong>TTL</strong></td>
+              <td>You set it manually</td>
+              <td>Automatic (managed by Route 53)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="section-label" style="margin-bottom:10px;">Valid Alias Targets</div>
+      <div class="grid-3" style="margin-bottom:12px;">
+        <div class="service-card">
+          <div class="service-name" style="font-size:14px;">ELB (all types)</div>
+          <div class="service-desc">ALB, NLB, CLB</div>
+        </div>
+        <div class="service-card">
+          <div class="service-name" style="font-size:14px;">CloudFront</div>
+          <div class="service-desc">CDN distributions</div>
+        </div>
+        <div class="service-card">
+          <div class="service-name" style="font-size:14px;">API Gateway</div>
+          <div class="service-desc">REST &amp; HTTP APIs</div>
+        </div>
+        <div class="service-card">
+          <div class="service-name" style="font-size:14px;">Elastic Beanstalk</div>
+          <div class="service-desc">Environments</div>
+        </div>
+        <div class="service-card">
+          <div class="service-name" style="font-size:14px;">S3 Websites</div>
+          <div class="service-desc">Static hosting buckets</div>
+        </div>
+        <div class="service-card">
+          <div class="service-name" style="font-size:14px;">Global Accelerator</div>
+          <div class="service-desc">Accelerator endpoints</div>
+        </div>
+      </div>
+
+      <div class="callout danger">
+        <strong>NOT a valid Alias target:</strong> EC2 DNS names cannot be used as Alias targets. Use an A record with the IP, or put an ELB in front of the EC2 instance.
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       4. HEALTH CHECKS
+  ═══════════════════════════════════════════════════════════════ -->
+  <section>
+    <div class="section-label">4 · Health Checks</div>
+    <div class="card">
+      <div class="card-title">3 Types of Route 53 Health Checks</div>
+
+      <div class="grid-3" style="margin-bottom:16px;">
+        <div class="hc-type">
+          <div class="hc-type-name">1. Endpoint</div>
+          <div class="hc-type-detail">Directly monitors a public resource (ALB, EC2 public IP). About 15 global health checkers run it. Passes if &gt;18% report healthy.</div>
+        </div>
+        <div class="hc-type">
+          <div class="hc-type-name">2. Calculated</div>
+          <div class="hc-type-detail">Combines up to 256 child health checks using OR / AND / NOT logic. Monitor aggregated status of a complex system.</div>
+        </div>
+        <div class="hc-type">
+          <div class="hc-type-name">3. CloudWatch Alarm</div>
+          <div class="hc-type-detail">Monitors a CloudWatch Alarm state. The only way to health-check <em>private</em> resources inside VPC.</div>
+        </div>
+      </div>
+
+      <div class="grid-2" style="margin-bottom:16px;">
+        <div class="callout info">
+          <strong>Check Interval:</strong> 30 seconds (standard) or 10 seconds (fast — higher cost). Healthy threshold: &gt;18% of global checkers reporting healthy.
+        </div>
+        <div class="callout warning">
+          <strong>Security Group Rule Required:</strong> Route 53 health checkers are external. You must allow their IP ranges in your security group for <code>HTTP/HTTPS/TCP</code> checks to work.
+        </div>
+      </div>
+
+      <!-- Private resource pattern -->
+      <div class="section-label" style="margin-bottom:10px;">Health Checking a Private Resource</div>
+      <div style="display:flex; align-items:center; flex-wrap:wrap; gap:6px; margin-bottom:12px;">
+        <div class="flow-box" style="background:rgba(99,102,241,0.1);border-color:#6366f1;">Private EC2<br/><span style="color:#94a3b8;font-size:13px;">(inside VPC)</span></div>
+        <div class="flow-connector">→</div>
+        <div class="flow-box" style="background:rgba(59,130,246,0.1);border-color:#3b82f6;">CloudWatch<br/>Metric</div>
+        <div class="flow-connector">→</div>
+        <div class="flow-box" style="background:rgba(249,115,22,0.1);border-color:#f97316;">CloudWatch<br/>Alarm</div>
+        <div class="flow-connector">→</div>
+        <div class="flow-box" style="background:rgba(16,185,129,0.1);border-color:#10b981;">Route 53<br/>Health Check</div>
+      </div>
+      <div class="callout success">
+        Private resources inside VPC are not accessible to Route 53 health checkers. Solution: publish a CloudWatch metric for the resource, create a CloudWatch Alarm on that metric, then create a Route 53 health check that monitors the alarm state.
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       5. ROUTING POLICIES (ANIMATED DEMO)
+  ═══════════════════════════════════════════════════════════════ -->
+  <section>
+    <div class="section-label">5 · Routing Policies</div>
+    <div class="card">
+      <div class="card-title">8 Routing Policies — Step-by-Step Walkthrough</div>
+
+      <div class="anim-demo" id="demo-routing"></div>
+      <div class="anim-controls">
+        <button class="nav-btn" id="demo-routing-prev" onclick="prev('demo-routing')">&#9664; Prev</button>
+        <button class="nav-btn" id="demo-routing-next" onclick="next('demo-routing')">Next &#9654;</button>
+        <div class="step-dots" id="demo-routing-dots"></div>
+        <span class="step-counter" id="demo-routing-counter"></span>
+        <button class="restart-btn" onclick="restart('demo-routing')">&#8635; Restart</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       6. 3RD PARTY DOMAINS
+  ═══════════════════════════════════════════════════════════════ -->
+  <section>
+    <div class="section-label">6 · 3rd Party Domains</div>
+    <div class="card">
+      <div class="card-title">Domain Registrar ≠ DNS Service</div>
+
+      <p style="color:#94a3b8; font-size:14px; margin-bottom:16px;">
+        You can register a domain at any registrar (GoDaddy, Namecheap, etc.) and still use Route 53 as the DNS service. The key is updating the NS (Name Server) records at the registrar.
+      </p>
+
+      <div style="display:flex; align-items:center; flex-wrap:wrap; gap:6px; margin-bottom:16px;">
+        <div class="flow-box" style="background:rgba(99,102,241,0.1);border-color:#6366f1;">Buy domain<br/><span style="color:#94a3b8;font-size:13px;">on GoDaddy</span></div>
+        <div class="flow-connector">→</div>
+        <div class="flow-box" style="background:rgba(249,115,22,0.1);border-color:#f97316;">Create Public Hosted Zone<br/><span style="color:#94a3b8;font-size:13px;">in Route 53</span></div>
+        <div class="flow-connector">→</div>
+        <div class="flow-box" style="background:rgba(16,185,129,0.1);border-color:#10b981;">Copy Route 53<br/>NS records</div>
+        <div class="flow-connector">→</div>
+        <div class="flow-box" style="background:rgba(59,130,246,0.1);border-color:#3b82f6;">Update NS records<br/><span style="color:#94a3b8;font-size:13px;">on GoDaddy</span></div>
+      </div>
+
+      <div class="callout info">
+        Route 53 provides 4 name servers when you create a hosted zone. These are the NS records you paste into your domain registrar's dashboard to delegate DNS resolution to Route 53.
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       EXAM TIPS
+  ═══════════════════════════════════════════════════════════════ -->
+  <section>
+    <div class="section-label">Exam Tips — See X, Think Y</div>
+    <div class="tips-grid">
+      <div class="tip-card">
+        <div class="tip-trigger">See: "100% availability SLA"</div>
+        <div class="tip-answer">→ Route 53 (only AWS service)</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-trigger">See: "zone apex / root domain" (e.g. example.com)</div>
+        <div class="tip-answer">→ Must use Alias — CNAME not allowed</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-trigger">See: "EC2 DNS name as Alias target"</div>
+        <div class="tip-answer">→ NOT valid. Use ELB in front of EC2</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-trigger">See: "Failover routing primary"</div>
+        <div class="tip-answer">→ Health check on primary is MANDATORY</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-trigger">See: "health check private resource / VPC"</div>
+        <div class="tip-answer">→ CloudWatch Metric → Alarm → Health Check</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-trigger">See: "health check not working / blocked"</div>
+        <div class="tip-answer">→ Allow Route 53 health checker IPs in security group</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-trigger">See: "localization / restrict by country"</div>
+        <div class="tip-answer">→ Geolocation (always create a Default record)</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-trigger">See: "shift traffic between regions with bias"</div>
+        <div class="tip-answer">→ Geoproximity (uses bias + Traffic Flow)</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-trigger">See: "known IP ranges / ISP traffic"</div>
+        <div class="tip-answer">→ IP-based routing (define CIDR-to-endpoint)</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-trigger">See: "multiple healthy IPs returned to client"</div>
+        <div class="tip-answer">→ Multi-Value (up to 8 records — NOT a replacement for ELB)</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-trigger">See: "simple with health checks"</div>
+        <div class="tip-answer">→ Multi-Value (Simple has no health checks)</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-trigger">See: "latency-based routing"</div>
+        <div class="tip-answer">→ Latency = network speed, NOT geographic distance</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-trigger">See: "domain bought at GoDaddy, use Route 53"</div>
+        <div class="tip-answer">→ Create public hosted zone → update NS at registrar</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-trigger">See: "test 10% traffic on new version"</div>
+        <div class="tip-answer">→ Weighted routing (weights don't need to sum to 100)</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-trigger">Geoproximity requirement</div>
+        <div class="tip-answer">→ Requires Route 53 Traffic Flow ($50/month). Non-AWS needs lat/long</div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     JAVASCRIPT — ANIMATION DEMOS
+═══════════════════════════════════════════════════════════════ -->
+<script>
+var DEMOS = {
+  'demo-routing': {
+    steps: [
+      {
+        body: '<div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">'
+          + '<span class="policy-tag" style="background:rgba(249,115,22,0.2);color:#fb923c;">Policy 1 of 8</span>'
+          + '<span style="font-size:20px;font-weight:800;color:#f8fafc;">Simple</span>'
+          + '</div>'
+          + '<div class="step-title">Route to a single resource (or random pick from multiple)</div>'
+          + '<div class="step-desc">Specify one or more IP values in the record. If multiple values, Route 53 returns all of them and the client picks one at random.</div>'
+          + '<div class="grid-2" style="gap:12px;">'
+          + '<div class="callout info"><strong>Supports health checks?</strong> No — Simple routing does not integrate with health checks. A failed resource will still receive traffic.</div>'
+          + '<div class="callout warning"><strong>Use case:</strong> Single-server setups, static websites, basic routing with no HA requirements. The most basic policy.</div>'
+          + '</div>'
+          + '<div style="margin-top:12px;padding:10px 14px;background:#0f172a;border-radius:8px;font-size:13px;color:#64748b;">Gotcha: Cannot attach health checks. If you need health checks with simple behavior, use <strong style="color:#f8fafc;">Multi-Value</strong> instead.</div>'
+      },
+      {
+        body: '<div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">'
+          + '<span class="policy-tag" style="background:rgba(99,102,241,0.2);color:#a5b4fc;">Policy 2 of 8</span>'
+          + '<span style="font-size:20px;font-weight:800;color:#f8fafc;">Weighted</span>'
+          + '</div>'
+          + '<div class="step-title">Split traffic by percentage weight across multiple resources</div>'
+          + '<div class="step-desc">Assign a weight to each record. Route 53 distributes queries proportionally. Weights do not need to sum to 100 — they are relative.</div>'
+          + '<div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:14px;">'
+          + '<div style="flex:1;min-width:140px;background:#0f172a;border:1px solid #334155;border-radius:8px;padding:12px;text-align:center;">'
+          + '<div style="font-size:24px;font-weight:800;color:#f97316;">70%</div>'
+          + '<div style="font-size:13px;color:#94a3b8;">Production (weight: 70)</div>'
+          + '</div>'
+          + '<div style="flex:1;min-width:140px;background:#0f172a;border:1px solid #334155;border-radius:8px;padding:12px;text-align:center;">'
+          + '<div style="font-size:24px;font-weight:800;color:#6366f1;">30%</div>'
+          + '<div style="font-size:13px;color:#94a3b8;">New version (weight: 30)</div>'
+          + '</div>'
+          + '</div>'
+          + '<div class="grid-2" style="gap:12px;">'
+          + '<div class="callout success"><strong>Use cases:</strong> A/B testing, canary deployments, gradual migration between regions or versions.</div>'
+          + '<div class="callout warning"><strong>Weight = 0:</strong> Setting weight to 0 stops all traffic to that endpoint. All records at 0 = equal distribution.</div>'
+          + '</div>'
+      },
+      {
+        body: '<div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">'
+          + '<span class="policy-tag" style="background:rgba(16,185,129,0.2);color:#6ee7b7;">Policy 3 of 8</span>'
+          + '<span style="font-size:20px;font-weight:800;color:#f8fafc;">Latency</span>'
+          + '</div>'
+          + '<div class="step-title">Route users to the AWS region with the lowest network latency</div>'
+          + '<div class="step-desc">Route 53 measures latency between the user and each AWS region where you have resources. Traffic goes to the fastest (lowest latency) region.</div>'
+          + '<div class="callout warning" style="margin-bottom:12px;"><strong>Latency ≠ Geographic Distance:</strong> A user in Germany might be routed to us-east-1 if it has lower latency than eu-west-1 at that moment. Latency is measured by actual network performance.</div>'
+          + '<div class="callout success"><strong>Health Checks:</strong> Supports health checks. If the lowest-latency region is unhealthy, traffic is automatically routed to the next best region.</div>'
+      },
+      {
+        body: '<div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">'
+          + '<span class="policy-tag" style="background:rgba(239,68,68,0.2);color:#fca5a5;">Policy 4 of 8</span>'
+          + '<span style="font-size:20px;font-weight:800;color:#f8fafc;">Failover</span>'
+          + '</div>'
+          + '<div class="step-title">Active-Passive failover with automatic health-check-based routing</div>'
+          + '<div class="step-desc">Designate one record as Primary and one as Secondary. Route 53 routes all traffic to primary. If primary fails its health check, traffic automatically shifts to secondary.</div>'
+          + '<div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:14px;">'
+          + '<div style="flex:1;min-width:160px;background:rgba(16,185,129,0.08);border:1px solid #10b981;border-radius:8px;padding:12px;">'
+          + '<div style="font-size:14px;font-weight:700;color:#10b981;">PRIMARY (Active)</div>'
+          + '<div style="font-size:13px;color:#94a3b8;margin-top:4px;">Receives all traffic. Health check is MANDATORY.</div>'
+          + '</div>'
+          + '<div style="flex:1;min-width:160px;background:rgba(239,68,68,0.08);border:1px solid #ef4444;border-radius:8px;padding:12px;">'
+          + '<div style="font-size:14px;font-weight:700;color:#ef4444;">SECONDARY (Passive)</div>'
+          + '<div style="font-size:13px;color:#94a3b8;margin-top:4px;">Disaster recovery. Receives traffic only when primary is unhealthy.</div>'
+          + '</div>'
+          + '</div>'
+          + '<div class="callout danger"><strong>Health check on primary is MANDATORY.</strong> Also supports automatic fail-back when primary recovers.</div>'
+      },
+      {
+        body: '<div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">'
+          + '<span class="policy-tag" style="background:rgba(245,158,11,0.2);color:#fcd34d;">Policy 5 of 8</span>'
+          + '<span style="font-size:20px;font-weight:800;color:#f8fafc;">Geolocation</span>'
+          + '</div>'
+          + '<div class="step-title">Route based on the user\'s geographic location (country, continent, US state)</div>'
+          + '<div class="step-desc">Different from Latency! Geolocation is about where the user physically is, not network speed. You explicitly define which location maps to which endpoint.</div>'
+          + '<div class="callout danger" style="margin-bottom:12px;"><strong>Default Record is REQUIRED.</strong> If a user\'s location doesn\'t match any record, Route 53 needs somewhere to send them. Without a default, those queries fail.</div>'
+          + '<div class="callout info"><strong>Use cases:</strong> Content localization (serving French content to France), compliance/content restriction (blocking certain content in specific countries), routing by language preference.</div>'
+      },
+      {
+        body: '<div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">'
+          + '<span class="policy-tag" style="background:rgba(168,85,247,0.2);color:#d8b4fe;">Policy 6 of 8</span>'
+          + '<span style="font-size:20px;font-weight:800;color:#f8fafc;">Geoproximity</span>'
+          + '</div>'
+          + '<div class="step-title">Route based on distance — with a bias adjustment to shift traffic boundaries</div>'
+          + '<div class="step-desc">Similar to Geolocation but with a Bias — a tunable value that expands or shrinks the geographic region handled by an endpoint.</div>'
+          + '<div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:14px;">'
+          + '<div style="flex:1;min-width:160px;background:rgba(16,185,129,0.08);border:1px solid #10b981;border-radius:8px;padding:12px;">'
+          + '<div style="font-size:14px;font-weight:700;color:#10b981;">Positive Bias (+1 to +99)</div>'
+          + '<div style="font-size:13px;color:#94a3b8;margin-top:4px;">Expands region → more traffic routed here</div>'
+          + '</div>'
+          + '<div style="flex:1;min-width:160px;background:rgba(239,68,68,0.08);border:1px solid #ef4444;border-radius:8px;padding:12px;">'
+          + '<div style="font-size:14px;font-weight:700;color:#ef4444;">Negative Bias (-1 to -99)</div>'
+          + '<div style="font-size:13px;color:#94a3b8;margin-top:4px;">Shrinks region → less traffic routed here</div>'
+          + '</div>'
+          + '</div>'
+          + '<div class="callout warning"><strong>Requirements:</strong> Must use Route 53 Traffic Flow ($50/month). Non-AWS resources require latitude and longitude coordinates.</div>'
+      },
+      {
+        body: '<div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">'
+          + '<span class="policy-tag" style="background:rgba(20,184,166,0.2);color:#5eead4;">Policy 7 of 8</span>'
+          + '<span style="font-size:20px;font-weight:800;color:#f8fafc;">IP-Based</span>'
+          + '</div>'
+          + '<div class="step-title">Route based on the client\'s IP address using CIDR blocks</div>'
+          + '<div class="step-desc">You define a mapping of CIDR blocks (IP ranges) to specific endpoints. Route 53 checks the client\'s source IP against your defined CIDR list.</div>'
+          + '<div class="callout info" style="margin-bottom:12px;"><strong>You define the CIDRs yourself</strong> — unlike Geolocation, Route 53 doesn\'t auto-resolve IPs to countries. You explicitly specify which IP ranges go where.</div>'
+          + '<div class="callout success"><strong>Use cases:</strong> You know the IP ranges of a specific ISP and want to route their users to a particular endpoint. Compliance routing for known corporate IP ranges. Optimizing performance for known traffic sources.</div>'
+      },
+      {
+        body: '<div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">'
+          + '<span class="policy-tag" style="background:rgba(59,130,246,0.2);color:#93c5fd;">Policy 8 of 8</span>'
+          + '<span style="font-size:20px;font-weight:800;color:#f8fafc;">Multi-Value</span>'
+          + '</div>'
+          + '<div class="step-title">Return up to 8 healthy records — client picks one</div>'
+          + '<div class="step-desc">Route 53 returns multiple healthy A records (up to 8) in response to a DNS query. The client chooses which one to connect to. Unhealthy endpoints are automatically excluded from the response.</div>'
+          + '<div class="callout danger" style="margin-bottom:12px;"><strong>NOT a substitute for ELB.</strong> Multi-Value is client-side load balancing through DNS. It does not have the connection-level load balancing, sticky sessions, SSL termination, or health-check depth that ELB provides.</div>'
+          + '<div class="callout success"><strong>vs Simple:</strong> Multi-Value is like Simple but with health checks. If you want multiple IPs returned AND health checks, use Multi-Value. Up to 8 records returned per query — unhealthy ones are filtered out.</div>'
+      }
+    ]
+  }
+};
+
+var states = {};
+
+function renderStep(id, step) {
+  var demo = DEMOS[id];
+  var total = demo.steps.length;
+  document.getElementById(id).innerHTML = demo.steps[step].body;
+  document.getElementById(id + '-counter').textContent = 'Step ' + (step + 1) + ' / ' + total;
+  document.querySelectorAll('[id^="' + id + '-dot-"]').forEach(function(d, i) {
+    d.classList.toggle('active', i === step);
+  });
+  document.getElementById(id + '-prev').disabled = step === 0;
+  document.getElementById(id + '-next').disabled = step === total - 1;
+  states[id] = step;
+}
+
+function prev(id) { if (states[id] > 0) renderStep(id, states[id] - 1); }
+function next(id) { if (states[id] < DEMOS[id].steps.length - 1) renderStep(id, states[id] + 1); }
+function restart(id) { renderStep(id, 0); }
+
+Object.keys(DEMOS).forEach(function(id) {
+  states[id] = 0;
+  var dotsEl = document.getElementById(id + '-dots');
+  dotsEl.innerHTML = DEMOS[id].steps.map(function(_, i) {
+    return '<div class="dot" id="' + id + '-dot-' + i + '"></div>';
+  }).join('');
+  renderStep(id, 0);
+});
+</script>
+
+</body>
+</html>

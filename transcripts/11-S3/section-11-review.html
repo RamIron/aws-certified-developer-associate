@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Section 11 — Amazon S3 | AWS Developer Associate</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #0f172a; color: #f8fafc; font-family: 'Inter', sans-serif; font-size: 14px; line-height: 1.6; min-height: 100vh; }
+    .hero { background: linear-gradient(135deg, #1e293b 0%, #0f172a 60%, #1a1a2e 100%); border-bottom: 1px solid #334155; padding: 48px 32px 40px; text-align: center; }
+    .hero-eyebrow { font-size: 13px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #f97316; margin-bottom: 12px; }
+    h1 { font-size: clamp(26px, 4vw, 40px); font-weight: 800; color: #f8fafc; margin-bottom: 8px; letter-spacing: -0.02em; }
+    .hero-subtitle { font-size: 15px; color: #94a3b8; margin-bottom: 20px; }
+    .xp-badge { display: inline-flex; align-items: center; gap: 6px; background: linear-gradient(135deg, #f97316, #ea580c); color: #fff; font-size: 13px; font-weight: 700; padding: 8px 18px; border-radius: 999px; }
+    .page-body { max-width: 1100px; margin: 0 auto; padding: 48px 24px; display: flex; flex-direction: column; gap: 40px; }
+    .section-label { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: #f97316; margin-bottom: 16px; }
+    .card { background: #1e293b; border-radius: 12px; border: 1px solid #334155; padding: 24px; }
+    .card-title { font-size: 18px; font-weight: 700; color: #f8fafc; margin-bottom: 16px; }
+    .callout { border-radius: 10px; padding: 16px 20px; font-size: 14px; line-height: 1.65; border-left: 4px solid; }
+    .callout.warning { background: rgba(249,115,22,0.08); border-color: #f97316; color: #fed7aa; }
+    .callout.warning strong { color: #fb923c; }
+    .callout.info { background: rgba(99,102,241,0.08); border-color: #6366f1; color: #c7d2fe; }
+    .callout.success { background: rgba(16,185,129,0.08); border-color: #10b981; color: #6ee7b7; }
+    .callout.danger { background: rgba(239,68,68,0.08); border-color: #ef4444; color: #fca5a5; }
+    .data-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    .data-table th { background: #1e2d4a; color: #94a3b8; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; padding: 10px 14px; text-align: left; }
+    .data-table td { padding: 10px 14px; border-bottom: 1px solid #1e293b; color: #cbd5e1; }
+    .data-table tr:last-child td { border-bottom: none; }
+    .data-table tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+    .tip-card { background: #0f172a; border-left: 3px solid #f97316; border-radius: 0 8px 8px 0; padding: 12px 16px; font-size: 14px; }
+    .tip-trigger { color: #64748b; }
+    .tip-answer { color: #f8fafc; font-weight: 700; }
+    .anim-demo { background: #0f172a; border-radius: 12px; padding: 20px; min-height: 120px; }
+    .anim-controls { display: flex; align-items: center; gap: 12px; margin-top: 16px; flex-wrap: wrap; }
+    .nav-btn { background: transparent; border: 2px solid #f97316; color: #f97316; padding: 8px 18px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px; transition: all 0.2s; font-family: 'Inter', sans-serif; }
+    .nav-btn:hover:not(:disabled) { background: #f97316; color: #0f172a; }
+    .nav-btn:disabled { opacity: 0.3; cursor: default; }
+    .restart-btn { background: transparent; border: 1px solid #475569; color: #94a3b8; padding: 6px 14px; border-radius: 8px; cursor: pointer; font-size: 13px; margin-left: auto; transition: all 0.2s; font-family: 'Inter', sans-serif; }
+    .restart-btn:hover { border-color: #94a3b8; color: #e2e8f0; }
+    .step-dots { display: flex; gap: 6px; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: #334155; transition: background 0.3s; }
+    .dot.active { background: #f97316; }
+    .step-counter { color: #94a3b8; font-size: 13px; }
+    @keyframes fadeScale { from { opacity: 0; transform: scale(0.97); } to { opacity: 1; transform: scale(1); } }
+    .anim-demo > * { animation: fadeScale 0.25s ease; }
+    .mono { font-family: 'Fira Code', monospace; }
+    code { font-family: 'Fira Code', monospace; font-size: 13px; background: rgba(248,114,22,0.1); color: #fb923c; padding: 2px 6px; border-radius: 4px; }
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+    .service-card { background: #0f172a; border: 1px solid #334155; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 8px; }
+    .service-icon { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; flex-shrink: 0; }
+    .service-name { font-size: 16px; font-weight: 700; color: #f8fafc; }
+    .service-desc { font-size: 13px; color: #94a3b8; line-height: 1.5; }
+    .compare-col { background: #0f172a; border: 1px solid #334155; border-radius: 10px; padding: 18px; }
+    .compare-col-title { font-size: 15px; font-weight: 700; margin-bottom: 12px; }
+    .compare-col ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .compare-col ul li { font-size: 13px; color: #94a3b8; padding-left: 14px; position: relative; }
+    .compare-col ul li::before { content: '›'; position: absolute; left: 0; color: #f97316; }
+    .arch-flow { display: flex; align-items: center; flex-wrap: wrap; gap: 0; margin-bottom: 8px; }
+    .arch-node { padding: 10px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; text-align: center; }
+    .arch-arrow { color: #475569; font-size: 16px; padding: 0 8px; }
+    .table-wrapper { overflow-x: auto; border-radius: 10px; border: 1px solid #334155; }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 13px; font-weight: 600; }
+    .badge-green { background: rgba(16,185,129,0.15); color: #6ee7b7; }
+    .badge-red { background: rgba(239,68,68,0.12); color: #fca5a5; }
+    .badge-blue { background: rgba(59,130,246,0.15); color: #93c5fd; }
+    .badge-yellow { background: rgba(234,179,8,0.15); color: #fde047; }
+    .tips-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 12px; }
+    .step-title { font-size: 15px; font-weight: 700; color: #f8fafc; margin-bottom: 4px; }
+    .step-desc { font-size: 13px; color: #94a3b8; margin-bottom: 12px; }
+    .divider { border: none; border-top: 1px solid #1e293b; margin: 4px 0; }
+    .feature-card { background: #0f172a; border: 1px solid #334155; border-radius: 10px; padding: 16px; }
+    .feature-card-title { font-size: 14px; font-weight: 700; color: #f97316; margin-bottom: 8px; }
+    .feature-card p, .feature-card li { font-size: 13px; color: #94a3b8; line-height: 1.5; }
+    .feature-card ul { list-style: none; display: flex; flex-direction: column; gap: 5px; padding-left: 0; }
+    .feature-card ul li { padding-left: 12px; position: relative; }
+    .feature-card ul li::before { content: '–'; position: absolute; left: 0; color: #475569; }
+
+    /* Section-specific styles */
+    .node-blue { background: rgba(59,130,246,0.15); border: 1px solid #3b82f6; color: #93c5fd; }
+    .node-green { background: rgba(16,185,129,0.15); border: 1px solid #10b981; color: #6ee7b7; }
+    .node-orange { background: rgba(249,115,22,0.15); border: 1px solid #f97316; color: #fed7aa; }
+    .node-purple { background: rgba(139,92,246,0.15); border: 1px solid #8b5cf6; color: #ddd6fe; }
+    .node-red { background: rgba(239,68,68,0.15); border: 1px solid #ef4444; color: #fca5a5; }
+    .node-gray { background: rgba(71,85,105,0.3); border: 1px solid #475569; color: #94a3b8; }
+    .node-yellow { background: rgba(234,179,8,0.15); border: 1px solid #eab308; color: #fde047; }
+
+    .access-card { background: #0f172a; border: 1px solid #334155; border-radius: 10px; padding: 18px; display: flex; flex-direction: column; gap: 10px; }
+    .access-card-header { display: flex; align-items: center; gap: 10px; }
+    .access-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; flex-shrink: 0; }
+    .access-title { font-size: 14px; font-weight: 700; color: #f8fafc; }
+    .access-detail { font-size: 13px; color: #94a3b8; }
+
+    .class-meter { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+    .class-bar-wrap { flex: 1; height: 8px; background: #1e293b; border-radius: 4px; overflow: hidden; }
+    .class-bar { height: 100%; border-radius: 4px; }
+    .class-name { font-size: 13px; font-weight: 600; color: #f8fafc; min-width: 180px; }
+    .class-cost-label { font-size: 13px; color: #94a3b8; min-width: 70px; text-align: right; }
+
+    .version-table-wrapper { overflow-x: auto; border-radius: 10px; border: 1px solid #334155; }
+  </style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-eyebrow">AWS Certified Developer Associate &middot; Section 11</div>
+  <h1>Amazon S3</h1>
+  <p class="hero-subtitle">Buckets &middot; Objects &middot; Security &middot; Versioning &middot; Replication &middot; Storage Classes</p>
+  <span class="xp-badge">&#9733; Section complete &middot; Quiz passed</span>
+</header>
+
+<main class="page-body">
+
+  <!-- ============================================================
+       SECTION 1: S3 BASICS
+       ============================================================ -->
+  <section>
+    <div class="section-label">1 &mdash; S3 Basics</div>
+    <div class="card">
+      <div class="card-title">Buckets, Objects &amp; Keys</div>
+      <p style="font-size:14px;color:#94a3b8;margin-bottom:20px;">Amazon S3 is object storage that scales infinitely. It is one of AWS's core building blocks — used for backups, static hosting, data lakes, and application storage.</p>
+
+      <div class="grid-2" style="margin-bottom:20px;">
+        <div class="feature-card">
+          <div class="feature-card-title">Buckets</div>
+          <ul>
+            <li>Top-level container for objects (like a "directory")</li>
+            <li>Name must be <strong style="color:#f8fafc;">globally unique</strong> across ALL accounts and ALL regions</li>
+            <li>Bucket itself is a <strong style="color:#f8fafc;">region-level</strong> resource (data lives in one region)</li>
+            <li>Naming: 3–63 chars, lowercase letters, numbers, hyphens — no uppercase, no underscores</li>
+            <li>Max 100 buckets per account (soft limit)</li>
+          </ul>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card-title">Objects &amp; Keys</div>
+          <ul>
+            <li>Files stored in buckets are called <strong style="color:#f8fafc;">objects</strong></li>
+            <li>Object key = full path e.g., <code>photos/vacation/beach.jpg</code></li>
+            <li>Key = prefix (<code>photos/vacation/</code>) + object name (<code>beach.jpg</code>)</li>
+            <li>S3 has NO real directories — the <code>/</code> is just part of the key name</li>
+            <li>Max object size: <strong style="color:#f8fafc;">5 TB</strong></li>
+            <li>Multi-part upload <strong style="color:#fb923c;">required</strong> for files &gt; 5 GB, recommended &gt; 100 MB</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="callout warning">
+        <strong>Common confusion on the exam:</strong> S3 bucket names are globally unique (across all AWS accounts), but buckets are region-level resources. The S3 console shows all buckets globally, which tricks people. Your data actually lives in the region you selected when creating the bucket.
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECTION 2: S3 SECURITY
+       ============================================================ -->
+  <section>
+    <div class="section-label">2 &mdash; S3 Security &amp; Access Control</div>
+    <div class="card">
+      <div class="card-title">Two Axes of Access Control</div>
+      <p style="font-size:14px;color:#94a3b8;margin-bottom:20px;">Access to S3 objects is granted when an IAM permission OR a resource-based policy allows it, AND there is no explicit deny.</p>
+
+      <div class="table-wrapper" style="margin-bottom:20px;">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Type</th>
+              <th>Mechanism</th>
+              <th>Applies to</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong style="color:#f8fafc;">User-Based</strong></td>
+              <td>IAM Policies on users, groups, or roles</td>
+              <td>Specific IAM principals in your account</td>
+            </tr>
+            <tr>
+              <td><strong style="color:#f8fafc;">Resource-Based</strong></td>
+              <td>Bucket Policy (JSON) attached to the bucket</td>
+              <td>Any principal including cross-account and anonymous</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 4 Access Patterns -->
+      <div class="grid-2" style="margin-bottom:20px;">
+        <div class="access-card">
+          <div class="access-card-header">
+            <div class="access-icon" style="background:rgba(59,130,246,0.15);color:#93c5fd;">IAM</div>
+            <div class="access-title">IAM User access</div>
+          </div>
+          <div class="access-detail">Attach an IAM policy to the user/group granting <code>s3:GetObject</code> etc. Works within the same account. No bucket policy needed.</div>
+        </div>
+        <div class="access-card">
+          <div class="access-card-header">
+            <div class="access-icon" style="background:rgba(16,185,129,0.15);color:#6ee7b7;">EC2</div>
+            <div class="access-title">EC2 instance access</div>
+          </div>
+          <div class="access-detail">Attach an <strong style="color:#f8fafc;">IAM Role</strong> to the EC2 instance. NEVER store AWS credentials on the instance. The SDK/CLI on EC2 automatically uses the role via the metadata service.</div>
+        </div>
+        <div class="access-card">
+          <div class="access-card-header">
+            <div class="access-icon" style="background:rgba(249,115,22,0.15);color:#fed7aa;">PUB</div>
+            <div class="access-title">Public internet access</div>
+          </div>
+          <div class="access-detail">Bucket Policy with <code>Principal: "*"</code>. Block Public Access setting must be disabled first. Use for static website hosting or public file distribution.</div>
+        </div>
+        <div class="access-card">
+          <div class="access-card-header">
+            <div class="access-icon" style="background:rgba(139,92,246,0.15);color:#ddd6fe;">XAC</div>
+            <div class="access-title">Cross-account access</div>
+          </div>
+          <div class="access-detail">Bucket Policy specifying the external account's IAM principal. No IAM policy change needed on your side once bucket policy is set.</div>
+        </div>
+      </div>
+
+      <div class="callout danger">
+        <strong>Block Public Access</strong> is an extra safety layer. It overrides bucket policies and ACLs — even if your bucket policy says public, Block Public Access will still block it. Enable at the account level to prevent any bucket in the account from becoming public.
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECTION 3: STATIC WEBSITE HOSTING
+       ============================================================ -->
+  <section>
+    <div class="section-label">3 &mdash; S3 Static Website Hosting</div>
+    <div class="card">
+      <div class="card-title">Hosting HTML/CSS/JS Files Directly from S3</div>
+
+      <div class="grid-2" style="margin-bottom:20px;">
+        <div class="feature-card">
+          <div class="feature-card-title">How to Enable</div>
+          <ul>
+            <li>Enable "Static website hosting" in bucket Properties</li>
+            <li>Specify index document (e.g., <code>index.html</code>)</li>
+            <li>Optionally specify error document (e.g., <code>error.html</code>)</li>
+            <li>S3 generates a website endpoint URL</li>
+            <li>Bucket policy must allow public <code>s3:GetObject</code></li>
+            <li>Block Public Access must be DISABLED</li>
+          </ul>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card-title">Key Facts for the Exam</div>
+          <ul>
+            <li><strong style="color:#fb923c;">403 Forbidden</strong> = bucket policy is not allowing public reads</li>
+            <li>S3 website URL format: <code>bucket.s3-website.region.amazonaws.com</code></li>
+            <li>Valid as a Route 53 <strong style="color:#f8fafc;">Alias target</strong> (no additional cost)</li>
+            <li>Does NOT support HTTPS natively — use CloudFront in front for HTTPS</li>
+            <li>Only supports GET and HEAD requests</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="callout info">
+        <strong>Route 53 + S3 website:</strong> Create an Alias record pointing to the S3 website endpoint. The bucket name MUST match the domain name exactly (e.g., bucket <code>www.example.com</code> for domain <code>www.example.com</code>).
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECTION 4: VERSIONING
+       ============================================================ -->
+  <section>
+    <div class="section-label">4 &mdash; S3 Versioning</div>
+    <div class="card">
+      <div class="card-title">Protecting Objects from Accidental Deletion &amp; Overwrites</div>
+      <p style="font-size:14px;color:#94a3b8;margin-bottom:20px;">When versioning is enabled, every upload to the same key creates a new version instead of overwriting. Each version gets a unique Version ID.</p>
+
+      <div class="grid-2" style="margin-bottom:20px;">
+        <div class="feature-card">
+          <div class="feature-card-title">Versioning Behavior</div>
+          <ul>
+            <li>Enabled at the <strong style="color:#f8fafc;">bucket level</strong></li>
+            <li>Once enabled, cannot be fully disabled — only suspended</li>
+            <li>Suspending does NOT delete existing versions</li>
+            <li>Files uploaded before enabling versioning have version = <code>null</code></li>
+            <li>Protects against accidental overwrites and deletes</li>
+          </ul>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card-title">Delete Behavior</div>
+          <ul>
+            <li><strong style="color:#f8fafc;">Delete without version ID</strong> → adds a <em>delete marker</em> (object appears gone but is recoverable — delete the marker)</li>
+            <li><strong style="color:#fb923c;">Delete with specific version ID</strong> → permanent, irreversible deletion of that version</li>
+            <li>Restoring: delete the delete marker to un-delete an object</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="version-table-wrapper" style="margin-bottom:16px;">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Action</th>
+              <th>What happens</th>
+              <th>Recoverable?</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Delete (no version specified)</td>
+              <td>Delete marker added, object hidden</td>
+              <td><span class="badge badge-green">Yes — delete the marker</span></td>
+            </tr>
+            <tr>
+              <td>Delete by specific Version ID</td>
+              <td>That exact version permanently removed</td>
+              <td><span class="badge badge-red">No — permanent</span></td>
+            </tr>
+            <tr>
+              <td>Upload same key again</td>
+              <td>New version created, old version preserved</td>
+              <td><span class="badge badge-green">Old version still accessible</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout warning">
+        <strong>Cost implication:</strong> Every version is stored and billed. Use Lifecycle Policies to automatically expire old versions (e.g., delete versions older than 90 days) to avoid unbounded storage costs.
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECTION 5: REPLICATION — ANIMATED DEMO
+       ============================================================ -->
+  <section>
+    <div class="section-label">5 &mdash; S3 Replication (CRR &amp; SRR)</div>
+    <div class="card">
+      <div class="card-title">Asynchronous Replication Between Buckets</div>
+
+      <div class="anim-demo" id="replication"></div>
+      <div class="anim-controls">
+        <button class="nav-btn" id="replication-prev" onclick="prev('replication')">&#9664; Prev</button>
+        <button class="nav-btn" id="replication-next" onclick="next('replication')">Next &#9654;</button>
+        <div class="step-dots" id="replication-dots"></div>
+        <span class="step-counter" id="replication-counter"></span>
+        <button class="restart-btn" onclick="restart('replication')">&#x21BA; Restart</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECTION 6: STORAGE CLASSES — ANIMATED DEMO
+       ============================================================ -->
+  <section>
+    <div class="section-label">6 &mdash; S3 Storage Classes</div>
+    <div class="card">
+      <div class="card-title">Cost vs Retrieval Tradeoff — Walk Through Every Class</div>
+      <p style="font-size:14px;color:#94a3b8;margin-bottom:8px;">All classes share <strong style="color:#f8fafc;">11 nines of durability</strong> (99.999999999%). Availability and retrieval speed differ. You can transition between classes manually or via Lifecycle Policies.</p>
+
+      <div style="margin-bottom:20px;">
+        <div style="font-size:13px;color:#64748b;margin-bottom:10px;font-style:italic;">Cost-per-GB tradeoff (relative — cheaper storage = slower/costlier retrieval):</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div class="class-meter"><span class="class-name">S3 Standard</span><div class="class-bar-wrap"><div class="class-bar" style="width:100%;background:#ef4444;"></div></div><span class="class-cost-label">Most $$$</span></div>
+          <div class="class-meter"><span class="class-name">S3 Standard-IA</span><div class="class-bar-wrap"><div class="class-bar" style="width:72%;background:#f97316;"></div></div><span class="class-cost-label">Lower $$</span></div>
+          <div class="class-meter"><span class="class-name">S3 One Zone-IA</span><div class="class-bar-wrap"><div class="class-bar" style="width:55%;background:#eab308;"></div></div><span class="class-cost-label">Lower $</span></div>
+          <div class="class-meter"><span class="class-name">Glacier Instant</span><div class="class-bar-wrap"><div class="class-bar" style="width:38%;background:#6366f1;"></div></div><span class="class-cost-label">Low $</span></div>
+          <div class="class-meter"><span class="class-name">Glacier Flexible</span><div class="class-bar-wrap"><div class="class-bar" style="width:25%;background:#3b82f6;"></div></div><span class="class-cost-label">Very low</span></div>
+          <div class="class-meter"><span class="class-name">Glacier Deep Archive</span><div class="class-bar-wrap"><div class="class-bar" style="width:12%;background:#10b981;"></div></div><span class="class-cost-label">Cheapest</span></div>
+          <div class="class-meter"><span class="class-name">Intelligent-Tiering</span><div class="class-bar-wrap"><div class="class-bar" style="width:65%;background:#8b5cf6;"></div></div><span class="class-cost-label">Variable</span></div>
+        </div>
+      </div>
+
+      <div class="anim-demo" id="storage-classes"></div>
+      <div class="anim-controls">
+        <button class="nav-btn" id="storage-classes-prev" onclick="prev('storage-classes')">&#9664; Prev</button>
+        <button class="nav-btn" id="storage-classes-next" onclick="next('storage-classes')">Next &#9654;</button>
+        <div class="step-dots" id="storage-classes-dots"></div>
+        <span class="step-counter" id="storage-classes-counter"></span>
+        <button class="restart-btn" onclick="restart('storage-classes')">&#x21BA; Restart</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECTION 7: EXAM TIPS
+       ============================================================ -->
+  <section>
+    <div class="section-label">7 &mdash; Exam Tips &amp; Flash Cards</div>
+    <div class="tips-grid">
+      <div class="tip-card">
+        <div class="tip-trigger">Bucket name must be _____ →</div>
+        <hr class="divider" />
+        <div class="tip-answer">Globally unique across ALL AWS accounts, but bucket is region-level</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-trigger">Maximum object size in S3 →</div>
+        <hr class="divider" />
+        <div class="tip-answer">5 TB total. Multi-part upload required above 5 GB</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-trigger">EC2 instance needs S3 access →</div>
+        <hr class="divider" />
+        <div class="tip-answer">IAM Role on the EC2 instance — NEVER store credentials on the instance</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-trigger">Cross-account S3 access →</div>
+        <hr class="divider" />
+        <div class="tip-answer">Bucket Policy specifying the external account's principal (ARN)</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-trigger">Prevent any bucket in account from being public →</div>
+        <hr class="divider" />
+        <div class="tip-answer">Account-level Block Public Access — overrides all bucket policies</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-trigger">S3 website returns 403 Forbidden →</div>
+        <hr class="divider" />
+        <div class="tip-answer">Bucket policy does not allow public s3:GetObject. Check Block Public Access setting too.</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-trigger">S3 website + Route 53 custom domain →</div>
+        <hr class="divider" />
+        <div class="tip-answer">Alias record pointing to S3 website endpoint. Bucket name must match domain.</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-trigger">Delete S3 object (versioned bucket) — recoverable? →</div>
+        <hr class="divider" />
+        <div class="tip-answer">Yes — delete marker added. Delete the marker to restore. Delete by version ID = permanent.</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-trigger">S3 Replication requirement →</div>
+        <hr class="divider" />
+        <div class="tip-answer">Versioning MUST be enabled on BOTH source and destination buckets</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-trigger">Existing objects not replicated after enabling replication →</div>
+        <hr class="divider" />
+        <div class="tip-answer">Use S3 Batch Replication to replicate pre-existing objects on demand</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-trigger">Permanent deletes in replication — replicated to target? →</div>
+        <hr class="divider" />
+        <div class="tip-answer">NEVER — preventing malicious deletes from propagating is a security feature</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-trigger">Unknown access pattern, don't want retrieval fees →</div>
+        <hr class="divider" />
+        <div class="tip-answer">S3 Intelligent-Tiering — auto-moves objects, no retrieval charges, small monitoring fee</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-trigger">Glacier, need data in milliseconds →</div>
+        <hr class="divider" />
+        <div class="tip-answer">Glacier Instant Retrieval (milliseconds, min 90 days storage)</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-trigger">Glacier, need data in minutes →</div>
+        <hr class="divider" />
+        <div class="tip-answer">Glacier Flexible — Expedited tier (1–5 min). Standard = 3–5 hrs. Bulk = 5–12 hrs (free)</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-trigger">Glacier, rarely needed, cheap long-term archive →</div>
+        <hr class="divider" />
+        <div class="tip-answer">Deep Archive — 12 hrs standard / 48 hrs bulk. Min 180 days. Cheapest storage.</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-trigger">One Zone-IA risk →</div>
+        <hr class="divider" />
+        <div class="tip-answer">Data is LOST if the single AZ is destroyed. Only use for recreatable or secondary backup data.</div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============================================================
+     JAVASCRIPT — ALL ANIMATED DEMOS
+     ============================================================ -->
+<script>
+var DEMOS = {
+  'replication': {
+    steps: [
+      {
+        body: `
+          <div class="step-title">Step 1 — Setup Requirements</div>
+          <div class="step-desc">Before replication works, certain conditions must be met on both buckets.</div>
+          <div class="grid-2" style="gap:12px;">
+            <div class="compare-col">
+              <div class="compare-col-title" style="color:#f97316;">Mandatory Requirements</div>
+              <ul>
+                <li>Versioning must be enabled on <strong style="color:#f8fafc;">BOTH</strong> source and destination</li>
+                <li>IAM role with permission to replicate</li>
+                <li>Works across different AWS accounts</li>
+                <li>Replication is <strong style="color:#f8fafc;">asynchronous</strong> (near real-time, not instant)</li>
+              </ul>
+            </div>
+            <div class="compare-col">
+              <div class="compare-col-title" style="color:#94a3b8;">What Gets Replicated</div>
+              <ul>
+                <li>Only <strong style="color:#f8fafc;">NEW objects</strong> after replication is configured</li>
+                <li>Metadata and tags are preserved</li>
+                <li>Delete markers: optional (opt-in)</li>
+                <li>Permanent deletes: <strong style="color:#fca5a5;">NEVER replicated</strong></li>
+                <li>NOT transitive (A→B, B→C does not mean A→C)</li>
+              </ul>
+            </div>
+          </div>
+        `
+      },
+      {
+        body: `
+          <div class="step-title">Step 2 — CRR: Cross-Region Replication</div>
+          <div class="step-desc">Replicates objects to a bucket in a different AWS region.</div>
+          <div style="display:flex;flex-direction:column;gap:14px;">
+            <div class="arch-flow">
+              <span class="arch-node node-orange">S3 Bucket<br/><span style="font-size:13px;font-weight:400;">us-east-1</span></span>
+              <span class="arch-arrow" style="font-size:20px;">&#x27F6;</span>
+              <span class="arch-node node-blue">S3 Bucket<br/><span style="font-size:13px;font-weight:400;">eu-west-1</span></span>
+              <span class="badge badge-blue" style="margin-left:12px;">Cross-Region</span>
+            </div>
+            <div class="feature-card">
+              <div class="feature-card-title">CRR Use Cases</div>
+              <ul>
+                <li>Compliance requirements (data must exist in specific regions)</li>
+                <li>Reduce latency for users in another region</li>
+                <li>Disaster recovery across geographic regions</li>
+                <li>Replicate to another AWS account for backup isolation</li>
+              </ul>
+            </div>
+          </div>
+        `
+      },
+      {
+        body: `
+          <div class="step-title">Step 3 — SRR: Same-Region Replication</div>
+          <div class="step-desc">Replicates objects to a different bucket within the same AWS region.</div>
+          <div style="display:flex;flex-direction:column;gap:14px;">
+            <div class="arch-flow">
+              <span class="arch-node node-orange">S3 Bucket A<br/><span style="font-size:13px;font-weight:400;">us-east-1</span></span>
+              <span class="arch-arrow" style="font-size:20px;">&#x27F6;</span>
+              <span class="arch-node node-green">S3 Bucket B<br/><span style="font-size:13px;font-weight:400;">us-east-1</span></span>
+              <span class="badge badge-green" style="margin-left:12px;">Same-Region</span>
+            </div>
+            <div class="feature-card">
+              <div class="feature-card-title">SRR Use Cases</div>
+              <ul>
+                <li>Log aggregation — consolidate logs from multiple buckets into one</li>
+                <li>Live replication from production to test/staging</li>
+                <li>Separate bucket for analytics without impacting prod</li>
+                <li>Account-level replication while staying in same region</li>
+              </ul>
+            </div>
+          </div>
+        `
+      },
+      {
+        body: `
+          <div class="step-title">Step 4 — Replication Rules &amp; Edge Cases</div>
+          <div class="step-desc">Critical exam details about what replication does and does NOT do.</div>
+          <div class="grid-2" style="gap:12px;">
+            <div class="compare-col">
+              <div class="compare-col-title" style="color:#6ee7b7;">What IS Replicated</div>
+              <ul>
+                <li>New objects uploaded after enabling replication</li>
+                <li>SSE-S3 and SSE-KMS encrypted objects (with config)</li>
+                <li>Object metadata, tags, ACLs</li>
+                <li>Delete markers (optional — must opt in)</li>
+              </ul>
+            </div>
+            <div class="compare-col">
+              <div class="compare-col-title" style="color:#fca5a5;">What is NOT Replicated</div>
+              <ul>
+                <li>Objects uploaded BEFORE enabling replication (use S3 Batch Replication)</li>
+                <li>Objects already replicated (no chains: A→B→C)</li>
+                <li>Permanent deletes (by version ID) — never replicated (security feature)</li>
+                <li>Glacier/Deep Archive objects</li>
+              </ul>
+            </div>
+          </div>
+        `
+      }
+    ]
+  },
+
+  'storage-classes': {
+    steps: [
+      {
+        body: `
+          <div class="step-title">S3 Standard — Frequently Accessed Data</div>
+          <div class="step-desc">The default class. Best when data is accessed often and latency matters.</div>
+          <div class="grid-2" style="gap:12px;">
+            <div class="feature-card">
+              <div class="feature-card-title">Characteristics</div>
+              <ul>
+                <li>Availability: <strong style="color:#f8fafc;">99.99%</strong></li>
+                <li>Stored across <strong style="color:#f8fafc;">minimum 3 AZs</strong></li>
+                <li>Retrieval: <strong style="color:#f8fafc;">Milliseconds (instant)</strong></li>
+                <li>No minimum storage duration</li>
+                <li>No retrieval fees</li>
+              </ul>
+            </div>
+            <div class="feature-card">
+              <div class="feature-card-title">Best For</div>
+              <ul>
+                <li>Frequently accessed application data</li>
+                <li>Active content delivery</li>
+                <li>Big data analytics that runs constantly</li>
+                <li>Mobile and gaming applications</li>
+              </ul>
+            </div>
+          </div>
+        `
+      },
+      {
+        body: `
+          <div class="step-title">S3 Standard-IA — Infrequent Access, Rapid Retrieval</div>
+          <div class="step-desc">Lower storage cost than Standard, but you pay a retrieval fee when you access the data.</div>
+          <div class="grid-2" style="gap:12px;">
+            <div class="feature-card">
+              <div class="feature-card-title">Characteristics</div>
+              <ul>
+                <li>Availability: <strong style="color:#f8fafc;">99.9%</strong></li>
+                <li>Stored across minimum 3 AZs</li>
+                <li>Retrieval: <strong style="color:#f8fafc;">Milliseconds (instant)</strong></li>
+                <li>Min storage duration: <strong style="color:#fb923c;">30 days</strong></li>
+                <li>Retrieval fee applies per GB</li>
+              </ul>
+            </div>
+            <div class="feature-card">
+              <div class="feature-card-title">Best For</div>
+              <ul>
+                <li>Disaster recovery copies</li>
+                <li>Backups you need quickly but rarely</li>
+                <li>Data accessed less than once per month</li>
+              </ul>
+            </div>
+          </div>
+        `
+      },
+      {
+        body: `
+          <div class="step-title">S3 One Zone-IA — Single AZ, Lower Cost</div>
+          <div class="step-desc">Like Standard-IA but stored in only ONE AZ. Cheaper, but data is lost if the AZ fails.</div>
+          <div class="grid-2" style="gap:12px;">
+            <div class="feature-card">
+              <div class="feature-card-title">Characteristics</div>
+              <ul>
+                <li>Availability: <strong style="color:#f8fafc;">99.5%</strong></li>
+                <li>Stored in <strong style="color:#fb923c;">SINGLE AZ only</strong></li>
+                <li>Retrieval: <strong style="color:#f8fafc;">Milliseconds (instant)</strong></li>
+                <li>Min storage duration: <strong style="color:#fb923c;">30 days</strong></li>
+                <li>Retrieval fee applies per GB</li>
+              </ul>
+            </div>
+            <div class="feature-card">
+              <div class="feature-card-title">Best For / Warning</div>
+              <ul>
+                <li>Secondary backup copies (source of truth elsewhere)</li>
+                <li>Thumbnail or preview versions (easily recreatable)</li>
+                <li>On-premises data backed up to S3</li>
+                <li style="color:#fca5a5;"><strong>RISK:</strong> Data permanently lost if AZ is destroyed</li>
+              </ul>
+            </div>
+          </div>
+        `
+      },
+      {
+        body: `
+          <div class="step-title">Glacier Instant Retrieval — Archive with Millisecond Access</div>
+          <div class="step-desc">Cold storage pricing but instant retrieval. Ideal for data you archive but may still need quickly.</div>
+          <div class="grid-2" style="gap:12px;">
+            <div class="feature-card">
+              <div class="feature-card-title">Characteristics</div>
+              <ul>
+                <li>Retrieval: <strong style="color:#f8fafc;">Milliseconds</strong></li>
+                <li>Min storage duration: <strong style="color:#fb923c;">90 days</strong></li>
+                <li>Higher retrieval cost than Standard-IA</li>
+                <li>Great durability (11 nines, 3+ AZs)</li>
+              </ul>
+            </div>
+            <div class="feature-card">
+              <div class="feature-card-title">Best For</div>
+              <ul>
+                <li>Medical imaging archives</li>
+                <li>News media assets accessed ~once per quarter</li>
+                <li>Compliance archives that may be audited</li>
+              </ul>
+            </div>
+          </div>
+        `
+      },
+      {
+        body: `
+          <div class="step-title">Glacier Flexible Retrieval — Three Speed Tiers</div>
+          <div class="step-desc">Choose your retrieval speed and pay accordingly. Bulk retrievals are free.</div>
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <div class="table-wrapper">
+              <table class="data-table">
+                <thead><tr><th>Tier</th><th>Retrieval Time</th><th>Cost</th></tr></thead>
+                <tbody>
+                  <tr><td><strong style="color:#fb923c;">Expedited</strong></td><td>1–5 minutes</td><td>Higher</td></tr>
+                  <tr><td><strong style="color:#f8fafc;">Standard</strong></td><td>3–5 hours</td><td>Moderate</td></tr>
+                  <tr><td><strong style="color:#6ee7b7;">Bulk</strong></td><td>5–12 hours</td><td>Free</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="callout info">Min storage duration: <strong>90 days</strong>. Use for data archives, backups, regulatory records where you can tolerate hours of wait time to restore.</div>
+          </div>
+        `
+      },
+      {
+        body: `
+          <div class="step-title">Glacier Deep Archive — Cheapest Long-Term Storage</div>
+          <div class="step-desc">Designed for data that is rarely if ever retrieved. Regulatory and compliance archives.</div>
+          <div class="grid-2" style="gap:12px;">
+            <div class="feature-card">
+              <div class="feature-card-title">Characteristics</div>
+              <ul>
+                <li>Standard retrieval: <strong style="color:#fb923c;">~12 hours</strong></li>
+                <li>Bulk retrieval: <strong style="color:#fb923c;">~48 hours</strong></li>
+                <li>Min storage duration: <strong style="color:#fb923c;">180 days</strong></li>
+                <li>Lowest cost storage class available</li>
+              </ul>
+            </div>
+            <div class="feature-card">
+              <div class="feature-card-title">Best For</div>
+              <ul>
+                <li>7–10 year regulatory retention requirements</li>
+                <li>Financial records, legal archives</li>
+                <li>Scientific data sets rarely needed</li>
+                <li>Magnetic tape replacement</li>
+              </ul>
+            </div>
+          </div>
+        `
+      },
+      {
+        body: `
+          <div class="step-title">S3 Intelligent-Tiering — Auto-Optimize Storage Cost</div>
+          <div class="step-desc">S3 monitors access patterns and moves objects between tiers automatically. No retrieval charges.</div>
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <div class="table-wrapper">
+              <table class="data-table">
+                <thead><tr><th>Tier</th><th>Access Pattern</th><th>Retrieval</th></tr></thead>
+                <tbody>
+                  <tr><td>Frequent Access</td><td>Default (accessed recently)</td><td>Milliseconds</td></tr>
+                  <tr><td>Infrequent Access</td><td>Not accessed for 30 days</td><td>Milliseconds</td></tr>
+                  <tr><td>Archive Instant</td><td>Not accessed for 90 days</td><td>Milliseconds</td></tr>
+                  <tr><td>Archive</td><td>90–180 days (opt-in)</td><td>Hours</td></tr>
+                  <tr><td>Deep Archive</td><td>180+ days (opt-in)</td><td>Hours</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="callout success">Small monthly monitoring and auto-tiering fee per object. <strong>No retrieval charges ever.</strong> Best when access patterns are unpredictable or changing over time.</div>
+          </div>
+        `
+      }
+    ]
+  }
+};
+
+var states = {};
+function renderStep(id, step) {
+  var demo = DEMOS[id];
+  var total = demo.steps.length;
+  document.getElementById(id).innerHTML = demo.steps[step].body;
+  document.getElementById(id + '-counter').textContent = 'Step ' + (step + 1) + ' / ' + total;
+  document.querySelectorAll('[id^="' + id + '-dot-"]').forEach(function(d, i) { d.classList.toggle('active', i === step); });
+  document.getElementById(id + '-prev').disabled = step === 0;
+  document.getElementById(id + '-next').disabled = step === total - 1;
+  states[id] = step;
+}
+function prev(id) { if (states[id] > 0) renderStep(id, states[id] - 1); }
+function next(id) { if (states[id] < DEMOS[id].steps.length - 1) renderStep(id, states[id] + 1); }
+function restart(id) { renderStep(id, 0); }
+Object.keys(DEMOS).forEach(function(id) {
+  states[id] = 0;
+  var dotsEl = document.getElementById(id + '-dots');
+  dotsEl.innerHTML = DEMOS[id].steps.map(function(_, i) { return '<div class="dot" id="' + id + '-dot-' + i + '"></div>'; }).join('');
+  renderStep(id, 0);
+});
+</script>
+
+</body>
+</html>

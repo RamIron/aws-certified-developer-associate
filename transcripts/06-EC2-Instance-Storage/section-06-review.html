@@ -1,0 +1,1082 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Section 6 — EC2 Instance Storage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #0f172a;
+      color: #e2e8f0;
+      line-height: 1.6;
+      padding: 0 0 64px;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(135deg, #1e293b 0%, #0f172a 60%, #1a1a2e 100%);
+      border-bottom: 1px solid #334155;
+      padding: 48px 32px 40px;
+      text-align: center;
+    }
+    .hero-eyebrow {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #f97316;
+      margin-bottom: 12px;
+    }
+    .hero h1 {
+      font-size: clamp(26px, 4vw, 40px);
+      font-weight: 800;
+      color: #f8fafc;
+      margin-bottom: 8px;
+      letter-spacing: -0.02em;
+    }
+    .hero-subtitle {
+      font-size: 15px;
+      color: #94a3b8;
+      margin-bottom: 20px;
+      font-weight: 400;
+    }
+    .xp-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: linear-gradient(135deg, #f97316, #ea580c);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 8px 18px;
+      border-radius: 999px;
+      letter-spacing: 0.01em;
+    }
+
+    /* ── LAYOUT ── */
+    .page-body {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px 24px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+
+    /* ── SECTION BLOCKS ── */
+    .section-block {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .section-title {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #f97316;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #334155;
+    }
+    .section-heading {
+      font-size: 20px;
+      font-weight: 700;
+      color: #f8fafc;
+    }
+    .sub-heading {
+      font-size: 13px;
+      font-weight: 600;
+      color: #64748b;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    /* ── CALLOUT BOXES ── */
+    .callout {
+      border-radius: 10px;
+      padding: 16px 20px;
+      font-size: 14px;
+      line-height: 1.65;
+      border-left: 4px solid;
+    }
+    .callout.warning {
+      background: rgba(249, 115, 22, 0.08);
+      border-color: #f97316;
+      color: #fed7aa;
+    }
+    .callout.warning strong { color: #fb923c; }
+    .callout.info {
+      background: rgba(99, 102, 241, 0.08);
+      border-color: #6366f1;
+      color: #c7d2fe;
+    }
+    .callout.info strong { color: #a5b4fc; }
+    .callout.danger {
+      background: rgba(239, 68, 68, 0.08);
+      border-color: #ef4444;
+      color: #fca5a5;
+    }
+    .callout.danger strong { color: #f87171; }
+    .callout.success {
+      background: rgba(34, 197, 94, 0.07);
+      border-color: #22c55e;
+      color: #86efac;
+    }
+    .callout.success strong { color: #4ade80; }
+    .callout-title {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      display: block;
+    }
+    .callout.warning .callout-title { color: #f97316; }
+    .callout.info .callout-title { color: #818cf8; }
+    .callout.danger .callout-title { color: #ef4444; }
+    .callout.success .callout-title { color: #22c55e; }
+
+    /* ── WEAK POINTS ── */
+    .weak-point-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 4px 0;
+    }
+    .weak-point-item::before {
+      content: '⚠';
+      color: #f97316;
+      font-size: 13px;
+      margin-top: 2px;
+      flex-shrink: 0;
+    }
+
+    /* ── CONCEPT CARDS ── */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+      gap: 14px;
+    }
+    .card-grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 14px;
+    }
+    .concept-card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 10px;
+      padding: 16px 18px;
+    }
+    .concept-card .card-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: #f97316;
+      margin-bottom: 4px;
+      letter-spacing: 0.04em;
+    }
+    .concept-card .card-body {
+      font-size: 13.5px;
+      color: #cbd5e1;
+      line-height: 1.55;
+    }
+    .concept-card .card-body strong { color: #f8fafc; }
+    .concept-card code {
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 4px;
+      padding: 1px 6px;
+      font-size: 13px;
+      color: #7dd3fc;
+      font-family: 'Courier New', monospace;
+    }
+
+    /* ── SNAPSHOT FEATURE CARDS ── */
+    .snapshot-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 14px;
+    }
+    .snapshot-card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 10px;
+      padding: 18px;
+      border-top: 3px solid #334155;
+    }
+    .snapshot-card.archive { border-top-color: #fbbf24; }
+    .snapshot-card.recycle { border-top-color: #4ade80; }
+    .snapshot-card.fast    { border-top-color: #7dd3fc; }
+
+    .snapshot-card .snap-name {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .snapshot-card.archive .snap-name { color: #fbbf24; }
+    .snapshot-card.recycle .snap-name { color: #4ade80; }
+    .snapshot-card.fast    .snap-name { color: #7dd3fc; }
+
+    .snapshot-card .snap-body {
+      font-size: 13px;
+      color: #94a3b8;
+      line-height: 1.5;
+    }
+    .snapshot-card .snap-body strong { color: #e2e8f0; }
+
+    /* ── AMI TYPES ── */
+    .ami-type-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 14px;
+    }
+    .ami-card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 10px;
+      padding: 16px 18px;
+    }
+    .ami-card .ami-type { font-size: 13px; font-weight: 700; color: #f8fafc; margin-bottom: 4px; }
+    .ami-card .ami-desc { font-size: 12.5px; color: #64748b; line-height: 1.45; }
+    .ami-card .ami-chip {
+      display: inline-block;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      padding: 2px 8px;
+      border-radius: 999px;
+      margin-bottom: 8px;
+    }
+    .ami-chip.aws    { background: rgba(249, 115, 22, 0.15); color: #f97316; border: 1px solid rgba(249, 115, 22, 0.3); }
+    .ami-chip.custom { background: rgba(99, 102, 241, 0.15); color: #a5b4fc; border: 1px solid rgba(99, 102, 241, 0.3); }
+    .ami-chip.market { background: rgba(34, 197, 94, 0.12);  color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.3); }
+
+    /* ── AMI FLOW ── */
+    .ami-flow {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .ami-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 14px 18px;
+      background: #1e293b;
+      border: 1px solid #334155;
+      position: relative;
+    }
+    .ami-step:first-child { border-radius: 10px 10px 0 0; }
+    .ami-step:last-child  { border-radius: 0 0 10px 10px; }
+    .ami-step:not(:last-child) { border-bottom: none; }
+    .ami-step .step-num {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #f97316, #ea580c);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .ami-step .step-text {
+      font-size: 13.5px;
+      color: #cbd5e1;
+      padding-top: 4px;
+    }
+    .ami-step .step-text strong { color: #f8fafc; }
+
+    /* ── CHIPS ── */
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .chip {
+      font-size: 13px;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 999px;
+      letter-spacing: 0.04em;
+    }
+    .chip.green  { background: rgba(34, 197, 94, 0.15);  color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.3); }
+    .chip.yellow { background: rgba(251, 191, 36, 0.12); color: #fbbf24; border: 1px solid rgba(251, 191, 36, 0.3); }
+    .chip.red    { background: rgba(239, 68, 68, 0.12);  color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
+    .chip.blue   { background: rgba(125, 211, 252, 0.1); color: #7dd3fc; border: 1px solid rgba(125, 211, 252, 0.3); }
+    .chip.purple { background: rgba(167, 139, 250, 0.12); color: #c4b5fd; border: 1px solid rgba(167, 139, 250, 0.3); }
+    .chip.gray   { background: rgba(100, 116, 139, 0.15); color: #94a3b8; border: 1px solid rgba(100, 116, 139, 0.3); }
+    .chip.orange { background: rgba(249, 115, 22, 0.12); color: #fb923c; border: 1px solid rgba(249, 115, 22, 0.3); }
+    .chip.ssd    { background: rgba(125, 211, 252, 0.1); color: #7dd3fc; border: 1px solid rgba(125, 211, 252, 0.3); }
+    .chip.hdd    { background: rgba(251, 191, 36, 0.1);  color: #fbbf24; border: 1px solid rgba(251, 191, 36, 0.3); }
+
+    /* ── EBS VOLUME TYPE CARDS ── */
+    .vol-type-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 14px;
+    }
+    .vol-card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 10px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .vol-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .vol-card .vol-name {
+      font-size: 20px;
+      font-weight: 800;
+      color: #f8fafc;
+      font-family: 'Courier New', monospace;
+    }
+    .vol-card .vol-stats {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .vol-stat-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12.5px;
+    }
+    .vol-stat-row .stat-key {
+      color: #475569;
+      font-weight: 600;
+      width: 100px;
+      flex-shrink: 0;
+    }
+    .vol-stat-row .stat-val {
+      color: #cbd5e1;
+      font-weight: 500;
+    }
+    .vol-stat-row .stat-val strong { color: #f8fafc; }
+    .vol-card .vol-best {
+      font-size: 13px;
+      color: #64748b;
+      line-height: 1.45;
+      border-top: 1px solid #334155;
+      padding-top: 8px;
+    }
+    .vol-card .vol-best strong { color: #94a3b8; }
+
+    /* ── GENERIC TABLE ── */
+    .table-wrapper {
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13.5px;
+    }
+    .data-table thead tr { background: #1e293b; }
+    .data-table thead th {
+      padding: 10px 16px;
+      text-align: left;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #64748b;
+      border-bottom: 1px solid #334155;
+    }
+    .data-table tbody tr { border-bottom: 1px solid #1e293b; }
+    .data-table tbody tr:last-child { border-bottom: none; }
+    .data-table tbody tr:hover { background: #1e293b; }
+    .data-table tbody td { padding: 10px 16px; color: #cbd5e1; }
+    .data-table tbody td:first-child { font-weight: 600; color: #e2e8f0; }
+    .data-table tbody td strong { color: #f8fafc; }
+
+    /* ── CALLOUT RULES LIST ── */
+    .rules-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .rule-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 12px 16px;
+    }
+    .rule-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #f97316;
+      margin-top: 5px;
+      flex-shrink: 0;
+    }
+    .rule-text {
+      font-size: 13.5px;
+      color: #cbd5e1;
+      line-height: 1.5;
+    }
+    .rule-text strong { color: #f8fafc; }
+    .rule-text code {
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 4px;
+      padding: 1px 6px;
+      font-size: 13px;
+      color: #7dd3fc;
+      font-family: 'Courier New', monospace;
+    }
+
+    /* ── EXAM TIPS ── */
+    .exam-tips-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 12px;
+    }
+    .exam-tip-card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .exam-tip-card .tip-q {
+      font-size: 12.5px;
+      color: #64748b;
+      font-weight: 500;
+    }
+    .exam-tip-card .tip-q::before { content: 'Q: '; color: #475569; font-weight: 700; }
+    .exam-tip-card .tip-a {
+      font-size: 13.5px;
+      color: #e2e8f0;
+      font-weight: 600;
+    }
+    .exam-tip-card .tip-a::before { content: 'A: '; color: #f97316; font-weight: 700; }
+
+    /* ── FINAL COMPARISON TABLE ── */
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    .comparison-table thead tr { background: #1e293b; }
+    .comparison-table thead th {
+      padding: 12px 16px;
+      text-align: left;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border-bottom: 2px solid #334155;
+    }
+    .comparison-table thead th:nth-child(1) { color: #64748b; }
+    .comparison-table thead th:nth-child(2) { color: #f97316; }
+    .comparison-table thead th:nth-child(3) { color: #7dd3fc; }
+    .comparison-table thead th:nth-child(4) { color: #a78bfa; }
+
+    .comparison-table tbody tr { border-bottom: 1px solid #1e293b; }
+    .comparison-table tbody tr:last-child { border-bottom: none; }
+    .comparison-table tbody tr:hover { background: #1e293b40; }
+    .comparison-table tbody td {
+      padding: 11px 16px;
+      color: #94a3b8;
+      vertical-align: top;
+    }
+    .comparison-table tbody td:first-child {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #475569;
+      width: 120px;
+    }
+    .comparison-table tbody td:nth-child(2) { color: #fcd34d; }
+    .comparison-table tbody td:nth-child(3) { color: #7dd3fc; }
+    .comparison-table tbody td:nth-child(4) { color: #c4b5fd; }
+    .comparison-table tbody td strong { color: #f8fafc; }
+
+  </style>
+</head>
+<body>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-eyebrow">AWS Certified Developer Associate</div>
+    <h1>Section 6 — EC2 Instance Storage</h1>
+    <div class="hero-subtitle">EBS · Snapshots · AMI · Instance Store · EFS · Volume Types</div>
+    <div class="xp-badge">⚡ +600 XP · 8/8 quizzes · Section complete</div>
+  </div>
+
+  <div class="page-body">
+
+    <!-- WEAK POINTS -->
+    <div class="section-block">
+      <div class="callout warning">
+        <span class="callout-title">Weak Points — Review These First</span>
+        <div class="weak-point-item">
+          <span><strong>6.10 Amazon EFS — 75%</strong> · Confused Elastic vs Max I/O performance modes</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 1. EBS -->
+    <div class="section-block">
+      <div class="section-title">01 — EBS (Elastic Block Store)</div>
+      <div class="card-grid">
+        <div class="concept-card">
+          <div class="card-label">Network Drive</div>
+          <div class="card-body">Not a physical drive — communicates over the network. <strong>Slight latency possible.</strong> Can be detached from one EC2 and attached to another.</div>
+        </div>
+        <div class="concept-card">
+          <div class="card-label">AZ-Locked</div>
+          <div class="card-body"><strong>Cannot attach to an instance in a different AZ.</strong> An EBS volume in us-east-1a cannot be directly attached to an instance in us-east-1b.</div>
+        </div>
+        <div class="concept-card">
+          <div class="card-label">Persistent Storage</div>
+          <div class="card-body">Data <strong>survives instance termination.</strong> This is the key advantage over EC2 Instance Store (which is ephemeral).</div>
+        </div>
+        <div class="concept-card">
+          <div class="card-label">Delete on Termination</div>
+          <div class="card-body"><strong>Root volume:</strong> deleted by default when instance terminates.<br><strong>Additional volumes:</strong> kept by default (can be changed).</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. EBS SNAPSHOTS -->
+    <div class="section-block">
+      <div class="section-title">02 — EBS Snapshots</div>
+
+      <div class="rules-list">
+        <div class="rule-item">
+          <div class="rule-dot"></div>
+          <div class="rule-text"><strong>Point-in-time backup</strong> of an EBS volume stored in S3 (managed by AWS)</div>
+        </div>
+        <div class="rule-item">
+          <div class="rule-dot"></div>
+          <div class="rule-text">Not required to detach the volume first, <strong>but recommended</strong> for data consistency</div>
+        </div>
+        <div class="rule-item">
+          <div class="rule-dot"></div>
+          <div class="rule-text">Use snapshots to <strong>MIGRATE EBS volumes across AZs or Regions</strong> — snapshot in AZ-A, restore in AZ-B</div>
+        </div>
+      </div>
+
+      <div style="margin-top: 4px;">
+        <div class="sub-heading">Snapshot Features</div>
+        <div class="snapshot-cards">
+          <div class="snapshot-card archive">
+            <div class="snap-name">Snapshot Archive</div>
+            <div class="snap-body"><strong>75% cheaper</strong> storage tier for snapshots that are rarely accessed. Restore time takes <strong>24 to 72 hours.</strong></div>
+          </div>
+          <div class="snapshot-card recycle">
+            <div class="snap-name">Recycle Bin</div>
+            <div class="snap-body">Recover <strong>accidentally deleted snapshots.</strong> Configure retention rules from <strong>1 day to 1 year.</strong></div>
+          </div>
+          <div class="snapshot-card fast">
+            <div class="snap-name">Fast Snapshot Restore</div>
+            <div class="snap-body">Forces <strong>full initialization</strong> of a snapshot — eliminates the latency on first use. Costs more.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. AMI -->
+    <div class="section-block">
+      <div class="section-title">03 — AMI (Amazon Machine Image)</div>
+
+      <div class="rules-list">
+        <div class="rule-item">
+          <div class="rule-dot"></div>
+          <div class="rule-text"><strong>Customization of EC2</strong> — pre-packages your OS, software, configuration, and monitoring agents. Faster boot since software is pre-baked.</div>
+        </div>
+        <div class="rule-item">
+          <div class="rule-dot"></div>
+          <div class="rule-text"><strong>Region-specific</strong> — AMIs are built for a specific region. Can be <strong>copied across regions</strong> but cannot be used directly across regions.</div>
+        </div>
+      </div>
+
+      <div style="margin-top: 4px;">
+        <div class="sub-heading">AMI Types</div>
+        <div class="ami-type-grid">
+          <div class="ami-card">
+            <div class="ami-chip aws">AWS PROVIDED</div>
+            <div class="ami-type">Public AMI</div>
+            <div class="ami-desc">Provided and maintained by AWS. Example: Amazon Linux 2, Ubuntu, Windows Server. Free to use.</div>
+          </div>
+          <div class="ami-card">
+            <div class="ami-chip custom">YOUR OWN</div>
+            <div class="ami-type">Custom AMI</div>
+            <div class="ami-desc">Created and maintained by you. Contains your custom software, config, packages. Faster launch times.</div>
+          </div>
+          <div class="ami-card">
+            <div class="ami-chip market">THIRD PARTY</div>
+            <div class="ami-type">Marketplace AMI</div>
+            <div class="ami-desc">AMIs sold by third-party vendors on the AWS Marketplace. May include licensed software with cost.</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top: 4px;">
+        <div class="sub-heading">AMI Creation Flow</div>
+        <div class="ami-flow">
+          <div class="ami-step">
+            <div class="step-num">1</div>
+            <div class="step-text"><strong>Launch + customize</strong> an EC2 instance — install software, configure as needed</div>
+          </div>
+          <div class="ami-step">
+            <div class="step-num">2</div>
+            <div class="step-text"><strong>Stop the instance</strong> — ensures data integrity before imaging</div>
+          </div>
+          <div class="ami-step">
+            <div class="step-num">3</div>
+            <div class="step-text"><strong>Build the AMI</strong> — AWS creates EBS snapshots of all volumes behind the scenes</div>
+          </div>
+          <div class="ami-step">
+            <div class="step-num">4</div>
+            <div class="step-text"><strong>Launch new instances</strong> from the AMI — instantly provisioned with all pre-packaged software</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. INSTANCE STORE -->
+    <div class="section-block">
+      <div class="section-title">04 — EC2 Instance Store</div>
+
+      <div class="rules-list">
+        <div class="rule-item">
+          <div class="rule-dot"></div>
+          <div class="rule-text"><strong>Physical hard drive</strong> attached directly to the HOST hardware — not a network drive</div>
+        </div>
+        <div class="rule-item">
+          <div class="rule-dot" style="background:#4ade80;"></div>
+          <div class="rule-text"><strong>FASTEST storage on AWS</strong> — millions of IOPS vs thousands for EBS. Best raw throughput.</div>
+        </div>
+        <div class="rule-item">
+          <div class="rule-dot" style="background:#ef4444;"></div>
+          <div class="rule-text"><strong>EPHEMERAL</strong> — data is <strong>LOST</strong> when the instance is stopped, terminated, or fails</div>
+        </div>
+        <div class="rule-item">
+          <div class="rule-dot"></div>
+          <div class="rule-text"><strong>Good for:</strong> buffer, cache, scratch data, temporary content — anything stateless and replaceable</div>
+        </div>
+        <div class="rule-item">
+          <div class="rule-dot"></div>
+          <div class="rule-text"><strong>Your responsibility</strong> to backup and replicate — AWS does not manage persistence for Instance Store</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. EBS VOLUME TYPES -->
+    <div class="section-block">
+      <div class="section-title">05 — EBS Volume Types</div>
+
+      <div class="vol-type-grid">
+
+        <!-- gp3 -->
+        <div class="vol-card">
+          <div class="vol-card-header">
+            <div class="vol-name">gp3</div>
+            <div class="chips"><span class="chip ssd">SSD</span></div>
+          </div>
+          <div class="vol-stats">
+            <div class="vol-stat-row"><span class="stat-key">Max IOPS</span><span class="stat-val"><strong>16,000</strong></span></div>
+            <div class="vol-stat-row"><span class="stat-key">Throughput</span><span class="stat-val"><strong>1,000 MiB/s</strong></span></div>
+            <div class="vol-stat-row"><span class="stat-key">Boot volume</span><span class="stat-val"><span class="chip green" style="font-size:10px;padding:2px 6px;">Yes</span></span></div>
+          </div>
+          <div class="vol-best"><strong>Best for:</strong> General purpose workloads. IOPS and throughput are <strong>independent from volume size</strong> — more cost-efficient.</div>
+        </div>
+
+        <!-- gp2 -->
+        <div class="vol-card">
+          <div class="vol-card-header">
+            <div class="vol-name">gp2</div>
+            <div class="chips"><span class="chip ssd">SSD</span></div>
+          </div>
+          <div class="vol-stats">
+            <div class="vol-stat-row"><span class="stat-key">Max IOPS</span><span class="stat-val"><strong>16,000</strong></span></div>
+            <div class="vol-stat-row"><span class="stat-key">Throughput</span><span class="stat-val"><strong>250 MiB/s</strong></span></div>
+            <div class="vol-stat-row"><span class="stat-key">Boot volume</span><span class="stat-val"><span class="chip green" style="font-size:10px;padding:2px 6px;">Yes</span></span></div>
+          </div>
+          <div class="vol-best"><strong>Best for:</strong> Legacy general purpose. IOPS <strong>tied to size</strong> (3 IOPS/GiB). Max 16K IOPS at 5,334 GiB.</div>
+        </div>
+
+        <!-- io1 -->
+        <div class="vol-card">
+          <div class="vol-card-header">
+            <div class="vol-name">io1</div>
+            <div class="chips"><span class="chip ssd">SSD</span></div>
+          </div>
+          <div class="vol-stats">
+            <div class="vol-stat-row"><span class="stat-key">Max IOPS</span><span class="stat-val"><strong>64,000</strong></span></div>
+            <div class="vol-stat-row"><span class="stat-key">Throughput</span><span class="stat-val"><strong>1,000 MiB/s</strong></span></div>
+            <div class="vol-stat-row"><span class="stat-key">Boot volume</span><span class="stat-val"><span class="chip green" style="font-size:10px;padding:2px 6px;">Yes</span></span></div>
+          </div>
+          <div class="vol-best"><strong>Best for:</strong> Critical workloads needing >16K IOPS. Databases (MySQL, Oracle, NoSQL). Supports Multi-Attach.</div>
+        </div>
+
+        <!-- io2 -->
+        <div class="vol-card">
+          <div class="vol-card-header">
+            <div class="vol-name">io2</div>
+            <div class="chips"><span class="chip ssd">SSD</span></div>
+          </div>
+          <div class="vol-stats">
+            <div class="vol-stat-row"><span class="stat-key">Max IOPS</span><span class="stat-val"><strong>256,000</strong> (Block Express)</span></div>
+            <div class="vol-stat-row"><span class="stat-key">Throughput</span><span class="stat-val"><strong>7,500 MiB/s</strong></span></div>
+            <div class="vol-stat-row"><span class="stat-key">Boot volume</span><span class="stat-val"><span class="chip green" style="font-size:10px;padding:2px 6px;">Yes</span></span></div>
+          </div>
+          <div class="vol-best"><strong>Best for:</strong> Same as io1 but higher durability (99.999%). io2 Block Express reaches 256K IOPS. Supports Multi-Attach.</div>
+        </div>
+
+        <!-- st1 -->
+        <div class="vol-card">
+          <div class="vol-card-header">
+            <div class="vol-name">st1</div>
+            <div class="chips"><span class="chip hdd">HDD</span></div>
+          </div>
+          <div class="vol-stats">
+            <div class="vol-stat-row"><span class="stat-key">Max IOPS</span><span class="stat-val"><strong>500</strong></span></div>
+            <div class="vol-stat-row"><span class="stat-key">Throughput</span><span class="stat-val"><strong>500 MiB/s</strong></span></div>
+            <div class="vol-stat-row"><span class="stat-key">Boot volume</span><span class="stat-val"><span class="chip red" style="font-size:10px;padding:2px 6px;">No</span></span></div>
+          </div>
+          <div class="vol-best"><strong>Best for:</strong> Throughput-optimized HDD. Big Data, data warehouses, log processing. High sequential throughput.</div>
+        </div>
+
+        <!-- sc1 -->
+        <div class="vol-card">
+          <div class="vol-card-header">
+            <div class="vol-name">sc1</div>
+            <div class="chips"><span class="chip hdd">HDD</span></div>
+          </div>
+          <div class="vol-stats">
+            <div class="vol-stat-row"><span class="stat-key">Max IOPS</span><span class="stat-val"><strong>250</strong></span></div>
+            <div class="vol-stat-row"><span class="stat-key">Throughput</span><span class="stat-val"><strong>250 MiB/s</strong></span></div>
+            <div class="vol-stat-row"><span class="stat-key">Boot volume</span><span class="stat-val"><span class="chip red" style="font-size:10px;padding:2px 6px;">No</span></span></div>
+          </div>
+          <div class="vol-best"><strong>Best for:</strong> Cold HDD — lowest cost. Infrequently accessed data where cost matters most. Archive workloads.</div>
+        </div>
+
+      </div>
+
+      <div style="margin-top: 8px; display: flex; flex-direction: column; gap: 10px;">
+        <div class="callout warning">
+          <strong>gp3 vs gp2:</strong> gp3 IOPS is independent from size — you can provision more IOPS without buying a larger volume. gp2 IOPS is tied to size: 3 IOPS/GiB, maxing at 16,000 IOPS at 5,334 GiB.
+        </div>
+        <div class="callout info">
+          <strong>Boot volumes:</strong> Only SSD types can be used as root/boot volumes (gp2, gp3, io1, io2). HDD types (st1, sc1) cannot boot.
+        </div>
+        <div class="callout danger">
+          <strong>IOPS thresholds:</strong> Need &gt;16K IOPS → use io1 or io2. Need &gt;256K IOPS → only EC2 Instance Store can exceed io2 Block Express's 256K max.
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. EBS MULTI-ATTACH -->
+    <div class="section-block">
+      <div class="section-title">06 — EBS Multi-Attach</div>
+      <div class="card-grid">
+        <div class="concept-card">
+          <div class="card-label">Supported Types</div>
+          <div class="card-body"><strong>io1 and io2 ONLY.</strong> General purpose (gp2, gp3) and HDD types do not support Multi-Attach.</div>
+        </div>
+        <div class="concept-card">
+          <div class="card-label">AZ Constraint</div>
+          <div class="card-body"><strong>Same AZ only.</strong> You cannot Multi-Attach across Availability Zones.</div>
+        </div>
+        <div class="concept-card">
+          <div class="card-label">Instance Limit</div>
+          <div class="card-body"><strong>Maximum 16 EC2 instances</strong> can be attached to a single Multi-Attach volume simultaneously.</div>
+        </div>
+        <div class="concept-card">
+          <div class="card-label">File System</div>
+          <div class="card-body">Requires a <strong>cluster-aware file system</strong>. NOT compatible with XFS or EXT4 — use GFS2 or OCFS2 for concurrent writes.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7. EFS -->
+    <div class="section-block">
+      <div class="section-title">07 — Amazon EFS (Elastic File System)</div>
+
+      <div class="card-grid">
+        <div class="concept-card">
+          <div class="card-label">Managed NFS</div>
+          <div class="card-body">Network File System (NFS protocol). Fully managed — no provisioning, patching, or capacity planning required.</div>
+        </div>
+        <div class="concept-card">
+          <div class="card-label">Linux Only</div>
+          <div class="card-body"><strong>POSIX file system — Linux only.</strong> Does NOT support Windows instances. Uses standard NFS file permissions.</div>
+        </div>
+        <div class="concept-card">
+          <div class="card-label">Scale</div>
+          <div class="card-body">Mount across <strong>hundreds of EC2 instances</strong> in <strong>multiple AZs</strong> simultaneously. Truly shared storage.</div>
+        </div>
+        <div class="concept-card">
+          <div class="card-label">Cost &amp; Port</div>
+          <div class="card-body"><strong>~3x more expensive</strong> than gp2. But pay-per-use — no capacity to provision. Port <strong>2049</strong> (NFS).</div>
+        </div>
+      </div>
+
+      <div style="margin-top: 4px;">
+        <div class="sub-heading">Performance Modes (set at creation, cannot change)</div>
+        <div class="table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Mode</th>
+                <th>Latency</th>
+                <th>Throughput</th>
+                <th>Best For</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>General Purpose</td>
+                <td><span class="chip green" style="font-size:11px;">Low latency</span></td>
+                <td>Normal</td>
+                <td>Default — web servers, CMS, home directories, development</td>
+              </tr>
+              <tr>
+                <td>Max I/O</td>
+                <td><span class="chip yellow" style="font-size:11px;">Higher latency</span></td>
+                <td><strong>Very high</strong></td>
+                <td>Big data analytics, media processing, high parallelism workloads</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div style="margin-top: 4px;">
+        <div class="sub-heading">Throughput Modes</div>
+        <div class="table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Mode</th>
+                <th>Scaling Behavior</th>
+                <th>Best For</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Bursting</td>
+                <td>Scales with storage size</td>
+                <td>Variable workloads, typical NFS use cases</td>
+              </tr>
+              <tr>
+                <td>Provisioned</td>
+                <td>Set independently of storage size</td>
+                <td>Known high-throughput workloads (e.g., 1 GiB/s for 1 TB stored)</td>
+              </tr>
+              <tr>
+                <td><strong>Elastic</strong></td>
+                <td>Auto-scales up/down (up to <strong>3 GiB/s reads</strong>)</td>
+                <td><strong>Unpredictable workloads</strong> — recommended default in modern AWS</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div style="margin-top: 4px;">
+        <div class="sub-heading">Storage Tiers (Lifecycle Management)</div>
+        <div class="table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Tier</th>
+                <th>Access Pattern</th>
+                <th>Cost</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Standard</td>
+                <td>Frequently accessed</td>
+                <td>Higher storage cost</td>
+              </tr>
+              <tr>
+                <td>EFS-IA</td>
+                <td>Infrequently accessed</td>
+                <td>Lower storage cost + retrieval fee per access</td>
+              </tr>
+              <tr>
+                <td>Archive</td>
+                <td>Rarely accessed (a few times per year)</td>
+                <td><strong>Cheapest</strong> storage cost</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="callout warning">
+        <span class="callout-title">Weak Point Trap</span>
+        <strong>Performance Modes vs Throughput Modes — do NOT confuse these:</strong><br><br>
+        <strong>Performance Mode</strong> = about latency + parallelism (General Purpose = low latency / Max I/O = massive throughput but higher latency)<br>
+        <strong>Throughput Mode</strong> = about how much data can flow (Bursting = tied to storage / Provisioned = fixed / Elastic = auto-scales)<br><br>
+        General Purpose does NOT mean low throughput. Max I/O does NOT mean "more expensive throughput mode."
+      </div>
+    </div>
+
+    <!-- 8. FINAL COMPARISON TABLE -->
+    <div class="section-block">
+      <div class="section-title">08 — Storage Comparison: EBS vs EFS vs Instance Store</div>
+
+      <div class="table-wrapper">
+        <table class="comparison-table">
+          <thead>
+            <tr>
+              <th>Feature</th>
+              <th>Instance Store</th>
+              <th>EBS</th>
+              <th>EFS</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Type</td>
+              <td>Physical (host hardware)</td>
+              <td>Network drive (block)</td>
+              <td>Network file system</td>
+            </tr>
+            <tr>
+              <td>AZ Scope</td>
+              <td>Single AZ (tied to instance)</td>
+              <td>Single AZ only</td>
+              <td><strong>Cross-AZ</strong></td>
+            </tr>
+            <tr>
+              <td>Persistence</td>
+              <td><strong>Ephemeral</strong> — data lost on stop/terminate</td>
+              <td><strong>Persistent</strong> — survives termination</td>
+              <td><strong>Persistent</strong> — survives termination</td>
+            </tr>
+            <tr>
+              <td>OS Support</td>
+              <td>Linux + Windows</td>
+              <td>Linux + Windows</td>
+              <td><strong>Linux ONLY</strong> (POSIX)</td>
+            </tr>
+            <tr>
+              <td>Speed</td>
+              <td><strong>Fastest</strong> (millions IOPS)</td>
+              <td>Fast (thousands IOPS)</td>
+              <td>Slower (network I/O)</td>
+            </tr>
+            <tr>
+              <td>Sharing</td>
+              <td>Single instance</td>
+              <td>Single instance (io1/io2: 16 max)</td>
+              <td><strong>Hundreds of instances</strong></td>
+            </tr>
+            <tr>
+              <td>Use Case</td>
+              <td>Temp cache, buffer, scratch data</td>
+              <td>OS root volumes, databases</td>
+              <td>Shared files, WordPress, CMS</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 9. EXAM TIPS -->
+    <div class="section-block">
+      <div class="section-title">09 — Exam Tips</div>
+      <div class="exam-tips-grid">
+
+        <div class="exam-tip-card">
+          <div class="tip-q">Fastest storage option on AWS?</div>
+          <div class="tip-a">EC2 Instance Store — millions of IOPS, but ephemeral</div>
+        </div>
+
+        <div class="exam-tip-card">
+          <div class="tip-q">AZ-locked network block storage?</div>
+          <div class="tip-a">EBS — cannot be directly used across AZs</div>
+        </div>
+
+        <div class="exam-tip-card">
+          <div class="tip-q">Move EBS to another AZ?</div>
+          <div class="tip-a">Take a snapshot, then restore in the new AZ</div>
+        </div>
+
+        <div class="exam-tip-card">
+          <div class="tip-q">Boot volumes must be...</div>
+          <div class="tip-a">SSD only (gp2, gp3, io1, io2) — HDD cannot boot</div>
+        </div>
+
+        <div class="exam-tip-card">
+          <div class="tip-q">gp3 vs gp2 key difference?</div>
+          <div class="tip-a">gp3 IOPS independent from size; gp2 IOPS tied to size (3/GiB)</div>
+        </div>
+
+        <div class="exam-tip-card">
+          <div class="tip-q">Need more than 256K IOPS?</div>
+          <div class="tip-a">Only EC2 Instance Store — io2 Block Express maxes at 256K</div>
+        </div>
+
+        <div class="exam-tip-card">
+          <div class="tip-q">Multi-Attach allowed for?</div>
+          <div class="tip-a">io1 and io2 only — same AZ, max 16 instances, cluster-aware FS required</div>
+        </div>
+
+        <div class="exam-tip-card">
+          <div class="tip-q">EFS is ___ compatible</div>
+          <div class="tip-a">Linux only (POSIX) — does NOT work on Windows</div>
+        </div>
+
+        <div class="exam-tip-card">
+          <div class="tip-q">EFS works across AZs?</div>
+          <div class="tip-a">Yes — can be mounted on instances across multiple AZs simultaneously</div>
+        </div>
+
+        <div class="exam-tip-card">
+          <div class="tip-q">Cheapest EFS option?</div>
+          <div class="tip-a">One Zone-IA — single AZ + infrequent access tier</div>
+        </div>
+
+        <div class="exam-tip-card">
+          <div class="tip-q">Shared file system for hundreds of EC2s?</div>
+          <div class="tip-a">EFS — the only option that supports concurrent access from hundreds of instances</div>
+        </div>
+
+        <div class="exam-tip-card">
+          <div class="tip-q">EFS performance mode for big data?</div>
+          <div class="tip-a">Max I/O (not General Purpose) — higher latency but massive parallel throughput</div>
+        </div>
+
+        <div class="exam-tip-card">
+          <div class="tip-q">EFS throughput for unpredictable workloads?</div>
+          <div class="tip-a">Elastic — auto-scales throughput up and down as needed</div>
+        </div>
+
+      </div>
+    </div>
+
+  </div><!-- end page-body -->
+
+</body>
+</html>

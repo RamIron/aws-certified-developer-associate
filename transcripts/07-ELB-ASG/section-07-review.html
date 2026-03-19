@@ -1,0 +1,1175 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Section 7 — ELB + ASG</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap");
+
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        background: #0f172a;
+        color: #e2e8f0;
+        line-height: 1.6;
+        padding: 0 0 64px;
+      }
+
+      /* ── HERO ── */
+      .hero {
+        background: linear-gradient(135deg, #1e293b 0%, #0f172a 60%, #1a1a2e 100%);
+        border-bottom: 1px solid #334155;
+        padding: 48px 32px 40px;
+        text-align: center;
+      }
+      .hero-eyebrow {
+        font-size: 13px;
+        font-weight: 600;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: #f97316;
+        margin-bottom: 12px;
+      }
+      h1 {
+        font-size: clamp(26px, 4vw, 40px);
+        font-weight: 800;
+        color: #f8fafc;
+        margin-bottom: 8px;
+        letter-spacing: -0.02em;
+      }
+      .hero-subtitle {
+        font-size: 15px;
+        color: #94a3b8;
+        margin-bottom: 20px;
+        font-weight: 400;
+      }
+      .xp-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: linear-gradient(135deg, #f97316, #ea580c);
+        color: #fff;
+        font-size: 13px;
+        font-weight: 700;
+        padding: 8px 18px;
+        border-radius: 999px;
+        letter-spacing: 0.01em;
+      }
+
+      .container {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 40px 24px 0;
+      }
+
+      /* ── SECTION CARDS ── */
+      .card {
+        background: #1e293b;
+        border-radius: 16px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        border: 1px solid #334155;
+      }
+      .card-header {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 1.5rem;
+      }
+      .badge {
+        background: #f97316;
+        color: #0f172a;
+        font-weight: 800;
+        font-size: 13px;
+        padding: 0.25rem 0.65rem;
+        border-radius: 6px;
+      }
+      h2 {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: #f8fafc;
+      }
+      h3 {
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: #d2d2d2;
+        margin: 1.5rem 0 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+      }
+
+      p {
+        color: #d2d2d2;
+        font-size: 0.9rem;
+        margin-bottom: 0.75rem;
+      }
+      p strong {
+        color: #e2e8f0;
+      }
+
+      /* ── CONCEPT CARDS GRID ── */
+      .concept-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 0.9rem;
+      }
+      .concept-card {
+        background: #0f172a;
+        border-radius: 12px;
+        padding: 1.1rem 1.2rem;
+        border: 1px solid #1e293b;
+      }
+      .concept-card .icon {
+        font-size: 1.4rem;
+        margin-bottom: 0.5rem;
+      }
+      .concept-card h4 {
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: #f8fafc;
+        margin-bottom: 0.3rem;
+      }
+      .concept-card p {
+        font-size: 13px;
+        color: #d2d2d2;
+        margin: 0;
+      }
+
+      /* ── LB COMPARISON CARDS ── */
+      .lb-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 1rem;
+      }
+      .lb-card {
+        background: #0f172a;
+        border-radius: 12px;
+        padding: 1.3rem;
+        border: 1px solid #1e293b;
+      }
+      .lb-card.alb {
+        border-top: 3px solid #3b82f6;
+      }
+      .lb-card.nlb {
+        border-top: 3px solid #10b981;
+      }
+      .lb-card.gwlb {
+        border-top: 3px solid #a855f7;
+      }
+      .lb-card h4 {
+        font-size: 0.9rem;
+        font-weight: 700;
+        margin-bottom: 0.25rem;
+      }
+      .lb-card.alb h4 { color: #60a5fa; }
+      .lb-card.nlb h4 { color: #34d399; }
+      .lb-card.gwlb h4 { color: #c084fc; }
+      .lb-card .lb-sub {
+        font-size: 13px;
+        color: #64748b;
+        margin-bottom: 0.85rem;
+      }
+      .lb-card ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+      .lb-card ul li {
+        font-size: 13px;
+        color: #d2d2d2;
+        padding: 0.22rem 0;
+        padding-left: 1.1rem;
+        position: relative;
+        border-bottom: 1px solid #1e293b;
+      }
+      .lb-card ul li:last-child {
+        border-bottom: none;
+      }
+      .lb-card.alb ul li::before { content: "›"; position: absolute; left: 0; color: #3b82f6; font-weight: 700; }
+      .lb-card.nlb ul li::before { content: "›"; position: absolute; left: 0; color: #10b981; font-weight: 700; }
+      .lb-card.gwlb ul li::before { content: "›"; position: absolute; left: 0; color: #a855f7; font-weight: 700; }
+      .lb-chip-row {
+        margin-top: 0.9rem;
+      }
+
+      /* ── CALLOUTS ── */
+      .callout {
+        border-radius: 8px;
+        padding: 0.75rem 1rem;
+        margin: 1rem 0;
+        font-size: 0.85rem;
+      }
+      .callout.warning {
+        background: #451a0322;
+        border: 1px dashed #f97316;
+        color: #fdba74;
+      }
+      .callout.danger {
+        background: #7f1d1d22;
+        border: 1px solid #dc262644;
+        color: #fca5a5;
+      }
+      .callout.info {
+        background: #1e3a5f22;
+        border-left: 3px solid #3b82f6;
+        color: #93c5fd;
+      }
+      .callout.success {
+        background: #064e3b22;
+        border-left: 3px solid #10b981;
+        color: #6ee7b7;
+      }
+
+      /* ── CHIPS ── */
+      .chip {
+        font-size: 13px;
+        font-weight: 700;
+        padding: 0.15rem 0.45rem;
+        border-radius: 4px;
+        white-space: nowrap;
+      }
+      .chip.red   { background: #7f1d1d; color: #fca5a5; }
+      .chip.green { background: #064e3b; color: #6ee7b7; }
+      .chip.yellow{ background: #422006; color: #fcd34d; }
+      .chip.blue  { background: #1e3a5f; color: #93c5fd; }
+      .chip.purple{ background: #3b0764; color: #d8b4fe; }
+      .chip.gray  { background: #1e293b; color: #64748b; }
+
+      /* ── INSTANCE BOXES ── */
+      @keyframes fadeScale {
+        from { opacity: 0; transform: scale(0.75); }
+        to   { opacity: 1; transform: scale(1); }
+      }
+      @keyframes blink {
+        0%, 100% { opacity: 1; }
+        50%       { opacity: 0.35; }
+      }
+      .inst {
+        width: 52px;
+        height: 52px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        font-size: 13px;
+        flex-shrink: 0;
+        animation: fadeScale 0.35s ease forwards;
+      }
+      .inst.v1 {
+        background: #1e3a5f;
+        color: #60a5fa;
+        border: 2px solid #3b82f6;
+      }
+      .inst.v2 {
+        background: #431407;
+        color: #fb923c;
+        border: 2px solid #f97316;
+      }
+      .inst.off {
+        background: #111827;
+        color: #374151;
+        border: 2px dashed #1e293b;
+      }
+      .inst.temp {
+        background: #064e3b;
+        color: #34d399;
+        border: 2px solid #10b981;
+      }
+      .inst.upd {
+        background: #422006;
+        color: #fcd34d;
+        border: 2px solid #f59e0b;
+        animation: blink 0.9s infinite;
+      }
+      .instance-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: center;
+        min-height: 52px;
+      }
+
+      /* ── ASG BOX ── */
+      .asg-box {
+        flex: 1;
+        min-width: 140px;
+        background: #0f172a;
+        border-radius: 10px;
+        padding: 0.9rem 1rem;
+        border: 1px solid #1e293b;
+      }
+      .asg-label {
+        font-size: 13px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        margin-bottom: 0.65rem;
+      }
+      .asg-label.main  { color: #60a5fa; }
+      .asg-label.temp  { color: #34d399; }
+      .asg-label.blue  { color: #93c5fd; }
+      .asg-label.green { color: #34d399; }
+      .asg-label.orange{ color: #fb923c; }
+      .dual-asg {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+
+      /* ── ANIMATED DEMO ── */
+      .demo-wrap {
+        background: #0f172a;
+        border-radius: 12px;
+        padding: 1.4rem;
+        margin: 0.5rem 0 1.5rem;
+      }
+      .demo-title {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        margin-bottom: 1rem;
+      }
+      .demo-title h4 {
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: #f8fafc;
+      }
+      .mode-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+      .anim-body {
+        min-height: 100px;
+        margin-bottom: 0.75rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.9rem;
+      }
+      .step-desc {
+        font-size: 0.83rem;
+        color: #d2d2d2;
+        background: #1e293b;
+        border-left: 3px solid #334155;
+        border-radius: 0 8px 8px 0;
+        padding: 0.5rem 0.85rem;
+        min-height: 2.2rem;
+        line-height: 1.5;
+        transition: border-color 0.3s;
+      }
+      .hl-v1  { color: #60a5fa; font-weight: 700; }
+      .hl-v2  { color: #fb923c; font-weight: 700; }
+      .hl-d   { color: #f87171; font-weight: 700; }
+      .hl-ok  { color: #34d399; font-weight: 700; }
+      .hl-tmp { color: #a78bfa; font-weight: 700; }
+
+      .anim-controls {
+        display: flex;
+        align-items: center;
+        gap: 0.85rem;
+        flex-wrap: wrap;
+      }
+      .nav-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+        background: transparent;
+        color: #f97316;
+        border: 1px solid #f97316;
+        border-radius: 8px;
+        padding: 0.4rem 0.9rem;
+        font-weight: 700;
+        font-size: 0.82rem;
+        cursor: pointer;
+        transition: background 0.2s;
+        font-family: "Inter", sans-serif;
+        white-space: nowrap;
+      }
+      .nav-btn:hover:not(:disabled) { background: #f9731618; }
+      .nav-btn:disabled { opacity: 0.22; cursor: default; }
+      .restart-btn {
+        background: transparent;
+        color: #475569;
+        border: 1px solid #1e293b;
+        border-radius: 8px;
+        padding: 0.4rem 0.75rem;
+        font-size: 13px;
+        cursor: pointer;
+        transition: color 0.2s, border-color 0.2s;
+        font-family: "Inter", sans-serif;
+        margin-left: auto;
+      }
+      .restart-btn:hover { color: #94a3b8; border-color: #334155; }
+      .step-dots { display: flex; gap: 5px; }
+      .sdot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #1e293b;
+        transition: background 0.3s, transform 0.3s;
+      }
+      .sdot.active { background: #f97316; transform: scale(1.3); }
+      .step-counter {
+        font-size: 13px;
+        color: #d2d2d2;
+        margin-left: auto;
+      }
+
+      /* ── AZ LAYOUT FOR CROSS-ZONE ── */
+      .az-layout {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+      .az-zone {
+        flex: 1;
+        min-width: 160px;
+        background: #0f172a;
+        border-radius: 10px;
+        padding: 0.9rem 1rem;
+        border: 1px solid #1e293b;
+      }
+      .az-zone-label {
+        font-size: 13px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        margin-bottom: 0.65rem;
+        color: #64748b;
+      }
+      .az-elb-box {
+        background: #1e293b;
+        border-radius: 8px;
+        padding: 0.5rem 0.75rem;
+        margin-bottom: 0.65rem;
+        font-size: 13px;
+        font-weight: 700;
+        color: #94a3b8;
+        border: 1px solid #334155;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .az-elb-box .traffic-pct {
+        font-size: 13px;
+        font-weight: 800;
+        color: #f97316;
+      }
+      .az-instances {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+      .inst-block {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.25rem;
+      }
+      .inst-pct {
+        font-size: 13px;
+        font-weight: 700;
+        color: #94a3b8;
+      }
+      .inst-pct.high { color: #f87171; }
+      .inst-pct.equal { color: #34d399; }
+
+      /* ── TABLE ── */
+      .data-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.82rem;
+        margin: 0.75rem 0;
+      }
+      .data-table th {
+        background: #0f172a;
+        color: #94a3b8;
+        font-weight: 700;
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        padding: 0.55rem 0.9rem;
+        text-align: left;
+        border-bottom: 1px solid #334155;
+      }
+      .data-table td {
+        padding: 0.55rem 0.9rem;
+        color: #d2d2d2;
+        border-bottom: 1px solid #1e293b;
+      }
+      .data-table tr:last-child td { border-bottom: none; }
+
+      /* ── EXAM TIPS ── */
+      .tips-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 0.7rem;
+      }
+      .tip {
+        background: #0f172a;
+        border-left: 3px solid #f97316;
+        border-radius: 0 8px 8px 0;
+        padding: 0.65rem 1rem;
+        font-size: 0.83rem;
+      }
+      .tip .trigger { color: #64748b; }
+      .tip .arrow   { color: #334155; margin: 0 0.25rem; }
+      .tip .answer  { color: #f8fafc; font-weight: 700; }
+
+      /* ── SCALING POLICIES GRID ── */
+      .policy-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 0.9rem;
+      }
+      .policy-card {
+        background: #0f172a;
+        border-radius: 12px;
+        padding: 1.1rem 1.2rem;
+        border: 1px solid #1e293b;
+        border-top: 3px solid #f97316;
+      }
+      .policy-card h4 {
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: #f8fafc;
+        margin-bottom: 0.4rem;
+      }
+      .policy-card p {
+        font-size: 13px;
+        color: #d2d2d2;
+        margin: 0;
+      }
+      .policy-card .example {
+        margin-top: 0.5rem;
+        font-size: 13px;
+        color: #f97316;
+        font-style: italic;
+      }
+
+      @media (max-width: 680px) {
+        body { padding: 1rem; }
+        h1   { font-size: 1.6rem; }
+        .az-layout,
+        .dual-asg { flex-direction: column; }
+        .lb-grid { grid-template-columns: 1fr; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="hero">
+      <div class="hero-eyebrow">AWS Certified Developer Associate</div>
+      <h1>Section 7 — ELB + ASG</h1>
+      <div class="hero-subtitle">Load Balancers · Scaling Policies · High Availability</div>
+      <div class="xp-badge">⚡ +800 XP &nbsp;·&nbsp; 10/10 quizzes &nbsp;·&nbsp; Section complete</div>
+    </div>
+    <div class="container">
+
+      <!-- ══════════════ WEAK POINTS ══════════════ -->
+      <div class="callout danger" style="margin-bottom: 2rem;">
+        <strong style="color:#f87171; display:block; margin-bottom:0.5rem;">⚠ Weak Points — Review Before Exam</strong>
+        <ul style="list-style:none; padding:0; display:flex; flex-direction:column; gap:0.4rem;">
+          <li>
+            <strong style="color:#fca5a5;">7.15 ASG Overview — 67%</strong>
+            <span style="color:#fca5a5; font-size:0.82rem;"> · Confused where to update AMI — answer: <strong>launch template</strong>, not the running instances</span>
+          </li>
+          <li>
+            <strong style="color:#fca5a5;">7.19 ASG Instance Refresh — 50%</strong>
+            <span style="color:#fca5a5; font-size:0.82rem;"> · Confused warm-up time behavior — it is <strong>fixed</strong>, does NOT auto-extend</span>
+          </li>
+          <li>
+            <strong style="color:#fca5a5;">Udemy quiz — 14/20</strong>
+            <span style="color:#fca5a5; font-size:0.82rem;"> · Below 75% threshold — section marked REVIEW</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- ══════════════ 1. SCALABILITY & HA ══════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">1</span>
+          <h2>Scalability &amp; High Availability</h2>
+        </div>
+
+        <div class="concept-grid">
+          <div class="concept-card">
+            <div class="icon">📈</div>
+            <h4>Vertical Scaling</h4>
+            <p>Bigger instance (scale up / down). Limited by hardware ceiling. Example: t2.micro → t2.large.</p>
+          </div>
+          <div class="concept-card">
+            <div class="icon">🖥</div>
+            <h4>Horizontal Scaling</h4>
+            <p>More instances (scale out / in). No hardware limit. Enabled by <strong>ASG + ELB</strong>.</p>
+          </div>
+          <div class="concept-card">
+            <div class="icon">🏛</div>
+            <h4>High Availability</h4>
+            <p>Multi-AZ deployment — survives an AZ failure. Enabled by <strong>ASG multi-AZ</strong> + <strong>ELB multi-AZ</strong>.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════ 2. LOAD BALANCER COMPARISON ══════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">2</span>
+          <h2>Load Balancer Comparison</h2>
+        </div>
+
+        <div class="lb-grid">
+
+          <!-- ALB -->
+          <div class="lb-card alb">
+            <h4>ALB — Application Load Balancer</h4>
+            <div class="lb-sub">Layer 7 · HTTP / HTTPS / WebSocket</div>
+            <ul>
+              <li>Web apps, microservices, containers</li>
+              <li>Routing: URL path, hostname, query string, headers</li>
+              <li>No static IP — DNS name only</li>
+              <li>Targets: EC2, ECS, Lambda, private IPs</li>
+              <li>Real client IP via <strong>X-Forwarded-For</strong> header</li>
+            </ul>
+            <div class="lb-chip-row">
+              <span class="chip blue">Layer 7</span>
+            </div>
+          </div>
+
+          <!-- NLB -->
+          <div class="lb-card nlb">
+            <h4>NLB — Network Load Balancer</h4>
+            <div class="lb-sub">Layer 4 · TCP / UDP / TLS</div>
+            <ul>
+              <li>Extreme performance, ultra-low latency</li>
+              <li>Static IPs per AZ (Elastic IP support)</li>
+              <li>Can be placed in front of ALB</li>
+              <li>Targets: EC2, private IPs, ALB</li>
+              <li>Sticky sessions via source IP (no cookies)</li>
+            </ul>
+            <div class="lb-chip-row">
+              <span class="chip green">Layer 4</span>
+            </div>
+          </div>
+
+          <!-- GWLB -->
+          <div class="lb-card gwlb">
+            <h4>GWLB — Gateway Load Balancer</h4>
+            <div class="lb-sub">Layer 3 · IP Packets · GENEVE port 6081</div>
+            <ul>
+              <li>Network traffic inspection (firewalls, IDS/IPS)</li>
+              <li>Routes every packet through 3rd-party appliances</li>
+              <li>Uses GENEVE protocol, port 6081</li>
+              <li>Targets: EC2, private IPs</li>
+              <li>Transparent to the application</li>
+            </ul>
+            <div class="lb-chip-row">
+              <span class="chip purple">Layer 3</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ══════════════ 3. STICKY SESSIONS ══════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">3</span>
+          <h2>Sticky Sessions</h2>
+        </div>
+
+        <div class="concept-grid">
+          <div class="concept-card">
+            <div class="icon">📌</div>
+            <h4>What it does</h4>
+            <p>Same client always routes to the same backend instance across requests.</p>
+          </div>
+          <div class="concept-card">
+            <div class="icon">🍪</div>
+            <h4>ALB — Cookie-based</h4>
+            <p><strong>Application-based</strong> (custom cookie) or <strong>duration-based</strong> (LB-generated). Configured at target group level.</p>
+          </div>
+          <div class="concept-card">
+            <div class="icon">🌐</div>
+            <h4>NLB — Source IP hash</h4>
+            <p>No cookies — uses source IP to route consistently. Simpler but less flexible.</p>
+          </div>
+          <div class="concept-card">
+            <div class="icon">⚙️</div>
+            <h4>Config level</h4>
+            <p>Sticky sessions are configured at the <strong>TARGET GROUP level</strong>, not the listener or LB itself.</p>
+          </div>
+        </div>
+
+        <div class="callout info" style="margin-top:1rem;">
+          <strong>Reserved cookie names:</strong> AWSALB, AWSALBAPP, AWSALBTG — do not use these names in your own cookies.
+        </div>
+
+        <div class="callout warning">
+          ⚠ <strong>Trade-off:</strong> Sticky sessions can cause load imbalance if some users generate significantly more load than others. A "heavy" user stays pinned to one instance, overloading it while others are idle.
+        </div>
+      </div>
+
+      <!-- ══════════════ 4. CROSS-ZONE LOAD BALANCING ══════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">4</span>
+          <h2>Cross-Zone Load Balancing</h2>
+        </div>
+
+        <p>Controls whether an ELB node in one AZ can distribute traffic to instances in <em>other</em> AZs.</p>
+
+        <div class="demo-wrap">
+          <div class="demo-title">
+            <div class="mode-dot" style="background:#f97316;"></div>
+            <h4>Cross-Zone — Interactive Demo</h4>
+          </div>
+
+          <div id="cz" class="anim-body"></div>
+
+          <div class="anim-controls" style="margin-top:0.75rem;">
+            <button class="nav-btn" id="cz-prev" onclick="prev('cz')">&#8592; Prev</button>
+            <div class="step-dots" id="cz-dots"></div>
+            <button class="nav-btn" id="cz-next" onclick="next('cz')">Next &#8594;</button>
+            <span class="step-counter" id="cz-counter"></span>
+            <button class="restart-btn" onclick="restart('cz')">&#8635; Restart</button>
+          </div>
+        </div>
+
+        <h3>Defaults by LB Type</h3>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Load Balancer</th>
+              <th>Cross-Zone Default</th>
+              <th>Inter-AZ Charges</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span style="color:#60a5fa; font-weight:700;">ALB</span></td>
+              <td><span class="chip green">ON by default</span></td>
+              <td>No charges</td>
+            </tr>
+            <tr>
+              <td><span style="color:#34d399; font-weight:700;">NLB</span></td>
+              <td><span class="chip gray">OFF by default</span></td>
+              <td>Charges apply when enabled</td>
+            </tr>
+            <tr>
+              <td><span style="color:#c084fc; font-weight:700;">GWLB</span></td>
+              <td><span class="chip gray">OFF by default</span></td>
+              <td>Charges apply when enabled</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ══════════════ 5. SSL/TLS ══════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">5</span>
+          <h2>SSL / TLS Certificates</h2>
+        </div>
+
+        <div class="concept-grid">
+          <div class="concept-card">
+            <div class="icon">🔐</div>
+            <h4>SSL Termination</h4>
+            <p>LB decrypts HTTPS traffic, then forwards plain HTTP to backend instances. Instances don't need to hold SSL certs.</p>
+          </div>
+          <div class="concept-card">
+            <div class="icon">📜</div>
+            <h4>ACM — AWS Certificate Manager</h4>
+            <p>Manages SSL/TLS certificates. Supports auto-renewal. Integrates natively with ALB and NLB.</p>
+          </div>
+          <div class="concept-card">
+            <div class="icon">🏷</div>
+            <h4>SNI — Server Name Indication</h4>
+            <p>Allows <strong>multiple SSL certs</strong> on a single load balancer listener. Supported by <strong>ALB &amp; NLB only</strong> — Classic LB does NOT support SNI.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════ 6. CONNECTION DRAINING ══════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">6</span>
+          <h2>Connection Draining</h2>
+        </div>
+
+        <div class="concept-grid">
+          <div class="concept-card">
+            <div class="icon">💧</div>
+            <h4>Also called</h4>
+            <p><strong>Deregistration Delay</strong> — same feature, different names depending on context.</p>
+          </div>
+          <div class="concept-card">
+            <div class="icon">⏳</div>
+            <h4>What it does</h4>
+            <p>In-flight requests get time to complete when an instance is deregistered or marked unhealthy. ELB stops sending NEW requests to the draining instance.</p>
+          </div>
+          <div class="concept-card">
+            <div class="icon">⚙️</div>
+            <h4>Timing</h4>
+            <p><strong>Default:</strong> 300 seconds | <strong>Range:</strong> 1–3,600 s | <strong>Disable:</strong> set to 0</p>
+          </div>
+          <div class="concept-card">
+            <div class="icon">🎯</div>
+            <h4>Best practice</h4>
+            <p>Low value for short requests. High value for long uploads or connections. Set to 0 to deregister instantly.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════ 7. ASG ══════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">7</span>
+          <h2>Auto Scaling Groups (ASG)</h2>
+        </div>
+
+        <div class="concept-grid">
+          <div class="concept-card">
+            <div class="icon">📋</div>
+            <h4>Launch Template</h4>
+            <p>Blueprint for new EC2 instances — AMI, instance type, user data, security groups, key pair, etc. <strong>Never</strong> the running instance config.</p>
+          </div>
+          <div class="concept-card">
+            <div class="icon">📊</div>
+            <h4>Min / Desired / Max</h4>
+            <p>Capacity boundaries. <strong>Min</strong>: floor, <strong>Desired</strong>: target ASG tries to maintain, <strong>Max</strong>: ceiling for scaling out.</p>
+          </div>
+          <div class="concept-card">
+            <div class="icon">🔄</div>
+            <h4>Self-Healing</h4>
+            <p>Unhealthy instances are terminated and replaced automatically. New instances are registered with the ELB target group.</p>
+          </div>
+          <div class="concept-card">
+            <div class="icon">💸</div>
+            <h4>ASGs are FREE</h4>
+            <p>The ASG itself costs nothing. You only pay for the EC2 instances it launches.</p>
+          </div>
+        </div>
+
+        <div class="callout danger" style="margin-top:1.25rem;">
+          <strong style="color:#f87171;">⚠ Weak point — AMI Update</strong><br>
+          To change the AMI for <em>future</em> instances: update the <strong>Launch Template</strong> (not the running instances). Running instances keep their original config until they are terminated and replaced. The ASG does not automatically restart existing instances after a template change.
+        </div>
+      </div>
+
+      <!-- ══════════════ 8. SCALING POLICIES ══════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">8</span>
+          <h2>Scaling Policies</h2>
+        </div>
+
+        <div class="policy-grid">
+          <div class="policy-card">
+            <h4>Target Tracking</h4>
+            <p>Set a metric and a target value. ASG continuously adjusts capacity to keep the metric at target.</p>
+            <div class="example">"Keep average CPU at 40%"</div>
+          </div>
+          <div class="policy-card">
+            <h4>Simple / Step Scaling</h4>
+            <p>CloudWatch alarm triggers a fixed change: add or remove N instances. Step scaling supports tiered thresholds.</p>
+            <div class="example">"CPU &gt; 70% → add 2 instances"</div>
+          </div>
+          <div class="policy-card">
+            <h4>Scheduled Scaling</h4>
+            <p>Scale at specific times for predictable patterns. Useful for known load spikes.</p>
+            <div class="example">"Every Friday at 5pm → min 10"</div>
+          </div>
+          <div class="policy-card">
+            <h4>Predictive Scaling</h4>
+            <p>ML model analyzes historical CloudWatch data. Forecasts load ahead of time and schedules proactive scaling.</p>
+            <div class="example">"Forecasts next week's traffic pattern"</div>
+          </div>
+        </div>
+
+        <div class="callout info" style="margin-top:1.25rem;">
+          <strong>Scaling Cooldown (default: 300 s)</strong> — After a scaling action, no new scaling activity occurs during the cooldown period. Gives metrics time to stabilize before the ASG makes another decision.
+        </div>
+      </div>
+
+      <!-- ══════════════ 9. INSTANCE REFRESH ══════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">9</span>
+          <h2>ASG Instance Refresh</h2>
+        </div>
+
+        <p>Allows rolling replacement of all instances in an ASG — triggered via the <strong>StartInstanceRefresh API</strong>. Useful when you update the launch template with a new AMI and need all running instances replaced.</p>
+
+        <div class="demo-wrap">
+          <div class="demo-title">
+            <div class="mode-dot" style="background:#10b981;"></div>
+            <h4>Instance Refresh — Rolling Replacement</h4>
+          </div>
+
+          <div id="ir" class="anim-body"></div>
+
+          <div class="anim-controls" style="margin-top:0.75rem;">
+            <button class="nav-btn" id="ir-prev" onclick="prev('ir')">&#8592; Prev</button>
+            <div class="step-dots" id="ir-dots"></div>
+            <button class="nav-btn" id="ir-next" onclick="next('ir')">Next &#8594;</button>
+            <span class="step-counter" id="ir-counter"></span>
+            <button class="restart-btn" onclick="restart('ir')">&#8635; Restart</button>
+          </div>
+        </div>
+
+        <div class="callout danger">
+          <strong style="color:#f87171;">⚠ Weak point — Warm-up time</strong><br>
+          Warm-up time does <strong>NOT auto-extend</strong>. If a new instance fails health checks during a refresh, the refresh <strong>PAUSES</strong> (because it cannot maintain the minimum healthy percentage). It does <strong>NOT</strong> extend the warm-up timer. The timer is fixed — once it expires, that instance is considered done regardless of health.
+        </div>
+      </div>
+
+      <!-- ══════════════ 10. EXAM QUICK REFERENCE ══════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">10</span>
+          <h2>Exam Quick Reference</h2>
+        </div>
+
+        <div class="tips-grid">
+          <div class="tip">
+            <span class="trigger">"Static IP / firewall whitelist"</span>
+            <span class="arrow">→</span>
+            <span class="answer">NLB (Elastic IP per AZ)</span>
+          </div>
+          <div class="tip">
+            <span class="trigger">"HTTP routing / microservices"</span>
+            <span class="arrow">→</span>
+            <span class="answer">ALB</span>
+          </div>
+          <div class="tip">
+            <span class="trigger">"Network inspection / GENEVE / port 6081"</span>
+            <span class="arrow">→</span>
+            <span class="answer">GWLB</span>
+          </div>
+          <div class="tip">
+            <span class="trigger">"Multiple SSL certs on one listener"</span>
+            <span class="arrow">→</span>
+            <span class="answer">SNI — ALB &amp; NLB only (not Classic LB)</span>
+          </div>
+          <div class="tip">
+            <span class="trigger">"EC2 sees ___ IP from ALB"</span>
+            <span class="arrow">→</span>
+            <span class="answer">ALB's private IP — use X-Forwarded-For for real client IP</span>
+          </div>
+          <div class="tip">
+            <span class="trigger">"Cross-zone ON by default"</span>
+            <span class="arrow">→</span>
+            <span class="answer">ALB only (free). NLB &amp; GWLB off by default (charges apply)</span>
+          </div>
+          <div class="tip">
+            <span class="trigger">"Sticky sessions on NLB"</span>
+            <span class="arrow">→</span>
+            <span class="answer">Source IP hash (no cookies)</span>
+          </div>
+          <div class="tip">
+            <span class="trigger">"Sticky sessions on ALB"</span>
+            <span class="arrow">→</span>
+            <span class="answer">Cookies (application-based or duration-based)</span>
+          </div>
+          <div class="tip">
+            <span class="trigger">"Connection draining default"</span>
+            <span class="arrow">→</span>
+            <span class="answer">300 seconds (range: 1–3,600 s, 0 = disabled)</span>
+          </div>
+          <div class="tip">
+            <span class="trigger">"ASG launch template vs running instance"</span>
+            <span class="arrow">→</span>
+            <span class="answer">Update launch template for NEW instances; running instances unaffected</span>
+          </div>
+          <div class="tip">
+            <span class="trigger">"Instance Refresh trigger"</span>
+            <span class="arrow">→</span>
+            <span class="answer">StartInstanceRefresh API</span>
+          </div>
+          <div class="tip">
+            <span class="trigger">"Warm-up time behavior"</span>
+            <span class="arrow">→</span>
+            <span class="answer">Fixed — does NOT auto-extend</span>
+          </div>
+          <div class="tip">
+            <span class="trigger">"ASG self-healing"</span>
+            <span class="arrow">→</span>
+            <span class="answer">Terminates unhealthy instances, replaces automatically</span>
+          </div>
+          <div class="tip">
+            <span class="trigger">"Predictive scaling uses"</span>
+            <span class="arrow">→</span>
+            <span class="answer">ML model, historical CloudWatch data, forecasts ahead</span>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /container -->
+
+    <script>
+      const states = {};
+      const I = (lbl, cls) => `<div class="inst ${cls}">${lbl}</div>`;
+      const R = (...a) => `<div class="instance-row">${a.join('')}</div>`;
+      const ASG = (lbl, cls, content) => `<div class="asg-box"><div class="asg-label ${cls}">${lbl}</div>${content}</div>`;
+      const DUAL = (...a) => `<div class="dual-asg">${a.join('')}</div>`;
+      const DESC = (html, color='#334155') => `<div class="step-desc" style="border-left-color:${color}">${html}</div>`;
+
+      // Helper: instance block with traffic pct label
+      const IB = (lbl, cls, pct, pctClass='') =>
+        `<div class="inst-block">
+           <div class="inst ${cls}">${lbl}</div>
+           <div class="inst-pct ${pctClass}">${pct}</div>
+         </div>`;
+
+      // Helper: AZ zone box
+      const AZ = (azLabel, elbPct, instances, elbColor) =>
+        `<div class="az-zone">
+           <div class="az-zone-label">${azLabel}</div>
+           <div class="az-elb-box">
+             <span>ELB Node</span>
+             <span class="traffic-pct" style="color:${elbColor || '#f97316'}">${elbPct}</span>
+           </div>
+           <div class="az-instances">${instances}</div>
+         </div>`;
+
+      const DEMOS = {
+        cz: {
+          color: '#f97316',
+          steps: [
+            {
+              body: `
+                <div class="az-layout">
+                  ${AZ('AZ-1 · 2 instances',
+                    '50% from Route 53',
+                    IB('i-1','v1','25%','') + IB('i-2','v1','25%',''),
+                    '#f97316'
+                  )}
+                  ${AZ('AZ-2 · 1 instance',
+                    '50% from Route 53',
+                    IB('i-3','v2','50%','high'),
+                    '#f87171'
+                  )}
+                </div>
+                ${DESC('<span class="hl-d">⚠ Without cross-zone:</span> AZ-2\'s single instance handles <span class="hl-d">50%</span> of all traffic! AZ-1\'s two instances each get only <span class="hl-v1">25%</span>. Severe load imbalance.', '#f87171')}
+              `
+            },
+            {
+              body: `
+                <div class="az-layout">
+                  ${AZ('AZ-1 · 2 instances',
+                    '50% from Route 53',
+                    IB('i-1','v1','33.3%','equal') + IB('i-2','v1','33.3%','equal'),
+                    '#34d399'
+                  )}
+                  ${AZ('AZ-2 · 1 instance',
+                    '50% from Route 53',
+                    IB('i-3','v2','33.3%','equal'),
+                    '#34d399'
+                  )}
+                </div>
+                ${DESC('<span class="hl-ok">✓ With cross-zone enabled:</span> Traffic distributed equally across <span class="hl-ok">ALL 3 instances</span> in ALL AZs. Each instance handles <span class="hl-ok">33.3%</span> regardless of AZ distribution.', '#10b981')}
+              `
+            }
+          ]
+        },
+
+        ir: {
+          color: '#10b981',
+          steps: [
+            {
+              body: `
+                ${DUAL(
+                  ASG('ASG — All instances (old AMI)', 'main',
+                    R(
+                      I('old','v1'), I('old','v1'), I('old','v1'), I('old','v1')
+                    )
+                  )
+                )}
+                ${DESC('All <span class="hl-v1">4 instances</span> running old AMI (launch template v1). Instance Refresh not yet triggered.', '#3b82f6')}
+              `
+            },
+            {
+              body: `
+                ${DUAL(
+                  ASG('ASG — Refresh in progress (min healthy: 50%)', 'blue',
+                    R(
+                      I('old','v1'), I('old','v1'),
+                      I('new','temp'), I('new','temp')
+                    )
+                  )
+                )}
+                ${DESC('Instance Refresh replaces <span class="hl-ok">2 instances</span> at a time (respects min healthy %: 50%). Old instances still serving traffic. New instances are in warm-up period.', '#f97316')}
+              `
+            },
+            {
+              body: `
+                ${DUAL(
+                  ASG('ASG — Refresh complete (new AMI)', 'green',
+                    R(
+                      I('new','temp'), I('new','temp'), I('new','temp'), I('new','temp')
+                    )
+                  )
+                )}
+                ${DESC('<span class="hl-ok">All 4 instances</span> replaced with new AMI. Warm-up time is <span class="hl-d">FIXED</span> — it does <span class="hl-d">NOT auto-extend</span> if an instance is slow to start.', '#10b981')}
+              `
+            }
+          ]
+        }
+      };
+
+      function initDemo(id) {
+        states[id] = 0;
+        buildDots(id, DEMOS[id].steps.length);
+        renderStep(id, 0);
+      }
+
+      function buildDots(id, count) {
+        document.getElementById(`${id}-dots`).innerHTML =
+          Array.from({length: count}, (_, i) =>
+            `<div class="sdot" id="${id}-dot-${i}"></div>`
+          ).join('');
+      }
+
+      function renderStep(id, step) {
+        const demo = DEMOS[id];
+        const total = demo.steps.length;
+        const body = document.getElementById(id);
+        body.innerHTML = demo.steps[step].body;
+        document.getElementById(`${id}-counter`).textContent = `Step ${step + 1} / ${total}`;
+        document.querySelectorAll(`[id^="${id}-dot-"]`).forEach((d, i) =>
+          d.classList.toggle('active', i === step)
+        );
+        const desc = body.querySelector('.step-desc');
+        if (desc) desc.style.borderLeftColor = demo.color;
+        const prevBtn = document.getElementById(`${id}-prev`);
+        const nextBtn = document.getElementById(`${id}-next`);
+        if (prevBtn) prevBtn.disabled = step === 0;
+        if (nextBtn) nextBtn.disabled = step === total - 1;
+        states[id] = step;
+      }
+
+      function prev(id) {
+        if (states[id] > 0) renderStep(id, states[id] - 1);
+      }
+      function next(id) {
+        if (states[id] < DEMOS[id].steps.length - 1) renderStep(id, states[id] + 1);
+      }
+      function restart(id) {
+        renderStep(id, 0);
+      }
+
+      Object.keys(DEMOS).forEach(initDemo);
+    </script>
+  </body>
+</html>

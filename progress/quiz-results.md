@@ -4,15 +4,28 @@
 
 | Metric | Value |
 |--------|-------|
-| Total XP | 6050 |
-| Lessons completed | 94 |
-| Perfect quizzes (100%) | 80 |
+| Total XP | 7000 |
+| Lessons completed | 107 |
+| Perfect quizzes (100%) | 93 |
 | Lessons to review | 11 |
 
 ## Session History
 
 | Date | Section | Lesson | XP | Result |
 |------|---------|--------|----|--------|
+| 2026-03-19 | 18 | 18.17 - CloudFormation Custom Resources | 75 | PERFECT |
+| 2026-03-19 | 18 | 18.15 - CloudFormation Stack Policies | 50 | PERFECT |
+| 2026-03-19 | 18 | 18.14 - CloudFormation Deletion Policy | 75 | PERFECT |
+| 2026-03-19 | 18 | 18.13 - CloudFormation Capabilities | 75 | PERFECT |
+| 2026-03-19 | 18 | 18.12 - CloudFormation Service Role | 75 | PERFECT |
+| 2026-03-18 | 18 | 18.11 - CloudFormation Rollbacks | 75 | PERFECT |
+| 2026-03-18 | 18 | 18.10 - CloudFormation Intrinsic Functions | 75 | PERFECT |
+| 2026-03-18 | 18 | 18.9 - CloudFormation Conditions | 75 | PERFECT |
+| 2026-03-18 | 18 | 18.8 - CloudFormation Outputs & Exports | 75 | PERFECT |
+| 2026-03-18 | 18 | 18.7 - CloudFormation Mappings | 75 | PERFECT |
+| 2026-03-18 | 18 | 18.6 - CloudFormation Parameters | 75 | PERFECT |
+| 2026-03-18 | 18 | 18.5 - CloudFormation Resources | 75 | PERFECT |
+| 2026-03-18 | 18 | 18.1 - CloudFormation Overview | 75 | PERFECT |
 | 2026-02-16 | 3 | 3.1 - AWS Cloud Overview - Regions & AZ | 100 | PERFECT |
 | 2026-02-16 | 4 | 4.1 - IAM Introduction: Users, Groups, Policies | 75 | PERFECT |
 | 2026-02-16 | 4 | 4.4 - IAM Policies | 50 | REVIEW |
@@ -619,6 +632,68 @@
 - **Status:** PERFECT
 
 ### 17.12 - Beanstalk Migrations
+- **Score:** 3/3 (100%)
+- **XP:** +75
+- **Status:** PERFECT
+
+## Section 18 - AWS CloudFormation
+
+### 18.5 - CloudFormation Resources
+- **Score:** 3/3 (100%)
+- **XP:** +75
+- **Status:** PERFECT
+
+### 18.6 - CloudFormation Parameters
+- **Score:** 3/3 (100%)
+- **XP:** +75
+- **Status:** PERFECT
+
+### 18.7 - CloudFormation Mappings
+- **Score:** 3/3 (100%)
+- **XP:** +75
+- **Status:** PERFECT
+
+### 18.8 - CloudFormation Outputs & Exports
+- **Score:** 3/3 (100%)
+- **XP:** +75
+- **Status:** PERFECT
+
+### 18.9 - CloudFormation Conditions
+- **Score:** 3/3 (100%)
+- **XP:** +75
+- **Status:** PERFECT
+
+### 18.10 - CloudFormation Intrinsic Functions
+- **Score:** 3/3 (100%)
+- **XP:** +75
+- **Status:** PERFECT
+
+### 18.11 - CloudFormation Rollbacks
+- **Score:** 3/3 (100%)
+- **XP:** +75
+- **Status:** PERFECT
+
+### 18.12 - CloudFormation Service Role
+- **Score:** 3/3 (100%)
+- **XP:** +75
+- **Status:** PERFECT
+
+### 18.13 - CloudFormation Capabilities
+- **Score:** 3/3 (100%)
+- **XP:** +75
+- **Status:** PERFECT
+
+### 18.14 - CloudFormation Deletion Policy
+- **Score:** 3/3 (100%)
+- **XP:** +75
+- **Status:** PERFECT
+
+### 18.15 - CloudFormation Stack Policies
+- **Score:** 2/2 (100%)
+- **XP:** +50
+- **Status:** PERFECT
+
+### 18.17 - CloudFormation Custom Resources
 - **Score:** 3/3 (100%)
 - **XP:** +75
 - **Status:** PERFECT

@@ -7,14 +7,14 @@ Study notes for AWS DVA-C02, assisted by Claude.
 ## 📊 Progress
 
 ```
-██████████████░░░░░░░░░░░░░░░░ 43% (209/483 lessons)
+███████████████░░░░░░░░░░░░░░░ 47% (228/483 lessons)
 ```
 
-📹 Videos: 189/446 · 📄 Articles: 6/8 · ❓ Quizzes: 14/29
+📹 Videos: 207/446 · 📄 Articles: 6/8 · ❓ Quizzes: 15/29
 
-**Current section:** 18 - AWS CloudFormation
+**Current section:** 19 - AWS Integration & Messaging: SQS, SNS & Kinesis
 
-**XP:** 6,550
+**XP:** 7,425
 
 ### Course Sections
 
@@ -37,7 +37,7 @@ Study notes for AWS DVA-C02, assisted by Claude.
 | 15: CloudFront | 49 min | ✅ |
 | 16: ECS, ECR & Fargate - Docker in AWS | 1h 19 min | ✅ |
 | 17: AWS Elastic Beanstalk | 59 min | ✅ |
-| 18: AWS CloudFormation | 1h 11 min | |
+| 18: AWS CloudFormation | 1h 11 min | ✅ |
 | 19: AWS Integration & Messaging: SQS, SNS & Kinesis | 1h 42 min | |
 | 20: AWS Monitoring & Audit: CloudWatch, X-Ray & CloudTrail | 1h 45 min | |
 | 21: AWS Serverless: Lambda | 3h 4 min | |
