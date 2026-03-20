@@ -172,3 +172,36 @@ docker pull $ECR_IMAGE_URL
 - Then `docker pull` to download the image
 
 **Key:** `aws ecr get-login-password` → `docker login` → `docker pull`. Always authenticate first.
+
+## Section 18 - AWS CloudFormation
+
+### Q16 - What to do after ROLLBACK_COMPLETE
+**Question:** An Administrator created a CloudFormation stack for the first time. The stack failed with status `ROLLBACK_COMPLETE`. After fixing the template, how should they continue?
+
+**Answer:** **Delete the failed stack and create a new stack.**
+
+- `ROLLBACK_COMPLETE` = creation failed, CloudFormation rolled everything back. The stack is a dead shell.
+- You **cannot** execute a ChangeSet or run `update-stack` on a `ROLLBACK_COMPLETE` stack — those require the stack to be in a valid state (e.g. `CREATE_COMPLETE`, `UPDATE_COMPLETE`).
+- `validate-template` only checks syntax — it doesn't deploy anything.
+- The only valid action: **delete the stack**, then **create a new one** with the fixed template.
+
+**Key:** `ROLLBACK_COMPLETE` = dead stack. Delete it and start fresh. ChangeSets and updates are not available in this state.
+
+### Q17 - Fn::Join output with a delimiter
+**Question:** With parameter `IPAddress` = `10.0.0.1`, what is the output of:
+```yaml
+Fn::Join:
+  - '='
+  - [IPAddress, !Ref 'IPAddress']
+```
+
+**Answer:** `IPAddress=10.0.0.1`
+
+- `Fn::Join` takes two arguments: **delimiter** first, then the **list of values**
+- The `- '='` is the delimiter (YAML list item syntax — the dash just means it's a list element)
+- The list resolves to `["IPAddress", "10.0.0.1"]`
+- Result: values joined with `=` → `IPAddress=10.0.0.1`
+- If delimiter were `''` (empty string): `IPAddress10.0.0.1`
+- If delimiter were `','`: `IPAddress,10.0.0.1`
+
+**Key:** `Fn::Join: [delimiter, [val1, val2, ...]]`. Delimiter goes first, list goes second.

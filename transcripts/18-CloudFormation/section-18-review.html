@@ -1,0 +1,918 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Section 18 — AWS CloudFormation</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap");
+
+      *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+      body {
+        font-family: "Inter", sans-serif;
+        background: #0f172a;
+        color: #e2e8f0;
+        line-height: 1.6;
+        padding: 0 0 64px;
+      }
+
+      /* ── LANGUAGE TOGGLE ── */
+      .lang-es { display: none; }
+      body.es .lang-en { display: none; }
+      body.es .lang-es { display: inline; }
+      body.es .lang-es-block { display: block; }
+      .lang-es-block { display: none; }
+      body.es .lang-en-block { display: none; }
+      .lang-toggle {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: transparent;
+        color: #94a3b8;
+        border: 1px solid #334155;
+        border-radius: 999px;
+        padding: 7px 18px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        font-family: "Inter", sans-serif;
+        transition: color 0.2s, border-color 0.2s, background 0.2s;
+        margin-top: 16px;
+      }
+      .lang-toggle:hover {
+        color: #e2e8f0;
+        border-color: #64748b;
+        background: #1e293b;
+      }
+
+      /* ── HERO ── */
+      .hero {
+        background: linear-gradient(135deg, #1e293b 0%, #0f172a 60%, #1a1a2e 100%);
+        border-bottom: 1px solid #334155;
+        padding: 48px 32px 40px;
+        text-align: center;
+      }
+      .hero-eyebrow {
+        font-size: 13px; font-weight: 600; letter-spacing: 0.12em;
+        text-transform: uppercase; color: #f97316; margin-bottom: 12px;
+      }
+      h1 { font-size: clamp(26px,4vw,40px); font-weight: 800; color: #f8fafc; margin-bottom: 8px; letter-spacing: -0.02em; }
+      .hero-subtitle { font-size: 15px; color: #94a3b8; margin-bottom: 20px; font-weight: 400; }
+      .xp-badge {
+        display: inline-flex; align-items: center; gap: 6px;
+        background: linear-gradient(135deg, #f97316, #ea580c);
+        color: #fff; font-size: 13px; font-weight: 700;
+        padding: 8px 18px; border-radius: 999px; letter-spacing: 0.01em;
+      }
+
+      .container { max-width: 1100px; margin: 0 auto; padding: 40px 24px 0; }
+
+      /* ── CARDS ── */
+      .card {
+        background: #1e293b; border-radius: 16px; padding: 2rem;
+        margin-bottom: 2rem; border: 1px solid #334155;
+      }
+      .card-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem; }
+      .badge { background: #f97316; color: #0f172a; font-weight: 800; font-size: 13px; padding: 0.25rem 0.65rem; border-radius: 6px; }
+      h2 { font-size: 1.3rem; font-weight: 700; color: #f8fafc; }
+      h3 { font-size: 0.95rem; font-weight: 600; color: #d2d2d2; margin: 1.5rem 0 0.9rem; text-transform: uppercase; letter-spacing: 0.06em; }
+      p { color: #d2d2d2; font-size: 0.9rem; margin-bottom: 0.75rem; }
+      p strong { color: #e2e8f0; }
+
+      /* ── CONCEPT GRID ── */
+      .concept-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap: 0.9rem; }
+      .concept-card { background: #0f172a; border-radius: 12px; padding: 1.1rem 1.2rem; border: 1px solid #1e293b; }
+      .concept-card .icon { font-size: 1.4rem; margin-bottom: 0.5rem; }
+      .concept-card h4 { font-size: 0.85rem; font-weight: 700; color: #f8fafc; margin-bottom: 0.3rem; }
+      .concept-card p { font-size: 13px; color: #d2d2d2; margin: 0; }
+
+      /* ── FLOW BOXES ── */
+      .flow-boxes { display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap; }
+      .fbox { background: #1e293b; border-radius: 6px; padding: 0.3rem 0.65rem; font-size: 13px; font-weight: 600; color: #e2e8f0; border: 1px solid #334155; }
+      .arrow { color: #334155; font-size: 1.1rem; }
+
+      /* ── CALLOUTS ── */
+      .callout { border-radius: 8px; padding: 0.75rem 1rem; margin: 1rem 0; font-size: 0.85rem; }
+      .callout.warning { background: #451a0322; border: 1px dashed #f97316; color: #fdba74; }
+      .callout.danger  { background: #7f1d1d22; border: 1px solid #dc262644; color: #fca5a5; }
+      .callout.info    { background: #1e3a5f22; border-left: 3px solid #3b82f6; color: #93c5fd; }
+      .callout.success { background: #064e3b22; border-left: 3px solid #10b981; color: #6ee7b7; }
+
+      /* ── CHIPS ── */
+      .chip { font-size: 13px; font-weight: 700; padding: 0.15rem 0.45rem; border-radius: 4px; white-space: nowrap; }
+      .chip.red    { background: #7f1d1d; color: #fca5a5; }
+      .chip.green  { background: #064e3b; color: #6ee7b7; }
+      .chip.yellow { background: #422006; color: #fcd34d; }
+      .chip.blue   { background: #1e3a5f; color: #93c5fd; }
+      .chip.gray   { background: #1e293b; color: #64748b; }
+      .chip.purple { background: #3b1f63; color: #c4b5fd; }
+      .chip.orange { background: #431407; color: #fb923c; }
+
+      /* ── CODE BLOCK ── */
+      .code-block {
+        background: #020617; border-radius: 10px; padding: 1rem 1.25rem;
+        font-family: "Fira Code","Courier New",monospace; font-size: 13px;
+        line-height: 1.9; border: 1px solid #1e293b; overflow-x: auto; margin: 0.75rem 0;
+      }
+      .ck { color: #60a5fa; }
+      .cv { color: #34d399; }
+      .cs { color: #fb923c; }
+      .cc { color: #334155; }
+
+      /* ── DATA TABLE ── */
+      .data-table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 0.75rem 0; }
+      .data-table th { background: #0f172a; color: #94a3b8; font-weight: 700; text-align: left; padding: 0.55rem 0.9rem; font-size: 12px; text-transform: uppercase; letter-spacing: 0.07em; border-bottom: 1px solid #334155; }
+      .data-table td { padding: 0.55rem 0.9rem; border-bottom: 1px solid #1e293b; color: #d2d2d2; vertical-align: top; }
+      .data-table tr:last-child td { border-bottom: none; }
+      .data-table td strong { color: #f8fafc; }
+      .data-table td code { font-family: "Fira Code",monospace; background: #0f172a; padding: 0.1rem 0.35rem; border-radius: 4px; color: #93c5fd; font-size: 12px; }
+
+      /* ── EXAM TIPS ── */
+      .tips-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(260px,1fr)); gap: 0.7rem; }
+      .tip { background: #0f172a; border-left: 3px solid #f97316; border-radius: 0 8px 8px 0; padding: 0.65rem 1rem; font-size: 0.83rem; }
+      .tip .trigger { color: #64748b; }
+      .tip .arr { color: #334155; margin: 0 0.25rem; }
+      .tip .answer { color: #f8fafc; font-weight: 700; }
+
+      /* ── STEP FLOW ── */
+      .step-flow { display: flex; flex-direction: column; gap: 0; }
+      .flow-step { display: flex; gap: 0; align-items: flex-start; }
+      .flow-num { flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%; background: #f97316; color: #0f172a; font-weight: 800; font-size: 13px; display: flex; align-items: center; justify-content: center; margin-top: 2px; z-index: 1; }
+      .flow-text { flex: 1; font-size: 0.85rem; color: #cbd5e1; padding: 0.1rem 0 1.1rem 1rem; margin-left: 0.6rem; border-left: 1px dashed #1e293b; }
+      .flow-step:last-child .flow-text { border-left: 1px solid transparent; padding-bottom: 0; }
+      .flow-text strong { color: #f8fafc; }
+      .flow-text .note { font-size: 13px; color: #94a3b8; display: block; margin-top: 0.2rem; }
+
+      /* ── POLICY COMPARE ── */
+      .policy-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); gap: 0.75rem; margin: 0.75rem 0; }
+      .policy-card { background: #0f172a; border-radius: 10px; padding: 1rem; border-top: 3px solid var(--pc,#334155); }
+      .policy-card h4 { font-size: 0.85rem; font-weight: 700; color: #f8fafc; margin-bottom: 0.65rem; }
+      .policy-row { display: flex; justify-content: space-between; align-items: center; font-size: 13px; padding: 0.18rem 0; }
+      .policy-row .lbl { color: #94a3b8; }
+
+      /* ── TWO-COL COMPARE ── */
+      .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 0.75rem 0; }
+      .compare-card { background: #0f172a; border-radius: 10px; padding: 1rem; }
+      .compare-card h4 { font-size: 0.82rem; font-weight: 700; margin-bottom: 0.65rem; }
+      .compare-card h4.blue { color: #60a5fa; }
+      .compare-card h4.green { color: #34d399; }
+      .compare-card h4.orange { color: #fb923c; }
+      .compare-card h4.purple { color: #c4b5fd; }
+      .compare-card ul { list-style: none; padding: 0; }
+      .compare-card li { font-size: 13px; color: #d2d2d2; padding: 0.18rem 0 0.18rem 1rem; position: relative; }
+      .compare-card li::before { content: "·"; position: absolute; left: 0; color: #475569; }
+
+      /* ── CAPABILITY CARDS ── */
+      .cap-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap: 0.75rem; }
+      .cap-card { background: #0f172a; border-radius: 10px; padding: 1rem 1.1rem; border: 1px solid #1e293b; }
+      .cap-card .cap-name { font-family: "Fira Code",monospace; font-size: 12px; color: #93c5fd; font-weight: 700; margin-bottom: 0.45rem; display: block; }
+      .cap-card p { font-size: 13px; margin: 0; }
+
+      /* ── STACKSET DIAGRAM ── */
+      .ss-wrap { background: #0f172a; border-radius: 12px; padding: 1.25rem; margin: 0.75rem 0; }
+      .ss-admin { display: inline-flex; align-items: center; gap: 0.5rem; background: #1e3a5f; border: 1px solid #3b82f6; border-radius: 8px; padding: 0.4rem 0.9rem; font-size: 13px; font-weight: 700; color: #60a5fa; margin-bottom: 1rem; }
+      .ss-accounts { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+      .ss-account { background: #1e293b; border-radius: 10px; padding: 0.75rem; border: 1px solid #334155; min-width: 140px; }
+      .ss-account h5 { font-size: 12px; font-weight: 700; color: #94a3b8; margin-bottom: 0.5rem; }
+      .ss-region { font-size: 12px; color: #d2d2d2; padding: 0.15rem 0; display: flex; align-items: center; gap: 0.35rem; }
+      .ss-region::before { content: "→"; color: #f97316; font-weight: 700; font-size: 11px; }
+      .ss-arrow { color: #334155; font-size: 1.4rem; margin: 0.35rem 0; }
+
+      /* ── FUNCTION TABLE STAR ── */
+      .star { color: #f97316; font-weight: 700; }
+      td.fn-name { font-family: "Fira Code",monospace; color: #93c5fd; font-weight: 600; font-size: 12px; }
+
+      @media (max-width: 680px) {
+        body { padding: 1rem; }
+        h1 { font-size: 1.6rem; }
+        .compare, .policy-grid { grid-template-columns: 1fr; }
+      }
+    </style>
+  </head>
+  <body>
+
+    <!-- ═══════════════════ HERO ═══════════════════ -->
+    <div class="hero">
+      <div class="hero-eyebrow">AWS Certified Developer Associate</div>
+      <h1>Section 18 — AWS CloudFormation</h1>
+      <div class="hero-subtitle">
+        <span class="lang-en">Infrastructure as Code · 14 lessons · CloudFormation Quiz complete</span>
+        <span class="lang-es">Infraestructura como Código · 14 lecciones · Quiz de CloudFormation completado</span>
+      </div>
+      <div class="xp-badge">⚡ +875 XP &nbsp;·&nbsp; Section complete</div>
+      <br/>
+      <button class="lang-toggle" id="lang-btn" onclick="toggleLang()">🌐 Español</button>
+    </div>
+
+    <div class="container">
+
+      <!-- ═══════════════ 1. OVERVIEW ═══════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">1</span>
+          <h2>
+            <span class="lang-en">What is CloudFormation?</span>
+            <span class="lang-es">¿Qué es CloudFormation?</span>
+          </h2>
+        </div>
+
+        <p>
+          <span class="lang-en"><strong>CloudFormation</strong> is AWS's Infrastructure as Code (IaC) service. You declare what resources you want in a YAML or JSON template, and CloudFormation creates them in the right order automatically.</span>
+          <span class="lang-es"><strong>CloudFormation</strong> es el servicio de Infraestructura como Código (IaC) de AWS. Declarás qué recursos querés en una plantilla YAML o JSON, y CloudFormation los crea en el orden correcto de forma automática.</span>
+        </p>
+
+        <div class="concept-grid">
+          <div class="concept-card">
+            <div class="icon">📄</div>
+            <h4><span class="lang-en">Declarative</span><span class="lang-es">Declarativo</span></h4>
+            <p><span class="lang-en">You define WHAT you want. CloudFormation figures out HOW and in what ORDER.</span><span class="lang-es">Definís QUÉ querés. CloudFormation se encarga del CÓMO y en qué ORDEN.</span></p>
+          </div>
+          <div class="concept-card">
+            <div class="icon">🔁</div>
+            <h4><span class="lang-en">Version Control</span><span class="lang-es">Control de Versiones</span></h4>
+            <p><span class="lang-en">Templates are code — store them in Git, review changes, roll back to any version.</span><span class="lang-es">Las plantillas son código: podés guardarlas en Git, revisar cambios y volver a versiones anteriores.</span></p>
+          </div>
+          <div class="concept-card">
+            <div class="icon">💸</div>
+            <h4><span class="lang-en">Cost Visibility</span><span class="lang-es">Visibilidad de Costos</span></h4>
+            <p><span class="lang-en">Resources are tagged automatically. Estimate costs and destroy/recreate environments on a schedule.</span><span class="lang-es">Los recursos se etiquetan automáticamente. Estimá costos y destruí/recreá entornos según un horario.</span></p>
+          </div>
+          <div class="concept-card">
+            <div class="icon">🏗️</div>
+            <h4><span class="lang-en">Separation of Concerns</span><span class="lang-es">Separación de Concerns</span></h4>
+            <p><span class="lang-en">Use separate stacks for networking, applications, and databases.</span><span class="lang-es">Usá stacks separados para red, aplicaciones y bases de datos.</span></p>
+          </div>
+        </div>
+
+        <h3><span class="lang-en">How It Works</span><span class="lang-es">Cómo Funciona</span></h3>
+        <div class="flow-boxes" style="margin-bottom:1rem">
+          <div class="fbox">📝 <span class="lang-en">Template</span><span class="lang-es">Plantilla</span></div>
+          <span class="arrow">→</span>
+          <div class="fbox">☁️ Amazon S3</div>
+          <span class="arrow">→</span>
+          <div class="fbox">⚙️ CloudFormation</div>
+          <span class="arrow">→</span>
+          <div class="fbox">📦 Stack</div>
+          <span class="arrow">→</span>
+          <div class="fbox">🔧 AWS Resources</div>
+        </div>
+        <div class="callout info">
+          <strong><span class="lang-en">Key rules:</span><span class="lang-es">Reglas clave:</span></strong>
+          <span class="lang-en"> Templates must be uploaded to <strong>S3 before CloudFormation can use them</strong> — always, no exceptions. Even when you upload via the AWS console, AWS automatically uploads it to S3 behind the scenes. To update a stack you must re-upload a <strong>new version</strong> — you cannot edit the previous template in-place. Deleting a stack deletes all resources it created.</span>
+          <span class="lang-es"> Las plantillas deben subirse a <strong>S3 antes de que CloudFormation pueda usarlas</strong> — siempre, sin excepción. Incluso al subirlas desde la consola de AWS, AWS las sube a S3 automáticamente en segundo plano. Para actualizar un stack debés subir una <strong>nueva versión</strong>; no se puede editar la plantilla anterior en su lugar. Eliminar un stack elimina todos los recursos que creó.</span>
+        </div>
+
+        <h3><span class="lang-en">Template Sections</span><span class="lang-es">Secciones de la Plantilla</span></h3>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th><span class="lang-en">Section</span><span class="lang-es">Sección</span></th>
+              <th><span class="lang-en">Description</span><span class="lang-es">Descripción</span></th>
+              <th><span class="lang-en">Required?</span><span class="lang-es">¿Requerida?</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code>Resources</code></td><td><span class="lang-en">AWS resources to create</span><span class="lang-es">Recursos de AWS a crear</span></td><td><span class="chip green">✅ YES</span></td></tr>
+            <tr><td><code>Parameters</code></td><td><span class="lang-en">Dynamic inputs for the template</span><span class="lang-es">Entradas dinámicas para la plantilla</span></td><td><span class="chip gray">No</span></td></tr>
+            <tr><td><code>Mappings</code></td><td><span class="lang-en">Fixed/static variables</span><span class="lang-es">Variables estáticas/fijas</span></td><td><span class="chip gray">No</span></td></tr>
+            <tr><td><code>Outputs</code></td><td><span class="lang-en">References to what was created</span><span class="lang-es">Referencias a lo que fue creado</span></td><td><span class="chip gray">No</span></td></tr>
+            <tr><td><code>Conditions</code></td><td><span class="lang-en">Logic to control resource creation</span><span class="lang-es">Lógica para controlar la creación de recursos</span></td><td><span class="chip gray">No</span></td></tr>
+            <tr><td><code>AWSTemplateFormatVersion</code></td><td><span class="lang-en">Template format version (internal to AWS)</span><span class="lang-es">Versión del formato de plantilla (interno de AWS)</span></td><td><span class="chip gray">No</span></td></tr>
+            <tr><td><code>Description</code></td><td><span class="lang-en">Human-readable comments</span><span class="lang-es">Comentarios legibles para humanos</span></td><td><span class="chip gray">No</span></td></tr>
+          </tbody>
+        </table>
+        <div class="callout warning">⚠ <strong>Resources</strong> <span class="lang-en">is the <strong>only mandatory section</strong> in any CloudFormation template.</span><span class="lang-es">es la <strong>única sección obligatoria</strong> en cualquier plantilla de CloudFormation.</span></div>
+      </div>
+
+      <!-- ═══════════════ 2. RESOURCES & PARAMETERS ═══════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">2</span>
+          <h2>Resources &amp; Parameters</h2>
+        </div>
+
+        <h3>Resources</h3>
+        <p>
+          <span class="lang-en">Resources are the core of every template. They represent the actual AWS components to create. CloudFormation supports <strong>700+ resource types</strong>.</span>
+          <span class="lang-es">Los recursos son el núcleo de toda plantilla. Representan los componentes de AWS a crear. CloudFormation soporta <strong>más de 700 tipos de recursos</strong>.</span>
+        </p>
+        <div class="callout info">
+          <strong><span class="lang-en">Type format:</span><span class="lang-es">Formato de tipo:</span></strong>
+          <code style="margin-left:6px;font-family:'Fira Code',monospace;color:#93c5fd;font-size:13px">AWS::ServiceName::ResourceType</code><br/>
+          <span style="font-size:13px;margin-top:4px;display:block;color:#93c5fd">
+            AWS::EC2::Instance &nbsp;·&nbsp; AWS::Kinesis::Stream &nbsp;·&nbsp; AWS::ElasticLoadBalancingV2::LoadBalancer
+          </span>
+        </div>
+        <div class="compare" style="margin-top:0.5rem">
+          <div class="compare-card">
+            <h4 class="green">✅ <span class="lang-en">Supported service?</span><span class="lang-es">¿Servicio soportado?</span></h4>
+            <p style="font-size:13px"><span class="lang-en">Use a standard resource type. CloudFormation handles it natively.</span><span class="lang-es">Usá un tipo de recurso estándar. CloudFormation lo maneja de forma nativa.</span></p>
+          </div>
+          <div class="compare-card">
+            <h4 class="orange">⚙️ <span class="lang-en">Unsupported service?</span><span class="lang-es">¿Servicio no soportado?</span></h4>
+            <p style="font-size:13px"><span class="lang-en">Use a <strong>Custom Resource</strong> backed by a Lambda function.</span><span class="lang-es">Usá un <strong>Custom Resource</strong> respaldado por una función Lambda.</span></p>
+          </div>
+        </div>
+
+        <h3>Parameters</h3>
+        <p>
+          <span class="lang-en">Parameters let users <strong>provide inputs</strong> at deploy time. Use them when a value cannot be determined ahead of time or may change between deployments.</span>
+          <span class="lang-es">Los parámetros permiten que los usuarios <strong>proporcionen entradas</strong> al momento del deploy. Usálos cuando un valor no se puede determinar de antemano o puede cambiar entre deploys.</span>
+        </p>
+
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th><span class="lang-en">Setting</span><span class="lang-es">Configuración</span></th>
+              <th><span class="lang-en">Purpose</span><span class="lang-es">Propósito</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code>Type</code></td><td><span class="lang-en">String, Number, CommaDelimitedList, AWS-Specific, SSM…</span><span class="lang-es">String, Number, CommaDelimitedList, AWS-Specific, SSM…</span></td></tr>
+            <tr><td><code>AllowedValues</code></td><td><span class="lang-en">Restricts input to a fixed list — creates a <strong>dropdown</strong> in the console</span><span class="lang-es">Restringe la entrada a una lista fija — crea un <strong>desplegable</strong> en la consola</span></td></tr>
+            <tr><td><code>NoEcho: true</code></td><td><span class="lang-en"><strong>Hides the value from logs</strong> — use for passwords and secrets</span><span class="lang-es"><strong>Oculta el valor en los logs</strong> — usarlo para contraseñas y secretos</span></td></tr>
+            <tr><td><code>Default</code></td><td><span class="lang-en">Value used if the user provides nothing</span><span class="lang-es">Valor usado si el usuario no proporciona nada</span></td></tr>
+            <tr><td><code>AllowedPattern</code></td><td><span class="lang-en">Regex validation</span><span class="lang-es">Validación con expresión regular</span></td></tr>
+          </tbody>
+        </table>
+
+        <div class="callout success">
+          <strong>!Ref</strong> — <span class="lang-en">reference a <strong>parameter</strong> (returns its value) or a <strong>resource</strong> (returns its physical ID). The syntax is identical in both cases — CloudFormation resolves which one it is automatically.</span>
+          <span class="lang-es">referencia un <strong>parámetro</strong> (devuelve su valor) o un <strong>recurso</strong> (devuelve su ID físico). La sintaxis es idéntica en ambos casos — CloudFormation resuelve automáticamente de qué tipo se trata.</span>
+        </div>
+
+        <h3><span class="lang-en">Pseudo Parameters</span><span class="lang-es">Parámetros Pseudo</span></h3>
+        <p style="margin-bottom:0.75rem"><span class="lang-en">Built-in parameters provided by AWS — available in every template with no definition needed.</span><span class="lang-es">Parámetros integrados proporcionados por AWS — disponibles en todas las plantillas sin necesidad de definirlos.</span></p>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th><span class="lang-en">Reference</span><span class="lang-es">Referencia</span></th>
+              <th><span class="lang-en">Returns</span><span class="lang-es">Devuelve</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code>AWS::AccountId</code></td><td><span class="lang-en">Your AWS account ID</span><span class="lang-es">Tu ID de cuenta de AWS</span></td></tr>
+            <tr><td><code>AWS::Region</code></td><td><span class="lang-en">The region the stack is deployed in</span><span class="lang-es">La región donde se despliega el stack</span></td></tr>
+            <tr><td><code>AWS::StackId</code></td><td><span class="lang-en">The stack's ARN</span><span class="lang-es">El ARN del stack</span></td></tr>
+            <tr><td><code>AWS::StackName</code></td><td><span class="lang-en">The stack's name</span><span class="lang-es">El nombre del stack</span></td></tr>
+            <tr><td><code>AWS::NotificationARNs</code></td><td><span class="lang-en">List of SNS topic ARNs for stack notifications</span><span class="lang-es">Lista de ARNs de temas SNS para notificaciones del stack</span></td></tr>
+            <tr><td><code>AWS::NoValue</code></td><td><span class="lang-en">Removes a property (used in conditions)</span><span class="lang-es">Elimina una propiedad (se usa en condiciones)</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ═══════════════ 3. MAPPINGS, OUTPUTS & CONDITIONS ═══════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">3</span>
+          <h2>Mappings · Outputs · Conditions</h2>
+        </div>
+
+        <h3>Mappings</h3>
+        <p>
+          <span class="lang-en">Mappings hold <strong>fixed, hardcoded</strong> values defined in the template. Use them when you know all valid values in advance (e.g. AMI IDs per region).</span>
+          <span class="lang-es">Los Mappings contienen valores <strong>fijos y codificados en duro</strong> definidos en la plantilla. Usalos cuando conocés todos los valores válidos de antemano (ej: IDs de AMI por región).</span>
+        </p>
+        <div class="code-block"><span class="ck">Mappings:</span><br>
+&nbsp;&nbsp;<span class="ck">RegionMap:</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="cv">us-east-1:</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cs">HVM64:</span> ami-0ff8a91507f77f867<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="cv">eu-west-1:</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cs">HVM64:</span> ami-047bb4163c506cd98<br>
+<br>
+<span class="cc"># Access with !FindInMap</span><br>
+<span class="cc">#              [MapName,  TopLevelKey,          SecondLevelKey]</span><br>
+<span class="ck">ImageId:</span> <span class="cs">!FindInMap [RegionMap, !Ref "AWS::Region", HVM64]</span></div>
+
+        <div class="compare">
+          <div class="compare-card">
+            <h4 class="blue">Mappings</h4>
+            <ul>
+              <li><span class="lang-en">Values hardcoded in template</span><span class="lang-es">Valores codificados en la plantilla</span></li>
+              <li><span class="lang-en">Finite, known in advance</span><span class="lang-es">Finitos, conocidos de antemano</span></li>
+              <li><span class="lang-en">Safer — you control all options</span><span class="lang-es">Más seguro — controlás todas las opciones</span></li>
+            </ul>
+          </div>
+          <div class="compare-card">
+            <h4 class="green">Parameters</h4>
+            <ul>
+              <li><span class="lang-en">Values provided by user at deploy</span><span class="lang-es">Valores proporcionados por el usuario al desplegar</span></li>
+              <li><span class="lang-en">Unknown ahead of time</span><span class="lang-es">Desconocidos de antemano</span></li>
+              <li><span class="lang-en">More flexible but less controlled</span><span class="lang-es">Más flexible pero menos controlado</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>Outputs &amp; Exports</h3>
+        <p>
+          <span class="lang-en">The Outputs section declares values that can be viewed in the console and optionally <strong>exported for other stacks to import</strong>.</span>
+          <span class="lang-es">La sección Outputs declara valores que se pueden ver en la consola y opcionalmente <strong>exportar para que otros stacks los importen</strong>.</span>
+        </p>
+        <div class="code-block"><span class="ck">Outputs:</span><br>
+&nbsp;&nbsp;<span class="cv">SSHSecurityGroup:</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="cs">Description:</span> The SSH SG for our company<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="cs">Value:</span> !Ref MySSHSecurityGroup<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="cs">Export:</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cs">Name:</span> SSHSecurityGroup  <span class="cc"># must be unique per region</span><br>
+<br>
+<span class="cc"># Import in another stack:</span><br>
+<span class="cs">SecurityGroups:</span><br>
+&nbsp;&nbsp;- <span class="ck">!ImportValue</span> SSHSecurityGroup</div>
+        <div class="callout danger">❌ <span class="lang-en"><strong>Cannot delete a stack</strong> whose exports are still referenced by other stacks.</span><span class="lang-es"><strong>No podés eliminar un stack</strong> cuyos exports siguen siendo referenciados por otros stacks.</span></div>
+
+        <h3>Conditions</h3>
+        <p>
+          <span class="lang-en">Conditions control whether a resource or output is created based on a logical evaluation — typically an environment parameter (dev / prod).</span>
+          <span class="lang-es">Las Conditions controlan si un recurso o output se crea en función de una evaluación lógica — típicamente un parámetro de entorno (dev / prod).</span>
+        </p>
+        <div class="code-block"><span class="cc"># Define the condition</span><br>
+<span class="ck">Conditions:</span><br>
+&nbsp;&nbsp;<span class="cv">CreateProdResources:</span> !Equals [!Ref EnvType, prod]<br>
+<br>
+<span class="cc"># Apply it to a resource</span><br>
+<span class="ck">Resources:</span><br>
+&nbsp;&nbsp;<span class="cv">MountPoint:</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="cs">Type:</span> AWS::EC2::VolumeAttachment<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="cs">Condition:</span> CreateProdResources  <span class="cc"># skipped if false</span></div>
+
+        <table class="data-table">
+          <thead><tr>
+            <th><span class="lang-en">Function</span><span class="lang-es">Función</span></th>
+            <th><span class="lang-en">Description</span><span class="lang-es">Descripción</span></th>
+          </tr></thead>
+          <tbody>
+            <tr><td><code>!Equals</code></td><td><span class="lang-en">True if two values are equal</span><span class="lang-es">Verdadero si dos valores son iguales</span></td></tr>
+            <tr><td><code>!And</code></td><td><span class="lang-en">True if all conditions are true</span><span class="lang-es">Verdadero si todas las condiciones son verdaderas</span></td></tr>
+            <tr><td><code>!Or</code></td><td><span class="lang-en">True if at least one condition is true</span><span class="lang-es">Verdadero si al menos una condición es verdadera</span></td></tr>
+            <tr><td><code>!Not</code></td><td><span class="lang-en">Inverts a condition</span><span class="lang-es">Invierte una condición</span></td></tr>
+            <tr><td><code>!If</code></td><td><span class="lang-en">Returns one value if true, another if false</span><span class="lang-es">Devuelve un valor si es verdadero, otro si es falso</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ═══════════════ 4. INTRINSIC FUNCTIONS ═══════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">4</span>
+          <h2><span class="lang-en">Intrinsic Functions</span><span class="lang-es">Funciones Intrínsecas</span></h2>
+        </div>
+
+        <p><span class="lang-en">Built-in functions that resolve values at deploy time. The <span class="star">★</span> marks what Stephane flagged as exam-critical.</span>
+        <span class="lang-es">Funciones integradas que resuelven valores en tiempo de despliegue. <span class="star">★</span> indica lo que Stephane marcó como crítico para el examen.</span></p>
+
+        <table class="data-table">
+          <thead><tr>
+            <th><span class="lang-en">Function</span><span class="lang-es">Función</span></th>
+            <th><span class="lang-en">Purpose</span><span class="lang-es">Propósito</span></th>
+            <th style="text-align:center"><span class="lang-en">Exam</span><span class="lang-es">Examen</span></th>
+          </tr></thead>
+          <tbody>
+            <tr><td class="fn-name">!Ref</td><td><span class="lang-en">Resource → physical ID · Parameter → value</span><span class="lang-es">Recurso → ID físico · Parámetro → valor</span></td><td style="text-align:center"><span class="star">★</span></td></tr>
+            <tr><td class="fn-name">!GetAtt</td><td><span class="lang-en">Get a specific attribute of a resource (AZ, IP, DNS…)</span><span class="lang-es">Obtener un atributo específico de un recurso (AZ, IP, DNS…)</span></td><td style="text-align:center"><span class="star">★</span></td></tr>
+            <tr><td class="fn-name">!FindInMap</td><td><span class="lang-en">Retrieve a value from a Mapping</span><span class="lang-es">Recuperar un valor de un Mapping</span></td><td style="text-align:center"><span class="star">★</span></td></tr>
+            <tr><td class="fn-name">!ImportValue</td><td><span class="lang-en">Import an exported value from another stack</span><span class="lang-es">Importar un valor exportado de otro stack</span></td><td style="text-align:center"><span class="star">★</span></td></tr>
+            <tr><td class="fn-name">!Base64</td><td><span class="lang-en">Encode to Base64 — used for EC2 UserData scripts</span><span class="lang-es">Codificar en Base64 — se usa para scripts de EC2 UserData</span></td><td style="text-align:center"><span class="star">★</span></td></tr>
+            <tr><td class="fn-name">!Equals / !And / !Or / !Not / !If</td><td><span class="lang-en">Condition functions</span><span class="lang-es">Funciones de condición</span></td><td style="text-align:center"><span class="star">★</span></td></tr>
+            <tr><td class="fn-name">!Join</td><td><span class="lang-en">Concatenate values with a delimiter — <code>!Join [delimiter, [val1, val2]]</code><br><small style="color:#64748b">e.g. <code>!Join ['=', [IPAddress, !Ref 'IPAddress']]</code> → <code>IPAddress=10.0.0.1</code></small></span><span class="lang-es">Concatenar valores con un delimitador — <code>!Join [delimitador, [val1, val2]]</code><br><small style="color:#64748b">ej. <code>!Join ['=', [IPAddress, !Ref 'IPAddress']]</code> → <code>IPAddress=10.0.0.1</code></small></span></td><td style="text-align:center"><span style="color:#475569">—</span></td></tr>
+            <tr><td class="fn-name">!Sub</td><td><span class="lang-en">Substitute variables in a string</span><span class="lang-es">Sustituir variables en una cadena de texto</span></td><td style="text-align:center"><span style="color:#475569">—</span></td></tr>
+            <tr><td class="fn-name">!Select</td><td><span class="lang-en">Select one value from a list by index</span><span class="lang-es">Seleccionar un valor de una lista por índice</span></td><td style="text-align:center"><span style="color:#475569">—</span></td></tr>
+          </tbody>
+        </table>
+
+        <div class="compare" style="margin-top:1rem">
+          <div class="compare-card">
+            <h4 class="blue">!Ref</h4>
+            <ul>
+              <li><span class="lang-en">Returns resource ID or parameter value</span><span class="lang-es">Devuelve el ID del recurso o el valor del parámetro</span></li>
+              <li><span class="lang-en">Example: EC2 Instance ID</span><span class="lang-es">Ejemplo: ID de la instancia EC2</span></li>
+            </ul>
+          </div>
+          <div class="compare-card">
+            <h4 class="green">!GetAtt</h4>
+            <ul>
+              <li><span class="lang-en">Returns a specific attribute beyond the ID</span><span class="lang-es">Devuelve un atributo específico más allá del ID</span></li>
+              <li><span class="lang-en">Example: EC2Instance.AvailabilityZone</span><span class="lang-es">Ejemplo: EC2Instance.AvailabilityZone</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="callout info">
+          💡 <strong>!Base64</strong>: <span class="lang-en">almost exclusively used to pass shell scripts as <strong>EC2 UserData</strong>. The EC2 service decodes it at launch.</span>
+          <span class="lang-es">se usa casi exclusivamente para pasar scripts de shell como <strong>EC2 UserData</strong>. El servicio EC2 lo decodifica al iniciar.</span>
+        </div>
+      </div>
+
+      <!-- ═══════════════ 5. ROLLBACKS & SERVICE ROLE ═══════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">5</span>
+          <h2><span class="lang-en">Rollbacks &amp; Service Role</span><span class="lang-es">Reversiones y Rol de Servicio</span></h2>
+        </div>
+
+        <h3><span class="lang-en">Rollbacks</span><span class="lang-es">Reversiones</span></h3>
+        <table class="data-table">
+          <thead><tr>
+            <th><span class="lang-en">Scenario</span><span class="lang-es">Escenario</span></th>
+            <th><span class="lang-en">Default Behavior</span><span class="lang-es">Comportamiento Predeterminado</span></th>
+          </tr></thead>
+          <tbody>
+            <tr>
+              <td><strong><span class="lang-en">Creation failure</span><span class="lang-es">Fallo en creación</span></strong></td>
+              <td><span class="lang-en">All resources deleted (rolled back). Logs available to investigate.</span><span class="lang-es">Todos los recursos se eliminan (se revierte). Los logs están disponibles para investigar.</span></td>
+            </tr>
+            <tr>
+              <td><strong><span class="lang-en">Creation failure (preserve option)</span><span class="lang-es">Fallo en creación (opción preservar)</span></strong></td>
+              <td><span class="lang-en">Successfully created resources are kept for debugging. Stack must be deleted to clean up.</span><span class="lang-es">Los recursos creados con éxito se conservan para depuración. El stack debe eliminarse para limpiar.</span></td>
+            </tr>
+            <tr>
+              <td><strong><span class="lang-en">Update failure</span><span class="lang-es">Fallo en actualización</span></strong></td>
+              <td><span class="lang-en">Automatic rollback to the last known working state.</span><span class="lang-es">Reversión automática al último estado de funcionamiento conocido.</span></td>
+            </tr>
+            <tr>
+              <td><strong><span class="lang-en">Rollback failure</span><span class="lang-es">Fallo en la reversión</span></strong></td>
+              <td><span class="lang-en">Fix resources manually → call <code>ContinueUpdateRollback</code></span><span class="lang-es">Corregí los recursos manualmente → llamá a <code>ContinueUpdateRollback</code></span></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="callout warning">
+          ⚠ <strong>ContinueUpdateRollback</strong>: <span class="lang-en">needed when a rollback itself gets stuck — usually because resources were <strong>manually modified</strong> outside CloudFormation.</span>
+          <span class="lang-es">necesario cuando una reversión queda trabada — generalmente porque los recursos fueron <strong>modificados manualmente</strong> fuera de CloudFormation.</span>
+        </div>
+        <div class="callout danger">
+          🚨 <strong>ROLLBACK_COMPLETE</strong> — <span class="lang-en"><strong>exam trap:</strong> after a creation failure the stack ends up here. You <strong>cannot</strong> run <code>update-stack</code> or execute a ChangeSet on it — those require a healthy stack state. Only valid action: <strong>delete the stack and create a new one</strong> with the fixed template.</span>
+          <span class="lang-es"><strong>trampa del examen:</strong> tras un fallo de creación el stack queda en este estado. <strong>No podés</strong> ejecutar <code>update-stack</code> ni un ChangeSet sobre él — esas operaciones requieren un stack en buen estado. La única acción válida: <strong>eliminar el stack y crear uno nuevo</strong> con la plantilla corregida.</span>
+        </div>
+
+        <h3>Service Role</h3>
+        <p>
+          <span class="lang-en">An IAM Role you assign to CloudFormation so it can create/update/delete resources <strong>using its own permissions</strong> instead of yours.</span>
+          <span class="lang-es">Un Rol IAM que le asignás a CloudFormation para que pueda crear/actualizar/eliminar recursos <strong>usando sus propios permisos</strong> en lugar de los tuyos.</span>
+        </p>
+
+        <div class="concept-grid">
+          <div class="concept-card">
+            <div class="icon">👤</div>
+            <h4><span class="lang-en">Without Service Role</span><span class="lang-es">Sin Rol de Servicio</span></h4>
+            <p><span class="lang-en">CloudFormation uses your personal IAM permissions. You must have direct access to all resources in the template.</span><span class="lang-es">CloudFormation usa tus permisos IAM personales. Debés tener acceso directo a todos los recursos en la plantilla.</span></p>
+          </div>
+          <div class="concept-card">
+            <div class="icon">🔑</div>
+            <h4><span class="lang-en">With Service Role</span><span class="lang-es">Con Rol de Servicio</span></h4>
+            <p><span class="lang-en">CloudFormation uses the role's permissions. You only need <code>cloudformation:*</code> and <code>iam:PassRole</code>.</span><span class="lang-es">CloudFormation usa los permisos del rol. Solo necesitás <code>cloudformation:*</code> y <code>iam:PassRole</code>.</span></p>
+          </div>
+          <div class="concept-card">
+            <div class="icon">🛡️</div>
+            <h4>iam:PassRole</h4>
+            <p><span class="lang-en">Required to assign a role to CloudFormation. Without it, the user cannot attach a service role to any stack.</span><span class="lang-es">Requerido para asignar un rol a CloudFormation. Sin esto, el usuario no puede adjuntar un rol de servicio a ningún stack.</span></p>
+          </div>
+        </div>
+
+        <div class="callout success">
+          ✅ <strong><span class="lang-en">Least privilege pattern:</span><span class="lang-es">Patrón de mínimo privilegio:</span></strong>
+          <span class="lang-en"> Users get <code>cloudformation:*</code> + <code>iam:PassRole</code>. The service role gets the actual resource permissions (S3, EC2, RDS…). Users never need those resource permissions directly.</span>
+          <span class="lang-es"> Los usuarios obtienen <code>cloudformation:*</code> + <code>iam:PassRole</code>. El rol de servicio obtiene los permisos reales de recursos (S3, EC2, RDS…). Los usuarios nunca necesitan esos permisos directamente.</span>
+        </div>
+      </div>
+
+      <!-- ═══════════════ 6. CAPABILITIES & DELETION POLICY ═══════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">6</span>
+          <h2><span class="lang-en">Capabilities &amp; Deletion Policy</span><span class="lang-es">Capabilities y Política de Eliminación</span></h2>
+        </div>
+
+        <h3>Capabilities</h3>
+        <p>
+          <span class="lang-en">Explicit acknowledgements required when a template performs sensitive operations. Without them, CloudFormation throws <code>InsufficientCapabilitiesException</code>.</span>
+          <span class="lang-es">Confirmaciones explícitas requeridas cuando una plantilla realiza operaciones sensibles. Sin ellas, CloudFormation lanza <code>InsufficientCapabilitiesException</code>.</span>
+        </p>
+
+        <div class="cap-grid">
+          <div class="cap-card">
+            <span class="cap-name">CAPABILITY_IAM</span>
+            <p><span class="lang-en">Template creates/updates <strong>unnamed</strong> IAM resources (users, roles, groups, policies).</span><span class="lang-es">La plantilla crea/actualiza recursos IAM <strong>sin nombre explícito</strong>.</span></p>
+          </div>
+          <div class="cap-card">
+            <span class="cap-name">CAPABILITY_NAMED_IAM</span>
+            <p><span class="lang-en">Template creates/updates IAM resources <strong>with an explicit name</strong>. Use this instead of IAM when names are set.</span><span class="lang-es">La plantilla crea/actualiza recursos IAM <strong>con un nombre explícito</strong>. Usá este en lugar de IAM cuando los nombres están definidos.</span></p>
+          </div>
+          <div class="cap-card">
+            <span class="cap-name">CAPABILITY_AUTO_EXPAND</span>
+            <p><span class="lang-en">Template uses <strong>macros or nested stacks</strong> that expand before deployment.</span><span class="lang-es">La plantilla usa <strong>macros o stacks anidados</strong> que se expanden antes del despliegue.</span></p>
+          </div>
+        </div>
+        <div class="callout info" style="margin-top:0.75rem">
+          💡 <span class="lang-en">Capabilities are just an <strong>acknowledgement</strong> — they don't grant extra permissions. Provide them via console checkbox, CLI <code>--capabilities</code>, or API.</span>
+          <span class="lang-es">Las capabilities son solo una <strong>confirmación</strong> — no otorgan permisos extra. Proporcionálas via checkbox en la consola, <code>--capabilities</code> en CLI, o en la API.</span>
+        </div>
+
+        <h3><span class="lang-en">Deletion Policy</span><span class="lang-es">Política de Eliminación</span></h3>
+        <p>
+          <span class="lang-en">Applied per-resource. Controls what happens to a resource when the stack is deleted or the resource is removed from the template.</span>
+          <span class="lang-es">Se aplica por recurso. Controla qué sucede con un recurso cuando el stack se elimina o el recurso se quita de la plantilla.</span>
+        </p>
+
+        <div class="policy-grid">
+          <div class="policy-card" style="--pc:#ef4444">
+            <h4>Delete <span class="chip gray" style="vertical-align:middle;font-size:11px"><span class="lang-en">default</span><span class="lang-es">predeterminado</span></span></h4>
+            <div class="policy-row"><span class="lbl"><span class="lang-en">Resource after stack delete</span><span class="lang-es">Recurso tras eliminar stack</span></span><span class="chip red"><span class="lang-en">Gone</span><span class="lang-es">Eliminado</span></span></div>
+            <div class="policy-row"><span class="lbl"><span class="lang-en">Works for all types?</span><span class="lang-es">¿Funciona en todos?</span></span><span class="chip green"><span class="lang-en">Yes</span><span class="lang-es">Sí</span></span></div>
+            <div class="policy-row"><span class="lbl">S3 gotcha</span><span class="chip yellow"><span class="lang-en">Must be empty</span><span class="lang-es">Debe estar vacío</span></span></div>
+          </div>
+          <div class="policy-card" style="--pc:#10b981">
+            <h4>Retain</h4>
+            <div class="policy-row"><span class="lbl"><span class="lang-en">Resource after stack delete</span><span class="lang-es">Recurso tras eliminar stack</span></span><span class="chip green"><span class="lang-en">Stays</span><span class="lang-es">Permanece</span></span></div>
+            <div class="policy-row"><span class="lbl"><span class="lang-en">Works for all types?</span><span class="lang-es">¿Funciona en todos?</span></span><span class="chip green"><span class="lang-en">Yes</span><span class="lang-es">Sí</span></span></div>
+            <div class="policy-row"><span class="lbl"><span class="lang-en">Manual cleanup?</span><span class="lang-es">¿Limpieza manual?</span></span><span class="chip yellow"><span class="lang-en">Required</span><span class="lang-es">Requerida</span></span></div>
+          </div>
+          <div class="policy-card" style="--pc:#3b82f6">
+            <h4>Snapshot</h4>
+            <div class="policy-row"><span class="lbl"><span class="lang-en">Resource after stack delete</span><span class="lang-es">Recurso tras eliminar stack</span></span><span class="chip red"><span class="lang-en">Gone</span><span class="lang-es">Eliminado</span></span></div>
+            <div class="policy-row"><span class="lbl"><span class="lang-en">Snapshot taken?</span><span class="lang-es">¿Snapshot tomado?</span></span><span class="chip green"><span class="lang-en">Yes</span><span class="lang-es">Sí</span></span></div>
+            <div class="policy-row"><span class="lbl"><span class="lang-en">Stateful only?</span><span class="lang-es">¿Solo recursos stateful?</span></span><span class="chip blue"><span class="lang-en">Yes</span><span class="lang-es">Sí</span></span></div>
+          </div>
+        </div>
+
+        <div class="callout info" style="margin-top:0.5rem">
+          <strong><span class="lang-en">Snapshot supported resources:</span><span class="lang-es">Recursos que soportan Snapshot:</span></strong>
+          EBS Volumes · ElastiCache · RDS (DBInstance / DB Cluster) · Redshift · Neptune · DocumentDB
+        </div>
+      </div>
+
+      <!-- ═══════════════ 7. STACK POLICIES, TERMINATION PROTECTION ═══════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">7</span>
+          <h2><span class="lang-en">Stack Policies &amp; Termination Protection</span><span class="lang-es">Políticas de Stack y Protección contra Eliminación</span></h2>
+        </div>
+
+        <h3><span class="lang-en">Stack Policies</span><span class="lang-es">Políticas de Stack</span></h3>
+        <p>
+          <span class="lang-en">A <strong>JSON document</strong> that controls which update actions are allowed on specific resources during a stack update. Protects against accidental changes to critical resources.</span>
+          <span class="lang-es">Un <strong>documento JSON</strong> que controla qué acciones de actualización están permitidas en recursos específicos durante una actualización de stack. Protege contra cambios accidentales en recursos críticos.</span>
+        </p>
+
+        <div class="code-block"><span class="ck">{</span><br>
+&nbsp;&nbsp;<span class="cs">"Statement"</span>: [<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="ck">{</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cs">"Effect"</span>: <span class="cv">"Allow"</span>,&nbsp;&nbsp;<span class="cc">// allow updates on everything…</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cs">"Action"</span>: <span class="cv">"Update:*"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cs">"Principal"</span>: <span class="cv">"*"</span>, <span class="cs">"Resource"</span>: <span class="cv">"*"</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="ck">}</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="ck">{</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cs">"Effect"</span>: <span class="cv">"Deny"</span>,&nbsp;&nbsp;&nbsp;<span class="cc">// …except the production DB</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cs">"Action"</span>: <span class="cv">"Update:*"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cs">"Principal"</span>: <span class="cv">"*"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cs">"Resource"</span>: <span class="cv">"LogicalResourceId/ProductionDatabase"</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="ck">}</span><br>
+&nbsp;&nbsp;]<br>
+<span class="ck">}</span></div>
+
+        <div class="concept-grid" style="margin-bottom:1rem">
+          <div class="concept-card">
+            <h4><span class="lang-en">Default (no policy)</span><span class="lang-es">Predeterminado (sin política)</span></h4>
+            <p><span class="lang-en">All resources can be updated freely.</span><span class="lang-es">Todos los recursos se pueden actualizar libremente.</span></p>
+          </div>
+          <div class="concept-card">
+            <h4><span class="lang-en">Once a policy is set</span><span class="lang-es">Una vez que se establece una política</span></h4>
+            <p><span class="lang-en"><strong>Default becomes Deny all.</strong> Must explicitly Allow what can be updated.</span><span class="lang-es"><strong>El predeterminado se convierte en Denegar todo.</strong> Debés permitir explícitamente lo que puede actualizarse.</span></p>
+          </div>
+          <div class="concept-card">
+            <h4><span class="lang-en">Deny vs Allow</span><span class="lang-es">Deny vs Allow</span></h4>
+            <p><span class="lang-en">A <strong>Deny always overrides</strong> an Allow. Same as standard IAM evaluation.</span><span class="lang-es"><strong>Deny siempre tiene precedencia</strong> sobre Allow. Igual que la evaluación IAM estándar.</span></p>
+          </div>
+        </div>
+        <div class="callout warning">⚠ <span class="lang-en">Stack policies only apply to <strong>stack updates</strong> — not to stack creation or deletion.</span><span class="lang-es">Las políticas de stack solo aplican a <strong>actualizaciones</strong> — no a la creación o eliminación del stack.</span></div>
+
+        <h3><span class="lang-en">Termination Protection</span><span class="lang-es">Protección contra Eliminación</span></h3>
+        <p>
+          <span class="lang-en">Prevents accidental <strong>deletion</strong> of an entire stack. Disabled by default — must be explicitly enabled. To delete a protected stack, disable protection first.</span>
+          <span class="lang-es">Previene la <strong>eliminación</strong> accidental de un stack completo. Deshabilitada por defecto — debe activarse explícitamente. Para eliminar un stack protegido, primero deshabilitá la protección.</span>
+        </p>
+
+        <table class="data-table" style="margin-top:0.75rem">
+          <thead><tr>
+            <th></th>
+            <th><span class="lang-en">Stack Policy</span><span class="lang-es">Política de Stack</span></th>
+            <th><span class="lang-en">Termination Protection</span><span class="lang-es">Protección contra Eliminación</span></th>
+          </tr></thead>
+          <tbody>
+            <tr><td><strong><span class="lang-en">Protects against</span><span class="lang-es">Protege contra</span></strong></td><td><span class="lang-en">Accidental <strong>updates</strong></span><span class="lang-es"><strong>Actualizaciones</strong> accidentales</span></td><td><span class="lang-en">Accidental <strong>deletion</strong></span><span class="lang-es"><strong>Eliminación</strong> accidental</span></td></tr>
+            <tr><td><strong><span class="lang-en">Scope</span><span class="lang-es">Alcance</span></strong></td><td><span class="lang-en">Per-resource</span><span class="lang-es">Por recurso</span></td><td><span class="lang-en">Entire stack</span><span class="lang-es">Stack completo</span></td></tr>
+            <tr><td><strong><span class="lang-en">Default</span><span class="lang-es">Predeterminado</span></strong></td><td><span class="lang-en">No policy (all updates allowed)</span><span class="lang-es">Sin política (todas las actualizaciones permitidas)</span></td><td><span class="chip gray"><span class="lang-en">Disabled</span><span class="lang-es">Deshabilitada</span></span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ═══════════════ 8. CUSTOM RESOURCES & STACKSETS ═══════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">8</span>
+          <h2><span class="lang-en">Custom Resources &amp; StackSets</span><span class="lang-es">Recursos Personalizados y StackSets</span></h2>
+        </div>
+
+        <h3><span class="lang-en">Custom Resources</span><span class="lang-es">Recursos Personalizados</span></h3>
+        <p>
+          <span class="lang-en">Used when CloudFormation doesn't natively support a service, or you need custom provisioning logic (e.g. calling a third-party API, emptying a bucket before deletion).</span>
+          <span class="lang-es">Se usan cuando CloudFormation no soporta nativamente un servicio, o cuando necesitás lógica de aprovisionamiento personalizada (ej: llamar a una API de terceros, vaciar un bucket antes de eliminarlo).</span>
+        </p>
+
+        <div class="compare">
+          <div class="compare-card">
+            <h4 class="blue">AWS::CloudFormation::CustomResource</h4>
+            <ul>
+              <li><span class="lang-en">Generic — works for any custom logic</span><span class="lang-es">Genérico — funciona para cualquier lógica personalizada</span></li>
+            </ul>
+          </div>
+          <div class="compare-card">
+            <h4 class="green">Custom::MyCustomResourceTypeName</h4>
+            <ul>
+              <li><span class="lang-en"><strong>Recommended</strong> — more descriptive, same behavior</span><span class="lang-es"><strong>Recomendado</strong> — más descriptivo, mismo comportamiento</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="code-block"><span class="ck">Resources:</span><br>
+&nbsp;&nbsp;<span class="cv">MyCustomResource:</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="cs">Type:</span> Custom::EmptyS3BucketOnDelete<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="cs">Properties:</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cs">ServiceToken:</span> arn:aws:lambda:us-east-1:123:function:EmptyBucket<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cc"># ServiceToken = Lambda ARN or SNS ARN (must be same region)</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cs">BucketName:</span> !Ref MyS3Bucket</div>
+
+        <div class="callout info">
+          💡 <strong><span class="lang-en">Classic exam pattern:</span><span class="lang-es">Patrón clásico del examen:</span></strong>
+        </div>
+        <div class="step-flow" style="margin-top:0.5rem">
+          <div class="flow-step">
+            <div class="flow-num">1</div>
+            <div class="flow-text"><strong><span class="lang-en">Stack deletion triggered</span><span class="lang-es">Se inicia la eliminación del stack</span></strong></div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-num">2</div>
+            <div class="flow-text"><strong><span class="lang-en">CloudFormation invokes the Custom Resource Lambda</span><span class="lang-es">CloudFormation invoca el Lambda del Custom Resource</span></strong></div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-num">3</div>
+            <div class="flow-text"><strong><span class="lang-en">Lambda empties the S3 bucket</span><span class="lang-es">Lambda vacía el bucket S3</span></strong></div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-num" style="background:#10b981">✓</div>
+            <div class="flow-text"><strong><span class="lang-en">CloudFormation deletes the now-empty bucket successfully</span><span class="lang-es">CloudFormation elimina el bucket vacío exitosamente</span></strong></div>
+          </div>
+        </div>
+
+        <div class="callout warning" style="margin-top:1rem">⚠ <code>ServiceToken</code> (<span class="lang-en">Lambda ARN or SNS ARN</span><span class="lang-es">ARN de Lambda o SNS</span>) <strong><span class="lang-en">must be in the same region</span><span class="lang-es">debe estar en la misma región</span></strong> <span class="lang-en">as the stack.</span><span class="lang-es">que el stack.</span></div>
+
+        <h3>StackSets</h3>
+        <p>
+          <span class="lang-en">Deploy the <strong>same CloudFormation stack to multiple AWS accounts and multiple regions</strong> in a single operation, managed from a single <strong>administrator account</strong>.</span>
+          <span class="lang-es">Desplegá el <strong>mismo stack de CloudFormation en múltiples cuentas y regiones de AWS</strong> en una sola operación, administrada desde una única <strong>cuenta administradora</strong>.</span>
+        </p>
+
+        <div class="ss-wrap">
+          <div class="ss-admin">👑 <span class="lang-en">Administrator Account</span><span class="lang-es">Cuenta Administradora</span></div>
+          <div class="ss-arrow">↓</div>
+          <div class="ss-accounts">
+            <div class="ss-account">
+              <h5><span class="lang-en">Account</span><span class="lang-es">Cuenta</span> A</h5>
+              <div class="ss-region">us-east-1</div>
+              <div class="ss-region">eu-west-1</div>
+            </div>
+            <div class="ss-account">
+              <h5><span class="lang-en">Account</span><span class="lang-es">Cuenta</span> B</h5>
+              <div class="ss-region">us-east-1</div>
+              <div class="ss-region">ap-southeast-1</div>
+            </div>
+            <div class="ss-account">
+              <h5><span class="lang-en">Account</span><span class="lang-es">Cuenta</span> C</h5>
+              <div class="ss-region">us-east-1</div>
+            </div>
+          </div>
+        </div>
+        <div class="callout success">✅ <span class="lang-en">Update the StackSet once → <strong>all stack instances updated automatically</strong>. Commonly used with <strong>AWS Organizations</strong>.</span><span class="lang-es">Actualizá el StackSet una vez → <strong>todas las instancias del stack se actualizan automáticamente</strong>. Se usa comúnmente con <strong>AWS Organizations</strong>.</span></div>
+      </div>
+
+      <!-- ═══════════════ 9. EXAM TIPS ═══════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">9</span>
+          <h2><span class="lang-en">Exam Tips</span><span class="lang-es">Tips para el Examen</span></h2>
+        </div>
+
+        <div class="tips-grid">
+          <div class="tip">
+            <span class="trigger"><span class="lang-en">Only mandatory section?</span><span class="lang-es">¿Única sección obligatoria?</span></span>
+            <span class="arr">→</span>
+            <span class="answer">Resources</span>
+          </div>
+          <div class="tip">
+            <span class="trigger"><span class="lang-en">Resource type format?</span><span class="lang-es">¿Formato del tipo de recurso?</span></span>
+            <span class="arr">→</span>
+            <span class="answer">AWS::ServiceName::ResourceType</span>
+          </div>
+          <div class="tip">
+            <span class="trigger"><span class="lang-en">AWS service not supported by CloudFormation?</span><span class="lang-es">¿Servicio AWS no soportado por CloudFormation?</span></span>
+            <span class="arr">→</span>
+            <span class="answer"><span class="lang-en">Custom Resources</span><span class="lang-es">Custom Resources</span></span>
+          </div>
+          <div class="tip">
+            <span class="trigger">NoEcho: true</span>
+            <span class="arr">→</span>
+            <span class="answer"><span class="lang-en">Passwords / secrets — hides value from logs</span><span class="lang-es">Contraseñas / secretos — oculta el valor en los logs</span></span>
+          </div>
+          <div class="tip">
+            <span class="trigger">!Ref <span class="lang-en">on resource</span><span class="lang-es">en recurso</span></span>
+            <span class="arr">→</span>
+            <span class="answer"><span class="lang-en">physical ID</span><span class="lang-es">ID físico</span></span>
+          </div>
+          <div class="tip">
+            <span class="trigger">!Ref <span class="lang-en">on parameter</span><span class="lang-es">en parámetro</span></span>
+            <span class="arr">→</span>
+            <span class="answer"><span class="lang-en">parameter value</span><span class="lang-es">valor del parámetro</span></span>
+          </div>
+          <div class="tip">
+            <span class="trigger">!GetAtt</span>
+            <span class="arr">→</span>
+            <span class="answer"><span class="lang-en">specific attribute (IP, AZ, DNS…) — check "Return values" in docs</span><span class="lang-es">atributo específico (IP, AZ, DNS…) — verificar "Return values" en la documentación</span></span>
+          </div>
+          <div class="tip">
+            <span class="trigger">!Base64</span>
+            <span class="arr">→</span>
+            <span class="answer"><span class="lang-en">EC2 UserData (almost exclusively)</span><span class="lang-es">EC2 UserData (casi exclusivamente)</span></span>
+          </div>
+          <div class="tip">
+            <span class="trigger">!FindInMap + AWS::Region</span>
+            <span class="arr">→</span>
+            <span class="answer"><span class="lang-en">automatic region-specific config (AMI IDs, etc.)</span><span class="lang-es">configuración automática por región (IDs de AMI, etc.)</span></span>
+          </div>
+          <div class="tip">
+            <span class="trigger"><span class="lang-en">Export name constraint?</span><span class="lang-es">¿Restricción del nombre del export?</span></span>
+            <span class="arr">→</span>
+            <span class="answer"><span class="lang-en">Unique per region</span><span class="lang-es">Único por región</span></span>
+          </div>
+          <div class="tip">
+            <span class="trigger"><span class="lang-en">Can you delete a stack with referenced exports?</span><span class="lang-es">¿Podés eliminar un stack con exports referenciados?</span></span>
+            <span class="arr">→</span>
+            <span class="answer"><span class="lang-en">No — delete dependent stacks first</span><span class="lang-es">No — eliminá primero los stacks dependientes</span></span>
+          </div>
+          <div class="tip">
+            <span class="trigger"><span class="lang-en">Rollback stuck?</span><span class="lang-es">¿Reversión trabada?</span></span>
+            <span class="arr">→</span>
+            <span class="answer"><span class="lang-en">Fix manually → ContinueUpdateRollback</span><span class="lang-es">Corregí manualmente → ContinueUpdateRollback</span></span>
+          </div>
+          <div class="tip">
+            <span class="trigger">iam:PassRole</span>
+            <span class="arr">→</span>
+            <span class="answer"><span class="lang-en">Required to assign a service role to CloudFormation</span><span class="lang-es">Requerido para asignar un rol de servicio a CloudFormation</span></span>
+          </div>
+          <div class="tip">
+            <span class="trigger">InsufficientCapabilitiesException</span>
+            <span class="arr">→</span>
+            <span class="answer"><span class="lang-en">Missing CAPABILITY_IAM / CAPABILITY_NAMED_IAM / CAPABILITY_AUTO_EXPAND</span><span class="lang-es">Falta CAPABILITY_IAM / CAPABILITY_NAMED_IAM / CAPABILITY_AUTO_EXPAND</span></span>
+          </div>
+          <div class="tip">
+            <span class="trigger"><span class="lang-en">IAM resource with explicit name?</span><span class="lang-es">¿Recurso IAM con nombre explícito?</span></span>
+            <span class="arr">→</span>
+            <span class="answer">CAPABILITY_NAMED_IAM</span>
+          </div>
+          <div class="tip">
+            <span class="trigger">DeletionPolicy Delete + S3</span>
+            <span class="arr">→</span>
+            <span class="answer"><span class="lang-en">Fails if bucket is NOT empty</span><span class="lang-es">Falla si el bucket NO está vacío</span></span>
+          </div>
+          <div class="tip">
+            <span class="trigger">DeletionPolicy Snapshot</span>
+            <span class="arr">→</span>
+            <span class="answer"><span class="lang-en">Stateful resources only (EBS, RDS, ElastiCache, Redshift, Neptune, DocumentDB)</span><span class="lang-es">Solo recursos stateful (EBS, RDS, ElastiCache, Redshift, Neptune, DocumentDB)</span></span>
+          </div>
+          <div class="tip">
+            <span class="trigger"><span class="lang-en">Stack Policy vs Termination Protection?</span><span class="lang-es">¿Stack Policy vs Protección contra Eliminación?</span></span>
+            <span class="arr">→</span>
+            <span class="answer"><span class="lang-en">Policy = protects updates · Termination = protects deletion</span><span class="lang-es">Policy = protege actualizaciones · Termination = protege la eliminación</span></span>
+          </div>
+          <div class="tip">
+            <span class="trigger">Custom Resource ServiceToken</span>
+            <span class="arr">→</span>
+            <span class="answer"><span class="lang-en">Lambda ARN or SNS ARN — same region as stack</span><span class="lang-es">ARN de Lambda o SNS — misma región que el stack</span></span>
+          </div>
+          <div class="tip">
+            <span class="trigger">StackSets</span>
+            <span class="arr">→</span>
+            <span class="answer"><span class="lang-en">Same stack → multiple accounts/regions → single admin account</span><span class="lang-es">Mismo stack → múltiples cuentas/regiones → una sola cuenta administradora</span></span>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /container -->
+
+    <script>
+      function toggleLang() {
+        const isEs = document.body.classList.toggle('es');
+        document.getElementById('lang-btn').textContent = isEs ? '🌐 English' : '🌐 Español';
+        document.documentElement.lang = isEs ? 'es' : 'en';
+      }
+    </script>
+  </body>
+</html>

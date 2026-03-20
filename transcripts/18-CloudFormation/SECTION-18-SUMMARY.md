@@ -31,7 +31,7 @@
 ### 1. What Is CloudFormation?
 - **Infrastructure as Code (IaC)** — declare AWS infrastructure in a YAML/JSON template; CloudFormation creates it
 - **Declarative** — you define WHAT, CloudFormation figures out HOW and ORDER
-- Templates are stored in **Amazon S3**, referenced by CloudFormation to create a **Stack**
+- Templates are stored in **Amazon S3**, referenced by CloudFormation to create a **Stack** — this is always true, even if you upload via the console (AWS uploads it to S3 behind the scenes automatically)
 - Delete a stack → **all resources created by it are deleted**
 - To update: must **re-upload a new version** (cannot edit the previous template)
 
@@ -173,7 +173,7 @@ MountPoint:
 | `!ImportValue` ⭐ | Import an exported value from another stack |
 | `!Base64` ⭐ | Encode a string to Base64 — used for EC2 UserData |
 | `!If` / `!Not` / `!Equals` / `!And` / `!Or` ⭐ | Condition functions |
-| `!Join` | Concatenate values with a delimiter |
+| `!Join` | Concatenate values with a delimiter — syntax: `!Join [delimiter, [val1, val2, ...]]` e.g. `!Join ['=', [IPAddress, !Ref 'IPAddress']]` → `IPAddress=10.0.0.1` |
 | `!Sub` | Substitute variables in a string |
 | `!Select` | Select a value from a list by index |
 
@@ -196,6 +196,8 @@ MountPoint:
 | **Rollback failure** | Fix resources manually, then call `ContinueUpdateRollback` |
 
 Root cause of rollback failure → resources were **manually modified** outside CloudFormation.
+
+> ⚠️ **`ROLLBACK_COMPLETE` status (exam trap):** After a creation failure, the stack ends up in `ROLLBACK_COMPLETE`. In this state you **cannot** run `update-stack` or execute a ChangeSet — those require a healthy stack state. The only valid action is to **delete the stack and create a new one** with the fixed template.
 
 ---
 
