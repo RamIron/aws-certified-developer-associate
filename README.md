@@ -7,14 +7,14 @@ Study notes for AWS DVA-C02, assisted by Claude.
 ## 📊 Progress
 
 ```
-███████████████░░░░░░░░░░░░░░░ 47% (228/483 lessons)
+████████████████░░░░░░░░░░░░░░ 51.8% (250/483 lessons)
 ```
 
-📹 Videos: 207/446 · 📄 Articles: 6/8 · ❓ Quizzes: 15/29
+📹 Videos: 228/446 · 📄 Articles: 6/8 · ❓ Quizzes: 16/29
 
-**Current section:** 19 - AWS Integration & Messaging: SQS, SNS & Kinesis
+**Current section:** 20 - AWS Monitoring & Audit: CloudWatch, X-Ray & CloudTrail
 
-**XP:** 7,425
+**XP:** 7,875
 
 ### Course Sections
 
@@ -38,7 +38,7 @@ Study notes for AWS DVA-C02, assisted by Claude.
 | 16: ECS, ECR & Fargate - Docker in AWS | 1h 19 min | ✅ |
 | 17: AWS Elastic Beanstalk | 59 min | ✅ |
 | 18: AWS CloudFormation | 1h 11 min | ✅ |
-| 19: AWS Integration & Messaging: SQS, SNS & Kinesis | 1h 42 min | |
+| 19: AWS Integration & Messaging: SQS, SNS & Kinesis | 1h 42 min | ✅ |
 | 20: AWS Monitoring & Audit: CloudWatch, X-Ray & CloudTrail | 1h 45 min | |
 | 21: AWS Serverless: Lambda | 3h 4 min | |
 | 22: AWS Serverless: DynamoDB | 1h 46 min | |
@@ -54,8 +54,8 @@ Study notes for AWS DVA-C02, assisted by Claude.
 | 32: AWS Final Cleanup | 3 min | |
 | 33: Preparing for the Exam | 21 min | |
 | 34: Congratulations | 9 min | |
-| **Completed** | **~13h 13 min** | |
-| **Remaining** | **~18h 4 min** | |
+| **Completed** | **~14h 55 min** | |
+| **Remaining** | **~16h 22 min** | |
 
 ---
 

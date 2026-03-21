@@ -4,15 +4,32 @@
 
 | Metric | Value |
 |--------|-------|
-| Total XP | 7000 |
-| Lessons completed | 107 |
-| Perfect quizzes (100%) | 93 |
-| Lessons to review | 11 |
+| Total XP | 7875 |
+| Lessons completed | 121 |
+| Perfect quizzes (100%) | 104 |
+| Lessons to review | 13 |
 
 ## Session History
 
 | Date | Section | Lesson | XP | Result |
 |------|---------|--------|----|--------|
+| 2026-03-21 | 19 | 19.18 - Amazon Data Firehose | 75 | PERFECT |
+| 2026-03-21 | 19 | 19.17 - Kinesis Data Streams Hands On | — | no quiz |
+| 2026-03-21 | 19 | 19.16 - Amazon Kinesis Data Streams | 75 | PERFECT |
+| 2026-03-21 | 19 | 19.15 - SNS Hands On | — | no quiz |
+| 2026-03-21 | 19 | 19.14 - SNS SQS Fan Out Pattern | 100 | PERFECT |
+| 2026-03-21 | 19 | 19.13 - Amazon SNS | 75 | PERFECT |
+| 2026-03-21 | 19 | 19.12 - SQS FIFO Queues Advanced | 50 | REVIEW 67% |
+| 2026-03-21 | 19 | 19.11 - SQS FIFO Queues | 75 | PERFECT |
+| 2026-03-20 | 19 | 19.10 - SQS Certified Developer Concepts | 75 | PASSED 75% |
+| 2026-03-20 | 19 | 19.9 - SQS Delay Queues | 25 | REVIEW 50% |
+| 2026-03-20 | 19 | 19.8 - SQS DLQ Hands On | — | no quiz |
+| 2026-03-20 | 19 | 19.7 - SQS Dead Letter Queues | 75 | PERFECT |
+| 2026-03-20 | 19 | 19.6 - SQS Message Visibility Timeout | 75 | PERFECT |
+| 2026-03-20 | 19 | 19.5 - SQS Queue Access Policy | 50 | PERFECT |
+| 2026-03-20 | 19 | 19.4 - SQS Standard Queue Hands On | — | no quiz |
+| 2026-03-20 | 19 | 19.3 - Amazon SQS Standard Queues Overview | 125 | PERFECT |
+| 2026-03-20 | 19 | 19.1 - Introduction to Messaging | — | skipped quiz |
 | 2026-03-19 | 18 | 18.17 - CloudFormation Custom Resources | 75 | PERFECT |
 | 2026-03-19 | 18 | 18.15 - CloudFormation Stack Policies | 50 | PERFECT |
 | 2026-03-19 | 18 | 18.14 - CloudFormation Deletion Policy | 75 | PERFECT |

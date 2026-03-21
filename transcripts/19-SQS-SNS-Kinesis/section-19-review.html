@@ -1,0 +1,636 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Section 19 — AWS Integration & Messaging</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap");
+
+      *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+      body {
+        font-family: "Inter", sans-serif;
+        background: #0f172a;
+        color: #e2e8f0;
+        line-height: 1.6;
+        padding: 0 0 64px;
+      }
+
+      /* ── LANGUAGE TOGGLE ── */
+      .lang-es { display: none; }
+      body.es .lang-en { display: none; }
+      body.es .lang-es { display: inline; }
+      body.es .lang-es-block { display: block; }
+      .lang-es-block { display: none; }
+      body.es .lang-en-block { display: none; }
+      .lang-toggle {
+        display: inline-flex; align-items: center; gap: 6px;
+        background: transparent; color: #94a3b8; border: 1px solid #334155;
+        border-radius: 999px; padding: 7px 18px; font-size: 13px; font-weight: 600;
+        cursor: pointer; font-family: "Inter", sans-serif;
+        transition: color 0.2s, border-color 0.2s, background 0.2s; margin-top: 16px;
+      }
+      .lang-toggle:hover { color: #e2e8f0; border-color: #64748b; background: #1e293b; }
+
+      /* ── HERO ── */
+      .hero {
+        background: linear-gradient(135deg, #1e293b 0%, #0f172a 60%, #1a1a2e 100%);
+        border-bottom: 1px solid #334155;
+        padding: 48px 32px 40px; text-align: center;
+      }
+      .hero-eyebrow { font-size: 13px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #f97316; margin-bottom: 12px; }
+      h1 { font-size: clamp(26px,4vw,40px); font-weight: 800; color: #f8fafc; margin-bottom: 8px; letter-spacing: -0.02em; }
+      .hero-subtitle { font-size: 15px; color: #94a3b8; margin-bottom: 20px; font-weight: 400; }
+      .xp-badge { display: inline-flex; align-items: center; gap: 6px; background: linear-gradient(135deg, #f97316, #ea580c); color: #fff; font-size: 13px; font-weight: 700; padding: 8px 18px; border-radius: 999px; }
+
+      .container { max-width: 1100px; margin: 0 auto; padding: 40px 24px 0; }
+
+      /* ── CARDS ── */
+      .card { background: #1e293b; border-radius: 16px; padding: 2rem; margin-bottom: 2rem; border: 1px solid #334155; }
+      .card-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem; }
+      .badge { background: #f97316; color: #0f172a; font-weight: 800; font-size: 13px; padding: 0.25rem 0.65rem; border-radius: 6px; }
+      h2 { font-size: 1.3rem; font-weight: 700; color: #f8fafc; }
+      h3 { font-size: 0.95rem; font-weight: 600; color: #d2d2d2; margin: 1.5rem 0 0.9rem; text-transform: uppercase; letter-spacing: 0.06em; }
+      p { color: #d2d2d2; font-size: 0.9rem; margin-bottom: 0.75rem; }
+      p strong { color: #e2e8f0; }
+
+      /* ── CONCEPT GRID ── */
+      .concept-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap: 0.9rem; }
+      .concept-card { background: #0f172a; border-radius: 12px; padding: 1.1rem 1.2rem; border: 1px solid #1e293b; }
+      .concept-card h4 { font-size: 0.85rem; font-weight: 700; color: #f8fafc; margin-bottom: 0.3rem; }
+      .concept-card p { font-size: 13px; color: #d2d2d2; margin: 0; }
+
+      /* ── CALLOUTS ── */
+      .callout { border-radius: 8px; padding: 0.75rem 1rem; margin: 1rem 0; font-size: 0.85rem; }
+      .callout.warning { background: #451a0322; border: 1px dashed #f97316; color: #fdba74; }
+      .callout.danger  { background: #7f1d1d22; border: 1px solid #dc262644; color: #fca5a5; }
+      .callout.info    { background: #1e3a5f22; border-left: 3px solid #3b82f6; color: #93c5fd; }
+      .callout.success { background: #064e3b22; border-left: 3px solid #10b981; color: #6ee7b7; }
+
+      /* ── CHIPS ── */
+      .chip { font-size: 13px; font-weight: 700; padding: 0.15rem 0.45rem; border-radius: 4px; white-space: nowrap; }
+      .chip.red    { background: #7f1d1d; color: #fca5a5; }
+      .chip.green  { background: #064e3b; color: #6ee7b7; }
+      .chip.yellow { background: #422006; color: #fcd34d; }
+      .chip.blue   { background: #1e3a5f; color: #93c5fd; }
+      .chip.purple { background: #3b1f63; color: #c4b5fd; }
+      .chip.orange { background: #431407; color: #fb923c; }
+
+      /* ── CODE BLOCK ── */
+      .code-block {
+        background: #020617; border-radius: 10px; padding: 1rem 1.25rem;
+        font-family: "Fira Code","Courier New",monospace; font-size: 13px;
+        line-height: 1.9; border: 1px solid #1e293b; overflow-x: auto; margin: 0.75rem 0;
+      }
+      .ck { color: #60a5fa; } .cv { color: #34d399; } .cs { color: #fb923c; } .cc { color: #334155; }
+
+      /* ── DATA TABLE ── */
+      .data-table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 0.75rem 0; }
+      .data-table th { background: #0f172a; color: #94a3b8; font-weight: 700; text-align: left; padding: 0.55rem 0.9rem; font-size: 12px; text-transform: uppercase; letter-spacing: 0.07em; border-bottom: 1px solid #334155; }
+      .data-table td { padding: 0.55rem 0.9rem; border-bottom: 1px solid #1e293b; color: #d2d2d2; vertical-align: top; }
+      .data-table tr:last-child td { border-bottom: none; }
+      .data-table td strong { color: #f8fafc; }
+      .data-table td code { font-family: "Fira Code",monospace; background: #0f172a; padding: 0.1rem 0.35rem; border-radius: 4px; color: #93c5fd; font-size: 12px; }
+
+      /* ── EXAM TIPS ── */
+      .tips-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(260px,1fr)); gap: 0.7rem; }
+      .tip { background: #0f172a; border-left: 3px solid #f97316; border-radius: 0 8px 8px 0; padding: 0.65rem 1rem; font-size: 0.83rem; }
+      .tip .trigger { color: #64748b; }
+      .tip .arr { color: #334155; margin: 0 0.25rem; }
+      .tip .answer { color: #f8fafc; font-weight: 700; }
+
+      /* ── COMPARE ── */
+      .compare { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin: 0.75rem 0; }
+      .compare-card { background: #0f172a; border-radius: 10px; padding: 1rem; }
+      .compare-card h4 { font-size: 0.82rem; font-weight: 700; margin-bottom: 0.65rem; }
+      .compare-card h4.blue { color: #60a5fa; }
+      .compare-card h4.green { color: #34d399; }
+      .compare-card h4.orange { color: #fb923c; }
+      .compare-card h4.purple { color: #c4b5fd; }
+      .compare-card ul { list-style: none; padding: 0; }
+      .compare-card li { font-size: 13px; color: #d2d2d2; padding: 0.18rem 0 0.18rem 1rem; position: relative; }
+      .compare-card li::before { content: "·"; position: absolute; left: 0; color: #475569; }
+
+      @media (max-width: 680px) {
+        body { padding: 1rem; }
+        h1 { font-size: 1.6rem; }
+        .compare { grid-template-columns: 1fr; }
+      }
+    </style>
+  </head>
+  <body>
+
+    <!-- ═══════════════════ HERO ═══════════════════ -->
+    <div class="hero">
+      <div class="hero-eyebrow">AWS Certified Developer Associate</div>
+      <h1>Section 19 — AWS Integration & Messaging</h1>
+      <div class="hero-subtitle">
+        <span class="lang-en">SQS, SNS & Kinesis · 21 lessons · Quiz complete</span>
+        <span class="lang-es">SQS, SNS y Kinesis · 21 lecciones · Quiz completado</span>
+      </div>
+      <div class="xp-badge">+700 XP &nbsp;·&nbsp; Section complete</div>
+      <br/>
+      <button class="lang-toggle" id="lang-btn" onclick="toggleLang()">Espanol</button>
+    </div>
+
+    <div class="container">
+
+      <!-- ═══════════════════ CARD 1: SQS STANDARD ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">1</span>
+          <h2><span class="lang-en">Amazon SQS — Standard Queue</span><span class="lang-es">Amazon SQS — Cola Estandar</span></h2>
+        </div>
+        <p>
+          <span class="lang-en">Producer sends messages to a queue. Consumers poll, process, and delete them. Unlimited throughput, at-least-once delivery, best-effort ordering.</span>
+          <span class="lang-es">El productor envia mensajes a una cola. Los consumidores los recogen, procesan y eliminan. Throughput ilimitado, entrega al-menos-una-vez, orden de mejor esfuerzo.</span>
+        </p>
+
+        <div class="concept-grid">
+          <div class="concept-card">
+            <h4><span class="lang-en">Max Message Size</span><span class="lang-es">Tamano Max Mensaje</span></h4>
+            <p><strong>1,024 KB</strong></p>
+          </div>
+          <div class="concept-card">
+            <h4><span class="lang-en">Retention</span><span class="lang-es">Retencion</span></h4>
+            <p><strong>4 days</strong> <span class="lang-en">(max 14)</span><span class="lang-es">(max 14)</span></p>
+          </div>
+          <div class="concept-card">
+            <h4><span class="lang-en">Max Poll</span><span class="lang-es">Max por Poll</span></h4>
+            <p><strong>10 messages</strong></p>
+          </div>
+          <div class="concept-card">
+            <h4><span class="lang-en">Visibility Timeout</span><span class="lang-es">Timeout de Visibilidad</span></h4>
+            <p><strong>30s</strong> <span class="lang-en">default (max 12h)</span><span class="lang-es">por defecto (max 12h)</span></p>
+          </div>
+        </div>
+
+        <div class="callout warning">
+          <span class="lang-en"><strong>Exam trap:</strong> Message processed twice = visibility timeout too short. Long delay after crash = timeout too high.</span>
+          <span class="lang-es"><strong>Trampa de examen:</strong> Mensaje procesado 2 veces = timeout muy corto. Demora larga tras crash = timeout muy alto.</span>
+        </div>
+      </div>
+
+      <!-- ═══════════════════ CARD 2: SQS SECURITY ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">2</span>
+          <h2><span class="lang-en">SQS Security & Access Policies</span><span class="lang-es">Seguridad y Politicas de Acceso SQS</span></h2>
+        </div>
+
+        <h3><span class="lang-en">Encryption</span><span class="lang-es">Encriptacion</span></h3>
+        <div class="concept-grid">
+          <div class="concept-card">
+            <h4><span class="lang-en">In-Flight</span><span class="lang-es">En Transito</span></h4>
+            <p>HTTPS</p>
+          </div>
+          <div class="concept-card">
+            <h4><span class="lang-en">At-Rest</span><span class="lang-es">En Reposo</span></h4>
+            <p>KMS (SSE-SQS or SSE-KMS)</p>
+          </div>
+          <div class="concept-card">
+            <h4><span class="lang-en">Client-Side</span><span class="lang-es">Lado Cliente</span></h4>
+            <p><span class="lang-en">Your responsibility</span><span class="lang-es">Tu responsabilidad</span></p>
+          </div>
+        </div>
+
+        <h3><span class="lang-en">Access Control</span><span class="lang-es">Control de Acceso</span></h3>
+        <p>
+          <span class="lang-en"><strong>IAM policies</strong> for API access. <strong>SQS Access Policies</strong> (resource-based) for cross-account access and allowing AWS services (like S3) to write to the queue.</span>
+          <span class="lang-es"><strong>IAM policies</strong> para acceso API. <strong>SQS Access Policies</strong> (basadas en recurso) para acceso cross-account y permitir servicios AWS (como S3) escribir en la cola.</span>
+        </p>
+
+        <h3><span class="lang-en">Cross-Account Access</span><span class="lang-es">Acceso Cross-Account</span></h3>
+        <div class="code-block">
+          <span class="cc">// Key fields in the policy:</span><br/>
+          <span class="ck">"Principal"</span>: <span class="cv">other account's ID</span><br/>
+          <span class="ck">"Action"</span>: <span class="cv">"sqs:ReceiveMessage"</span>
+        </div>
+
+        <h3><span class="lang-en">S3 → SQS Event Policy</span><span class="lang-es">Politica S3 → SQS</span></h3>
+        <div class="code-block">
+          <span class="ck">"Principal"</span>: <span class="cv">"*"</span><br/>
+          <span class="ck">"Condition"</span>: {<br/>
+          &nbsp;&nbsp;<span class="cs">"ArnLike"</span>: bucket ARN<br/>
+          &nbsp;&nbsp;<span class="cs">"StringEquals"</span>: SourceAccount<br/>
+          }
+        </div>
+      </div>
+
+      <!-- ═══════════════════ CARD 3: SQS ADVANCED ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">3</span>
+          <h2><span class="lang-en">SQS Advanced Concepts</span><span class="lang-es">Conceptos Avanzados SQS</span></h2>
+        </div>
+
+        <h3><span class="lang-en">Dead Letter Queue (DLQ)</span><span class="lang-es">Cola de Mensajes Fallidos (DLQ)</span></h3>
+        <p>
+          <span class="lang-en">After <strong>MaximumReceives</strong> threshold is exceeded, message moves to DLQ for debugging. DLQ type must match source (FIFO→FIFO, Standard→Standard). Set retention to <strong>14 days</strong>. Use <strong>Redrive to Source</strong> to reprocess after fixing consumer.</span>
+          <span class="lang-es">Cuando se excede el umbral <strong>MaximumReceives</strong>, el mensaje se mueve a la DLQ para depuracion. El tipo de DLQ debe coincidir (FIFO→FIFO, Standard→Standard). Retencion: <strong>14 dias</strong>. Usar <strong>Redrive to Source</strong> para reprocesar despues de arreglar el consumidor.</span>
+        </p>
+        <div class="callout danger">
+          <span class="lang-en"><strong>Warning:</strong> If a message expires in the source queue before reaching MaximumReceives, it's <strong>lost forever</strong> — never reaches the DLQ.</span>
+          <span class="lang-es"><strong>Atencion:</strong> Si un mensaje expira en la cola fuente antes de alcanzar MaximumReceives, se <strong>pierde para siempre</strong> — nunca llega a la DLQ.</span>
+        </div>
+
+        <h3><span class="lang-en">Delay Queue</span><span class="lang-es">Cola con Retraso</span></h3>
+        <p>
+          <span class="lang-en">Hide messages before first poll. Max <strong>15 minutes</strong>. Default: 0s. Per-message override: <code>DelaySeconds</code>.</span>
+          <span class="lang-es">Ocultar mensajes antes del primer poll. Max <strong>15 minutos</strong>. Por defecto: 0s. Override por mensaje: <code>DelaySeconds</code>.</span>
+        </p>
+
+        <h3><span class="lang-en">Long Polling</span><span class="lang-es">Long Polling</span></h3>
+        <p>
+          <span class="lang-en">Consumer waits for messages if queue is empty. Range: <strong>1–20 seconds</strong> (20 recommended). Reduces API calls and cost. Enable via <code>ReceiveMessageWaitTimeSeconds</code> or queue-level setting.</span>
+          <span class="lang-es">El consumidor espera mensajes si la cola esta vacia. Rango: <strong>1–20 segundos</strong> (20 recomendado). Reduce llamadas API y costo. Activar via <code>ReceiveMessageWaitTimeSeconds</code> o a nivel de cola.</span>
+        </p>
+
+        <h3><span class="lang-en">SQS Extended Client</span><span class="lang-es">Cliente Extendido SQS</span></h3>
+        <p>
+          <span class="lang-en">For messages &gt; 1,024 KB: upload large payload to <strong>S3</strong>, send metadata pointer through SQS.</span>
+          <span class="lang-es">Para mensajes &gt; 1,024 KB: subir el payload grande a <strong>S3</strong>, enviar puntero de metadata por SQS.</span>
+        </p>
+      </div>
+
+      <!-- ═══════════════════ CARD 4: SQS APIS ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">4</span>
+          <h2><span class="lang-en">SQS Must-Know APIs</span><span class="lang-es">APIs Importantes de SQS</span></h2>
+        </div>
+        <table class="data-table">
+          <thead><tr><th>API</th><th><span class="lang-en">Purpose</span><span class="lang-es">Proposito</span></th></tr></thead>
+          <tbody>
+            <tr><td><code>CreateQueue</code></td><td><span class="lang-en">Create queue (arg: <code>MessageRetentionPeriod</code>)</span><span class="lang-es">Crear cola (arg: <code>MessageRetentionPeriod</code>)</span></td></tr>
+            <tr><td><code>DeleteQueue</code></td><td><span class="lang-en">Delete queue + all messages</span><span class="lang-es">Eliminar cola + todos los mensajes</span></td></tr>
+            <tr><td><code>PurgeQueue</code></td><td><span class="lang-en">Delete all messages, keep queue</span><span class="lang-es">Eliminar mensajes, mantener cola</span></td></tr>
+            <tr><td><code>SendMessage</code></td><td><span class="lang-en">Send message (arg: <code>DelaySeconds</code>)</span><span class="lang-es">Enviar mensaje (arg: <code>DelaySeconds</code>)</span></td></tr>
+            <tr><td><code>ReceiveMessage</code></td><td><span class="lang-en">Poll (default 1, max 10 via <code>MaxNumberOfMessages</code>)</span><span class="lang-es">Recibir (default 1, max 10 via <code>MaxNumberOfMessages</code>)</span></td></tr>
+            <tr><td><code>DeleteMessage</code></td><td><span class="lang-en">Remove after processing</span><span class="lang-es">Eliminar despues de procesar</span></td></tr>
+            <tr><td><code>ChangeMessageVisibility</code></td><td><span class="lang-en">Extend visibility timeout</span><span class="lang-es">Extender timeout de visibilidad</span></td></tr>
+          </tbody>
+        </table>
+        <div class="callout info">
+          <span class="lang-en"><strong>Batch variants</strong> exist for: SendMessage, DeleteMessage, ChangeMessageVisibility — fewer API calls, lower cost.</span>
+          <span class="lang-es"><strong>Variantes batch</strong> existen para: SendMessage, DeleteMessage, ChangeMessageVisibility — menos llamadas API, menor costo.</span>
+        </div>
+      </div>
+
+      <!-- ═══════════════════ CARD 5: FIFO ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">5</span>
+          <h2><span class="lang-en">SQS FIFO Queues</span><span class="lang-es">Colas FIFO de SQS</span></h2>
+        </div>
+        <p>
+          <span class="lang-en">Strict ordering guarantee. Queue name must end with <code>.fifo</code>.</span>
+          <span class="lang-es">Garantia de orden estricto. El nombre de la cola debe terminar con <code>.fifo</code>.</span>
+        </p>
+        <div class="concept-grid">
+          <div class="concept-card">
+            <h4><span class="lang-en">Throughput</span><span class="lang-es">Throughput</span></h4>
+            <p><strong>300 msg/s</strong> <span class="lang-en">(3,000 with batch)</span><span class="lang-es">(3,000 con batch)</span></p>
+          </div>
+          <div class="concept-card">
+            <h4><span class="lang-en">Deduplication</span><span class="lang-es">Deduplicacion</span></h4>
+            <p><span class="lang-en"><strong>5 min</strong> window. SHA-256 hash or explicit ID</span><span class="lang-es">Ventana de <strong>5 min</strong>. Hash SHA-256 o ID explicito</span></p>
+          </div>
+          <div class="concept-card">
+            <h4>Message Group ID</h4>
+            <p><span class="lang-en">Required. Ordering within group. Different groups = parallel consumers</span><span class="lang-es">Requerido. Orden dentro del grupo. Grupos diferentes = consumidores paralelos</span></p>
+          </div>
+        </div>
+        <div class="callout warning">
+          <span class="lang-en"><strong>Exam trap:</strong> Explicit <code>MessageDeduplicationId</code> <strong>overrides</strong> content-based deduplication. Different IDs = both messages accepted even with same body.</span>
+          <span class="lang-es"><strong>Trampa de examen:</strong> Un <code>MessageDeduplicationId</code> explicito <strong>anula</strong> la deduplicacion basada en contenido. IDs diferentes = ambos mensajes aceptados aunque el cuerpo sea igual.</span>
+        </div>
+      </div>
+
+      <!-- ═══════════════════ CARD 6: SNS ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">6</span>
+          <h2><span class="lang-en">Amazon SNS — Pub/Sub</span><span class="lang-es">Amazon SNS — Pub/Sub</span></h2>
+        </div>
+        <p>
+          <span class="lang-en">Producer publishes to a <strong>topic</strong>. All <strong>subscribers</strong> receive the message. Data is <strong>not persisted</strong> — if not delivered, it's lost.</span>
+          <span class="lang-es">El productor publica a un <strong>topic</strong>. Todos los <strong>suscriptores</strong> reciben el mensaje. Los datos <strong>no persisten</strong> — si no se entregan, se pierden.</span>
+        </p>
+
+        <h3><span class="lang-en">Subscribers</span><span class="lang-es">Suscriptores</span></h3>
+        <p><span class="lang-en">SQS, Lambda, KDF, Email, Email-JSON, HTTP/HTTPS, SMS</span><span class="lang-es">SQS, Lambda, KDF, Email, Email-JSON, HTTP/HTTPS, SMS</span></p>
+
+        <h3><span class="lang-en">SNS FIFO Topics</span><span class="lang-es">Topics FIFO de SNS</span></h3>
+        <p>
+          <span class="lang-en">Ordering + dedup. Subscribers: <strong>only SQS queues</strong> (Standard and FIFO). No Lambda, Email, HTTP.</span>
+          <span class="lang-es">Orden + dedup. Suscriptores: <strong>solo colas SQS</strong> (Standard y FIFO). No Lambda, Email, HTTP.</span>
+        </p>
+
+        <h3><span class="lang-en">Message Filtering</span><span class="lang-es">Filtrado de Mensajes</span></h3>
+        <p>
+          <span class="lang-en">JSON filter policy on the <strong>subscription</strong> (not the topic). No filter = receives <strong>all messages</strong>.</span>
+          <span class="lang-es">Politica de filtro JSON en la <strong>suscripcion</strong> (no en el topic). Sin filtro = recibe <strong>todos los mensajes</strong>.</span>
+        </p>
+      </div>
+
+      <!-- ═══════════════════ CARD 7: FAN OUT ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">7</span>
+          <h2><span class="lang-en">SNS + SQS Fan Out Pattern</span><span class="lang-es">Patron Fan Out SNS + SQS</span></h2>
+        </div>
+        <p>
+          <span class="lang-en">Push once to SNS topic, multiple SQS queues subscribe. Decoupled, no data loss, cross-region supported.</span>
+          <span class="lang-es">Publicar una vez al topic SNS, multiples colas SQS suscritas. Desacoplado, sin perdida de datos, soporte cross-region.</span>
+        </p>
+        <div class="callout warning">
+          <span class="lang-en"><strong>S3 event limitation:</strong> One rule per event type + prefix. To send same event to multiple destinations, use fan out: S3 → SNS → multiple SQS queues.</span>
+          <span class="lang-es"><strong>Limitacion S3:</strong> Una regla por tipo de evento + prefijo. Para enviar el mismo evento a multiples destinos, usar fan out: S3 → SNS → multiples colas SQS.</span>
+        </div>
+        <p>
+          <span class="lang-en"><strong>SNS → KDF → S3</strong> for persisting/archiving all messages flowing through a topic.</span>
+          <span class="lang-es"><strong>SNS → KDF → S3</strong> para persistir/archivar todos los mensajes que fluyen por un topic.</span>
+        </p>
+      </div>
+
+      <!-- ═══════════════════ CARD 8: KINESIS ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">8</span>
+          <h2><span class="lang-en">Kinesis Data Streams</span><span class="lang-es">Kinesis Data Streams</span></h2>
+        </div>
+        <p>
+          <span class="lang-en">Collect and store streaming data in <strong>real-time</strong>. Data is <strong>immutable</strong> and can be <strong>replayed</strong>. Ordering via <strong>partition ID</strong>.</span>
+          <span class="lang-es">Recolectar y almacenar datos de streaming en <strong>tiempo real</strong>. Los datos son <strong>inmutables</strong> y se pueden <strong>reprocesar</strong>. Orden via <strong>partition ID</strong>.</span>
+        </p>
+
+        <div class="concept-grid">
+          <div class="concept-card">
+            <h4><span class="lang-en">Retention</span><span class="lang-es">Retencion</span></h4>
+            <p><strong>1–365 days</strong></p>
+          </div>
+          <div class="concept-card">
+            <h4><span class="lang-en">Shard In</span><span class="lang-es">Shard Entrada</span></h4>
+            <p><strong>1 MB/s</strong> (1,000 rec/s)</p>
+          </div>
+          <div class="concept-card">
+            <h4><span class="lang-en">Shard Out</span><span class="lang-es">Shard Salida</span></h4>
+            <p><strong>2 MB/s</strong></p>
+          </div>
+          <div class="concept-card">
+            <h4><span class="lang-en">On-Demand Default</span><span class="lang-es">On-Demand Default</span></h4>
+            <p><strong>4 MB/s in, 8 MB/s out</strong></p>
+          </div>
+        </div>
+
+        <h3><span class="lang-en">Standard vs Enhanced Fan-Out</span><span class="lang-es">Standard vs Enhanced Fan-Out</span></h3>
+        <table class="data-table">
+          <thead><tr><th></th><th>Standard</th><th>Enhanced Fan-Out</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Model</strong></td><td><span class="lang-en">Consumer pulls</span><span class="lang-es">Consumidor hace pull</span></td><td><span class="lang-en">Kinesis pushes</span><span class="lang-es">Kinesis hace push</span></td></tr>
+            <tr><td><strong>Throughput</strong></td><td><span class="lang-en">2 MB/s shared per shard</span><span class="lang-es">2 MB/s compartido por shard</span></td><td><span class="lang-en">2 MB/s <strong>per consumer</strong> per shard</span><span class="lang-es">2 MB/s <strong>por consumidor</strong> por shard</span></td></tr>
+          </tbody>
+        </table>
+
+        <div class="callout info">
+          <span class="lang-en"><strong>Shard scaling:</strong> Can only <strong>double</strong> shards per operation (1 → 2 → 4 → 8). <strong>KPL</strong> = optimized producer, <strong>KCL</strong> = optimized consumer.</span>
+          <span class="lang-es"><strong>Escalado de shards:</strong> Solo se puede <strong>duplicar</strong> shards por operacion (1 → 2 → 4 → 8). <strong>KPL</strong> = productor optimizado, <strong>KCL</strong> = consumidor optimizado.</span>
+        </div>
+
+        <h3><span class="lang-en">Key CLI/APIs</span><span class="lang-es">CLI/APIs Clave</span></h3>
+        <table class="data-table">
+          <thead><tr><th>API</th><th><span class="lang-en">Purpose</span><span class="lang-es">Proposito</span></th></tr></thead>
+          <tbody>
+            <tr><td><code>put-record</code></td><td><span class="lang-en">Send record (requires <strong>partition key</strong>)</span><span class="lang-es">Enviar registro (requiere <strong>partition key</strong>)</span></td></tr>
+            <tr><td><code>describe-stream</code></td><td><span class="lang-en">Get shard IDs</span><span class="lang-es">Obtener IDs de shards</span></td></tr>
+            <tr><td><code>get-shard-iterator</code></td><td><span class="lang-en"><strong>TRIM_HORIZON</strong> (beginning) or <strong>LATEST</strong> (new only)</span><span class="lang-es"><strong>TRIM_HORIZON</strong> (desde inicio) o <strong>LATEST</strong> (solo nuevos)</span></td></tr>
+            <tr><td><code>get-records</code></td><td><span class="lang-en">Fetch batch (data is <strong>base64-encoded</strong>)</span><span class="lang-es">Obtener lote (datos en <strong>base64</strong>)</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ═══════════════════ CARD 9: FIREHOSE ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">9</span>
+          <h2><span class="lang-en">Amazon Data Firehose</span><span class="lang-es">Amazon Data Firehose</span></h2>
+        </div>
+        <p>
+          <span class="lang-en">Fully managed delivery service. Formerly called <strong>Kinesis Data Firehose</strong>. Works <strong>with or without</strong> Kinesis Data Streams as source.</span>
+          <span class="lang-es">Servicio de entrega totalmente gestionado. Anteriormente llamado <strong>Kinesis Data Firehose</strong>. Funciona <strong>con o sin</strong> Kinesis Data Streams como fuente.</span>
+        </p>
+
+        <h3><span class="lang-en">Sources</span><span class="lang-es">Fuentes</span></h3>
+        <p><span class="lang-en">SDK, Kinesis Agent, KDS, CloudWatch Logs/Events, IoT</span><span class="lang-es">SDK, Kinesis Agent, KDS, CloudWatch Logs/Events, IoT</span></p>
+
+        <h3><span class="lang-en">Destinations</span><span class="lang-es">Destinos</span></h3>
+        <div class="concept-grid">
+          <div class="concept-card">
+            <h4>AWS</h4>
+            <p>S3, Redshift, OpenSearch</p>
+          </div>
+          <div class="concept-card">
+            <h4>3rd Party</h4>
+            <p>Datadog, Splunk, New Relic, MongoDB</p>
+          </div>
+          <div class="concept-card">
+            <h4>Custom</h4>
+            <p><span class="lang-en">Any HTTP endpoint</span><span class="lang-es">Cualquier endpoint HTTP</span></p>
+          </div>
+          <div class="concept-card">
+            <h4><span class="lang-en">Failed Data</span><span class="lang-es">Datos Fallidos</span></h4>
+            <p><span class="lang-en">Backup S3 bucket</span><span class="lang-es">Bucket S3 de respaldo</span></p>
+          </div>
+        </div>
+
+        <h3><span class="lang-en">Key Properties</span><span class="lang-es">Propiedades Clave</span></h3>
+        <p>
+          <span class="lang-en"><strong>Near real-time</strong> — buffer flushes by size or time (min <strong>60 seconds</strong>). No data storage, no replay. Optional <strong>Lambda</strong> for transformation (CSV → JSON). Built-in conversion to Parquet/ORC. Compression: GZIP, Snappy.</span>
+          <span class="lang-es"><strong>Casi tiempo real</strong> — buffer descarga por tamano o tiempo (min <strong>60 segundos</strong>). Sin almacenamiento, sin replay. <strong>Lambda</strong> opcional para transformacion (CSV → JSON). Conversion nativa a Parquet/ORC. Compresion: GZIP, Snappy.</span>
+        </p>
+      </div>
+
+      <!-- ═══════════════════ CARD 10: KDS vs FIREHOSE ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">10</span>
+          <h2><span class="lang-en">Kinesis Data Streams vs Data Firehose</span><span class="lang-es">Kinesis Data Streams vs Data Firehose</span></h2>
+        </div>
+        <table class="data-table">
+          <thead><tr><th></th><th>KDS</th><th>Firehose</th></tr></thead>
+          <tbody>
+            <tr><td><strong><span class="lang-en">Latency</span><span class="lang-es">Latencia</span></strong></td><td><span class="chip green">Real-time</span></td><td><span class="chip yellow">Near real-time</span></td></tr>
+            <tr><td><strong><span class="lang-en">Code</span><span class="lang-es">Codigo</span></strong></td><td><span class="lang-en">Write your own producer/consumer</span><span class="lang-es">Escribir tu propio productor/consumidor</span></td><td><span class="lang-en">Fully managed, no code</span><span class="lang-es">Totalmente gestionado, sin codigo</span></td></tr>
+            <tr><td><strong><span class="lang-en">Storage</span><span class="lang-es">Almacenamiento</span></strong></td><td><span class="lang-en">1–365 days</span><span class="lang-es">1–365 dias</span></td><td><span class="lang-en">No storage</span><span class="lang-es">Sin almacenamiento</span></td></tr>
+            <tr><td><strong>Replay</strong></td><td><span class="chip green">Yes</span></td><td><span class="chip red">No</span></td></tr>
+            <tr><td><strong>Scaling</strong></td><td><span class="lang-en">Manual (shard) or on-demand</span><span class="lang-es">Manual (shard) u on-demand</span></td><td><span class="lang-en">Automatic</span><span class="lang-es">Automatico</span></td></tr>
+          </tbody>
+        </table>
+        <div class="callout info">
+          <span class="lang-en"><strong>Exam keyword:</strong> "real-time" → KDS | "near real-time" or "load into S3/Redshift" → Firehose</span>
+          <span class="lang-es"><strong>Keyword examen:</strong> "real-time" → KDS | "near real-time" o "cargar en S3/Redshift" → Firehose</span>
+        </div>
+      </div>
+
+      <!-- ═══════════════════ CARD 11: FLINK ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">11</span>
+          <h2><span class="lang-en">Managed Service for Apache Flink</span><span class="lang-es">Servicio Gestionado para Apache Flink</span></h2>
+        </div>
+        <p>
+          <span class="lang-en">Real-time stream processing/transformation. Reads from <strong>KDS</strong> and <strong>MSK</strong> (Managed Kafka). Uses Java, SQL, or Scala.</span>
+          <span class="lang-es">Procesamiento/transformacion de streams en tiempo real. Lee de <strong>KDS</strong> y <strong>MSK</strong> (Kafka gestionado). Usa Java, SQL o Scala.</span>
+        </p>
+        <div class="callout danger">
+          <span class="lang-en"><strong>Exam trap:</strong> Flink <strong>CANNOT</strong> read from Amazon Data Firehose!</span>
+          <span class="lang-es"><strong>Trampa de examen:</strong> Flink <strong>NO PUEDE</strong> leer de Amazon Data Firehose!</span>
+        </div>
+      </div>
+
+      <!-- ═══════════════════ CARD 12: BIG COMPARISON ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">12</span>
+          <h2><span class="lang-en">SQS vs SNS vs Kinesis</span><span class="lang-es">SQS vs SNS vs Kinesis</span></h2>
+        </div>
+        <div class="compare">
+          <div class="compare-card">
+            <h4 class="blue">SQS</h4>
+            <ul>
+              <li><span class="lang-en">Consumer <strong>pulls</strong></span><span class="lang-es">Consumidor hace <strong>pull</strong></span></li>
+              <li><span class="lang-en">Delete after processing</span><span class="lang-es">Eliminar tras procesar</span></li>
+              <li><span class="lang-en">No replay</span><span class="lang-es">Sin replay</span></li>
+              <li><span class="lang-en">Unlimited throughput</span><span class="lang-es">Throughput ilimitado</span></li>
+              <li><span class="lang-en">FIFO ordering optional</span><span class="lang-es">Orden FIFO opcional</span></li>
+              <li><span class="lang-en">Message delay supported</span><span class="lang-es">Retraso de mensajes soportado</span></li>
+            </ul>
+          </div>
+          <div class="compare-card">
+            <h4 class="green">SNS</h4>
+            <ul>
+              <li><span class="lang-en"><strong>Push</strong> to many</span><span class="lang-es"><strong>Push</strong> a muchos</span></li>
+              <li><span class="lang-en"><strong>Not persisted</strong></span><span class="lang-es"><strong>No persiste</strong></span></li>
+              <li><span class="lang-en">No replay</span><span class="lang-es">Sin replay</span></li>
+              <li><span class="lang-en">Up to 12.5M subscribers</span><span class="lang-es">Hasta 12.5M suscriptores</span></li>
+              <li><span class="lang-en">FIFO topics available</span><span class="lang-es">Topics FIFO disponibles</span></li>
+              <li><span class="lang-en">Fan out with SQS</span><span class="lang-es">Fan out con SQS</span></li>
+            </ul>
+          </div>
+          <div class="compare-card">
+            <h4 class="orange">Kinesis</h4>
+            <ul>
+              <li><span class="lang-en">Pull or push (enhanced)</span><span class="lang-es">Pull o push (enhanced)</span></li>
+              <li><span class="lang-en">Immutable, up to 365 days</span><span class="lang-es">Inmutable, hasta 365 dias</span></li>
+              <li><span class="lang-en"><strong>Replay supported</strong></span><span class="lang-es"><strong>Replay soportado</strong></span></li>
+              <li><span class="lang-en">Shard-based throughput</span><span class="lang-es">Throughput basado en shards</span></li>
+              <li><span class="lang-en">Ordering at shard level</span><span class="lang-es">Orden a nivel de shard</span></li>
+              <li><span class="lang-en">Real-time big data, ETL</span><span class="lang-es">Big data en tiempo real, ETL</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════ CARD 13: NUMBERS TO MEMORIZE ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">13</span>
+          <h2><span class="lang-en">Numbers to Memorize</span><span class="lang-es">Numeros para Memorizar</span></h2>
+        </div>
+        <table class="data-table">
+          <thead><tr><th><span class="lang-en">Item</span><span class="lang-es">Item</span></th><th><span class="lang-en">Value</span><span class="lang-es">Valor</span></th></tr></thead>
+          <tbody>
+            <tr><td><span class="lang-en">SQS max message size</span><span class="lang-es">Tamano max mensaje SQS</span></td><td><strong>1,024 KB</strong></td></tr>
+            <tr><td><span class="lang-en">SQS default retention</span><span class="lang-es">Retencion default SQS</span></td><td><strong>4 days</strong> (max 14)</td></tr>
+            <tr><td><span class="lang-en">SQS visibility timeout default</span><span class="lang-es">Visibility timeout default</span></td><td><strong>30 seconds</strong> (max 12 hours)</td></tr>
+            <tr><td><span class="lang-en">SQS delay queue max</span><span class="lang-es">Max delay queue SQS</span></td><td><strong>15 minutes</strong></td></tr>
+            <tr><td><span class="lang-en">SQS long polling range</span><span class="lang-es">Rango long polling SQS</span></td><td><strong>1–20 seconds</strong> (20 recommended)</td></tr>
+            <tr><td><span class="lang-en">SQS MaxNumberOfMessages</span><span class="lang-es">SQS MaxNumberOfMessages</span></td><td><strong>1</strong> default, <strong>10</strong> max</td></tr>
+            <tr><td><span class="lang-en">SQS FIFO throughput</span><span class="lang-es">Throughput FIFO SQS</span></td><td><strong>300 msg/s</strong> (3,000 with batch)</td></tr>
+            <tr><td><span class="lang-en">FIFO deduplication window</span><span class="lang-es">Ventana dedup FIFO</span></td><td><strong>5 minutes</strong></td></tr>
+            <tr><td><span class="lang-en">SNS max subscribers per topic</span><span class="lang-es">Max suscriptores SNS por topic</span></td><td><strong>12,500,000</strong></td></tr>
+            <tr><td><span class="lang-en">KDS retention</span><span class="lang-es">Retencion KDS</span></td><td><strong>1–365 days</strong></td></tr>
+            <tr><td><span class="lang-en">KDS per shard in / out</span><span class="lang-es">KDS por shard entrada / salida</span></td><td><strong>1 MB/s in</strong>, <strong>2 MB/s out</strong></td></tr>
+            <tr><td><span class="lang-en">KDS on-demand default</span><span class="lang-es">KDS on-demand default</span></td><td><strong>4 MB/s in</strong>, <strong>8 MB/s out</strong></td></tr>
+            <tr><td><span class="lang-en">Firehose buffer min interval</span><span class="lang-es">Intervalo min buffer Firehose</span></td><td><strong>60 seconds</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ═══════════════════ CARD 14: COMMON EXAM TRAPS ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">14</span>
+          <h2><span class="lang-en">Common Exam Traps</span><span class="lang-es">Trampas Comunes del Examen</span></h2>
+        </div>
+        <div class="callout danger">
+          <span class="lang-en"><strong>Message processed twice</strong> → visibility timeout <strong>too short</strong></span>
+          <span class="lang-es"><strong>Mensaje procesado 2 veces</strong> → visibility timeout <strong>muy corto</strong></span>
+        </div>
+        <div class="callout danger">
+          <span class="lang-en"><strong>"Too many API calls"</strong> → enable <strong>long polling</strong></span>
+          <span class="lang-es"><strong>"Demasiadas llamadas API"</strong> → activar <strong>long polling</strong></span>
+        </div>
+        <div class="callout danger">
+          <span class="lang-en"><strong>Large messages &gt; 1,024 KB</strong> → <strong>SQS Extended Client + S3</strong></span>
+          <span class="lang-es"><strong>Mensajes grandes &gt; 1,024 KB</strong> → <strong>SQS Extended Client + S3</strong></span>
+        </div>
+        <div class="callout danger">
+          <span class="lang-en"><strong>S3 one rule per event + prefix</strong> → use <strong>fan out</strong> (SNS + SQS)</span>
+          <span class="lang-es"><strong>S3 una regla por evento + prefijo</strong> → usar <strong>fan out</strong> (SNS + SQS)</span>
+        </div>
+        <div class="callout danger">
+          <span class="lang-en"><strong>SNS data not persisted</strong> — if not delivered, it's <strong>lost</strong></span>
+          <span class="lang-es"><strong>SNS no persiste datos</strong> — si no se entrega, se <strong>pierde</strong></span>
+        </div>
+        <div class="callout danger">
+          <span class="lang-en"><strong>Flink CANNOT read from Firehose</strong></span>
+          <span class="lang-es"><strong>Flink NO PUEDE leer de Firehose</strong></span>
+        </div>
+        <div class="callout danger">
+          <span class="lang-en"><strong>SNS FIFO topics</strong>: only <strong>SQS queues</strong> as subscribers — no Lambda, Email, HTTP</span>
+          <span class="lang-es"><strong>SNS FIFO topics</strong>: solo <strong>colas SQS</strong> como suscriptores — no Lambda, Email, HTTP</span>
+        </div>
+        <div class="callout danger">
+          <span class="lang-en"><strong>Explicit MessageDeduplicationId overrides</strong> content-based dedup</span>
+          <span class="lang-es"><strong>MessageDeduplicationId explicito anula</strong> la dedup basada en contenido</span>
+        </div>
+        <div class="callout danger">
+          <span class="lang-en"><strong>Shard scaling:</strong> can only <strong>double</strong> per operation (1 → 2 → 4 → 8)</span>
+          <span class="lang-es"><strong>Escalado de shards:</strong> solo se puede <strong>duplicar</strong> por operacion (1 → 2 → 4 → 8)</span>
+        </div>
+      </div>
+
+      <!-- ═══════════════════ CARD 15: KEYWORD TRIGGERS ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">EXAM</span>
+          <h2><span class="lang-en">Quick Keyword Triggers</span><span class="lang-es">Keywords Rapidos para el Examen</span></h2>
+        </div>
+        <div class="tips-grid">
+          <div class="tip"><span class="trigger">"decouple" / "work queue"</span><span class="arr">→</span><span class="answer">SQS</span></div>
+          <div class="tip"><span class="trigger">"pub/sub" / "fan out"</span><span class="arr">→</span><span class="answer">SNS</span></div>
+          <div class="tip"><span class="trigger">"real-time" / "replay"</span><span class="arr">→</span><span class="answer">Kinesis Data Streams</span></div>
+          <div class="tip"><span class="trigger">"near real-time" / "load into S3"</span><span class="arr">→</span><span class="answer">Data Firehose</span></div>
+          <div class="tip"><span class="trigger">"too many API calls"</span><span class="arr">→</span><span class="answer">Long Polling</span></div>
+          <div class="tip"><span class="trigger">"message &gt; 1,024 KB"</span><span class="arr">→</span><span class="answer">Extended Client + S3</span></div>
+          <div class="tip"><span class="trigger">"processed twice"</span><span class="arr">→</span><span class="answer">Visibility timeout too short</span></div>
+          <div class="tip"><span class="trigger">"stream transformation"</span><span class="arr">→</span><span class="answer">Apache Flink</span></div>
+          <div class="tip"><span class="trigger">"Flink + Firehose"</span><span class="arr">→</span><span class="answer chip red">WRONG — Flink can't read from Firehose</span></div>
+          <div class="tip"><span class="trigger">"SNS not delivered"</span><span class="arr">→</span><span class="answer chip red">LOST — SNS is not persisted</span></div>
+        </div>
+      </div>
+
+    </div><!-- /container -->
+
+    <script>
+      function toggleLang() {
+        document.body.classList.toggle("es");
+        const btn = document.getElementById("lang-btn");
+        btn.textContent = document.body.classList.contains("es") ? "English" : "Espanol";
+      }
+    </script>
+  </body>
+</html>

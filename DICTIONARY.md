@@ -28,6 +28,7 @@ A reference for acronyms and English terms encountered in the course, with Spani
 | CRR     | Cross-Region Replication                | Replicación entre regiones                        |
 | CSV     | Comma-Separated Values                  | Valores separados por comas                       |
 | DDoS    | Distributed Denial of Service           | Denegación de servicio distribuida                |
+| DLQ     | Dead Letter Queue                       | Cola de mensajes fallidos                         |
 | DNS     | Domain Name System                      | Sistema de nombres de dominio                     |
 | EBS     | Elastic Block Store                     | Almacenamiento en bloque elástico                 |
 | EC2     | Elastic Compute Cloud                   | Nube de cómputo elástica                          |
@@ -38,6 +39,7 @@ A reference for acronyms and English terms encountered in the course, with Spani
 | ETL     | Extract, Transform, Load                | Extraer, transformar, cargar                      |
 | ELB     | Elastic Load Balancer                   | Balanceador de carga elástico                     |
 | ENI     | Elastic Network Interface               | Interfaz de red elástica                          |
+| FIFO    | First In, First Out                     | Primero en entrar, primero en salir               |
 | FTP     | File Transfer Protocol                  | Protocolo de transferencia de archivos            |
 | FQDN    | Fully Qualified Domain Name             | Nombre de dominio completamente cualificado       |
 | GWLB    | Gateway Load Balancer                   | Balanceador de carga de puerta de enlace          |
@@ -51,12 +53,17 @@ A reference for acronyms and English terms encountered in the course, with Spani
 | IGW     | Internet Gateway                        | Puerta de enlace a internet                       |
 | IMDS    | Instance Metadata Service               | Servicio de metadatos de instancia                |
 | IOPS    | Input/Output Operations Per Second      | Operaciones de entrada/salida por segundo         |
+| KCL     | Kinesis Client Library                  | Librería cliente de Kinesis (consumidores)        |
+| KDF     | Kinesis Data Firehose                   | Kinesis Data Firehose (servicio de entrega de datos) |
+| KDS     | Kinesis Data Streams                    | Kinesis Data Streams (flujo de datos en tiempo real) |
 | KMS     | Key Management Service                  | Servicio de gestión de claves                     |
+| KPL     | Kinesis Producer Library                | Librería productora de Kinesis (productores)      |
 | IoT     | Internet of Things                      | Internet de las cosas                             |
 | IP      | Internet Protocol                       | Protocolo de internet                             |
 | JSON    | JavaScript Object Notation              | Notación de objetos JavaScript                    |
 | MFA     | Multi-Factor Authentication             | Autenticación multifactor                         |
 | ML      | Machine Learning                        | Aprendizaje automático                            |
+| MSK     | Managed Streaming for Apache Kafka      | Servicio gestionado de Apache Kafka               |
 | NAT     | Network Address Translation             | Traducción de direcciones de red                  |
 | NLB     | Network Load Balancer                   | Balanceador de carga de red                       |
 | NoSQL   | Not Only SQL                            | No solo SQL                                       |
@@ -70,7 +77,10 @@ A reference for acronyms and English terms encountered in the course, with Spani
 | RDP     | Remote Desktop Protocol                 | Protocolo de escritorio remoto                    |
 | SDK     | Software Development Kit                | Kit de desarrollo de software                     |
 | SFTP    | Secure File Transfer Protocol           | Protocolo seguro de transferencia de archivos     |
+| SHA     | Secure Hash Algorithm                   | Algoritmo de hash seguro                          |
 | SNI     | Server Name Indication                  | Indicación de nombre de servidor                  |
+| SNS     | Simple Notification Service             | Servicio de notificación simple                   |
+| SQS     | Simple Queue Service                    | Servicio de cola simple                           |
 | SLA     | Service Level Agreement                 | Acuerdo de nivel de servicio                      |
 | SOA     | Start of Authority                      | Inicio de autoridad (registro administrativo DNS) |
 | SLD     | Second Level Domain                     | Dominio de segundo nivel                          |

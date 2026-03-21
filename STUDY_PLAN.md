@@ -3,10 +3,10 @@
 ## Overall Progress
 
 ```
-[███████████░░░░░░░░░] 18/34 sections | 228/483 lessons
-Total XP: 7425
+[███████████░░░░░░░░░] 19/34 sections | 250/483 lessons (51.8%)
+Total XP: 7875
 
-Videos: 207/446 | Articles: 6/8 | Quizzes: 15/29
+Videos: 228/446 | Articles: 6/8 | Quizzes: 16/29
 ```
 
 > **Note:** The exact number of lessons per section will be filled in as the course progresses.
@@ -277,32 +277,27 @@ Videos: 207/446 | Articles: 6/8 | Quizzes: 15/29
 - [x] CloudFormation Quiz (Udemy quiz - completed)
 
 ## Section 19: AWS Integration & Messaging: SQS, SNS & Kinesis
-- [ ] 19.1 - Introduction to Messaging
-- [ ] 19.2 - Amazon SQS - Overview
-- [ ] 19.3 - SQS - Standard Queue Hands On
-- [ ] 19.4 - SQS - Queue Access Policy
-- [ ] 19.5 - SQS - Message Visibility Timeout
-- [ ] 19.6 - SQS - Dead Letter Queue
-- [ ] 19.7 - SQS - Dead Letter Queue Hands On
-- [ ] 19.8 - SQS - Delay Queue
-- [ ] 19.9 - SQS - Long Polling
-- [ ] 19.10 - SQS - Extended Client
-- [ ] 19.11 - SQS - Must Know API
-- [ ] 19.12 - SQS - FIFO Queues
-- [ ] 19.13 - SQS - FIFO Queues Hands On
-- [ ] 19.14 - Amazon SNS - Overview
-- [ ] 19.15 - SNS Hands On
-- [ ] 19.16 - SNS & SQS - Fan Out Pattern
-- [ ] 19.17 - SNS - Message Filtering
-- [ ] 19.18 - Kinesis Overview
-- [ ] 19.19 - Kinesis Producers
-- [ ] 19.20 - Kinesis Consumers
-- [ ] 19.21 - Kinesis Data Streams Hands On
-- [ ] 19.22 - Kinesis Client Library
-- [ ] 19.23 - Kinesis Operations
-- [ ] 19.24 - Kinesis Data Firehose
-- [ ] 19.25 - Kinesis Data Firehose Hands On
-- [ ] 19.26 - Data Ordering for Kinesis vs SQS FIFO
+- [x] 19.1 - Introduction to Messaging (215)
+- [x] 19.2 - Amazon SQS - Standard Queues Overview (216) (PERFECT 100%)
+- [x] 19.3 - SQS - Standard Queue Hands On (217)
+- [x] 19.4 - SQS Queue Access Policy (218) (PERFECT 100%)
+- [x] 19.5 - SQS - Message Visibility Timeout (219) (PERFECT 100%)
+- [x] 19.6 - SQS - Dead Letter Queues (220) (PERFECT 100%)
+- [x] 19.7 - SQS - Dead Letter Queues - Hands On (221)
+- [x] 19.8 - SQS - Delay Queues (222) (REVIEW 50%)
+- [x] 19.9 - SQS - Certified Developer Concepts (223) (PASSED 75%)
+- [x] 19.10 - SQS - FIFO Queues (224) (PERFECT 100%)
+- [x] 19.11 - SQS - FIFO Queues Advanced (225) (REVIEW 67%)
+- [x] 19.12 - Amazon SNS (226) (PERFECT 100%)
+- [x] 19.13 - Amazon SNS and SQS - Fan Out Pattern (227) (PERFECT 100%)
+- [x] 19.14 - SNS Hands On (228)
+- [x] 19.15 - Amazon Kinesis Data Streams (229) (PERFECT 100%)
+- [x] 19.16 - Amazon Kinesis Data Streams - Hands On (230)
+- [x] 19.17 - Amazon Data Firehose (231) (PERFECT 100%)
+- [x] 19.18 - Amazon Data Firehose - Hands On (232)
+- [x] 19.19 - Amazon Managed Service for Apache Flink (233)
+- [x] 19.20 - SQS vs SNS vs Kinesis (234)
+- [x] Messaging & Integration Quiz (Quiz 16 - completed)
 
 ## Section 20: AWS Monitoring & Audit: CloudWatch, X-Ray and CloudTrail
 - [ ] 20.1 - CloudWatch Metrics
