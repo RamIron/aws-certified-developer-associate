@@ -4,15 +4,27 @@
 
 | Metric | Value |
 |--------|-------|
-| Total XP | 7875 |
-| Lessons completed | 121 |
-| Perfect quizzes (100%) | 104 |
-| Lessons to review | 13 |
+| Total XP | 8700 |
+| Lessons completed | 133 |
+| Perfect quizzes (100%) | 112 |
+| Lessons to review | 15 |
 
 ## Session History
 
 | Date | Section | Lesson | XP | Result |
 |------|---------|--------|----|--------|
+| 2026-03-24 | 20 | 20.25 - CloudTrail | 100 | PERFECT |
+| 2026-03-24 | 20 | 20.23 - X-Ray & ECS | 75 | PERFECT |
+| 2026-03-24 | 20 | 20.21 - X-Ray APIs | 75 | PERFECT |
+| 2026-03-24 | 20 | 20.19 - X-Ray: Instrumentation and Concepts | 50 | REVIEW 67% |
+| 2026-03-24 | 20 | 20.17 - X-Ray Overview | 75 | PASSED 75% |
+| 2026-03-24 | 20 | 20.14 - Amazon EventBridge | 100 | PERFECT |
+| 2026-03-23 | 20 | 20.13 - CloudWatch Synthetics | 75 | PERFECT |
+| 2026-03-23 | 20 | 20.11 - CloudWatch Alarms | 100 | PERFECT |
+| 2026-03-23 | 20 | 20.8 - CloudWatch Agent & Logs Agent | 50 | PERFECT |
+| 2026-03-23 | 20 | 20.5 - CloudWatch Logs | 75 | PASSED 75% |
+| 2026-03-21 | 20 | 20.4 - CloudWatch Custom Metrics | 0 | REVIEW 0% |
+| 2026-03-21 | 20 | 20.3 - CloudWatch Metrics | 50 | PERFECT |
 | 2026-03-21 | 19 | 19.18 - Amazon Data Firehose | 75 | PERFECT |
 | 2026-03-21 | 19 | 19.17 - Kinesis Data Streams Hands On | — | no quiz |
 | 2026-03-21 | 19 | 19.16 - Amazon Kinesis Data Streams | 75 | PERFECT |

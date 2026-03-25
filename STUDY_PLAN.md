@@ -3,10 +3,10 @@
 ## Overall Progress
 
 ```
-[███████████░░░░░░░░░] 19/34 sections | 250/483 lessons (51.8%)
-Total XP: 7875
+[████████████░░░░░░░░] 20/34 sections | 280/483 lessons (58.0%)
+Total XP: 8700
 
-Videos: 228/446 | Articles: 6/8 | Quizzes: 16/29
+Videos: 257/446 | Articles: 6/8 | Quizzes: 17/29
 ```
 
 > **Note:** The exact number of lessons per section will be filled in as the course progresses.
@@ -300,25 +300,36 @@ Videos: 228/446 | Articles: 6/8 | Quizzes: 16/29
 - [x] Messaging & Integration Quiz (Quiz 16 - completed)
 
 ## Section 20: AWS Monitoring & Audit: CloudWatch, X-Ray and CloudTrail
-- [ ] 20.1 - CloudWatch Metrics
-- [ ] 20.2 - CloudWatch Custom Metrics
-- [ ] 20.3 - CloudWatch Logs
-- [ ] 20.4 - CloudWatch Logs Hands On
-- [ ] 20.5 - CloudWatch Agent & Logs Agent
-- [ ] 20.6 - CloudWatch Alarms
-- [ ] 20.7 - CloudWatch Alarms Hands On
-- [ ] 20.8 - EventBridge (CloudWatch Events)
-- [ ] 20.9 - EventBridge Hands On
-- [ ] 20.10 - X-Ray Overview
-- [ ] 20.11 - X-Ray: Getting Started & Hands On
-- [ ] 20.12 - X-Ray Instrumentation & Concepts
-- [ ] 20.13 - X-Ray Sampling Rules
-- [ ] 20.14 - X-Ray APIs
-- [ ] 20.15 - X-Ray with Beanstalk
-- [ ] 20.16 - X-Ray & ECS
-- [ ] 20.17 - CloudTrail
-- [ ] 20.18 - CloudTrail Hands On
-- [ ] 20.19 - CloudTrail vs CloudWatch vs X-Ray
+- [x] 20.1 - AWS Monitoring - Section Introduction (235) (intro - no quiz)
+- [x] 20.2 - Monitoring Overview in AWS (236) (overview - no quiz)
+- [x] 20.3 - CloudWatch Metrics (237) (PERFECT 100%)
+- [x] 20.4 - CloudWatch Custom Metrics (238) (REVIEW 0%)
+- [x] 20.5 - CloudWatch Logs (239) (PASSED 75%)
+- [x] 20.6 - CloudWatch Logs - Hands On (240)
+- [x] 20.7 - CloudWatch Logs - Live Tail - Hands On (241)
+- [x] 20.8 - CloudWatch Agent & CloudWatch Logs Agent (242) (PERFECT 100%)
+- [x] 20.9 - CloudWatch Logs - Metric Filters (243)
+- [x] 20.10 - CloudWatch Logs - Metric Filters Hands On (244)
+- [x] 20.11 - CloudWatch Alarms (245)
+- [x] 20.12 - CloudWatch Alarms Hands On (246)
+- [x] 20.13 - CloudWatch Synthetics (247) (PERFECT 100%)
+- [x] 20.14 - Amazon EventBridge (248) (PERFECT 100%)
+- [x] 20.15 - Amazon EventBridge - Hands On (249)
+- [x] 20.16 - Amazon EventBridge - Multi-Account Aggregation (250)
+- [x] 20.17 - X-Ray Overview (251) (PASSED 75%)
+- [x] 20.18 - X-Ray Hands On (252)
+- [x] 20.19 - X-Ray: Instrumentation and Concepts (253) (REVIEW 67%)
+- [x] 20.20 - X-Ray: Sampling Rules (254)
+- [x] 20.21 - X-Ray APIs (255) (PERFECT 100%)
+- [x] 20.22 - X-Ray with Beanstalk (256)
+- [x] 20.23 - X-Ray & ECS (257)
+- [x] 20.24 - AWS Distro for OpenTelemetry (258)
+- [x] 20.25 - CloudTrail (259)
+- [x] 20.26 - CloudTrail Hands On (260)
+- [x] 20.27 - CloudTrail - EventBridge Integration (261)
+- [x] 20.28 - CloudTrail vs CloudWatch vs X-Ray (262)
+- [x] 20.29 - AWS Quick Clean-Up (263)
+- [x] Monitoring & Audit Quiz (Quiz 17)
 
 ## Section 21: AWS Serverless: Lambda
 - [ ] 21.1 - Serverless Introduction

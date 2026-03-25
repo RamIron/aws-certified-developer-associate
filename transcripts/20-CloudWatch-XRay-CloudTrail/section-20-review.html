@@ -1,0 +1,570 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Section 20 — AWS Monitoring & Audit</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap");
+
+      *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+      body {
+        font-family: "Inter", sans-serif;
+        background: #0f172a;
+        color: #e2e8f0;
+        line-height: 1.6;
+        padding: 0 0 64px;
+      }
+
+      /* ── LANGUAGE TOGGLE ── */
+      .lang-es { display: none; }
+      body.es .lang-en { display: none; }
+      body.es .lang-es { display: inline; }
+      body.es .lang-es-block { display: block; }
+      .lang-es-block { display: none; }
+      body.es .lang-en-block { display: none; }
+      .lang-toggle {
+        display: inline-flex; align-items: center; gap: 6px;
+        background: transparent; color: #94a3b8; border: 1px solid #334155;
+        border-radius: 999px; padding: 7px 18px; font-size: 13px; font-weight: 600;
+        cursor: pointer; font-family: "Inter", sans-serif;
+        transition: color 0.2s, border-color 0.2s, background 0.2s; margin-top: 16px;
+      }
+      .lang-toggle:hover { color: #e2e8f0; border-color: #64748b; background: #1e293b; }
+
+      /* ── HERO ── */
+      .hero {
+        background: linear-gradient(135deg, #1e293b 0%, #0f172a 60%, #1a1a2e 100%);
+        border-bottom: 1px solid #334155;
+        padding: 48px 32px 40px; text-align: center;
+      }
+      .hero-eyebrow { font-size: 13px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #f97316; margin-bottom: 12px; }
+      h1 { font-size: clamp(26px,4vw,40px); font-weight: 800; color: #f8fafc; margin-bottom: 8px; letter-spacing: -0.02em; }
+      .hero-subtitle { font-size: 15px; color: #94a3b8; margin-bottom: 20px; font-weight: 400; }
+      .xp-badge { display: inline-flex; align-items: center; gap: 6px; background: linear-gradient(135deg, #f97316, #ea580c); color: #fff; font-size: 13px; font-weight: 700; padding: 8px 18px; border-radius: 999px; }
+
+      .container { max-width: 1100px; margin: 0 auto; padding: 40px 24px 0; }
+
+      /* ── CARDS ── */
+      .card { background: #1e293b; border-radius: 16px; padding: 2rem; margin-bottom: 2rem; border: 1px solid #334155; }
+      .card-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem; }
+      .badge { background: #f97316; color: #0f172a; font-weight: 800; font-size: 13px; padding: 0.25rem 0.65rem; border-radius: 6px; }
+      h2 { font-size: 1.3rem; font-weight: 700; color: #f8fafc; }
+      h3 { font-size: 0.95rem; font-weight: 600; color: #d2d2d2; margin: 1.5rem 0 0.9rem; text-transform: uppercase; letter-spacing: 0.06em; }
+      p { color: #d2d2d2; font-size: 0.9rem; margin-bottom: 0.75rem; }
+      p strong { color: #e2e8f0; }
+
+      /* ── CONCEPT GRID ── */
+      .concept-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap: 0.9rem; }
+      .concept-card { background: #0f172a; border-radius: 12px; padding: 1.1rem 1.2rem; border: 1px solid #1e293b; }
+      .concept-card h4 { font-size: 0.85rem; font-weight: 700; color: #f8fafc; margin-bottom: 0.3rem; }
+      .concept-card p { font-size: 13px; color: #d2d2d2; margin: 0; }
+
+      /* ── CALLOUTS ── */
+      .callout { border-radius: 8px; padding: 0.75rem 1rem; margin: 1rem 0; font-size: 0.85rem; }
+      .callout.warning { background: #451a0322; border: 1px dashed #f97316; color: #fdba74; }
+      .callout.danger  { background: #7f1d1d22; border: 1px solid #dc262644; color: #fca5a5; }
+      .callout.info    { background: #1e3a5f22; border-left: 3px solid #3b82f6; color: #93c5fd; }
+      .callout.success { background: #064e3b22; border-left: 3px solid #10b981; color: #6ee7b7; }
+
+      /* ── CHIPS ── */
+      .chip { font-size: 13px; font-weight: 700; padding: 0.15rem 0.45rem; border-radius: 4px; white-space: nowrap; }
+      .chip.red    { background: #7f1d1d; color: #fca5a5; }
+      .chip.green  { background: #064e3b; color: #6ee7b7; }
+      .chip.yellow { background: #422006; color: #fcd34d; }
+      .chip.blue   { background: #1e3a5f; color: #93c5fd; }
+      .chip.purple { background: #3b1f63; color: #c4b5fd; }
+      .chip.orange { background: #431407; color: #fb923c; }
+
+      /* ── CODE BLOCK ── */
+      .code-block {
+        background: #020617; border-radius: 10px; padding: 1rem 1.25rem;
+        font-family: "Fira Code","Courier New",monospace; font-size: 13px;
+        line-height: 1.9; border: 1px solid #1e293b; overflow-x: auto; margin: 0.75rem 0;
+      }
+      .ck { color: #60a5fa; } .cv { color: #34d399; } .cs { color: #fb923c; } .cc { color: #334155; }
+
+      /* ── DATA TABLE ── */
+      .data-table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 0.75rem 0; }
+      .data-table th { background: #0f172a; color: #94a3b8; font-weight: 700; text-align: left; padding: 0.55rem 0.9rem; font-size: 12px; text-transform: uppercase; letter-spacing: 0.07em; border-bottom: 1px solid #334155; }
+      .data-table td { padding: 0.55rem 0.9rem; border-bottom: 1px solid #1e293b; color: #d2d2d2; vertical-align: top; }
+      .data-table tr:last-child td { border-bottom: none; }
+      .data-table td strong { color: #f8fafc; }
+      .data-table td code { font-family: "Fira Code",monospace; background: #0f172a; padding: 0.1rem 0.35rem; border-radius: 4px; color: #93c5fd; font-size: 12px; }
+
+      /* ── EXAM TIPS ── */
+      .tips-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(260px,1fr)); gap: 0.7rem; }
+      .tip { background: #0f172a; border-left: 3px solid #f97316; border-radius: 0 8px 8px 0; padding: 0.65rem 1rem; font-size: 0.83rem; }
+      .tip .trigger { color: #64748b; }
+      .tip .arr { color: #334155; margin: 0 0.25rem; }
+      .tip .answer { color: #f8fafc; font-weight: 700; }
+
+      /* ── COMPARE ── */
+      .compare { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin: 0.75rem 0; }
+      .compare-card { background: #0f172a; border-radius: 10px; padding: 1rem; }
+      .compare-card h4 { font-size: 0.82rem; font-weight: 700; margin-bottom: 0.65rem; }
+      .compare-card h4.blue { color: #60a5fa; }
+      .compare-card h4.green { color: #34d399; }
+      .compare-card h4.orange { color: #fb923c; }
+      .compare-card h4.purple { color: #c4b5fd; }
+      .compare-card ul { list-style: none; padding: 0; }
+      .compare-card li { font-size: 13px; color: #d2d2d2; padding: 0.18rem 0 0.18rem 1rem; position: relative; }
+      .compare-card li::before { content: "·"; position: absolute; left: 0; color: #475569; }
+
+      @media (max-width: 680px) {
+        body { padding: 1rem; }
+        h1 { font-size: 1.6rem; }
+        .compare { grid-template-columns: 1fr; }
+      }
+    </style>
+  </head>
+  <body>
+
+    <!-- ═══════════════════ HERO ═══════════════════ -->
+    <div class="hero">
+      <div class="hero-eyebrow">AWS Certified Developer Associate</div>
+      <h1>Section 20 — AWS Monitoring & Audit</h1>
+      <div class="hero-subtitle">
+        <span class="lang-en">CloudWatch, X-Ray & CloudTrail · 29 lessons · Quiz complete</span>
+        <span class="lang-es">CloudWatch, X-Ray y CloudTrail · 29 lecciones · Quiz completado</span>
+      </div>
+      <div class="xp-badge">+825 XP &nbsp;·&nbsp; Section complete</div>
+      <br/>
+      <button class="lang-toggle" id="lang-btn" onclick="toggleLang()">Espanol</button>
+    </div>
+
+    <div class="container">
+
+      <!-- ═══════════════════ CARD 1: THE BIG THREE ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">1</span>
+          <h2><span class="lang-en">The Big Three: CloudWatch vs X-Ray vs CloudTrail</span><span class="lang-es">Los Tres Grandes: CloudWatch vs X-Ray vs CloudTrail</span></h2>
+        </div>
+        <p>
+          <span class="lang-en">Three services, three purposes. Know which one to use for each scenario.</span>
+          <span class="lang-es">Tres servicios, tres propositos. Saber cual usar en cada escenario.</span>
+        </p>
+        <div class="compare">
+          <div class="compare-card">
+            <h4 class="blue">CloudWatch</h4>
+            <ul>
+              <li><span class="lang-en">Monitoring</span><span class="lang-es">Monitoreo</span></li>
+              <li><span class="lang-en">Metrics, Logs, Alarms</span><span class="lang-es">Metricas, Logs, Alarmas</span></li>
+              <li><span class="lang-en">"How are my resources performing?"</span><span class="lang-es">"Como estan rindiendo mis recursos?"</span></li>
+            </ul>
+          </div>
+          <div class="compare-card">
+            <h4 class="green">X-Ray</h4>
+            <ul>
+              <li><span class="lang-en">Tracing</span><span class="lang-es">Trazabilidad</span></li>
+              <li><span class="lang-en">Service map, traces, segments</span><span class="lang-es">Mapa de servicios, trazas, segmentos</span></li>
+              <li><span class="lang-en">"Where is the bottleneck?"</span><span class="lang-es">"Donde esta el cuello de botella?"</span></li>
+            </ul>
+          </div>
+          <div class="compare-card">
+            <h4 class="orange">CloudTrail</h4>
+            <ul>
+              <li><span class="lang-en">Audit</span><span class="lang-es">Auditoria</span></li>
+              <li><span class="lang-en">API call history</span><span class="lang-es">Historial de llamadas API</span></li>
+              <li><span class="lang-en">"Who did what and when?"</span><span class="lang-es">"Quien hizo que y cuando?"</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════ CARD 2: CW METRICS ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">2</span>
+          <h2><span class="lang-en">CloudWatch Metrics</span><span class="lang-es">Metricas de CloudWatch</span></h2>
+        </div>
+        <div class="concept-grid">
+          <div class="concept-card">
+            <h4><span class="lang-en">Default EC2</span><span class="lang-es">EC2 por defecto</span></h4>
+            <p><span class="lang-en">Every <strong>5 minutes</strong></span><span class="lang-es">Cada <strong>5 minutos</strong></span></p>
+          </div>
+          <div class="concept-card">
+            <h4><span class="lang-en">Detailed Monitoring</span><span class="lang-es">Monitoreo Detallado</span></h4>
+            <p><span class="lang-en">Every <strong>1 minute</strong> (extra cost)</span><span class="lang-es">Cada <strong>1 minuto</strong> (costo extra)</span></p>
+          </div>
+          <div class="concept-card">
+            <h4><span class="lang-en">Max Dimensions</span><span class="lang-es">Max Dimensiones</span></h4>
+            <p><strong>30</strong> <span class="lang-en">per metric</span><span class="lang-es">por metrica</span></p>
+          </div>
+          <div class="concept-card">
+            <h4>RAM/Memory</h4>
+            <p><span class="chip red"><span class="lang-en">NOT default</span><span class="lang-es">NO por defecto</span></span></p>
+          </div>
+        </div>
+
+        <h3><span class="lang-en">Custom Metrics</span><span class="lang-es">Metricas Personalizadas</span></h3>
+        <p><span class="lang-en">API: <code>PutMetricData</code>. Define your own namespace, dimensions, and values.</span><span class="lang-es">API: <code>PutMetricData</code>. Define tu propio namespace, dimensiones y valores.</span></p>
+        <table class="data-table">
+          <tr><th>StorageResolution</th><th><span class="lang-en">Stores at</span><span class="lang-es">Almacena cada</span></th><th><span class="lang-en">Read Periods</span><span class="lang-es">Periodos de Lectura</span></th><th><span class="lang-en">Retention</span><span class="lang-es">Retencion</span></th></tr>
+          <tr><td><code>60</code> (standard)</td><td>1 min</td><td>60s+</td><td>Normal</td></tr>
+          <tr><td><code>1</code> (high-res)</td><td>1 sec</td><td><strong>1s, 5s, 10s, 30s</strong>, 60s+</td><td><span class="chip yellow">3 hours</span></td></tr>
+        </table>
+        <div class="callout warning"><span class="lang-en">Accepts timestamps <strong>2 weeks past</strong> and <strong>2 hours future</strong>. Make sure EC2 clock is correct!</span><span class="lang-es">Acepta timestamps <strong>2 semanas atras</strong> y <strong>2 horas futuro</strong>. Asegurate que el reloj de EC2 sea correcto!</span></div>
+      </div>
+
+      <!-- ═══════════════════ CARD 3: CW LOGS ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">3</span>
+          <h2><span class="lang-en">CloudWatch Logs</span><span class="lang-es">Logs de CloudWatch</span></h2>
+        </div>
+        <p><span class="lang-en"><strong>Log Group</strong> = application. <strong>Log Stream</strong> = instance/container. Retention: <strong>1 day to 10 years</strong>.</span><span class="lang-es"><strong>Log Group</strong> = aplicacion. <strong>Log Stream</strong> = instancia/contenedor. Retencion: <strong>1 dia a 10 anos</strong>.</span></p>
+
+        <h3><span class="lang-en">Export Options</span><span class="lang-es">Opciones de Exportacion</span></h3>
+        <table class="data-table">
+          <tr><th><span class="lang-en">Method</span><span class="lang-es">Metodo</span></th><th><span class="lang-en">Destination</span><span class="lang-es">Destino</span></th><th><span class="lang-en">Speed</span><span class="lang-es">Velocidad</span></th><th>API</th></tr>
+          <tr><td><strong>Batch</strong></td><td>S3</td><td><span class="lang-en">Up to <strong>12 hours</strong></span><span class="lang-es">Hasta <strong>12 horas</strong></span></td><td><code>CreateExportTask</code></td></tr>
+          <tr><td><strong>Real-time</strong></td><td>KDS, KDF, Lambda</td><td><span class="chip green">Streaming</span></td><td><span class="lang-en">Subscription Filter</span><span class="lang-es">Filtro de Suscripcion</span></td></tr>
+        </table>
+        <div class="callout info"><span class="lang-en">Max <strong>2 subscription filters</strong> per log group. Logs Insights = query engine, <strong>NOT real-time</strong>.</span><span class="lang-es">Max <strong>2 filtros de suscripcion</strong> por log group. Logs Insights = motor de consultas, <strong>NO en tiempo real</strong>.</span></div>
+      </div>
+
+      <!-- ═══════════════════ CARD 4: CW AGENTS ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">4</span>
+          <h2><span class="lang-en">CloudWatch Agents</span><span class="lang-es">Agentes de CloudWatch</span></h2>
+        </div>
+        <div class="callout danger"><span class="lang-en">EC2 pushes <strong>metrics</strong> by default but <strong>ZERO logs</strong>. You need an agent + IAM role for logs.</span><span class="lang-es">EC2 envia <strong>metricas</strong> por defecto pero <strong>CERO logs</strong>. Necesitas un agente + IAM role para logs.</span></div>
+        <table class="data-table">
+          <tr><th></th><th><span class="lang-en">Logs Agent (OLD)</span><span class="lang-es">Logs Agent (VIEJO)</span></th><th><span class="lang-en">Unified Agent (NEW)</span><span class="lang-es">Unified Agent (NUEVO)</span></th></tr>
+          <tr><td><strong>Logs</strong></td><td><span class="chip green">Yes</span></td><td><span class="chip green">Yes</span></td></tr>
+          <tr><td><strong>Metrics</strong></td><td><span class="chip red">No</span></td><td><span class="chip green">RAM, swap, processes, disk I/O, netstat</span></td></tr>
+          <tr><td><strong>Config</strong></td><td>Manual</td><td><strong>SSM Parameter Store</strong></td></tr>
+          <tr><td><strong>Status</strong></td><td><span class="chip red">Deprecated</span></td><td><span class="chip green">Use this one</span></td></tr>
+        </table>
+      </div>
+
+      <!-- ═══════════════════ CARD 5: METRIC FILTERS & ALARMS ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">5</span>
+          <h2><span class="lang-en">Metric Filters & Alarms</span><span class="lang-es">Filtros de Metricas y Alarmas</span></h2>
+        </div>
+
+        <h3><span class="lang-en">Metric Filters Chain</span><span class="lang-es">Cadena de Filtros de Metricas</span></h3>
+        <div class="code-block">
+          <span class="ck">Logs</span> <span class="cc">&rarr;</span> <span class="cv">Metric Filter</span> <span class="cc">&rarr;</span> <span class="cs">CloudWatch Metric</span> <span class="cc">&rarr;</span> <span class="ck">Alarm</span> <span class="cc">&rarr;</span> <span class="cv">SNS</span>
+        </div>
+        <div class="callout warning"><span class="lang-en">Metric Filters are <strong>NOT retroactive</strong> — only new events after creation. Max <strong>3 dimensions</strong>.</span><span class="lang-es">Los Metric Filters <strong>NO son retroactivos</strong> — solo eventos nuevos. Max <strong>3 dimensiones</strong>.</span></div>
+
+        <h3><span class="lang-en">Alarm States & Targets</span><span class="lang-es">Estados y Destinos de Alarmas</span></h3>
+        <div class="concept-grid">
+          <div class="concept-card">
+            <h4><span class="lang-en">3 States</span><span class="lang-es">3 Estados</span></h4>
+            <p><span class="chip green">OK</span> <span class="chip yellow">INSUFFICIENT_DATA</span> <span class="chip red">ALARM</span></p>
+          </div>
+          <div class="concept-card">
+            <h4><span class="lang-en">3 Targets</span><span class="lang-es">3 Destinos</span></h4>
+            <p><span class="lang-en">EC2 Actions, Auto Scaling, SNS</span><span class="lang-es">Acciones EC2, Auto Scaling, SNS</span></p>
+          </div>
+          <div class="concept-card">
+            <h4><span class="lang-en">Composite Alarms</span><span class="lang-es">Alarmas Compuestas</span></h4>
+            <p><span class="lang-en">AND/OR on multiple alarms. Reduces noise.</span><span class="lang-es">AND/OR sobre multiples alarmas. Reduce ruido.</span></p>
+          </div>
+          <div class="concept-card">
+            <h4><span class="lang-en">Test Alarms</span><span class="lang-es">Probar Alarmas</span></h4>
+            <p><code>set-alarm-state</code> CLI</p>
+          </div>
+        </div>
+
+        <h3><span class="lang-en">EC2 Instance Recovery</span><span class="lang-es">Recuperacion de Instancia EC2</span></h3>
+        <p><span class="lang-en">Triggered by <code>StatusCheckFailed_System</code>. Keeps: same private IP, public IP, Elastic IP, metadata, placement group.</span><span class="lang-es">Activado por <code>StatusCheckFailed_System</code>. Mantiene: misma IP privada, IP publica, Elastic IP, metadata, placement group.</span></p>
+      </div>
+
+      <!-- ═══════════════════ CARD 6: SYNTHETICS CANARY ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">6</span>
+          <h2><span class="lang-en">CloudWatch Synthetics Canary</span><span class="lang-es">CloudWatch Synthetics Canary</span></h2>
+        </div>
+        <p><span class="lang-en">Scripts that simulate user behavior to find issues <strong>before</strong> customers do. Written in <strong>Node.js or Python</strong> with <strong>headless Chrome</strong>.</span><span class="lang-es">Scripts que simulan el comportamiento del usuario para encontrar problemas <strong>antes</strong> que los clientes. Escritos en <strong>Node.js o Python</strong> con <strong>Chrome headless</strong>.</span></p>
+
+        <h3><span class="lang-en">6 Blueprints</span><span class="lang-es">6 Plantillas</span></h3>
+        <table class="data-table">
+          <tr><th>Blueprint</th><th><span class="lang-en">Purpose</span><span class="lang-es">Proposito</span></th></tr>
+          <tr><td><strong>Heartbeat Monitor</strong></td><td><span class="lang-en">Load URL, screenshots, verify alive</span><span class="lang-es">Cargar URL, screenshots, verificar que funciona</span></td></tr>
+          <tr><td><strong>API Canary</strong></td><td><span class="lang-en">Test REST API read/write</span><span class="lang-es">Probar lectura/escritura de REST API</span></td></tr>
+          <tr><td><strong>Broken Link Checker</strong></td><td><span class="lang-en">Find dead links</span><span class="lang-es">Encontrar links rotos</span></td></tr>
+          <tr><td><strong>Visual Monitoring</strong></td><td><span class="lang-en">Screenshot vs baseline comparison</span><span class="lang-es">Comparacion de screenshot vs baseline</span></td></tr>
+          <tr><td><strong>Canary Recorder</strong></td><td><span class="lang-en">Record actions → auto-generate script</span><span class="lang-es">Grabar acciones → auto-generar script</span></td></tr>
+          <tr><td><strong>GUI Workflow Builder</strong></td><td><span class="lang-en">Verify form workflows (login, checkout)</span><span class="lang-es">Verificar flujos de formularios (login, checkout)</span></td></tr>
+        </table>
+      </div>
+
+      <!-- ═══════════════════ CARD 7: EVENTBRIDGE ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">7</span>
+          <h2><span class="lang-en">Amazon EventBridge</span><span class="lang-es">Amazon EventBridge</span></h2>
+        </div>
+        <p><span class="lang-en">Formerly <strong>CloudWatch Events</strong>. Serverless event bus for reacting to events and scheduling cron jobs.</span><span class="lang-es">Antes <strong>CloudWatch Events</strong>. Bus de eventos serverless para reaccionar a eventos y programar cron jobs.</span></p>
+
+        <h3><span class="lang-en">3 Event Buses</span><span class="lang-es">3 Buses de Eventos</span></h3>
+        <table class="data-table">
+          <tr><th>Bus</th><th><span class="lang-en">Source</span><span class="lang-es">Origen</span></th><th><span class="lang-en">Example</span><span class="lang-es">Ejemplo</span></th></tr>
+          <tr><td><strong>Default</strong></td><td><span class="lang-en">AWS services</span><span class="lang-es">Servicios AWS</span></td><td>EC2, S3, CodeBuild</td></tr>
+          <tr><td><strong>Partner</strong></td><td><span class="lang-en">SaaS partners</span><span class="lang-es">Socios SaaS</span></td><td>Zendesk, Datadog, Auth0</td></tr>
+          <tr><td><strong>Custom</strong></td><td><span class="lang-en">Your own apps</span><span class="lang-es">Tus propias apps</span></td><td><span class="lang-en">Microservices (AWS or on-prem)</span><span class="lang-es">Microservicios (AWS o on-prem)</span></td></tr>
+        </table>
+
+        <h3><span class="lang-en">Key Features</span><span class="lang-es">Funcionalidades Clave</span></h3>
+        <div class="concept-grid">
+          <div class="concept-card">
+            <h4><span class="lang-en">Archive & Replay</span><span class="lang-es">Archivar y Repetir</span></h4>
+            <p><span class="lang-en">Archive events, replay for debugging</span><span class="lang-es">Archivar eventos, repetir para debugging</span></p>
+          </div>
+          <div class="concept-card">
+            <h4>Schema Registry</h4>
+            <p><span class="lang-en">Auto-discover JSON structure, generate code bindings</span><span class="lang-es">Auto-descubrir estructura JSON, generar codigo</span></p>
+          </div>
+          <div class="concept-card">
+            <h4><span class="lang-en">Cross-Account</span><span class="lang-es">Multi-Cuenta</span></h4>
+            <p><span class="lang-en">Resource-based policy on event bus</span><span class="lang-es">Policy basada en recurso en el bus</span></p>
+          </div>
+          <div class="concept-card">
+            <h4><span class="lang-en">Killer Combo</span><span class="lang-es">Combo Letal</span></h4>
+            <p><span class="lang-en">CloudTrail + EventBridge = react to ANY API call</span><span class="lang-es">CloudTrail + EventBridge = reaccionar a CUALQUIER API call</span></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════ CARD 8: X-RAY OVERVIEW ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">8</span>
+          <h2><span class="lang-en">X-Ray — How It Works</span><span class="lang-es">X-Ray — Como Funciona</span></h2>
+        </div>
+        <p><span class="lang-en">Visual service map for distributed applications. Trace requests end-to-end. Two things required to enable:</span><span class="lang-es">Mapa visual de servicios para aplicaciones distribuidas. Trazar requests de punta a punta. Dos cosas necesarias:</span></p>
+        <div class="concept-grid">
+          <div class="concept-card">
+            <h4><span class="lang-en">1. X-Ray SDK</span><span class="lang-es">1. SDK de X-Ray</span></h4>
+            <p><span class="lang-en">Import in your code (Java, Python, Go, Node.js, .NET)</span><span class="lang-es">Importar en tu codigo (Java, Python, Go, Node.js, .NET)</span></p>
+          </div>
+          <div class="concept-card">
+            <h4><span class="lang-en">2. X-Ray Daemon</span><span class="lang-es">2. Daemon de X-Ray</span></h4>
+            <p><span class="lang-en">UDP interceptor, sends batch every 1s. EC2: install yourself. Lambda: automatic.</span><span class="lang-es">Interceptor UDP, envia lote cada 1s. EC2: instalar manualmente. Lambda: automatico.</span></p>
+          </div>
+        </div>
+
+        <h3><span class="lang-en">Terminology</span><span class="lang-es">Terminologia</span></h3>
+        <table class="data-table">
+          <tr><th><span class="lang-en">Term</span><span class="lang-es">Termino</span></th><th><span class="lang-en">Meaning</span><span class="lang-es">Significado</span></th></tr>
+          <tr><td><strong>Trace</strong></td><td><span class="lang-en">End-to-end journey of one request</span><span class="lang-es">Viaje completo de un request</span></td></tr>
+          <tr><td><strong>Segment</strong></td><td><span class="lang-en">One service's contribution</span><span class="lang-es">Contribucion de un servicio</span></td></tr>
+          <tr><td><strong>Sub-segment</strong></td><td><span class="lang-en">Granular detail within a segment</span><span class="lang-es">Detalle granular dentro de un segmento</span></td></tr>
+          <tr><td><strong>Annotations</strong></td><td><span class="chip green"><span class="lang-en">Indexed — searchable</span><span class="lang-es">Indexadas — buscables</span></span></td></tr>
+          <tr><td><strong>Metadata</strong></td><td><span class="chip red"><span class="lang-en">NOT indexed — not searchable</span><span class="lang-es">NO indexada — no buscable</span></span></td></tr>
+        </table>
+      </div>
+
+      <!-- ═══════════════════ CARD 9: X-RAY SAMPLING & APIS ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">9</span>
+          <h2><span class="lang-en">X-Ray Sampling & APIs</span><span class="lang-es">X-Ray Muestreo y APIs</span></h2>
+        </div>
+
+        <h3><span class="lang-en">Default Sampling Rule</span><span class="lang-es">Regla de Muestreo por Defecto</span></h3>
+        <div class="concept-grid">
+          <div class="concept-card">
+            <h4>Reservoir</h4>
+            <p><strong>1 req/s</strong></p>
+          </div>
+          <div class="concept-card">
+            <h4>Rate</h4>
+            <p><strong>5%</strong> <span class="lang-en">of additional</span><span class="lang-es">del resto</span></p>
+          </div>
+          <div class="concept-card">
+            <h4><span class="lang-en">Change Rules</span><span class="lang-es">Cambiar Reglas</span></h4>
+            <p><span class="chip green"><span class="lang-en">No restart needed</span><span class="lang-es">Sin reiniciar</span></span></p>
+          </div>
+          <div class="concept-card">
+            <h4><span class="lang-en">Priority</span><span class="lang-es">Prioridad</span></h4>
+            <p><span class="lang-en">Lower # = higher priority. Default = 10,000</span><span class="lang-es">Menor # = mayor prioridad. Default = 10,000</span></p>
+          </div>
+        </div>
+
+        <h3><span class="lang-en">Write APIs</span><span class="lang-es">APIs de Escritura</span> (<code>AWSXRayWriteOnlyAccess</code>)</h3>
+        <table class="data-table">
+          <tr><th>API</th><th><span class="lang-en">Purpose</span><span class="lang-es">Proposito</span></th></tr>
+          <tr><td><code>PutTraceSegments</code></td><td><span class="lang-en">Upload segment documents</span><span class="lang-es">Subir documentos de segmentos</span></td></tr>
+          <tr><td><code>PutTelemetryRecords</code></td><td><span class="lang-en">Upload daemon health metrics</span><span class="lang-es">Subir metricas de salud del daemon</span></td></tr>
+          <tr><td><code>GetSamplingRules</code></td><td><span class="lang-en">Read sampling rules (so daemon knows what to send)</span><span class="lang-es">Leer reglas de muestreo (para que el daemon sepa que enviar)</span></td></tr>
+        </table>
+        <div class="callout info"><span class="lang-en"><strong>Why a Get in the Write policy?</strong> The daemon needs to read sampling rules to know which requests to send.</span><span class="lang-es"><strong>Por que un Get en la politica de Write?</strong> El daemon necesita leer las reglas de muestreo para saber que requests enviar.</span></div>
+
+        <h3><span class="lang-en">Read APIs</span><span class="lang-es">APIs de Lectura</span></h3>
+        <table class="data-table">
+          <tr><th>API</th><th><span class="lang-en">Purpose</span><span class="lang-es">Proposito</span></th></tr>
+          <tr><td><code>GetServiceGraph</code></td><td><span class="lang-en">Main visual service map</span><span class="lang-es">Mapa visual principal</span></td></tr>
+          <tr><td><code>GetTraceSummaries</code></td><td><span class="lang-en">Trace IDs for a time range</span><span class="lang-es">IDs de trazas para un rango de tiempo</span></td></tr>
+          <tr><td><code>BatchGetTraces</code></td><td><span class="lang-en">Full trace details by ID</span><span class="lang-es">Detalle completo de traza por ID</span></td></tr>
+          <tr><td><code>GetTraceGraph</code></td><td><span class="lang-en">Service graph for specific traces</span><span class="lang-es">Grafico de servicio para trazas especificas</span></td></tr>
+        </table>
+      </div>
+
+      <!-- ═══════════════════ CARD 10: X-RAY WITH ECS ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">10</span>
+          <h2><span class="lang-en">X-Ray with Beanstalk & ECS</span><span class="lang-es">X-Ray con Beanstalk y ECS</span></h2>
+        </div>
+
+        <h3><span class="lang-en">Beanstalk</span><span class="lang-es">Beanstalk</span></h3>
+        <p><span class="lang-en">Daemon already included. Enable via console or <code>.ebextensions/xray-daemon.config</code> with <code>XRayEnabled: true</code>.</span><span class="lang-es">Daemon ya incluido. Habilitar via consola o <code>.ebextensions/xray-daemon.config</code> con <code>XRayEnabled: true</code>.</span></p>
+
+        <h3><span class="lang-en">ECS — 3 Patterns</span><span class="lang-es">ECS — 3 Patrones</span></h3>
+        <table class="data-table">
+          <tr><th><span class="lang-en">Pattern</span><span class="lang-es">Patron</span></th><th><span class="lang-en">Launch Type</span><span class="lang-es">Tipo de Lanzamiento</span></th><th><span class="lang-en">How</span><span class="lang-es">Como</span></th></tr>
+          <tr><td><strong>Daemon</strong></td><td>EC2 only</td><td><span class="lang-en">1 daemon per instance</span><span class="lang-es">1 daemon por instancia</span></td></tr>
+          <tr><td><strong>Side Car (EC2)</strong></td><td>EC2</td><td><span class="lang-en">1 daemon per app container</span><span class="lang-es">1 daemon por contenedor</span></td></tr>
+          <tr><td><strong>Side Car (Fargate)</strong></td><td><span class="chip orange">Fargate ONLY option</span></td><td><span class="lang-en">1 daemon per task</span><span class="lang-es">1 daemon por tarea</span></td></tr>
+        </table>
+        <div class="callout warning"><span class="lang-en">Task definition: port <strong>2000/UDP</strong>, env var <code>AWS_XRAY_DAEMON_ADDRESS</code>, link containers.</span><span class="lang-es">Task definition: puerto <strong>2000/UDP</strong>, env var <code>AWS_XRAY_DAEMON_ADDRESS</code>, enlazar contenedores.</span></div>
+      </div>
+
+      <!-- ═══════════════════ CARD 11: X-RAY TROUBLESHOOTING ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">11</span>
+          <h2><span class="lang-en">X-Ray Troubleshooting</span><span class="lang-es">Solucion de Problemas de X-Ray</span></h2>
+        </div>
+        <table class="data-table">
+          <tr><th><span class="lang-en">Platform</span><span class="lang-es">Plataforma</span></th><th><span class="lang-en">Checklist</span><span class="lang-es">Lista de Verificacion</span></th></tr>
+          <tr><td><strong>EC2</strong></td><td><span class="lang-en">1. IAM role with X-Ray permissions? 2. Daemon running?</span><span class="lang-es">1. IAM role con permisos X-Ray? 2. Daemon ejecutandose?</span></td></tr>
+          <tr><td><strong>Lambda</strong></td><td><span class="lang-en">1. IAM execution role (<code>AWSXRayWriteOnlyAccess</code>)? 2. SDK imported? 3. <strong>Active Tracing</strong> enabled?</span><span class="lang-es">1. IAM execution role (<code>AWSXRayWriteOnlyAccess</code>)? 2. SDK importado? 3. <strong>Active Tracing</strong> habilitado?</span></td></tr>
+        </table>
+        <div class="callout danger"><span class="lang-en"><strong>Classic exam question:</strong> "X-Ray works locally but not on EC2" → daemon not running OR missing IAM role.</span><span class="lang-es"><strong>Pregunta clasica:</strong> "X-Ray funciona local pero no en EC2" → daemon no ejecutandose O falta IAM role.</span></div>
+      </div>
+
+      <!-- ═══════════════════ CARD 12: CLOUDTRAIL ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">12</span>
+          <h2><span class="lang-en">CloudTrail</span><span class="lang-es">CloudTrail</span></h2>
+        </div>
+        <p><span class="lang-en">Records <strong>who did what and when</strong>. <span class="chip green">Enabled by default</span>. Logs all API calls from console, SDK, CLI, IAM users/roles.</span><span class="lang-es">Registra <strong>quien hizo que y cuando</strong>. <span class="chip green">Habilitado por defecto</span>. Registra todas las llamadas API desde consola, SDK, CLI, IAM users/roles.</span></p>
+
+        <h3><span class="lang-en">3 Event Types</span><span class="lang-es">3 Tipos de Eventos</span></h3>
+        <table class="data-table">
+          <tr><th><span class="lang-en">Type</span><span class="lang-es">Tipo</span></th><th><span class="lang-en">Default?</span><span class="lang-es">Por defecto?</span></th><th><span class="lang-en">Examples</span><span class="lang-es">Ejemplos</span></th></tr>
+          <tr><td><strong>Management Events</strong></td><td><span class="chip green">Yes</span></td><td>CreateSubnet, AttachRolePolicy, TerminateInstances</td></tr>
+          <tr><td><strong>Data Events</strong></td><td><span class="chip red">No</span> <span class="lang-en">(high volume)</span><span class="lang-es">(alto volumen)</span></td><td>S3 GetObject/PutObject, Lambda Invoke</td></tr>
+          <tr><td><strong>Insights Events</strong></td><td><span class="chip red">No</span> <span class="lang-en">(must enable + pay)</span><span class="lang-es">(habilitar + pagar)</span></td><td><span class="lang-en">Detects unusual activity vs baseline</span><span class="lang-es">Detecta actividad inusual vs baseline</span></td></tr>
+        </table>
+
+        <h3><span class="lang-en">Retention</span><span class="lang-es">Retencion</span></h3>
+        <div class="code-block">
+          <span class="lang-en"><span class="ck">CloudTrail</span> <span class="cc">(90 days)</span> <span class="cc">&rarr;</span> <span class="cv">S3</span> <span class="cc">(long-term)</span> <span class="cc">&rarr;</span> <span class="cs">Athena</span> <span class="cc">(query/analyze)</span></span>
+          <span class="lang-es"><span class="ck">CloudTrail</span> <span class="cc">(90 dias)</span> <span class="cc">&rarr;</span> <span class="cv">S3</span> <span class="cc">(largo plazo)</span> <span class="cc">&rarr;</span> <span class="cs">Athena</span> <span class="cc">(consultar/analizar)</span></span>
+        </div>
+      </div>
+
+      <!-- ═══════════════════ CARD 13: NUMBERS TO MEMORIZE ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">13</span>
+          <h2><span class="lang-en">Numbers to Memorize</span><span class="lang-es">Numeros para Memorizar</span></h2>
+        </div>
+        <table class="data-table">
+          <tr><th><span class="lang-en">What</span><span class="lang-es">Que</span></th><th><span class="lang-en">Value</span><span class="lang-es">Valor</span></th></tr>
+          <tr><td><span class="lang-en">EC2 default metric interval</span><span class="lang-es">Intervalo metrica EC2 por defecto</span></td><td><strong>5 min</strong></td></tr>
+          <tr><td><span class="lang-en">EC2 detailed monitoring</span><span class="lang-es">Monitoreo detallado EC2</span></td><td><strong>1 min</strong></td></tr>
+          <tr><td><span class="lang-en">Max dimensions per metric</span><span class="lang-es">Max dimensiones por metrica</span></td><td><strong>30</strong></td></tr>
+          <tr><td><span class="lang-en">High-res data retention</span><span class="lang-es">Retencion datos alta-res</span></td><td><strong>3 hours</strong></td></tr>
+          <tr><td><span class="lang-en">Custom metric past timestamp</span><span class="lang-es">Timestamp pasado metrica custom</span></td><td><strong>2 weeks</strong></td></tr>
+          <tr><td><span class="lang-en">Custom metric future timestamp</span><span class="lang-es">Timestamp futuro metrica custom</span></td><td><strong>2 hours</strong></td></tr>
+          <tr><td><span class="lang-en">Batch export to S3</span><span class="lang-es">Export batch a S3</span></td><td><span class="lang-en">Up to <strong>12 hours</strong></span><span class="lang-es">Hasta <strong>12 horas</strong></span></td></tr>
+          <tr><td><span class="lang-en">Max subscription filters/group</span><span class="lang-es">Max filtros suscripcion/grupo</span></td><td><strong>2</strong></td></tr>
+          <tr><td><span class="lang-en">Max metric filter dimensions</span><span class="lang-es">Max dimensiones filtro metrica</span></td><td><strong>3</strong></td></tr>
+          <tr><td><span class="lang-en">X-Ray daemon batch interval</span><span class="lang-es">Intervalo lote daemon X-Ray</span></td><td><strong>1 second</strong></td></tr>
+          <tr><td><span class="lang-en">X-Ray daemon port</span><span class="lang-es">Puerto daemon X-Ray</span></td><td><strong>2000/UDP</strong></td></tr>
+          <tr><td><span class="lang-en">X-Ray default sampling</span><span class="lang-es">Muestreo X-Ray por defecto</span></td><td><strong>1 req/s + 5%</strong></td></tr>
+          <tr><td><span class="lang-en">CloudTrail retention</span><span class="lang-es">Retencion CloudTrail</span></td><td><strong>90 days</strong></td></tr>
+        </table>
+      </div>
+
+      <!-- ═══════════════════ CARD 14: COMMON EXAM TRAPS ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">14</span>
+          <h2><span class="lang-en">Common Exam Traps</span><span class="lang-es">Trampas Comunes del Examen</span></h2>
+        </div>
+        <div class="tips-grid">
+          <div class="tip">
+            <span class="trigger"><span class="lang-en">"Need RAM metrics"</span><span class="lang-es">"Necesito metricas de RAM"</span></span>
+            <span class="arr">&rarr;</span>
+            <span class="answer"><span class="lang-en">CloudWatch Unified Agent (not default)</span><span class="lang-es">CloudWatch Unified Agent (no por defecto)</span></span>
+          </div>
+          <div class="tip">
+            <span class="trigger"><span class="lang-en">"Real-time log export"</span><span class="lang-es">"Export de logs en tiempo real"</span></span>
+            <span class="arr">&rarr;</span>
+            <span class="answer"><span class="lang-en">Subscription Filter (not CreateExportTask)</span><span class="lang-es">Subscription Filter (no CreateExportTask)</span></span>
+          </div>
+          <div class="tip">
+            <span class="trigger"><span class="lang-en">"X-Ray works locally, fails on EC2"</span><span class="lang-es">"X-Ray funciona local, falla en EC2"</span></span>
+            <span class="arr">&rarr;</span>
+            <span class="answer"><span class="lang-en">Daemon not running or missing IAM role</span><span class="lang-es">Daemon no ejecutandose o falta IAM role</span></span>
+          </div>
+          <div class="tip">
+            <span class="trigger"><span class="lang-en">"X-Ray on Fargate"</span><span class="lang-es">"X-Ray en Fargate"</span></span>
+            <span class="arr">&rarr;</span>
+            <span class="answer"><span class="lang-en">Side Car ONLY (no Daemon option)</span><span class="lang-es">Side Car UNICAMENTE (sin opcion Daemon)</span></span>
+          </div>
+          <div class="tip">
+            <span class="trigger"><span class="lang-en">"Search X-Ray traces by key"</span><span class="lang-es">"Buscar trazas X-Ray por clave"</span></span>
+            <span class="arr">&rarr;</span>
+            <span class="answer"><span class="lang-en">Annotations (indexed), not Metadata</span><span class="lang-es">Annotations (indexadas), no Metadata</span></span>
+          </div>
+          <div class="tip">
+            <span class="trigger"><span class="lang-en">"Test alarm without real incident"</span><span class="lang-es">"Probar alarma sin incidente real"</span></span>
+            <span class="arr">&rarr;</span>
+            <span class="answer"><code>set-alarm-state</code> CLI</span>
+          </div>
+          <div class="tip">
+            <span class="trigger"><span class="lang-en">"Who deleted my resource?"</span><span class="lang-es">"Quien borro mi recurso?"</span></span>
+            <span class="arr">&rarr;</span>
+            <span class="answer">CloudTrail</span>
+          </div>
+          <div class="tip">
+            <span class="trigger"><span class="lang-en">"Events beyond 90 days"</span><span class="lang-es">"Eventos mas alla de 90 dias"</span></span>
+            <span class="arr">&rarr;</span>
+            <span class="answer"><span class="lang-en">CloudTrail → S3 → Athena</span><span class="lang-es">CloudTrail → S3 → Athena</span></span>
+          </div>
+          <div class="tip">
+            <span class="trigger"><span class="lang-en">"Cron job in AWS"</span><span class="lang-es">"Cron job en AWS"</span></span>
+            <span class="arr">&rarr;</span>
+            <span class="answer"><span class="lang-en">EventBridge Schedule</span><span class="lang-es">EventBridge Schedule</span></span>
+          </div>
+          <div class="tip">
+            <span class="trigger"><span class="lang-en">"Simulate user experience"</span><span class="lang-es">"Simular experiencia de usuario"</span></span>
+            <span class="arr">&rarr;</span>
+            <span class="answer"><span class="lang-en">Synthetics Canary</span><span class="lang-es">Synthetics Canary</span></span>
+          </div>
+          <div class="tip">
+            <span class="trigger"><span class="lang-en">"Open-source tracing, multiple destinations"</span><span class="lang-es">"Trazabilidad open-source, multiples destinos"</span></span>
+            <span class="arr">&rarr;</span>
+            <span class="answer"><span class="lang-en">AWS Distro for OpenTelemetry</span><span class="lang-es">AWS Distro for OpenTelemetry</span></span>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- container -->
+
+    <script>
+      function toggleLang() {
+        document.body.classList.toggle('es');
+        const btn = document.getElementById('lang-btn');
+        btn.textContent = document.body.classList.contains('es') ? 'English' : 'Espanol';
+      }
+    </script>
+  </body>
+</html>

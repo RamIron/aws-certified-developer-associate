@@ -84,6 +84,6 @@ It should aggregate all lesson notes from that section into a single reference f
 
 ## Current State
 
-- **Current section:** Section 20 - AWS Monitoring & Audit: CloudWatch, X-Ray and CloudTrail
-- **Total XP:** 7875
-- **Lessons completed:** 250
+- **Current section:** Section 21 - AWS Serverless: Lambda
+- **Total XP:** 8700
+- **Lessons completed:** 280
