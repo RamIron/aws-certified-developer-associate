@@ -121,7 +121,11 @@ A reference for acronyms and English terms encountered in the course, with Spani
 | Inbound / Outbound        | Entrante / Saliente                                     |
 | Inline policy             | Política directa / integrada                            |
 | On-premises               | En las instalaciones (infraestructura local)            |
+| Instrumentation           | Instrumentación (medir rendimiento, diagnosticar errores, escribir trazas) |
 | Redact                    | Censurar / ocultar información sensible                 |
+| Scale in                  | Reducir / achicar (remover instancias — menos recursos) |
+| Scale out                 | Escalar / crecer (agregar instancias — más recursos)    |
+| Side car                  | Contenedor acompañante (se ejecuta al lado de tu app)   |
 | Slight                    | Leve / ligero                                           |
 | Steady-state              | Estado estable / constante                              |
 | Tenancy                   | Arrendamiento / tenencia                                |

@@ -48,6 +48,7 @@
 ---
 
 ## CloudWatch Metrics
+> *How often data is collected and published to CloudWatch*
 
 ### Built-in Metrics
 - Every AWS service pushes metrics to CloudWatch
@@ -65,6 +66,7 @@
 ---
 
 ## CloudWatch Logs
+> *What your applications output — store, search, and export log data*
 
 ### Structure
 - **Log Group** = your application
@@ -96,6 +98,7 @@ SDK, CloudWatch Unified Agent, Elastic Beanstalk, ECS, Lambda, VPC Flow Logs, AP
 ---
 
 ## CloudWatch Agents
+> *Software installed on EC2 to push logs and extra metrics (RAM, disk, etc.)*
 
 | | Logs Agent (OLD) | Unified Agent (NEW) |
 |--|-----------------|---------------------|
@@ -109,6 +112,7 @@ SDK, CloudWatch Unified Agent, Elastic Beanstalk, ECS, Lambda, VPC Flow Logs, AP
 ---
 
 ## CloudWatch Metric Filters
+> *Turn log patterns into metrics — then trigger alarms on them*
 
 - Scan logs for patterns → create CloudWatch Metrics
 - **NOT retroactive** — only new events after filter creation
@@ -118,6 +122,7 @@ SDK, CloudWatch Unified Agent, Elastic Beanstalk, ECS, Lambda, VPC Flow Logs, AP
 ---
 
 ## CloudWatch Alarms
+> *How often the alarm evaluates a metric and triggers actions (different from how often data is collected!)*
 
 ### Three States
 `OK` → `INSUFFICIENT_DATA` → `ALARM`
@@ -142,6 +147,7 @@ SDK, CloudWatch Unified Agent, Elastic Beanstalk, ECS, Lambda, VPC Flow Logs, AP
 ---
 
 ## CloudWatch Synthetics Canary
+> *Automated scripts that test your endpoints from the outside — like a robot user*
 
 - Scripts that **simulate user behavior** (proactive monitoring)
 - Written in **Node.js or Python** with **headless Google Chrome**
@@ -161,6 +167,7 @@ SDK, CloudWatch Unified Agent, Elastic Beanstalk, ECS, Lambda, VPC Flow Logs, AP
 ---
 
 ## Amazon EventBridge (formerly CloudWatch Events)
+> *React to events in real-time — "when X happens, do Y"*
 
 ### Two Modes
 1. **Schedule/Cron** — "Every hour, trigger Lambda"
@@ -193,6 +200,7 @@ SDK, CloudWatch Unified Agent, Elastic Beanstalk, ECS, Lambda, VPC Flow Logs, AP
 ---
 
 ## AWS X-Ray
+> *Trace requests across microservices — find where things break or slow down*
 
 ### What It Does
 - Visual service map of distributed applications
@@ -264,6 +272,7 @@ Task definition config: port **2000/UDP**, env var `AWS_XRAY_DAEMON_ADDRESS`, li
 ---
 
 ## AWS Distro for OpenTelemetry
+> *Open-source alternative to X-Ray SDK — send traces to multiple destinations*
 
 - **Open-source** alternative to X-Ray
 - Send traces to **multiple destinations** (X-Ray + Datadog + Prometheus)
@@ -273,6 +282,7 @@ Task definition config: port **2000/UDP**, env var `AWS_XRAY_DAEMON_ADDRESS`, li
 ---
 
 ## CloudTrail
+> *Audit log — who made which API call and when (security camera for your AWS account)*
 
 ### What It Does
 - **Audit** — records who did what and when (API calls)

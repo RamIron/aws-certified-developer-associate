@@ -112,6 +112,9 @@
       .compare-card li { font-size: 13px; color: #d2d2d2; padding: 0.18rem 0 0.18rem 1rem; position: relative; }
       .compare-card li::before { content: "·"; position: absolute; left: 0; color: #475569; }
 
+      /* ── CARD SUBTITLE ── */
+      .card-subtitle { font-size: 14px; color: #f8fafc; font-style: normal; margin-bottom: 1rem; }
+
       @media (max-width: 680px) {
         body { padding: 1rem; }
         h1 { font-size: 1.6rem; }
@@ -180,6 +183,7 @@
           <span class="badge">2</span>
           <h2><span class="lang-en">CloudWatch Metrics</span><span class="lang-es">Metricas de CloudWatch</span></h2>
         </div>
+        <p class="card-subtitle"><span class="lang-en">How often data is collected and published to CloudWatch</span><span class="lang-es">Con que frecuencia se recopilan y publican datos en CloudWatch</span></p>
         <div class="concept-grid">
           <div class="concept-card">
             <h4><span class="lang-en">Default EC2</span><span class="lang-es">EC2 por defecto</span></h4>
@@ -215,6 +219,7 @@
           <span class="badge">3</span>
           <h2><span class="lang-en">CloudWatch Logs</span><span class="lang-es">Logs de CloudWatch</span></h2>
         </div>
+        <p class="card-subtitle"><span class="lang-en">What your applications output — store, search, and export log data</span><span class="lang-es">Lo que tus aplicaciones generan — almacenar, buscar y exportar datos de logs</span></p>
         <p><span class="lang-en"><strong>Log Group</strong> = application. <strong>Log Stream</strong> = instance/container. Retention: <strong>1 day to 10 years</strong>.</span><span class="lang-es"><strong>Log Group</strong> = aplicacion. <strong>Log Stream</strong> = instancia/contenedor. Retencion: <strong>1 dia a 10 anos</strong>.</span></p>
 
         <h3><span class="lang-en">Export Options</span><span class="lang-es">Opciones de Exportacion</span></h3>
@@ -232,6 +237,7 @@
           <span class="badge">4</span>
           <h2><span class="lang-en">CloudWatch Agents</span><span class="lang-es">Agentes de CloudWatch</span></h2>
         </div>
+        <p class="card-subtitle"><span class="lang-en">Software installed on EC2 to push logs and extra metrics (RAM, disk, etc.)</span><span class="lang-es">Software instalado en EC2 para enviar logs y metricas extra (RAM, disco, etc.)</span></p>
         <div class="callout danger"><span class="lang-en">EC2 pushes <strong>metrics</strong> by default but <strong>ZERO logs</strong>. You need an agent + IAM role for logs.</span><span class="lang-es">EC2 envia <strong>metricas</strong> por defecto pero <strong>CERO logs</strong>. Necesitas un agente + IAM role para logs.</span></div>
         <table class="data-table">
           <tr><th></th><th><span class="lang-en">Logs Agent (OLD)</span><span class="lang-es">Logs Agent (VIEJO)</span></th><th><span class="lang-en">Unified Agent (NEW)</span><span class="lang-es">Unified Agent (NUEVO)</span></th></tr>
@@ -248,6 +254,7 @@
           <span class="badge">5</span>
           <h2><span class="lang-en">Metric Filters & Alarms</span><span class="lang-es">Filtros de Metricas y Alarmas</span></h2>
         </div>
+        <p class="card-subtitle"><span class="lang-en">How often the alarm evaluates a metric and triggers actions (different from how often data is collected!)</span><span class="lang-es">Con que frecuencia la alarma evalua una metrica y dispara acciones (diferente de con que frecuencia se recopilan datos!)</span></p>
 
         <h3><span class="lang-en">Metric Filters Chain</span><span class="lang-es">Cadena de Filtros de Metricas</span></h3>
         <div class="code-block">
@@ -273,6 +280,10 @@
             <h4><span class="lang-en">Test Alarms</span><span class="lang-es">Probar Alarmas</span></h4>
             <p><code>set-alarm-state</code> CLI</p>
           </div>
+          <div class="concept-card">
+            <h4><span class="lang-en">High-Resolution Alarm Period</span><span class="lang-es">Periodo de Alarma Alta Resolucion</span></h4>
+            <p><span class="lang-en">High-res metrics → alarm every <strong>10s or 30s</strong>. Standard → multiples of 60s only.</span><span class="lang-es">Metricas alta-res → alarma cada <strong>10s o 30s</strong>. Estandar → solo multiplos de 60s.</span></p>
+          </div>
         </div>
 
         <h3><span class="lang-en">EC2 Instance Recovery</span><span class="lang-es">Recuperacion de Instancia EC2</span></h3>
@@ -285,6 +296,7 @@
           <span class="badge">6</span>
           <h2><span class="lang-en">CloudWatch Synthetics Canary</span><span class="lang-es">CloudWatch Synthetics Canary</span></h2>
         </div>
+        <p class="card-subtitle"><span class="lang-en">Automated scripts that test your endpoints from the outside — like a robot user</span><span class="lang-es">Scripts automatizados que prueban tus endpoints desde afuera — como un usuario robot</span></p>
         <p><span class="lang-en">Scripts that simulate user behavior to find issues <strong>before</strong> customers do. Written in <strong>Node.js or Python</strong> with <strong>headless Chrome</strong>.</span><span class="lang-es">Scripts que simulan el comportamiento del usuario para encontrar problemas <strong>antes</strong> que los clientes. Escritos en <strong>Node.js o Python</strong> con <strong>Chrome headless</strong>.</span></p>
 
         <h3><span class="lang-en">6 Blueprints</span><span class="lang-es">6 Plantillas</span></h3>
@@ -305,6 +317,7 @@
           <span class="badge">7</span>
           <h2><span class="lang-en">Amazon EventBridge</span><span class="lang-es">Amazon EventBridge</span></h2>
         </div>
+        <p class="card-subtitle"><span class="lang-en">React to events in real-time — "when X happens, do Y"</span><span class="lang-es">Reaccionar a eventos en tiempo real — "cuando pase X, hacer Y"</span></p>
         <p><span class="lang-en">Formerly <strong>CloudWatch Events</strong>. Serverless event bus for reacting to events and scheduling cron jobs.</span><span class="lang-es">Antes <strong>CloudWatch Events</strong>. Bus de eventos serverless para reaccionar a eventos y programar cron jobs.</span></p>
 
         <h3><span class="lang-en">3 Event Buses</span><span class="lang-es">3 Buses de Eventos</span></h3>
@@ -342,6 +355,7 @@
           <span class="badge">8</span>
           <h2><span class="lang-en">X-Ray — How It Works</span><span class="lang-es">X-Ray — Como Funciona</span></h2>
         </div>
+        <p class="card-subtitle"><span class="lang-en">Trace requests across microservices — find where things break or slow down</span><span class="lang-es">Rastrear requests a traves de microservicios — encontrar donde se rompe o se ralentiza</span></p>
         <p><span class="lang-en">Visual service map for distributed applications. Trace requests end-to-end. Two things required to enable:</span><span class="lang-es">Mapa visual de servicios para aplicaciones distribuidas. Trazar requests de punta a punta. Dos cosas necesarias:</span></p>
         <div class="concept-grid">
           <div class="concept-card">
@@ -371,6 +385,7 @@
           <span class="badge">9</span>
           <h2><span class="lang-en">X-Ray Sampling & APIs</span><span class="lang-es">X-Ray Muestreo y APIs</span></h2>
         </div>
+        <p class="card-subtitle"><span class="lang-en">How X-Ray decides which requests to trace, and the APIs the daemon uses behind the scenes</span><span class="lang-es">Como X-Ray decide que requests rastrear, y las APIs que el daemon usa por detras</span></p>
 
         <h3><span class="lang-en">Default Sampling Rule</span><span class="lang-es">Regla de Muestreo por Defecto</span></h3>
         <div class="concept-grid">
@@ -417,6 +432,7 @@
           <span class="badge">10</span>
           <h2><span class="lang-en">X-Ray with Beanstalk & ECS</span><span class="lang-es">X-Ray con Beanstalk y ECS</span></h2>
         </div>
+        <p class="card-subtitle"><span class="lang-en">How to deploy the X-Ray daemon depending on your compute platform</span><span class="lang-es">Como desplegar el daemon de X-Ray segun tu plataforma de computo</span></p>
 
         <h3><span class="lang-en">Beanstalk</span><span class="lang-es">Beanstalk</span></h3>
         <p><span class="lang-en">Daemon already included. Enable via console or <code>.ebextensions/xray-daemon.config</code> with <code>XRayEnabled: true</code>.</span><span class="lang-es">Daemon ya incluido. Habilitar via consola o <code>.ebextensions/xray-daemon.config</code> con <code>XRayEnabled: true</code>.</span></p>
@@ -437,6 +453,7 @@
           <span class="badge">11</span>
           <h2><span class="lang-en">X-Ray Troubleshooting</span><span class="lang-es">Solucion de Problemas de X-Ray</span></h2>
         </div>
+        <p class="card-subtitle"><span class="lang-en">"X-Ray not working" — what to check first on each platform</span><span class="lang-es">"X-Ray no funciona" — que revisar primero en cada plataforma</span></p>
         <table class="data-table">
           <tr><th><span class="lang-en">Platform</span><span class="lang-es">Plataforma</span></th><th><span class="lang-en">Checklist</span><span class="lang-es">Lista de Verificacion</span></th></tr>
           <tr><td><strong>EC2</strong></td><td><span class="lang-en">1. IAM role with X-Ray permissions? 2. Daemon running?</span><span class="lang-es">1. IAM role con permisos X-Ray? 2. Daemon ejecutandose?</span></td></tr>
@@ -451,6 +468,7 @@
           <span class="badge">12</span>
           <h2><span class="lang-en">CloudTrail</span><span class="lang-es">CloudTrail</span></h2>
         </div>
+        <p class="card-subtitle"><span class="lang-en">Audit log — who made which API call and when (security camera for your AWS account)</span><span class="lang-es">Log de auditoria — quien hizo que llamada API y cuando (camara de seguridad de tu cuenta AWS)</span></p>
         <p><span class="lang-en">Records <strong>who did what and when</strong>. <span class="chip green">Enabled by default</span>. Logs all API calls from console, SDK, CLI, IAM users/roles.</span><span class="lang-es">Registra <strong>quien hizo que y cuando</strong>. <span class="chip green">Habilitado por defecto</span>. Registra todas las llamadas API desde consola, SDK, CLI, IAM users/roles.</span></p>
 
         <h3><span class="lang-en">3 Event Types</span><span class="lang-es">3 Tipos de Eventos</span></h3>
@@ -474,6 +492,7 @@
           <span class="badge">13</span>
           <h2><span class="lang-en">Numbers to Memorize</span><span class="lang-es">Numeros para Memorizar</span></h2>
         </div>
+        <p class="card-subtitle"><span class="lang-en">Quick reference — all the numbers the exam loves to test</span><span class="lang-es">Referencia rapida — todos los numeros que al examen le encanta preguntar</span></p>
         <table class="data-table">
           <tr><th><span class="lang-en">What</span><span class="lang-es">Que</span></th><th><span class="lang-en">Value</span><span class="lang-es">Valor</span></th></tr>
           <tr><td><span class="lang-en">EC2 default metric interval</span><span class="lang-es">Intervalo metrica EC2 por defecto</span></td><td><strong>5 min</strong></td></tr>
@@ -498,6 +517,7 @@
           <span class="badge">14</span>
           <h2><span class="lang-en">Common Exam Traps</span><span class="lang-es">Trampas Comunes del Examen</span></h2>
         </div>
+        <p class="card-subtitle"><span class="lang-en">Trigger → Answer patterns — when you see X in the question, think Y</span><span class="lang-es">Disparador → Respuesta — cuando veas X en la pregunta, piensa Y</span></p>
         <div class="tips-grid">
           <div class="tip">
             <span class="trigger"><span class="lang-en">"Need RAM metrics"</span><span class="lang-es">"Necesito metricas de RAM"</span></span>
