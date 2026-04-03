@@ -46,7 +46,7 @@ Study notes for AWS DVA-C02, assisted by Claude.
 | 24: AWS CICD: CodeCommit, CodePipeline, CodeBuild, CodeDeploy | 1h 38 min | |
 | 25: AWS Serverless: SAM | 35 min | |
 | 26: Cloud Development Kit (CDK) | 26 min | |
-| 27: Cognito: User Pools, Identity Pools & Sync | 39 min | |
+| 27: Cognito: Cognito User Pools, Cognito Identity Pools & Cognito Sync | 39 min | |
 | 28: Other Serverless: Step Functions & AppSync | 58 min | |
 | 29: Advanced Identity | 23 min | |
 | 30: AWS Security & Encryption: KMS, Encryption SDK, SSM Parameter Store, IAM & STS | 1h 29 min | |

@@ -16,6 +16,7 @@ Videos: 305 | Quizzes: 18/29 | ⏱ 21h 35min done · 10h 23min left
 ---
 
 ## Section 1: Course Introduction
+
 - [x] 1.1 - Course Introduction (intro - no quiz)
 - [x] 1.2 - Creating an AWS Account (intro - no quiz)
 - [x] 1.3 - Important Message (intro - no quiz)
@@ -24,14 +25,17 @@ Videos: 305 | Quizzes: 18/29 | ⏱ 21h 35min done · 10h 23min left
 - [x] 1.6 - AWS Account Setup (intro - no quiz)
 
 ## Section 2: Code & Slides Download
+
 - [ ] 2.1 - Code & Slides Download
 
 ## Section 3: Getting Started with AWS
+
 - [x] 3.1 - AWS Cloud Overview - Regions & AZ (PERFECT 100%)
 - [x] 3.2 - Tour of the Console & Services in AWS (skipped - console UI overview)
 - [x] 3.3 - About the UI changes in the course (skipped - console UI overview)
 
 ## Section 4: IAM & AWS CLI
+
 - [x] 4.1 - IAM Introduction: Users, Groups, Policies (PERFECT 100%)
 - [x] 4.2 - IAM Users & Groups Hands On (skipped - hands-on walkthrough)
 - [x] 4.3 - AWS Console Simultaneous Sign-in (skipped - console feature)
@@ -54,6 +58,7 @@ Videos: 305 | Quizzes: 18/29 | ⏱ 21h 35min done · 10h 23min left
 - [x] 4.20 - IAM Summary (skipped - recap)
 
 ## Section 5: EC2 Fundamentals
+
 - [x] 5.1 - AWS Budget Setup (skipped - billing walkthrough)
 - [x] 5.2 - EC2 Basics (PERFECT 100%)
 - [x] 5.3 - Create an EC2 Instance with EC2 User Data to have a Website Hands On (skipped - hands-on walkthrough)
@@ -70,6 +75,7 @@ Videos: 305 | Quizzes: 18/29 | ⏱ 21h 35min done · 10h 23min left
 - [x] 5.14 - EC2 Instance Purchasing Options (PASSED 75%)
 
 ## Section 6: EC2 Instance Storage
+
 - [x] 6.1 - EBS Overview (PERFECT 100%)
 - [x] 6.2 - EBS Hands On (skipped - hands-on walkthrough)
 - [x] 6.3 - EBS Snapshots (PERFECT 100%)
@@ -85,6 +91,7 @@ Videos: 305 | Quizzes: 18/29 | ⏱ 21h 35min done · 10h 23min left
 - [x] 6.13 - EBS & EFS - Section Cleanup (skipped - console cleanup walkthrough)
 
 ## Section 7: AWS Fundamentals: ELB + ASG
+
 - [x] 7.1 - High Availability and Scalability (PERFECT 100%)
 - [x] 7.2 - Elastic Load Balancing (ELB) Overview (PERFECT 100%)
 - [x] 7.3 - Note: About the Classic Load Balancer (CLB) (skipped - CLB deprecated, not on exam)
@@ -107,6 +114,7 @@ Videos: 305 | Quizzes: 18/29 | ⏱ 21h 35min done · 10h 23min left
 - [x] 7.20 - High Availability & Scalability Quiz (Udemy quiz - 14/20)
 
 ## Section 8: RDS + Aurora + ElastiCache
+
 - [x] 8.1 - Amazon RDS Overview (PERFECT 100%)
 - [x] 8.2 - RDS Read Replicas vs Multi AZ (PERFECT 100%)
 - [x] 8.3 - Amazon RDS Hands On (skipped - hands-on walkthrough)
@@ -121,6 +129,7 @@ Videos: 305 | Quizzes: 18/29 | ⏱ 21h 35min done · 10h 23min left
 - [x] 8.12 - RDS, Aurora, & ElastiCache Quiz (Udemy quiz - 16/22)
 
 ## Section 9: Route 53
+
 - [x] 9.1 - What is a DNS? (PERFECT 100%)
 - [x] 9.2 - Route 53 Overview (REVIEW 67%)
 - [x] 9.3 - Route 53 - Registering a domain (skipped - hands-on walkthrough)
@@ -141,18 +150,20 @@ Videos: 305 | Quizzes: 18/29 | ⏱ 21h 35min done · 10h 23min left
 - [x] 9.18 - Routing Policy - Multi Value (PERFECT 100%)
 - [x] 9.19 - 3rd Party Domains & Route 53 (PERFECT 100%)
 - [x] 9.20 - Route 53 - Section Cleanup (skipped - hands-on cleanup)
-- [x] 9.21 - Route 53 Quiz (skipped - Udemy quiz)
+- [x] 9.21 - Route 53 Quiz (Udemy quiz - completed)
 
 ## Section 10: VPC Fundamentals
+
 - [x] 10.1 - VPC Fundamentals - Section Introduction (intro - no quiz)
 - [x] 10.2 - VPC, Subnets, IGW and NAT (PERFECT 100%)
 - [x] 10.3 - NACL, SG, VPC Flow Logs (PERFECT 100%)
 - [x] 10.4 - VPC Peering, Endpoints, VPN, DX (PERFECT 100%)
 - [x] 10.5 - VPC Cheat Sheet & Closing Comments (skipped - summary/recap)
 - [x] 10.6 - Three Tier Architecture (PERFECT 100%)
-- [x] 10.7 - VPC Quiz (skipped - Udemy quiz)
+- [x] 10.7 - VPC Quiz (Udemy quiz - completed)
 
 ## Section 11: Amazon S3 Introduction
+
 - [x] 11.1 - S3 Overview (PERFECT 100%)
 - [x] 11.2 - S3 Hands On (skipped - hands-on walkthrough)
 - [x] 11.3 - S3 Security: Bucket Policy (PERFECT 100%)
@@ -166,9 +177,10 @@ Videos: 305 | Quizzes: 18/29 | ⏱ 21h 35min done · 10h 23min left
 - [x] 11.11 - S3 Replication - Hands On (skipped - hands-on walkthrough)
 - [x] 11.12 - S3 Storage Classes Overview (REVIEW 0%)
 - [x] 11.13 - S3 Storage Classes Hands On (skipped - hands-on walkthrough)
-- [x] 11.14 - Amazon S3 Quiz (skipped - Udemy quiz)
+- [x] 11.14 - Amazon S3 Quiz (Udemy quiz - completed)
 
 ## Section 12: AWS CLI, SDK, IAM Roles & Policies
+
 - [x] 12.1 - AWS EC2 Instance Metadata (PERFECT 100%)
 - [x] 12.2 - AWS EC2 Instance Metadata - Hands On (skipped - hands-on walkthrough)
 - [x] 12.3 - AWS CLI Profiles (skipped - practical tip, not on exam)
@@ -177,18 +189,20 @@ Videos: 305 | Quizzes: 18/29 | ⏱ 21h 35min done · 10h 23min left
 - [x] 12.6 - Exponential Backoff & Service Limit Increase (PERFECT 100%)
 - [x] 12.7 - AWS Credentials Provider & Chain (REVIEW 67%)
 - [x] 12.8 - AWS Signature v4 Signing (Sigv4) (PERFECT 100%)
-- [x] 12.9 - AWS IAM, CLI, & SDK Quiz (skipped - Udemy quiz)
+- [x] 12.9 - AWS IAM, CLI, & SDK Quiz (Udemy quiz - completed)
 
 ## Section 13: Advanced Amazon S3
+
 - [x] 13.1 - S3 Lifecycle Rules (with S3 Analytics) (PERFECT 100%)
 - [x] 13.2 - S3 Lifecycle Rules - Hands On (skipped - hands-on walkthrough)
 - [x] 13.3 - S3 Event Notifications (PERFECT 100%)
 - [x] 13.4 - S3 Event Notifications - Hands On (skipped - hands-on walkthrough)
 - [x] 13.5 - S3 Performance (PERFECT 100%)
 - [x] 13.6 - S3 Object Tags & Metadata (REVIEW 50%)
-- [x] 13.7 - Amazon S3 Advanced Quiz (skipped - Udemy quiz)
+- [x] 13.7 - Amazon S3 Advanced Quiz (Udemy quiz - completed)
 
 ## Section 14: Amazon S3 Security
+
 - [x] 14.1 - S3 Encryption (PERFECT 100%)
 - [x] 14.2 - About DSSE-KMS (skipped - article, not on exam)
 - [x] 14.3 - S3 Encryption - Hands On (skipped - hands-on walkthrough)
@@ -203,9 +217,10 @@ Videos: 305 | Quizzes: 18/29 | ⏱ 21h 35min done · 10h 23min left
 - [x] 14.12 - S3 Pre-signed URLs - Hands On (skipped - hands-on walkthrough)
 - [x] 14.13 - S3 Access Points (PERFECT 100%)
 - [x] 14.14 - S3 Object Lambda (PERFECT 100%)
-- [x] 14.15 - Amazon S3 Security Quiz (skipped - Udemy quiz)
+- [x] 14.15 - Amazon S3 Security Quiz (Udemy quiz - completed)
 
 ## Section 15: CloudFront
+
 - [x] 15.1 - CloudFront - Overview (PERFECT 100%)
 - [x] 15.2 - CloudFront Hands On (skipped - hands-on)
 - [x] 15.3 - CloudFront - Caching & Caching Policies (PERFECT 100%)
@@ -218,9 +233,10 @@ Videos: 305 | Quizzes: 18/29 | ⏱ 21h 35min done · 10h 23min left
 - [x] 15.10 - CloudFront Signed URL - Key Groups + Hands On (skipped - hands-on, key info added to 15.9)
 - [x] 15.11 - CloudFront Advanced Concepts (PERFECT 100%)
 - [x] 15.12 - CloudFront - Real Time Logs (skipped - low exam relevance)
-- [x] 15.13 - CloudFront Quiz (skipped - Udemy quiz)
+- [x] 15.13 - CloudFront Quiz (Udemy quiz - completed)
 
 ## Section 16: ECS, ECR & Fargate - Docker in AWS
+
 - [x] 16.1 - Docker Introduction (PERFECT 100%)
 - [x] 16.2 - Amazon ECS (PERFECT 100%)
 - [x] 16.3 - Creating ECS Cluster Hands On (skipped - hands-on)
@@ -237,9 +253,10 @@ Videos: 305 | Quizzes: 18/29 | ⏱ 21h 35min done · 10h 23min left
 - [x] 16.14 - AWS CoPilot - Overview (skipped - low exam relevance)
 - [x] 16.15 - AWS CoPilot - Hands On (skipped - hands-on)
 - [x] 16.16 - Amazon EKS (PERFECT 100%)
-- [x] 16.17 - Containers on AWS Quiz (skipped - Udemy quiz)
+- [x] 16.17 - Containers on AWS Quiz (Udemy quiz - completed)
 
 ## Section 17: AWS Elastic Beanstalk ✓
+
 - [x] 17.1 - AWS Elastic Beanstalk - Section Introduction (skipped - intro)
 - [x] 17.2 - Elastic Beanstalk Overview (High level) (PERFECT 100%)
 - [x] 17.3 - Beanstalk First Environment (skipped - hands-on)
@@ -253,9 +270,10 @@ Videos: 305 | Quizzes: 18/29 | ⏱ 21h 35min done · 10h 23min left
 - [x] 17.11 - Beanstalk Cloning (PERFECT 100%)
 - [x] 17.12 - Beanstalk Migrations (PERFECT 100%)
 - [x] 17.13 - Beanstalk Cleanup (skipped - hands-on cleanup)
-- [x] 17.14 - Elastic Beanstalk Quiz (skipped - Udemy quiz)
+- [x] 17.14 - Elastic Beanstalk Quiz (Udemy quiz - completed)
 
 ## Section 18: AWS CloudFormation ✓
+
 - [x] 18.1 - CloudFormation Overview (PERFECT 100%)
 - [x] 18.2 - CloudFormation Create Stack Hands On (skipped - hands-on walkthrough)
 - [x] 18.3 - CloudFormation Update & Delete Stack Hands On (skipped - hands-on walkthrough)
@@ -277,6 +295,7 @@ Videos: 305 | Quizzes: 18/29 | ⏱ 21h 35min done · 10h 23min left
 - [x] CloudFormation Quiz (Udemy quiz - completed)
 
 ## Section 19: AWS Integration & Messaging: SQS, SNS & Kinesis
+
 - [x] 19.1 - Introduction to Messaging (215)
 - [x] 19.2 - Amazon SQS - Standard Queues Overview (216) (PERFECT 100%)
 - [x] 19.3 - SQS - Standard Queue Hands On (217)
@@ -297,9 +316,10 @@ Videos: 305 | Quizzes: 18/29 | ⏱ 21h 35min done · 10h 23min left
 - [x] 19.18 - Amazon Data Firehose - Hands On (232)
 - [x] 19.19 - Amazon Managed Service for Apache Flink (233)
 - [x] 19.20 - SQS vs SNS vs Kinesis (234)
-- [x] Messaging & Integration Quiz (Quiz 16 - completed)
+- [x] Messaging & Integration Quiz (Udemy quiz - completed)
 
 ## Section 20: AWS Monitoring & Audit: CloudWatch, X-Ray and CloudTrail
+
 - [x] 20.1 - AWS Monitoring - Section Introduction (235) (intro - no quiz)
 - [x] 20.2 - Monitoring Overview in AWS (236) (overview - no quiz)
 - [x] 20.3 - CloudWatch Metrics (237) (PERFECT 100%)
@@ -329,9 +349,10 @@ Videos: 305 | Quizzes: 18/29 | ⏱ 21h 35min done · 10h 23min left
 - [x] 20.27 - CloudTrail - EventBridge Integration (261)
 - [x] 20.28 - CloudTrail vs CloudWatch vs X-Ray (262)
 - [x] 20.29 - AWS Quick Clean-Up (263)
-- [x] Monitoring & Audit Quiz (Quiz 17)
+- [x] Monitoring & Audit Quiz (Udemy quiz - completed)
 
 ## Section 21: AWS Serverless: Lambda
+
 - [x] 21.1 - AWS Lambda - Section Introduction (intro)
 - [x] 21.2 - Serverless Introduction
 - [x] 21.3 - AWS Lambda Overview
@@ -380,154 +401,197 @@ Videos: 305 | Quizzes: 18/29 | ⏱ 21h 35min done · 10h 23min left
 - [x] 21.46 - Lambda - CodeGuru Integration
 - [x] 21.47 - Lambda Limits
 - [x] 21.48 - Lambda Best Practices
-- [x] Lambda Quiz (Quiz 18) — pending Udemy attempt
+- [x] Lambda Quiz (Udemy quiz - completed)
 
 ## Section 22: AWS Serverless: DynamoDB
-- [ ] 22.1 - DynamoDB Overview
-- [ ] 22.2 - DynamoDB Basics Hands On
-- [ ] 22.3 - DynamoDB - WCU & RCU - Throughput
-- [ ] 22.4 - DynamoDB - WCU & RCU Hands On
-- [ ] 22.5 - DynamoDB - Basic Operations
-- [ ] 22.6 - DynamoDB - Basic Operations Hands On
-- [ ] 22.7 - DynamoDB - Conditional Writes
-- [ ] 22.8 - DynamoDB - Indexes (GSI + LSI)
-- [ ] 22.9 - DynamoDB - Indexes Hands On
-- [ ] 22.10 - DynamoDB - PartiQL
-- [ ] 22.11 - DynamoDB - PartiQL Hands On
-- [ ] 22.12 - DynamoDB - Optimistic Locking
-- [ ] 22.13 - DynamoDB - DAX
-- [ ] 22.14 - DynamoDB - DAX Hands On
+
+- [ ] 22.1 - DynamoDB - Section Introduction (intro)
+- [ ] 22.2 - DynamoDB Overview
+- [ ] 22.3 - DynamoDB Basics - Hands On
+- [ ] 22.4 - DynamoDB WCU & RCU - Throughput
+- [ ] 22.5 - DynamoDB WCU & RCU - Hands On
+- [ ] 22.6 - DynamoDB - Basic Operations
+- [ ] 22.7 - DynamoDB Basic APIs - Hands On
+- [ ] 22.8 - DynamoDB - Conditional Writes
+- [ ] 22.9 - DynamoDB Indexes (GSI + LSI)
+- [ ] 22.10 - DynamoDB Indexes (GSI + LSI) - Hands On
+- [ ] 22.11 - DynamoDB PartiQL
+- [ ] 22.12 - DynamoDB Optimistic Locking
+- [ ] 22.13 - DynamoDB DAX
+- [ ] 22.14 - DynamoDB DAX - Hands On
 - [ ] 22.15 - DynamoDB Streams
-- [ ] 22.16 - DynamoDB Streams Hands On
+- [ ] 22.16 - DynamoDB Streams - Hands On
 - [ ] 22.17 - DynamoDB TTL
-- [ ] 22.18 - DynamoDB TTL Hands On
-- [ ] 22.19 - DynamoDB CLI
-- [ ] 22.20 - DynamoDB Transactions
-- [ ] 22.21 - DynamoDB - Session State
-- [ ] 22.22 - DynamoDB - Partitioning Strategies
-- [ ] 22.23 - DynamoDB - Write Types
-- [ ] 22.24 - DynamoDB - Large Objects Pattern
-- [ ] 22.25 - DynamoDB - Operations
-- [ ] 22.26 - DynamoDB - Security & Other
+- [ ] 22.18 - DynamoDB CLI
+- [ ] 22.19 - DynamoDB Transactions
+- [ ] 22.20 - DynamoDB Session State
+- [ ] 22.21 - DynamoDB Partitioning Strategies
+- [ ] 22.22 - DynamoDB Conditional Writes, Concurrent Writes & Atomic Writes
+- [ ] 22.23 - DynamoDB Patterns with S3
+- [ ] 22.24 - DynamoDB Operations
+- [ ] 22.25 - DynamoDB Security & Other
+- [ ] DynamoDB Quiz (Quiz 19)
 
 ## Section 23: AWS Serverless: API Gateway
-- [ ] 23.1 - API Gateway Overview
-- [ ] 23.2 - API Gateway Basics Hands On
-- [ ] 23.3 - API Gateway - Stages and Deployment
-- [ ] 23.4 - API Gateway - Stages & Deployment Hands On
-- [ ] 23.5 - API Gateway - Stage Variables
-- [ ] 23.6 - API Gateway - Stage Variables Hands On
-- [ ] 23.7 - API Gateway - Canary Deployments
-- [ ] 23.8 - API Gateway - Canary Deployments Hands On
-- [ ] 23.9 - API Gateway - Integration Types & Mappings
-- [ ] 23.10 - API Gateway - Mapping Templates Hands On
-- [ ] 23.11 - API Gateway - Open API
-- [ ] 23.12 - API Gateway - Open API Hands On
-- [ ] 23.13 - API Gateway - Request Validation
-- [ ] 23.14 - API Gateway - Request Validation Hands On
-- [ ] 23.15 - API Gateway - Caching
-- [ ] 23.16 - API Gateway - Usage Plans & API Keys
-- [ ] 23.17 - API Gateway - Monitoring, Logging and Tracing
-- [ ] 23.18 - API Gateway - CORS
-- [ ] 23.19 - API Gateway - CORS Hands On
-- [ ] 23.20 - API Gateway - Authentication and Authorization
-- [ ] 23.21 - API Gateway - REST API vs HTTP API vs WebSocket
-- [ ] 23.22 - API Gateway - Websocket API
-- [ ] 23.23 - API Gateway - Architecture
 
-## Section 24: AWS Serverless: SAM - Serverless Application Model
-- [ ] 24.1 - SAM Overview
-- [ ] 24.2 - SAM - Creating First Project
-- [ ] 24.3 - SAM - Deploying SAM Project
-- [ ] 24.4 - SAM - CLI Debugging
-- [ ] 24.5 - SAM - Policy Templates
-- [ ] 24.6 - SAM - SAM & CodeDeploy
-- [ ] 24.7 - SAM - SAM Local Capabilities
-- [ ] 24.8 - SAM - SAM Section Summary
+- [ ] 23.1 - API Gateway - Section Introduction (intro)
+- [ ] 23.2 - API Gateway Overview
+- [ ] 23.3 - API Gateway Basics Hands On
+- [ ] 23.4 - API Gateway Stages and Deployment
+- [ ] 23.5 - API Gateway Stages and Deployment Hands On
+- [ ] 23.6 - API Gateway Stages Configurations Hands On
+- [ ] 23.7 - API Gateway Canary Deployments
+- [ ] 23.8 - API Gateway Canary Deployments Hands On
+- [ ] 23.9 - API Gateway Integration Types & Mappings
+- [ ] 23.10 - API Gateway Mapping Templates Hands On
+- [ ] 23.11 - API Gateway Open API
+- [ ] 23.12 - API Gateway Open API - Hands On
+- [ ] 23.13 - API Gateway Caching
+- [ ] 23.14 - API Gateway Usage Plans & API Keys
+- [ ] 23.15 - API Gateway Monitoring, Logging and Tracing
+- [ ] 23.16 - API Gateway CORS
+- [ ] 23.17 - API Gateway Authentication and Authorization
+- [ ] 23.18 - API Gateway Authentication and Authorization - Hands On
+- [ ] 23.19 - API Gateway REST API vs HTTP API
+- [ ] 23.20 - API Gateway Websocket API
+- [ ] 23.21 - API Gateway - Architecture
+- [ ] API Gateway Quiz (Quiz 20)
 
-## Section 25: AWS CDK - Cloud Development Kit
-- [ ] 25.1 - CDK Overview
-- [ ] 25.2 - CDK Hands On
-- [ ] 25.3 - CDK - Constructs
-- [ ] 25.4 - CDK - Commands & Bootstrapping
-- [ ] 25.5 - CDK - Testing
-- [ ] 25.6 - CDK - Testing Hands On
+## Section 24: AWS CICD: CodeCommit, CodePipeline, CodeBuild, CodeDeploy
 
-## Section 26: Cognito: User Pools, Identity Pools & Sync
-- [ ] 26.1 - Cognito Overview
-- [ ] 26.2 - Cognito User Pools
-- [ ] 26.3 - Cognito User Pools Hands On
-- [ ] 26.4 - Cognito User Pools - App Integration
-- [ ] 26.5 - Cognito Identity Pools
-- [ ] 26.6 - Cognito Identity Pools Hands On
+- [ ] 24.1 - AWS CICD - Section Introduction (intro)
+- [ ] 24.2 - Introduction to CICD in AWS
+- [ ] 24.3 - CodeCommit Overview
+- [ ] 24.4 - CodeCommit Hands On Part I
+- [ ] 24.5 - CodeCommit Hands On Part 2
+- [ ] 24.6 - CodePipeline Overview
+- [ ] 24.7 - CodePipeline - Hands On - Prerequisite
+- [ ] 24.8 - CodePipeline - Hands On
+- [ ] 24.9 - CodeBuild Overview
+- [ ] 24.10 - CodeBuild Hands On Part I
+- [ ] 24.11 - CodeBuild Hands On Part 2
+- [ ] 24.12 - CodeDeploy Overview
+- [ ] 24.13 - CodeDeploy Hands On
+- [ ] 24.14 - CodeDeploy for EC2 and ASG
+- [ ] 24.15 - CodeArtifact - Overview
+- [ ] 24.16 - CodeArtifact - Hands On
+- [ ] 24.17 - CodeGuru - Overview
+- [ ] 24.18 - CodeGuru - Agent Configuration
+- [ ] AWS CICD Quiz (Quiz 21)
 
-## Section 27: Other Serverless: Step Functions & AppSync
-- [ ] 27.1 - Step Functions Overview
-- [ ] 27.2 - Step Functions Hands On
-- [ ] 27.3 - Step Functions - Error Handling
-- [ ] 27.4 - Step Functions - Wait for Task Token
-- [ ] 27.5 - Step Functions - Activity Tasks
-- [ ] 27.6 - Step Functions - Standard vs Express
-- [ ] 27.7 - AppSync Overview
-- [ ] 27.8 - AppSync Hands On
-- [ ] 27.9 - AWS Amplify
+## Section 25: AWS Serverless: SAM - Serverless Application Model
 
-## Section 28: Advanced Identity
-- [ ] 28.1 - STS Overview
-- [ ] 28.2 - Advanced IAM
-- [ ] 28.3 - Granting a User Permissions to Pass a Role to an AWS Service
-- [ ] 28.4 - AWS Directory Services
+- [ ] 25.1 - AWS SAM - Section Introduction (intro)
+- [ ] 25.2 - SAM Overview
+- [ ] 25.3 - SAM - Hands On
+- [ ] 25.4 - SAM with DynamoDB - Hands On
+- [ ] 25.5 - SAM Policy Templates
+- [ ] 25.6 - SAM with CodeDeploy
+- [ ] 25.7 - SAM - Local Capabilities
+- [ ] 25.8 - SAM - Multiple Environments
+- [ ] SAM Quiz (Quiz 22)
 
-## Section 29: AWS Security & Encryption: KMS, SSM Parameter Store, IAM & STS
-- [ ] 29.1 - Encryption 101
-- [ ] 29.2 - KMS Overview
-- [ ] 29.3 - KMS Hands On
-- [ ] 29.4 - KMS Key Rotation
-- [ ] 29.5 - KMS - How API Works
-- [ ] 29.6 - KMS Encryption Patterns and Envelope Encryption
-- [ ] 29.7 - Encryption SDK Overview
-- [ ] 29.8 - SSM Parameter Store Overview
-- [ ] 29.9 - SSM Parameter Store Hands On (CLI)
-- [ ] 29.10 - SSM Parameter Store Hands On (Lambda)
-- [ ] 29.11 - Secrets Manager Overview
-- [ ] 29.12 - Secrets Manager Hands On
-- [ ] 29.13 - SSM Parameter Store vs Secrets Manager
-- [ ] 29.14 - CloudWatch Logs Encryption
-- [ ] 29.15 - CodeBuild Security
-- [ ] 29.16 - Nitro Enclaves
+## Section 26: Cloud Development Kit (CDK)
 
-## Section 30: AWS Other Services
-- [ ] 30.1 - Other Services Overview
-- [ ] 30.2 - SES
-- [ ] 30.3 - Amazon OpenSearch
-- [ ] 30.4 - Amazon Athena
-- [ ] 30.5 - MSK - Amazon Managed Streaming for Apache Kafka
-- [ ] 30.6 - Amazon Certificate Manager (ACM)
-- [ ] 30.7 - Amazon Macie
-- [ ] 30.8 - AWS AppConfig
-- [ ] 30.9 - CloudWatch Evidently
+- [ ] 26.1 - CDK Overview
+- [ ] 26.2 - CDK - Hands On
+- [ ] 26.3 - CDK - Constructs
+- [ ] 26.4 - CDK - Commands & Bootstraping
+- [ ] 26.5 - CDK - Unit Testing
+- [ ] CDK Quiz (Quiz 23)
 
-## Section 31: AWS CI/CD: CodeCommit, CodePipeline, CodeBuild, CodeDeploy
-- [ ] 31.1 - CI/CD Introduction
-- [ ] 31.2 - CodeCommit Overview
-- [ ] 31.3 - CodeCommit Hands On
-- [ ] 31.4 - CodePipeline Overview
-- [ ] 31.5 - CodePipeline Hands On
-- [ ] 31.6 - CodeBuild Overview
-- [ ] 31.7 - CodeBuild Hands On
-- [ ] 31.8 - CodeDeploy Overview
-- [ ] 31.9 - CodeDeploy - EC2 & ASG
-- [ ] 31.10 - CodeDeploy - Lambda & ECS
-- [ ] 31.11 - CodeDeploy Hands On
-- [ ] 31.12 - CodeStar Overview
-- [ ] 31.13 - CodeArtifact
-- [ ] 31.14 - CodeGuru
-- [ ] 31.15 - CodeGuru Hands On
+## Section 27: Cognito: Cognito User Pools, Cognito Identity Pools & Cognito Sync
 
-## Section 32: Exam Preparation
-- [ ] 32.1 - State of Learning Checkpoint
-- [ ] 32.2 - Exam Tips
-- [ ] 32.3 - Exam Walkthrough
+- [ ] 27.1 - Cognito Overview
+- [ ] 27.2 - Cognito User Pools
+- [ ] 27.3 - Cognito User Pools Hands On
+- [ ] 27.4 - Cognito User Pools - Others
+- [ ] 27.5 - Application Load Balancer - User Authentication
+- [ ] 27.6 - Cognito Identity Pools
+- [ ] 27.7 - Cognito Identity Pools Hands On
+- [ ] 27.8 - Cognito User Pools vs Cognito Identity Pools
+- [ ] Cognito Quiz (Quiz 24)
 
-## Section 33: Congratulations
-- [ ] 33.1 - Congratulations!
+## Section 28: Other Serverless: Step Functions & AppSync
+
+- [ ] 28.1 - Step Functions Overview
+- [ ] 28.2 - Step Functions - Hands On
+- [ ] 28.3 - Step Functions - Invoke Lambda - Hands On
+- [ ] 28.4 - Step Functions - Error Handling
+- [ ] 28.5 - Step Functions - Error Handling Hands On
+- [ ] 28.6 - Step Functions - Wait For Task Token
+- [ ] 28.7 - Step Functions - Activity Tasks
+- [ ] 28.8 - Step Functions - Standard vs Express
+- [ ] 28.9 - AppSync Overview
+- [ ] 28.10 - AppSync Hands On
+- [ ] 28.11 - AWS Amplify
+- [ ] 28.12 - AWS Amplify - Hands On
+- [ ] Other Serverless Quiz (Quiz 25)
+
+## Section 29: Advanced Identity
+
+- [ ] 29.1 - STS Overview
+- [ ] 29.2 - Advanced IAM
+- [ ] 29.3 - Granting a User Permissions to Pass a Role to an AWS Service
+- [ ] 29.4 - AWS Directory Services
+- [ ] Advanced IAM Quiz (Quiz 26)
+
+## Section 30: AWS Security & Encryption: KMS, Encryption SDK, SSM Parameter Store, IAM & STS
+
+- [ ] 30.1 - AWS Security - Section Introduction (intro)
+- [ ] 30.2 - Encryption 101
+- [ ] 30.3 - KMS Overview
+- [ ] 30.4 - KMS Hands On w/ CLI
+- [ ] 30.5 - KMS Encryption Patterns and Envelope Encryption
+- [ ] 30.6 - Encryption SDK CLI Hands On
+- [ ] 30.7 - KMS Limits
+- [ ] 30.8 - KMS and AWS Lambda Practice
+- [ ] 30.9 - S3 Bucket Key
+- [ ] 30.10 - KMS Key Policies & IAM Principals
+- [ ] 30.11 - CloudHSM Overview
+- [ ] 30.12 - SSM Parameter Store Overview
+- [ ] 30.13 - SSM Parameter Store Hands On (CLI)
+- [ ] 30.14 - Secrets Manager - Overview
+- [ ] 30.15 - Secrets Manager - Hands On
+- [ ] 30.16 - SSM Parameter Store vs Secrets Manager
+- [ ] 30.17 - CloudFormation - Secrets Manager & SSM Integration
+- [ ] 30.18 - CloudWatch Logs Encryption
+- [ ] 30.19 - CodeBuild Security
+- [ ] 30.20 - AWS Nitro Enclaves
+- [ ] AWS Security & Encryption Quiz (Quiz 27)
+
+## Section 31: AWS Other Services
+
+- [ ] 31.1 - AWS Other Services - Section Introduction (intro)
+- [ ] 31.2 - AWS SES
+- [ ] 31.3 - Amazon OpenSearch Service - Overview
+- [ ] 31.4 - Amazon Athena - Overview
+- [ ] 31.5 - Amazon Athena - Hands On
+- [ ] 31.6 - Amazon MSK - Overview
+- [ ] 31.7 - Amazon Certificate Manager (ACM)
+- [ ] 31.8 - Amazon Certificate Manager (ACM) Hands On
+- [ ] 31.9 - ACM Private CA - Overview
+- [ ] 31.10 - Amazon Macie
+- [ ] 31.11 - AWS AppConfig - Overview
+- [ ] Other Services Quiz (Quiz 28)
+
+## Section 32: AWS Final Cleanup
+
+- [ ] 32.1 - AWS Final Cleanup
+- [ ] 32.2 - Cleanup Checklist (article)
+
+## Section 33: Preparing for the Exam - AWS Certified Developer Associate
+
+- [ ] 33.1 - Exam Preparation - Section Introduction (intro)
+- [ ] 33.2 - State of Learning Checkpoint
+- [ ] 33.3 - Exam Tips - AWS Certified Developer Associate
+- [ ] 33.4 - Exam Walkthrough and Signup
+- [ ] 33.5 - Save 50% on your AWS Exam Cost!
+- [ ] 33.6 - Get an Extra 30 Minutes on your AWS Exam - Non Native English Speakers only
+- [ ] Practice Test (Examen de prueba 1)
+
+## Section 34: Congratulations - AWS Certified Developer Associate
+
+- [ ] 34.1 - AWS Certification Paths
+- [ ] 34.2 - Congratulations
+- [ ] 34.3 - Bonus Lecture (article)
