@@ -118,11 +118,14 @@ A reference for acronyms and English terms encountered in the course, with Spani
 | Failover                  | Conmutación por error                                   |
 | Forecast                  | Pronóstico / previsión                                  |
 | Fault tolerance           | Tolerancia a fallos                                     |
+| Idempotent                | Idempotente (ejecutar 1 o N veces da el mismo resultado) |
 | Inbound / Outbound        | Entrante / Saliente                                     |
 | Inline policy             | Política directa / integrada                            |
 | On-premises               | En las instalaciones (infraestructura local)            |
 | Instrumentation           | Instrumentación (medir rendimiento, diagnosticar errores, escribir trazas) |
 | Redact                    | Censurar / ocultar información sensible                 |
+| Serverless                | Sin servidor (no gestionás servidores — solo tirás código y AWS se encarga) |
+| Shard                     | Fragmento / partición (un carril del stream — procesa una porción del tráfico) |
 | Scale in                  | Reducir / achicar (remover instancias — menos recursos) |
 | Scale out                 | Escalar / crecer (agregar instancias — más recursos)    |
 | Side car                  | Contenedor acompañante (se ejecuta al lado de tu app)   |

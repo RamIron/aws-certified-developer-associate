@@ -4,15 +4,22 @@
 
 | Metric | Value |
 |--------|-------|
-| Total XP | 8700 |
-| Lessons completed | 133 |
-| Perfect quizzes (100%) | 112 |
+| Total XP | 9550 |
+| Lessons completed | 151 |
+| Perfect quizzes (100%) | 122 |
 | Lessons to review | 15 |
 
 ## Session History
 
 | Date | Section | Lesson | XP | Result |
 |------|---------|--------|----|--------|
+| 2026-04-02 | 21 | 21.44 - Lambda Function URL | 75 | PERFECT |
+| 2026-04-01 | 21 | 21.41 - Lambda Versions and Aliases | 75 | PERFECT |
+| 2026-04-01 | 21 | 21.34 - Lambda Concurrency | 100 | PERFECT |
+| 2026-04-01 | 21 | 21.33 - Lambda File Systems Mounting | 75 | PERFECT |
+| 2026-04-01 | 21 | 21.29 - Lambda Function Performance | 75 | PERFECT |
+| 2026-03-31 | 21 | 21.27 - Lambda in VPC | 75 | PERFECT |
+| 2026-03-26 | 21 | 21.26 - Lambda@Edge & CloudFront Functions | 75 | PERFECT |
 | 2026-03-24 | 20 | 20.25 - CloudTrail | 100 | PERFECT |
 | 2026-03-24 | 20 | 20.23 - X-Ray & ECS | 75 | PERFECT |
 | 2026-03-24 | 20 | 20.21 - X-Ray APIs | 75 | PERFECT |
@@ -723,6 +730,73 @@
 - **Status:** PERFECT
 
 ### 18.17 - CloudFormation Custom Resources
+- **Score:** 3/3 (100%)
+- **XP:** +75
+- **Status:** PERFECT
+
+### 21.3 - AWS Lambda Overview
+- **Date:** 2026-03-25
+- **Score:** 4/4 (100%)
+- **XP:** +100
+- **Status:** PERFECT
+
+### 21.7 - Lambda & Application Load Balancer
+- **Date:** 2026-03-25
+- **Score:** 2/2 (100%)
+- **XP:** +50
+- **Status:** PERFECT
+
+### 21.9 - Lambda Asynchronous Invocations & DLQ
+- **Date:** 2026-03-25
+- **Score:** 3/3 (100%)
+- **XP:** +75
+- **Status:** PERFECT
+
+### 21.15 - Lambda Event Source Mapping
+- **Date:** 2026-03-25
+- **Score:** 3/4 (75%)
+- **XP:** +75
+- **Status:** PASSED
+- **Missed:** Q3 - Parallelization: total concurrent Lambdas = shards × parallelization factor (4 shards × 5 = 20, not just 5)
+
+### 21.44 - Lambda Function URL
+- **Date:** 2026-04-02
+- **Score:** 3/3 (100%)
+- **XP:** +75
+- **Status:** PERFECT
+
+### 21.41 - Lambda Versions and Aliases
+- **Date:** 2026-04-01
+- **Score:** 3/3 (100%)
+- **XP:** +75
+- **Status:** PERFECT
+
+### 21.34 - Lambda Concurrency
+- **Date:** 2026-04-01
+- **Score:** 4/4 (100%)
+- **XP:** +100
+- **Status:** PERFECT
+
+### 21.33 - Lambda File Systems Mounting
+- **Date:** 2026-04-01
+- **Score:** 3/3 (100%)
+- **XP:** +75
+- **Status:** PERFECT
+
+### 21.29 - Lambda Function Performance
+- **Date:** 2026-04-01
+- **Score:** 3/3 (100%)
+- **XP:** +75
+- **Status:** PERFECT
+
+### 21.27 - Lambda in VPC
+- **Date:** 2026-03-31
+- **Score:** 3/3 (100%)
+- **XP:** +75
+- **Status:** PERFECT
+
+### 21.26 - Lambda@Edge & CloudFront Functions
+- **Date:** 2026-03-26
 - **Score:** 3/3 (100%)
 - **XP:** +75
 - **Status:** PERFECT

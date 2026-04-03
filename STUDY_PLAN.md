@@ -3,10 +3,10 @@
 ## Overall Progress
 
 ```
-[████████████░░░░░░░░] 20/34 sections | 280/483 lessons (58.0%)
-Total XP: 8700
+[█████████████░░░░░░░] 21/33 sections | 329/483 lessons (68.1%)
+Total XP: 9550
 
-Videos: 257/446 | Articles: 6/8 | Quizzes: 17/29
+Videos: 305 | Quizzes: 18/29 | ⏱ 21h 35min done · 10h 23min left
 ```
 
 > **Note:** The exact number of lessons per section will be filled in as the course progresses.
@@ -332,41 +332,55 @@ Videos: 257/446 | Articles: 6/8 | Quizzes: 17/29
 - [x] Monitoring & Audit Quiz (Quiz 17)
 
 ## Section 21: AWS Serverless: Lambda
-- [ ] 21.1 - Serverless Introduction
-- [ ] 21.2 - Lambda Overview
-- [ ] 21.3 - Lambda Hands On
-- [ ] 21.4 - Lambda - Synchronous Invocations
-- [ ] 21.5 - Lambda - Synchronous Invocations Hands On
-- [ ] 21.6 - Lambda - Asynchronous Invocations
-- [ ] 21.7 - Lambda - Asynchronous Invocations & DLQ Hands On
-- [ ] 21.8 - Lambda - Event Source Mapping
-- [ ] 21.9 - Lambda - Event Source Mapping SQS Hands On
-- [ ] 21.10 - Lambda - Event Source Mapping Scaling
-- [ ] 21.11 - Lambda - Destinations
-- [ ] 21.12 - Lambda - Destinations Hands On
-- [ ] 21.13 - Lambda Permissions - IAM Roles & Resource Policies
-- [ ] 21.14 - Lambda - Environment Variables
-- [ ] 21.15 - Lambda - Environment Variables Hands On
-- [ ] 21.16 - Lambda - Monitoring & X-Ray Tracing
-- [ ] 21.17 - Lambda - Monitoring & X-Ray Tracing Hands On
-- [ ] 21.18 - Lambda@Edge & CloudFront Functions
-- [ ] 21.19 - Lambda in VPC
-- [ ] 21.20 - Lambda Function Performance
-- [ ] 21.21 - Lambda Execution Context
-- [ ] 21.22 - Lambda Layers
-- [ ] 21.23 - Lambda - File Systems Mounting
-- [ ] 21.24 - Lambda Concurrency
-- [ ] 21.25 - Lambda Concurrency Hands On
-- [ ] 21.26 - Lambda External Dependencies
-- [ ] 21.27 - Lambda and CloudFormation
-- [ ] 21.28 - Lambda Container Images
-- [ ] 21.29 - Lambda Versions and Aliases
-- [ ] 21.30 - Lambda Versions and Aliases Hands On
-- [ ] 21.31 - Lambda & CodeDeploy
-- [ ] 21.32 - Lambda - Function URL
-- [ ] 21.33 - Lambda - Function URL Hands On
-- [ ] 21.34 - Lambda - CodeGuru Integration
-- [ ] 21.35 - Lambda Limits & Best Practices
+- [x] 21.1 - AWS Lambda - Section Introduction (intro)
+- [x] 21.2 - Serverless Introduction
+- [x] 21.3 - AWS Lambda Overview
+- [x] 21.4 - AWS Lambda - First Hands On
+- [x] 21.5 - Lambda Synchronous Invocations
+- [x] 21.6 - Lambda Synchronous Invocations Hands On
+- [x] 21.7 - Lambda & Application Load Balancer
+- [x] 21.8 - Lambda & Application Load Balancer Hands On
+- [x] 21.9 - Lambda Asynchronous Invocations & DLQ
+- [x] 21.10 - Lambda Asynchronous Invocations Hands On
+- [x] 21.11 - Lambda & CloudWatch Events / EventBridge
+- [x] 21.12 - Lambda & CloudWatch Events / EventBridge Hands On
+- [x] 21.13 - Lambda & S3 Event Notifications
+- [x] 21.14 - Lambda & S3 Event Notifications - Hands On
+- [x] 21.15 - Lambda Event Source Mapping
+- [x] 21.16 - Lambda Event Source Mapping Hands On (SQS)
+- [x] 21.17 - Lambda Event & Context Objects
+- [x] 21.18 - Lambda Destinations
+- [x] 21.19 - Lambda Destinations Hands On
+- [x] 21.20 - Lambda Permissions - IAM Roles & Resource Policies
+- [x] 21.21 - Lambda Permissions - IAM Roles & Resource Policies - Hands On
+- [x] 21.22 - Lambda Environment Variables
+- [x] 21.23 - Lambda Environment Variables - Hands On
+- [x] 21.24 - Lambda Monitoring & X-Ray Tracing
+- [x] 21.25 - Lambda Monitoring & X-Ray Tracing - Hands On
+- [x] 21.26 - Lambda@Edge & CloudFront Functions (PERFECT 100%)
+- [x] 21.27 - Lambda in VPC (PERFECT 100%)
+- [x] 21.28 - Lambda in VPC - Hands On
+- [x] 21.29 - Lambda Function Performance (PERFECT 100%)
+- [x] 21.30 - Lambda Function Performance - Hands On
+- [x] 21.31 - Lambda Layers
+- [x] 21.32 - Lambda Layers - Hands On
+- [x] 21.33 - Lambda File Systems Mounting
+- [x] 21.34 - Lambda Concurrency (PERFECT 100%)
+- [x] 21.35 - Lambda Concurrency Hands On
+- [x] 21.36 - Lambda External Dependencies
+- [x] 21.37 - Lambda External Dependencies - Hands On
+- [x] 21.38 - Lambda and CloudFormation
+- [x] 21.39 - Lambda and CloudFormation - Hands On
+- [x] 21.40 - Lambda Container Images
+- [x] 21.41 - Lambda Versions and Aliases
+- [x] 21.42 - Lambda Versions and Aliases - Hands On
+- [x] 21.43 - Lambda and CodeDeploy
+- [x] 21.44 - Lambda Function URL
+- [x] 21.45 - Lambda Function URL - Hands On
+- [x] 21.46 - Lambda - CodeGuru Integration
+- [x] 21.47 - Lambda Limits
+- [x] 21.48 - Lambda Best Practices
+- [x] Lambda Quiz (Quiz 18) — pending Udemy attempt
 
 ## Section 22: AWS Serverless: DynamoDB
 - [ ] 22.1 - DynamoDB Overview
