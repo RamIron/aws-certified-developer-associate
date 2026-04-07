@@ -4,15 +4,34 @@
 
 | Metric | Value |
 |--------|-------|
-| Total XP | 9550 |
-| Lessons completed | 151 |
-| Perfect quizzes (100%) | 122 |
+| Total XP | 10975 |
+| Lessons completed | 169 |
+| Perfect quizzes (100%) | 137 |
 | Lessons to review | 15 |
 
 ## Session History
 
 | Date | Section | Lesson | XP | Result |
 |------|---------|--------|----|--------|
+| 2026-04-07 | 23 - API Gateway | 23.7 - API Gateway Canary Deployments | +50 | PERFECT 100% |
+| 2026-04-07 | 23 - API Gateway | 23.4 - API Gateway Stages and Deployment | +50 | REVIEW 67% |
+| 2026-04-06 | 23 - API Gateway | 23.2 - API Gateway Overview | +75 | PASSED 75% |
+| 2026-04-04 | 22 - DynamoDB | DynamoDB Quiz (Quiz 19) - Udemy | — | Completed |
+| 2026-04-04 | 22 - DynamoDB | 22.25 - DynamoDB Security & Other | +100 | PERFECT 100% |
+| 2026-04-04 | 22 - DynamoDB | 22.23 - DynamoDB Patterns with S3 | +75 | PERFECT 100% |
+| 2026-04-04 | 22 - DynamoDB | 22.22 - DynamoDB Write Types | +75 | PERFECT 100% |
+| 2026-04-04 | 22 - DynamoDB | 22.20 - DynamoDB Session State | +75 | PERFECT 100% |
+| 2026-04-04 | 22 - DynamoDB | 22.19 - DynamoDB Transactions | +100 | PERFECT 100% |
+| 2026-04-04 | 22 - DynamoDB | 22.18 - DynamoDB CLI | +75 | PERFECT 100% |
+| 2026-04-04 | 22 - DynamoDB | 22.17 - DynamoDB TTL | +75 | PERFECT 100% |
+| 2026-04-04 | 22 - DynamoDB | 22.15 - DynamoDB Streams | +100 | PERFECT 100% |
+| 2026-04-04 | 22 - DynamoDB | 22.13 - DynamoDB DAX | +75 | PERFECT 100% |
+| 2026-04-04 | 22 - DynamoDB | 22.12 - DynamoDB Optimistic Locking | +75 | PERFECT 100% |
+| 2026-04-04 | 22 - DynamoDB | 22.9 - DynamoDB Indexes (GSI + LSI) | +100 | PERFECT 100% |
+| 2026-04-04 | 22 - DynamoDB | 22.8 - DynamoDB Conditional Writes | +100 | PERFECT 100% |
+| 2026-04-04 | 22 - DynamoDB | 22.6 - DynamoDB Basic Operations | +75 | PERFECT 100% |
+| 2026-04-03 | 22 - DynamoDB | 22.4 - DynamoDB WCU & RCU - Throughput | +75 | PERFECT 100% |
+| 2026-04-03 | 22 | 22.2 - DynamoDB Overview | 75 | PASSED |
 | 2026-04-02 | 21 | 21.44 - Lambda Function URL | 75 | PERFECT |
 | 2026-04-01 | 21 | 21.41 - Lambda Versions and Aliases | 75 | PERFECT |
 | 2026-04-01 | 21 | 21.34 - Lambda Concurrency | 100 | PERFECT |

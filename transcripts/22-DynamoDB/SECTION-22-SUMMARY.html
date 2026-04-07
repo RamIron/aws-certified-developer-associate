@@ -1,0 +1,805 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Section 22 — AWS Serverless: DynamoDB</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap");
+
+      *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+      body {
+        font-family: "Inter", sans-serif;
+        background: #0f172a;
+        color: #e2e8f0;
+        line-height: 1.6;
+        padding: 0 0 64px;
+      }
+
+      /* ── LANGUAGE TOGGLE ── */
+      .lang-es { display: none; }
+      body.es .lang-en { display: none; }
+      body.es .lang-es { display: inline; }
+      body.es .lang-es-block { display: block; }
+      .lang-es-block { display: none; }
+      body.es .lang-en-block { display: none; }
+      .lang-toggle {
+        display: inline-flex; align-items: center; gap: 6px;
+        background: transparent; color: #94a3b8; border: 1px solid #334155;
+        border-radius: 999px; padding: 7px 18px; font-size: 13px; font-weight: 600;
+        cursor: pointer; font-family: "Inter", sans-serif;
+        transition: color 0.2s, border-color 0.2s, background 0.2s; margin-top: 16px;
+      }
+      .lang-toggle:hover { color: #e2e8f0; border-color: #64748b; background: #1e293b; }
+
+      /* ── HERO ── */
+      .hero {
+        background: linear-gradient(135deg, #1e293b 0%, #0f172a 60%, #1a1a2e 100%);
+        border-bottom: 1px solid #334155;
+        padding: 48px 32px 40px; text-align: center;
+      }
+      .hero-eyebrow { font-size: 13px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #f97316; margin-bottom: 12px; }
+      h1 { font-size: clamp(26px,4vw,40px); font-weight: 800; color: #f8fafc; margin-bottom: 8px; letter-spacing: -0.02em; }
+      .hero-subtitle { font-size: 15px; color: #94a3b8; margin-bottom: 20px; font-weight: 400; }
+      .xp-badge { display: inline-flex; align-items: center; gap: 6px; background: linear-gradient(135deg, #f97316, #ea580c); color: #fff; font-size: 13px; font-weight: 700; padding: 8px 18px; border-radius: 999px; }
+
+      .container { max-width: 1100px; margin: 0 auto; padding: 40px 24px 0; }
+
+      /* ── CARDS ── */
+      .card { background: #1e293b; border-radius: 16px; padding: 2rem; margin-bottom: 2rem; border: 1px solid #334155; }
+      .card-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem; }
+      .badge { background: #f97316; color: #0f172a; font-weight: 800; font-size: 13px; padding: 0.25rem 0.65rem; border-radius: 6px; }
+      h2 { font-size: 1.3rem; font-weight: 700; color: #f8fafc; }
+      h3 { font-size: 0.95rem; font-weight: 600; color: #d2d2d2; margin: 1.5rem 0 0.9rem; text-transform: uppercase; letter-spacing: 0.06em; }
+      p { color: #d2d2d2; font-size: 0.9rem; margin-bottom: 0.75rem; }
+      p strong { color: #e2e8f0; }
+
+      /* ── CONCEPT GRID ── */
+      .concept-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap: 0.9rem; }
+      .concept-card { background: #0f172a; border-radius: 12px; padding: 1.1rem 1.2rem; border: 1px solid #1e293b; }
+      .concept-card h4 { font-size: 0.85rem; font-weight: 700; color: #f8fafc; margin-bottom: 0.3rem; }
+      .concept-card p { font-size: 13px; color: #d2d2d2; margin: 0; }
+
+      /* ── CALLOUTS ── */
+      .callout { border-radius: 8px; padding: 0.75rem 1rem; margin: 1rem 0; font-size: 0.85rem; }
+      .callout.warning { background: #451a0322; border: 1px dashed #f97316; color: #fdba74; }
+      .callout.danger  { background: #7f1d1d22; border: 1px solid #dc262688; color: #fca5a5; }
+      .callout.info    { background: #1e3a5f22; border-left: 3px solid #3b82f6; color: #93c5fd; }
+      .callout.success { background: #064e3b22; border-left: 3px solid #10b981; color: #6ee7b7; }
+
+      /* ── CHIPS ── */
+      .chip { font-size: 13px; font-weight: 700; padding: 0.15rem 0.45rem; border-radius: 4px; white-space: nowrap; }
+      .chip.red    { background: #7f1d1d; color: #fca5a5; }
+      .chip.green  { background: #064e3b; color: #6ee7b7; }
+      .chip.yellow { background: #422006; color: #fcd34d; }
+      .chip.blue   { background: #1e3a5f; color: #93c5fd; }
+      .chip.purple { background: #3b1f63; color: #c4b5fd; }
+      .chip.orange { background: #431407; color: #fb923c; }
+
+      /* ── CODE BLOCK ── */
+      .code-block {
+        background: #020617; border-radius: 10px; padding: 1rem 1.25rem;
+        font-family: "Fira Code","Courier New",monospace; font-size: 13px;
+        line-height: 1.9; border: 1px solid #1e293b; overflow-x: auto; margin: 0.75rem 0;
+        white-space: pre;
+      }
+      .ck { color: #60a5fa; } .cv { color: #34d399; } .cs { color: #fb923c; } .cc { color: #334155; }
+
+      /* ── DATA TABLE ── */
+      .data-table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 0.75rem 0; }
+      .data-table th { background: #0f172a; color: #94a3b8; font-weight: 700; text-align: left; padding: 0.55rem 0.9rem; font-size: 12px; text-transform: uppercase; letter-spacing: 0.07em; border-bottom: 1px solid #334155; }
+      .data-table td { padding: 0.55rem 0.9rem; border-bottom: 1px solid #1e293b; color: #d2d2d2; vertical-align: top; }
+      .data-table tr:last-child td { border-bottom: none; }
+      .data-table td strong { color: #f8fafc; }
+      .data-table td code { font-family: "Fira Code",monospace; background: #0f172a; padding: 0.1rem 0.35rem; border-radius: 4px; color: #93c5fd; font-size: 12px; }
+
+      /* ── EXAM TIPS ── */
+      .tips-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(260px,1fr)); gap: 0.7rem; }
+      .tip { background: #0f172a; border-left: 3px solid #f97316; border-radius: 0 8px 8px 0; padding: 0.65rem 1rem; font-size: 0.83rem; }
+      .tip .trigger { color: #64748b; }
+      .tip .arr { color: #334155; margin: 0 0.25rem; }
+      .tip .answer { color: #f8fafc; font-weight: 700; }
+
+      /* ── COMPARE ── */
+      .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 0.75rem 0; }
+      .compare-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin: 0.75rem 0; }
+      .compare-card { background: #0f172a; border-radius: 10px; padding: 1rem; }
+      .compare-card h4 { font-size: 0.82rem; font-weight: 700; margin-bottom: 0.65rem; }
+      .compare-card h4.blue   { color: #60a5fa; }
+      .compare-card h4.green  { color: #34d399; }
+      .compare-card h4.orange { color: #fb923c; }
+      .compare-card h4.purple { color: #c4b5fd; }
+      .compare-card h4.yellow { color: #fcd34d; }
+      .compare-card h4.red    { color: #fca5a5; }
+      .compare-card ul { list-style: none; padding: 0; }
+      .compare-card li { font-size: 13px; color: #d2d2d2; padding: 0.18rem 0 0.18rem 1rem; position: relative; }
+      .compare-card li::before { content: "·"; position: absolute; left: 0; color: #475569; }
+
+      /* ── CARD SUBTITLE ── */
+      .card-subtitle { font-size: 14px; color: #f8fafc; font-style: normal; margin-bottom: 1rem; }
+
+      /* ── VISUAL DIAGRAM ── */
+      .vd { background: #020617; border-radius: 12px; padding: 1.5rem; border: 1px solid #1e293b; margin: 0.75rem 0; position: relative; }
+      .vd-label { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #64748b; margin-bottom: 0.5rem; }
+      .vd-box { border: 1.5px dashed #475569; border-radius: 10px; padding: 1rem; position: relative; }
+      .vd-box-title { position: absolute; top: -9px; left: 14px; background: #020617; padding: 0 8px; font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
+      .vd-box-title.blue   { color: #60a5fa; }
+      .vd-box-title.yellow { color: #fcd34d; }
+      .vd-box-title.green  { color: #34d399; }
+      .vd-box-title.orange { color: #fb923c; }
+      .vd-box-title.red    { color: #fca5a5; }
+      .vd-box-title.purple { color: #c4b5fd; }
+      .vd-node { display: inline-flex; align-items: center; gap: 6px; background: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 6px 14px; font-size: 12px; font-weight: 600; color: #e2e8f0; white-space: nowrap; }
+      .vd-node.orange { border-color: #f9731688; color: #fb923c; }
+      .vd-node.blue   { border-color: #3b82f688; color: #93c5fd; }
+      .vd-node.green  { border-color: #10b98188; color: #6ee7b7; }
+      .vd-node.yellow { border-color: #fcd34d88; color: #fcd34d; }
+      .vd-node.red    { border-color: #f87171aa; color: #fca5a5; }
+      .vd-node.purple { border-color: #a78bfa88; color: #c4b5fd; }
+      .vd-arrow { color: #475569; font-size: 18px; font-weight: 400; line-height: 1; display: inline-flex; align-items: center; padding: 0 4px; }
+      .vd-arrow-label { font-size: 10px; color: #64748b; font-weight: 600; }
+      .vd-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 0.5rem 0; }
+      .vd-col { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+      .vd-gap { height: 8px; }
+      .vd-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 0.75rem; }
+
+      /* ── LEGACY DIAGRAM ── */
+      .diagram {
+        background: #020617; border-radius: 10px; padding: 1.2rem 1.5rem;
+        font-family: "Fira Code","Courier New",monospace; font-size: 12px;
+        line-height: 1.7; border: 1px solid #1e293b; overflow-x: auto; margin: 0.75rem 0;
+        white-space: pre; color: #94a3b8;
+      }
+      .diagram .hl  { color: #f97316; font-weight: 700; }
+      .diagram .hlb { color: #60a5fa; font-weight: 700; }
+      .diagram .hlg { color: #34d399; }
+      .diagram .hlr { color: #fca5a5; }
+      .diagram .hly { color: #fcd34d; }
+
+      /* ── FORMULA ── */
+      .formula-block { background: #020617; border: 1px solid #334155; border-radius: 10px; padding: 1.2rem 1.5rem; margin: 0.75rem 0; }
+      .formula-block .f-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: #64748b; margin-bottom: 0.4rem; font-weight: 600; }
+      .formula-block .f-expr { font-family: "Fira Code",monospace; font-size: 14px; font-weight: 600; color: #f97316; }
+      .formula-block .f-note { font-size: 12px; color: #64748b; margin-top: 4px; }
+
+      @media (max-width: 680px) {
+        body { padding: 1rem; }
+        h1 { font-size: 1.6rem; }
+        .compare, .compare-3 { grid-template-columns: 1fr; }
+        .vd-grid-2 { grid-template-columns: 1fr; }
+      }
+    </style>
+  </head>
+  <body>
+
+    <!-- ═══════════════════ HERO ═══════════════════ -->
+    <div class="hero">
+      <div class="hero-eyebrow">AWS Certified Developer Associate · DVA-C02</div>
+      <h1>Section 22 — AWS Serverless: DynamoDB</h1>
+      <div class="hero-subtitle">
+        <span class="lang-en">25 lessons · All quizzes PERFECT · 1,250 XP earned</span>
+        <span class="lang-es">25 lecciones · Todos los quizzes PERFECTOS · 1,250 XP ganados</span>
+      </div>
+      <div class="xp-badge">+1,250 XP &nbsp;·&nbsp; Section complete ✓</div>
+      <br/>
+      <button class="lang-toggle" id="lang-btn" onclick="toggleLang()">🌐 Español</button>
+    </div>
+
+    <div class="container">
+
+      <!-- ═══════════════════ CARD 1: OVERVIEW ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">1</span>
+          <h2><span class="lang-en">DynamoDB Overview — SQL vs NoSQL</span><span class="lang-es">DynamoDB Overview — SQL vs NoSQL</span></h2>
+        </div>
+        <p class="card-subtitle"><span class="lang-en">Fully managed NoSQL — horizontally scalable, single-digit ms latency, multi-AZ by default</span><span class="lang-es">NoSQL totalmente administrado — escalable horizontalmente, latencia de un solo dígito ms, multi-AZ por defecto</span></p>
+
+        <table class="data-table">
+          <tr><th></th><th>RDBMS (SQL)</th><th>DynamoDB (NoSQL)</th></tr>
+          <tr><td><strong>Schema</strong></td><td><span class="lang-en">Strict, predefined</span><span class="lang-es">Estricto, predefinido</span></td><td><span class="lang-en">Flexible per item</span><span class="lang-es">Flexible por ítem</span></td></tr>
+          <tr><td><strong>Joins</strong></td><td><span class="chip green">Yes</span></td><td><span class="chip red">No</span></td></tr>
+          <tr><td><strong><span class="lang-en">Aggregations</span><span class="lang-es">Agregaciones</span></strong></td><td><span class="chip green">SUM, AVG…</span></td><td><span class="chip red">No</span></td></tr>
+          <tr><td><strong>Scaling</strong></td><td><span class="lang-en">Vertical (bigger machine)</span><span class="lang-es">Vertical (máquina más grande)</span></td><td><span class="chip green"><span class="lang-en">Horizontal (reads + writes)</span><span class="lang-es">Horizontal (lecturas + escrituras)</span></span></td></tr>
+          <tr><td><strong><span class="lang-en">Max item size</span><span class="lang-es">Tamaño máx de ítem</span></strong></td><td>—</td><td><strong>400 KB</strong></td></tr>
+        </table>
+
+        <h3><span class="lang-en">Key Facts</span><span class="lang-es">Datos Clave</span></h3>
+        <div class="concept-grid">
+          <div class="concept-card">
+            <h4>Multi-AZ</h4>
+            <p><span class="lang-en">Replication across AZs <strong>built in</strong> — no config needed</span><span class="lang-es">Replicación multi-AZ <strong>incluida</strong> — sin configuración</span></p>
+          </div>
+          <div class="concept-card">
+            <h4>Latency</h4>
+            <p><span class="lang-en"><strong>Single-digit ms</strong> — fast and consistent</span><span class="lang-es"><strong>Un solo dígito ms</strong> — rápido y consistente</span></p>
+          </div>
+          <div class="concept-card">
+            <h4>Scale</h4>
+            <p><span class="lang-en">Millions req/sec · trillions of rows · hundreds of TB</span><span class="lang-es">Millones req/seg · trillones de filas · cientos de TB</span></p>
+          </div>
+          <div class="concept-card">
+            <h4><span class="lang-en">Table Classes</span><span class="lang-es">Clases de Tabla</span></h4>
+            <p><span class="lang-en"><strong>Standard</strong> and <strong>Infrequent Access (IA)</strong></span><span class="lang-es"><strong>Standard</strong> e <strong>Infrequent Access (IA)</strong></span></p>
+          </div>
+        </div>
+
+        <h3><span class="lang-en">Primary Key Options</span><span class="lang-es">Opciones de Clave Primaria</span></h3>
+        <div class="compare">
+          <div class="compare-card">
+            <h4 class="blue"><span class="lang-en">Option 1 — Partition Key only (Hash)</span><span class="lang-es">Opción 1 — Solo Partition Key (Hash)</span></h4>
+            <ul>
+              <li><span class="lang-en">Must be unique per item</span><span class="lang-es">Debe ser única por ítem</span></li>
+              <li><span class="lang-en">High cardinality required</span><span class="lang-es">Requiere alta cardinalidad</span></li>
+              <li><span class="lang-en">Example: <code>user_id</code> ✅</span><span class="lang-es">Ejemplo: <code>user_id</code> ✅</span></li>
+            </ul>
+          </div>
+          <div class="compare-card">
+            <h4 class="green"><span class="lang-en">Option 2 — Partition Key + Sort Key (Hash + Range)</span><span class="lang-es">Opción 2 — Partition Key + Sort Key</span></h4>
+            <ul>
+              <li><span class="lang-en">Combination must be unique</span><span class="lang-es">La combinación debe ser única</span></li>
+              <li><span class="lang-en">Same PK allowed with different SKs</span><span class="lang-es">Mismo PK con distintos SK</span></li>
+              <li><span class="lang-en">Data grouped by PK, ordered by SK</span><span class="lang-es">Datos agrupados por PK, ordenados por SK</span></li>
+            </ul>
+          </div>
+        </div>
+        <div class="callout info"><span class="lang-en"><strong>Best partition key</strong> = attribute with the most distinct values (highest cardinality). Example: <code>movie_id</code> ✅ vs <code>movie_language</code> ❌ (too few values → hot partition)</span><span class="lang-es"><strong>Mejor partition key</strong> = atributo con más valores distintos (mayor cardinalidad). Ejemplo: <code>movie_id</code> ✅ vs <code>movie_language</code> ❌ (muy pocos valores → hot partition)</span></div>
+      </div>
+
+      <!-- ═══════════════════ CARD 2: CAPACITY MODES ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">2</span>
+          <h2><span class="lang-en">Capacity Modes &amp; Throughput</span><span class="lang-es">Modos de Capacidad y Throughput</span></h2>
+        </div>
+        <p class="card-subtitle"><span class="lang-en">Provisioned vs On-Demand — can switch once every 24 hours</span><span class="lang-es">Provisioned vs On-Demand — se puede cambiar una vez cada 24 horas</span></p>
+
+        <table class="data-table">
+          <tr><th></th><th>Provisioned</th><th>On-Demand</th></tr>
+          <tr><td><strong><span class="lang-en">Planning</span><span class="lang-es">Planificación</span></strong></td><td><span class="lang-en">Set RCU + WCU upfront</span><span class="lang-es">Definir RCU + WCU de antemano</span></td><td><span class="lang-en">None — auto</span><span class="lang-es">Ninguna — auto</span></td></tr>
+          <tr><td><strong>Cost</strong></td><td><span class="lang-en">Pay for provisioned capacity</span><span class="lang-es">Pagás por la capacidad provisionada</span></td><td><span class="lang-en">Pay per request (~2.5× more expensive)</span><span class="lang-es">Pagás por request (~2.5× más caro)</span></td></tr>
+          <tr><td><strong>Throttling</strong></td><td><code>ProvisionedThroughputExceededException</code></td><td><span class="chip green"><span class="lang-en">No throttling</span><span class="lang-es">Sin throttling</span></span></td></tr>
+          <tr><td><strong><span class="lang-en">Unit names</span><span class="lang-es">Nombres de unidades</span></strong></td><td>RCU / WCU</td><td>RRU / WRU <span class="lang-en">(same calculation)</span><span class="lang-es">(mismo cálculo)</span></td></tr>
+          <tr><td><strong><span class="lang-en">Use when</span><span class="lang-es">Usar cuando</span></strong></td><td><span class="lang-en">Predictable, steady traffic</span><span class="lang-es">Tráfico predecible y constante</span></td><td><span class="lang-en">Unknown or unpredictable workloads</span><span class="lang-es">Carga desconocida o impredecible</span></td></tr>
+        </table>
+
+        <div class="callout warning"><span class="lang-en"><strong>Throttling causes:</strong> hot key · hot partition · very large items. <strong>Solutions:</strong> exponential backoff (SDK built-in), better partition key distribution, DAX for read-heavy hot keys.</span><span class="lang-es"><strong>Causas de throttling:</strong> hot key · hot partition · ítems muy grandes. <strong>Soluciones:</strong> exponential backoff (SDK nativo), mejor distribución de partition key, DAX para hot keys de lectura.</span></div>
+      </div>
+
+      <!-- ═══════════════════ CARD 3: WCU & RCU FORMULAS ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">3</span>
+          <h2><span class="lang-en">WCU &amp; RCU Formulas</span><span class="lang-es">Fórmulas de WCU y RCU</span></h2>
+        </div>
+        <p class="card-subtitle"><span class="lang-en">The most calculation-heavy topic in DynamoDB — know all three read modes cold</span><span class="lang-es">El tema con más cálculos en DynamoDB — dominá los tres modos de lectura</span></p>
+
+        <h3>WCU — Write Capacity Unit</h3>
+        <p><span class="lang-en">1 WCU = 1 write/sec for items up to <strong>1 KB</strong> — round UP to nearest 1 KB</span><span class="lang-es">1 WCU = 1 escritura/seg para ítems de hasta <strong>1 KB</strong> — redondear hacia ARRIBA al KB más cercano</span></p>
+        <div class="formula-block">
+          <div class="f-label">WCU</div>
+          <div class="f-expr">WCU = (writes/sec) × ceil(item_KB / 1)</div>
+        </div>
+        <table class="data-table">
+          <tr><th><span class="lang-en">Example</span><span class="lang-es">Ejemplo</span></th><th><span class="lang-en">Calculation</span><span class="lang-es">Cálculo</span></th><th><span class="lang-en">Result</span><span class="lang-es">Resultado</span></th></tr>
+          <tr><td><span class="lang-en">10 writes/sec, 2 KB each</span><span class="lang-es">10 escrituras/seg, 2 KB</span></td><td>10 × 2</td><td><strong>20 WCU</strong></td></tr>
+          <tr><td><span class="lang-en">6 writes/sec, 4.5 KB each</span><span class="lang-es">6 escrituras/seg, 4.5 KB</span></td><td>6 × 5 <span class="lang-en">(4.5 → rounds up to 5)</span><span class="lang-es">(4.5 → sube a 5)</span></td><td><strong>30 WCU</strong></td></tr>
+          <tr><td><span class="lang-en">120 writes/min, 2 KB each</span><span class="lang-es">120 escrituras/min, 2 KB</span></td><td>(120/60) × 2 = 2 × 2</td><td><strong>4 WCU</strong></td></tr>
+        </table>
+
+        <h3>RCU — Read Capacity Unit</h3>
+        <p><span class="lang-en">1 RCU = 1 strongly consistent read/sec OR 2 eventually consistent reads/sec, for items up to <strong>4 KB</strong> — round UP to nearest 4 KB</span><span class="lang-es">1 RCU = 1 lectura strongly consistent/seg O 2 eventually consistent/seg, para ítems de hasta <strong>4 KB</strong> — redondear al múltiplo de 4 KB más cercano hacia ARRIBA</span></p>
+
+        <div class="vd-grid-2">
+          <div class="formula-block">
+            <div class="f-label">Strongly Consistent</div>
+            <div class="f-expr">RCU = reads × ceil(KB / 4)</div>
+          </div>
+          <div class="formula-block">
+            <div class="f-label">Eventually Consistent (default)</div>
+            <div class="f-expr">RCU = (reads / 2) × ceil(KB / 4)</div>
+          </div>
+        </div>
+        <div class="formula-block">
+          <div class="f-label">Transactional (2× — prepare + commit phases)</div>
+          <div class="f-expr">RCU = (reads × 2) × ceil(KB / 4)</div>
+          <div class="f-note">Transactional WCU: WCU = (writes × 2) × ceil(KB / 1)</div>
+        </div>
+
+        <div class="callout info"><strong><span class="lang-en">Worked example — 8 reads/sec, 6 KB items</span><span class="lang-es">Ejemplo — 8 lecturas/seg, ítems de 6 KB</span>:</strong> <span class="lang-en">6 KB rounds UP to <strong>8 KB</strong> (nearest multiple of 4)</span><span class="lang-es">6 KB sube a <strong>8 KB</strong> (múltiplo de 4 más cercano)</span></div>
+        <table class="data-table">
+          <tr><th>Mode</th><th><span class="lang-en">Calculation</span><span class="lang-es">Cálculo</span></th><th><span class="lang-en">Result</span><span class="lang-es">Resultado</span></th></tr>
+          <tr><td>Strongly Consistent</td><td>8 × (8/4) = 8 × 2</td><td><strong>16 RCU</strong></td></tr>
+          <tr><td>Eventually Consistent</td><td>(8/2) × (8/4) = 4 × 2</td><td><strong>8 RCU</strong></td></tr>
+          <tr><td>Transactional</td><td>(8 × 2) × (8/4) = 16 × 2</td><td><strong>32 RCU</strong></td></tr>
+        </table>
+      </div>
+
+      <!-- ═══════════════════ CARD 4: WRITE & READ APIs ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">4</span>
+          <h2><span class="lang-en">Write &amp; Read APIs</span><span class="lang-es">APIs de Escritura y Lectura</span></h2>
+        </div>
+        <p class="card-subtitle"><span class="lang-en">Know the difference between full-replace and partial-update, and when FilterExpression saves you nothing</span><span class="lang-es">Conocé la diferencia entre reemplazo total y actualización parcial, y cuándo FilterExpression no ahorra nada</span></p>
+
+        <h3><span class="lang-en">Write APIs</span><span class="lang-es">APIs de escritura</span></h3>
+        <table class="data-table">
+          <tr><th>API</th><th><span class="lang-en">Behavior</span><span class="lang-es">Comportamiento</span></th><th><span class="lang-en">Key detail</span><span class="lang-es">Detalle clave</span></th></tr>
+          <tr><td><code>PutItem</code></td><td><span class="lang-en">Creates OR <strong>fully replaces</strong> item with same PK</span><span class="lang-es">Crea O <strong>reemplaza completamente</strong> el ítem con el mismo PK</span></td><td><span class="lang-en">Old attributes not in new item are <strong>deleted</strong></span><span class="lang-es">Atributos del ítem viejo no incluidos en el nuevo se <strong>eliminan</strong></span></td></tr>
+          <tr><td><code>UpdateItem</code></td><td><span class="lang-en">Edits specific attributes only</span><span class="lang-es">Edita solo atributos específicos</span></td><td><span class="lang-en">Untouched attributes preserved (partial update)</span><span class="lang-es">Atributos no tocados se preservan (actualización parcial)</span></td></tr>
+          <tr><td><code>DeleteItem</code></td><td><span class="lang-en">Deletes a single item</span><span class="lang-es">Elimina un único ítem</span></td><td><span class="lang-en">Supports conditional delete</span><span class="lang-es">Soporta delete condicional</span></td></tr>
+          <tr><td><code>DeleteTable</code></td><td><span class="lang-en">Drops entire table instantly</span><span class="lang-es">Elimina toda la tabla al instante</span></td><td><span class="chip green"><span class="lang-en">Fastest + cheapest way to wipe all data</span><span class="lang-es">Forma más rápida y barata de borrar todo</span></span></td></tr>
+          <tr><td><code>BatchWriteItem</code></td><td><span class="lang-en">Up to 25 PutItem + DeleteItem</span><span class="lang-es">Hasta 25 PutItem + DeleteItem</span></td><td>16 MB total · <span class="chip red"><span class="lang-en">No UpdateItem</span></span></td></tr>
+        </table>
+
+        <h3><span class="lang-en">Read APIs</span><span class="lang-es">APIs de lectura</span></h3>
+        <table class="data-table">
+          <tr><th>API</th><th><span class="lang-en">Returns</span><span class="lang-es">Retorna</span></th><th><span class="lang-en">Key detail</span><span class="lang-es">Detalle clave</span></th></tr>
+          <tr><td><code>GetItem</code></td><td><span class="lang-en">Exactly 1 item by PK</span><span class="lang-es">Exactamente 1 ítem por PK</span></td><td><span class="lang-en">Returns 0 or 1 item only. <code>ConsistentRead = True</code> → strongly consistent</span><span class="lang-es">Retorna 0 o 1 ítem. <code>ConsistentRead = True</code> → strongly consistent</span></td></tr>
+          <tr><td><code>Query</code></td><td><span class="lang-en">Items for a specific PK</span><span class="lang-es">Ítems de un PK específico</span></td><td><span class="lang-en">Optional SK filter. FilterExpression after keys. Up to 1 MB.</span><span class="lang-es">Filtro opcional por SK. FilterExpression después de lectura. Hasta 1 MB.</span></td></tr>
+          <tr><td><code>Scan</code></td><td><span class="lang-en">Entire table</span><span class="lang-es">Toda la tabla</span></td><td><span class="chip red"><span class="lang-en">Very inefficient</span><span class="lang-es">Muy ineficiente</span></span> <span class="lang-en">— use only for export/analytics</span><span class="lang-es">— usar solo para exportación/analítica</span></td></tr>
+          <tr><td><code>BatchGetItem</code></td><td><span class="lang-en">Up to 100 items</span><span class="lang-es">Hasta 100 ítems</span></td><td><span class="lang-en">16 MB total. Across multiple tables.</span><span class="lang-es">16 MB total. Desde múltiples tablas.</span></td></tr>
+        </table>
+
+        <div class="callout danger"><span class="lang-en"><strong>FilterExpression does NOT reduce RCU.</strong> Items are read first, then filtered before sending the response. You pay for all reads regardless. Cannot filter on key attributes (PK or SK).</span><span class="lang-es"><strong>FilterExpression NO reduce los RCU.</strong> Los ítems se leen primero, luego se filtran antes de enviar la respuesta. Pagás por todas las lecturas igual. No se puede filtrar por atributos clave (PK o SK).</span></div>
+      </div>
+
+      <!-- ═══════════════════ CARD 5: CONDITIONAL WRITES ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">5</span>
+          <h2><span class="lang-en">Conditional Writes &amp; Optimistic Locking</span><span class="lang-es">Escrituras Condicionales y Bloqueo Optimista</span></h2>
+        </div>
+        <p class="card-subtitle"><span class="lang-en">Guard writes with conditions — and use version attributes to prevent lost updates</span><span class="lang-es">Protegé las escrituras con condiciones — y usá atributos de versión para evitar actualizaciones perdidas</span></p>
+
+        <h3>ConditionExpression</h3>
+        <p><span class="lang-en">Evaluated before the write. If false → write rejected with <code>ConditionalCheckFailedException</code>. Applies to: PutItem · UpdateItem · DeleteItem · BatchWriteItem</span><span class="lang-es">Se evalúa antes de la escritura. Si es falsa → escritura rechazada con <code>ConditionalCheckFailedException</code>. Aplica a: PutItem · UpdateItem · DeleteItem · BatchWriteItem</span></p>
+
+        <table class="data-table">
+          <tr><th><span class="lang-en">Condition</span><span class="lang-es">Condición</span></th><th><span class="lang-en">Description</span><span class="lang-es">Descripción</span></th></tr>
+          <tr><td><code>attribute_exists(attr)</code></td><td><span class="lang-en">Succeeds if attribute exists</span><span class="lang-es">Éxito si el atributo existe</span></td></tr>
+          <tr><td><code>attribute_not_exists(attr)</code></td><td><span class="lang-en">Succeeds if attribute does NOT exist</span><span class="lang-es">Éxito si el atributo NO existe</span></td></tr>
+          <tr><td><code>contains(attr, value)</code></td><td><span class="lang-en">String or set contains value</span><span class="lang-es">String o set contiene el valor</span></td></tr>
+          <tr><td><code>begins_with(attr, prefix)</code></td><td><span class="lang-en">String starts with prefix</span><span class="lang-es">String empieza con prefijo</span></td></tr>
+          <tr><td><code>IN</code>, <code>between :a and :b</code></td><td><span class="lang-en">Value range / list checks</span><span class="lang-es">Rango de valor / lista</span></td></tr>
+          <tr><td><code>=</code>, <code>&lt;&gt;</code>, <code>&lt;</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>&gt;=</code></td><td><span class="lang-en">Comparisons</span><span class="lang-es">Comparaciones</span></td></tr>
+        </table>
+
+        <div class="callout success"><span class="lang-en"><strong>Safe upsert pattern:</strong> <code>PutItem</code> with <code>attribute_not_exists(pk)</code> — only writes if item doesn't exist. ConditionalCheckFailedException if it already does.</span><span class="lang-es"><strong>Patrón safe upsert:</strong> <code>PutItem</code> con <code>attribute_not_exists(pk)</code> — solo escribe si el ítem no existe. ConditionalCheckFailedException si ya existe.</span></div>
+
+        <h3><span class="lang-en">FilterExpression vs ConditionExpression</span><span class="lang-es">FilterExpression vs ConditionExpression</span></h3>
+        <table class="data-table">
+          <tr><th></th><th>FilterExpression</th><th>ConditionExpression</th></tr>
+          <tr><td><strong>Side</strong></td><td><span class="lang-en">Read operations (Query, Scan)</span><span class="lang-es">Operaciones de lectura (Query, Scan)</span></td><td><span class="lang-en">Write operations (Put, Update, Delete)</span><span class="lang-es">Operaciones de escritura (Put, Update, Delete)</span></td></tr>
+          <tr><td><strong>Purpose</strong></td><td><span class="lang-en">Filter results returned to client</span><span class="lang-es">Filtrar resultados al cliente</span></td><td><span class="lang-en">Decide if the write should happen</span><span class="lang-es">Decidir si la escritura debe ocurrir</span></td></tr>
+          <tr><td><strong>RCU effect</strong></td><td><span class="chip red"><span class="lang-en">None — reads happen first</span><span class="lang-es">Ninguno — lecturas ocurren primero</span></span></td><td><span class="lang-en">N/A (write side)</span><span class="lang-es">N/A (lado de escritura)</span></td></tr>
+        </table>
+
+        <h3><span class="lang-en">Optimistic Locking</span><span class="lang-es">Bloqueo Optimista</span></h3>
+        <p><span class="lang-en">Add a <code>version</code> attribute to each item. Write with condition <code>version = &lt;version you read&gt;</code>. If someone else modified it first → version mismatch → <code>ConditionalCheckFailedException</code> → re-read and retry.</span><span class="lang-es">Agregá un atributo <code>version</code> a cada ítem. Escribí con condición <code>version = &lt;version que leíste&gt;</code>. Si alguien más lo modificó antes → versión no coincide → <code>ConditionalCheckFailedException</code> → volver a leer y reintentar.</span></p>
+        <div class="diagram"><span class="hlg">Item:</span> { user_id: "u1", name: "Bob", <span class="hl">version: 1</span> }
+
+Client 1: SET name = "John"  IF version = 1  <span class="hlg">✅ wins  → version becomes 2</span>
+Client 2: SET name = "Lisa"  IF version = 1  <span class="hlr">❌ ConditionalCheckFailedException</span>
+                                               <span class="cc">→ must re-read (version=2) and retry</span></div>
+        <div class="callout info"><span class="lang-en">DynamoDB supports <strong>optimistic locking only</strong> — no pessimistic locking (no blocking locks).</span><span class="lang-es">DynamoDB solo soporta <strong>bloqueo optimista</strong> — no hay bloqueo pesimista.</span></div>
+      </div>
+
+      <!-- ═══════════════════ CARD 6: INDEXES ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">6</span>
+          <h2><span class="lang-en">Indexes — LSI vs GSI</span><span class="lang-es">Índices — LSI vs GSI</span></h2>
+        </div>
+        <p class="card-subtitle"><span class="lang-en">LSI shares capacity, GSI owns it — and GSI throttling can silently kill your main table</span><span class="lang-es">LSI comparte capacidad, GSI la tiene propia — y el throttling de GSI puede matar silenciosamente tu tabla principal</span></p>
+
+        <table class="data-table">
+          <tr><th></th><th>LSI — Local Secondary Index</th><th>GSI — Global Secondary Index</th></tr>
+          <tr><td><strong>Partition key</strong></td><td><span class="lang-en">Same as base table</span><span class="lang-es">Igual a la tabla base</span></td><td><span class="chip blue"><span class="lang-en">Different from base table</span><span class="lang-es">Diferente a la tabla base</span></span></td></tr>
+          <tr><td><strong>Sort key</strong></td><td><span class="lang-en">Different from base table</span><span class="lang-es">Diferente a la tabla base</span></td><td><span class="lang-en">Optional, different</span><span class="lang-es">Opcional, diferente</span></td></tr>
+          <tr><td><strong><span class="lang-en">Created when</span><span class="lang-es">Creado cuándo</span></strong></td><td><span class="chip red"><span class="lang-en">Table creation ONLY</span><span class="lang-es">Solo al crear la tabla</span></span></td><td><span class="chip green"><span class="lang-en">Anytime (add / modify after creation)</span><span class="lang-es">Cualquier momento</span></span></td></tr>
+          <tr><td><strong>Capacity</strong></td><td><span class="lang-en">Shares main table RCU/WCU</span><span class="lang-es">Comparte RCU/WCU de la tabla principal</span></td><td><span class="lang-en">Own provisioned RCU/WCU</span><span class="lang-es">RCU/WCU propio provisionado</span></td></tr>
+          <tr><td><strong>Max per table</strong></td><td>5</td><td>20</td></tr>
+          <tr><td><strong>Throttling</strong></td><td><span class="chip green"><span class="lang-en">No extra concern</span><span class="lang-es">Sin preocupación adicional</span></span></td><td><span class="chip red"><span class="lang-en">GSI throttle → main table throttle ⚠️</span><span class="lang-es">Throttle GSI → throttle tabla principal ⚠️</span></span></td></tr>
+        </table>
+
+        <div class="callout danger"><span class="lang-en"><strong>GSI Throttling Trap ⚠️ —</strong> If GSI WCU is too low → both GSI AND main table are throttled, even if the main table has plenty of WCU left. Always provision enough WCU on your GSIs.</span><span class="lang-es"><strong>Trampa GSI ⚠️ —</strong> Si el WCU del GSI es muy bajo → tanto el GSI como la tabla principal hacen throttling, incluso si la tabla principal tiene WCU sobrante. Siempre provisioná suficiente WCU en los GSIs.</span></div>
+
+        <div class="compare">
+          <div class="compare-card">
+            <h4 class="blue">LSI <span class="lang-en">Example</span><span class="lang-es">Ejemplo</span></h4>
+            <ul>
+              <li>Base: PK=user_id, SK=game_id</li>
+              <li>LSI: PK=user_id, SK=game_timestamp</li>
+              <li><span class="lang-en">"All games for user X between dates A–B"</span><span class="lang-es">"Todos los juegos del usuario X entre fechas A–B"</span></li>
+            </ul>
+          </div>
+          <div class="compare-card">
+            <h4 class="green">GSI <span class="lang-en">Example</span><span class="lang-es">Ejemplo</span></h4>
+            <ul>
+              <li>Base: PK=user_id, SK=game_id</li>
+              <li>GSI: PK=game_id, SK=game_timestamp</li>
+              <li><span class="lang-en">"Who played game X and when?"</span><span class="lang-es">"¿Quién jugó el juego X y cuándo?"</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════ CARD 7: DAX ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">7</span>
+          <h2><span class="lang-en">DAX — DynamoDB Accelerator</span><span class="lang-es">DAX — DynamoDB Accelerator</span></h2>
+        </div>
+        <p class="card-subtitle"><span class="lang-en">In-memory cache — microsecond latency, no code changes, solves hot key problems</span><span class="lang-es">Caché en memoria — latencia de microsegundos, sin cambios de código, resuelve problemas de hot key</span></p>
+
+        <div class="vd">
+          <div class="vd-label"><span class="lang-en">DAX Architecture</span><span class="lang-es">Arquitectura DAX</span></div>
+          <div class="vd-row">
+            <div class="vd-node">Application</div>
+            <div class="vd-arrow">→</div>
+            <div class="vd-node orange">DAX Cluster<br><small style="font-size:10px;opacity:.7"><span class="lang-en">min 3 nodes · max 10 · Multi-AZ</span><span class="lang-es">mín 3 nodos · máx 10 · Multi-AZ</span></small></div>
+            <div class="vd-arrow">→</div>
+            <div class="vd-arrow-label"><span class="lang-en">cache miss only</span><span class="lang-es">solo cache miss</span></div>
+            <div class="vd-arrow">→</div>
+            <div class="vd-node blue">DynamoDB<br><small style="font-size:10px;opacity:.7">single-digit ms</small></div>
+          </div>
+          <div class="vd-row" style="margin-top:4px">
+            <div style="font-size:11px;color:#34d399;padding-left:4px"><span class="lang-en">↑ Cache hit: microsecond latency — same API, no code changes</span><span class="lang-es">↑ Cache hit: latencia de microsegundos — misma API, sin cambios de código</span></div>
+          </div>
+        </div>
+
+        <h3>DAX vs ElastiCache</h3>
+        <table class="data-table">
+          <tr><th></th><th>DAX</th><th>ElastiCache</th></tr>
+          <tr><td><strong><span class="lang-en">Caches</span><span class="lang-es">Cachea</span></strong></td><td><span class="lang-en">Raw items / query results</span><span class="lang-es">Ítems crudos / resultados de query</span></td><td><span class="lang-en">Aggregated / computed results</span><span class="lang-es">Resultados agregados / computados</span></td></tr>
+          <tr><td><strong>Integration</strong></td><td><span class="chip green"><span class="lang-en">Transparent — same DynamoDB API</span><span class="lang-es">Transparente — misma API de DynamoDB</span></span></td><td><span class="lang-en">Manual — app manages explicitly</span><span class="lang-es">Manual — la app lo gestiona explícitamente</span></td></tr>
+          <tr><td><strong><span class="lang-en">Use case</span><span class="lang-es">Caso de uso</span></strong></td><td><span class="lang-en">Hot key relief, read-heavy tables</span><span class="lang-es">Alivio de hot key, tablas con muchas lecturas</span></td><td><span class="lang-en">Results of expensive computations</span><span class="lang-es">Resultados de cómputos costosos</span></td></tr>
+          <tr><td><strong>Default TTL</strong></td><td>5 minutes</td><td><span class="lang-en">Configurable</span><span class="lang-es">Configurable</span></td></tr>
+        </table>
+        <div class="callout info"><span class="lang-en"><strong>They can work together:</strong> DAX caches raw items; ElastiCache caches the computed aggregation (e.g. sum of 10,000 scanned items).</span><span class="lang-es"><strong>Pueden usarse juntos:</strong> DAX cachea ítems crudos; ElastiCache cachea la agregación computada (ej: suma de 10,000 ítems escaneados).</span></div>
+      </div>
+
+      <!-- ═══════════════════ CARD 8: STREAMS ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">8</span>
+          <h2><span class="lang-en">DynamoDB Streams</span><span class="lang-es">DynamoDB Streams</span></h2>
+        </div>
+        <p class="card-subtitle"><span class="lang-en">Ordered stream of item-level changes — 24h retention, auto-sharded, three consumer options</span><span class="lang-es">Stream ordenado de cambios a nivel de ítem — retención 24h, auto-shardado, tres opciones de consumidor</span></p>
+
+        <h3><span class="lang-en">Stream View Types</span><span class="lang-es">Tipos de Vista de Stream</span></h3>
+        <table class="data-table">
+          <tr><th>Type</th><th><span class="lang-en">Included in each record</span><span class="lang-es">Incluido en cada registro</span></th></tr>
+          <tr><td><code>KEYS_ONLY</code></td><td><span class="lang-en">Key attributes only</span><span class="lang-es">Solo atributos clave</span></td></tr>
+          <tr><td><code>NEW_IMAGE</code></td><td><span class="lang-en">Entire item <strong>after</strong> the change</span><span class="lang-es">Ítem completo <strong>después</strong> del cambio</span></td></tr>
+          <tr><td><code>OLD_IMAGE</code></td><td><span class="lang-en">Entire item <strong>before</strong> the change</span><span class="lang-es">Ítem completo <strong>antes</strong> del cambio</span></td></tr>
+          <tr><td><code>NEW_AND_OLD_IMAGES</code></td><td><span class="lang-en">Both old + new — see <strong>exactly what changed</strong></span><span class="lang-es">Ambas versiones — ver <strong>exactamente qué cambió</strong></span></td></tr>
+        </table>
+
+        <h3><span class="lang-en">Architecture — Consumers</span><span class="lang-es">Arquitectura — Consumidores</span></h3>
+        <div class="vd">
+          <div class="vd-label">DynamoDB Streams</div>
+          <div class="vd-row">
+            <div class="vd-node orange">DynamoDB Table<br><small style="font-size:10px;opacity:.7">CREATE · UPDATE · DELETE</small></div>
+            <div class="vd-arrow">→</div>
+            <div class="vd-node purple">DynamoDB Stream<br><small style="font-size:10px;opacity:.7"><span class="lang-en">24h retention · auto-sharded</span><span class="lang-es">Retención 24h · auto-shardado</span></small></div>
+          </div>
+          <div class="vd-gap"></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.75rem;margin-top:0.5rem">
+            <div class="vd-box">
+              <div class="vd-box-title blue">Consumer 1</div>
+              <div class="vd-row" style="margin-top:6px">
+                <div class="vd-node blue" style="font-size:11px">Kinesis Data Streams</div>
+              </div>
+              <div style="font-size:11px;color:#64748b;margin-top:6px"><span class="lang-en">→ Firehose → S3 / Redshift / OpenSearch</span><span class="lang-es">→ Firehose → S3 / Redshift / OpenSearch</span></div>
+            </div>
+            <div class="vd-box">
+              <div class="vd-box-title green">Consumer 2</div>
+              <div class="vd-row" style="margin-top:6px">
+                <div class="vd-node green" style="font-size:11px">AWS Lambda</div>
+              </div>
+              <div style="font-size:11px;color:#64748b;margin-top:6px"><span class="lang-en">Event Source Mapping (polls) · synchronous · batched</span><span class="lang-es">Event Source Mapping (polls) · síncrono · por lotes</span></div>
+            </div>
+            <div class="vd-box">
+              <div class="vd-box-title yellow">Consumer 3</div>
+              <div class="vd-row" style="margin-top:6px">
+                <div class="vd-node yellow" style="font-size:11px">KCL App (EC2)</div>
+              </div>
+              <div style="font-size:11px;color:#64748b;margin-top:6px"><span class="lang-en">Same API as Kinesis — custom processing</span><span class="lang-es">Misma API que Kinesis — procesamiento custom</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout warning"><span class="lang-en"><strong>Enabling Streams does NOT backfill past changes</strong> — only new modifications appear from the moment you enable it.</span><span class="lang-es"><strong>Habilitar Streams NO retroalimenta cambios pasados</strong> — solo aparecen modificaciones nuevas desde el momento en que lo habilitás.</span></div>
+      </div>
+
+      <!-- ═══════════════════ CARD 9: TTL + CLI + TRANSACTIONS ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">9</span>
+          <h2>TTL · CLI Pagination · Transactions</h2>
+        </div>
+        <p class="card-subtitle"><span class="lang-en">Three distinct exam topics often tested in isolation</span><span class="lang-es">Tres temas de examen distintos que suelen testearse por separado</span></p>
+
+        <h3>TTL — Time To Live</h3>
+        <div class="concept-grid">
+          <div class="concept-card">
+            <h4>Setup</h4>
+            <p><span class="lang-en">Attribute of type <strong>Number</strong> (Unix Epoch timestamp). Free — no WCU charged.</span><span class="lang-es">Atributo de tipo <strong>Number</strong> (Unix Epoch timestamp). Gratis — no consume WCU.</span></p>
+          </div>
+          <div class="concept-card">
+            <h4>Delay</h4>
+            <p><span class="lang-en">Deletion happens within <strong>48 hours</strong> of expiration (not instant).</span><span class="lang-es">La eliminación ocurre en un máximo de <strong>48 horas</strong> desde la expiración (no es instantáneo).</span></p>
+          </div>
+          <div class="concept-card">
+            <h4><span class="lang-en">Visibility</span><span class="lang-es">Visibilidad</span></h4>
+            <p><span class="lang-en">Expired items still appear in reads until deleted — <strong>filter client-side</strong>.</span><span class="lang-es">Los ítems expirados siguen apareciendo en lecturas hasta ser eliminados — <strong>filtrar del lado del cliente</strong>.</span></p>
+          </div>
+          <div class="concept-card">
+            <h4>Streams</h4>
+            <p><span class="lang-en">TTL deletes appear in DynamoDB Streams → <strong>recoverable</strong>. Also removed from LSIs/GSIs automatically.</span><span class="lang-es">Los deletes de TTL aparecen en Streams → <strong>recuperables</strong>. También se eliminan de LSIs/GSIs automáticamente.</span></p>
+          </div>
+        </div>
+
+        <h3>CLI Pagination</h3>
+        <table class="data-table">
+          <tr><th>Parameter</th><th><span class="lang-en">What it does</span><span class="lang-es">Qué hace</span></th><th>NextToken?</th></tr>
+          <tr><td><code>--page-size</code></td><td><span class="lang-en">Smaller internal API calls — avoids timeouts. Still returns <strong>all</strong> items.</span><span class="lang-es">Llamadas internas más pequeñas — evita timeouts. Igual retorna <strong>todos</strong> los ítems.</span></td><td><span class="chip red">No</span></td></tr>
+          <tr><td><code>--max-items</code></td><td><span class="lang-en">Limits how many items returned to you — true pagination.</span><span class="lang-es">Limita cuántos ítems se retornan — paginación real.</span></td><td><span class="chip green">Yes</span></td></tr>
+          <tr><td><code>--starting-token</code></td><td><span class="lang-en">Continue from a NextToken value.</span><span class="lang-es">Continuar desde un valor NextToken.</span></td><td><span class="lang-en">Until exhausted</span><span class="lang-es">Hasta que se acabe</span></td></tr>
+        </table>
+
+        <h3>Transactions — ACID</h3>
+        <p><span class="lang-en">All-or-nothing operations across one or more items/tables. Two APIs: <code>TransactGetItems</code> (read) and <code>TransactWriteItems</code> (write).</span><span class="lang-es">Operaciones todo-o-nada en uno o más ítems/tablas. Dos APIs: <code>TransactGetItems</code> (lectura) y <code>TransactWriteItems</code> (escritura).</span></p>
+        <div class="callout danger"><span class="lang-en"><strong>Cost: always 2× WCU and 2× RCU</strong> — two internal phases: Prepare (validate + reserve) + Commit (apply). Use Transactional RCU formula: <code>(reads × 2) × ceil(KB / 4)</code></span><span class="lang-es"><strong>Costo: siempre 2× WCU y 2× RCU</strong> — dos fases internas: Prepare (validar + reservar) + Commit (aplicar). Usá la fórmula transaccional: <code>(reads × 2) × ceil(KB / 4)</code></span></div>
+      </div>
+
+      <!-- ═══════════════════ CARD 10: SESSION STATE + WRITE TYPES ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">10</span>
+          <h2><span class="lang-en">Session State · Write Types · Sharding</span><span class="lang-es">Estado de Sesión · Tipos de Escritura · Sharding</span></h2>
+        </div>
+        <p class="card-subtitle"><span class="lang-en">Three architecture patterns tested frequently on the exam</span><span class="lang-es">Tres patrones de arquitectura evaluados frecuentemente en el examen</span></p>
+
+        <h3><span class="lang-en">Session State — Service Comparison</span><span class="lang-es">Estado de Sesión — Comparación de Servicios</span></h3>
+        <table class="data-table">
+          <tr><th>Service</th><th><span class="lang-en">Shared?</span><span class="lang-es">¿Compartido?</span></th><th><span class="lang-en">Best for</span><span class="lang-es">Mejor para</span></th></tr>
+          <tr><td><strong>DynamoDB</strong></td><td><span class="chip green">Yes</span></td><td><span class="lang-en">"serverless" / "auto-scaling" session store</span><span class="lang-es">"serverless" / "auto-scaling" session store</span></td></tr>
+          <tr><td><strong>ElastiCache</strong></td><td><span class="chip green">Yes</span></td><td><span class="lang-en">"in-memory" / "fastest" session store</span><span class="lang-es">"in-memory" / "más rápido" session store</span></td></tr>
+          <tr><td><strong>EFS</strong></td><td><span class="chip green">Yes</span></td><td><span class="lang-en">File-based session sharing for EC2</span><span class="lang-es">Sesiones basadas en archivos para EC2</span></td></tr>
+          <tr><td><strong>EBS / Instance Store</strong></td><td><span class="chip red">No</span></td><td><span class="lang-en">Local only — cannot share across instances ❌</span><span class="lang-es">Solo local — no se puede compartir entre instancias ❌</span></td></tr>
+          <tr><td><strong>S3</strong></td><td><span class="chip yellow"><span class="lang-en">Yes (but slow)</span><span class="lang-es">Sí (pero lento)</span></span></td><td><span class="lang-en">Not suitable for session state ❌</span><span class="lang-es">No apto para estado de sesión ❌</span></td></tr>
+        </table>
+
+        <h3><span class="lang-en">Write Types</span><span class="lang-es">Tipos de Escritura</span></h3>
+        <div class="compare" style="grid-template-columns: 1fr 1fr 1fr 1fr">
+          <div class="compare-card">
+            <h4 class="red">Concurrent ❌</h4>
+            <ul>
+              <li><span class="lang-en">Both succeed</span><span class="lang-es">Ambos tienen éxito</span></li>
+              <li><span class="lang-en">Last write wins</span><span class="lang-es">Última escritura gana</span></li>
+              <li><span class="lang-en">Silent overwrite bug</span><span class="lang-es">Sobreescritura silenciosa</span></li>
+            </ul>
+          </div>
+          <div class="compare-card">
+            <h4 class="green"><span class="lang-en">Conditional ✅</span><span class="lang-es">Condicional ✅</span></h4>
+            <ul>
+              <li><span class="lang-en">One fails with exception</span><span class="lang-es">Uno falla con excepción</span></li>
+              <li><span class="lang-en">One clean winner</span><span class="lang-es">Un ganador limpio</span></li>
+              <li><span class="lang-en">= Optimistic locking</span><span class="lang-es">= Bloqueo optimista</span></li>
+            </ul>
+          </div>
+          <div class="compare-card">
+            <h4 class="blue"><span class="lang-en">Atomic ✅</span><span class="lang-es">Atómico ✅</span></h4>
+            <ul>
+              <li><span class="lang-en">Both succeed</span><span class="lang-es">Ambos tienen éxito</span></li>
+              <li><span class="lang-en">Values accumulate (0+1+2=3)</span><span class="lang-es">Valores se acumulan (0+1+2=3)</span></li>
+              <li><span class="lang-en">Counters, stats. NOT idempotent!</span><span class="lang-es">Contadores, stats. ¡NO idempotente!</span></li>
+            </ul>
+          </div>
+          <div class="compare-card">
+            <h4 class="orange"><span class="lang-en">Batch ✅</span><span class="lang-es">Batch ✅</span></h4>
+            <ul>
+              <li><span class="lang-en">All succeed (if no error)</span><span class="lang-es">Todos tienen éxito (sin error)</span></li>
+              <li><span class="lang-en">Efficiency — fewer round trips</span><span class="lang-es">Eficiencia — menos round trips</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <h3><span class="lang-en">Write Sharding — Hot Partition Fix</span><span class="lang-es">Write Sharding — Fix para Hot Partition</span></h3>
+        <p><span class="lang-en"><strong>Problem:</strong> Low-cardinality PKs (e.g. only <code>candidate_a</code> / <code>candidate_b</code>) → hot partitions. <strong>Solution:</strong> Append a random or hash-calculated suffix to the PK to spread writes. Trade-off: reads must query all shards and aggregate in app code.</span><span class="lang-es"><strong>Problema:</strong> PKs de baja cardinalidad (ej: solo <code>candidate_a</code> / <code>candidate_b</code>) → hot partitions. <strong>Solución:</strong> Agregar un sufijo aleatorio o calculado por hash al PK para distribuir escrituras. Trade-off: las lecturas deben consultar todos los shards y agregar en el código de la app.</span></p>
+        <div class="diagram"><span class="hlr">Without sharding:</span>
+  candidate_a → Partition 1 (ALL votes) 🔥
+  candidate_b → Partition 2 (ALL votes) 🔥
+
+<span class="hlg">With random suffix:</span>
+  candidate_a_11 → Partition 3 ✅
+  candidate_a_20 → Partition 7 ✅
+  candidate_b_17 → Partition 1 ✅</div>
+      </div>
+
+      <!-- ═══════════════════ CARD 11: S3 PATTERNS + OPERATIONS ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">11</span>
+          <h2><span class="lang-en">Patterns with S3 &amp; Operations</span><span class="lang-es">Patrones con S3 y Operaciones</span></h2>
+        </div>
+        <p class="card-subtitle"><span class="lang-en">The 400 KB limit forces a pointer pattern — and S3 metadata indexing is a classic exam scenario</span><span class="lang-es">El límite de 400 KB fuerza un patrón de puntero — y la indexación de metadata de S3 es un escenario clásico del examen</span></p>
+
+        <h3><span class="lang-en">Pattern 1 — Large Object Pointer</span><span class="lang-es">Patrón 1 — Puntero a Objeto Grande</span></h3>
+        <div class="vd">
+          <div class="vd-row">
+            <div class="vd-node">App</div>
+            <div class="vd-arrow">→</div>
+            <div class="vd-node orange">S3 Bucket<br><small style="font-size:10px;opacity:.7"><span class="lang-en">stores the file</span><span class="lang-es">almacena el archivo</span></small></div>
+          </div>
+          <div class="vd-row">
+            <div class="vd-node">App</div>
+            <div class="vd-arrow">→</div>
+            <div class="vd-node blue">DynamoDB<br><small style="font-size:10px;opacity:.7"><span class="lang-en">metadata + S3 URL pointer</span><span class="lang-es">metadata + puntero URL S3</span></small></div>
+          </div>
+          <div style="font-size:11px;color:#64748b;margin-top:8px"><span class="lang-en">Client reads metadata from DynamoDB (fast + indexed) → fetches actual file from S3 using the URL</span><span class="lang-es">El cliente lee metadata de DynamoDB (rápido + indexado) → busca el archivo real de S3 usando la URL</span></div>
+        </div>
+
+        <h3><span class="lang-en">Pattern 2 — S3 Metadata Index</span><span class="lang-es">Patrón 2 — Índice de Metadata S3</span></h3>
+        <div class="vd">
+          <div class="vd-row">
+            <div class="vd-node">App</div>
+            <div class="vd-arrow">→</div>
+            <div class="vd-node orange">S3<br><small style="font-size:10px;opacity:.7">upload</small></div>
+            <div class="vd-arrow">→</div>
+            <div class="vd-arrow-label"><span class="lang-en">Event Notification</span><span class="lang-es">Notificación de evento</span></div>
+            <div class="vd-arrow">→</div>
+            <div class="vd-node green">Lambda</div>
+            <div class="vd-arrow">→</div>
+            <div class="vd-node blue">DynamoDB<br><small style="font-size:10px;opacity:.7"><span class="lang-en">searchable metadata index</span><span class="lang-es">índice de metadata buscable</span></small></div>
+          </div>
+          <div style="font-size:11px;color:#64748b;margin-top:8px"><span class="lang-en">Now you can query: "find all objects by user X", "uploads between date A and B", "total storage by customer"</span><span class="lang-es">Ahora podés consultar: "todos los objetos del usuario X", "uploads entre fecha A y B", "almacenamiento total por cliente"</span></div>
+        </div>
+
+        <h3><span class="lang-en">Table Operations</span><span class="lang-es">Operaciones de Tabla</span></h3>
+        <table class="data-table">
+          <tr><th>Operation</th><th><span class="lang-en">Method</span><span class="lang-es">Método</span></th><th><span class="lang-en">Recommendation</span><span class="lang-es">Recomendación</span></th></tr>
+          <tr><td><span class="lang-en">Wipe all data</span><span class="lang-es">Borrar todos los datos</span></td><td><span class="chip green">DeleteTable + recreate</span></td><td><span class="lang-en">Instant + cheap ✅ (NOT Scan + delete ❌)</span><span class="lang-es">Instantáneo + barato ✅ (NO Scan + delete ❌)</span></td></tr>
+          <tr><td><span class="lang-en">Copy a table</span><span class="lang-es">Copiar una tabla</span></td><td>AWS Backup · AWS Glue</td><td><span class="lang-en">Backup = simple restore; Glue = ETL with transformations</span><span class="lang-es">Backup = restore simple; Glue = ETL con transformaciones</span></td></tr>
+        </table>
+      </div>
+
+      <!-- ═══════════════════ CARD 12: SECURITY ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">12</span>
+          <h2><span class="lang-en">Security, Global Tables &amp; Fine-Grained Access</span><span class="lang-es">Seguridad, Tablas Globales y Acceso Granular</span></h2>
+        </div>
+        <p class="card-subtitle"><span class="lang-en">LeadingKeys = row-level security · Attributes condition = column-level · Global Tables require Streams</span><span class="lang-es">LeadingKeys = seguridad a nivel de fila · Condición de Attributes = nivel de columna · Tablas Globales requieren Streams</span></p>
+
+        <div class="compare">
+          <div>
+            <h3>Security</h3>
+            <table class="data-table">
+              <tr><th>Feature</th><th>Detail</th></tr>
+              <tr><td>VPC Endpoints</td><td><span class="lang-en">Private access — no public internet</span><span class="lang-es">Acceso privado — sin internet público</span></td></tr>
+              <tr><td>IAM</td><td><span class="lang-en">Full access control per table/operation</span><span class="lang-es">Control de acceso completo por tabla/operación</span></td></tr>
+              <tr><td><span class="lang-en">Encryption at rest</span><span class="lang-es">Encriptación en reposo</span></td><td>AWS KMS <span class="lang-en">(managed or CMK)</span><span class="lang-es">(administrado o CMK)</span></td></tr>
+              <tr><td>PITR</td><td><span class="lang-en">Point-in-time recovery — no performance impact</span><span class="lang-es">Recuperación a punto en el tiempo — sin impacto en rendimiento</span></td></tr>
+            </table>
+
+            <h3 style="margin-top:1rem"><span class="lang-en">Global Tables</span><span class="lang-es">Tablas Globales</span></h3>
+            <div class="callout danger"><span class="lang-en"><strong>Requires DynamoDB Streams enabled.</strong> Multi-region, multi-active — reads AND writes accepted in any region.</span><span class="lang-es"><strong>Requiere Streams habilitado.</strong> Multi-región, multi-activo — lecturas Y escrituras aceptadas en cualquier región.</span></div>
+          </div>
+          <div>
+            <h3><span class="lang-en">Fine-Grained Access Control</span><span class="lang-es">Control de Acceso Granular</span></h3>
+            <p><span class="lang-en">Federated login → temporary credentials → IAM role with conditions:</span><span class="lang-es">Login federado → credenciales temporales → rol IAM con condiciones:</span></p>
+            <table class="data-table">
+              <tr><th>Condition</th><th><span class="lang-en">Restricts</span><span class="lang-es">Restringe</span></th></tr>
+              <tr><td><code>dynamodb:LeadingKeys</code></td><td><span class="lang-en"><strong>Row-level</strong> — user only accesses items where PK = their identity</span><span class="lang-es"><strong>Nivel de fila</strong> — usuario solo accede a ítems donde PK = su identidad</span></td></tr>
+              <tr><td><code>dynamodb:Attributes</code></td><td><span class="lang-en"><strong>Column-level</strong> — user only sees specific attributes</span><span class="lang-es"><strong>Nivel de columna</strong> — usuario solo ve atributos específicos</span></td></tr>
+            </table>
+            <div class="code-block"><span class="cc">// IAM condition — Cognito user can only access their own items</span>
+<span class="ck">"Condition"</span>: {
+  <span class="ck">"ForAllValues:StringEquals"</span>: {
+    <span class="cs">"dynamodb:LeadingKeys"</span>: [
+      <span class="cv">"${cognito-identity.amazonaws.com:sub}"</span>
+    ]
+  }
+}</div>
+
+            <h3><span class="lang-en">Other</span><span class="lang-es">Otros</span></h3>
+            <div class="concept-grid">
+              <div class="concept-card">
+                <h4>DynamoDB Local</h4>
+                <p><span class="lang-en">Dev/test simulation. No AWS, no cost.</span><span class="lang-es">Simulación de dev/test. Sin AWS ni costo.</span></p>
+              </div>
+              <div class="concept-card">
+                <h4>AWS DMS</h4>
+                <p><span class="lang-en">Migrate to/from DynamoDB. MongoDB → DynamoDB, DynamoDB → S3/Oracle/MySQL.</span><span class="lang-es">Migrar hacia/desde DynamoDB. MongoDB → DynamoDB.</span></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════ CARD 13: EXAM TIPS ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge" style="background:#ef4444">📋</span>
+          <h2><span class="lang-en">Consolidated Exam Tips</span><span class="lang-es">Tips Consolidados para el Examen</span></h2>
+        </div>
+
+        <h3><span class="lang-en">Formulas &amp; Capacity</span><span class="lang-es">Fórmulas y Capacidad</span></h3>
+        <div class="tips-grid">
+          <div class="tip"><span class="trigger">WCU formula</span><span class="arr">→</span><span class="answer">(writes/sec) × ceil(KB / 1)</span></div>
+          <div class="tip"><span class="trigger">RCU strongly consistent</span><span class="arr">→</span><span class="answer">reads × ceil(KB / 4)</span></div>
+          <div class="tip"><span class="trigger">RCU eventually consistent</span><span class="arr">→</span><span class="answer">(reads / 2) × ceil(KB / 4)</span></div>
+          <div class="tip"><span class="trigger">RCU transactional</span><span class="arr">→</span><span class="answer">(reads × 2) × ceil(KB / 4)</span></div>
+          <div class="tip"><span class="trigger">Transactional cost</span><span class="arr">→</span><span class="answer">Always 2× WCU and 2× RCU</span></div>
+          <div class="tip"><span class="trigger">On-demand vs Provisioned</span><span class="arr">→</span><span class="answer">~2.5× more expensive. Switch once per 24h.</span></div>
+          <div class="tip"><span class="trigger">ProvisionedThroughputExceededException</span><span class="arr">→</span><span class="answer">Exponential backoff (SDK built-in)</span></div>
+        </div>
+
+        <h3 style="margin-top:1.5rem">APIs</h3>
+        <div class="tips-grid">
+          <div class="tip"><span class="trigger">PutItem vs UpdateItem</span><span class="arr">→</span><span class="answer">Put = full replace · Update = partial update</span></div>
+          <div class="tip"><span class="trigger">GetItem</span><span class="arr">→</span><span class="answer">Returns exactly 0 or 1 item only</span></div>
+          <div class="tip"><span class="trigger">FilterExpression</span><span class="arr">→</span><span class="answer">Does NOT reduce RCU. Reads happen first.</span></div>
+          <div class="tip"><span class="trigger">BatchWriteItem restriction</span><span class="arr">→</span><span class="answer">No UpdateItem support</span></div>
+          <div class="tip"><span class="trigger">Wipe a table</span><span class="arr">→</span><span class="answer">DeleteTable + recreate (NOT Scan + delete)</span></div>
+          <div class="tip"><span class="trigger">ConditionExpression failure</span><span class="arr">→</span><span class="answer">ConditionalCheckFailedException</span></div>
+          <div class="tip"><span class="trigger">Safe upsert</span><span class="arr">→</span><span class="answer">attribute_not_exists(pk) on PutItem</span></div>
+        </div>
+
+        <h3 style="margin-top:1.5rem"><span class="lang-en">Indexes</span><span class="lang-es">Índices</span></h3>
+        <div class="tips-grid">
+          <div class="tip"><span class="trigger">LSI</span><span class="arr">→</span><span class="answer">Same PK, different SK · creation time ONLY · shared capacity</span></div>
+          <div class="tip"><span class="trigger">GSI</span><span class="arr">→</span><span class="answer">Different PK · add anytime · own capacity</span></div>
+          <div class="tip"><span class="trigger">GSI throttle</span><span class="arr">→</span><span class="answer">Main table throttles too ⚠️ even with plenty of WCU</span></div>
+          <div class="tip"><span class="trigger">Query on non-key attribute</span><span class="arr">→</span><span class="answer">Need a GSI</span></div>
+        </div>
+
+        <h3 style="margin-top:1.5rem">Streams · TTL · DAX</h3>
+        <div class="tips-grid">
+          <div class="tip"><span class="trigger">Streams retention</span><span class="arr">→</span><span class="answer">24 hours · shards auto-managed</span></div>
+          <div class="tip"><span class="trigger">Lambda reads Streams</span><span class="arr">→</span><span class="answer">Event Source Mapping → synchronous · batched</span></div>
+          <div class="tip"><span class="trigger">NEW_AND_OLD_IMAGES</span><span class="arr">→</span><span class="answer">See exactly what changed in an item</span></div>
+          <div class="tip"><span class="trigger">Global Tables requirement</span><span class="arr">→</span><span class="answer">DynamoDB Streams must be enabled</span></div>
+          <div class="tip"><span class="trigger">TTL deletion delay</span><span class="arr">→</span><span class="answer">Up to 48 hours · free · filter expired client-side</span></div>
+          <div class="tip"><span class="trigger">DAX</span><span class="arr">→</span><span class="answer">Microsecond latency · no code changes · 5 min TTL · max 10 nodes · min 3 for HA</span></div>
+          <div class="tip"><span class="trigger">DAX vs ElastiCache</span><span class="arr">→</span><span class="answer">DAX = raw items · ElastiCache = computed aggregations</span></div>
+        </div>
+
+        <h3 style="margin-top:1.5rem"><span class="lang-en">Architecture &amp; Security</span><span class="lang-es">Arquitectura y Seguridad</span></h3>
+        <div class="tips-grid">
+          <div class="tip"><span class="trigger">"in-memory" session store</span><span class="arr">→</span><span class="answer">ElastiCache</span></div>
+          <div class="tip"><span class="trigger">"serverless/auto-scaling" session store</span><span class="arr">→</span><span class="answer">DynamoDB</span></div>
+          <div class="tip"><span class="trigger">LeadingKeys condition</span><span class="arr">→</span><span class="answer">Row-level security (user = their own items only)</span></div>
+          <div class="tip"><span class="trigger">Attributes condition</span><span class="arr">→</span><span class="answer">Column-level security</span></div>
+          <div class="tip"><span class="trigger">DynamoDB Local</span><span class="arr">→</span><span class="answer">Dev/test simulation — no AWS, no cost</span></div>
+          <div class="tip"><span class="trigger">max-items vs page-size (CLI)</span><span class="arr">→</span><span class="answer">max-items = true pagination + NextToken · page-size = avoid timeouts only</span></div>
+        </div>
+      </div>
+
+    </div><!-- /container -->
+
+    <p style="text-align:center;color:#334155;font-size:12px;margin-top:48px">
+      Section 22 — DynamoDB · DVA-C02 · <span class="lang-en">Generated</span><span class="lang-es">Generado</span> April 2026
+    </p>
+
+    <script>
+      function toggleLang() {
+        const body = document.body;
+        const btn = document.getElementById('lang-btn');
+        if (body.classList.contains('es')) {
+          body.classList.remove('es');
+          btn.textContent = '🌐 Español';
+        } else {
+          body.classList.add('es');
+          btn.textContent = '🌐 English';
+        }
+      }
+    </script>
+  </body>
+</html>

@@ -3,10 +3,10 @@
 ## Overall Progress
 
 ```
-[█████████████░░░░░░░] 21/33 sections | 329/483 lessons (68.1%)
-Total XP: 9550
+[██████████████░░░░░░] 22/33 sections | 355/483 lessons (73.5%)
+Total XP: 10800
 
-Videos: 305 | Quizzes: 18/29 | ⏱ 21h 35min done · 10h 23min left
+Videos: 330 | Quizzes: 19/29 | ⏱ 23h 21min done · 8h 37min left
 ```
 
 > **Note:** The exact number of lessons per section will be filled in as the course progresses.
@@ -405,43 +405,43 @@ Videos: 305 | Quizzes: 18/29 | ⏱ 21h 35min done · 10h 23min left
 
 ## Section 22: AWS Serverless: DynamoDB
 
-- [ ] 22.1 - DynamoDB - Section Introduction (intro)
-- [ ] 22.2 - DynamoDB Overview
-- [ ] 22.3 - DynamoDB Basics - Hands On
-- [ ] 22.4 - DynamoDB WCU & RCU - Throughput
-- [ ] 22.5 - DynamoDB WCU & RCU - Hands On
-- [ ] 22.6 - DynamoDB - Basic Operations
-- [ ] 22.7 - DynamoDB Basic APIs - Hands On
-- [ ] 22.8 - DynamoDB - Conditional Writes
-- [ ] 22.9 - DynamoDB Indexes (GSI + LSI)
-- [ ] 22.10 - DynamoDB Indexes (GSI + LSI) - Hands On
-- [ ] 22.11 - DynamoDB PartiQL
-- [ ] 22.12 - DynamoDB Optimistic Locking
-- [ ] 22.13 - DynamoDB DAX
-- [ ] 22.14 - DynamoDB DAX - Hands On
-- [ ] 22.15 - DynamoDB Streams
-- [ ] 22.16 - DynamoDB Streams - Hands On
-- [ ] 22.17 - DynamoDB TTL
-- [ ] 22.18 - DynamoDB CLI
-- [ ] 22.19 - DynamoDB Transactions
-- [ ] 22.20 - DynamoDB Session State
-- [ ] 22.21 - DynamoDB Partitioning Strategies
-- [ ] 22.22 - DynamoDB Conditional Writes, Concurrent Writes & Atomic Writes
-- [ ] 22.23 - DynamoDB Patterns with S3
-- [ ] 22.24 - DynamoDB Operations
-- [ ] 22.25 - DynamoDB Security & Other
-- [ ] DynamoDB Quiz (Quiz 19)
+- [x] 22.1 - DynamoDB - Section Introduction (intro)
+- [x] 22.2 - DynamoDB Overview (PASSED 75%)
+- [x] 22.3 - DynamoDB Basics - Hands On (skipped - hands-on walkthrough, new info added to notes)
+- [x] 22.4 - DynamoDB WCU & RCU - Throughput (PERFECT 100%)
+- [x] 22.5 - DynamoDB WCU & RCU - Hands On (skipped - hands-on, Auto Scaling + Capacity Calculator notes added)
+- [x] 22.6 - DynamoDB - Basic Operations (PERFECT 100%)
+- [x] 22.7 - DynamoDB Basic APIs - Hands On (skipped - hands-on, console filter vs FilterExpression note added)
+- [x] 22.8 - DynamoDB - Conditional Writes (PERFECT 100%)
+- [x] 22.9 - DynamoDB Indexes (GSI + LSI) (PERFECT 100%)
+- [x] 22.10 - DynamoDB Indexes (GSI + LSI) - Hands On (skipped - hands-on, no new concepts)
+- [x] 22.11 - DynamoDB PartiQL (skipped - hands-on, index querying syntax + batch support noted)
+- [x] 22.12 - DynamoDB Optimistic Locking (PERFECT 100%)
+- [x] 22.13 - DynamoDB DAX (PERFECT 100%)
+- [x] 22.14 - DynamoDB DAX - Hands On (skipped - hands-on, node types/networking/TTL config noted)
+- [x] 22.15 - DynamoDB Streams (PERFECT 100%)
+- [x] 22.16 - DynamoDB Streams - Hands On (skipped - hands-on, batch settings + record structure per operation noted)
+- [x] 22.17 - DynamoDB TTL (PERFECT 100%)
+- [x] 22.18 - DynamoDB CLI (PERFECT 100%)
+- [x] 22.19 - DynamoDB Transactions (PERFECT 100%)
+- [x] 22.20 - DynamoDB Session State (PERFECT 100%)
+- [x] 22.21 - DynamoDB Partitioning Strategies (PERFECT 100%)
+- [x] 22.22 - DynamoDB Conditional Writes, Concurrent Writes & Atomic Writes (PERFECT 100%)
+- [x] 22.23 - DynamoDB Patterns with S3 (PERFECT 100%)
+- [x] 22.24 - DynamoDB Operations (skipped - short, copy table options noted)
+- [x] 22.25 - DynamoDB Security & Other (PERFECT 100%)
+- [x] DynamoDB Quiz (Quiz 19) (Udemy quiz - completed)
 
 ## Section 23: AWS Serverless: API Gateway
 
-- [ ] 23.1 - API Gateway - Section Introduction (intro)
-- [ ] 23.2 - API Gateway Overview
-- [ ] 23.3 - API Gateway Basics Hands On
-- [ ] 23.4 - API Gateway Stages and Deployment
-- [ ] 23.5 - API Gateway Stages and Deployment Hands On
-- [ ] 23.6 - API Gateway Stages Configurations Hands On
-- [ ] 23.7 - API Gateway Canary Deployments
-- [ ] 23.8 - API Gateway Canary Deployments Hands On
+- [x] 23.1 - API Gateway - Section Introduction (intro)
+- [x] 23.2 - API Gateway Overview (PASSED 75%)
+- [x] 23.3 - API Gateway Basics Hands On (skipped - hands-on, timeout 29s + proxy integration noted)
+- [x] 23.4 - API Gateway Stages and Deployment (REVIEW 67%)
+- [x] 23.5 - API Gateway Stages and Deployment Hands On (skipped - hands-on, stage variable syntax clarified)
+- [x] 23.6 - API Gateway Stages Configurations Hands On (skipped - hands-on, config options overview noted)
+- [x] 23.7 - API Gateway Canary Deployments (PERFECT 100%)
+- [x] 23.8 - API Gateway Canary Deployments Hands On (skipped - hands-on, canary workflow + :version syntax noted)
 - [ ] 23.9 - API Gateway Integration Types & Mappings
 - [ ] 23.10 - API Gateway Mapping Templates Hands On
 - [ ] 23.11 - API Gateway Open API

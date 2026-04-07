@@ -27,6 +27,7 @@ A reference for acronyms and English terms encountered in the course, with Spani
 | CPU     | Central Processing Unit                 | Unidad central de procesamiento                   |
 | CRR     | Cross-Region Replication                | Replicación entre regiones                        |
 | CSV     | Comma-Separated Values                  | Valores separados por comas                       |
+| DAX     | DynamoDB Accelerator                    | Acelerador de DynamoDB (caché en memoria)         |
 | DDoS    | Distributed Denial of Service           | Denegación de servicio distribuida                |
 | DLQ     | Dead Letter Queue                       | Cola de mensajes fallidos                         |
 | DNS     | Domain Name System                      | Sistema de nombres de dominio                     |
@@ -42,7 +43,9 @@ A reference for acronyms and English terms encountered in the course, with Spani
 | FIFO    | First In, First Out                     | Primero en entrar, primero en salir               |
 | FTP     | File Transfer Protocol                  | Protocolo de transferencia de archivos            |
 | FQDN    | Fully Qualified Domain Name             | Nombre de dominio completamente cualificado       |
+| GSI     | Global Secondary Index                  | Índice secundario global (DynamoDB)               |
 | GWLB    | Gateway Load Balancer                   | Balanceador de carga de puerta de enlace          |
+| HA      | High Availability                       | Alta disponibilidad                               |
 | HDD     | Hard Disk Drive                         | Disco duro                                        |
 | HPC     | High-Performance Computing              | Computación de alto rendimiento                   |
 | HTTP    | HyperText Transfer Protocol             | Protocolo de transferencia de hipertexto          |
@@ -59,6 +62,7 @@ A reference for acronyms and English terms encountered in the course, with Spani
 | KMS     | Key Management Service                  | Servicio de gestión de claves                     |
 | KPL     | Kinesis Producer Library                | Librería productora de Kinesis (productores)      |
 | IoT     | Internet of Things                      | Internet de las cosas                             |
+| LSI     | Local Secondary Index                   | Índice secundario local (DynamoDB)                |
 | IP      | Internet Protocol                       | Protocolo de internet                             |
 | JSON    | JavaScript Object Notation              | Notación de objetos JavaScript                    |
 | MFA     | Multi-Factor Authentication             | Autenticación multifactor                         |
@@ -73,7 +77,9 @@ A reference for acronyms and English terms encountered in the course, with Spani
 | PII     | Personally Identifiable Information     | Información de identificación personal            |
 | RAID    | Redundant Array of Independent Disks    | Conjunto redundante de discos independientes      |
 | RAM     | Random Access Memory                    | Memoria de acceso aleatorio                       |
+| RCU     | Read Capacity Unit                      | Unidad de capacidad de lectura (DynamoDB)         |
 | RDS     | Relational Database Service             | Servicio de base de datos relacional              |
+| RRU     | Read Request Unit                       | Unidad de solicitud de lectura (DynamoDB On-Demand) |
 | RDP     | Remote Desktop Protocol                 | Protocolo de escritorio remoto                    |
 | SDK     | Software Development Kit                | Kit de desarrollo de software                     |
 | SFTP    | Secure File Transfer Protocol           | Protocolo seguro de transferencia de archivos     |
@@ -102,6 +108,8 @@ A reference for acronyms and English terms encountered in the course, with Spani
 | vCPU    | Virtual CPU                             | CPU virtual                                       |
 | VPC     | Virtual Private Cloud                   | Nube privada virtual                              |
 | VPN     | Virtual Private Network                 | Red privada virtual                               |
+| WCU     | Write Capacity Unit                     | Unidad de capacidad de escritura (DynamoDB)       |
+| WRU     | Write Request Unit                      | Unidad de solicitud de escritura (DynamoDB On-Demand) |
 
 ---
 
@@ -124,6 +132,7 @@ A reference for acronyms and English terms encountered in the course, with Spani
 | On-premises               | En las instalaciones (infraestructura local)            |
 | Instrumentation           | Instrumentación (medir rendimiento, diagnosticar errores, escribir trazas) |
 | Redact                    | Censurar / ocultar información sensible                 |
+| Seamless                  | Sin fricciones / transparente (funciona sin que tengas que hacer nada extra) |
 | Serverless                | Sin servidor (no gestionás servidores — solo tirás código y AWS se encarga) |
 | Shard                     | Fragmento / partición (un carril del stream — procesa una porción del tráfico) |
 | Scale in                  | Reducir / achicar (remover instancias — menos recursos) |
