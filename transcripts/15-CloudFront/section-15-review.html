@@ -115,9 +115,9 @@
          SECTION 1 — CloudFront Overview
     ========================================================= -->
     <section>
-      <div class="section-label">01 — CloudFront Overview</div>
+      <div class="section-label"><span class="lang-en">01 — CloudFront Overview</span><span class="lang-es">01 — Descripción general de CloudFront</span></div>
       <div class="card">
-        <div class="card-title">What is CloudFront?</div>
+        <div class="card-title"><span class="lang-en">What is CloudFront?</span><span class="lang-es">¿Qué es CloudFront?</span></div>
         <p style="font-size: 14px; color: #94a3b8; margin-bottom: 16px;">
           CloudFront is AWS's CDN (Content Delivery Network). On the exam, <strong style="color: #f8fafc;">CDN = CloudFront</strong>.
           It caches content at ~216 Points of Presence (edge locations) worldwide, serving users from the nearest edge for low latency.
@@ -126,52 +126,52 @@
         <div class="grid-3" style="margin-bottom: 20px;">
           <div class="service-card">
             <div class="service-icon" style="background: rgba(249,115,22,0.15);">&#127757;</div>
-            <div class="service-name">~216 Edge Locations</div>
-            <div class="service-desc">Content cached globally. Users served from nearest PoP. Dramatically reduces latency for worldwide audiences.</div>
+            <div class="service-name"><span class="lang-en">~216 Edge Locations</span><span class="lang-es">~216 ubicaciones de borde</span></div>
+            <div class="service-desc"><span class="lang-en">Content cached globally. Users served from nearest PoP. Dramatically reduces latency for worldwide audiences.</span><span class="lang-es">Contenido almacenado en caché globalmente. Los usuarios se sirven desde el PoP más cercano. Reduce dramáticamente la latencia para audiencias mundiales.</span></div>
           </div>
           <div class="service-card">
             <div class="service-icon" style="background: rgba(239,68,68,0.12);">&#128737;</div>
-            <div class="service-name">DDoS Protection</div>
-            <div class="service-desc">Built-in via AWS Shield (Standard). Integration with AWS WAF for layer 7 rules and bot protection.</div>
+            <div class="service-name"><span class="lang-en">DDoS Protection</span><span class="lang-es">Protección DDoS</span></div>
+            <div class="service-desc"><span class="lang-en">Built-in via <span class="lang-en">AWS Shield</span><span class="lang-es">AWS Shield</span> (Standard). Integration with <span class="lang-en">AWS WAF</span><span class="lang-es">AWS WAF</span> for <span class="lang-en">layer 7 rules</span><span class="lang-es">reglas de capa 7</span> and <span class="lang-en">bot protection</span><span class="lang-es">protección de bots</span>.</span><span class="lang-es">Integrado a través de <span class="lang-en">AWS Shield</span><span class="lang-es">AWS Shield</span> (Estándar). Integración con <span class="lang-en">AWS WAF</span><span class="lang-es">AWS WAF</span> para reglas de capa 7 y protección de bots.</span></div>
           </div>
           <div class="service-card">
             <div class="service-icon" style="background: rgba(16,185,129,0.12);">&#128274;</div>
-            <div class="service-name">HTTPS + OAC</div>
-            <div class="service-desc">HTTPS everywhere. Origin Access Control (OAC) restricts S3 buckets to CloudFront-only access.</div>
+            <div class="service-name"><span class="lang-en">HTTPS + OAC</span><span class="lang-es">HTTPS + OAC</span></div>
+            <div class="service-desc"><span class="lang-en">HTTPS everywhere. <span class="lang-en">Origin Access Control</span><span class="lang-es">Control de acceso al origen</span> (OAC) restricts S3 buckets to CloudFront-only access.</span><span class="lang-es">HTTPS en todas partes. <span class="lang-en">Origin Access Control</span><span class="lang-es">Control de acceso al origen</span> (OAC) restringe los depósitos de S3 al acceso solo de CloudFront.</span></div>
           </div>
         </div>
 
         <!-- CloudFront Origins -->
         <div style="margin-bottom: 16px;">
-          <div style="font-size: 14px; font-weight: 700; color: #f8fafc; margin-bottom: 12px;">CloudFront Origins — What CloudFront Can Serve From</div>
+          <div style="font-size: 14px; font-weight: 700; color: #f8fafc; margin-bottom: 12px;"><span class="lang-en">CloudFront Origins — What CloudFront Can Serve From</span><span class="lang-es">Orígenes de CloudFront — De dónde puede servir CloudFront</span></div>
           <div class="table-wrapper">
             <table class="data-table">
               <thead>
                 <tr>
-                  <th>Origin Type</th>
-                  <th>Examples</th>
-                  <th>Access / Security</th>
-                  <th>Notes</th>
+                  <th><span class="lang-en">Origin Type</span><span class="lang-es">Tipo de origen</span></th>
+                  <th><span class="lang-en">Examples</span><span class="lang-es">Ejemplos</span></th>
+                  <th><span class="lang-en">Access / Security</span><span class="lang-es">Acceso / Seguridad</span></th>
+                  <th><span class="lang-en">Notes</span><span class="lang-es">Notas</span></th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td><strong style="color: #f8fafc;">S3 Bucket</strong></td>
-                  <td>Static files, media, backups</td>
-                  <td><span class="badge badge-blue">OAC + bucket policy</span></td>
-                  <td>Can also use CloudFront for uploads (PUT/POST)</td>
+                  <td><strong style="color: #f8fafc;"><span class="lang-en">S3 Bucket</span><span class="lang-es">Depósito de S3</span></strong></td>
+                  <td><span class="lang-en">Static files, media, backups</span><span class="lang-es">Archivos estáticos, medios, copias de seguridad</span></td>
+                  <td><span class="badge badge-blue"><span class="lang-en">OAC + bucket policy</span><span class="lang-es">OAC + política de depósito</span></span></td>
+                  <td><span class="lang-en">Can also use CloudFront for uploads (PUT/POST)</span><span class="lang-es">También puede usar CloudFront para cargas (PUT/POST)</span></td>
                 </tr>
                 <tr>
-                  <td><strong style="color: #f8fafc;">VPC Origin</strong></td>
-                  <td>Private ALB, NLB, EC2 in private subnets</td>
-                  <td><span class="badge badge-green">Most secure (recommended)</span></td>
-                  <td>No public exposure; resources stay private</td>
+                  <td><strong style="color: #f8fafc;"><span class="lang-en">VPC Origin</span><span class="lang-es">Origen de VPC</span></strong></td>
+                  <td><span class="lang-en">Private ALB, NLB, EC2 in private subnets</span><span class="lang-es">ALB privada, NLB, EC2 en subredes privadas</span></td>
+                  <td><span class="badge badge-green"><span class="lang-en">Most secure (recommended)</span><span class="lang-es">Más seguro (recomendado)</span></span></td>
+                  <td><span class="lang-en">No public exposure; resources stay private</span><span class="lang-es">Sin exposición pública; los recursos permanecen privados</span></td>
                 </tr>
                 <tr>
-                  <td><strong style="color: #f8fafc;">Custom HTTP</strong></td>
-                  <td>S3 website endpoint, public ALB, any HTTP server</td>
-                  <td><span class="badge badge-orange">Direct HTTP</span></td>
-                  <td>Origin must be publicly accessible</td>
+                  <td><strong style="color: #f8fafc;"><span class="lang-en">Custom HTTP</span><span class="lang-es">HTTP personalizado</span></strong></td>
+                  <td><span class="lang-en">S3 website endpoint, public ALB, any HTTP server</span><span class="lang-es">punto de enlace del sitio web de S3, ALB pública, cualquier servidor HTTP</span></td>
+                  <td><span class="badge badge-orange"><span class="lang-en">Direct HTTP</span><span class="lang-es">HTTP directo</span></span></td>
+                  <td><span class="lang-en">Origin must be publicly accessible</span><span class="lang-es">El origen debe ser accesible públicamente</span></td>
                 </tr>
               </tbody>
             </table>
@@ -179,26 +179,26 @@
         </div>
 
         <!-- CloudFront vs S3 CRR -->
-        <div style="font-size: 14px; font-weight: 700; color: #f8fafc; margin-bottom: 12px;">CloudFront vs S3 Cross-Region Replication</div>
+        <div style="font-size: 14px; font-weight: 700; color: #f8fafc; margin-bottom: 12px;"><span class="lang-en">CloudFront vs S3 Cross-Region Replication</span><span class="lang-es">CloudFront vs Replicación entre regiones de S3</span></div>
         <div class="grid-2">
           <div class="compare-col">
             <div class="compare-col-title" style="color: #f97316;">CloudFront</div>
             <ul>
-              <li>~216 edge locations worldwide</li>
-              <li>TTL ~1 day (cached content may be slightly stale)</li>
-              <li>Best for static content that needs global reach</li>
-              <li>Files cached at the edge, great cache hit ratio</li>
-              <li>Content available everywhere with no manual setup per region</li>
+              <li><span class="lang-en">~216 edge locations worldwide</span><span class="lang-es">~216 ubicaciones de borde en todo el mundo</span></li>
+              <li><span class="lang-en">TTL ~1 day (cached content may be slightly stale)</span><span class="lang-es">TTL ~1 día (el contenido almacenado en caché puede estar ligeramente obsoleto)</span></li>
+              <li><span class="lang-en">Best for static content that needs global reach</span><span class="lang-es">Mejor para contenido estático que necesita alcance global</span></li>
+              <li><span class="lang-en">Files cached at the edge, great cache hit ratio</span><span class="lang-es">Archivos almacenados en caché en el borde, excelente relación de acierto de caché</span></li>
+              <li><span class="lang-en">Content available everywhere with no manual setup per region</span><span class="lang-es">Contenido disponible en todas partes sin configuración manual por región</span></li>
             </ul>
           </div>
           <div class="compare-col">
-            <div class="compare-col-title" style="color: #6366f1;">S3 Cross-Region Replication (CRR)</div>
+            <div class="compare-col-title" style="color: #6366f1;"><span class="lang-en">S3 Cross-Region Replication (CRR)</span><span class="lang-es">Replicación de S3 entre regiones (CRR)</span></div>
             <ul>
-              <li>Must be configured for each specific region</li>
-              <li>Near real-time replication — data always fresh</li>
-              <li>Best for dynamic content or low-latency access in a few specific regions</li>
-              <li>Read-only in destination regions</li>
-              <li>No caching — requests go to the replicated bucket</li>
+              <li><span class="lang-en">Must be configured for each specific region</span><span class="lang-es">Debe configurarse para cada región específica</span></li>
+              <li><span class="lang-en">Near real-time replication — data always fresh</span><span class="lang-es">Replicación casi en tiempo real — datos siempre frescos</span></li>
+              <li><span class="lang-en">Best for dynamic content or low-latency access in a few specific regions</span><span class="lang-es">Mejor para contenido dinámico o acceso de baja latencia en algunas regiones específicas</span></li>
+              <li><span class="lang-en">Read-only in destination regions</span><span class="lang-es">Solo lectura en regiones de destino</span></li>
+              <li><span class="lang-en">No</span><span class="lang-es">No</span> <span class="lang-en">caching — requests go to the replicated bucket</span><span class="lang-es">almacenamiento en caché — las solicitudes van al depósito replicado</span></li>
             </ul>
           </div>
         </div>
@@ -206,89 +206,89 @@
     </section>
 
     <!-- =========================================================
-         SECTION 2 — Cache Key & Policies
+         SECTION 2 — <span class="lang-en">Cache Key</span><span class="lang-es">Clave de caché</span> & Policies
     ========================================================= -->
     <section>
-      <div class="section-label">02 — Caching: Cache Key &amp; Policies</div>
+      <div class="section-label"><span class="lang-en">02 — Caching: Cache Key &amp; Policies</span><span class="lang-es">02 — Almacenamiento en caché: clave de caché y políticas</span></div>
       <div class="card">
-        <div class="card-title">How CloudFront Caching Works</div>
+        <div class="card-title"><span class="lang-en">How CloudFront Caching Works</span><span class="lang-es">Cómo funciona el almacenamiento en caché de CloudFront</span></div>
         <p style="font-size: 14px; color: #94a3b8; margin-bottom: 16px;">
-          CloudFront caches responses at edge locations. The <strong style="color: #f8fafc;">Cache Key</strong> determines what counts as a unique cached item.
-          By default it is just the hostname + URL path. You can extend it via Cache Policy.
+          <span class="lang-en">CloudFront caches responses at edge locations.</span><span class="lang-es">CloudFront almacena en caché las respuestas en ubicaciones de borde.</span> The <strong style="color: #f8fafc;"><span class="lang-en">Cache Key</span><span class="lang-es">Clave de caché</span></strong> <span class="lang-en">determines what counts as a unique cached item.</span><span class="lang-es">determina qué cuenta como un elemento único almacenado en caché.</span>
+          <span class="lang-en">By default it is just the hostname + URL path.</span><span class="lang-es">Por defecto es solo el nombre de host + ruta de URL.</span> You can extend it via <span class="lang-en">Cache Policy</span><span class="lang-es">Política de caché</span>.
         </p>
 
         <div class="callout info" style="margin-bottom: 20px;">
-          <strong>Default Cache Key:</strong> <code>hostname + resource portion of URL</code> (e.g. <code>d123.cloudfront.net/images/cat.jpg</code>).
-          Adding more dimensions (headers, cookies, query strings) creates a more granular cache key but reduces your cache hit ratio.
+          <strong><span class="lang-en">Default Cache Key:</span><span class="lang-es">Clave de caché predeterminada:</span></strong> <code>hostname + resource portion of URL</code> (e.g. <code>d123.cloudfront.net/images/cat.jpg</code>).
+          <span class="lang-en">Adding more dimensions (headers, cookies, query strings) creates a more granular cache key but reduces your cache hit ratio.</span><span class="lang-es">Agregar más dimensiones (encabezados, cookies, cadenas de consulta) crea una clave de caché más granular pero reduce su relación de acierto de caché.</span>
         </div>
 
-        <!-- Cache Policy vs Origin Request Policy -->
-        <div style="font-size: 14px; font-weight: 700; color: #f8fafc; margin-bottom: 12px;">Cache Policy vs Origin Request Policy</div>
+        <!-- <span class="lang-en">Cache Policy vs Origin Request Policy</span><span class="lang-es">Política de caché vs Política de solicitud de origen</span> -->
+        <div style="font-size: 14px; font-weight: 700; color: #f8fafc; margin-bottom: 12px;"><span class="lang-en">Cache Policy vs Origin Request Policy</span><span class="lang-es">Política de caché vs Política de solicitud de origen</span></div>
         <div class="table-wrapper" style="margin-bottom: 20px;">
           <table class="data-table">
             <thead>
               <tr>
-                <th>Policy</th>
-                <th>What It Controls</th>
-                <th>Affects Cache Key?</th>
-                <th>Forwarded to Origin?</th>
+                <th><span class="lang-en">Policy</span><span class="lang-es">Política</span></th>
+                <th><span class="lang-en">What It Controls</span><span class="lang-es">Lo que controla</span></th>
+                <th><span class="lang-en">Affects Cache Key?</span><span class="lang-es">¿Afecta la clave de caché?</span></th>
+                <th><span class="lang-en">Forwarded to Origin?</span><span class="lang-es">¿Se reenvía al origen?</span></th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td><strong style="color: #f8fafc;">Cache Policy</strong></td>
-                <td>Cache Key composition + TTL (min, max, default)</td>
-                <td><span class="badge badge-green">Yes</span></td>
-                <td><span class="badge badge-green">Yes</span></td>
+                <td><strong style="color: #f8fafc;"><span class="lang-en">Cache Policy</span><span class="lang-es">Política de caché</span></strong></td>
+                <td><span class="lang-en">Cache Key composition + TTL (min, max, default)</span><span class="lang-es">Composición de clave de caché + TTL (mín, máx, predeterminado)</span></td>
+                <td><span class="badge badge-green"><span class="lang-en">Yes</span><span class="lang-es">Sí</span></span></td>
+                <td><span class="badge badge-green"><span class="lang-en">Yes</span><span class="lang-es">Sí</span></span></td>
               </tr>
               <tr>
-                <td><strong style="color: #f8fafc;">Origin Request Policy</strong></td>
-                <td>Additional data sent to origin (headers, cookies, query strings NOT in cache key)</td>
-                <td><span class="badge badge-red">No</span></td>
-                <td><span class="badge badge-green">Yes</span></td>
+                <td><strong style="color: #f8fafc;"><span class="lang-en">Origin Request Policy</span><span class="lang-es">Política de solicitud de origen</span></strong></td>
+                <td><span class="lang-en">Additional data sent to origin (headers, cookies, query strings NOT in cache key)</span><span class="lang-es">Datos adicionales enviados al origen (encabezados, cookies, cadenas de consulta NO en la clave de caché)</span></td>
+                <td><span class="badge badge-red"><span class="lang-en">No</span><span class="lang-es">No</span></span></td>
+                <td><span class="badge badge-green"><span class="lang-en">Yes</span><span class="lang-es">Sí</span></span></td>
               </tr>
             </tbody>
           </table>
         </div>
 
         <!-- Cache Behaviors -->
-        <div style="font-size: 14px; font-weight: 700; color: #f8fafc; margin-bottom: 12px;">Cache Behaviors — Route URL Patterns to Different Origins</div>
+        <div style="font-size: 14px; font-weight: 700; color: #f8fafc; margin-bottom: 12px;"><span class="lang-en">Cache Behaviors — Route URL Patterns to Different Origins</span><span class="lang-es">Comportamientos de caché — Enrutar patrones de URL a diferentes orígenes</span></div>
         <p style="font-size: 14px; color: #94a3b8; margin-bottom: 12px;">
-          Cache Behaviors let you route different URL patterns to different origins with different TTLs, headers, and cache settings.
-          The <strong style="color: #f8fafc;">most specific pattern matches first</strong>. The default <code>/*</code> is always evaluated last.
+          <span class="lang-en">Cache Behaviors let you route different URL patterns to different origins with different TTLs, headers, and cache settings.</span><span class="lang-es">Los comportamientos de caché le permiten enrutar diferentes patrones de URL a diferentes orígenes con diferentes TTL, encabezados y configuraciones de caché.</span>
+          The <strong style="color: #f8fafc;">most specific pattern matches first</strong>. The default <code>/*</code> <span class="lang-en">is always evaluated last.</span><span class="lang-es">siempre se evalúa en último lugar.</span>
         </p>
 
         <div style="margin-bottom: 16px;">
           <div class="behavior-row">
             <div class="behavior-pattern">/api/*</div>
             <div class="behavior-arrow">&#8594;</div>
-            <div class="behavior-origin">EC2 / Application Server</div>
-            <div class="behavior-note">Dynamic: short TTL, forward all cookies &amp; headers</div>
+            <div class="behavior-origin"><span class="lang-en">EC2 / Application Server</span><span class="lang-es">EC2 / Servidor de aplicaciones</span></div>
+            <div class="behavior-note"><span class="lang-en">Dynamic: short TTL, forward all cookies &amp; headers</span><span class="lang-es">Dinámico: TTL corto, reenviar todas las cookies y encabezados</span></div>
           </div>
           <div class="behavior-row">
             <div class="behavior-pattern">/login</div>
             <div class="behavior-arrow">&#8594;</div>
-            <div class="behavior-origin">EC2 (auth service)</div>
-            <div class="behavior-note">Sets signed cookies for subsequent static requests</div>
+            <div class="behavior-origin"><span class="lang-en">EC2 (auth service)</span><span class="lang-es">EC2 (servicio de autenticación)</span></div>
+            <div class="behavior-note"><span class="lang-en">Sets signed cookies for subsequent static requests</span><span class="lang-es">Establece cookies firmadas para solicitudes estáticas posteriores</span></div>
           </div>
           <div class="behavior-row">
             <div class="behavior-pattern">/*</div>
             <div class="behavior-arrow">&#8594;</div>
-            <div class="behavior-origin">S3 Bucket</div>
-            <div class="behavior-note">Default: static assets, long TTL, cache cookies from /login</div>
+            <div class="behavior-origin"><span class="lang-en">S3 Bucket</span><span class="lang-es">Depósito de S3</span></div>
+            <div class="behavior-note"><span class="lang-en">Default</span><span class="lang-es">Predeterminado</span>: static assets, long TTL, cache cookies from /login</div>
           </div>
         </div>
 
         <!-- Cache Invalidation -->
         <div class="feature-card">
-          <div class="feature-card-title">Cache Invalidation — Force-Refresh Edge Caches</div>
-          <p style="margin-bottom: 8px;">When you update origin content, edges still serve stale cached versions until TTL expires. Invalidation force-removes files from all edge locations immediately.</p>
+          <div class="feature-card-title"><span class="lang-en">Cache Invalidation — Force-Refresh Edge Caches</span><span class="lang-es">Invalidación de caché — Caché de borde de actualización forzada</span></div>
+          <p style="margin-bottom: 8px;"><span class="lang-en">When you update origin content, edges still serve stale cached versions until TTL expires.</span><span class="lang-es">Cuando actualiza el contenido de origen, los bordes aún sirven versiones en caché obsoletas hasta que expira TTL.</span> <span class="lang-en">Invalidation force-removes files from all edge locations immediately.</span><span class="lang-es">La invalidación fuerza la eliminación de archivos de todas las ubicaciones de borde inmediatamente.</span></p>
           <ul>
-            <li><code>/*</code> — invalidate all cached content</li>
-            <li><code>/images/*</code> — invalidate a specific path pattern</li>
-            <li><code>/index.html</code> — invalidate a single file</li>
+            <li><code>/*</code> — <span class="lang-en">invalidate all cached content</span><span class="lang-es">invalidar todo el contenido almacenado en caché</span></li>
+            <li><code>/images/*</code> — <span class="lang-en">invalidate a specific path pattern</span><span class="lang-es">invalidar un patrón de ruta específico</span></li>
+            <li><code>/index.html</code> — <span class="lang-en">invalidate a single file</span><span class="lang-es">invalidar un archivo único</span></li>
           </ul>
-          <div style="margin-top: 8px; font-size: 13px; color: #475569;">Exam trigger: "Updated origin but users still see old content" → answer is Cache Invalidation.</div>
+          <div style="margin-top: 8px; font-size: 13px; color: #475569;"><span class="lang-en"><span class="lang-en">Exam trigger:</span><span class="lang-es">Indicador de examen:</span> "Updated origin but users still see old content" → answer is Cache Invalidation.</span><span class="lang-es">Indicador de examen: "Origen actualizado pero los usuarios aún ven contenido antiguo" → la respuesta es Invalidación de caché.</span></div>
         </div>
       </div>
     </section>
@@ -297,23 +297,23 @@
          SECTION 3 — Cache Hit vs Miss Flow
     ========================================================= -->
     <section>
-      <div class="section-label">03 — Cache Hit vs Cache Miss</div>
+      <div class="section-label"><span class="lang-en">03 — Cache Hit vs Cache Miss</span><span class="lang-es">03 — Acierto de caché vs Error de caché</span></div>
       <div class="card">
-        <div class="card-title">How Edge Caching Flows Work</div>
+        <div class="card-title"><span class="lang-en">How Edge Caching Flows Work</span><span class="lang-es">Cómo funcionan los flujos de almacenamiento en caché de borde</span></div>
         <p style="font-size: 14px; color: #94a3b8; margin-bottom: 20px;">
-          Understanding the difference between a cache hit and cache miss is fundamental — they follow different request paths.
+          <span class="lang-en">Understanding the difference between a cache hit and cache miss is fundamental — they follow different request paths.</span><span class="lang-es">Comprender la diferencia entre un acierto de caché y un error de caché es fundamental — siguen diferentes rutas de solicitud.</span>
         </p>
 
         <!-- Cache HIT -->
         <div style="margin-bottom: 18px;">
           <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
             <span class="hit-label hit">CACHE HIT</span>
-            <span style="font-size: 13px; color: #64748b;">Content already at edge — no origin call needed</span>
+            <span style="font-size: 13px; color: #64748b;"><span class="lang-en">Content already at edge — no origin call needed</span><span class="lang-es">Contenido ya en el borde — no se necesita llamada al origen</span></span>
           </div>
           <div class="flow-row">
-            <div class="cf-node user">User<br/><span style="font-size: 13px; font-weight: 400;">Makes request</span></div>
+            <div class="cf-node user">User<br/><span style="font-size: 13px; font-weight: 400;"><span class="lang-en">Makes request</span><span class="lang-es">Realiza solicitud</span></span></div>
             <div class="cf-arrow">&#8594;</div>
-            <div class="cf-node edge">Edge Location<br/><span style="font-size: 13px; font-weight: 400;">Content cached!</span></div>
+            <div class="cf-node edge">Edge Location<br/><span style="font-size: 13px; font-weight: 400;"><span class="lang-en">Content cached!</span><span class="lang-es">¡Contenido almacenado en caché!</span></span></div>
             <div class="cf-arrow">&#8594;</div>
             <div class="cf-node user">User<br/><span style="font-size: 13px; font-weight: 400;">Fast response (&lt;20ms)</span></div>
           </div>
@@ -323,34 +323,34 @@
         <div>
           <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
             <span class="hit-label miss">CACHE MISS</span>
-            <span style="font-size: 13px; color: #64748b;">Edge fetches from origin, caches it, then returns to user</span>
+            <span style="font-size: 13px; color: #64748b;"><span class="lang-en">Edge fetches from origin, caches it, then returns to user</span><span class="lang-es">El borde obtiene del origen, lo almacena en caché, luego lo devuelve al usuario</span></span>
           </div>
           <div class="flow-row">
-            <div class="cf-node user">User<br/><span style="font-size: 13px; font-weight: 400;">Makes request</span></div>
+            <div class="cf-node user">User<br/><span style="font-size: 13px; font-weight: 400;"><span class="lang-en">Makes request</span><span class="lang-es">Realiza solicitud</span></span></div>
             <div class="cf-arrow">&#8594;</div>
-            <div class="cf-node edge">Edge Location<br/><span style="font-size: 13px; font-weight: 400;">Not cached</span></div>
+            <div class="cf-node edge">Edge Location<br/><span style="font-size: 13px; font-weight: 400;"><span class="lang-en">Not cached</span><span class="lang-es">No almacenado en caché</span></span></div>
             <div class="cf-arrow">&#8594;</div>
-            <div class="cf-node origin">Origin<br/><span style="font-size: 13px; font-weight: 400;">S3 / EC2 / ALB</span></div>
+            <div class="cf-node origin">Origin<br/><span style="font-size: 13px; font-weight: 400;"><span class="lang-en">S3 / EC2 / ALB</span><span class="lang-es">S3 / EC2 / ALB</span></span></div>
             <div class="cf-arrow">&#8594;</div>
-            <div class="cf-node edge">Edge Location<br/><span style="font-size: 13px; font-weight: 400;">Caches response</span></div>
+            <div class="cf-node edge">Edge Location<br/><span style="font-size: 13px; font-weight: 400;"><span class="lang-en">Caches response</span><span class="lang-es">Respuesta en caché</span></span></div>
             <div class="cf-arrow">&#8594;</div>
-            <div class="cf-node user">User<br/><span style="font-size: 13px; font-weight: 400;">Gets response</span></div>
+            <div class="cf-node user">User<br/><span style="font-size: 13px; font-weight: 400;"><span class="lang-en">Gets response</span><span class="lang-es">Obtiene respuesta</span></span></div>
           </div>
-          <div style="font-size: 13px; color: #64748b; margin-top: 8px;">Subsequent requests from any user → Cache HIT at that edge for the TTL duration.</div>
+          <div style="font-size: 13px; color: #64748b; margin-top: 8px;"><span class="lang-en">Subsequent requests from any user → Cache HIT at that edge for the TTL duration.</span><span class="lang-es">Solicitudes posteriores de cualquier usuario → ACIERTO DE CACHÉ en ese borde durante la duración de TTL.</span></div>
         </div>
       </div>
     </section>
 
     <!-- =========================================================
-         SECTION 4 — VPC Origins vs Public Origins
+         SECTION 4 — <span class="lang-en">VPC Origin</span><span class="lang-es">Origen de VPC</span>s vs Public Origins
     ========================================================= -->
     <section>
-      <div class="section-label">04 — VPC Origins vs Public Origins</div>
+      <div class="section-label"><span class="lang-en">04 — VPC Origins vs Public Origins</span><span class="lang-es">04 — Orígenes de VPC vs Orígenes públicos</span></div>
       <div class="card">
-        <div class="card-title">Connecting CloudFront to Private Resources</div>
+        <div class="card-title"><span class="lang-en">Connecting CloudFront to Private Resources</span><span class="lang-es">Conectar CloudFront a recursos privados</span></div>
         <p style="font-size: 14px; color: #94a3b8; margin-bottom: 16px;">
-          VPC Origins is the modern, recommended approach for connecting CloudFront to ALBs, NLBs, and EC2 instances.
-          It keeps your origin resources private and removes the need for public IPs.
+          <span class="lang-en">VPC Origin</span><span class="lang-es">Origen de VPC</span>s is the modern, recommended approach for connecting CloudFront to ALBs, NLBs, and EC2 instances.
+          <span class="lang-en">It keeps your origin resources private and removes the need for public IPs.</span><span class="lang-es">Mantiene sus recursos de origen privados y elimina la necesidad de direcciones IP públicas.</span>
         </p>
 
         <div class="table-wrapper" style="margin-bottom: 16px;">
@@ -358,37 +358,37 @@
             <thead>
               <tr>
                 <th></th>
-                <th>VPC Origins (Recommended)</th>
-                <th>Public Origins (Legacy)</th>
+                <th><span class="lang-en">VPC Origins (Recommended)</span><span class="lang-es">Orígenes de VPC (Recomendado)</span></th>
+                <th><span class="lang-en">Public Origins (Legacy)</span><span class="lang-es">Orígenes públicos (heredado)</span></th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td style="color: #94a3b8; font-weight: 600;">Subnet</td>
-                <td>Private subnets — no public exposure</td>
-                <td>Must be in public subnets with public IPs</td>
+                <td style="color: #94a3b8; font-weight: 600;"><span class="lang-en">Subnet</span><span class="lang-es">Subred</span></td>
+                <td><span class="lang-en">Private subnets — no public exposure</span><span class="lang-es">Subredes privadas — sin exposición pública</span></td>
+                <td><span class="lang-en">Must be in public subnets with public IPs</span><span class="lang-es">Debe estar en subredes públicas con direcciones IP públicas</span></td>
               </tr>
               <tr>
-                <td style="color: #94a3b8; font-weight: 600;">Security</td>
+                <td style="color: #94a3b8; font-weight: 600;"><span class="lang-en">Security</span><span class="lang-es">Seguridad</span></td>
                 <td><span class="badge badge-green">Most secure</span> — traffic stays within AWS</td>
-                <td>Must whitelist CloudFront IP ranges in Security Groups</td>
+                <td><span class="lang-en">Must whitelist CloudFront IP ranges in Security Groups</span><span class="lang-es">Debe incluir en la lista blanca los rangos de IP de CloudFront en grupos de seguridad</span></td>
               </tr>
               <tr>
-                <td style="color: #94a3b8; font-weight: 600;">IP Management</td>
-                <td>None required — private access</td>
-                <td>Must track and update CloudFront IP list in SGs</td>
+                <td style="color: #94a3b8; font-weight: 600;"><span class="lang-en">IP Management</span><span class="lang-es">Administración de IP</span></td>
+                <td><span class="lang-en">None required — private access</span><span class="lang-es">Ninguno requerido — acceso privado</span></td>
+                <td><span class="lang-en">Must track and update CloudFront IP list in SGs</span><span class="lang-es">Debe rastrear y actualizar la lista de IP de CloudFront en SG</span></td>
               </tr>
               <tr>
-                <td style="color: #94a3b8; font-weight: 600;">Supported</td>
-                <td>ALB, NLB, EC2 instances</td>
-                <td>Public ALB, public EC2, custom HTTP endpoints</td>
+                <td style="color: #94a3b8; font-weight: 600;"><span class="lang-en">Supported</span><span class="lang-es">Soportado</span></td>
+                <td><span class="lang-en">ALB, NLB, EC2 instances</span><span class="lang-es">Instancias de ALB, NLB, EC2</span></td>
+                <td><span class="lang-en">Public ALB, public EC2, custom HTTP endpoints</span><span class="lang-es">ALB pública, EC2 pública, extremos HTTP personalizados</span></td>
               </tr>
             </tbody>
           </table>
         </div>
 
         <div class="callout success">
-          <strong>Exam signal:</strong> "Most secure CloudFront to ALB setup" or "CloudFront without exposing ALB publicly" → answer is <strong>VPC Origins</strong>.
+          <strong><span class="lang-en">Exam signal:</span><span class="lang-es">Señal de examen:</span></strong> "Most secure CloudFront to ALB setup" or "CloudFront without exposing ALB publicly" → answer is <strong><span class="lang-en">VPC Origin</span><span class="lang-es">Origen de VPC</span>s</strong>.
         </div>
       </div>
     </section>
@@ -397,12 +397,12 @@
          SECTION 5 — Signed URLs & Signed Cookies (Animated)
     ========================================================= -->
     <section>
-      <div class="section-label">05 — Signed URLs &amp; Signed Cookies</div>
+      <div class="section-label"><span class="lang-en">05 — Signed URLs &amp; Signed Cookies</span><span class="lang-es">05 — URLs firmadas y cookies firmadas</span></div>
       <div class="card">
-        <div class="card-title">Controlling Access to CloudFront Content</div>
+        <div class="card-title"><span class="lang-en">Controlling Access to CloudFront Content</span><span class="lang-es">Controlar el acceso al contenido de CloudFront</span></div>
         <p style="font-size: 14px; color: #94a3b8; margin-bottom: 20px;">
-          Signed URLs and Signed Cookies restrict who can access cached CloudFront content.
-          Knowing WHEN to use each — and how they differ from S3 Pre-signed URLs — is a common exam topic.
+          <span class="lang-en">Signed URLs and Signed Cookies restrict who can access cached CloudFront content</span><span class="lang-es">Las URL firmadas y las cookies firmadas restringen quién puede acceder al contenido de CloudFront almacenado en caché</span>.
+          <span class="lang-en">Knowing WHEN to use each — and how they differ from S3 Pre-signed URLs — is a common exam topic.</span><span class="lang-es">Saber CUÁNDO usar cada una — y cómo difieren de las URL pre-firmadas de S3 — es un tema común de examen.</span>
         </p>
 
         <!-- Animated Step-through -->
@@ -423,105 +423,105 @@
          SECTION 6 — Advanced Features
     ========================================================= -->
     <section>
-      <div class="section-label">06 — Advanced Features</div>
+      <div class="section-label"><span class="lang-en">06 — Advanced Features</span><span class="lang-es">06 — Características avanzadas</span></div>
       <div class="card">
-        <div class="card-title">Price Classes, Origin Groups, Field-Level Encryption &amp; More</div>
+        <div class="card-title"><span class="lang-en">Price Classes, Origin Groups, Field-Level Encryption &amp; More</span><span class="lang-es">Clases de precio, grupos de origen, cifrado a nivel de campo y más</span></div>
         <p style="font-size: 14px; color: #94a3b8; margin-bottom: 20px;">
-          These advanced features each have a specific exam trigger pattern. Know what problem each one solves.
+          <span class="lang-en">These advanced features each have a specific exam trigger pattern.</span><span class="lang-es">Cada una de estas características avanzadas tiene un patrón de activación de examen específico.</span> <span class="lang-en">Know what problem each one solves.</span><span class="lang-es">Sepa qué problema resuelve cada uno.</span>
         </p>
 
         <div class="grid-2" style="margin-bottom: 20px;">
 
           <div class="feature-card">
-            <div class="feature-card-title">Price Classes — Cost Control</div>
-            <p style="margin-bottom: 8px;">Control which edge locations serve your distribution to manage cost.</p>
+            <div class="feature-card-title"><span class="lang-en">Price Classes — Cost Control</span><span class="lang-es">Clases de precio — Control de costos</span></div>
+            <p style="margin-bottom: 8px;"><span class="lang-en">Control which edge locations serve your distribution to manage cost</span><span class="lang-es">Controle qué ubicaciones de borde sirven su distribución para administrar costos</span>.</p>
             <ul>
-              <li><strong style="color: #f8fafc;">Class 100</strong> — North America + Europe only. Cheapest option.</li>
-              <li><strong style="color: #f8fafc;">Class 200</strong> — Most regions except the most expensive.</li>
-              <li><strong style="color: #f8fafc;">Class All</strong> — All edge locations worldwide. Best performance, highest cost.</li>
+              <li><strong style="color: #f8fafc;">Class 100</strong> — <span class="lang-en">North America + Europe only. Cheapest option.</span><span class="lang-es">Solo América del Norte + Europa. Opción más económica.</span></li>
+              <li><strong style="color: #f8fafc;">Class 200</strong> — <span class="lang-en">Most regions except the most expensive.</span><span class="lang-es">La mayoría de las regiones excepto la más cara.</span></li>
+              <li><strong style="color: #f8fafc;">Class All</strong> — <span class="lang-en">All edge locations worldwide. Best performance, highest cost.</span><span class="lang-es">Todas las ubicaciones de borde en todo el mundo. Mejor rendimiento, costo más alto.</span></li>
             </ul>
-            <div style="margin-top: 8px; font-size: 13px; color: #64748b;">Exam: "Cheapest CloudFront setup" → Price Class 100</div>
+            <div style="margin-top: 8px; font-size: 13px; color: #64748b;"><span class="lang-en">Exam: "Cheapest CloudFront setup" → Price Class 100</span><span class="lang-es">Examen: "Configuración de CloudFront más económica" → Clase de precio 100</span></div>
           </div>
 
           <div class="feature-card">
-            <div class="feature-card-title">Origin Groups — Failover &amp; DR</div>
-            <p style="margin-bottom: 8px;">Define a primary + secondary origin. CloudFront automatically fails over on HTTP errors (5xx).</p>
+            <div class="feature-card-title"><span class="lang-en">Origin Groups — Failover &amp; DR</span><span class="lang-es">Grupos de Origen — Conmutación por error y DR</span></div>
+            <p style="margin-bottom: 8px;"><span class="lang-en">Define a primary + secondary origin. CloudFront automatically fails over on HTTP errors (5xx).</span><span class="lang-es">Defina un origen primario + secundario. CloudFront conmuta automáticamente por errores HTTP (5xx).</span></p>
             <ul>
-              <li>Provides high availability and failover</li>
-              <li>Combined with S3 CRR = regional disaster recovery</li>
-              <li>Primary fails → CloudFront switches to secondary seamlessly</li>
+              <li><span class="lang-en">Provides high availability and failover</span><span class="lang-es">Proporciona alta disponibilidad y conmutación por error</span></li>
+              <li><span class="lang-en">Combined with S3 CRR = regional disaster recovery</span><span class="lang-es">Combinado con S3 CRR = recuperación ante desastres regional</span></li>
+              <li><span class="lang-en">Primary fails → CloudFront switches to secondary seamlessly</span><span class="lang-es">El primario falla → CloudFront cambia al secundario sin interrupciones</span></li>
             </ul>
-            <div style="margin-top: 8px; font-size: 13px; color: #64748b;">Exam: "CloudFront regional DR" → Origin Groups + S3 CRR</div>
+            <div style="margin-top: 8px; font-size: 13px; color: #64748b;"><span class="lang-en">Exam: "CloudFront regional DR" → Origin Groups + S3 CRR</span><span class="lang-es">Examen: "CloudFront regional DR" → Grupos de Origen + S3 CRR</span></div>
           </div>
 
           <div class="feature-card">
-            <div class="feature-card-title">Field-Level Encryption</div>
-            <p style="margin-bottom: 8px;">Encrypt specific POST fields at the edge using your public key. Only your web server (with the private key) can decrypt.</p>
+            <div class="feature-card-title"><span class="lang-en">Field-Level Encryption</span><span class="lang-es">Cifrado a nivel de campo</span></div>
+            <p style="margin-bottom: 8px;"><span class="lang-en">Encrypt specific POST fields at the edge using your public key. Only your web server (with the private key) can decrypt.</span><span class="lang-es">Cifre campos POST específicos en el borde utilizando su clave pública. Solo su servidor web (con la clave privada) puede descifrar.</span></p>
             <ul>
-              <li>Encrypt up to 10 fields per request</li>
-              <li>CloudFront, ALB, and other layers cannot read the encrypted fields</li>
-              <li>Protects sensitive data (credit cards, SSNs) in transit through the stack</li>
-              <li>Encrypted all the way from edge to application</li>
+              <li><span class="lang-en">Encrypt up to 10 fields per request</span><span class="lang-es">Cifra hasta 10 campos por solicitud</span></li>
+              <li><span class="lang-en">CloudFront, ALB, and other layers cannot read the encrypted fields</span><span class="lang-es">CloudFront, ALB y otras capas no pueden leer los campos cifrados</span></li>
+              <li><span class="lang-en">Protects sensitive data (credit cards, SSNs) in transit through the stack</span><span class="lang-es">Protege datos sensibles (tarjetas de crédito, SSNs) en tránsito a través de la pila</span></li>
+              <li><span class="lang-en">Encrypted all the way from edge to application</span><span class="lang-es">Cifrado de principio a fin desde el borde hasta la aplicación</span></li>
             </ul>
-            <div style="margin-top: 8px; font-size: 13px; color: #64748b;">Exam: "Encrypt sensitive fields, only app server decrypts" → Field-Level Encryption</div>
+            <div style="margin-top: 8px; font-size: 13px; color: #64748b;"><span class="lang-en">Exam: "Encrypt sensitive fields, only app server decrypts" → Field-Level Encryption</span><span class="lang-es">Examen: "Cifrar campos sensibles, solo el servidor de aplicaciones descifra" → Cifrado a nivel de campo</span></div>
           </div>
 
           <div class="feature-card">
-            <div class="feature-card-title">Real-Time Logs</div>
-            <p style="margin-bottom: 8px;">CloudFront can deliver real-time access logs to a single destination.</p>
+            <div class="feature-card-title"><span class="lang-en">Real-Time Logs</span><span class="lang-es">Registros en tiempo real</span></div>
+            <p style="margin-bottom: 8px;"><span class="lang-en">CloudFront can deliver real-time access logs to a single destination.</span><span class="lang-es">CloudFront puede entregar registros de acceso en tiempo real a un único destino.</span></p>
             <ul>
-              <li>Only destination: <strong style="color: #f8fafc;">Kinesis Data Streams</strong></li>
-              <li>Configurable sampling rate (% of requests to log)</li>
-              <li>Can filter by specific cache behaviors/paths</li>
-              <li>From Kinesis: forward to Lambda, S3, OpenSearch, etc.</li>
+              <li><span class="lang-en">Only destination: <strong style="color: #f8fafc;">Kinesis Data Streams</strong></span><span class="lang-es">Único destino: <strong style="color: #f8fafc;">Kinesis Data Streams</strong></span></li>
+              <li><span class="lang-en">Configurable sampling rate (% of requests to log)</span><span class="lang-es">Tasa de muestreo configurable (% de solicitudes a registrar)</span></li>
+              <li><span class="lang-en">Can filter by specific cache behaviors/paths</span><span class="lang-es">Puede filtrar por comportamientos de caché/rutas específicas</span></li>
+              <li><span class="lang-en">From Kinesis: forward to Lambda, S3, OpenSearch, etc.</span><span class="lang-es">Desde Kinesis: reenviar a Lambda, S3, OpenSearch, etc.</span></li>
             </ul>
-            <div style="margin-top: 8px; font-size: 13px; color: #64748b;">Exam: "CloudFront real-time logs" → Kinesis Data Streams (only option)</div>
+            <div style="margin-top: 8px; font-size: 13px; color: #64748b;"><span class="lang-en">Exam: "CloudFront real-time logs" → Kinesis Data Streams (only option)</span><span class="lang-es">Examen: "Registros en tiempo real de CloudFront" → Kinesis Data Streams (única opción)</span></div>
           </div>
 
           <div class="feature-card">
-            <div class="feature-card-title">Geo Restriction</div>
-            <p style="margin-bottom: 8px;">Block or allow users based on country. Uses a third-party Geo-IP database to determine origin country.</p>
+            <div class="feature-card-title"><span class="lang-en">Geo Restriction</span><span class="lang-es">Restricción geográfica</span></div>
+            <p style="margin-bottom: 8px;"><span class="lang-en">Block or allow users based on country. Uses a third-party Geo-IP database to determine origin country.</span><span class="lang-es">Bloquee o permita usuarios según el país. Utiliza una base de datos Geo-IP de terceros para determinar el país de origen.</span></p>
             <ul>
-              <li><strong style="color: #f8fafc;">Allowlist</strong> — Only listed countries can access</li>
-              <li><strong style="color: #f8fafc;">Blocklist</strong> — Listed countries are blocked (403)</li>
-              <li>Country determined by Geo-IP database (not 100% accurate)</li>
-              <li>Use case: copyright law compliance by geography</li>
+              <li><strong style="color: #f8fafc;"><span class="lang-en">Allowlist</span><span class="lang-es">Lista blanca</span></strong> — <span class="lang-en">Only listed countries can access</span><span class="lang-es">Solo los países enumerados pueden acceder</span></li>
+              <li><strong style="color: #f8fafc;"><span class="lang-en">Blocklist</span><span class="lang-es">Lista negra</span></strong> — <span class="lang-en">Listed countries are blocked (403)</span><span class="lang-es">Los países enumerados están bloqueados (403)</span></li>
+              <li><span class="lang-en">Country determined by Geo-IP database (not 100% accurate)</span><span class="lang-es">País determinado por base de datos Geo-IP (no 100% preciso)</span></li>
+              <li><span class="lang-en">Use case: copyright law compliance by geography</span><span class="lang-es">Caso de uso: cumplimiento de leyes de derechos de autor por geografía</span></li>
             </ul>
           </div>
 
           <div class="feature-card">
-            <div class="feature-card-title">OAC — Origin Access Control</div>
-            <p style="margin-bottom: 8px;">Restricts S3 bucket access so only CloudFront can fetch objects. Replaces the older OAI (Origin Access Identity).</p>
+            <div class="feature-card-title"><span class="lang-en">OAC — Origin Access Control</span><span class="lang-es">OAC — Control de acceso al origen</span></div>
+            <p style="margin-bottom: 8px;"><span class="lang-en">Restricts S3 bucket access so only CloudFront can fetch objects. Replaces the older OAI (Origin Access Identity).</span><span class="lang-es">Restringe el acceso al depósito de S3 para que solo CloudFront pueda obtener objetos. Reemplaza el OAI más antiguo (Identidad de acceso de origen).</span></p>
             <ul>
-              <li>S3 bucket policy grants CloudFront service principal access</li>
-              <li>Bucket can be completely private — no public URLs</li>
-              <li>OAC supports SSE-KMS encrypted S3 objects (OAI did not)</li>
-              <li>OAC is the current recommended approach (not OAI)</li>
+              <li><span class="lang-en">S3 bucket policy grants CloudFront service principal access</span><span class="lang-es">La política de depósito de S3 otorga acceso del principal del servicio CloudFront</span></li>
+              <li><span class="lang-en">Bucket can be completely private — no public URLs</span><span class="lang-es">El depósito puede ser completamente privado — sin URL públicas</span></li>
+              <li><span class="lang-en">OAC supports SSE-KMS encrypted S3 objects (OAI did not)</span><span class="lang-es">OAC admite objetos de S3 encriptados con SSE-KMS (OAI no lo hizo)</span></li>
+              <li><span class="lang-en">OAC is the current recommended approach (not OAI)</span><span class="lang-es">OAC es el enfoque recomendado actualmente (no OAI)</span></li>
             </ul>
-            <div style="margin-top: 8px; font-size: 13px; color: #64748b;">Exam: "Secure S3 behind CloudFront" → OAC + S3 bucket policy</div>
+            <div style="margin-top: 8px; font-size: 13px; color: #64748b;"><span class="lang-en">Exam: "Secure S3 behind CloudFront" → OAC + S3 bucket policy</span><span class="lang-es">Examen: "Asegurar S3 detrás de CloudFront" → OAC + política de depósito de S3</span></div>
           </div>
 
         </div>
 
         <!-- Origin Groups Architecture -->
         <div style="background: #0f172a; border-radius: 10px; padding: 16px;">
-          <div style="font-size: 13px; color: #64748b; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.08em;">Origin Groups Failover Architecture</div>
+          <div style="font-size: 13px; color: #64748b; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.08em;"><span class="lang-en">Origin Groups Failover Architecture</span><span class="lang-es">Arquitectura de conmutación por error de grupos de origen</span></div>
           <div class="flow-row">
-            <div class="cf-node user">User<br/><span style="font-size: 13px; font-weight: 400;">Request</span></div>
+            <div class="cf-node user"><span class="lang-en">User</span><span class="lang-es">Usuario</span><br/><span style="font-size: 13px; font-weight: 400;"><span class="lang-en">Request</span><span class="lang-es">Solicitud</span></span></div>
             <div class="cf-arrow">&#8594;</div>
-            <div class="cf-node edge">CloudFront<br/><span style="font-size: 13px; font-weight: 400;">Origin Group</span></div>
+            <div class="cf-node edge"><span class="lang-en">CloudFront</span><span class="lang-es">CloudFront</span><br/><span style="font-size: 13px; font-weight: 400;"><span class="lang-en">Origin Group</span><span class="lang-es">Grupo de origen</span></span></div>
             <div class="cf-arrow">&#8594;</div>
-            <div class="cf-node origin">Primary Origin<br/><span style="font-size: 13px; font-weight: 400;">S3 us-east-1</span></div>
+            <div class="cf-node origin"><span class="lang-en">Primary Origin</span><span class="lang-es">Origen primario</span><br/><span style="font-size: 13px; font-weight: 400;"><span class="lang-en">S3 us-east-1</span><span class="lang-es">S3 us-east-1</span></span></div>
           </div>
-          <div style="margin: 8px 0 8px 120px; font-size: 13px; color: #ef4444;">Primary fails (5xx) &#8595;</div>
+          <div style="margin: 8px 0 8px 120px; font-size: 13px; color: #ef4444;"><span class="lang-en">Primary fails (5xx) &#8595;</span><span class="lang-es">Fallo primario (5xx) &#8595;</span></div>
           <div class="flow-row">
             <div class="cf-node user" style="opacity: 0; pointer-events: none;">User<br/><span style="font-size: 13px;">spacer</span></div>
             <div class="cf-arrow" style="opacity: 0;">&#8594;</div>
-            <div class="cf-node edge">CloudFront<br/><span style="font-size: 13px; font-weight: 400;">Automatic failover</span></div>
+            <div class="cf-node edge">CloudFront<br/><span style="font-size: 13px; font-weight: 400;"><span class="lang-en">Automatic failover</span><span class="lang-es">Conmutación por error automática</span></span></div>
             <div class="cf-arrow">&#8594;</div>
-            <div class="cf-node secondary">Secondary Origin<br/><span style="font-size: 13px; font-weight: 400;">S3 CRR eu-west-1</span></div>
+            <div class="cf-node secondary"><span class="lang-en">Secondary Origin</span><span class="lang-es">Origen secundario</span><br/><span style="font-size: 13px; font-weight: 400;"><span class="lang-en">S3 CRR eu-west-1</span><span class="lang-es">S3 CRR eu-west-1</span></span></div>
           </div>
-          <div style="font-size: 13px; color: #64748b; margin-top: 8px;">With S3 CRR keeping secondary in sync = regional disaster recovery solution.</div>
+          <div style="font-size: 13px; color: #64748b; margin-top: 8px;"><span class="lang-en">With S3 CRR keeping secondary in sync = regional disaster recovery solution.</span><span class="lang-es">Con S3 CRR manteniendo sincronización secundaria = solución de recuperación ante desastres regional.</span></div>
         </div>
       </div>
     </section>
@@ -530,89 +530,89 @@
          SECTION 7 — Exam Tips
     ========================================================= -->
     <section>
-      <div class="section-label">07 — Exam Tips &amp; Quick Recall</div>
+      <div class="section-label"><span class="lang-en">07 — Exam Tips &amp; Quick Recall</span><span class="lang-es">07 — Consejos de examen y recordatorio rápido</span></div>
       <div class="card">
-        <div class="card-title">Section 15 Exam Cheat Sheet</div>
+        <div class="card-title"><span class="lang-en">Section 15 Exam Cheat Sheet</span><span class="lang-es">Hoja de trucos de examen de la sección 15</span></div>
         <div class="tips-grid">
 
           <div class="tip-card">
-            <div class="tip-trigger">See "CDN" on exam &rarr;</div>
-            <div class="tip-answer">CloudFront — always</div>
+            <div class="tip-trigger"><span class="lang-en">See "CDN" on exam &rarr;</span><span class="lang-es">Ver "CDN" en el examen &rarr;</span></div>
+            <div class="tip-answer"><span class="lang-en">CloudFront — always</span><span class="lang-es">CloudFront — siempre</span></div>
           </div>
 
           <div class="tip-card">
-            <div class="tip-trigger">Secure S3 origin behind CloudFront &rarr;</div>
-            <div class="tip-answer">OAC (Origin Access Control) + S3 bucket policy granting CloudFront service principal</div>
+            <div class="tip-trigger"><span class="lang-en">Secure S3 origin behind CloudFront &rarr;</span><span class="lang-es">Asegurar origen de S3 detrás de CloudFront &rarr;</span></div>
+            <div class="tip-answer"><span class="lang-en">OAC (Origin Access Control) + S3 bucket policy granting CloudFront service principal</span><span class="lang-es">OAC (Control de acceso al origen) + política de depósito de S3 que otorga el principal del servicio CloudFront</span></div>
           </div>
 
           <div class="tip-card">
-            <div class="tip-trigger">CloudFront to private ALB/EC2, most secure &rarr;</div>
-            <div class="tip-answer">VPC Origin — resources stay in private subnets, no public exposure needed</div>
+            <div class="tip-trigger"><span class="lang-en">CloudFront to private ALB/EC2, most secure &rarr;</span><span class="lang-es">CloudFront a ALB/EC2 privada, más seguro &rarr;</span></div>
+            <div class="tip-answer"><span class="lang-en">VPC Origin — resources stay in private subnets, no public exposure needed</span><span class="lang-es">Origen de VPC — los recursos permanecen en subredes privadas, sin necesidad de exposición pública</span></div>
           </div>
 
           <div class="tip-card">
-            <div class="tip-trigger">Default Cache Key &rarr;</div>
-            <div class="tip-answer">hostname + resource URL path only</div>
+            <div class="tip-trigger"><span class="lang-en">Default Cache Key &rarr;</span><span class="lang-es">Clave de caché predeterminada &rarr;</span></div>
+            <div class="tip-answer"><span class="lang-en">hostname + resource URL path only</span><span class="lang-es">nombre de host + ruta de URL de recurso solamente</span></div>
           </div>
 
           <div class="tip-card">
-            <div class="tip-trigger">Cache Policy vs Origin Request Policy &rarr;</div>
-            <div class="tip-answer">Cache Policy = Cache Key + TTL (forwarded to origin). Origin Request Policy = forwarded to origin but NOT in cache key</div>
+            <div class="tip-trigger"><span class="lang-en">Cache Policy vs Origin Request Policy &rarr;</span><span class="lang-es">Política de caché vs Política de solicitud de origen &rarr;</span></div>
+            <div class="tip-answer"><span class="lang-en">Cache Policy = Cache Key + TTL (forwarded to origin). Origin Request Policy = forwarded to origin but NOT in cache key</span><span class="lang-es">Política de caché = Clave de caché + TTL (reenviada al origen). Política de solicitud de origen = reenviada al origen pero NO en la clave de caché</span></div>
           </div>
 
           <div class="tip-card">
-            <div class="tip-trigger">Users see old content after update &rarr;</div>
-            <div class="tip-answer">Cache Invalidation — use /* for all or /path/* for specific paths</div>
+            <div class="tip-trigger"><span class="lang-en">Users see old content after update &rarr;</span><span class="lang-es">Los usuarios ven contenido antiguo después de la actualización &rarr;</span></div>
+            <div class="tip-answer"><span class="lang-en">Cache Invalidation — use /* for all or /path/* for specific paths</span><span class="lang-es">Invalidación de caché — use /* para todo o /ruta/* para rutas específicas</span></div>
           </div>
 
           <div class="tip-card">
-            <div class="tip-trigger">Different URL patterns, different origins &rarr;</div>
-            <div class="tip-answer">Cache Behaviors — most specific match wins, /* default always evaluated last</div>
+            <div class="tip-trigger"><span class="lang-en">Different URL patterns, different origins &rarr;</span><span class="lang-es">Diferentes patrones de URL, diferentes orígenes &rarr;</span></div>
+            <div class="tip-answer"><span class="lang-en">Cache Behaviors — most specific match wins, /* default always evaluated last</span><span class="lang-es">Comportamientos de caché — la coincidencia más específica gana, /* predeterminado siempre se evalúa en último lugar</span></div>
           </div>
 
           <div class="tip-card">
-            <div class="tip-trigger">Signed URL vs Signed Cookie &rarr;</div>
-            <div class="tip-answer">Signed URL = one file access | Signed Cookie = multiple files / subscription</div>
+            <div class="tip-trigger"><span class="lang-en">Signed URL vs Signed Cookie &rarr;</span><span class="lang-es">URL firmada vs Cookie firmada &rarr;</span></div>
+            <div class="tip-answer"><span class="lang-en">Signed URL = one file access | Signed Cookie = multiple files / subscription</span><span class="lang-es">URL firmada = acceso a un archivo | Cookie firmada = múltiples archivos / suscripción</span></div>
           </div>
 
           <div class="tip-card">
-            <div class="tip-trigger">S3 behind CloudFront with OAC, need signed access &rarr;</div>
-            <div class="tip-answer">CloudFront Signed URL (NOT S3 Pre-signed URL — bypasses CloudFront)</div>
+            <div class="tip-trigger"><span class="lang-en">S3 behind CloudFront with OAC, need signed access &rarr;</span><span class="lang-es">S3 detrás de CloudFront con OAC, necesita acceso firmado &rarr;</span></div>
+            <div class="tip-answer"><span class="lang-en">CloudFront Signed URL (NOT S3 Pre-signed URL — bypasses CloudFront)</span><span class="lang-es">URL firmada de CloudFront (NO URL pre-firmada de S3 — omite CloudFront)</span></div>
           </div>
 
           <div class="tip-card">
-            <div class="tip-trigger">S3 without CloudFront, need temporary access &rarr;</div>
-            <div class="tip-answer">S3 Pre-signed URL</div>
+            <div class="tip-trigger"><span class="lang-en">S3 without CloudFront, need temporary access &rarr;</span><span class="lang-es">S3 sin CloudFront, necesita acceso temporal &rarr;</span></div>
+            <div class="tip-answer"><span class="lang-en">S3 Pre-signed URL</span><span class="lang-es">URL pre-firmada de S3</span></div>
           </div>
 
           <div class="tip-card">
-            <div class="tip-trigger">Signed URL key management &rarr;</div>
-            <div class="tip-answer">Trusted Key Groups (recommended — any IAM user, API-manageable). Avoid CloudFront Key Pairs (root only, no APIs)</div>
+            <div class="tip-trigger"><span class="lang-en">Signed URL key management &rarr;</span><span class="lang-es">Gestión de claves de URL firmada &rarr;</span></div>
+            <div class="tip-answer"><span class="lang-en">Trusted Key Groups (recommended — any IAM user, API-manageable). Avoid CloudFront Key Pairs (root only, no APIs)</span><span class="lang-es">Grupos de claves de confianza (recomendado — cualquier usuario de IAM, gestionable por API). Evite pares de claves de CloudFront (solo raíz, sin API)</span></div>
           </div>
 
           <div class="tip-card">
-            <div class="tip-trigger">Cheapest CloudFront setup &rarr;</div>
-            <div class="tip-answer">Price Class 100 (NA + Europe only)</div>
+            <div class="tip-trigger"><span class="lang-en">Cheapest CloudFront setup &rarr;</span><span class="lang-es">Configuración de CloudFront más económica &rarr;</span></div>
+            <div class="tip-answer"><span class="lang-en">Price Class 100 (NA + Europe only)</span><span class="lang-es">Clase de precio 100 (solo América del Norte + Europa)</span></div>
           </div>
 
           <div class="tip-card">
-            <div class="tip-trigger">CloudFront regional disaster recovery &rarr;</div>
-            <div class="tip-answer">Origin Groups (primary + secondary) + S3 CRR to keep secondary in sync</div>
+            <div class="tip-trigger"><span class="lang-en">CloudFront regional disaster recovery &rarr;</span><span class="lang-es">Recuperación ante desastres regional de CloudFront &rarr;</span></div>
+            <div class="tip-answer"><span class="lang-en">Origin Groups (primary + secondary) + S3 CRR to keep secondary in sync</span><span class="lang-es">Grupos de Origen (primario + secundario) + S3 CRR para mantener secundario sincronizado</span></div>
           </div>
 
           <div class="tip-card">
-            <div class="tip-trigger">Encrypt specific fields, only app server decrypts &rarr;</div>
-            <div class="tip-answer">Field-Level Encryption — up to 10 fields, public key at edge, private key at web server</div>
+            <div class="tip-trigger"><span class="lang-en">Encrypt specific fields, only app server decrypts &rarr;</span><span class="lang-es">Cifrar campos específicos, solo el servidor de aplicaciones descifra &rarr;</span></div>
+            <div class="tip-answer"><span class="lang-en">Field-Level Encryption — up to 10 fields, public key at edge, private key at web server</span><span class="lang-es">Cifrado a nivel de campo — hasta 10 campos, clave pública en el borde, clave privada en el servidor web</span></div>
           </div>
 
           <div class="tip-card">
-            <div class="tip-trigger">CloudFront real-time logs destination &rarr;</div>
-            <div class="tip-answer">Kinesis Data Streams — the only supported real-time log destination</div>
+            <div class="tip-trigger"><span class="lang-en">CloudFront real-time logs destination &rarr;</span><span class="lang-es">Destino de registros en tiempo real de CloudFront &rarr;</span></div>
+            <div class="tip-answer"><span class="lang-en">Kinesis Data Streams — the only supported real-time log destination</span><span class="lang-es">Kinesis Data Streams — el único destino de registro en tiempo real admitido</span></div>
           </div>
 
           <div class="tip-card">
-            <div class="tip-trigger">Block users by country &rarr;</div>
-            <div class="tip-answer">Geo Restriction — allowlist or blocklist, determined by Geo-IP database</div>
+            <div class="tip-trigger"><span class="lang-en">Block users by country &rarr;</span><span class="lang-es">Bloquear usuarios por país &rarr;</span></div>
+            <div class="tip-answer"><span class="lang-en">Geo Restriction — allowlist or blocklist, determined by Geo-IP database</span><span class="lang-es">Restricción geográfica — lista blanca o lista negra, determinada por base de datos Geo-IP</span></div>
           </div>
 
         </div>
@@ -692,7 +692,7 @@
                   '<tbody>' +
                     '<tr><td style="color: #94a3b8;">Works with</td><td>ANY CloudFront origin (S3, EC2, ALB)</td><td>S3 only</td></tr>' +
                     '<tr><td style="color: #94a3b8;">Routing</td><td>Via CDN edge locations (cached)</td><td>Direct to S3 — bypasses CloudFront</td></tr>' +
-                    '<tr><td style="color: #94a3b8;">Use when</td><td>S3 is behind CloudFront with OAC</td><td>No CloudFront in the architecture</td></tr>' +
+                    '<tr><td style="color: #94a3b8;">Use when</td><td>S3 is behind CloudFront with OAC</td><td><span class="lang-en">No</span><span class="lang-es">No</span> CloudFront in the architecture</td></tr>' +
                     '<tr><td style="color: #94a3b8;">Key management</td><td>Trusted Key Groups (IAM users)</td><td>IAM user/role credentials</td></tr>' +
                   '</tbody>' +
                 '</table>' +
@@ -711,7 +711,7 @@
                     '<li>Any IAM user can create and manage keys</li>' +
                     '<li>Fully API-manageable and automatable</li>' +
                     '<li>Supports key rotation workflows</li>' +
-                    '<li>No root account involvement required</li>' +
+                    '<li><span class="lang-en">No</span><span class="lang-es">No</span> root account involvement required</li>' +
                     '<li>Follows IAM least-privilege principles</li>' +
                   '</ul>' +
                 '</div>' +
@@ -719,7 +719,7 @@
                   '<div class="feature-card-title" style="color: #fca5a5;">CloudFront Key Pairs (Legacy — Avoid)</div>' +
                   '<ul>' +
                     '<li>Requires root account credentials to manage</li>' +
-                    '<li>No API support — manual console process</li>' +
+                    '<li><span class="lang-en">No</span><span class="lang-es">No</span> API support — manual console process</li>' +
                     '<li>Cannot be automated or rotated via CI/CD</li>' +
                     '<li>Root account usage violates AWS security best practices</li>' +
                     '<li>AWS recommends migrating to Key Groups</li>' +

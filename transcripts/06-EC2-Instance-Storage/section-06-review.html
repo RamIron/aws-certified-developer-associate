@@ -523,6 +523,7 @@
   </head>
 <body>
 
+
   <script>initHeader("Section 6 — EC2 Instance Storage")</script>
 
   <div class="page-body">
@@ -530,69 +531,69 @@
     <!-- WEAK POINTS -->
     <div class="section-block">
       <div class="callout warning">
-        <span class="callout-title">Weak Points — Review These First</span>
+        <span class="callout-title"><span class="lang-en">Weak Points — Review These First</span><span class="lang-es">Puntos Débiles — Revisa Estos Primero</span></span>
         <div class="weak-point-item">
-          <span><strong>6.10 Amazon EFS — 75%</strong> · Confused Elastic vs Max I/O performance modes</span>
+          <span><strong><span class="lang-en">6.10 Amazon EFS — 75%</span><span class="lang-es">6.10 Amazon EFS — 75%</span></strong> <span class="lang-en">· Confused Elastic vs <span class="lang-en">Max I/O</span><span class="lang-es">Máx E/S</span> performance modes</span><span class="lang-es">· Confundido entre los modos de rendimiento Elastic vs <span class="lang-en">Max I/O</span><span class="lang-es">Máx E/S</span></span></span>
         </div>
       </div>
     </div>
 
     <!-- 1. EBS -->
     <div class="section-block">
-      <div class="section-title">01 — EBS (Elastic Block Store)</div>
+      <div class="section-title"><span class="lang-en">01 — EBS (Elastic Block Store)</span><span class="lang-es">01 — EBS (Elastic Block Store)</span></div>
       <div class="card-grid">
         <div class="concept-card">
-          <div class="card-label">Network Drive</div>
-          <div class="card-body">Not a physical drive — communicates over the network. <strong>Slight latency possible.</strong> Can be detached from one EC2 and attached to another.</div>
+          <div class="card-label"><span class="lang-en"><span class="lang-en">Network Drive</span><span class="lang-es">Unidad de Red</span></span><span class="lang-es">Unidad de Red</span></div>
+          <div class="card-body"><span class="lang-en"><span class="lang-en">Not a physical drive — communicates over the network. <strong>Slight latency possible.</strong> Can be detached from one EC2 and attached to another.</span><span class="lang-es">No es una unidad física — se comunica a través de la red. <strong>Posible ligera latencia.</strong> Puede desacoplarse de una instancia EC2 y acoplarse a otra.</span></span><span class="lang-es">No es una unidad física — se comunica a través de la red. <strong>Posible ligera latencia.</strong> Puede desacoplarse de una instancia EC2 y acoplarse a otra.</span></div>
         </div>
         <div class="concept-card">
-          <div class="card-label">AZ-Locked</div>
-          <div class="card-body"><strong>Cannot attach to an instance in a different AZ.</strong> An EBS volume in us-east-1a cannot be directly attached to an instance in us-east-1b.</div>
+          <div class="card-label"><span class="lang-en">AZ-Locked</span><span class="lang-es">Bloqueada por AZ</span></div>
+          <div class="card-body"><span class="lang-en"><strong>Cannot attach to an instance in a different AZ.</strong> An EBS volume in us-east-1a cannot be directly attached to an instance in us-east-1b.</span><span class="lang-es"><strong>No se puede adjuntar a una instancia en una AZ diferente.</strong> Un volumen EBS en us-east-1a no se puede adjuntar directamente a una instancia en us-east-1b.</span></div>
         </div>
         <div class="concept-card">
-          <div class="card-label">Persistent Storage</div>
-          <div class="card-body">Data <strong>survives instance termination.</strong> This is the key advantage over EC2 Instance Store (which is ephemeral).</div>
+          <div class="card-label"><span class="lang-en">Persistent Storage</span><span class="lang-es">Almacenamiento Persistente</span></div>
+          <div class="card-body"><span class="lang-en">Data <strong>survives instance termination.</strong> This is the key advantage over EC2 <span class="lang-en">Instance Store</span><span class="lang-es">Instance Store</span> (which is ephemeral).</span><span class="lang-es">Los datos <strong>sobreviven a la terminación de la instancia.</strong> Esta es la ventaja clave sobre EC2 <span class="lang-en">Instance Store</span><span class="lang-es">Instance Store</span> (que es efímero).</span></div>
         </div>
         <div class="concept-card">
-          <div class="card-label">Delete on Termination</div>
-          <div class="card-body"><strong>Root volume:</strong> deleted by default when instance terminates.<br><strong>Additional volumes:</strong> kept by default (can be changed).</div>
+          <div class="card-label"><span class="lang-en">Delete on Termination</span><span class="lang-es">Eliminar al Terminar</span></div>
+          <div class="card-body"><span class="lang-en"><strong>Root volume:</strong> deleted by default when instance terminates.<br><strong>Additional volumes:</strong> kept by default (can be changed).</span><span class="lang-es"><strong>Volumen raíz:</strong> eliminado por defecto cuando termina la instancia.<br><strong>Volúmenes adicionales:</strong> conservados por defecto (puede cambiarse).</span></div>
         </div>
       </div>
     </div>
 
     <!-- 2. EBS SNAPSHOTS -->
     <div class="section-block">
-      <div class="section-title">02 — EBS Snapshots</div>
+      <div class="section-title"><span class="lang-en">02 — EBS Snapshots</span><span class="lang-es">02 — Snapshots EBS</span></div>
 
       <div class="rules-list">
         <div class="rule-item">
           <div class="rule-dot"></div>
-          <div class="rule-text"><strong>Point-in-time backup</strong> of an EBS volume stored in S3 (managed by AWS)</div>
+          <div class="rule-text"><span class="lang-en"><strong>Point-in-time backup</strong> of an EBS volume stored in S3 (managed by AWS)</span><span class="lang-es">Copia de seguridad <strong>en un punto en el tiempo</strong> de un volumen EBS almacenado en S3 (gestionado por AWS)</span></div>
         </div>
         <div class="rule-item">
           <div class="rule-dot"></div>
-          <div class="rule-text">Not required to detach the volume first, <strong>but recommended</strong> for data consistency</div>
+          <div class="rule-text"><span class="lang-en">Not required to detach the volume first, <strong>but recommended</strong> for data consistency</span><span class="lang-es">No es necesario desmontar el volumen primero, <strong>pero se recomienda</strong> para consistencia de datos</span></div>
         </div>
         <div class="rule-item">
           <div class="rule-dot"></div>
-          <div class="rule-text">Use snapshots to <strong>MIGRATE EBS volumes across AZs or Regions</strong> — snapshot in AZ-A, restore in AZ-B</div>
+          <div class="rule-text"><span class="lang-en">Use snapshots to <strong>MIGRATE EBS volumes across AZs or Regions</strong> — snapshot in AZ-A, restore in AZ-B</span><span class="lang-es">Usa snapshots para <strong>MIGRAR volúmenes EBS entre AZs o Regiones</strong> — snapshot en AZ-A, restaurar en AZ-B</span></div>
         </div>
       </div>
 
       <div style="margin-top: 4px;">
-        <div class="sub-heading">Snapshot Features</div>
+        <div class="sub-heading"><span class="lang-en">Snapshot <span class="lang-en">Feature</span><span class="lang-es">Característica</span>s</span><span class="lang-es">Características del Snapshot</span></div>
         <div class="snapshot-cards">
           <div class="snapshot-card archive">
-            <div class="snap-name">Snapshot Archive</div>
-            <div class="snap-body"><strong>75% cheaper</strong> storage tier for snapshots that are rarely accessed. Restore time takes <strong>24 to 72 hours.</strong></div>
+            <div class="snap-name"><span class="lang-en">Snapshot <span class="lang-en">Archive</span><span class="lang-es">Archivo</span></span><span class="lang-es">Archivo de Snapshot</span></div>
+            <div class="snap-body"><span class="lang-en"><strong>75% cheaper</strong> storage tier for snapshots that are rarely accessed. Restore time takes <strong>24 to 72 hours.</strong></span><span class="lang-es">Capa de almacenamiento <strong>75% más barata</strong> para snapshots a los que se accede raramente. El tiempo de restauración toma <strong>24 a 72 horas.</strong></span></div>
           </div>
           <div class="snapshot-card recycle">
-            <div class="snap-name">Recycle Bin</div>
-            <div class="snap-body">Recover <strong>accidentally deleted snapshots.</strong> Configure retention rules from <strong>1 day to 1 year.</strong></div>
+            <div class="snap-name"><span class="lang-en">Recycle Bin</span><span class="lang-es">Papelera de Reciclaje</span></div>
+            <div class="snap-body"><span class="lang-en">Recover <strong>accidentally deleted snapshots.</strong> Configure retention rules from <strong>1 day to 1 year.</strong></span><span class="lang-es">Recupera <strong>snapshots eliminados accidentalmente.</strong> Configura reglas de retención de <strong>1 día a 1 año.</strong></span></div>
           </div>
           <div class="snapshot-card fast">
-            <div class="snap-name">Fast Snapshot Restore</div>
-            <div class="snap-body">Forces <strong>full initialization</strong> of a snapshot — eliminates the latency on first use. Costs more.</div>
+            <div class="snap-name"><span class="lang-en">Fast Snapshot Restore</span><span class="lang-es">Restauración Rápida de Snapshot</span></div>
+            <div class="snap-body"><span class="lang-en">Forces <strong>full initialization</strong> of a snapshot — eliminates the latency on first use. Costs more.</span><span class="lang-es">Fuerza la <strong>inicialización completa</strong> de un snapshot — elimina la latencia en el primer uso. Cuesta más.</span></div>
           </div>
         </div>
       </div>
@@ -600,58 +601,58 @@
 
     <!-- 3. AMI -->
     <div class="section-block">
-      <div class="section-title">03 — AMI (Amazon Machine Image)</div>
+      <div class="section-title"><span class="lang-en">03 — AMI (Amazon Machine Image)</span><span class="lang-es">03 — AMI (Imagen de Máquina Amazon)</span></div>
 
       <div class="rules-list">
         <div class="rule-item">
           <div class="rule-dot"></div>
-          <div class="rule-text"><strong>Customization of EC2</strong> — pre-packages your OS, software, configuration, and monitoring agents. Faster boot since software is pre-baked.</div>
+          <div class="rule-text"><span class="lang-en"><strong>Customization of EC2</strong> — pre-packages your OS, software, configuration, and monitoring agents. Faster boot since software is pre-baked.</span><span class="lang-es"><strong>Personalización de EC2</strong> — pre-empaqueta tu SO, software, configuración y agentes de monitoreo. Arranque más rápido ya que el software está preconfigurado.</span></div>
         </div>
         <div class="rule-item">
           <div class="rule-dot"></div>
-          <div class="rule-text"><strong>Region-specific</strong> — AMIs are built for a specific region. Can be <strong>copied across regions</strong> but cannot be used directly across regions.</div>
+          <div class="rule-text"><span class="lang-en"><strong>Region-specific</strong> — AMIs are built for a specific region. Can be <strong>copied across regions</strong> but cannot be used directly across regions.</span><span class="lang-es"><strong>Específica de región</strong> — las AMI se construyen para una región específica. Pueden ser <strong>copiadas entre regiones</strong> pero no se pueden usar directamente entre regiones.</span></div>
         </div>
       </div>
 
       <div style="margin-top: 4px;">
-        <div class="sub-heading">AMI Types</div>
+        <div class="sub-heading"><span class="lang-en">AMI <span class="lang-en">Type</span><span class="lang-es">Tipo</span>s</span><span class="lang-es">Tipos de AMI</span></div>
         <div class="ami-type-grid">
           <div class="ami-card">
             <div class="ami-chip aws">AWS PROVIDED</div>
-            <div class="ami-type">Public AMI</div>
-            <div class="ami-desc">Provided and maintained by AWS. Example: Amazon Linux 2, Ubuntu, Windows Server. Free to use.</div>
+            <div class="ami-type"><span class="lang-en">Public AMI</span><span class="lang-es">AMI Pública</span></div>
+            <div class="ami-desc"><span class="lang-en">Provided and maintained by AWS. Example: Amazon Linux 2, Ubuntu, Windows Server. Free to use.</span><span class="lang-es">Proporcionada y mantenida por AWS. Ejemplo: Amazon Linux 2, Ubuntu, Windows Server. Libre de usar.</span></div>
           </div>
           <div class="ami-card">
             <div class="ami-chip custom">YOUR OWN</div>
-            <div class="ami-type">Custom AMI</div>
-            <div class="ami-desc">Created and maintained by you. Contains your custom software, config, packages. Faster launch times.</div>
+            <div class="ami-type"><span class="lang-en">Custom AMI</span><span class="lang-es">AMI Personalizada</span></div>
+            <div class="ami-desc"><span class="lang-en">Created and maintained by you. Contains your custom software, config, packages. Faster launch times.</span><span class="lang-es">Creada y mantenida por ti. Contiene tu software personalizado, configuración, paquetes. Tiempos de lanzamiento más rápidos.</span></div>
           </div>
           <div class="ami-card">
             <div class="ami-chip market">THIRD PARTY</div>
-            <div class="ami-type">Marketplace AMI</div>
-            <div class="ami-desc">AMIs sold by third-party vendors on the AWS Marketplace. May include licensed software with cost.</div>
+            <div class="ami-type"><span class="lang-en">Marketplace AMI</span><span class="lang-es">AMI de Marketplace</span></div>
+            <div class="ami-desc"><span class="lang-en">AMIs sold by third-party vendors on the AWS Marketplace. May include licensed software with cost.</span><span class="lang-es">AMI vendidas por proveedores terceros en AWS Marketplace. Puede incluir software con licencia con costo.</span></div>
           </div>
         </div>
       </div>
 
       <div style="margin-top: 4px;">
-        <div class="sub-heading">AMI Creation Flow</div>
+        <div class="sub-heading"><span class="lang-en">AMI Creation Flow</span><span class="lang-es">Flujo de Creación de AMI</span></div>
         <div class="ami-flow">
           <div class="ami-step">
             <div class="step-num">1</div>
-            <div class="step-text"><strong>Launch + customize</strong> an EC2 instance — install software, configure as needed</div>
+            <div class="step-text"><span class="lang-en"><strong>Launch + customize</strong> an EC2 instance — install software, configure as needed</span><span class="lang-es"><strong>Lanza + personaliza</strong> una instancia EC2 — instala software, configura según sea necesario</span></div>
           </div>
           <div class="ami-step">
             <div class="step-num">2</div>
-            <div class="step-text"><strong>Stop the instance</strong> — ensures data integrity before imaging</div>
+            <div class="step-text"><span class="lang-en"><strong>Stop the instance</strong> — ensures data integrity before imaging</span><span class="lang-es"><strong>Detén la instancia</strong> — asegura integridad de datos antes de la creación de imagen</span></div>
           </div>
           <div class="ami-step">
             <div class="step-num">3</div>
-            <div class="step-text"><strong>Build the AMI</strong> — AWS creates EBS snapshots of all volumes behind the scenes</div>
+            <div class="step-text"><span class="lang-en"><strong>Build the AMI</strong> — AWS creates EBS snapshots of all volumes behind the scenes</span><span class="lang-es"><strong>Construye la AMI</strong> — AWS crea snapshots EBS de todos los volúmenes detrás de escenas</span></div>
           </div>
           <div class="ami-step">
             <div class="step-num">4</div>
-            <div class="step-text"><strong>Launch new instances</strong> from the AMI — instantly provisioned with all pre-packaged software</div>
+            <div class="step-text"><span class="lang-en"><strong>Launch new instances</strong> from the AMI — instantly provisioned with all pre-packaged software</span><span class="lang-es"><strong>Lanza nuevas instancias</strong> desde la AMI — provisionadas instantáneamente con todo el software pre-empaquetado</span></div>
           </div>
         </div>
       </div>
@@ -659,35 +660,35 @@
 
     <!-- 4. INSTANCE STORE -->
     <div class="section-block">
-      <div class="section-title">04 — EC2 Instance Store</div>
+      <div class="section-title"><span class="lang-en">04 — EC2 <span class="lang-en">Instance Store</span><span class="lang-es">Instance Store</span></span><span class="lang-es">04 — EC2 <span class="lang-en">Instance Store</span><span class="lang-es">Instance Store</span></span></div>
 
       <div class="rules-list">
         <div class="rule-item">
           <div class="rule-dot"></div>
-          <div class="rule-text"><strong>Physical hard drive</strong> attached directly to the HOST hardware — not a network drive</div>
+          <div class="rule-text"><span class="lang-en"><strong>Physical hard drive</strong> attached directly to the HOST hardware — not a network drive</span><span class="lang-es"><strong>Disco duro físico</strong> conectado directamente al hardware del HOST — no es una unidad de red</span></div>
         </div>
         <div class="rule-item">
           <div class="rule-dot" style="background:#4ade80;"></div>
-          <div class="rule-text"><strong>FASTEST storage on AWS</strong> — millions of IOPS vs thousands for EBS. Best raw throughput.</div>
+          <div class="rule-text"><span class="lang-en"><strong>FASTEST storage on AWS</strong> — millions of IOPS vs thousands for EBS. Best raw throughput.</span><span class="lang-es"><strong>Almacenamiento MÁS RÁPIDO en AWS</strong> — millones de IOPS vs miles para EBS. Mejor rendimiento bruto.</span></div>
         </div>
         <div class="rule-item">
           <div class="rule-dot" style="background:#ef4444;"></div>
-          <div class="rule-text"><strong>EPHEMERAL</strong> — data is <strong>LOST</strong> when the instance is stopped, terminated, or fails</div>
+          <div class="rule-text"><span class="lang-en"><strong>EPHEMERAL</strong> — data is <strong>LOST</strong> when the instance is stopped, terminated, or fails</span><span class="lang-es"><strong>EFÍMERO</strong> — los datos se <strong>PIERDEN</strong> cuando la instancia se detiene, termina o falla</span></div>
         </div>
         <div class="rule-item">
           <div class="rule-dot"></div>
-          <div class="rule-text"><strong>Good for:</strong> buffer, cache, scratch data, temporary content — anything stateless and replaceable</div>
+          <div class="rule-text"><span class="lang-en"><strong>Good for:</strong> buffer, cache, scratch data, temporary content — anything stateless and replaceable</span><span class="lang-es"><strong>Bueno para:</strong> buffer, caché, datos temporales, contenido temporal — cualquier cosa sin estado y reemplazable</span></div>
         </div>
         <div class="rule-item">
           <div class="rule-dot"></div>
-          <div class="rule-text"><strong>Your responsibility</strong> to backup and replicate — AWS does not manage persistence for Instance Store</div>
+          <div class="rule-text"><span class="lang-en"><strong>Your responsibility</strong> to backup and replicate — AWS does not manage persistence for <span class="lang-en">Instance Store</span><span class="lang-es">Instance Store</span></span><span class="lang-es"><strong>Tu responsabilidad</strong> hacer backup y replicar — AWS no gestiona persistencia para <span class="lang-en">Instance Store</span><span class="lang-es">Instance Store</span></span></div>
         </div>
       </div>
     </div>
 
     <!-- 5. EBS VOLUME TYPES -->
     <div class="section-block">
-      <div class="section-title">05 — EBS Volume Types</div>
+      <div class="section-title"><span class="lang-en">05 — EBS Volume <span class="lang-en">Type</span><span class="lang-es">Tipo</span>s</span><span class="lang-es">05 — Tipos de Volumen EBS</span></div>
 
       <div class="vol-type-grid">
 
@@ -698,11 +699,11 @@
             <div class="chips"><span class="chip ssd">SSD</span></div>
           </div>
           <div class="vol-stats">
-            <div class="vol-stat-row"><span class="stat-key">Max IOPS</span><span class="stat-val"><strong>16,000</strong></span></div>
-            <div class="vol-stat-row"><span class="stat-key">Throughput</span><span class="stat-val"><strong>1,000 MiB/s</strong></span></div>
-            <div class="vol-stat-row"><span class="stat-key">Boot volume</span><span class="stat-val"><span class="chip green" style="font-size:10px;padding:2px 6px;">Yes</span></span></div>
+            <div class="vol-stat-row"><span class="stat-key"><span class="lang-en">Max IOPS</span><span class="lang-es">IOPS Máx</span></span><span class="stat-val"><strong>16,000</strong></span></div>
+            <div class="vol-stat-row"><span class="stat-key"><span class="lang-en">Throughput</span><span class="lang-es">Rendimiento</span></span><span class="stat-val"><strong>1,000 MiB/s</strong></span></div>
+            <div class="vol-stat-row"><span class="stat-key"><span class="lang-en">Boot volume</span><span class="lang-es">Volumen de arranque</span></span><span class="stat-val"><span class="chip green" style="font-size:10px;padding:2px 6px;"><span class="lang-en">Yes</span><span class="lang-es">Sí</span></span></span></div>
           </div>
-          <div class="vol-best"><strong>Best for:</strong> General purpose workloads. IOPS and throughput are <strong>independent from volume size</strong> — more cost-efficient.</div>
+          <div class="vol-best"><span class="lang-en"><strong>Best for:</strong> General purpose workloads. IOPS and throughput are <strong>independent from volume size</strong> — more cost-efficient.</span><span class="lang-es"><strong>Mejor para:</strong> Cargas de trabajo de propósito general. IOPS y rendimiento son <strong>independientes del tamaño del volumen</strong> — más eficiente en costos.</span></div>
         </div>
 
         <!-- gp2 -->
@@ -712,11 +713,11 @@
             <div class="chips"><span class="chip ssd">SSD</span></div>
           </div>
           <div class="vol-stats">
-            <div class="vol-stat-row"><span class="stat-key">Max IOPS</span><span class="stat-val"><strong>16,000</strong></span></div>
-            <div class="vol-stat-row"><span class="stat-key">Throughput</span><span class="stat-val"><strong>250 MiB/s</strong></span></div>
-            <div class="vol-stat-row"><span class="stat-key">Boot volume</span><span class="stat-val"><span class="chip green" style="font-size:10px;padding:2px 6px;">Yes</span></span></div>
+            <div class="vol-stat-row"><span class="stat-key"><span class="lang-en">Max IOPS</span><span class="lang-es">IOPS Máx</span></span><span class="stat-val"><strong>16,000</strong></span></div>
+            <div class="vol-stat-row"><span class="stat-key"><span class="lang-en">Throughput</span><span class="lang-es">Rendimiento</span></span><span class="stat-val"><strong>250 MiB/s</strong></span></div>
+            <div class="vol-stat-row"><span class="stat-key"><span class="lang-en">Boot volume</span><span class="lang-es">Volumen de arranque</span></span><span class="stat-val"><span class="chip green" style="font-size:10px;padding:2px 6px;"><span class="lang-en">Yes</span><span class="lang-es">Sí</span></span></span></div>
           </div>
-          <div class="vol-best"><strong>Best for:</strong> Legacy general purpose. IOPS <strong>tied to size</strong> (3 IOPS/GiB). Max 16K IOPS at 5,334 GiB.</div>
+          <div class="vol-best"><span class="lang-en"><strong>Best for:</strong> Legacy general purpose. IOPS <strong>tied to size</strong> (3 IOPS/GiB). Max 16K IOPS at 5,334 GiB.</span><span class="lang-es"><strong>Mejor para:</strong> Propósito general heredado. IOPS <strong>vinculado al tamaño</strong> (3 IOPS/GiB). Máx 16K IOPS en 5,334 GiB.</span></div>
         </div>
 
         <!-- io1 -->
@@ -726,11 +727,11 @@
             <div class="chips"><span class="chip ssd">SSD</span></div>
           </div>
           <div class="vol-stats">
-            <div class="vol-stat-row"><span class="stat-key">Max IOPS</span><span class="stat-val"><strong>64,000</strong></span></div>
-            <div class="vol-stat-row"><span class="stat-key">Throughput</span><span class="stat-val"><strong>1,000 MiB/s</strong></span></div>
-            <div class="vol-stat-row"><span class="stat-key">Boot volume</span><span class="stat-val"><span class="chip green" style="font-size:10px;padding:2px 6px;">Yes</span></span></div>
+            <div class="vol-stat-row"><span class="stat-key"><span class="lang-en">Max IOPS</span><span class="lang-es">IOPS Máx</span></span><span class="stat-val"><strong>64,000</strong></span></div>
+            <div class="vol-stat-row"><span class="stat-key"><span class="lang-en">Throughput</span><span class="lang-es">Rendimiento</span></span><span class="stat-val"><strong>1,000 MiB/s</strong></span></div>
+            <div class="vol-stat-row"><span class="stat-key"><span class="lang-en">Boot volume</span><span class="lang-es">Volumen de arranque</span></span><span class="stat-val"><span class="chip green" style="font-size:10px;padding:2px 6px;"><span class="lang-en">Yes</span><span class="lang-es">Sí</span></span></span></div>
           </div>
-          <div class="vol-best"><strong>Best for:</strong> Critical workloads needing >16K IOPS. Databases (MySQL, Oracle, NoSQL). Supports Multi-Attach.</div>
+          <div class="vol-best"><span class="lang-en"><strong>Best for:</strong> Critical workloads needing >16K IOPS. Databases (MySQL, Oracle, NoSQL). Supports Multi-Attach.</span><span class="lang-es"><strong>Mejor para:</strong> Cargas de trabajo críticas que necesitan >16K IOPS. Bases de datos (MySQL, Oracle, NoSQL). Soporta Multi-Attach.</span></div>
         </div>
 
         <!-- io2 -->
@@ -740,11 +741,11 @@
             <div class="chips"><span class="chip ssd">SSD</span></div>
           </div>
           <div class="vol-stats">
-            <div class="vol-stat-row"><span class="stat-key">Max IOPS</span><span class="stat-val"><strong>256,000</strong> (Block Express)</span></div>
-            <div class="vol-stat-row"><span class="stat-key">Throughput</span><span class="stat-val"><strong>7,500 MiB/s</strong></span></div>
-            <div class="vol-stat-row"><span class="stat-key">Boot volume</span><span class="stat-val"><span class="chip green" style="font-size:10px;padding:2px 6px;">Yes</span></span></div>
+            <div class="vol-stat-row"><span class="stat-key"><span class="lang-en">Max IOPS</span><span class="lang-es">IOPS Máx</span></span><span class="stat-val"><strong>256,000</strong> (Block Express)</span></div>
+            <div class="vol-stat-row"><span class="stat-key"><span class="lang-en">Throughput</span><span class="lang-es">Rendimiento</span></span><span class="stat-val"><strong>7,500 MiB/s</strong></span></div>
+            <div class="vol-stat-row"><span class="stat-key"><span class="lang-en">Boot volume</span><span class="lang-es">Volumen de arranque</span></span><span class="stat-val"><span class="chip green" style="font-size:10px;padding:2px 6px;"><span class="lang-en">Yes</span><span class="lang-es">Sí</span></span></span></div>
           </div>
-          <div class="vol-best"><strong>Best for:</strong> Same as io1 but higher durability (99.999%). io2 Block Express reaches 256K IOPS. Supports Multi-Attach.</div>
+          <div class="vol-best"><span class="lang-en"><strong>Best for:</strong> Same as io1 but higher durability (99.999%). io2 Block Express reaches 256K IOPS. Supports Multi-Attach.</span><span class="lang-es"><strong>Mejor para:</strong> Igual que io1 pero mayor durabilidad (99.999%). io2 Block Express alcanza 256K IOPS. Soporta Multi-Attach.</span></div>
         </div>
 
         <!-- st1 -->
@@ -754,11 +755,11 @@
             <div class="chips"><span class="chip hdd">HDD</span></div>
           </div>
           <div class="vol-stats">
-            <div class="vol-stat-row"><span class="stat-key">Max IOPS</span><span class="stat-val"><strong>500</strong></span></div>
-            <div class="vol-stat-row"><span class="stat-key">Throughput</span><span class="stat-val"><strong>500 MiB/s</strong></span></div>
-            <div class="vol-stat-row"><span class="stat-key">Boot volume</span><span class="stat-val"><span class="chip red" style="font-size:10px;padding:2px 6px;">No</span></span></div>
+            <div class="vol-stat-row"><span class="stat-key"><span class="lang-en">Max IOPS</span><span class="lang-es">IOPS Máx</span></span><span class="stat-val"><strong>500</strong></span></div>
+            <div class="vol-stat-row"><span class="stat-key"><span class="lang-en">Throughput</span><span class="lang-es">Rendimiento</span></span><span class="stat-val"><strong>500 MiB/s</strong></span></div>
+            <div class="vol-stat-row"><span class="stat-key"><span class="lang-en">Boot volume</span><span class="lang-es">Volumen de arranque</span></span><span class="stat-val"><span class="chip red" style="font-size:10px;padding:2px 6px;"><span class="lang-en">No</span><span class="lang-es">No</span></span></span></div>
           </div>
-          <div class="vol-best"><strong>Best for:</strong> Throughput-optimized HDD. Big Data, data warehouses, log processing. High sequential throughput.</div>
+          <div class="vol-best"><span class="lang-en"><strong>Best for:</strong> Throughput-optimized HDD. Big Data, data warehouses, log processing. High sequential throughput.</span><span class="lang-es"><strong>Mejor para:</strong> HDD optimizado para rendimiento. Big Data, almacenes de datos, procesamiento de logs. Alto rendimiento secuencial.</span></div>
         </div>
 
         <!-- sc1 -->
@@ -768,98 +769,98 @@
             <div class="chips"><span class="chip hdd">HDD</span></div>
           </div>
           <div class="vol-stats">
-            <div class="vol-stat-row"><span class="stat-key">Max IOPS</span><span class="stat-val"><strong>250</strong></span></div>
-            <div class="vol-stat-row"><span class="stat-key">Throughput</span><span class="stat-val"><strong>250 MiB/s</strong></span></div>
-            <div class="vol-stat-row"><span class="stat-key">Boot volume</span><span class="stat-val"><span class="chip red" style="font-size:10px;padding:2px 6px;">No</span></span></div>
+            <div class="vol-stat-row"><span class="stat-key"><span class="lang-en">Max IOPS</span><span class="lang-es">IOPS Máx</span></span><span class="stat-val"><strong>250</strong></span></div>
+            <div class="vol-stat-row"><span class="stat-key"><span class="lang-en">Throughput</span><span class="lang-es">Rendimiento</span></span><span class="stat-val"><strong>250 MiB/s</strong></span></div>
+            <div class="vol-stat-row"><span class="stat-key"><span class="lang-en">Boot volume</span><span class="lang-es">Volumen de arranque</span></span><span class="stat-val"><span class="chip red" style="font-size:10px;padding:2px 6px;"><span class="lang-en">No</span><span class="lang-es">No</span></span></span></div>
           </div>
-          <div class="vol-best"><strong>Best for:</strong> Cold HDD — lowest cost. Infrequently accessed data where cost matters most. Archive workloads.</div>
+          <div class="vol-best"><span class="lang-en"><strong>Best for:</strong> Cold HDD — lowest cost. <span class="lang-en">Infrequently accessed</span><span class="lang-es">Acceso infrecuente</span> data where cost matters most. <span class="lang-en">Archive</span><span class="lang-es">Archivo</span> workloads.</span><span class="lang-es"><strong>Mejor para:</strong> HDD frío — menor costo. Datos a los que se accede raramente donde el costo es lo más importante. Cargas de archivo.</span></div>
         </div>
 
       </div>
 
       <div style="margin-top: 8px; display: flex; flex-direction: column; gap: 10px;">
         <div class="callout warning">
-          <strong>gp3 vs gp2:</strong> gp3 IOPS is independent from size — you can provision more IOPS without buying a larger volume. gp2 IOPS is tied to size: 3 IOPS/GiB, maxing at 16,000 IOPS at 5,334 GiB.
+          <span class="lang-en"><strong>gp3 vs gp2:</strong> gp3 IOPS is independent from size — you can provision more IOPS without buying a larger volume. gp2 IOPS is tied to size: 3 IOPS/GiB, maxing at 16,000 IOPS at 5,334 GiB.</span><span class="lang-es"><strong>gp3 vs gp2:</strong> gp3 IOPS es independiente del tamaño — puedes provisionarse más IOPS sin comprar un volumen más grande. gp2 IOPS está vinculado al tamaño: 3 IOPS/GiB, máximo 16,000 IOPS en 5,334 GiB.</span>
         </div>
         <div class="callout info">
-          <strong>Boot volumes:</strong> Only SSD types can be used as root/boot volumes (gp2, gp3, io1, io2). HDD types (st1, sc1) cannot boot.
+          <span class="lang-en"><strong>Boot volumes:</strong> Only SSD types can be used as root/boot volumes (gp2, gp3, io1, io2). HDD types (st1, sc1) cannot boot.</span><span class="lang-es"><strong>Volúmenes de arranque:</strong> Solo los tipos SSD se pueden usar como volúmenes raíz/arranque (gp2, gp3, io1, io2). Los tipos HDD (st1, sc1) no pueden arrancar.</span>
         </div>
         <div class="callout danger">
-          <strong>IOPS thresholds:</strong> Need &gt;16K IOPS → use io1 or io2. Need &gt;256K IOPS → only EC2 Instance Store can exceed io2 Block Express's 256K max.
+          <strong>IOPS thresholds:</strong> Need &gt;16K IOPS → use io1 or io2. Need &gt;256K IOPS → only EC2 <span class="lang-en">Instance Store</span><span class="lang-es">Instance Store</span> can exceed io2 Block Express's 256K max.
         </div>
       </div>
     </div>
 
     <!-- 6. EBS MULTI-ATTACH -->
     <div class="section-block">
-      <div class="section-title">06 — EBS Multi-Attach</div>
+      <div class="section-title"><span class="lang-en">06 — EBS Multi-Attach</span><span class="lang-es">06 — EBS Multi-Attach</span></div>
       <div class="card-grid">
         <div class="concept-card">
-          <div class="card-label">Supported Types</div>
-          <div class="card-body"><strong>io1 and io2 ONLY.</strong> General purpose (gp2, gp3) and HDD types do not support Multi-Attach.</div>
+          <div class="card-label"><span class="lang-en">Supported <span class="lang-en">Type</span><span class="lang-es">Tipo</span>s</span><span class="lang-es">Tipos Soportados</span></div>
+          <div class="card-body"><span class="lang-en"><strong>io1 and io2 ONLY.</strong> General purpose (gp2, gp3) and HDD types do not support Multi-Attach.</span><span class="lang-es"><strong>Solo io1 e io2.</strong> Los tipos de propósito general (gp2, gp3) y HDD no soportan Multi-Attach.</span></div>
         </div>
         <div class="concept-card">
-          <div class="card-label">AZ Constraint</div>
-          <div class="card-body"><strong>Same AZ only.</strong> You cannot Multi-Attach across Availability Zones.</div>
+          <div class="card-label"><span class="lang-en">AZ Constraint</span><span class="lang-es">Restricción de AZ</span></div>
+          <div class="card-body"><span class="lang-en"><strong>Same AZ only.</strong> You cannot Multi-Attach across Availability Zones.</span><span class="lang-es"><strong>Solo la misma AZ.</strong> No puedes hacer Multi-Attach entre Zonas de Disponibilidad.</span></div>
         </div>
         <div class="concept-card">
-          <div class="card-label">Instance Limit</div>
-          <div class="card-body"><strong>Maximum 16 EC2 instances</strong> can be attached to a single Multi-Attach volume simultaneously.</div>
+          <div class="card-label"><span class="lang-en">Instance Limit</span><span class="lang-es">Límite de Instancias</span></div>
+          <div class="card-body"><span class="lang-en"><strong>Maximum 16 EC2 instances</strong> can be attached to a single Multi-Attach volume simultaneously.</span><span class="lang-es"><strong>Máximo 16 instancias EC2</strong> pueden adjuntarse a un único volumen Multi-Attach simultáneamente.</span></div>
         </div>
         <div class="concept-card">
-          <div class="card-label">File System</div>
-          <div class="card-body">Requires a <strong>cluster-aware file system</strong>. NOT compatible with XFS or EXT4 — use GFS2 or OCFS2 for concurrent writes.</div>
+          <div class="card-label"><span class="lang-en">File System</span><span class="lang-es">Sistema de Archivos</span></div>
+          <div class="card-body"><span class="lang-en">Requires a <strong>cluster-aware file system</strong>. NOT compatible with XFS or EXT4 — use GFS2 or OCFS2 for concurrent writes.</span><span class="lang-es">Requiere un <strong>sistema de archivos consciente del clúster</strong>. NO compatible con XFS o EXT4 — usa GFS2 u OCFS2 para escrituras concurrentes.</span></div>
         </div>
       </div>
     </div>
 
     <!-- 7. EFS -->
     <div class="section-block">
-      <div class="section-title">07 — Amazon EFS (Elastic File System)</div>
+      <div class="section-title"><span class="lang-en">07 — Amazon EFS (Elastic File System)</span><span class="lang-es">07 — Amazon EFS (Elastic File System)</span></div>
 
       <div class="card-grid">
         <div class="concept-card">
-          <div class="card-label">Managed NFS</div>
-          <div class="card-body">Network File System (NFS protocol). Fully managed — no provisioning, patching, or capacity planning required.</div>
+          <div class="card-label"><span class="lang-en">Managed NFS</span><span class="lang-es">NFS Administrado</span></div>
+          <div class="card-body"><span class="lang-en">Network File System (NFS protocol). Fully managed — no provisioning, patching, or capacity planning required.</span><span class="lang-es">Network File System (protocolo NFS). Completamente administrado — no se requiere provisionamiento, parches o planificación de capacidad.</span></div>
         </div>
         <div class="concept-card">
-          <div class="card-label">Linux Only</div>
-          <div class="card-body"><strong>POSIX file system — Linux only.</strong> Does NOT support Windows instances. Uses standard NFS file permissions.</div>
+          <div class="card-label"><span class="lang-en">Linux Only</span><span class="lang-es">Solo Linux</span></div>
+          <div class="card-body"><span class="lang-en"><strong>POSIX file system — Linux only.</strong> Does NOT support Windows instances. Uses standard NFS file permissions.</span><span class="lang-es"><strong>Sistema de archivos POSIX — solo Linux.</strong> NO soporta instancias Windows. Usa permisos estándar de archivos NFS.</span></div>
         </div>
         <div class="concept-card">
-          <div class="card-label">Scale</div>
-          <div class="card-body">Mount across <strong>hundreds of EC2 instances</strong> in <strong>multiple AZs</strong> simultaneously. Truly shared storage.</div>
+          <div class="card-label"><span class="lang-en">Scale</span><span class="lang-es">Escala</span></div>
+          <div class="card-body"><span class="lang-en">Mount across <strong>hundreds of EC2 instances</strong> in <strong>multiple AZs</strong> simultaneously. Truly shared storage.</span><span class="lang-es">Monta en <strong>cientos de instancias EC2</strong> en <strong>múltiples AZs</strong> simultáneamente. Almacenamiento verdaderamente compartido.</span></div>
         </div>
         <div class="concept-card">
-          <div class="card-label">Cost &amp; Port</div>
-          <div class="card-body"><strong>~3x more expensive</strong> than gp2. But pay-per-use — no capacity to provision. Port <strong>2049</strong> (NFS).</div>
+          <div class="card-label"><span class="lang-en">Cost &amp; Port</span><span class="lang-es">Costo y Puerto</span></div>
+          <div class="card-body"><span class="lang-en"><strong>~3x more expensive</strong> than gp2. But pay-per-use — no capacity to provision. Port <strong>2049</strong> (NFS).</span><span class="lang-es"><strong>~3x más caro</strong> que gp2. Pero pago por uso — sin capacidad para provisionarse. Puerto <strong>2049</strong> (NFS).</span></div>
         </div>
       </div>
 
       <div style="margin-top: 4px;">
-        <div class="sub-heading">Performance Modes (set at creation, cannot change)</div>
+        <div class="sub-heading"><span class="lang-en">Performance Modes (set at creation, cannot change)</span><span class="lang-es">Modos de Rendimiento (establecidos al crear, no se pueden cambiar)</span></div>
         <div class="table-wrapper">
           <table class="data-table">
             <thead>
               <tr>
-                <th>Mode</th>
-                <th>Latency</th>
-                <th>Throughput</th>
-                <th>Best For</th>
+                <th><span class="lang-en">Mode</span><span class="lang-es">Modo</span></th>
+                <th><span class="lang-en">Latency</span><span class="lang-es">Latencia</span></th>
+                <th><span class="lang-en">Throughput</span><span class="lang-es">Rendimiento</span></th>
+                <th><span class="lang-en">Best For</span><span class="lang-es">Mejor Para</span></th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td>General Purpose</td>
-                <td><span class="chip green" style="font-size:11px;">Low latency</span></td>
-                <td>Normal</td>
-                <td>Default — web servers, CMS, home directories, development</td>
+                <td><span class="lang-en">General Purpose</span><span class="lang-es">Propósito General</span></td>
+                <td><span class="chip green" style="font-size:11px;"><span class="lang-en">Low latency</span><span class="lang-es">Baja latencia</span></span></td>
+                <td><span class="lang-en">Normal</span><span class="lang-es">Normal</span></td>
+                <td><span class="lang-en">Default — web servers, CMS, home directories, development</span><span class="lang-es">Predeterminado — servidores web, CMS, directorios de inicio, desarrollo</span></td>
               </tr>
               <tr>
-                <td>Max I/O</td>
-                <td><span class="chip yellow" style="font-size:11px;">Higher latency</span></td>
-                <td><strong>Very high</strong></td>
-                <td>Big data analytics, media processing, high parallelism workloads</td>
+                <td><span class="lang-en">Max I/O</span><span class="lang-es">Máx E/S</span></td>
+                <td><span class="chip yellow" style="font-size:11px;"><span class="lang-en">Higher latency</span><span class="lang-es">Latencia más alta</span></span></td>
+                <td><strong><span class="lang-en">Very high</span><span class="lang-es">Muy alto</span></strong></td>
+                <td><span class="lang-en">Big data analytics, media processing, high parallelism workloads</span><span class="lang-es">Análisis de big data, procesamiento de medios, cargas de trabajo de alto paralelismo</span></td>
               </tr>
             </tbody>
           </table>
@@ -867,31 +868,31 @@
       </div>
 
       <div style="margin-top: 4px;">
-        <div class="sub-heading">Throughput Modes</div>
+        <div class="sub-heading"><span class="lang-en">Throughput Modes</span><span class="lang-es">Modos de Rendimiento</span></div>
         <div class="table-wrapper">
           <table class="data-table">
             <thead>
               <tr>
-                <th>Mode</th>
-                <th>Scaling Behavior</th>
-                <th>Best For</th>
+                <th><span class="lang-en">Mode</span><span class="lang-es">Modo</span></th>
+                <th><span class="lang-en">Scaling Behavior</span><span class="lang-es">Comportamiento de Escalado</span></th>
+                <th><span class="lang-en">Best For</span><span class="lang-es">Mejor Para</span></th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td>Bursting</td>
-                <td>Scales with storage size</td>
-                <td>Variable workloads, typical NFS use cases</td>
+                <td><span class="lang-en">Bursting</span><span class="lang-es">Ráfaga</span></td>
+                <td><span class="lang-en">Scales with storage size</span><span class="lang-es">Escala con el tamaño de almacenamiento</span></td>
+                <td><span class="lang-en">Variable workloads, typical NFS use cases</span><span class="lang-es">Cargas de trabajo variables, casos de uso típicos de NFS</span></td>
               </tr>
               <tr>
-                <td>Provisioned</td>
-                <td>Set independently of storage size</td>
-                <td>Known high-throughput workloads (e.g., 1 GiB/s for 1 TB stored)</td>
+                <td><span class="lang-en">Provisioned</span><span class="lang-es">Provisionado</span></td>
+                <td><span class="lang-en">Set independently of storage size</span><span class="lang-es">Configurado independientemente del tamaño de almacenamiento</span></td>
+                <td><span class="lang-en">Known high-throughput workloads (e.g., 1 GiB/s for 1 TB stored)</span><span class="lang-es">Cargas de trabajo de alto rendimiento conocidas (ej., 1 GiB/s para 1 TB almacenado)</span></td>
               </tr>
               <tr>
-                <td><strong>Elastic</strong></td>
-                <td>Auto-scales up/down (up to <strong>3 GiB/s reads</strong>)</td>
-                <td><strong>Unpredictable workloads</strong> — recommended default in modern AWS</td>
+                <td><span class="lang-en"><strong>Elastic</strong></span><span class="lang-es"><strong>Elástico</strong></span></td>
+                <td><span class="lang-en">Auto-scales up/down (up to <strong>3 GiB/s reads</strong>)</span><span class="lang-es">Escala automáticamente arriba/abajo (hasta <strong>3 GiB/s lecturas</strong>)</span></td>
+                <td><span class="lang-en"><strong>Unpredictable workloads</strong> — recommended default in modern AWS</span><span class="lang-es"><strong>Cargas de trabajo impredecibles</strong> — recomendado por defecto en AWS moderno</span></td>
               </tr>
             </tbody>
           </table>
@@ -899,31 +900,31 @@
       </div>
 
       <div style="margin-top: 4px;">
-        <div class="sub-heading">Storage Tiers (Lifecycle Management)</div>
+        <div class="sub-heading"><span class="lang-en">Storage Tiers (Lifecycle Management)</span><span class="lang-es">Niveles de Almacenamiento (Gestión del Ciclo de Vida)</span></div>
         <div class="table-wrapper">
           <table class="data-table">
             <thead>
               <tr>
-                <th>Tier</th>
-                <th>Access Pattern</th>
-                <th>Cost</th>
+                <th><span class="lang-en">Tier</span><span class="lang-es">Nivel</span></th>
+                <th><span class="lang-en">Access Pattern</span><span class="lang-es">Patrón de Acceso</span></th>
+                <th><span class="lang-en">Cost</span><span class="lang-es">Costo</span></th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td>Standard</td>
-                <td>Frequently accessed</td>
-                <td>Higher storage cost</td>
+                <td><span class="lang-en">Standard</span><span class="lang-es">Estándar</span></td>
+                <td><span class="lang-en">Frequently accessed</span><span class="lang-es">Acceso frecuente</span></td>
+                <td><span class="lang-en">Higher storage cost</span><span class="lang-es">Costo de almacenamiento más alto</span></td>
               </tr>
               <tr>
-                <td>EFS-IA</td>
-                <td>Infrequently accessed</td>
-                <td>Lower storage cost + retrieval fee per access</td>
+                <td><span class="lang-en">EFS-IA</span><span class="lang-es">EFS-IA</span></td>
+                <td><span class="lang-en">Infrequently accessed</span><span class="lang-es">Acceso infrecuente</span></td>
+                <td><span class="lang-en">Lower storage cost + retrieval fee per access</span><span class="lang-es">Costo de almacenamiento más bajo + tarifa de recuperación por acceso</span></td>
               </tr>
               <tr>
-                <td>Archive</td>
-                <td>Rarely accessed (a few times per year)</td>
-                <td><strong>Cheapest</strong> storage cost</td>
+                <td><span class="lang-en">Archive</span><span class="lang-es">Archivo</span></td>
+                <td><span class="lang-en">Rarely accessed (a few times per year)</span><span class="lang-es">Acceso raro (unas pocas veces al año)</span></td>
+                <td><span class="lang-en"><strong>Cheapest</strong> storage cost</span><span class="lang-es">Costo de almacenamiento <strong>más barato</strong></span></td>
               </tr>
             </tbody>
           </table>
@@ -931,70 +932,70 @@
       </div>
 
       <div class="callout warning">
-        <span class="callout-title">Weak Point Trap</span>
-        <strong>Performance Modes vs Throughput Modes — do NOT confuse these:</strong><br><br>
-        <strong>Performance Mode</strong> = about latency + parallelism (General Purpose = low latency / Max I/O = massive throughput but higher latency)<br>
-        <strong>Throughput Mode</strong> = about how much data can flow (Bursting = tied to storage / Provisioned = fixed / Elastic = auto-scales)<br><br>
-        General Purpose does NOT mean low throughput. Max I/O does NOT mean "more expensive throughput mode."
+        <span class="callout-title"><span class="lang-en">Weak Point Trap</span><span class="lang-es">Trampa del Punto Débil</span></span>
+        <span class="lang-en"><strong>Performance Modes vs Throughput Modes — do NOT confuse these:</strong></span><span class="lang-es"><strong>Modos de Rendimiento vs Modos de Rendimiento — NO confundas estos:</strong></span><br><br>
+        <span class="lang-en"><strong>Performance Mode</strong> = about latency + parallelism</span><span class="lang-es"><strong>Modo de Rendimiento</strong> = sobre latencia + paralelismo</span> (<span class="lang-en"><span class="lang-en">General Purpose</span><span class="lang-es">Propósito General</span> = low latency / <span class="lang-en">Max I/O</span><span class="lang-es">Máx E/S</span> = massive throughput but higher latency)</span><span class="lang-es">Propósito General = latencia baja / Máx E/S = rendimiento masivo pero latencia más alta)</span><br>
+        <span class="lang-en"><strong>Throughput Mode</strong> = about how much data can flow</span><span class="lang-es"><strong>Modo de Rendimiento</strong> = sobre cuántos datos pueden fluir</span> (<span class="lang-en"><span class="lang-en">Bursting</span><span class="lang-es">Ráfaga</span> = tied to storage / <span class="lang-en">Provisioned</span><span class="lang-es">Provisionado</span> = fixed / Elastic = auto-scales)</span><span class="lang-es">Ráfaga = vinculado al almacenamiento / Provisionado = fijo / Elástico = escala automáticamente)</span><br><br>
+        <span class="lang-en"><span class="lang-en">General Purpose</span><span class="lang-es">Propósito General</span> does NOT mean low throughput. <span class="lang-en">Max I/O</span><span class="lang-es">Máx E/S</span> does NOT mean "more expensive throughput mode."</span><span class="lang-es">Propósito General NO significa bajo rendimiento. Máx E/S NO significa "modo de rendimiento más caro".</span>
       </div>
     </div>
 
     <!-- 8. FINAL COMPARISON TABLE -->
     <div class="section-block">
-      <div class="section-title">08 — Storage Comparison: EBS vs EFS vs Instance Store</div>
+      <div class="section-title"><span class="lang-en">08 — Storage Comparison: EBS vs EFS vs <span class="lang-en">Instance Store</span><span class="lang-es">Instance Store</span></span><span class="lang-es">08 — Comparación de Almacenamiento: EBS vs EFS vs <span class="lang-en">Instance Store</span><span class="lang-es">Instance Store</span></span></div>
 
       <div class="table-wrapper">
         <table class="comparison-table">
           <thead>
             <tr>
-              <th>Feature</th>
-              <th>Instance Store</th>
-              <th>EBS</th>
-              <th>EFS</th>
+              <th><span class="lang-en">Feature</span><span class="lang-es">Característica</span></th>
+              <th><span class="lang-en">Instance Store</span><span class="lang-es">Instance Store</span></th>
+              <th><span class="lang-en">EBS</span><span class="lang-es">EBS</span></th>
+              <th><span class="lang-en">EFS</span><span class="lang-es">EFS</span></th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td>Type</td>
-              <td>Physical (host hardware)</td>
-              <td>Network drive (block)</td>
-              <td>Network file system</td>
+              <td><span class="lang-en">Type</span><span class="lang-es">Tipo</span></td>
+              <td><span class="lang-en">Physical (host hardware)</span><span class="lang-es">Físico (hardware del host)</span></td>
+              <td><span class="lang-en">Network drive (block)</span><span class="lang-es">Unidad de red (bloque)</span></td>
+              <td><span class="lang-en">Network file system</span><span class="lang-es">Sistema de archivos de red</span></td>
             </tr>
             <tr>
-              <td>AZ Scope</td>
-              <td>Single AZ (tied to instance)</td>
-              <td>Single AZ only</td>
-              <td><strong>Cross-AZ</strong></td>
+              <td><span class="lang-en">AZ Scope</span><span class="lang-es">Alcance de AZ</span></td>
+              <td><span class="lang-en">Single AZ (tied to instance)</span><span class="lang-es">AZ única (vinculada a instancia)</span></td>
+              <td><span class="lang-en">Single AZ only</span><span class="lang-es">Solo AZ única</span></td>
+              <td><span class="lang-en"><strong>Cross-AZ</strong></span><span class="lang-es"><strong>Entre AZs</strong></span></td>
             </tr>
             <tr>
-              <td>Persistence</td>
-              <td><strong>Ephemeral</strong> — data lost on stop/terminate</td>
-              <td><strong>Persistent</strong> — survives termination</td>
-              <td><strong>Persistent</strong> — survives termination</td>
+              <td><span class="lang-en">Persistence</span><span class="lang-es">Persistencia</span></td>
+              <td><span class="lang-en"><strong>Ephemeral</strong> — data lost on stop/terminate</span><span class="lang-es"><strong>Efímero</strong> — datos perdidos al detener/terminar</span></td>
+              <td><span class="lang-en"><strong>Persistent</strong> — survives termination</span><span class="lang-es"><strong>Persistente</strong> — sobrevive la terminación</span></td>
+              <td><span class="lang-en"><strong>Persistent</strong> — survives termination</span><span class="lang-es"><strong>Persistente</strong> — sobrevive la terminación</span></td>
             </tr>
             <tr>
-              <td>OS Support</td>
-              <td>Linux + Windows</td>
-              <td>Linux + Windows</td>
-              <td><strong>Linux ONLY</strong> (POSIX)</td>
+              <td><span class="lang-en">OS Support</span><span class="lang-es">Soporte del SO</span></td>
+              <td><span class="lang-en">Linux + Windows</span><span class="lang-es">Linux + Windows</span></td>
+              <td><span class="lang-en">Linux + Windows</span><span class="lang-es">Linux + Windows</span></td>
+              <td><span class="lang-en"><strong>Linux ONLY</strong> (POSIX)</span><span class="lang-es"><strong>Solo Linux</strong> (POSIX)</span></td>
             </tr>
             <tr>
-              <td>Speed</td>
-              <td><strong>Fastest</strong> (millions IOPS)</td>
-              <td>Fast (thousands IOPS)</td>
-              <td>Slower (network I/O)</td>
+              <td><span class="lang-en">Speed</span><span class="lang-es">Velocidad</span></td>
+              <td><span class="lang-en"><strong>Fastest</strong> (millions IOPS)</span><span class="lang-es"><strong>Más rápido</strong> (millones IOPS)</span></td>
+              <td><span class="lang-en">Fast (thousands IOPS)</span><span class="lang-es">Rápido (miles IOPS)</span></td>
+              <td><span class="lang-en">Slower (network I/O)</span><span class="lang-es">Más lento (E/S de red)</span></td>
             </tr>
             <tr>
-              <td>Sharing</td>
-              <td>Single instance</td>
-              <td>Single instance (io1/io2: 16 max)</td>
-              <td><strong>Hundreds of instances</strong></td>
+              <td><span class="lang-en">Sharing</span><span class="lang-es">Compartición</span></td>
+              <td><span class="lang-en">Single instance</span><span class="lang-es">Instancia única</span></td>
+              <td><span class="lang-en">Single instance</span><span class="lang-es">Instancia única</span> (io1/io2: 16 max)</td>
+              <td><span class="lang-en"><strong>Hundreds of instances</strong></span><span class="lang-es"><strong>Cientos de instancias</strong></span></td>
             </tr>
             <tr>
-              <td>Use Case</td>
-              <td>Temp cache, buffer, scratch data</td>
-              <td>OS root volumes, databases</td>
-              <td>Shared files, WordPress, CMS</td>
+              <td><span class="lang-en">Use Case</span><span class="lang-es">Caso de Uso</span></td>
+              <td><span class="lang-en">Temp cache, buffer, scratch data</span><span class="lang-es">Caché temp, buffer, datos temporales</span></td>
+              <td><span class="lang-en">OS root volumes, databases</span><span class="lang-es">Volúmenes raíz del SO, bases de datos</span></td>
+              <td><span class="lang-en">Shared files, WordPress, CMS</span><span class="lang-es">Archivos compartidos, WordPress, CMS</span></td>
             </tr>
           </tbody>
         </table>
@@ -1003,78 +1004,79 @@
 
     <!-- 9. EXAM TIPS -->
     <div class="section-block">
-      <div class="section-title">09 — Exam Tips</div>
+      <div class="section-title"><span class="lang-en">09 — Exam Tips</span><span class="lang-es">09 — Consejos para el Examen</span></div>
       <div class="exam-tips-grid">
 
         <div class="exam-tip-card">
-          <div class="tip-q">Fastest storage option on AWS?</div>
-          <div class="tip-a">EC2 Instance Store — millions of IOPS, but ephemeral</div>
+          <div class="tip-q"><span class="lang-en">Fastest storage option on AWS?</span><span class="lang-es">Opción de almacenamiento más rápida en AWS?</span></div>
+          <div class="tip-a">EC2 <span class="lang-en">Instance Store</span><span class="lang-es">Instance Store</span> — <span class="lang-en">millions of IOPS, but ephemeral</span><span class="lang-es">millones de IOPS, pero efímero</span></div>
         </div>
 
         <div class="exam-tip-card">
-          <div class="tip-q">AZ-locked network block storage?</div>
-          <div class="tip-a">EBS — cannot be directly used across AZs</div>
+          <div class="tip-q"><span class="lang-en">AZ-locked network block storage?</span><span class="lang-es">Almacenamiento de bloque de red bloqueado por AZ?</span></div>
+          <div class="tip-a"><span class="lang-en">EBS — cannot be directly used across AZs</span><span class="lang-es">EBS — no se puede usar directamente entre AZs</span></div>
         </div>
 
         <div class="exam-tip-card">
-          <div class="tip-q">Move EBS to another AZ?</div>
-          <div class="tip-a">Take a snapshot, then restore in the new AZ</div>
+          <div class="tip-q"><span class="lang-en">Move EBS to another AZ?</span><span class="lang-es">Mover EBS a otra AZ?</span></div>
+          <div class="tip-a"><span class="lang-en">Take a snapshot, then restore in the new AZ</span><span class="lang-es">Toma un snapshot, luego restaura en la nueva AZ</span></div>
         </div>
 
         <div class="exam-tip-card">
-          <div class="tip-q">Boot volumes must be...</div>
-          <div class="tip-a">SSD only (gp2, gp3, io1, io2) — HDD cannot boot</div>
+          <div class="tip-q"><span class="lang-en">Boot volumes must be...</span><span class="lang-es">Los volúmenes de arranque deben ser...</span></div>
+          <div class="tip-a"><span class="lang-en">SSD only (gp2, gp3, io1, io2) — HDD cannot boot</span><span class="lang-es">Solo SSD (gp2, gp3, io1, io2) — HDD no puede arrancar</span></div>
         </div>
 
         <div class="exam-tip-card">
-          <div class="tip-q">gp3 vs gp2 key difference?</div>
-          <div class="tip-a">gp3 IOPS independent from size; gp2 IOPS tied to size (3/GiB)</div>
+          <div class="tip-q"><span class="lang-en">gp3 vs gp2 key difference?</span><span class="lang-es">Diferencia clave gp3 vs gp2?</span></div>
+          <div class="tip-a"><span class="lang-en">gp3 IOPS independent from size; gp2 IOPS tied to size (3/GiB)</span><span class="lang-es">gp3 IOPS independiente del tamaño; gp2 IOPS vinculado al tamaño (3/GiB)</span></div>
         </div>
 
         <div class="exam-tip-card">
-          <div class="tip-q">Need more than 256K IOPS?</div>
-          <div class="tip-a">Only EC2 Instance Store — io2 Block Express maxes at 256K</div>
+          <div class="tip-q"><span class="lang-en">Need more than 256K IOPS?</span><span class="lang-es">Necesitas más de 256K IOPS?</span></div>
+          <div class="tip-a">Only EC2 <span class="lang-en">Instance Store</span><span class="lang-es">Instance Store</span> — <span class="lang-en">io2 Block Express maxes at 256K</span><span class="lang-es">io2 Block Express tiene un máximo de 256K</span></div>
         </div>
 
         <div class="exam-tip-card">
-          <div class="tip-q">Multi-Attach allowed for?</div>
-          <div class="tip-a">io1 and io2 only — same AZ, max 16 instances, cluster-aware FS required</div>
+          <div class="tip-q"><span class="lang-en">Multi-Attach allowed for?</span><span class="lang-es">Multi-Attach permitido para?</span></div>
+          <div class="tip-a"><span class="lang-en">io1 and io2 only — same AZ, max 16 instances, cluster-aware FS required</span><span class="lang-es">Solo io1 e io2 — misma AZ, máx 16 instancias, se requiere FS consciente de clúster</span></div>
         </div>
 
         <div class="exam-tip-card">
-          <div class="tip-q">EFS is ___ compatible</div>
-          <div class="tip-a">Linux only (POSIX) — does NOT work on Windows</div>
+          <div class="tip-q"><span class="lang-en">EFS is ___ compatible</span><span class="lang-es">EFS es compatible con ___</span></div>
+          <div class="tip-a"><span class="lang-en">Linux only (POSIX) — does NOT work on Windows</span><span class="lang-es">Solo Linux (POSIX) — NO funciona en Windows</span></div>
         </div>
 
         <div class="exam-tip-card">
-          <div class="tip-q">EFS works across AZs?</div>
-          <div class="tip-a">Yes — can be mounted on instances across multiple AZs simultaneously</div>
+          <div class="tip-q"><span class="lang-en">EFS works across AZs?</span><span class="lang-es">EFS funciona entre AZs?</span></div>
+          <div class="tip-a"><span class="lang-en">Yes — can be mounted on instances across multiple AZs simultaneously</span><span class="lang-es">Sí — puede montarse en instancias entre múltiples AZs simultáneamente</span></div>
         </div>
 
         <div class="exam-tip-card">
-          <div class="tip-q">Cheapest EFS option?</div>
-          <div class="tip-a">One Zone-IA — single AZ + infrequent access tier</div>
+          <div class="tip-q"><span class="lang-en">Cheapest EFS option?</span><span class="lang-es">Opción de EFS más barata?</span></div>
+          <div class="tip-a"><span class="lang-en">One Zone-IA — single AZ + infrequent access tier</span><span class="lang-es">One Zone-IA — AZ única + capa de acceso infrecuente</span></div>
         </div>
 
         <div class="exam-tip-card">
-          <div class="tip-q">Shared file system for hundreds of EC2s?</div>
-          <div class="tip-a">EFS — the only option that supports concurrent access from hundreds of instances</div>
+          <div class="tip-q"><span class="lang-en">Shared file system for hundreds of EC2s?</span><span class="lang-es">Sistema de archivos compartido para cientos de EC2s?</span></div>
+          <div class="tip-a"><span class="lang-en">EFS — the only option that supports concurrent access from hundreds of instances</span><span class="lang-es">EFS — la única opción que soporta acceso concurrente desde cientos de instancias</span></div>
         </div>
 
         <div class="exam-tip-card">
-          <div class="tip-q">EFS performance mode for big data?</div>
-          <div class="tip-a">Max I/O (not General Purpose) — higher latency but massive parallel throughput</div>
+          <div class="tip-q"><span class="lang-en">EFS performance mode for big data?</span><span class="lang-es">Modo de rendimiento EFS para big data?</span></div>
+          <div class="tip-a"><span class="lang-en">Max I/O</span><span class="lang-es">Máx E/S</span> (not <span class="lang-en">General Purpose</span><span class="lang-es">Propósito General</span>) — <span class="lang-en">higher latency but massive parallel throughput</span><span class="lang-es">latencia más alta pero rendimiento paralelo masivo</span></div>
         </div>
 
         <div class="exam-tip-card">
-          <div class="tip-q">EFS throughput for unpredictable workloads?</div>
-          <div class="tip-a">Elastic — auto-scales throughput up and down as needed</div>
+          <div class="tip-q"><span class="lang-en">EFS throughput for unpredictable workloads?</span><span class="lang-es">Rendimiento EFS para cargas de trabajo impredecibles?</span></div>
+          <div class="tip-a"><span class="lang-en">Elastic — auto-scales throughput up and down as needed</span><span class="lang-es">Elástico — escala automáticamente el rendimiento arriba y abajo según sea necesario</span></div>
         </div>
 
       </div>
     </div>
 
   </div><!-- end page-body -->
+
 
 </body>
 </html>

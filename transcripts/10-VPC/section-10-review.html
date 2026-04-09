@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Section 10 — VPC Fundamentals | AWS Developer Associate</title>
+  <title>Section 10 — VPC Fundamentals</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet" />
@@ -124,45 +124,45 @@
        SECTION 1: VPC & SUBNETS OVERVIEW
        ============================================================ -->
   <section>
-    <div class="section-label">1 &mdash; VPC &amp; Subnets Overview</div>
+    <div class="section-label"><span class="lang-en">1 &mdash; VPC &amp; Subnets Overview</span><span class="lang-es">1 &mdash; Descripción general de VPC y subredes</span></div>
     <div class="card">
-      <div class="card-title">What Is a VPC?</div>
-      <p style="font-size:14px;color:#94a3b8;margin-bottom:20px;">A VPC (Virtual Private Cloud) is your private network inside AWS. You define the IP range, create subnets, and control routing and access.</p>
+      <div class="card-title"><span class="lang-en">What Is a VPC?</span><span class="lang-es">¿Qué es una VPC?</span></div>
+      <p style="font-size:14px;color:#94a3b8;margin-bottom:20px;"><span class="lang-en">A VPC (Virtual Private Cloud) is your private network inside AWS. You define the IP range, create subnets, and control routing and access.</span><span class="lang-es">Una VPC (Nube Privada Virtual) es su red privada dentro de AWS. Define el rango de IP, crea subredes y controla el enrutamiento y el acceso.</span></p>
 
       <div class="grid-2" style="margin-bottom:20px;">
         <div class="feature-card">
-          <div class="feature-card-title">VPC — Regional Resource</div>
+          <div class="feature-card-title"><span class="lang-en">VPC — Regional Resource</span><span class="lang-es">VPC — Recurso Regional</span></div>
           <ul>
-            <li>Spans ALL Availability Zones in a region</li>
-            <li>You define a CIDR block (e.g., <code>10.0.0.0/16</code>)</li>
-            <li>Max 5 VPCs per region (soft limit)</li>
-            <li>Each AWS account gets a default VPC</li>
+            <li><span class="lang-en">Spans ALL Availability Zones in a region</span><span class="lang-es">Abarca TODAS las zonas de disponibilidad de una región</span></li>
+            <li><span class="lang-en">You define a CIDR block (e.g.,</span><span class="lang-es">Defines un bloque CIDR (por ejemplo,</span> <code>10.0.0.0/16</code>)</li>
+            <li><span class="lang-en">Max 5 VPCs per region (soft limit)</span><span class="lang-es">Máx. 5 VPC por región (límite flexible)</span></li>
+            <li><span class="lang-en">Each AWS account gets a default VPC</span><span class="lang-es">Cada cuenta de AWS obtiene una VPC predeterminada</span></li>
           </ul>
         </div>
         <div class="feature-card">
-          <div class="feature-card-title">Subnet — AZ-Level Resource</div>
+          <div class="feature-card-title"><span class="lang-en">Subnet — AZ-<span class="lang-en">Level</span><span class="lang-es">Nivel</span> Resource</span><span class="lang-es">Subred — Recurso a nivel de AZ</span></div>
           <ul>
-            <li>Lives inside one specific AZ</li>
-            <li>Sub-range of the VPC CIDR (e.g., <code>10.0.1.0/24</code>)</li>
-            <li>AWS reserves 5 IPs per subnet (first 4 + last 1)</li>
-            <li>Public or Private depending on route table</li>
+            <li><span class="lang-en">Lives inside one specific AZ</span><span class="lang-es">Vive dentro de una AZ específica</span></li>
+            <li><span class="lang-en">Sub-range of the VPC CIDR (e.g.,</span><span class="lang-es">Subrango del CIDR de VPC (por ejemplo,</span> <code>10.0.1.0/24</code>)</li>
+            <li><span class="lang-en">AWS reserves 5 IPs per subnet (first 4 + last 1)</span><span class="lang-es">AWS reserva 5 IP por subred (primeras 4 + última 1)</span></li>
+            <li><span class="lang-en">Public or Private depending on route table</span><span class="lang-es">Público o privado según la tabla de rutas</span></li>
           </ul>
         </div>
       </div>
 
       <div class="vpc-subnet-grid" style="margin-bottom:20px;">
         <div class="subnet-box subnet-public">
-          <div class="subnet-label">Public Subnet</div>
-          <div class="subnet-detail">Has a route to an <strong style="color:#6ee7b7;">Internet Gateway</strong> in its route table. Resources can be accessed from the internet (if allowed by SG). Use for: ELB, Bastion hosts, NAT Gateway.</div>
+          <div class="subnet-label"><span class="lang-en">Public Subnet</span><span class="lang-es">Subred Pública</span></div>
+          <div class="subnet-detail"><span class="lang-en">Has a route to an <strong style="color:#6ee7b7;">Internet Gateway</strong> in its route table. Resources can be accessed from the internet (if allowed by SG). Use for: ELB, Bastion hosts, NAT Gateway.</span><span class="lang-es">Tiene una ruta a una <strong style="color:#6ee7b7;">Puerta de enlace a Internet</strong> en su tabla de rutas. Se puede acceder a los recursos desde Internet (si lo permite el SG). Use para: ELB, hosts bastión, NAT Gateway.</span></div>
         </div>
         <div class="subnet-box subnet-private">
-          <div class="subnet-label">Private Subnet</div>
-          <div class="subnet-detail">No route to an Internet Gateway. Isolated from the public internet. Use for: application servers, databases, caches. Can reach internet <em>outbound only</em> via NAT.</div>
+          <div class="subnet-label"><span class="lang-en">Private Subnet</span><span class="lang-es">Subred Privada</span></div>
+          <div class="subnet-detail"><span class="lang-en">No route to an Internet Gateway. Isolated from the public internet. Use for: application servers, databases, caches. Can reach internet <em>outbound only</em> via NAT.</span><span class="lang-es">Sin ruta a una Puerta de enlace a Internet. Aislado de Internet público. Use para: servidores de aplicaciones, bases de datos, cachés. Puede alcanzar Internet <em>solo saliente</em> vía NAT.</span></div>
         </div>
       </div>
 
       <div class="callout info">
-        <strong>Default VPC:</strong> Every AWS account has one. All subnets are public (one per AZ). CIDR block is <code>172.31.0.0/16</code>. Instances launched here get both a public and private IP by default. Safe to use for learning — do NOT delete it.
+        <strong><span class="lang-en">Default VPC:</span><span class="lang-es">VPC Predeterminada:</span></strong> <span class="lang-en">Every AWS account has one. All subnets are public (one per AZ). CIDR block is <code>172.31.0.0/16</code>. Instances launched here get both a public and private IP by default. Safe to use for learning — do NOT delete it.</span><span class="lang-es">Cada cuenta de AWS tiene una. Todas las subredes son públicas (una por AZ). El bloque CIDR es <code>172.31.0.0/16</code>. Las instancias lanzadas aquí obtienen tanto IP pública como privada de forma predeterminada. Es seguro usar para aprender — NO la elimine.</span>
       </div>
     </div>
   </section>
@@ -171,17 +171,17 @@
        SECTION 2: INTERNET GATEWAY & NAT — ANIMATED DEMO
        ============================================================ -->
   <section>
-    <div class="section-label">2 &mdash; Internet Gateway &amp; NAT Gateway</div>
+    <div class="section-label"><span class="lang-en">2 &mdash; Internet Gateway &amp; NAT Gateway</span><span class="lang-es">2 &mdash; Puerta de enlace a Internet y NAT Gateway</span></div>
     <div class="card">
-      <div class="card-title">Traffic Flow: Public vs Private Subnets</div>
+      <div class="card-title"><span class="lang-en">Traffic Flow: Public vs <span class="lang-en">Private Subnet</span><span class="lang-es">Subred Privada</span>s</span><span class="lang-es">Flujo de tráfico: Subredes públicas vs privadas</span></div>
 
       <div class="anim-demo" id="igw-nat"></div>
       <div class="anim-controls">
-        <button class="nav-btn" id="igw-nat-prev" onclick="prev('igw-nat')">&#9664; Prev</button>
-        <button class="nav-btn" id="igw-nat-next" onclick="next('igw-nat')">Next &#9654;</button>
+        <button class="nav-btn" id="igw-nat-prev" onclick="prev('igw-nat')">&#9664; <span class="lang-en">Prev</span><span class="lang-es">Anterior</span></button>
+        <button class="nav-btn" id="igw-nat-next" onclick="next('igw-nat')"><span class="lang-en">Next</span><span class="lang-es">Siguiente</span> &#9654;</button>
         <div class="step-dots" id="igw-nat-dots"></div>
         <span class="step-counter" id="igw-nat-counter"></span>
-        <button class="restart-btn" onclick="restart('igw-nat')">&#x21BA; Restart</button>
+        <button class="restart-btn" onclick="restart('igw-nat')">&#x21BA; <span class="lang-en">Restart</span><span class="lang-es">Reiniciar</span></button>
       </div>
     </div>
   </section>
@@ -190,18 +190,18 @@
        SECTION 3: NACL vs SECURITY GROUP — ANIMATED DEMO
        ============================================================ -->
   <section>
-    <div class="section-label">3 &mdash; NACL vs Security Groups</div>
+    <div class="section-label"><span class="lang-en">3 &mdash; NACL vs <span class="lang-en">Security Group</span><span class="lang-es">Grupo de seguridad</span>s</span><span class="lang-es">3 &mdash; ACL de red vs Grupos de seguridad</span></div>
     <div class="card">
-      <div class="card-title">Two Layers of Traffic Filtering</div>
-      <p style="font-size:14px;color:#94a3b8;margin-bottom:20px;">AWS provides two distinct firewall mechanisms. Understanding the difference is critical for the exam.</p>
+      <div class="card-title"><span class="lang-en">Two Layers of Traffic Filtering</span><span class="lang-es">Dos capas de filtrado de tráfico</span></div>
+      <p style="font-size:14px;color:#94a3b8;margin-bottom:20px;"><span class="lang-en">AWS provides two distinct firewall mechanisms. Understanding the difference is critical for the exam.</span><span class="lang-es">AWS proporciona dos mecanismos de firewall distintos. Comprender la diferencia es crítica para el examen.</span></p>
 
       <div class="anim-demo" id="nacl-sg"></div>
       <div class="anim-controls">
-        <button class="nav-btn" id="nacl-sg-prev" onclick="prev('nacl-sg')">&#9664; Prev</button>
-        <button class="nav-btn" id="nacl-sg-next" onclick="next('nacl-sg')">Next &#9654;</button>
+        <button class="nav-btn" id="nacl-sg-prev" onclick="prev('nacl-sg')">&#9664; <span class="lang-en">Prev</span><span class="lang-es">Anterior</span></button>
+        <button class="nav-btn" id="nacl-sg-next" onclick="next('nacl-sg')"><span class="lang-en">Next</span><span class="lang-es">Siguiente</span> &#9654;</button>
         <div class="step-dots" id="nacl-sg-dots"></div>
         <span class="step-counter" id="nacl-sg-counter"></span>
-        <button class="restart-btn" onclick="restart('nacl-sg')">&#x21BA; Restart</button>
+        <button class="restart-btn" onclick="restart('nacl-sg')">&#x21BA; <span class="lang-en">Restart</span><span class="lang-es">Reiniciar</span></button>
       </div>
 
       <!-- Full Comparison Table -->
@@ -209,41 +209,41 @@
         <table class="data-table">
           <thead>
             <tr>
-              <th>Attribute</th>
-              <th>NACL (Network ACL)</th>
-              <th>Security Group</th>
+              <th><span class="lang-en">Attribute</span><span class="lang-es">Atributo</span></th>
+              <th><span class="lang-en">NACL (Network ACL)</span><span class="lang-es">ACL de red</span></th>
+              <th><span class="lang-en">Security Group</span><span class="lang-es">Grupo de seguridad</span></th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td><strong style="color:#f8fafc;">Level</strong></td>
-              <td>Subnet boundary</td>
-              <td>Instance / ENI boundary</td>
+              <td><strong style="color:#f8fafc;"><span class="lang-en">Level</span><span class="lang-es">Nivel</span></strong></td>
+              <td><span class="lang-en">Subnet boundary</span><span class="lang-es">Límite de subred</span></td>
+              <td><span class="lang-en">Instance / ENI boundary</span><span class="lang-es">Límite de instancia / ENI</span></td>
             </tr>
             <tr>
-              <td><strong style="color:#f8fafc;">Rule types</strong></td>
+              <td><strong style="color:#f8fafc;"><span class="lang-en">Rule types</span><span class="lang-es">Tipos de reglas</span></strong></td>
               <td><span class="badge badge-red">Allow</span> <span class="badge badge-red">Deny</span></td>
-              <td><span class="badge badge-green">Allow only</span></td>
+              <td><span class="badge badge-green"><span class="lang-en">Allow only</span><span class="lang-es">Solo permitir</span></span></td>
             </tr>
             <tr>
-              <td><strong style="color:#f8fafc;">Stateful?</strong></td>
-              <td><span class="badge badge-red">Stateless</span> — must allow return traffic</td>
-              <td><span class="badge badge-green">Stateful</span> — return traffic auto-allowed</td>
+              <td><strong style="color:#f8fafc;"><span class="lang-en"><span class="lang-en">Stateful</span><span class="lang-es">Con estado</span>?</span><span class="lang-es">¿Con estado?</span></strong></td>
+              <td><span class="badge badge-red"><span class="lang-en">Stateless</span><span class="lang-es">Sin estado</span></span> — <span class="lang-en">must allow return traffic</span><span class="lang-es">debe permitir tráfico de retorno</span></td>
+              <td><span class="badge badge-green"><span class="lang-en">Stateful</span><span class="lang-es">Con estado</span></span> — <span class="lang-en">return traffic auto-allowed</span><span class="lang-es">tráfico de retorno permitido automáticamente</span></td>
             </tr>
             <tr>
-              <td><strong style="color:#f8fafc;">Rule references</strong></td>
-              <td>IP addresses / CIDR only</td>
-              <td>IPs, CIDRs, or other Security Groups</td>
+              <td><strong style="color:#f8fafc;"><span class="lang-en">Rule references</span><span class="lang-es">Referencias de reglas</span></strong></td>
+              <td><span class="lang-en">IP addresses / CIDR only</span><span class="lang-es">Solo direcciones IP / CIDR</span></td>
+              <td><span class="lang-en">IPs, CIDRs, or other <span class="lang-en">Security Group</span><span class="lang-es">Grupo de seguridad</span>s</span><span class="lang-es">IP, CIDR u otros grupos de seguridad</span></td>
             </tr>
             <tr>
-              <td><strong style="color:#f8fafc;">Rule evaluation</strong></td>
-              <td>Rules evaluated in number order (lowest first)</td>
-              <td>All rules evaluated together</td>
+              <td><strong style="color:#f8fafc;"><span class="lang-en">Rule evaluation</span><span class="lang-es">Evaluación de reglas</span></strong></td>
+              <td><span class="lang-en">Rules evaluated in number order (lowest first)</span><span class="lang-es">Reglas evaluadas en orden numérico (menor primero)</span></td>
+              <td><span class="lang-en">All rules evaluated together</span><span class="lang-es">Todas las reglas evaluadas juntas</span></td>
             </tr>
             <tr>
-              <td><strong style="color:#f8fafc;">Default behavior</strong></td>
-              <td>Default NACL allows everything. Custom NACL denies everything.</td>
-              <td>Denies all inbound, allows all outbound</td>
+              <td><strong style="color:#f8fafc;"><span class="lang-en">Default behavior</span><span class="lang-es">Comportamiento predeterminado</span></strong></td>
+              <td><span class="lang-en">Default NACL allows everything. Custom NACL denies everything.</span><span class="lang-es">La ACL de red predeterminada permite todo. La ACL de red personalizada lo niega todo.</span></td>
+              <td><span class="lang-en">Denies all inbound, allows all outbound</span><span class="lang-es">Deniega todo entrante, permite todo saliente</span></td>
             </tr>
           </tbody>
         </table>
@@ -255,52 +255,52 @@
        SECTION 4: VPC FLOW LOGS
        ============================================================ -->
   <section>
-    <div class="section-label">4 &mdash; VPC Flow Logs</div>
+    <div class="section-label"><span class="lang-en">4 &mdash; VPC Flow Logs</span><span class="lang-es">4 &mdash; Registros de flujo de VPC</span></div>
     <div class="card">
-      <div class="card-title">Capturing IP Traffic for Visibility &amp; Troubleshooting</div>
-      <p style="font-size:14px;color:#94a3b8;margin-bottom:20px;">VPC Flow Logs capture metadata about all IP traffic going to and from network interfaces. They are the primary tool for diagnosing connectivity issues.</p>
+      <div class="card-title"><span class="lang-en">Capturing IP Traffic for Visibility &amp; Troubleshooting</span><span class="lang-es">Captura de tráfico IP para visibilidad y resolución de problemas</span></div>
+      <p style="font-size:14px;color:#94a3b8;margin-bottom:20px;"><span class="lang-en">VPC Flow Logs capture metadata about all IP traffic going to and from network interfaces. They are the primary tool for diagnosing connectivity issues.</span><span class="lang-es">Los registros de flujo de VPC capturan metadatos sobre todo el tráfico IP que va hacia y desde interfaces de red. Son la herramienta principal para diagnosticar problemas de conectividad.</span></p>
 
       <div class="grid-3" style="margin-bottom:20px;">
         <div class="service-card">
           <div class="service-icon" style="background:rgba(59,130,246,0.15);color:#93c5fd;">VPC</div>
-          <div class="service-name">VPC Level</div>
-          <div class="service-desc">Captures all traffic for every ENI in the entire VPC. Broadest scope.</div>
+          <div class="service-name"><span class="lang-en">VPC <span class="lang-en">Level</span><span class="lang-es">Nivel</span></span><span class="lang-es">Nivel de VPC</span></div>
+          <div class="service-desc"><span class="lang-en">Captures all traffic for every ENI in the entire VPC. Broadest scope.</span><span class="lang-es">Captura todo el tráfico de cada ENI en toda la VPC. Alcance más amplio.</span></div>
         </div>
         <div class="service-card">
           <div class="service-icon" style="background:rgba(139,92,246,0.15);color:#ddd6fe;">SUB</div>
-          <div class="service-name">Subnet Level</div>
-          <div class="service-desc">Captures all traffic for ENIs within a specific subnet.</div>
+          <div class="service-name"><span class="lang-en">Subnet <span class="lang-en">Level</span><span class="lang-es">Nivel</span></span><span class="lang-es">Nivel de subred</span></div>
+          <div class="service-desc"><span class="lang-en">Captures all traffic for ENIs within a specific subnet.</span><span class="lang-es">Captura todo el tráfico de ENI dentro de una subred específica.</span></div>
         </div>
         <div class="service-card">
           <div class="service-icon" style="background:rgba(16,185,129,0.15);color:#6ee7b7;">ENI</div>
-          <div class="service-name">ENI Level</div>
-          <div class="service-desc">Captures traffic for a single Elastic Network Interface. Most granular.</div>
+          <div class="service-name"><span class="lang-en">ENI <span class="lang-en">Level</span><span class="lang-es">Nivel</span></span><span class="lang-es">Nivel de ENI</span></div>
+          <div class="service-desc"><span class="lang-en">Captures traffic for a single Elastic Network Interface. Most granular.</span><span class="lang-es">Captura tráfico de una única interfaz de red elástica. Más granular.</span></div>
         </div>
       </div>
 
       <div class="grid-2" style="margin-bottom:20px;">
         <div class="feature-card">
-          <div class="feature-card-title">What Gets Captured</div>
+          <div class="feature-card-title"><span class="lang-en">What Gets Captured</span><span class="lang-es">Qué se captura</span></div>
           <ul>
-            <li>ALLOWED and DENIED traffic both logged</li>
-            <li>Source IP, destination IP, port, protocol</li>
-            <li>Packet count, byte count, time window</li>
-            <li>ACCEPT or REJECT action recorded</li>
-            <li>AWS managed service traffic: ELB, RDS, ElastiCache, Redshift, NAT Gateway, Transit Gateway</li>
+            <li><span class="lang-en">ALLOWED and DENIED traffic both logged</span><span class="lang-es">Tráfico PERMITIDO y DENEGADO registrado</span></li>
+            <li><span class="lang-en">Source IP, destination IP, port, protocol</span><span class="lang-es">IP de origen, IP de destino, puerto, protocolo</span></li>
+            <li><span class="lang-en">Packet count, byte count, time window</span><span class="lang-es">Conteo de paquetes, conteo de bytes, ventana de tiempo</span></li>
+            <li><span class="lang-en">ACCEPT or REJECT action recorded</span><span class="lang-es">Acción ACEPTAR o RECHAZAR registrada</span></li>
+            <li><span class="lang-en">AWS managed service traffic: ELB, RDS, ElastiCache, Redshift, NAT Gateway, Transit Gateway</span><span class="lang-es">Tráfico de servicio gestionado por AWS: ELB, RDS, ElastiCache, Redshift, NAT Gateway, Transit Gateway</span></li>
           </ul>
         </div>
         <div class="feature-card">
-          <div class="feature-card-title">Destinations</div>
+          <div class="feature-card-title"><span class="lang-en">Destinations</span><span class="lang-es">Destinos</span></div>
           <ul>
-            <li><strong style="color:#f8fafc;">Amazon S3</strong> — cost-effective long-term storage, queryable with Athena</li>
-            <li><strong style="color:#f8fafc;">CloudWatch Logs</strong> — real-time monitoring, metric filters</li>
-            <li><strong style="color:#f8fafc;">Kinesis Data Firehose</strong> — stream to third-party analytics tools</li>
+            <li><strong style="color:#f8fafc;"><span class="lang-en">Amazon S3</span><span class="lang-es">Amazon S3</span></strong> — <span class="lang-en">cost-effective long-term storage, queryable with Athena</span><span class="lang-es">almacenamiento a largo plazo rentable, consultable con Athena</span></li>
+            <li><strong style="color:#f8fafc;"><span class="lang-en">CloudWatch Logs</span><span class="lang-es">Registros de CloudWatch</span></strong> — <span class="lang-en">real-time monitoring, metric filters</span><span class="lang-es">monitoreo en tiempo real, filtros de métricas</span></li>
+            <li><strong style="color:#f8fafc;"><span class="lang-en">Kinesis Data Firehose</span><span class="lang-es">Kinesis Data Firehose</span></strong> — <span class="lang-en">stream to third-party analytics tools</span><span class="lang-es">transmitir a herramientas de análisis de terceros</span></li>
           </ul>
         </div>
       </div>
 
       <div class="callout warning">
-        <strong>Exam trap:</strong> Flow Logs do NOT capture traffic to/from the AWS DNS server (169.254.169.253), the link-local address (169.254.169.254 for metadata), or DHCP traffic. Use Flow Logs to diagnose NACL vs Security Group issues — look for ACCEPT vs REJECT in the logs.
+        <strong><span class="lang-en">Exam trap:</span><span class="lang-es">Trampa del examen:</span></strong> <span class="lang-en">Flow Logs do NOT capture traffic to/from the AWS DNS server (169.254.169.253), the link-local address (169.254.169.254 for metadata), or DHCP traffic. Use Flow Logs to diagnose NACL vs <span class="lang-en">Security Group</span><span class="lang-es">Grupo de seguridad</span> issues — look for ACCEPT vs REJECT in the logs.</span><span class="lang-es">Los registros de flujo NO capturan tráfico hacia/desde el servidor DNS de AWS (169.254.169.253), la dirección de enlace local (169.254.169.254 para metadatos), o tráfico DHCP. Use registros de flujo para diagnosticar problemas de ACL de red vs grupo de seguridad — busque ACEPTAR vs RECHAZAR en los registros.</span>
       </div>
     </div>
   </section>
@@ -309,51 +309,51 @@
        SECTION 5: VPC PEERING
        ============================================================ -->
   <section>
-    <div class="section-label">5 &mdash; VPC Peering</div>
+    <div class="section-label"><span class="lang-en">5 &mdash; VPC Peering</span><span class="lang-es">5 &mdash; Emparejamiento de VPC</span></div>
     <div class="card">
-      <div class="card-title">Connecting VPCs Privately via the AWS Network</div>
-      <p style="font-size:14px;color:#94a3b8;margin-bottom:20px;">VPC Peering lets two VPCs communicate as if they were on the same private network — no internet involved. It works within the same account, across accounts, and across regions.</p>
+      <div class="card-title"><span class="lang-en">Connecting VPCs Privately via the AWS Network</span><span class="lang-es">Conectar VPC de forma privada a través de la red de AWS</span></div>
+      <p style="font-size:14px;color:#94a3b8;margin-bottom:20px;"><span class="lang-en">VPC Peering lets two VPCs communicate as if they were on the same private network — no internet involved. It works within the same account, across accounts, and across regions.</span><span class="lang-es">El emparejamiento de VPC permite que dos VPC se comuniquen como si estuvieran en la misma red privada — sin Internet involucrado. Funciona dentro de la misma cuenta, entre cuentas y entre regiones.</span></p>
 
       <div class="grid-2" style="margin-bottom:20px;">
         <div class="feature-card">
-          <div class="feature-card-title">Requirements &amp; Constraints</div>
+          <div class="feature-card-title"><span class="lang-en">Requirements &amp; Constraints</span><span class="lang-es">Requisitos y restricciones</span></div>
           <ul>
-            <li>IP CIDR ranges must NOT overlap</li>
-            <li>NOT transitive — each pair needs its own peering connection</li>
-            <li>Both VPCs need updated route tables after peering</li>
-            <li>Works across different AWS accounts</li>
-            <li>Works across different regions</li>
+            <li><span class="lang-en">IP CIDR ranges must NOT overlap</span><span class="lang-es">Los rangos CIDR de IP NO deben superponerse</span></li>
+            <li><span class="lang-en">NOT transitive — each pair needs its own peering connection</span><span class="lang-es">NO transitivo — cada par necesita su propia conexión de emparejamiento</span></li>
+            <li><span class="lang-en">Both VPCs need updated route tables after peering</span><span class="lang-es">Ambas VPC necesitan tablas de rutas actualizadas después del emparejamiento</span></li>
+            <li><span class="lang-en">Works across different AWS accounts</span><span class="lang-es">Funciona entre diferentes cuentas de AWS</span></li>
+            <li><span class="lang-en">Works across different regions</span><span class="lang-es">Funciona entre diferentes regiones</span></li>
           </ul>
         </div>
         <div class="feature-card">
-          <div class="feature-card-title">Non-Transitivity Explained</div>
-          <p style="margin-bottom:10px;">If A&ndash;B peered and B&ndash;C peered, A cannot reach C automatically. You must create A&ndash;C peering separately.</p>
+          <div class="feature-card-title"><span class="lang-en">Non-Transitivity Explained</span><span class="lang-es">Transitividad No explicada</span></div>
+          <p style="margin-bottom:10px;"><span class="lang-en">If A&ndash;B peered and B&ndash;C peered, A cannot reach C automatically. You must create A&ndash;C peering separately.</span><span class="lang-es">Si A&ndash;B están emparejadas y B&ndash;C están emparejadas, A no puede alcanzar C automáticamente. Debes crear el emparejamiento A&ndash;C por separado.</span></p>
           <!-- Peering visual -->
           <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px;">
             <div style="display:flex;align-items:center;gap:8px;">
               <span class="arch-node node-blue" style="font-size:13px;padding:6px 12px;">VPC-A</span>
               <span style="color:#10b981;font-size:18px;">&#8594;&#8592;</span>
               <span class="arch-node node-green" style="font-size:13px;padding:6px 12px;">VPC-B</span>
-              <span class="badge badge-green" style="margin-left:4px;">Peered</span>
+              <span class="badge badge-green" style="margin-left:4px;"><span class="lang-en">Peered</span><span class="lang-es">Emparejado</span></span>
             </div>
             <div style="display:flex;align-items:center;gap:8px;">
               <span class="arch-node node-blue" style="font-size:13px;padding:6px 12px;">VPC-A</span>
               <span style="color:#10b981;font-size:18px;">&#8594;&#8592;</span>
               <span class="arch-node node-purple" style="font-size:13px;padding:6px 12px;">VPC-C</span>
-              <span class="badge badge-green" style="margin-left:4px;">Peered</span>
+              <span class="badge badge-green" style="margin-left:4px;"><span class="lang-en">Peered</span><span class="lang-es">Emparejado</span></span>
             </div>
             <div style="display:flex;align-items:center;gap:8px;">
               <span class="arch-node node-green" style="font-size:13px;padding:6px 12px;">VPC-B</span>
               <span style="color:#ef4444;font-size:18px;">&#10005;</span>
               <span class="arch-node node-purple" style="font-size:13px;padding:6px 12px;">VPC-C</span>
-              <span class="badge badge-red" style="margin-left:4px;">No path!</span>
+              <span class="badge badge-red" style="margin-left:4px;"><span class="lang-en">No path!</span><span class="lang-es">¡Sin camino!</span></span>
             </div>
           </div>
         </div>
       </div>
 
       <div class="callout info">
-        <strong>Key exam point:</strong> VPC Peering is NOT transitive. If you need any-to-any connectivity between many VPCs, consider <strong>AWS Transit Gateway</strong> instead (hub-and-spoke model, supports transitive routing).
+        <strong><span class="lang-en">Key exam point:</span><span class="lang-es">Punto clave del examen:</span></strong> VPC Peering is NOT transitive. If you need any-to-any connectivity between many VPCs, consider <strong>AWS Transit Gateway</strong> instead (hub-and-spoke model, supports transitive routing).
       </div>
     </div>
   </section>
@@ -362,36 +362,36 @@
        SECTION 6: VPC ENDPOINTS
        ============================================================ -->
   <section>
-    <div class="section-label">6 &mdash; VPC Endpoints</div>
+    <div class="section-label"><span class="lang-en">6 &mdash; VPC Endpoints</span><span class="lang-es">6 &mdash; Puntos de enlace de VPC</span></div>
     <div class="card">
-      <div class="card-title">Private Access to AWS Services — No Internet Required</div>
-      <p style="font-size:14px;color:#94a3b8;margin-bottom:20px;">VPC Endpoints let resources in your private subnets reach AWS services without traffic ever leaving the AWS network.</p>
+      <div class="card-title"><span class="lang-en">Private Access to AWS Services — No Internet Required</span><span class="lang-es">Acceso privado a servicios de AWS — No se requiere Internet</span></div>
+      <p style="font-size:14px;color:#94a3b8;margin-bottom:20px;"><span class="lang-en">VPC Endpoints let resources in your private subnets reach AWS services without traffic ever leaving the AWS network.</span><span class="lang-es">Los puntos de enlace de VPC permiten que los recursos en sus subredes privadas accedan a los servicios de AWS sin que el tráfico salga de la red de AWS.</span></p>
 
       <div class="grid-2" style="margin-bottom:20px;">
         <div class="compare-col">
-          <div class="compare-col-title" style="color:#10b981;">Gateway Endpoint</div>
+          <div class="compare-col-title" style="color:#10b981;"><span class="lang-en">Gateway Endpoint</span><span class="lang-es">Punto de enlace de puerta de enlace</span></div>
           <ul>
             <li>Supports <strong style="color:#f8fafc;">S3 and DynamoDB ONLY</strong></li>
-            <li>Implemented as a route in the VPC route table</li>
-            <li>No ENI — no per-hour cost (completely FREE)</li>
-            <li>Associated with specific route tables in specific subnets</li>
-            <li>Does not require a private DNS name</li>
+            <li><span class="lang-en">Implemented as a route in the VPC route table</span><span class="lang-es">Implementado como una ruta en la tabla de rutas de VPC</span></li>
+            <li><span class="lang-en">No ENI — no per-hour cost (completely FREE)</span><span class="lang-es">Sin ENI — sin costo por hora (completamente GRATIS)</span></li>
+            <li><span class="lang-en">Associated with specific route tables in specific subnets</span><span class="lang-es">Asociado con tablas de rutas específicas en subredes específicas</span></li>
+            <li><span class="lang-en">Does not require a private DNS name</span><span class="lang-es">No requiere un nombre DNS privado</span></li>
           </ul>
         </div>
         <div class="compare-col">
-          <div class="compare-col-title" style="color:#6366f1;">Interface Endpoint (PrivateLink)</div>
+          <div class="compare-col-title" style="color:#6366f1;"><span class="lang-en">Interface Endpoint (PrivateLink)</span><span class="lang-es">Punto de enlace de interfaz (PrivateLink)</span></div>
           <ul>
             <li>Supports <strong style="color:#f8fafc;">all other AWS services</strong> (SQS, SNS, KMS, etc.)</li>
-            <li>Creates an ENI in your subnet — uses private IP</li>
-            <li>Billed per hour + per GB of data processed</li>
-            <li>Provides private DNS name for the service</li>
-            <li>Can be used from Direct Connect / Site-to-Site VPN</li>
+            <li><span class="lang-en">Creates an ENI in your subnet — uses private IP</span><span class="lang-es">Crea una ENI en su subred — usa IP privada</span></li>
+            <li><span class="lang-en">Billed per hour + per GB of data processed</span><span class="lang-es">Se factura por hora + por GB de datos procesados</span></li>
+            <li><span class="lang-en">Provides private DNS name for the service</span><span class="lang-es">Proporciona nombre DNS privado para el servicio</span></li>
+            <li><span class="lang-en">Can be used from Direct Connect / Site-to-Site VPN</span><span class="lang-es">Se puede usar desde Direct Connect / VPN de sitio a sitio</span></li>
           </ul>
         </div>
       </div>
 
       <div class="callout success">
-        <strong>Free tip for the exam:</strong> Gateway Endpoint for S3 is free AND the recommended approach for EC2/Lambda in private subnets needing S3 access. Interface Endpoints cost money but support every service.
+        <strong><span class="lang-en">Free tip for the exam:</span><span class="lang-es">Consejo gratis para el examen:</span></strong> <span class="lang-en"><span class="lang-en">Gateway Endpoint</span><span class="lang-es">Punto de enlace de puerta de enlace</span> for S3 is free AND the recommended approach for EC2/Lambda in private subnets needing S3 access. Interface Endpoints cost money but support every service.</span><span class="lang-es">El punto de enlace de puerta de enlace para S3 es gratuito Y el enfoque recomendado para EC2/Lambda en subredes privadas que necesitan acceso a S3. Los puntos de enlace de interfaz cuestan dinero pero admiten todos los servicios.</span>
       </div>
     </div>
   </section>
@@ -400,52 +400,52 @@
        SECTION 7: SITE-TO-SITE VPN vs DIRECT CONNECT
        ============================================================ -->
   <section>
-    <div class="section-label">7 &mdash; Site-to-Site VPN vs Direct Connect</div>
+    <div class="section-label"><span class="lang-en">7 &mdash; Site-to-Site VPN vs Direct Connect</span><span class="lang-es">7 &mdash; VPN de sitio a sitio vs Direct Connect</span></div>
     <div class="card">
-      <div class="card-title">Connecting On-Premises Networks to AWS</div>
-      <p style="font-size:14px;color:#94a3b8;margin-bottom:20px;">When your corporate data center needs to communicate with your AWS VPC, you have two main options.</p>
+      <div class="card-title"><span class="lang-en">Connecting On-Premises Networks to AWS</span><span class="lang-es">Conectar redes locales a AWS</span></div>
+      <p style="font-size:14px;color:#94a3b8;margin-bottom:20px;"><span class="lang-en">When your corporate data center needs to communicate with your AWS VPC, you have two main options.</span><span class="lang-es">Cuando su centro de datos corporativo necesita comunicarse con su VPC de AWS, tiene dos opciones principales.</span></p>
 
       <div class="table-wrapper" style="margin-bottom:20px;">
         <table class="data-table">
           <thead>
             <tr>
-              <th>Attribute</th>
-              <th>Site-to-Site VPN</th>
-              <th>Direct Connect (DX)</th>
+              <th><span class="lang-en">Attribute</span><span class="lang-es">Atributo</span></th>
+              <th><span class="lang-en">Site-to-Site VPN</span><span class="lang-es">VPN de sitio a sitio</span></th>
+              <th><span class="lang-en">Direct Connect (DX)</span><span class="lang-es">Direct Connect (DX)</span></th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td><strong style="color:#f8fafc;">Path</strong></td>
-              <td>Public internet (encrypted via IPSec)</td>
-              <td>Dedicated private fiber — bypasses internet</td>
+              <td><strong style="color:#f8fafc;"><span class="lang-en">Path</span><span class="lang-es">Ruta</span></strong></td>
+              <td><span class="lang-en">Public internet (encrypted via IPSec)</span><span class="lang-es">Internet público (encriptado vía IPSec)</span></td>
+              <td><span class="lang-en">Dedicated private fiber — bypasses internet</span><span class="lang-es">Fibra privada dedicada — evita internet</span></td>
             </tr>
             <tr>
-              <td><strong style="color:#f8fafc;">Setup time</strong></td>
-              <td><span class="badge badge-green">Minutes</span></td>
-              <td><span class="badge badge-red">At least 1 month</span> (physical provisioning)</td>
+              <td><strong style="color:#f8fafc;"><span class="lang-en">Setup time</span><span class="lang-es">Tiempo de configuración</span></strong></td>
+              <td><span class="badge badge-green"><span class="lang-en">Minutes</span><span class="lang-es">Minutos</span></span></td>
+              <td><span class="badge badge-red"><span class="lang-en">At least 1 month</span><span class="lang-es">Al menos 1 mes</span></span> <span class="lang-en">(physical provisioning)</span><span class="lang-es">(aprovisionamiento físico)</span></td>
             </tr>
             <tr>
-              <td><strong style="color:#f8fafc;">Bandwidth</strong></td>
-              <td>Limited by internet connection</td>
-              <td>1 Gbps, 10 Gbps, or 100 Gbps options</td>
+              <td><strong style="color:#f8fafc;"><span class="lang-en">Bandwidth</span><span class="lang-es">Ancho de banda</span></strong></td>
+              <td><span class="lang-en">Limited by internet connection</span><span class="lang-es">Limitado por conexión a Internet</span></td>
+              <td><span class="lang-en">1 Gbps, 10 Gbps, or 100 Gbps options</span><span class="lang-es">Opciones de 1 Gbps, 10 Gbps o 100 Gbps</span></td>
             </tr>
             <tr>
-              <td><strong style="color:#f8fafc;">Cost</strong></td>
-              <td>Low</td>
-              <td>Higher (port-hour + data transfer)</td>
+              <td><strong style="color:#f8fafc;"><span class="lang-en">Cost</span><span class="lang-es">Costo</span></strong></td>
+              <td><span class="lang-en">Low</span><span class="lang-es">Bajo</span></td>
+              <td><span class="lang-en">Higher (port-hour + data transfer)</span><span class="lang-es">Superior (por hora de puerto + transferencia de datos)</span></td>
             </tr>
             <tr>
-              <td><strong style="color:#f8fafc;">Use case</strong></td>
-              <td>Quick setup, backup connectivity, low-throughput</td>
-              <td>High-throughput, consistent latency, compliance</td>
+              <td><strong style="color:#f8fafc;"><span class="lang-en">Use case</span><span class="lang-es">Caso de uso</span></strong></td>
+              <td><span class="lang-en">Quick setup, backup connectivity, low-throughput</span><span class="lang-es">Configuración rápida, conectividad de respaldo, bajo rendimiento</span></td>
+              <td><span class="lang-en">High-throughput, consistent latency, compliance</span><span class="lang-es">Alto rendimiento, latencia consistente, cumplimiento</span></td>
             </tr>
           </tbody>
         </table>
       </div>
 
       <div class="callout warning">
-        <strong>AWS-side component for VPN:</strong> Virtual Private Gateway (VGW) attached to the VPC, plus a Customer Gateway (CGW) on the on-premises side. Direct Connect uses a Direct Connect Gateway to connect to one or more VPCs.
+        <strong><span class="lang-en">AWS-side component for VPN:</span><span class="lang-es">Componente en AWS para VPN:</span></strong> <span class="lang-en">Virtual Private Gateway (VGW) attached to the VPC, plus a Customer Gateway (CGW) on the on-premises side. Direct Connect uses a Direct Connect Gateway to connect to one or more VPCs.</span><span class="lang-es">Puerta de enlace privada virtual (VGW) conectada a la VPC, más una Puerta de enlace del cliente (CGW) en el lado local. Direct Connect usa una Puerta de enlace de Direct Connect para conectar una o más VPC.</span>
       </div>
     </div>
   </section>
@@ -454,10 +454,10 @@
        SECTION 8: THREE-TIER ARCHITECTURE
        ============================================================ -->
   <section>
-    <div class="section-label">8 &mdash; Three-Tier Architecture</div>
+    <div class="section-label"><span class="lang-en">8 &mdash; Three-Tier Architecture</span><span class="lang-es">8 &mdash; Arquitectura de tres capas</span></div>
     <div class="card">
-      <div class="card-title">Classic Web Application Layout in a VPC</div>
-      <p style="font-size:14px;color:#94a3b8;margin-bottom:20px;">AWS best practice distributes web applications across three tiers with specific subnet placement for security and scalability.</p>
+      <div class="card-title"><span class="lang-en">Classic Web Application Layout in a VPC</span><span class="lang-es">Diseño clásico de aplicación web en una VPC</span></div>
+      <p style="font-size:14px;color:#94a3b8;margin-bottom:20px;"><span class="lang-en">AWS best practice distributes web applications across three tiers with specific subnet placement for security and scalability.</span><span class="lang-es">Las mejores prácticas de AWS distribuyen las aplicaciones web en tres capas con colocación de subred específica para seguridad y escalabilidad.</span></p>
 
       <div class="tier-rows" style="margin-bottom:20px;">
         <div class="tier-row">
@@ -465,9 +465,9 @@
             <span class="tier-label tier-public">PUBLIC</span>
           </div>
           <div class="tier-content">
-            <div class="tier-title">Tier 1 — Web / Load Balancer</div>
+            <div class="tier-title"><span class="lang-en">Tier 1 — Web / Load Balancer</span><span class="lang-es">Capa 1 — Web / Equilibrador de carga</span></div>
             <div class="tier-detail">
-              <strong style="color:#f8fafc;">Elastic Load Balancer (ELB)</strong> — publicly accessible, spread across multiple public subnets in different AZs. Receives internet traffic and distributes to application tier. Also: Bastion hosts if needed.
+              <strong style="color:#f8fafc;"><span class="lang-en">Elastic Load Balancer (ELB)</span><span class="lang-es">Equilibrador de carga elástico (ELB)</span></strong> — <span class="lang-en">publicly accessible, spread across multiple public subnets in different AZs. Receives internet traffic and distributes to application tier. Also: Bastion hosts if needed.</span><span class="lang-es">accesible públicamente, distribuido en múltiples subredes públicas en diferentes AZs. Recibe tráfico de Internet y lo distribuye a la capa de aplicación. También: hosts bastión si es necesario.</span>
             </div>
           </div>
         </div>
@@ -476,9 +476,9 @@
             <span class="tier-label tier-private">PRIVATE</span>
           </div>
           <div class="tier-content">
-            <div class="tier-title">Tier 2 — Application (EC2 in ASG)</div>
+            <div class="tier-title"><span class="lang-en">Tier 2 — Application (EC2 in ASG)</span><span class="lang-es">Capa 2 — Aplicación (EC2 en ASG)</span></div>
             <div class="tier-detail">
-              <strong style="color:#f8fafc;">EC2 instances in Auto Scaling Group</strong> — private subnets across AZs. Security group only allows inbound from the ELB security group. EFS can mount here for shared file storage (e.g., WordPress images). Outbound via NAT Gateway.
+              <strong style="color:#f8fafc;"><span class="lang-en">EC2 instances in Auto Scaling Group</span><span class="lang-es">Instancias EC2 en grupo de escalado automático</span></strong> — <span class="lang-en">private subnets across AZs. Security group only allows inbound from the ELB security group. EFS can mount here for shared file storage (e.g., WordPress images). Outbound via NAT Gateway.</span><span class="lang-es">subredes privadas en AZs. El grupo de seguridad solo permite entrada desde el grupo de seguridad de ELB. EFS puede montarse aquí para almacenamiento de archivos compartidos (por ejemplo, imágenes de WordPress). Saliente vía NAT Gateway.</span>
             </div>
           </div>
         </div>
@@ -487,16 +487,16 @@
             <span class="tier-label tier-private">PRIVATE</span>
           </div>
           <div class="tier-content">
-            <div class="tier-title">Tier 3 — Data (RDS + ElastiCache)</div>
+            <div class="tier-title"><span class="lang-en">Tier 3 — Data (RDS + ElastiCache)</span><span class="lang-es">Capa 3 — Datos (RDS + ElastiCache)</span></div>
             <div class="tier-detail">
-              <strong style="color:#f8fafc;">RDS</strong> (with Multi-AZ standby) and <strong style="color:#f8fafc;">ElastiCache</strong> (Redis/Memcached) — deepest private subnets. Security groups only allow inbound from EC2 security groups. No internet access whatsoever.
+              <strong style="color:#f8fafc;"><span class="lang-en">RDS</span><span class="lang-es">RDS</span></strong> <span class="lang-en">(with Multi-AZ standby) and <strong style="color:#f8fafc;">ElastiCache</strong> (Redis/Memcached) — deepest private subnets. Security groups only allow inbound from EC2 security groups. No internet access whatsoever.</span><span class="lang-es">(con respaldo Multi-AZ) y <strong style="color:#f8fafc;">ElastiCache</strong> (Redis/Memcached) — subredes privadas más profundas. Los grupos de seguridad solo permiten entrada de grupos de seguridad EC2. Sin acceso a Internet en absoluto.</span>
             </div>
           </div>
         </div>
       </div>
 
       <div class="callout info">
-        <strong>LAMP Stack / WordPress note:</strong> Linux + Apache + MySQL (RDS) + PHP on EC2. WordPress stores media/uploads on <strong>Amazon EFS</strong> (shared across all EC2 instances in the ASG). ElastiCache (Redis) handles session data and query caching.
+        <strong><span class="lang-en">LAMP Stack / WordPress note:</span><span class="lang-es">Nota de LAMP Stack / WordPress:</span></strong> <span class="lang-en">Linux + Apache + MySQL (RDS) + PHP on EC2. WordPress stores media/uploads on <strong>Amazon EFS</strong> (shared across all EC2 instances in the ASG). ElastiCache (Redis) handles session data and query caching.</span><span class="lang-es">Linux + Apache + MySQL (RDS) + PHP en EC2. WordPress almacena medios/cargas en <strong>Amazon EFS</strong> (compartido entre todas las instancias EC2 en el ASG). ElastiCache (Redis) maneja datos de sesión y almacenamiento en caché de consultas.</span>
       </div>
     </div>
   </section>
@@ -505,67 +505,67 @@
        SECTION 9: EXAM TIPS
        ============================================================ -->
   <section>
-    <div class="section-label">9 &mdash; Exam Tips &amp; Flash Cards</div>
+    <div class="section-label"><span class="lang-en">9 &mdash; Exam Tips &amp; Flash Cards</span><span class="lang-es">9 &mdash; Consejos para el examen y tarjetas de referencia</span></div>
     <div class="tips-grid">
       <div class="tip-card">
-        <div class="tip-trigger">If the question says "public subnet" →</div>
+        <div class="tip-trigger"><span class="lang-en">If the question says "public subnet" →</span><span class="lang-es">Si la pregunta dice "subred pública" →</span></div>
         <hr class="divider" />
-        <div class="tip-answer">Route table has a route to an Internet Gateway</div>
+        <div class="tip-answer"><span class="lang-en">Route table has a route to an Internet Gateway</span><span class="lang-es">La tabla de rutas tiene una ruta a una Puerta de enlace a Internet</span></div>
       </div>
       <div class="tip-card">
-        <div class="tip-trigger">Private subnet needs outbound internet access →</div>
+        <div class="tip-trigger"><span class="lang-en">Private subnet needs outbound internet access →</span><span class="lang-es">La subred privada necesita acceso a Internet saliente →</span></div>
         <hr class="divider" />
-        <div class="tip-answer">NAT Gateway (deployed in PUBLIC subnet, not private)</div>
+        <div class="tip-answer"><span class="lang-en">NAT Gateway (deployed in PUBLIC subnet, not private)</span><span class="lang-es">NAT Gateway (implementado en subred PÚBLICA, no privada)</span></div>
       </div>
       <div class="tip-card">
-        <div class="tip-trigger">NAT Gateway vs NAT Instance →</div>
+        <div class="tip-trigger"><span class="lang-en">NAT Gateway vs NAT Instance →</span><span class="lang-es">NAT Gateway vs NAT Instance →</span></div>
         <hr class="divider" />
-        <div class="tip-answer">NAT Gateway = AWS-managed, highly available. NAT Instance = self-managed EC2 (legacy, avoid)</div>
+        <div class="tip-answer"><span class="lang-en">NAT Gateway = AWS-managed, highly available. NAT Instance = self-managed EC2 (legacy, avoid)</span><span class="lang-es">NAT Gateway = administrado por AWS, altamente disponible. NAT Instance = EC2 autoadministrado (heredado, evitar)</span></div>
       </div>
       <div class="tip-card">
-        <div class="tip-trigger">Subnet-level firewall, can DENY traffic →</div>
+        <div class="tip-trigger"><span class="lang-en">Subnet-level firewall, can DENY traffic →</span><span class="lang-es">Firewall a nivel de subred, puede NEGAR tráfico →</span></div>
         <hr class="divider" />
-        <div class="tip-answer">NACL — stateless, evaluates allow AND deny rules in order</div>
+        <div class="tip-answer"><span class="lang-en">NACL — stateless, evaluates allow AND deny rules in order</span><span class="lang-es">ACL de red — sin estado, evalúa reglas de permitir y denegar en orden</span></div>
       </div>
       <div class="tip-card">
-        <div class="tip-trigger">Instance-level firewall, return traffic auto-allowed →</div>
+        <div class="tip-trigger">Instance-level firewall, <span class="lang-en">return traffic auto-allowed</span><span class="lang-es">tráfico de retorno permitido automáticamente</span> →</div>
         <hr class="divider" />
-        <div class="tip-answer">Security Group — stateful, allow rules only</div>
+        <div class="tip-answer"><span class="lang-en">Security Group</span><span class="lang-es">Grupo de seguridad</span> — stateful, allow rules only</div>
       </div>
       <div class="tip-card">
-        <div class="tip-trigger">Need to troubleshoot "why can't EC2 reach service X?" →</div>
+        <div class="tip-trigger"><span class="lang-en">Need to troubleshoot "why can't EC2 reach service X?" →</span><span class="lang-es">¿Necesita solucionar problemas "por qué EC2 no puede alcanzar el servicio X?" →</span></div>
         <hr class="divider" />
-        <div class="tip-answer">Enable VPC Flow Logs — check ACCEPT vs REJECT records</div>
+        <div class="tip-answer"><span class="lang-en">Enable VPC Flow Logs — check ACCEPT vs REJECT records</span><span class="lang-es">Habilite registros de flujo de VPC — compruebe registros ACEPTAR vs RECHAZAR</span></div>
       </div>
       <div class="tip-card">
-        <div class="tip-trigger">Connect two VPCs privately, same or cross-account →</div>
+        <div class="tip-trigger"><span class="lang-en">Connect two VPCs privately, same or cross-account →</span><span class="lang-es">Conectar dos VPC de forma privada, misma cuenta o entre cuentas →</span></div>
         <hr class="divider" />
-        <div class="tip-answer">VPC Peering — no overlapping CIDRs, NOT transitive</div>
+        <div class="tip-answer"><span class="lang-en">VPC Peering — no overlapping CIDRs, NOT transitive</span><span class="lang-es">Emparejamiento de VPC — sin CIDR superpuestos, NO es transitivo</span></div>
       </div>
       <div class="tip-card">
-        <div class="tip-trigger">EC2 in private subnet needs to reach S3 or DynamoDB →</div>
+        <div class="tip-trigger"><span class="lang-en">EC2 in private subnet needs to reach S3 or DynamoDB →</span><span class="lang-es">EC2 en subred privada necesita alcanzar S3 o DynamoDB →</span></div>
         <hr class="divider" />
-        <div class="tip-answer">Gateway VPC Endpoint (FREE, no internet needed)</div>
+        <div class="tip-answer"><span class="lang-en">Gateway VPC Endpoint (FREE, no internet needed)</span><span class="lang-es">Punto de enlace de VPC de puerta de enlace (GRATIS, no se requiere Internet)</span></div>
       </div>
       <div class="tip-card">
-        <div class="tip-trigger">Private access to SQS, SNS, KMS, etc. from VPC →</div>
+        <div class="tip-trigger"><span class="lang-en">Private access to SQS, SNS, KMS, etc. from VPC →</span><span class="lang-es">Acceso privado a SQS, SNS, KMS, etc. desde VPC →</span></div>
         <hr class="divider" />
-        <div class="tip-answer">Interface VPC Endpoint (PrivateLink, creates ENI)</div>
+        <div class="tip-answer"><span class="lang-en">Interface VPC Endpoint (PrivateLink, creates ENI)</span><span class="lang-es">Punto de enlace de VPC de interfaz (PrivateLink, crea ENI)</span></div>
       </div>
       <div class="tip-card">
-        <div class="tip-trigger">On-premises to AWS — need it NOW, low bandwidth ok →</div>
+        <div class="tip-trigger"><span class="lang-en">On-premises to AWS — need it NOW, low bandwidth ok →</span><span class="lang-es">Local a AWS — lo necesita AHORA, ancho de banda bajo está bien →</span></div>
         <hr class="divider" />
-        <div class="tip-answer">Site-to-Site VPN (minutes to set up, over public internet)</div>
+        <div class="tip-answer"><span class="lang-en">Site-to-Site VPN (minutes to set up, over public internet)</span><span class="lang-es">VPN de sitio a sitio (minutos para configurar, sobre Internet público)</span></div>
       </div>
       <div class="tip-card">
-        <div class="tip-trigger">On-premises to AWS — dedicated, consistent, high-speed →</div>
+        <div class="tip-trigger"><span class="lang-en">On-premises to AWS — dedicated, consistent, high-speed →</span><span class="lang-es">Local a AWS — dedicado, consistente, alta velocidad →</span></div>
         <hr class="divider" />
-        <div class="tip-answer">Direct Connect (1+ month to provision, private fiber)</div>
+        <div class="tip-answer"><span class="lang-en">Direct Connect (1+ month to provision, private fiber)</span><span class="lang-es">Direct Connect (1+ mes para aprovisionar, fibra privada)</span></div>
       </div>
       <div class="tip-card">
-        <div class="tip-trigger">Three-tier: what goes in public vs private subnets? →</div>
+        <div class="tip-trigger"><span class="lang-en">Three-tier: what goes in public vs private subnets? →</span><span class="lang-es">Tres capas: ¿qué va en subredes públicas vs privadas? →</span></div>
         <hr class="divider" />
-        <div class="tip-answer">PUBLIC: ELB only. PRIVATE: EC2 (app), RDS, ElastiCache (data)</div>
+        <div class="tip-answer"><span class="lang-en">PUBLIC: ELB only. PRIVATE: EC2 (app), RDS, ElastiCache (data)</span><span class="lang-es">PÚBLICO: solo ELB. PRIVADO: EC2 (app), RDS, ElastiCache (datos)</span></div>
       </div>
     </div>
   </section>
@@ -581,11 +581,11 @@ var DEMOS = {
     steps: [
       {
         body: `
-          <div class="step-title">Step 1 — Public Subnet: Bidirectional Internet via IGW</div>
-          <div class="step-desc">An EC2 instance in a public subnet has a route to the Internet Gateway. Traffic flows both ways.</div>
+          <div class="step-title"><span class="lang-en"><span class="lang-en">Step 1 — Public Subnet: Bidirectional Internet via IGW</span><span class="lang-es">Paso 1 — Subred Pública: Internet bidireccional vía IGW</span></span><span class="lang-es">Paso 1 — Subred Pública: Internet bidireccional vía IGW</span></div>
+          <div class="step-desc"><span class="lang-en">An EC2 instance in a public subnet has a route to the Internet Gateway. Traffic flows both ways.</span><span class="lang-es">Una instancia EC2 en una subred pública tiene una ruta a la Puerta de enlace a Internet. El tráfico fluye en ambas direcciones.</span></div>
           <div style="display:flex;flex-direction:column;gap:10px;">
             <div class="arch-flow">
-              <span class="arch-node node-green">EC2 (Public Subnet)</span>
+              <span class="arch-node node-green">EC2 (<span class="lang-en">Public Subnet</span><span class="lang-es">Subred Pública</span>)</span>
               <span class="arch-arrow">→</span>
               <span class="arch-node node-orange">Route Table</span>
               <span class="arch-arrow">→</span>
@@ -593,17 +593,17 @@ var DEMOS = {
               <span class="arch-arrow">↔</span>
               <span class="arch-node node-gray">Internet</span>
             </div>
-            <div class="callout success" style="margin-top:8px;">The route table has an entry: <code>0.0.0.0/0 → igw-xxxx</code>. The EC2 must also have a public IP or Elastic IP. Security Group must allow the traffic.</div>
+            <div class="callout success" style="margin-top:8px;">The route table has an entry: <code>0.0.0.0/0 → igw-xxxx</code>. The EC2 must also have a public IP or Elastic IP. <span class="lang-en">Security Group</span><span class="lang-es">Grupo de seguridad</span> must allow the traffic.</div>
           </div>
         `
       },
       {
         body: `
-          <div class="step-title">Step 2 — Private Subnet Problem: No Route Out</div>
-          <div class="step-desc">An EC2 in a private subnet has no route to the Internet Gateway. It is completely isolated from the internet.</div>
+          <div class="step-title">Step 2 — <span class="lang-en">Private Subnet</span><span class="lang-es">Subred Privada</span> Problem: No Route Out</div>
+          <div class="step-desc"><span class="lang-en">An EC2 in a private subnet has no route to the Internet Gateway. It is completely isolated from the internet.</span><span class="lang-es">Una instancia EC2 en una subred privada no tiene ruta a la Puerta de enlace a Internet. Está completamente aislada de Internet.</span></div>
           <div style="display:flex;flex-direction:column;gap:10px;">
             <div class="arch-flow">
-              <span class="arch-node node-purple">EC2 (Private Subnet)</span>
+              <span class="arch-node node-purple">EC2 (<span class="lang-en">Private Subnet</span><span class="lang-es">Subred Privada</span>)</span>
               <span class="arch-arrow">→</span>
               <span class="arch-node node-orange">Route Table</span>
               <span class="blocked-arrow">✗</span>
@@ -611,19 +611,19 @@ var DEMOS = {
               <span class="arch-arrow" style="opacity:0.3;">→</span>
               <span class="arch-node node-gray" style="opacity:0.4;">Internet</span>
             </div>
-            <div class="callout danger" style="margin-top:8px;">No route to IGW exists. The instance cannot download packages, call external APIs, or be reached from outside. This is intentional for databases and app servers.</div>
+            <div class="callout danger" style="margin-top:8px;"><span class="lang-en">No route to IGW exists. The instance cannot download packages, call external APIs, or be reached from outside. This is intentional for databases and app servers.</span><span class="lang-es">No existe ruta a IGW. La instancia no puede descargar paquetes, llamar a API externas o ser alcanzada desde el exterior. Esto es intencional para bases de datos y servidores de aplicaciones.</span></div>
           </div>
         `
       },
       {
         body: `
-          <div class="step-title">Step 3 — NAT Gateway: Outbound-Only Internet Access</div>
-          <div class="step-desc">NAT Gateway is deployed in a PUBLIC subnet. Private instances route through it for outbound traffic, but inbound internet cannot reach them.</div>
+          <div class="step-title"><span class="lang-en">Step 3 — NAT Gateway: Outbound-Only Internet Access</span><span class="lang-es">Paso 3 — NAT Gateway: Acceso a Internet solo saliente</span></div>
+          <div class="step-desc"><span class="lang-en">NAT Gateway is deployed in a PUBLIC subnet. Private instances route through it for outbound traffic, but inbound internet cannot reach them.</span><span class="lang-es">NAT Gateway se implementa en una subred PÚBLICA. Las instancias privadas se enrutan a través de él para tráfico saliente, pero Internet entrante no puede alcanzarlas.</span></div>
           <div style="display:flex;flex-direction:column;gap:12px;">
             <div class="arch-flow">
               <span class="arch-node node-purple">EC2 (Private)</span>
               <span class="arch-arrow">→</span>
-              <span class="arch-node node-orange">NAT Gateway<br/><span style="font-size:13px;font-weight:400;color:#fed7aa;">(Public Subnet)</span></span>
+              <span class="arch-node node-orange">NAT Gateway<br/><span style="font-size:13px;font-weight:400;color:#fed7aa;">(<span class="lang-en">Public Subnet</span><span class="lang-es">Subred Pública</span>)</span></span>
               <span class="arch-arrow">→</span>
               <span class="arch-node node-blue">IGW</span>
               <span class="arch-arrow">→</span>
@@ -634,33 +634,33 @@ var DEMOS = {
               <span class="blocked-arrow">✗</span>
               <span class="arch-node node-purple" style="opacity:0.5;">EC2 (Private)</span>
             </div>
-            <div class="callout info">Private subnet route table gets: <code>0.0.0.0/0 → nat-xxxx</code>. NAT Gateway itself has an Elastic IP. It is fully managed by AWS — no patching needed. Charged per hour + per GB.</div>
+            <div class="callout info"><span class="lang-en">Private subnet route table gets: <code>0.0.0.0/0 → nat-xxxx</code>. NAT Gateway itself has an Elastic IP. It is fully managed by AWS — no patching needed. Charged per hour + per GB.</span><span class="lang-es">La tabla de rutas de la subred privada obtiene: <code>0.0.0.0/0 → nat-xxxx</code>. NAT Gateway tiene su propia IP elástica. Está completamente administrado por AWS — no se requiere parches. Se cobra por hora + por GB.</span></div>
           </div>
         `
       },
       {
         body: `
-          <div class="step-title">Step 4 — NAT Gateway vs NAT Instance Comparison</div>
-          <div class="step-desc">NAT Gateway is the modern recommended approach. NAT Instance is legacy and self-managed.</div>
+          <div class="step-title"><span class="lang-en">Step 4 — NAT Gateway vs NAT Instance Comparison</span><span class="lang-es">Paso 4 — Comparación de NAT Gateway vs NAT Instance</span></div>
+          <div class="step-desc"><span class="lang-en">NAT Gateway is the modern recommended approach. NAT Instance is legacy and self-managed.</span><span class="lang-es">NAT Gateway es el enfoque moderno recomendado. NAT Instance es heredado y autoadministrado.</span></div>
           <div class="grid-2" style="gap:12px;">
             <div class="compare-col">
-              <div class="compare-col-title" style="color:#10b981;">NAT Gateway (Recommended)</div>
+              <div class="compare-col-title" style="color:#10b981;"><span class="lang-en">NAT Gateway (Recommended)</span><span class="lang-es">NAT Gateway (Recomendado)</span></div>
               <ul>
-                <li>Managed by AWS — no maintenance</li>
-                <li>Automatically scales bandwidth (up to 45 Gbps)</li>
-                <li>High availability within AZ (deploy in each AZ for full HA)</li>
-                <li>Cannot be used as Bastion host</li>
-                <li>No Security Groups to manage</li>
+                <li><span class="lang-en">Managed by AWS — no maintenance</span><span class="lang-es">Administrado por AWS — sin mantenimiento</span></li>
+                <li><span class="lang-en">Automatically scales bandwidth (up to 45 Gbps)</span><span class="lang-es">Escala automáticamente el ancho de banda (hasta 45 Gbps)</span></li>
+                <li><span class="lang-en">High availability within AZ (deploy in each AZ for full HA)</span><span class="lang-es">Alta disponibilidad dentro de AZ (implementar en cada AZ para HA completa)</span></li>
+                <li><span class="lang-en">Cannot be used as Bastion host</span><span class="lang-es">No puede ser utilizado como host bastión</span></li>
+                <li>No <span class="lang-en">Security Group</span><span class="lang-es">Grupo de seguridad</span>s to manage</li>
               </ul>
             </div>
             <div class="compare-col">
-              <div class="compare-col-title" style="color:#94a3b8;">NAT Instance (Legacy)</div>
+              <div class="compare-col-title" style="color:#94a3b8;"><span class="lang-en">NAT Instance (Legacy)</span><span class="lang-es">NAT Instance (Heredado)</span></div>
               <ul>
-                <li>You manage the EC2 instance</li>
-                <li>Must disable source/dest check manually</li>
-                <li>Bandwidth limited by instance type</li>
-                <li>Can be used as a Bastion host</li>
-                <li>Must manage Security Groups yourself</li>
+                <li><span class="lang-en">You manage the EC2 instance</span><span class="lang-es">Administras la instancia EC2</span></li>
+                <li><span class="lang-en">Must disable source/dest check manually</span><span class="lang-es">Debe deshabilitar la verificación de origen/destino manualmente</span></li>
+                <li><span class="lang-en">Bandwidth limited by instance type</span><span class="lang-es">Ancho de banda limitado por tipo de instancia</span></li>
+                <li><span class="lang-en">Can be used as a Bastion host</span><span class="lang-es">Puede ser utilizado como host bastión</span></li>
+                <li>Must manage <span class="lang-en">Security Group</span><span class="lang-es">Grupo de seguridad</span>s yourself</li>
               </ul>
             </div>
           </div>
@@ -673,57 +673,57 @@ var DEMOS = {
     steps: [
       {
         body: `
-          <div class="step-title">Step 1 — First Layer: NACL at the Subnet Boundary</div>
-          <div class="step-desc">Every packet entering or leaving a subnet passes through the NACL first. Rules are evaluated in order from lowest number to highest.</div>
+          <div class="step-title"><span class="lang-en">Step 1 — First Layer: NACL at the Subnet Boundary</span><span class="lang-es">Paso 1 — Primera capa: ACL de red en el límite de subred</span></div>
+          <div class="step-desc"><span class="lang-en">Every packet entering or leaving a subnet passes through the NACL first. Rules are evaluated in order from lowest number to highest.</span><span class="lang-es">Cada paquete que entra o sale de una subred pasa primero por la ACL de red. Las reglas se evalúan en orden de menor a mayor número.</span></div>
           <div style="display:flex;flex-direction:column;gap:12px;">
             <div class="arch-flow">
               <span class="arch-node node-gray">Internet Request</span>
               <span class="arch-arrow">→</span>
-              <span class="arch-node node-orange">NACL<br/><span style="font-size:13px;font-weight:400;color:#fed7aa;">Subnet Level</span></span>
+              <span class="arch-node node-orange">NACL<br/><span style="font-size:13px;font-weight:400;color:#fed7aa;"><span class="lang-en">Subnet <span class="lang-en">Level</span><span class="lang-es">Nivel</span></span><span class="lang-es">Nivel de subred</span></span></span>
               <span class="arch-arrow">→</span>
               <span class="arch-node node-gray" style="opacity:0.5;">(if allowed)</span>
             </div>
-            <div class="callout warning">NACL evaluates rules in order (rule #100, #200, etc.). First matching rule wins. If no rule matches, traffic is DENIED by the catch-all <code>*</code> rule. NACL can both ALLOW and DENY — use deny rules to explicitly block known bad IPs.</div>
+            <div class="callout warning"><span class="lang-en">NACL evaluates rules in order (rule #100, #200, etc.). First matching rule wins. If no rule matches, traffic is DENIED by the catch-all <code>*</code> rule. NACL can both ALLOW and DENY — use deny rules to explicitly block known bad IPs.</span><span class="lang-es">La ACL de red evalúa las reglas en orden (regla #100, #200, etc.). Gana la primera regla coincidente. Si ninguna regla coincide, el tráfico es DENEGADO por la regla general <code>*</code>. La ACL de red puede tanto PERMITIR como DENEGAR — use reglas de denegación para bloquear explícitamente IPs conocidas malas.</span></div>
           </div>
         `
       },
       {
         body: `
-          <div class="step-title">Step 2 — Second Layer: Security Group at the Instance</div>
-          <div class="step-desc">If NACL allows the traffic, it then hits the Security Group attached to the EC2 instance (or ENI).</div>
+          <div class="step-title">Step 2 — Second Layer: <span class="lang-en">Security Group</span><span class="lang-es">Grupo de seguridad</span> at the Instance</div>
+          <div class="step-desc">If NACL allows the traffic, it then hits the <span class="lang-en">Security Group</span><span class="lang-es">Grupo de seguridad</span> attached to the EC2 instance (or ENI).</div>
           <div style="display:flex;flex-direction:column;gap:12px;">
             <div class="arch-flow">
-              <span class="arch-node node-gray">Packet (passed NACL)</span>
+              <span class="arch-node node-gray"><span class="lang-en">Packet (passed NACL)</span><span class="lang-es">Paquete (pasó ACL de red)</span></span>
               <span class="arch-arrow">→</span>
-              <span class="arch-node node-blue">Security Group<br/><span style="font-size:13px;font-weight:400;color:#93c5fd;">Instance Level</span></span>
+              <span class="arch-node node-blue"><span class="lang-en">Security Group</span><span class="lang-es">Grupo de seguridad</span><br/><span style="font-size:13px;font-weight:400;color:#93c5fd;">Instance <span class="lang-en">Level</span><span class="lang-es">Nivel</span></span></span>
               <span class="arch-arrow">→</span>
               <span class="arch-node node-green">EC2 Instance</span>
             </div>
-            <div class="callout info">Security Group has ALLOW rules only. All rules are evaluated together (no ordering). If no rule allows the traffic, it is dropped silently. You can reference other Security Group IDs (e.g., allow traffic from ELB SG only).</div>
+            <div class="callout info"><span class="lang-en">Security Group</span><span class="lang-es">Grupo de seguridad</span> has ALLOW rules only. All rules are evaluated together (no ordering). If no rule allows the traffic, it is dropped silently. You can reference other <span class="lang-en">Security Group</span><span class="lang-es">Grupo de seguridad</span> IDs (e.g., allow traffic from ELB SG only).</div>
           </div>
         `
       },
       {
         body: `
-          <div class="step-title">Step 3 — Return Traffic: Stateful vs Stateless</div>
-          <div class="step-desc">The most important behavioral difference on the exam: how each layer handles response traffic.</div>
+          <div class="step-title">Step 3 — Return Traffic: <span class="lang-en">Stateful</span><span class="lang-es">Con estado</span> vs <span class="lang-en">Stateless</span><span class="lang-es">Sin estado</span></div>
+          <div class="step-desc"><span class="lang-en">The most important behavioral difference on the exam: how each layer handles response traffic.</span><span class="lang-es">La diferencia de comportamiento más importante en el examen: cómo cada capa maneja el tráfico de respuesta.</span></div>
           <div class="grid-2" style="gap:12px;">
             <div class="compare-col">
-              <div class="compare-col-title" style="color:#6ee7b7;">Security Group — STATEFUL</div>
+              <div class="compare-col-title" style="color:#6ee7b7;"><span class="lang-en">Security Group</span><span class="lang-es">Grupo de seguridad</span> — STATEFUL</div>
               <ul>
-                <li>Tracks connection state</li>
-                <li>Inbound rule allows port 80</li>
-                <li>Response on ephemeral port automatically allowed</li>
-                <li>You only write rules for the direction you initiate</li>
+                <li><span class="lang-en">Tracks connection state</span><span class="lang-es">Rastrear estado de conexión</span></li>
+                <li><span class="lang-en">Inbound rule allows port 80</span><span class="lang-es">La regla entrante permite el puerto 80</span></li>
+                <li><span class="lang-en">Response on ephemeral port automatically allowed</span><span class="lang-es">Respuesta en puerto efímero automáticamente permitida</span></li>
+                <li><span class="lang-en">You only write rules for the direction you initiate</span><span class="lang-es">Solo escribe reglas para la dirección que inicia</span></li>
               </ul>
             </div>
             <div class="compare-col">
-              <div class="compare-col-title" style="color:#fca5a5;">NACL — STATELESS</div>
+              <div class="compare-col-title" style="color:#fca5a5;"><span class="lang-en">NACL — STATELESS</span><span class="lang-es">NACL — SIN ESTADO</span></div>
               <ul>
-                <li>Does NOT track connection state</li>
-                <li>Inbound port 80 allowed — not enough!</li>
-                <li>Must ALSO add outbound rule for ephemeral ports (1024–65535)</li>
-                <li>Every direction needs explicit rules</li>
+                <li><span class="lang-en">Does NOT track connection state</span><span class="lang-es">NO rastrea el estado de la conexión</span></li>
+                <li><span class="lang-en">Inbound port 80 allowed — not enough!</span><span class="lang-es">¡Puerto 80 entrante permitido — ¡no es suficiente!</span></li>
+                <li><span class="lang-en">Must ALSO add outbound rule for ephemeral ports (1024–65535)</span><span class="lang-es">También DEBE agregar regla saliente para puertos efímeros (1024–65535)</span></li>
+                <li><span class="lang-en">Every direction needs explicit rules</span><span class="lang-es">Cada dirección necesita reglas explícitas</span></li>
               </ul>
             </div>
           </div>

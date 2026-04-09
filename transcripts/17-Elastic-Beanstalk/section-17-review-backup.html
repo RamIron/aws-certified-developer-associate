@@ -753,82 +753,77 @@
       <div class="card">
         <div class="card-header">
           <span class="badge">1</span>
-          <h2><span class="lang-en">What is Elastic Beanstalk?</span><span class="lang-es">¿Qué es Elastic Beanstalk?</span></h2>
+          <h2>What is Elastic Beanstalk?</h2>
         </div>
 
         <div class="concept-grid">
           <div class="concept-card">
             <div class="icon">👨‍💻</div>
-            <h4><span class="lang-en">Developer-centric</span><span class="lang-es">Centrado en desarrolladores</span></h4>
+            <h4>Developer-centric</h4>
             <p>
-              <span class="lang-en">You only worry about the code. Beanstalk handles provisioning,
-              scaling, and monitoring.</span><span class="lang-es">Solo te preocupas por el código. Beanstalk maneja el aprovisionamiento,
-              escalado y monitoreo.</span>
+              You only worry about the code. Beanstalk handles provisioning,
+              scaling, and monitoring.
             </p>
           </div>
           <div class="concept-card">
             <div class="icon">🔧</div>
-            <h4><span class="lang-en">Managed service</span><span class="lang-es">Servicio gestionado</span></h4>
+            <h4>Managed service</h4>
             <p>
-              <span class="lang-en">Reuses EC2, ASG, ELB, RDS, ElastiCache under the hood. You don't
-              manage them directly.</span><span class="lang-es">Reutiliza EC2, ASG, ELB, RDS, ElastiCache bajo el capó. No los
-              gestiona directamente.</span>
+              Reuses EC2, ASG, ELB, RDS, ElastiCache under the hood. You don't
+              manage them directly.
             </p>
           </div>
           <div class="concept-card">
             <div class="icon">💸</div>
-            <h4><span class="lang-en">Free to use</span><span class="lang-es">Gratis para usar</span></h4>
+            <h4>Free to use</h4>
             <p>
-              <span class="lang-en">Beanstalk itself costs nothing. You pay for the underlying
-              resources (EC2, RDS, etc.).</span><span class="lang-es">Beanstalk en sí no cuesta nada. Paga por los recursos subyacentes
-              (EC2, RDS, etc.).</span>
+              Beanstalk itself costs nothing. You pay for the underlying
+              resources (EC2, RDS, etc.).
             </p>
           </div>
           <div class="concept-card">
             <div class="icon">🏗</div>
-            <h4><span class="lang-en">Powered by CloudFormation</span><span class="lang-es">Impulsado por CloudFormation</span></h4>
+            <h4>Powered by CloudFormation</h4>
             <p>
-              <span class="lang-en">Each environment = one CloudFormation stack. Beanstalk creates and
-              manages it for you.</span><span class="lang-es">Cada entorno = una pila de CloudFormation. Beanstalk la crea y
-              la gestiona por usted.</span>
+              Each environment = one CloudFormation stack. Beanstalk creates and
+              manages it for you.
             </p>
           </div>
         </div>
 
-        <h3><span class="lang-en">Components</span><span class="lang-es">Componentes</span></h3>
+        <h3>Components</h3>
         <div class="concept-grid">
           <div class="concept-card">
-            <h4><span class="lang-en">Application</span><span class="lang-es">Aplicación</span></h4>
+            <h4>Application</h4>
             <p>
-              <span class="lang-en">Top-level container for all environments, versions, and configs.</span><span class="lang-es">Contenedor de nivel superior para todos los entornos, versiones y configuraciones.</span>
+              Top-level container for all environments, versions, and configs.
             </p>
           </div>
           <div class="concept-card">
-            <h4><span class="lang-en">App Version</span><span class="lang-es">Versión de la aplicación</span></h4>
+            <h4>App Version</h4>
             <p>
-              <span class="lang-en">An iteration of your code — v1, v2, v3… stored as a zip in S3.</span><span class="lang-es">Una iteración de su código - v1, v2, v3 ... almacenada como zip en S3.</span>
+              An iteration of your code — v1, v2, v3… stored as a zip in S3.
             </p>
           </div>
           <div class="concept-card">
-            <h4><span class="lang-en"><span class="lang-en">Environment</span><span class="lang-es">Entorno</span></span><span class="lang-es">Entorno</span></h4>
+            <h4>Environment</h4>
             <p>
-              <span class="lang-en">A collection of AWS resources running
-              <strong>one</strong> application version at a time.</span><span class="lang-es">Una colección de recursos de AWS ejecutando
-              <strong>una</strong> versión de la aplicación a la vez.</span>
+              A collection of AWS resources running
+              <strong>one</strong> application version at a time.
             </p>
           </div>
           <div class="concept-card">
-            <h4><span class="lang-en">Tier</span><span class="lang-es">Nivel</span></h4>
-            <p><span class="lang-en">Web Server (HTTP) or Worker (SQS background processing).</span><span class="lang-es">Servidor web (HTTP) o trabajador (procesamiento de fondo SQS).</span></p>
+            <h4>Tier</h4>
+            <p>Web Server (HTTP) or Worker (SQS background processing).</p>
           </div>
         </div>
 
-        <h3><span class="lang-en">Tiers</span><span class="lang-es">Niveles</span></h3>
+        <h3>Tiers</h3>
         <div class="tier-compare">
           <div class="tier-card web">
-            <h4>🌐 <span class="lang-en">Web Server Tier</span><span class="lang-es">Nivel de servidor web</span></h4>
+            <h4>🌐 Web Server Tier</h4>
             <div class="flow-boxes">
-              <div class="fbox"><span class="lang-en">Users</span><span class="lang-es">Usuarios</span></div>
+              <div class="fbox">Users</div>
               <span class="arrow">→</span>
               <div class="fbox">ELB</div>
               <span class="arrow">→</span>
@@ -837,28 +832,29 @@
               <div class="fbox">EC2</div>
             </div>
             <p style="margin-top: 0.75rem; font-size: 13px">
-              <span class="lang-en">Handles HTTP requests. Classic web application setup.</span><span class="lang-es">Maneja solicitudes HTTP. Configuración clásica de aplicaciones web.</span>
+              Handles HTTP requests. Classic web application setup.
             </p>
           </div>
           <div class="tier-card worker">
-            <h4>⚙️ <span class="lang-en">Worker Tier</span><span class="lang-es">Nivel de trabajador</span></h4>
+            <h4>⚙️ Worker Tier</h4>
             <div class="flow-boxes">
-              <div class="fbox"><span class="lang-en">SQS Queue</span><span class="lang-es">Cola SQS</span></div>
+              <div class="fbox">SQS Queue</div>
               <span class="arrow">→</span>
               <div class="fbox">ASG</div>
               <span class="arrow">→</span>
               <div class="fbox">EC2</div>
             </div>
             <p style="margin-top: 0.75rem; font-size: 13px">
-              <span class="lang-en">Processes background jobs. Scales based on
-              <strong>queue depth</strong>.</span><span class="lang-es">Procesa trabajos en segundo plano. Escala según
-              <strong>profundidad de cola</strong>.</span>
+              Processes background jobs. Scales based on
+              <strong>queue depth</strong>.
             </p>
           </div>
         </div>
 
         <div class="callout warning" style="margin-top: 1rem">
-          ⚠ <span class="lang-en">RDS created <strong>inside</strong> Beanstalk = tied to environment lifecycle. Delete the environment → delete the database. Create RDS <strong>outside</strong> for production.</span><span class="lang-es">RDS creado <strong>dentro</strong> de Beanstalk = vinculado al ciclo de vida del entorno. Elimine el entorno → elimine la base de datos. Cree RDS <strong>fuera</strong> para producción.</span>
+          ⚠ RDS created <strong>inside</strong> Beanstalk = tied to environment
+          lifecycle. Delete the environment → delete the database. Create RDS
+          <strong>outside</strong> for production.
         </div>
       </div>
 
@@ -866,113 +862,113 @@
       <div class="card">
         <div class="card-header">
           <span class="badge">2</span>
-          <h2><span class="lang-en">Deployment Modes</span><span class="lang-es">Modos de despliegue</span></h2>
+          <h2>Deployment Modes</h2>
         </div>
 
         <!-- Quick reference grid -->
         <div class="modes-grid">
           <div class="mode-card" style="--mode-color: #ef4444">
-            <h4><span class="lang-en">All at Once</span><span class="lang-es">Todo a la vez</span></h4>
+            <h4>All at Once</h4>
             <div class="mode-metric">
-              <span class="lbl"><span class="lang-en">Downtime</span><span class="lang-es">Tiempo de inactividad</span></span><span class="chip red"><span class="lang-en">YES</span><span class="lang-es">SÍ</span></span>
+              <span class="lbl">Downtime</span><span class="chip red">YES</span>
             </div>
             <div class="mode-metric">
-              <span class="lbl"><span class="lang-en">Capacity</span><span class="lang-es">Capacidad</span></span
-              ><span class="chip red"><span class="lang-en">Zero</span><span class="lang-es">Cero</span></span>
+              <span class="lbl">Capacity</span
+              ><span class="chip red">Zero</span>
             </div>
             <div class="mode-metric">
-              <span class="lbl"><span class="lang-en">Cost</span><span class="lang-es">Costo</span></span><span class="chip green"><span class="lang-en">None</span><span class="lang-es">Ninguno</span></span>
+              <span class="lbl">Cost</span><span class="chip green">None</span>
             </div>
             <div class="mode-metric">
-              <span class="lbl"><span class="lang-en">Rollback</span><span class="lang-es">Reversión</span></span
-              ><span class="chip yellow"><span class="lang-en">Redeploy</span><span class="lang-es">Reimplementar</span></span>
+              <span class="lbl">Rollback</span
+              ><span class="chip yellow">Redeploy</span>
             </div>
             <div class="mode-metric">
-              <span class="lbl"><span class="lang-en">Speed</span><span class="lang-es">Velocidad</span></span
-              ><span class="chip green"><span class="lang-en">Fastest</span><span class="lang-es">Más rápido</span></span>
+              <span class="lbl">Speed</span
+              ><span class="chip green">Fastest</span>
             </div>
           </div>
           <div class="mode-card" style="--mode-color: #3b82f6">
-            <h4><span class="lang-en">Rolling</span><span class="lang-es">Gradual</span></h4>
+            <h4>Rolling</h4>
             <div class="mode-metric">
-              <span class="lbl"><span class="lang-en">Downtime</span><span class="lang-es">Tiempo de inactividad</span></span
-              ><span class="chip green"><span class="lang-en">No</span><span class="lang-es">No</span></span>
+              <span class="lbl">Downtime</span
+              ><span class="chip green">No</span>
             </div>
             <div class="mode-metric">
-              <span class="lbl"><span class="lang-en">Capacity</span><span class="lang-es">Capacidad</span></span
-              ><span class="chip red"><span class="lang-en">Below</span><span class="lang-es">Debajo</span></span>
+              <span class="lbl">Capacity</span
+              ><span class="chip red">Below</span>
             </div>
             <div class="mode-metric">
-              <span class="lbl"><span class="lang-en">Cost</span><span class="lang-es">Costo</span></span><span class="chip green"><span class="lang-en">None</span><span class="lang-es">Ninguno</span></span>
+              <span class="lbl">Cost</span><span class="chip green">None</span>
             </div>
             <div class="mode-metric">
-              <span class="lbl"><span class="lang-en">Rollback</span><span class="lang-es">Reversión</span></span
+              <span class="lbl">Rollback</span
               ><span class="chip yellow">Manual</span>
             </div>
             <div class="mode-metric">
-              <span class="lbl"><span class="lang-en">Speed</span><span class="lang-es">Velocidad</span></span
+              <span class="lbl">Speed</span
               ><span class="chip yellow">Slow</span>
             </div>
           </div>
           <div class="mode-card" style="--mode-color: #06b6d4">
-            <h4><span class="lang-en">Rolling + Batch</span><span class="lang-es">Gradual + Lote</span></h4>
+            <h4>Rolling + Batch</h4>
             <div class="mode-metric">
-              <span class="lbl"><span class="lang-en">Downtime</span><span class="lang-es">Tiempo de inactividad</span></span
-              ><span class="chip green"><span class="lang-en">No</span><span class="lang-es">No</span></span>
+              <span class="lbl">Downtime</span
+              ><span class="chip green">No</span>
             </div>
             <div class="mode-metric">
-              <span class="lbl"><span class="lang-en">Capacity</span><span class="lang-es">Capacidad</span></span
+              <span class="lbl">Capacity</span
               ><span class="chip green">At capacity</span>
             </div>
             <div class="mode-metric">
-              <span class="lbl"><span class="lang-en">Cost</span><span class="lang-es">Costo</span></span
+              <span class="lbl">Cost</span
               ><span class="chip yellow">Small extra</span>
             </div>
             <div class="mode-metric">
-              <span class="lbl"><span class="lang-en">Rollback</span><span class="lang-es">Reversión</span></span
+              <span class="lbl">Rollback</span
               ><span class="chip yellow">Manual</span>
             </div>
             <div class="mode-metric">
-              <span class="lbl"><span class="lang-en">Speed</span><span class="lang-es">Velocidad</span></span
+              <span class="lbl">Speed</span
               ><span class="chip yellow">Slow</span>
             </div>
           </div>
           <div class="mode-card" style="--mode-color: #10b981">
-            <h4><span class="lang-en">Immutable</span><span class="lang-es">Inmutable</span></h4>
+            <h4>Immutable</h4>
             <div class="mode-metric">
-              <span class="lbl"><span class="lang-en">Downtime</span><span class="lang-es">Tiempo de inactividad</span></span
-              ><span class="chip green"><span class="lang-en">No</span><span class="lang-es">No</span></span>
+              <span class="lbl">Downtime</span
+              ><span class="chip green">No</span>
             </div>
             <div class="mode-metric">
-              <span class="lbl"><span class="lang-en">Capacity</span><span class="lang-es">Capacidad</span></span><span class="chip red">2x</span>
+              <span class="lbl">Capacity</span><span class="chip red">2x</span>
             </div>
             <div class="mode-metric">
-              <span class="lbl"><span class="lang-en">Cost</span><span class="lang-es">Costo</span></span><span class="chip red">High</span>
+              <span class="lbl">Cost</span><span class="chip red">High</span>
             </div>
             <div class="mode-metric">
-              <span class="lbl"><span class="lang-en">Rollback</span><span class="lang-es">Reversión</span></span
+              <span class="lbl">Rollback</span
               ><span class="chip green">Quick</span>
             </div>
             <div class="mode-metric">
-              <span class="lbl"><span class="lang-en">Speed</span><span class="lang-es">Velocidad</span></span
+              <span class="lbl">Speed</span
               ><span class="chip red">Longest</span>
             </div>
           </div>
           <div class="mode-card" style="--mode-color: #8b5cf6">
-            <h4><span class="lang-en">Blue / Green</span><span class="lang-es">Azul / Verde</span></h4>
+            <h4>Blue / Green</h4>
             <div class="mode-metric">
-              <span class="lbl"><span class="lang-en">Downtime</span><span class="lang-es">Tiempo de inactividad</span></span
-              ><span class="chip green"><span class="lang-en">No</span><span class="lang-es">No</span></span>
+              <span class="lbl">Downtime</span
+              ><span class="chip green">No</span>
             </div>
             <div class="mode-metric">
-              <span class="lbl"><span class="lang-en">Capacity</span><span class="lang-es">Capacidad</span></span
+              <span class="lbl">Capacity</span
               ><span class="chip red">2x envs</span>
             </div>
             <div class="mode-metric">
-              <span class="lbl"><span class="lang-en">Cost</span><span class="lang-es">Costo</span></span><span class="chip red">High</span>
+              <span class="lbl">Cost</span><span class="chip red">High</span>
             </div>
             <div class="mode-metric">
-              <span class="lbl"><span class="lang-en">Rollback</span><span class="lang-es">Reversión</span></span
+              <span class="lbl">Rollback</span
               ><span class="chip green">Swap URL</span>
             </div>
             <div class="mode-metric">
@@ -981,23 +977,23 @@
             </div>
           </div>
           <div class="mode-card" style="--mode-color: #f97316">
-            <h4><span class="lang-en">Traffic Splitting</span><span class="lang-es">División de Tráfico</span></h4>
+            <h4>Traffic Splitting</h4>
             <div class="mode-metric">
-              <span class="lbl"><span class="lang-en">Downtime</span><span class="lang-es">Tiempo de inactividad</span></span
-              ><span class="chip green"><span class="lang-en">No</span><span class="lang-es">No</span></span>
+              <span class="lbl">Downtime</span
+              ><span class="chip green">No</span>
             </div>
             <div class="mode-metric">
-              <span class="lbl"><span class="lang-en">Capacity</span><span class="lang-es">Capacidad</span></span><span class="chip red">2x</span>
+              <span class="lbl">Capacity</span><span class="chip red">2x</span>
             </div>
             <div class="mode-metric">
-              <span class="lbl"><span class="lang-en">Cost</span><span class="lang-es">Costo</span></span><span class="chip red">High</span>
+              <span class="lbl">Cost</span><span class="chip red">High</span>
             </div>
             <div class="mode-metric">
-              <span class="lbl"><span class="lang-en">Rollback</span><span class="lang-es">Reversión</span></span
+              <span class="lbl">Rollback</span
               ><span class="chip green">Automatic</span>
             </div>
             <div class="mode-metric">
-              <span class="lbl">Type</span><span class="chip blue"><span class="lang-en">Canary</span><span class="lang-es">Canario</span></span>
+              <span class="lbl">Type</span><span class="chip blue">Canary</span>
             </div>
           </div>
         </div>
@@ -1008,8 +1004,8 @@
         <div class="demo-wrap">
           <div class="demo-title">
             <div class="mode-dot" style="background: #ef4444"></div>
-            <h4><span class="lang-en">All at Once</span><span class="lang-es">Todo a la vez</span></h4>
-            <span class="chip red" style="margin-left: auto"><span class="lang-en">Downtime</span><span class="lang-es">Tiempo de inactividad</span></span>
+            <h4>All at Once</h4>
+            <span class="chip red" style="margin-left: auto">Downtime</span>
           </div>
           <div id="aao" class="anim-body">
             <!-- rendered by JS -->
@@ -1027,7 +1023,7 @@
         <div class="demo-wrap">
           <div class="demo-title">
             <div class="mode-dot" style="background: #3b82f6"></div>
-            <h4><span class="lang-en">Rolling</span><span class="lang-es">Gradual</span></h4>
+            <h4>Rolling</h4>
             <span class="chip yellow" style="margin-left: auto"
               >Below capacity during deploy</span
             >
@@ -1046,7 +1042,7 @@
         <div class="demo-wrap">
           <div class="demo-title">
             <div class="mode-dot" style="background: #06b6d4"></div>
-            <h4><span class="lang-en"><span class="lang-en">Rolling with Additional Batches</span><span class="lang-es">Gradual con Lotes Adicionales</span></span><span class="lang-es">Gradual con Lotes Adicionales</span></h4>
+            <h4>Rolling with Additional Batches</h4>
             <span class="chip green" style="margin-left: auto"
               >Always at capacity</span
             >
@@ -1065,7 +1061,7 @@
         <div class="demo-wrap">
           <div class="demo-title">
             <div class="mode-dot" style="background: #10b981"></div>
-            <h4><span class="lang-en">Immutable</span><span class="lang-es">Inmutable</span></h4>
+            <h4>Immutable</h4>
             <span class="chip green" style="margin-left: auto"
               >Temp ASG · Quick rollback</span
             >
@@ -1084,7 +1080,7 @@
         <div class="demo-wrap">
           <div class="demo-title">
             <div class="mode-dot" style="background: #f97316"></div>
-            <h4><span class="lang-en">Traffic Splitting (Canary)</span><span class="lang-es">División de Tráfico (Canario)</span></h4>
+            <h4>Traffic Splitting (Canary)</h4>
             <span class="chip blue" style="margin-left: auto"
               >ALB · Automated rollback</span
             >
@@ -1103,7 +1099,7 @@
         <div class="demo-wrap">
           <div class="demo-title">
             <div class="mode-dot" style="background: #8b5cf6"></div>
-            <h4><span class="lang-en">Blue / Green</span><span class="lang-es">Azul / Verde</span></h4>
+            <h4>Blue / Green</h4>
             <span class="chip red" style="margin-left: auto"
               >Route 53 · DNS change · Manual</span
             >
@@ -1119,7 +1115,8 @@
         </div>
 
         <div class="callout info">
-          <span class="lang-en"><strong>Blue/Green vs Traffic Splitting:</strong> Both split traffic between two sets of instances. Blue/Green uses</span><span class="lang-es"><strong>Azul/Verde vs División de Tráfico:</strong> Ambos dividen el tráfico entre dos conjuntos de instancias. Azul/Verde usa</span>
+          <strong>Blue/Green vs Traffic Splitting:</strong> Both split traffic
+          between two sets of instances. Blue/Green uses
           <strong>Route 53</strong> (DNS change, manual, separate environment).
           Traffic Splitting uses <strong>ALB</strong> (no DNS change, automated
           rollback, Beanstalk feature).
@@ -1130,7 +1127,7 @@
       <div class="card">
         <div class="card-header">
           <span class="badge">3</span>
-          <h2><span class="lang-en">Lifecycle Policy</span><span class="lang-es">Política de Ciclo de Vida</span></h2>
+          <h2>Lifecycle Policy</h2>
         </div>
 
         <p>
@@ -1162,7 +1159,7 @@
         <div class="concept-grid" style="margin-top: 1rem">
           <div class="concept-card">
             <div class="icon">🔢</div>
-            <h4><span class="lang-en">By Count</span><span class="lang-es">Por Número</span></h4>
+            <h4>By Count</h4>
             <p>
               Keep only the last N versions (e.g., keep last 200). Older ones
               are deleted.
@@ -1170,14 +1167,14 @@
           </div>
           <div class="concept-card">
             <div class="icon">📅</div>
-            <h4><span class="lang-en">By Time</span><span class="lang-es">Por Tiempo</span></h4>
+            <h4>By Time</h4>
             <p>
               Delete versions older than N days (e.g., older than 180 days).
             </p>
           </div>
           <div class="concept-card">
             <div class="icon">🛡</div>
-            <h4><span class="lang-en">Active = Protected</span><span class="lang-es">Activo = Protegido</span></h4>
+            <h4>Active = Protected</h4>
             <p>
               Versions currently deployed to an environment are
               <strong>never deleted</strong>.
@@ -1185,7 +1182,7 @@
           </div>
           <div class="concept-card">
             <div class="icon">📦</div>
-            <h4><span class="lang-en">S3 Source Bundle</span><span class="lang-es">Paquete de Fuente S3</span></h4>
+            <h4>S3 Source Bundle</h4>
             <p>
               Choose to <strong>retain</strong> (audit trail) or
               <strong>delete</strong> (save cost) the S3 zip file.
@@ -1195,7 +1192,7 @@
 
         <div class="callout info" style="margin-top: 1rem">
           Lifecycle cleanup runs via a
-          <strong><span class="lang-en">Beanstalk service role</span><span class="lang-es">rol de servicio de Beanstalk</span></strong> that needs IAM permissions to
+          <strong>Beanstalk service role</strong> that needs IAM permissions to
           delete from S3.
         </div>
       </div>
@@ -1204,7 +1201,7 @@
       <div class="card">
         <div class="card-header">
           <span class="badge">4</span>
-          <h2><span class="lang-en">EB Extensions</span><span class="lang-es">Extensiones de EB</span></h2>
+          <h2>EB Extensions</h2>
         </div>
 
         <p>
@@ -1213,11 +1210,11 @@
           infrastructure-as-code for Beanstalk.
         </p>
 
-        <h3><span class="lang-en">Three Rules (all required)</span><span class="lang-es">Tres Reglas (todas requeridas)</span></h3>
+        <h3>Three Rules (all required)</h3>
         <div class="concept-grid">
           <div class="concept-card">
             <div class="icon">📁</div>
-            <h4><span class="lang-en">Directory</span><span class="lang-es">Directorio</span></h4>
+            <h4>Directory</h4>
             <p>
               Must be in <strong>.ebextensions/</strong> at the root of your
               source code. The dot matters.
@@ -1225,7 +1222,7 @@
           </div>
           <div class="concept-card">
             <div class="icon">📄</div>
-            <h4><span class="lang-en">File extension</span><span class="lang-es">Extensión de archivo</span></h4>
+            <h4>File extension</h4>
             <p>
               Files must end in <strong>.config</strong> (e.g.,
               environment-variables.config, logging.config).
@@ -1233,7 +1230,7 @@
           </div>
           <div class="concept-card">
             <div class="icon">✏️</div>
-            <h4><span class="lang-en">Format</span><span class="lang-es">Formato</span></h4>
+            <h4>Format</h4>
             <p>
               Content must be <strong>YAML or JSON</strong>. The .config
               extension doesn't restrict format.
@@ -1241,7 +1238,7 @@
           </div>
         </div>
 
-        <h3><span class="lang-en">Example: Setting environment variables</span><span class="lang-es">Ejemplo: Establecer variables de entorno</span></h3>
+        <h3>Example: Setting environment variables</h3>
         <div class="code-block">
           <span class="cc"># .ebextensions/environment-variables.config</span>
           <span class="ck">option_settings</span>:
@@ -1265,7 +1262,7 @@
       <div class="card">
         <div class="card-header">
           <span class="badge">5</span>
-          <h2><span class="lang-en">CloudFormation Under the Hood</span><span class="lang-es">CloudFormation Bajo el Capó</span></h2>
+          <h2>CloudFormation Under the Hood</h2>
         </div>
 
         <p>
@@ -1277,7 +1274,7 @@
         <div class="concept-grid">
           <div class="concept-card">
             <div class="icon">🔍</div>
-            <h4><span class="lang-en">1 Env = 1 Stack</span><span class="lang-es">1 Entorno = 1 Pila</span></h4>
+            <h4>1 Env = 1 Stack</h4>
             <p>
               Each Beanstalk environment maps to exactly one CloudFormation
               stack. Visible in the CF console.
@@ -1285,7 +1282,7 @@
           </div>
           <div class="concept-card">
             <div class="icon">⚙️</div>
-            <h4><span class="lang-en">What it creates</span><span class="lang-es">Lo que crea</span></h4>
+            <h4>What it creates</h4>
             <p>
               ASG, Launch Config, ELB, Target Groups, Security Groups,
               CloudWatch Alarms, Scaling Policies.
@@ -1293,7 +1290,7 @@
           </div>
           <div class="concept-card">
             <div class="icon">🚀</div>
-            <h4><span class="lang-en">Power unlock</span><span class="lang-es">Desbloqueador de energía</span></h4>
+            <h4>Power unlock</h4>
             <p>
               EB Extensions + CloudFormation = provision
               <strong>any</strong> AWS resource beyond the console UI.
@@ -1306,7 +1303,7 @@
       <div class="card">
         <div class="card-header">
           <span class="badge">6</span>
-          <h2><span class="lang-en">Cloning</span><span class="lang-es">Clonación</span></h2>
+          <h2>Cloning</h2>
         </div>
         <p>
           Clone an existing environment to get an
@@ -1316,17 +1313,17 @@
 
         <div class="preserve-grid">
           <div class="pcard yes">
-            <h4>✓ <span class="lang-en">Preserved</span><span class="lang-es">Preservado</span></h4>
+            <h4>✓ Preserved</h4>
             <ul>
-              <li><span class="lang-en">Load balancer type &amp; config</span><span class="lang-es">Tipo de balanceador de carga y configuración</span></li>
-              <li><span class="lang-en">RDS database configuration (type, size, settings)</span><span class="lang-es">Configuración de la base de datos RDS (tipo, tamaño, configuración)</span></li>
-              <li><span class="lang-en">All environment variables</span><span class="lang-es">Todas las variables de entorno</span></li>
-              <li><span class="lang-en">Instance type &amp; all resource settings</span><span class="lang-es">Tipo de instancia y toda la configuración de recursos</span></li>
-              <li><span class="lang-en">Application version</span><span class="lang-es">Versión de la aplicación</span></li>
+              <li>Load balancer type &amp; config</li>
+              <li>RDS database configuration (type, size, settings)</li>
+              <li>All environment variables</li>
+              <li>Instance type &amp; all resource settings</li>
+              <li>Application version</li>
             </ul>
           </div>
           <div class="pcard no">
-            <h4>✗ <span class="lang-en">NOT Preserved</span><span class="lang-es">NO Preservado</span></h4>
+            <h4>✗ NOT Preserved</h4>
             <ul>
               <li>RDS <strong>data</strong> (empty database)</li>
             </ul>
@@ -1338,12 +1335,12 @@
       <div class="card">
         <div class="card-header">
           <span class="badge">7</span>
-          <h2><span class="lang-en">Migrations</span><span class="lang-es">Migraciones</span></h2>
+          <h2>Migrations</h2>
         </div>
 
-        <h3><span class="lang-en">Load Balancer Migration</span><span class="lang-es">Migración del Balanceador de Carga</span></h3>
+        <h3>Load Balancer Migration</h3>
         <div class="callout danger">
-          You <strong><span class="lang-en">cannot change the LB type</span><span class="lang-es">no puede cambiar el tipo de LB</span></strong> after an environment is
+          You <strong>cannot change the LB type</strong> after an environment is
           created — only its configuration. You also
           <strong>cannot use Clone</strong> for this: clone copies the LB type
           too.
@@ -1444,7 +1441,8 @@
         </div>
 
         <div class="callout success" style="margin-top: 1rem">
-          ✓ <span class="lang-en">RDS now lives independently, connected to the new Beanstalk environment via env variable.</span><span class="lang-es">RDS ahora vive independientemente, conectado al nuevo entorno de Beanstalk a través de variable env.</span>
+          ✓ RDS now lives independently, connected to the new Beanstalk
+          environment via env variable.
         </div>
       </div>
 
@@ -1452,35 +1450,35 @@
       <div class="card">
         <div class="card-header">
           <span class="badge">8</span>
-          <h2><span class="lang-en">Exam Quick Reference</span><span class="lang-es">Referencia Rápida del Examen</span></h2>
+          <h2>Exam Quick Reference</h2>
         </div>
         <div class="tips-grid">
           <div class="tip">
-            <span class="trigger"><span class="lang-en">"Only mode with downtime"</span><span class="lang-es">"Único modo con tiempo de inactividad"</span></span
+            <span class="trigger">"Only mode with downtime"</span
             ><span class="arrow">→</span><span class="answer">All at Once</span>
           </div>
           <div class="tip">
-            <span class="trigger"><span class="lang-en">"No downtime + no extra cost"</span><span class="lang-es">"Sin tiempo de inactividad + sin costo adicional"</span></span
+            <span class="trigger">"No downtime + no extra cost"</span
             ><span class="arrow">→</span><span class="answer">Rolling</span>
           </div>
           <div class="tip">
-            <span class="trigger"><span class="lang-en">"Always at capacity + minimal cost"</span><span class="lang-es">"Siempre a capacidad + costo mínimo"</span></span
+            <span class="trigger">"Always at capacity + minimal cost"</span
             ><span class="arrow">→</span
             ><span class="answer">Rolling with additional batches</span>
           </div>
           <div class="tip">
             <span class="trigger"
-              ><span class="lang-en">"Temp ASG + quick rollback + willing to pay"</span><span class="lang-es">"ASG temporal + reversión rápida + dispuesto a pagar"</span></span
+              >"Temp ASG + quick rollback + willing to pay"</span
             ><span class="arrow">→</span><span class="answer">Immutable</span>
           </div>
           <div class="tip">
-            <span class="trigger"><span class="lang-en">"Canary testing"</span><span class="lang-es">"Pruebas Canary"</span></span
+            <span class="trigger">"Canary testing"</span
             ><span class="arrow">→</span
             ><span class="answer">Traffic Splitting</span>
           </div>
           <div class="tip">
-            <span class="trigger"><span class="lang-en">"Only mode with DNS change"</span><span class="lang-es">"Único modo con cambio de DNS"</span></span
-            ><span class="arrow">→</span><span class="answer"><span class="lang-en">Blue/Green</span><span class="lang-es">Azul/Verde</span></span>
+            <span class="trigger">"Only mode with DNS change"</span
+            ><span class="arrow">→</span><span class="answer">Blue/Green</span>
           </div>
           <div class="tip">
             <span class="trigger">"ALB splits traffic, automated rollback"</span
@@ -1489,7 +1487,7 @@
           </div>
           <div class="tip">
             <span class="trigger">"Route 53 weighted policy, manual"</span
-            ><span class="arrow">→</span><span class="answer"><span class="lang-en">Blue/Green</span><span class="lang-es">Azul/Verde</span></span>
+            ><span class="arrow">→</span><span class="answer">Blue/Green</span>
           </div>
           <div class="tip">
             <span class="trigger">"EB extensions file requirements"</span

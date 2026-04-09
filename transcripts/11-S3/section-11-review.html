@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Section 11 — Amazon S3 | AWS Developer Associate</title>
+  <title><span class="lang-en">Section 11 — Amazon S3</span><span class="lang-es">Sección 11 — Amazon S3</span></title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet" />
@@ -118,37 +118,37 @@
        SECTION 1: S3 BASICS
        ============================================================ -->
   <section>
-    <div class="section-label">1 &mdash; S3 Basics</div>
+    <div class="section-label"><span class="lang-en">1 &mdash; S3 Basics</span><span class="lang-es">1 &mdash; Conceptos Básicos de S3</span></div>
     <div class="card">
-      <div class="card-title">Buckets, Objects &amp; Keys</div>
-      <p style="font-size:14px;color:#94a3b8;margin-bottom:20px;">Amazon S3 is object storage that scales infinitely. It is one of AWS's core building blocks — used for backups, static hosting, data lakes, and application storage.</p>
+      <div class="card-title"><span class="lang-en">Buckets, Objects &amp; Keys</span><span class="lang-es">Buckets, Objetos y Claves</span></div>
+      <p style="font-size:14px;color:#94a3b8;margin-bottom:20px;"><span class="lang-en">Amazon S3 is object storage that scales infinitely. It is one of AWS's core building blocks — used for backups, static hosting, data lakes, and application storage.</span><span class="lang-es">Amazon S3 es almacenamiento de objetos que escala infinitamente. Es uno de los bloques de construcción principales de AWS — utilizado para copias de seguridad, alojamiento estático, lagos de datos y almacenamiento de aplicaciones.</span></p>
 
       <div class="grid-2" style="margin-bottom:20px;">
         <div class="feature-card">
-          <div class="feature-card-title">Buckets</div>
+          <div class="feature-card-title"><span class="lang-en">Buckets</span><span class="lang-es">Buckets</span></div>
           <ul>
-            <li>Top-level container for objects (like a "directory")</li>
-            <li>Name must be <strong style="color:#f8fafc;">globally unique</strong> across ALL accounts and ALL regions</li>
-            <li>Bucket itself is a <strong style="color:#f8fafc;">region-level</strong> resource (data lives in one region)</li>
-            <li>Naming: 3–63 chars, lowercase letters, numbers, hyphens — no uppercase, no underscores</li>
-            <li>Max 100 buckets per account (soft limit)</li>
+            <li><span class="lang-en">Top-level container for objects (like a "directory")</span><span class="lang-es">Contenedor de nivel superior para objetos (como un "directorio")</span></li>
+            <li><span class="lang-en">Name must be <strong style="color:#f8fafc;">globally unique</strong> across ALL accounts and ALL regions</span><span class="lang-es">El nombre debe ser <strong style="color:#f8fafc;">globalmente único</strong> en TODAS las cuentas y TODAS las regiones</span></li>
+            <li><span class="lang-en">Bucket itself is a <strong style="color:#f8fafc;">region-level</strong> resource (data lives in one region)</span><span class="lang-es">El bucket en sí es un recurso a <strong style="color:#f8fafc;">nivel de región</strong> (los datos viven en una región)</span></li>
+            <li><span class="lang-en">Naming: 3–63 chars, lowercase letters, numbers, hyphens — no uppercase, no underscores</span><span class="lang-es">Nomenclatura: 3–63 caracteres, letras minúsculas, números, guiones — sin mayúsculas, sin guiones bajos</span></li>
+            <li><span class="lang-en">Max 100 buckets per account (soft limit)</span><span class="lang-es">Máx 100 buckets por cuenta (límite suave)</span></li>
           </ul>
         </div>
         <div class="feature-card">
-          <div class="feature-card-title">Objects &amp; Keys</div>
+          <div class="feature-card-title"><span class="lang-en">Objects &amp; Keys</span><span class="lang-es">Objetos y Claves</span></div>
           <ul>
-            <li>Files stored in buckets are called <strong style="color:#f8fafc;">objects</strong></li>
-            <li>Object key = full path e.g., <code>photos/vacation/beach.jpg</code></li>
-            <li>Key = prefix (<code>photos/vacation/</code>) + object name (<code>beach.jpg</code>)</li>
-            <li>S3 has NO real directories — the <code>/</code> is just part of the key name</li>
-            <li>Max object size: <strong style="color:#f8fafc;">5 TB</strong></li>
-            <li>Multi-part upload <strong style="color:#fb923c;">required</strong> for files &gt; 5 GB, recommended &gt; 100 MB</li>
+            <li><span class="lang-en">Files stored in buckets are called <strong style="color:#f8fafc;">objects</strong></span><span class="lang-es">Los archivos almacenados en buckets se llaman <strong style="color:#f8fafc;">objetos</strong></span></li>
+            <li><span class="lang-en">Object key = full path e.g., <code>photos/vacation/beach.jpg</code></span><span class="lang-es">Clave de objeto = ruta completa p.ej., <code>photos/vacation/beach.jpg</code></span></li>
+            <li><span class="lang-en">Key = prefix (<code>photos/vacation/</code>) + object name (<code>beach.jpg</code>)</span><span class="lang-es">Clave = prefijo (<code>photos/vacation/</code>) + nombre de objeto (<code>beach.jpg</code>)</span></li>
+            <li><span class="lang-en">S3 has NO real directories — the <code>/</code> is just part of the key name</span><span class="lang-es">S3 NO tiene directorios reales — el <code>/</code> es solo parte del nombre de la clave</span></li>
+            <li><span class="lang-en">Max object size: <strong style="color:#f8fafc;">5 TB</strong></span><span class="lang-es">Tamaño máximo de objeto: <strong style="color:#f8fafc;">5 TB</strong></span></li>
+            <li><span class="lang-en">Multi-part upload <strong style="color:#fb923c;">required</strong> for files &gt; 5 GB, recommended &gt; 100 MB</span><span class="lang-es">Carga multiparte <strong style="color:#fb923c;">requerida</strong> para archivos &gt; 5 GB, recomendada &gt; 100 MB</span></li>
           </ul>
         </div>
       </div>
 
       <div class="callout warning">
-        <strong>Common confusion on the exam:</strong> S3 bucket names are globally unique (across all AWS accounts), but buckets are region-level resources. The S3 console shows all buckets globally, which tricks people. Your data actually lives in the region you selected when creating the bucket.
+        <span class="lang-en"><strong>Common confusion on the exam:</strong> S3 bucket names are globally unique (across all AWS accounts), but buckets are region-level resources. The S3 console shows all buckets globally, which tricks people. Your data actually lives in the region you selected when creating the bucket.</span><span class="lang-es"><strong>Confusión común en el examen:</strong> Los nombres de bucket de S3 son globalmente únicos (en todas las cuentas de AWS), pero los buckets son recursos a nivel de región. La consola de S3 muestra todos los buckets globalmente, lo que engaña a la gente. Sus datos realmente viven en la región que seleccionó al crear el bucket.</span>
       </div>
     </div>
   </section>
@@ -157,30 +157,30 @@
        SECTION 2: S3 SECURITY
        ============================================================ -->
   <section>
-    <div class="section-label">2 &mdash; S3 Security &amp; Access Control</div>
+    <div class="section-label"><span class="lang-en">2 &mdash; S3 Security &amp; Access Control</span><span class="lang-es">2 &mdash; Seguridad de S3 y Control de Acceso</span></div>
     <div class="card">
-      <div class="card-title">Two Axes of Access Control</div>
-      <p style="font-size:14px;color:#94a3b8;margin-bottom:20px;">Access to S3 objects is granted when an IAM permission OR a resource-based policy allows it, AND there is no explicit deny.</p>
+      <div class="card-title"><span class="lang-en">Two Axes of Access Control</span><span class="lang-es">Dos Ejes de Control de Acceso</span></div>
+      <p style="font-size:14px;color:#94a3b8;margin-bottom:20px;"><span class="lang-en">Access to S3 objects is granted when an IAM permission OR a resource-based policy allows it, AND there is no explicit deny.</span><span class="lang-es">El acceso a objetos de S3 se otorga cuando un permiso de IAM O una política basada en recursos lo permite, Y no hay una negación explícita.</span></p>
 
       <div class="table-wrapper" style="margin-bottom:20px;">
         <table class="data-table">
           <thead>
             <tr>
-              <th>Type</th>
-              <th>Mechanism</th>
-              <th>Applies to</th>
+              <th><span class="lang-en">Type</span><span class="lang-es">Tipo</span></th>
+              <th><span class="lang-en">Mechanism</span><span class="lang-es">Mecanismo</span></th>
+              <th><span class="lang-en">Applies to</span><span class="lang-es">Se aplica a</span></th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td><strong style="color:#f8fafc;">User-Based</strong></td>
-              <td>IAM Policies on users, groups, or roles</td>
-              <td>Specific IAM principals in your account</td>
+              <td><strong style="color:#f8fafc;"><span class="lang-en"><strong style="color:#f8fafc;">User-Based</strong></span><span class="lang-es"><strong style="color:#f8fafc;">Basado en Usuario</strong></span></td>
+              <td><span class="lang-en">IAM Policies on users, groups, or roles</span><span class="lang-es">Políticas de IAM en usuarios, grupos o roles</span></td>
+              <td><span class="lang-en">Specific IAM principals in your account</span><span class="lang-es">Principales de IAM específicos en tu cuenta</span></td>
             </tr>
             <tr>
-              <td><strong style="color:#f8fafc;">Resource-Based</strong></td>
-              <td>Bucket Policy (JSON) attached to the bucket</td>
-              <td>Any principal including cross-account and anonymous</td>
+              <td><strong style="color:#f8fafc;"><span class="lang-en"><strong style="color:#f8fafc;">Resource-Based</strong></span><span class="lang-es"><strong style="color:#f8fafc;">Basado en Recursos</strong></span></td>
+              <td><span class="lang-en">Bucket Policy (JSON) attached to the bucket</span><span class="lang-es">Política de Bucket (JSON) adjunta al bucket</span></td>
+              <td><span class="lang-en">Any principal including cross-account and anonymous</span><span class="lang-es">Cualquier principal incluyendo entre cuentas y anónimo</span></td>
             </tr>
           </tbody>
         </table>
@@ -191,35 +191,35 @@
         <div class="access-card">
           <div class="access-card-header">
             <div class="access-icon" style="background:rgba(59,130,246,0.15);color:#93c5fd;">IAM</div>
-            <div class="access-title">IAM User access</div>
+            <div class="access-title"><span class="lang-en">IAM User access</span><span class="lang-es">Acceso de Usuario IAM</span></div>
           </div>
-          <div class="access-detail">Attach an IAM policy to the user/group granting <code>s3:GetObject</code> etc. Works within the same account. No bucket policy needed.</div>
+          <div class="access-detail"><span class="lang-en">Attach an IAM policy to the user/group granting <code>s3:GetObject</code> etc. Works within the same account. No bucket policy needed.</span><span class="lang-es">Adjunta una política de IAM al usuario/grupo otorgando <code>s3:GetObject</code> etc. Funciona dentro de la misma cuenta. No se necesita política de bucket.</span></div>
         </div>
         <div class="access-card">
           <div class="access-card-header">
             <div class="access-icon" style="background:rgba(16,185,129,0.15);color:#6ee7b7;">EC2</div>
-            <div class="access-title">EC2 instance access</div>
+            <div class="access-title"><span class="lang-en">EC2 instance access</span><span class="lang-es">Acceso de instancia EC2</span></div>
           </div>
-          <div class="access-detail">Attach an <strong style="color:#f8fafc;">IAM Role</strong> to the EC2 instance. NEVER store AWS credentials on the instance. The SDK/CLI on EC2 automatically uses the role via the metadata service.</div>
+          <div class="access-detail"><span class="lang-en">Attach an <strong style="color:#f8fafc;">IAM Role</strong> to the EC2 instance. NEVER store AWS credentials on the instance. The SDK/CLI on EC2 automatically uses the role via the metadata service.</span><span class="lang-es">Adjunta un <strong style="color:#f8fafc;">Rol de IAM</strong> a la instancia EC2. NUNCA almacenes credenciales de AWS en la instancia. El SDK/CLI en EC2 usa automáticamente el rol a través del servicio de metadatos.</span></div>
         </div>
         <div class="access-card">
           <div class="access-card-header">
             <div class="access-icon" style="background:rgba(249,115,22,0.15);color:#fed7aa;">PUB</div>
-            <div class="access-title">Public internet access</div>
+            <div class="access-title"><span class="lang-en">Public internet access</span><span class="lang-es">Acceso a Internet Público</span></div>
           </div>
-          <div class="access-detail">Bucket Policy with <code>Principal: "*"</code>. Block Public Access setting must be disabled first. Use for static website hosting or public file distribution.</div>
+          <div class="access-detail"><span class="lang-en">Bucket Policy with <code>Principal: "*"</code>. Block Public Access setting must be disabled first. Use for static website hosting or public file distribution.</span><span class="lang-es">Política de Bucket con <code>Principal: "*"</code>. La configuración de Bloquear acceso público debe deshabilitarse primero. Úsalo para alojamiento de sitios web estáticos o distribución de archivos públicos.</span></div>
         </div>
         <div class="access-card">
           <div class="access-card-header">
             <div class="access-icon" style="background:rgba(139,92,246,0.15);color:#ddd6fe;">XAC</div>
-            <div class="access-title">Cross-account access</div>
+            <div class="access-title"><span class="lang-en">Cross-account access</span><span class="lang-es">Acceso entre cuentas</span></div>
           </div>
-          <div class="access-detail">Bucket Policy specifying the external account's IAM principal. No IAM policy change needed on your side once bucket policy is set.</div>
+          <div class="access-detail"><span class="lang-en">Bucket Policy specifying the external account's IAM principal. No IAM policy change needed on your side once bucket policy is set.</span><span class="lang-es">Política de Bucket especificando el principal de IAM de la cuenta externa. No se necesita cambio de política de IAM de tu lado una vez que se configure la política de bucket.</span></div>
         </div>
       </div>
 
       <div class="callout danger">
-        <strong>Block Public Access</strong> is an extra safety layer. It overrides bucket policies and ACLs — even if your bucket policy says public, Block Public Access will still block it. Enable at the account level to prevent any bucket in the account from becoming public.
+        <span class="lang-en"><strong>Block Public Access</strong> is an extra safety layer. It overrides bucket policies and ACLs — even if your bucket policy says public, Block Public Access will still block it. Enable at the account level to prevent any bucket in the account from becoming public.</span><span class="lang-es"><strong>Bloquear acceso público</strong> es una capa de seguridad adicional. Anula las políticas de bucket y las ACLs — incluso si tu política de bucket dice público, Bloquear acceso público aún lo bloqueará. Habilítalo a nivel de cuenta para evitar que cualquier bucket en la cuenta se haga público.</span>
       </div>
     </div>
   </section>
@@ -228,36 +228,36 @@
        SECTION 3: STATIC WEBSITE HOSTING
        ============================================================ -->
   <section>
-    <div class="section-label">3 &mdash; S3 Static Website Hosting</div>
+    <div class="section-label"><span class="lang-en">3 &mdash; S3 Static Website Hosting</span><span class="lang-es">3 &mdash; Alojamiento de Sitio Web Estático en S3</span></div>
     <div class="card">
-      <div class="card-title">Hosting HTML/CSS/JS Files Directly from S3</div>
+      <div class="card-title"><span class="lang-en">Hosting HTML/CSS/JS Files Directly from S3</span><span class="lang-es">Alojamiento de Archivos HTML/CSS/JS Directamente desde S3</span></div>
 
       <div class="grid-2" style="margin-bottom:20px;">
         <div class="feature-card">
-          <div class="feature-card-title">How to Enable</div>
+          <div class="feature-card-title"><span class="lang-en">How to Enable</span><span class="lang-es">Cómo Habilitar</span></div>
           <ul>
-            <li>Enable "Static website hosting" in bucket Properties</li>
-            <li>Specify index document (e.g., <code>index.html</code>)</li>
-            <li>Optionally specify error document (e.g., <code>error.html</code>)</li>
-            <li>S3 generates a website endpoint URL</li>
-            <li>Bucket policy must allow public <code>s3:GetObject</code></li>
-            <li>Block Public Access must be DISABLED</li>
+            <li><span class="lang-en">Enable "Static website hosting" in bucket Properties</span><span class="lang-es">Habilita "Alojamiento de sitio web estático" en Propiedades del bucket</span></li>
+            <li><span class="lang-en">Specify index document (e.g., <code>index.html</code>)</span><span class="lang-es">Especifica documento índice (p.ej., <code>index.html</code>)</span></li>
+            <li><span class="lang-en">Optionally specify error document (e.g., <code>error.html</code>)</span><span class="lang-es">Opcionalmente especifica documento de error (p.ej., <code>error.html</code>)</span></li>
+            <li><span class="lang-en">S3 generates a website endpoint URL</span><span class="lang-es">S3 genera una URL de punto final del sitio web</span></li>
+            <li><span class="lang-en">Bucket policy must allow public <code>s3:GetObject</code></span><span class="lang-es">La política de bucket debe permitir <code>s3:GetObject</code> público</span></li>
+            <li><span class="lang-en">Block Public Access must be DISABLED</span><span class="lang-es">Bloquear acceso público debe estar DESHABILITADO</span></li>
           </ul>
         </div>
         <div class="feature-card">
-          <div class="feature-card-title">Key Facts for the Exam</div>
+          <div class="feature-card-title"><span class="lang-en">Key Facts for the Exam</span><span class="lang-es">Hechos Clave para el Examen</span></div>
           <ul>
-            <li><strong style="color:#fb923c;">403 Forbidden</strong> = bucket policy is not allowing public reads</li>
-            <li>S3 website URL format: <code>bucket.s3-website.region.amazonaws.com</code></li>
-            <li>Valid as a Route 53 <strong style="color:#f8fafc;">Alias target</strong> (no additional cost)</li>
-            <li>Does NOT support HTTPS natively — use CloudFront in front for HTTPS</li>
-            <li>Only supports GET and HEAD requests</li>
+            <li><span class="lang-en"><strong style="color:#fb923c;">403 Forbidden</strong> = bucket policy is not allowing public reads</span><span class="lang-es"><strong style="color:#fb923c;">403 Prohibido</strong> = la política de bucket no permite lecturas públicas</span></li>
+            <li><span class="lang-en">S3 website URL format: <code>bucket.s3-website.region.amazonaws.com</code></span><span class="lang-es">Formato de URL del sitio web S3: <code>bucket.s3-website.region.amazonaws.com</code></span></li>
+            <li><span class="lang-en">Valid as a Route 53 <strong style="color:#f8fafc;">Alias target</strong> (no additional cost)</span><span class="lang-es">Válido como <strong style="color:#f8fafc;">destino de Alias</strong> de Route 53 (sin costo adicional)</span></li>
+            <li><span class="lang-en">Does NOT support HTTPS natively — use CloudFront in front for HTTPS</span><span class="lang-es">NO soporta HTTPS nativamente — usa CloudFront al frente para HTTPS</span></li>
+            <li><span class="lang-en">Only supports GET and HEAD requests</span><span class="lang-es">Solo soporta solicitudes GET y HEAD</span></li>
           </ul>
         </div>
       </div>
 
       <div class="callout info">
-        <strong>Route 53 + S3 website:</strong> Create an Alias record pointing to the S3 website endpoint. The bucket name MUST match the domain name exactly (e.g., bucket <code>www.example.com</code> for domain <code>www.example.com</code>).
+        <span class="lang-en"><strong>Route 53 + S3 website:</strong> Create an Alias record pointing to the S3 website endpoint. The bucket name MUST match the domain name exactly (e.g., bucket <code>www.example.com</code> for domain <code>www.example.com</code>).</span><span class="lang-es"><strong>Route 53 + sitio web S3:</strong> Crea un registro de Alias que apunte al punto final del sitio web de S3. El nombre del bucket DEBE coincidir exactamente con el nombre de dominio (p.ej., bucket <code>www.example.com</code> para dominio <code>www.example.com</code>).</span>
       </div>
     </div>
   </section>
@@ -266,28 +266,28 @@
        SECTION 4: VERSIONING
        ============================================================ -->
   <section>
-    <div class="section-label">4 &mdash; S3 Versioning</div>
+    <div class="section-label"><span class="lang-en">4 &mdash; S3 Versioning</span><span class="lang-es">4 &mdash; Versionado de S3</span></div>
     <div class="card">
-      <div class="card-title">Protecting Objects from Accidental Deletion &amp; Overwrites</div>
-      <p style="font-size:14px;color:#94a3b8;margin-bottom:20px;">When versioning is enabled, every upload to the same key creates a new version instead of overwriting. Each version gets a unique Version ID.</p>
+      <div class="card-title"><span class="lang-en">Protecting Objects from Accidental Deletion &amp; Overwrites</span><span class="lang-es">Protegiendo Objetos de Eliminación Accidental y Sobrescrituras</span></div>
+      <p style="font-size:14px;color:#94a3b8;margin-bottom:20px;"><span class="lang-en">When versioning is enabled, every upload to the same key creates a new version instead of overwriting. Each version gets a unique Version ID.</span><span class="lang-es">Cuando el versionado está habilitado, cada carga a la misma clave crea una nueva versión en lugar de sobrescribir. Cada versión obtiene un ID de versión único.</span></p>
 
       <div class="grid-2" style="margin-bottom:20px;">
         <div class="feature-card">
-          <div class="feature-card-title">Versioning Behavior</div>
+          <div class="feature-card-title"><span class="lang-en">Versioning Behavior</span><span class="lang-es">Comportamiento del Versionado</span></div>
           <ul>
-            <li>Enabled at the <strong style="color:#f8fafc;">bucket level</strong></li>
-            <li>Once enabled, cannot be fully disabled — only suspended</li>
-            <li>Suspending does NOT delete existing versions</li>
-            <li>Files uploaded before enabling versioning have version = <code>null</code></li>
-            <li>Protects against accidental overwrites and deletes</li>
+            <li><span class="lang-en">Enabled at the <strong style="color:#f8fafc;">bucket level</strong></span><span class="lang-es">Habilitado a <strong style="color:#f8fafc;">nivel de bucket</strong></span></li>
+            <li><span class="lang-en">Once enabled, cannot be fully disabled — only suspended</span><span class="lang-es">Una vez habilitado, no se puede deshabilitar completamente — solo suspenderse</span></li>
+            <li><span class="lang-en">Suspending does NOT delete existing versions</span><span class="lang-es">Suspender NO elimina las versiones existentes</span></li>
+            <li><span class="lang-en">Files uploaded before enabling versioning have version = <code>null</code></span><span class="lang-es">Los archivos cargados antes de habilitar el versionado tienen versión = <code>null</code></span></li>
+            <li><span class="lang-en">Protects against accidental overwrites and deletes</span><span class="lang-es">Protege contra sobrescrituras y eliminaciones accidentales</span></li>
           </ul>
         </div>
         <div class="feature-card">
-          <div class="feature-card-title">Delete Behavior</div>
+          <div class="feature-card-title"><span class="lang-en">Delete Behavior</span><span class="lang-es">Comportamiento de Eliminación</span></div>
           <ul>
-            <li><strong style="color:#f8fafc;">Delete without version ID</strong> → adds a <em>delete marker</em> (object appears gone but is recoverable — delete the marker)</li>
-            <li><strong style="color:#fb923c;">Delete with specific version ID</strong> → permanent, irreversible deletion of that version</li>
-            <li>Restoring: delete the delete marker to un-delete an object</li>
+            <li><span class="lang-en"><strong style="color:#f8fafc;">Delete without version ID</strong> → adds a <em>delete marker</em> (object appears gone but is recoverable — delete the marker)</span><span class="lang-es"><strong style="color:#f8fafc;">Eliminar sin ID de versión</strong> → agrega un <em>marcador de eliminación</em> (el objeto aparece eliminado pero es recuperable — elimina el marcador)</span></li>
+            <li><span class="lang-en"><strong style="color:#fb923c;">Delete with specific version ID</strong> → permanent, irreversible deletion of that version</span><span class="lang-es"><strong style="color:#fb923c;">Eliminar con ID de versión específico</strong> → eliminación permanente e irreversible de esa versión</span></li>
+            <li><span class="lang-en">Restoring: delete the delete marker to un-delete an object</span><span class="lang-es">Restauración: elimina el marcador de eliminación para deshacer la eliminación de un objeto</span></li>
           </ul>
         </div>
       </div>
@@ -296,33 +296,33 @@
         <table class="data-table">
           <thead>
             <tr>
-              <th>Action</th>
-              <th>What happens</th>
-              <th>Recoverable?</th>
+              <th><span class="lang-en">Action</span><span class="lang-es">Acción</span></th>
+              <th><span class="lang-en">What happens</span><span class="lang-es">Qué ocurre</span></th>
+              <th><span class="lang-en">Recoverable?</span><span class="lang-es">¿Recuperable?</span></th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td>Delete (no version specified)</td>
-              <td>Delete marker added, object hidden</td>
-              <td><span class="badge badge-green">Yes — delete the marker</span></td>
+              <td><span class="lang-en">Delete (no version specified)</span><span class="lang-es">Eliminar (sin versión especificada)</span></td>
+              <td><span class="lang-en">Delete marker added, object hidden</span><span class="lang-es">Se agrega marcador de eliminación, objeto oculto</span></td>
+              <td><span class="badge badge-green"><span class="lang-en">Yes — delete the marker</span><span class="lang-es">Sí — elimina el marcador</span></span></td>
             </tr>
             <tr>
-              <td>Delete by specific Version ID</td>
-              <td>That exact version permanently removed</td>
-              <td><span class="badge badge-red">No — permanent</span></td>
+              <td><span class="lang-en">Delete by specific Version ID</span><span class="lang-es">Eliminar por ID de versión específica</span></td>
+              <td><span class="lang-en">That exact version permanently removed</span><span class="lang-es">Esa versión exacta se elimina permanentemente</span></td>
+              <td><span class="badge badge-red"><span class="lang-en">No — permanent</span><span class="lang-es">No — permanente</span></span></td>
             </tr>
             <tr>
-              <td>Upload same key again</td>
-              <td>New version created, old version preserved</td>
-              <td><span class="badge badge-green">Old version still accessible</span></td>
+              <td><span class="lang-en">Upload same key again</span><span class="lang-es">Subir la misma clave nuevamente</span></td>
+              <td><span class="lang-en">New version created, old version preserved</span><span class="lang-es">Se crea nueva versión, versión anterior conservada</span></td>
+              <td><span class="badge badge-green"><span class="lang-en">Old version still accessible</span><span class="lang-es">Versión anterior aún accesible</span></span></td>
             </tr>
           </tbody>
         </table>
       </div>
 
       <div class="callout warning">
-        <strong>Cost implication:</strong> Every version is stored and billed. Use Lifecycle Policies to automatically expire old versions (e.g., delete versions older than 90 days) to avoid unbounded storage costs.
+        <span class="lang-en"><strong>Cost implication:</strong> Every version is stored and billed. Use Lifecycle Policies to automatically expire old versions (e.g., delete versions older than 90 days) to avoid unbounded storage costs.</span><span class="lang-es"><strong>Implicación de costo:</strong> Cada versión se almacena y se factura. Usa Políticas de ciclo de vida para expirar automáticamente versiones antiguas (p.ej., eliminar versiones más antiguas que 90 días) para evitar costos de almacenamiento ilimitados.</span>
       </div>
     </div>
   </section>
@@ -331,9 +331,9 @@
        SECTION 5: REPLICATION — ANIMATED DEMO
        ============================================================ -->
   <section>
-    <div class="section-label">5 &mdash; S3 Replication (CRR &amp; SRR)</div>
+    <div class="section-label"><span class="lang-en">5 &mdash; S3 Replication (CRR &amp; SRR)</span><span class="lang-es">5 &mdash; Replicación de S3 (CRR y SRR)</span></div>
     <div class="card">
-      <div class="card-title">Asynchronous Replication Between Buckets</div>
+      <div class="card-title"><span class="lang-en">Asynchronous Replication Between Buckets</span><span class="lang-es">Replicación Asincrónica Entre Buckets</span></div>
 
       <div class="anim-demo" id="replication"></div>
       <div class="anim-controls">
@@ -350,21 +350,21 @@
        SECTION 6: STORAGE CLASSES — ANIMATED DEMO
        ============================================================ -->
   <section>
-    <div class="section-label">6 &mdash; S3 Storage Classes</div>
+    <div class="section-label"><span class="lang-en">6 &mdash; S3 Storage Classes</span><span class="lang-es">6 &mdash; Clases de Almacenamiento de S3</span></div>
     <div class="card">
-      <div class="card-title">Cost vs Retrieval Tradeoff — Walk Through Every Class</div>
-      <p style="font-size:14px;color:#94a3b8;margin-bottom:8px;">All classes share <strong style="color:#f8fafc;">11 nines of durability</strong> (99.999999999%). Availability and retrieval speed differ. You can transition between classes manually or via Lifecycle Policies.</p>
+      <div class="card-title"><span class="lang-en">Cost vs Retrieval Tradeoff — Walk Through Every Class</span><span class="lang-es">Compensación Costo vs Recuperación — Recorrida por Cada Clase</span></div>
+      <p style="font-size:14px;color:#94a3b8;margin-bottom:8px;"><span class="lang-en">All classes share <strong style="color:#f8fafc;">11 nines of durability</strong> (99.999999999%). Availability and retrieval speed differ. You can transition between classes manually or via Lifecycle Policies.</span><span class="lang-es">Todas las clases comparten <strong style="color:#f8fafc;">11 nueves de durabilidad</strong> (99.999999999%). La disponibilidad y velocidad de recuperación difieren. Puedes transicionar entre clases manualmente o a través de Políticas de ciclo de vida.</span></p>
 
       <div style="margin-bottom:20px;">
-        <div style="font-size:13px;color:#64748b;margin-bottom:10px;font-style:italic;">Cost-per-GB tradeoff (relative — cheaper storage = slower/costlier retrieval):</div>
+        <div style="font-size:13px;color:#64748b;margin-bottom:10px;font-style:italic;"><span class="lang-en">Cost-per-GB tradeoff (relative — cheaper storage = slower/costlier retrieval):</span><span class="lang-es">Compensación costo por GB (relativa — almacenamiento más barato = recuperación más lenta/más costosa):</span></div>
         <div style="display:flex;flex-direction:column;gap:8px;">
-          <div class="class-meter"><span class="class-name">S3 Standard</span><div class="class-bar-wrap"><div class="class-bar" style="width:100%;background:#ef4444;"></div></div><span class="class-cost-label">Most $$$</span></div>
-          <div class="class-meter"><span class="class-name">S3 Standard-IA</span><div class="class-bar-wrap"><div class="class-bar" style="width:72%;background:#f97316;"></div></div><span class="class-cost-label">Lower $$</span></div>
-          <div class="class-meter"><span class="class-name">S3 One Zone-IA</span><div class="class-bar-wrap"><div class="class-bar" style="width:55%;background:#eab308;"></div></div><span class="class-cost-label">Lower $</span></div>
-          <div class="class-meter"><span class="class-name">Glacier Instant</span><div class="class-bar-wrap"><div class="class-bar" style="width:38%;background:#6366f1;"></div></div><span class="class-cost-label">Low $</span></div>
-          <div class="class-meter"><span class="class-name">Glacier Flexible</span><div class="class-bar-wrap"><div class="class-bar" style="width:25%;background:#3b82f6;"></div></div><span class="class-cost-label">Very low</span></div>
-          <div class="class-meter"><span class="class-name">Glacier Deep Archive</span><div class="class-bar-wrap"><div class="class-bar" style="width:12%;background:#10b981;"></div></div><span class="class-cost-label">Cheapest</span></div>
-          <div class="class-meter"><span class="class-name">Intelligent-Tiering</span><div class="class-bar-wrap"><div class="class-bar" style="width:65%;background:#8b5cf6;"></div></div><span class="class-cost-label">Variable</span></div>
+          <div class="class-meter"><span class="class-name"><span class="lang-en">S3 Standard</span><span class="lang-es">S3 Standard</span></span><div class="class-bar-wrap"><div class="class-bar" style="width:100%;background:#ef4444;"></div></div><span class="class-cost-label"><span class="lang-en">Most $$$</span><span class="lang-es">Más $$$</span></span></div>
+          <div class="class-meter"><span class="class-name"><span class="lang-en">S3 Standard-IA</span><span class="lang-es">S3 Standard-IA</span></span><div class="class-bar-wrap"><div class="class-bar" style="width:72%;background:#f97316;"></div></div><span class="class-cost-label"><span class="lang-en">Lower $$</span><span class="lang-es">Menor $$</span></span></div>
+          <div class="class-meter"><span class="class-name"><span class="lang-en">S3 One Zone-IA</span><span class="lang-es">S3 One Zone-IA</span></span><div class="class-bar-wrap"><div class="class-bar" style="width:55%;background:#eab308;"></div></div><span class="class-cost-label"><span class="lang-en">Lower $</span><span class="lang-es">Menor $</span></span></div>
+          <div class="class-meter"><span class="class-name"><span class="lang-en">Glacier Instant</span><span class="lang-es">Glacier Instant</span></span><div class="class-bar-wrap"><div class="class-bar" style="width:38%;background:#6366f1;"></div></div><span class="class-cost-label"><span class="lang-en">Low $</span><span class="lang-es">Bajo $</span></span></div>
+          <div class="class-meter"><span class="class-name"><span class="lang-en">Glacier Flexible</span><span class="lang-es">Glacier Flexible</span></span><div class="class-bar-wrap"><div class="class-bar" style="width:25%;background:#3b82f6;"></div></div><span class="class-cost-label"><span class="lang-en">Very low</span><span class="lang-es">Muy bajo</span></span></div>
+          <div class="class-meter"><span class="class-name"><span class="lang-en">Glacier Deep Archive</span><span class="lang-es">Glacier Deep Archive</span></span><div class="class-bar-wrap"><div class="class-bar" style="width:12%;background:#10b981;"></div></div><span class="class-cost-label"><span class="lang-en">Cheapest</span><span class="lang-es">Más barato</span></span></div>
+          <div class="class-meter"><span class="class-name"><span class="lang-en">Intelligent-Tiering</span><span class="lang-es">Intelligent-Tiering</span></span><div class="class-bar-wrap"><div class="class-bar" style="width:65%;background:#8b5cf6;"></div></div><span class="class-cost-label"><span class="lang-en">Variable</span><span class="lang-es">Variable</span></span></div>
         </div>
       </div>
 
@@ -383,87 +383,87 @@
        SECTION 7: EXAM TIPS
        ============================================================ -->
   <section>
-    <div class="section-label">7 &mdash; Exam Tips &amp; Flash Cards</div>
+    <div class="section-label"><span class="lang-en">7 &mdash; Exam Tips &amp; Flash Cards</span><span class="lang-es">7 &mdash; Consejos para el Examen y Tarjetas Rápidas</span></div>
     <div class="tips-grid">
       <div class="tip-card">
-        <div class="tip-trigger">Bucket name must be _____ →</div>
+        <div class="tip-trigger"><span class="lang-en">Bucket name must be _____ →</span><span class="lang-es">El nombre del bucket debe ser _____ →</span></div>
         <hr class="divider" />
-        <div class="tip-answer">Globally unique across ALL AWS accounts, but bucket is region-level</div>
+        <div class="tip-answer"><span class="lang-en">Globally unique across ALL AWS accounts, but bucket is region-level</span><span class="lang-es">Globalmente único en TODAS las cuentas de AWS, pero el bucket es a nivel de región</span></div>
       </div>
       <div class="tip-card">
-        <div class="tip-trigger">Maximum object size in S3 →</div>
+        <div class="tip-trigger"><span class="lang-en">Maximum object size in S3 →</span><span class="lang-es">Tamaño máximo de objeto en S3 →</span></div>
         <hr class="divider" />
-        <div class="tip-answer">5 TB total. Multi-part upload required above 5 GB</div>
+        <div class="tip-answer"><span class="lang-en">5 TB total. Multi-part upload required above 5 GB</span><span class="lang-es">5 TB total. Carga multiparte requerida por encima de 5 GB</span></div>
       </div>
       <div class="tip-card">
-        <div class="tip-trigger">EC2 instance needs S3 access →</div>
+        <div class="tip-trigger"><span class="lang-en">EC2 instance needs S3 access →</span><span class="lang-es">La instancia EC2 necesita acceso a S3 →</span></div>
         <hr class="divider" />
-        <div class="tip-answer">IAM Role on the EC2 instance — NEVER store credentials on the instance</div>
+        <div class="tip-answer"><span class="lang-en">IAM Role on the EC2 instance — NEVER store credentials on the instance</span><span class="lang-es">Rol de IAM en la instancia EC2 — NUNCA almacenes credenciales en la instancia</span></div>
       </div>
       <div class="tip-card">
-        <div class="tip-trigger">Cross-account S3 access →</div>
+        <div class="tip-trigger"><span class="lang-en">Cross-account S3 access →</span><span class="lang-es">Acceso S3 entre cuentas →</span></div>
         <hr class="divider" />
-        <div class="tip-answer">Bucket Policy specifying the external account's principal (ARN)</div>
+        <div class="tip-answer"><span class="lang-en">Bucket Policy specifying the external account's principal (ARN)</span><span class="lang-es">Política de Bucket especificando el principal de la cuenta externa (ARN)</span></div>
       </div>
       <div class="tip-card">
-        <div class="tip-trigger">Prevent any bucket in account from being public →</div>
+        <div class="tip-trigger"><span class="lang-en">Prevent any bucket in account from being public →</span><span class="lang-es">Evita que cualquier bucket en la cuenta sea público →</span></div>
         <hr class="divider" />
-        <div class="tip-answer">Account-level Block Public Access — overrides all bucket policies</div>
+        <div class="tip-answer"><span class="lang-en">Account-level Block Public Access — overrides all bucket policies</span><span class="lang-es">Bloquear acceso público a nivel de cuenta — anula todas las políticas de bucket</span></div>
       </div>
       <div class="tip-card">
-        <div class="tip-trigger">S3 website returns 403 Forbidden →</div>
+        <div class="tip-trigger"><span class="lang-en">S3 website returns 403 Forbidden →</span><span class="lang-es">Sitio web S3 devuelve 403 Prohibido →</span></div>
         <hr class="divider" />
-        <div class="tip-answer">Bucket policy does not allow public s3:GetObject. Check Block Public Access setting too.</div>
+        <div class="tip-answer"><span class="lang-en">Bucket policy does not allow public s3:GetObject. Check Block Public Access setting too.</span><span class="lang-es">La política de bucket no permite s3:GetObject público. Verifica la configuración de Bloquear acceso público también.</span></div>
       </div>
       <div class="tip-card">
-        <div class="tip-trigger">S3 website + Route 53 custom domain →</div>
+        <div class="tip-trigger"><span class="lang-en">S3 website + Route 53 custom domain →</span><span class="lang-es">Sitio web S3 + dominio personalizado de Route 53 →</span></div>
         <hr class="divider" />
-        <div class="tip-answer">Alias record pointing to S3 website endpoint. Bucket name must match domain.</div>
+        <div class="tip-answer"><span class="lang-en">Alias record pointing to S3 website endpoint. Bucket name must match domain.</span><span class="lang-es">Registro de Alias apuntando al punto final del sitio web S3. El nombre del bucket debe coincidir con el dominio.</span></div>
       </div>
       <div class="tip-card">
-        <div class="tip-trigger">Delete S3 object (versioned bucket) — recoverable? →</div>
+        <div class="tip-trigger"><span class="lang-en">Delete S3 object (versioned bucket) — recoverable? →</span><span class="lang-es">Eliminar objeto S3 (bucket versionado) — ¿recuperable? →</span></div>
         <hr class="divider" />
-        <div class="tip-answer">Yes — delete marker added. Delete the marker to restore. Delete by version ID = permanent.</div>
+        <div class="tip-answer"><span class="lang-en">Yes — delete marker added. Delete the marker to restore. Delete by version ID = permanent.</span><span class="lang-es">Sí — marcador de eliminación agregado. Elimina el marcador para restaurar. Eliminar por ID de versión = permanente.</span></div>
       </div>
       <div class="tip-card">
-        <div class="tip-trigger">S3 Replication requirement →</div>
+        <div class="tip-trigger"><span class="lang-en">S3 Replication requirement →</span><span class="lang-es">Requisito de Replicación de S3 →</span></div>
         <hr class="divider" />
-        <div class="tip-answer">Versioning MUST be enabled on BOTH source and destination buckets</div>
+        <div class="tip-answer"><span class="lang-en">Versioning MUST be enabled on BOTH source and destination buckets</span><span class="lang-es">El versionado DEBE estar habilitado en AMBOS buckets de origen y destino</span></div>
       </div>
       <div class="tip-card">
-        <div class="tip-trigger">Existing objects not replicated after enabling replication →</div>
+        <div class="tip-trigger"><span class="lang-en">Existing objects not replicated after enabling replication →</span><span class="lang-es">Objetos existentes no replicados después de habilitar la replicación →</span></div>
         <hr class="divider" />
-        <div class="tip-answer">Use S3 Batch Replication to replicate pre-existing objects on demand</div>
+        <div class="tip-answer"><span class="lang-en">Use S3 Batch Replication to replicate pre-existing objects on demand</span><span class="lang-es">Usa Replicación por lotes de S3 para replicar objetos preexistentes bajo demanda</span></div>
       </div>
       <div class="tip-card">
-        <div class="tip-trigger">Permanent deletes in replication — replicated to target? →</div>
+        <div class="tip-trigger"><span class="lang-en">Permanent deletes in replication — replicated to target? →</span><span class="lang-es">Eliminaciones permanentes en replicación — ¿replicadas al destino? →</span></div>
         <hr class="divider" />
-        <div class="tip-answer">NEVER — preventing malicious deletes from propagating is a security feature</div>
+        <div class="tip-answer"><span class="lang-en">NEVER — preventing malicious deletes from propagating is a security feature</span><span class="lang-es">NUNCA — evitar que eliminaciones maliciosas se propaguen es una característica de seguridad</span></div>
       </div>
       <div class="tip-card">
-        <div class="tip-trigger">Unknown access pattern, don't want retrieval fees →</div>
+        <div class="tip-trigger"><span class="lang-en">Unknown access pattern, don't want retrieval fees →</span><span class="lang-es">Patrón de acceso desconocido, no quiero cargos de recuperación →</span></div>
         <hr class="divider" />
-        <div class="tip-answer">S3 Intelligent-Tiering — auto-moves objects, no retrieval charges, small monitoring fee</div>
+        <div class="tip-answer"><span class="lang-en">S3 Intelligent-Tiering — auto-moves objects, no retrieval charges, small monitoring fee</span><span class="lang-es">S3 Intelligent-Tiering — mueve objetos automáticamente, sin cargos de recuperación, pequeña tarifa de monitoreo</span></div>
       </div>
       <div class="tip-card">
-        <div class="tip-trigger">Glacier, need data in milliseconds →</div>
+        <div class="tip-trigger"><span class="lang-en">Glacier, need data in milliseconds →</span><span class="lang-es">Glacier, necesito datos en milisegundos →</span></div>
         <hr class="divider" />
-        <div class="tip-answer">Glacier Instant Retrieval (milliseconds, min 90 days storage)</div>
+        <div class="tip-answer"><span class="lang-en">Glacier Instant Retrieval (milliseconds, min 90 days storage)</span><span class="lang-es">Glacier Instant Retrieval (milisegundos, almacenamiento mínimo 90 días)</span></div>
       </div>
       <div class="tip-card">
-        <div class="tip-trigger">Glacier, need data in minutes →</div>
+        <div class="tip-trigger"><span class="lang-en">Glacier, need data in minutes →</span><span class="lang-es">Glacier, necesito datos en minutos →</span></div>
         <hr class="divider" />
-        <div class="tip-answer">Glacier Flexible — Expedited tier (1–5 min). Standard = 3–5 hrs. Bulk = 5–12 hrs (free)</div>
+        <div class="tip-answer"><span class="lang-en">Glacier Flexible — Expedited tier (1–5 min). Standard = 3–5 hrs. Bulk = 5–12 hrs (free)</span><span class="lang-es">Glacier Flexible — Nivel Expedito (1–5 min). Estándar = 3–5 hrs. Masivo = 5–12 hrs (gratis)</span></div>
       </div>
       <div class="tip-card">
-        <div class="tip-trigger">Glacier, rarely needed, cheap long-term archive →</div>
+        <div class="tip-trigger"><span class="lang-en">Glacier, rarely needed, cheap long-term archive →</span><span class="lang-es">Glacier, rara vez necesario, archivo económico a largo plazo →</span></div>
         <hr class="divider" />
-        <div class="tip-answer">Deep Archive — 12 hrs standard / 48 hrs bulk. Min 180 days. Cheapest storage.</div>
+        <div class="tip-answer"><span class="lang-en">Deep Archive — 12 hrs standard / 48 hrs bulk. Min 180 days. Cheapest storage.</span><span class="lang-es">Deep Archive — 12 hrs estándar / 48 hrs masivo. Mínimo 180 días. Almacenamiento más barato.</span></div>
       </div>
       <div class="tip-card">
-        <div class="tip-trigger">One Zone-IA risk →</div>
+        <div class="tip-trigger"><span class="lang-en">One Zone-IA risk →</span><span class="lang-es">Riesgo de One Zone-IA →</span></div>
         <hr class="divider" />
-        <div class="tip-answer">Data is LOST if the single AZ is destroyed. Only use for recreatable or secondary backup data.</div>
+        <div class="tip-answer"><span class="lang-en">Data is LOST if the single AZ is destroyed. Only use for recreatable or secondary backup data.</span><span class="lang-es">Los datos SE PIERDEN si la única AZ se destruye. Úsalo solo para datos recreables o copia de seguridad secundaria.</span></div>
       </div>
     </div>
   </section>
@@ -479,26 +479,26 @@ var DEMOS = {
     steps: [
       {
         body: `
-          <div class="step-title">Step 1 — Setup Requirements</div>
-          <div class="step-desc">Before replication works, certain conditions must be met on both buckets.</div>
+          <div class="step-title"><span class="lang-en">Step 1 — Setup Requirements</span><span class="lang-es">Paso 1 — Requisitos de Configuración</span></div>
+          <div class="step-desc"><span class="lang-en">Before replication works, certain conditions must be met on both buckets.</span><span class="lang-es">Antes de que funcione la replicación, se deben cumplir ciertas condiciones en ambos buckets.</span></div>
           <div class="grid-2" style="gap:12px;">
             <div class="compare-col">
-              <div class="compare-col-title" style="color:#f97316;">Mandatory Requirements</div>
+              <div class="compare-col-title" style="color:#f97316;"><span class="lang-en">Mandatory Requirements</span><span class="lang-es">Requisitos Obligatorios</span></div>
               <ul>
-                <li>Versioning must be enabled on <strong style="color:#f8fafc;">BOTH</strong> source and destination</li>
-                <li>IAM role with permission to replicate</li>
-                <li>Works across different AWS accounts</li>
-                <li>Replication is <strong style="color:#f8fafc;">asynchronous</strong> (near real-time, not instant)</li>
+                <li><span class="lang-en">Versioning must be enabled on <strong style="color:#f8fafc;">BOTH</strong> source and destination</span><span class="lang-es">El versionado debe estar habilitado en <strong style="color:#f8fafc;">AMBOS</strong> origen y destino</span></li>
+                <li><span class="lang-en">IAM role with permission to replicate</span><span class="lang-es">Rol de IAM con permiso para replicar</span></li>
+                <li><span class="lang-en">Works across different AWS accounts</span><span class="lang-es">Funciona entre diferentes cuentas de AWS</span></li>
+                <li><span class="lang-en">Replication is <strong style="color:#f8fafc;">asynchronous</strong> (near real-time, not instant)</span><span class="lang-es">La replicación es <strong style="color:#f8fafc;">asincrónica</strong> (casi en tiempo real, no instantánea)</span></li>
               </ul>
             </div>
             <div class="compare-col">
-              <div class="compare-col-title" style="color:#94a3b8;">What Gets Replicated</div>
+              <div class="compare-col-title" style="color:#94a3b8;"><span class="lang-en">What Gets Replicated</span><span class="lang-es">Qué se Replica</span></div>
               <ul>
-                <li>Only <strong style="color:#f8fafc;">NEW objects</strong> after replication is configured</li>
-                <li>Metadata and tags are preserved</li>
-                <li>Delete markers: optional (opt-in)</li>
-                <li>Permanent deletes: <strong style="color:#fca5a5;">NEVER replicated</strong></li>
-                <li>NOT transitive (A→B, B→C does not mean A→C)</li>
+                <li><span class="lang-en">Only <strong style="color:#f8fafc;">NEW objects</strong> after replication is configured</span><span class="lang-es">Solo <strong style="color:#f8fafc;">objetos NUEVOS</strong> después de que se configure la replicación</span></li>
+                <li><span class="lang-en">Metadata and tags are preserved</span><span class="lang-es">Los metadatos y etiquetas se preservan</span></li>
+                <li><span class="lang-en">Delete markers: optional (opt-in)</span><span class="lang-es">Marcadores de eliminación: opcional (opt-in)</span></li>
+                <li><span class="lang-en">Permanent deletes: <strong style="color:#fca5a5;">NEVER replicated</strong></span><span class="lang-es">Eliminaciones permanentes: <strong style="color:#fca5a5;">NUNCA replicadas</strong></span></li>
+                <li><span class="lang-en">NOT transitive (A→B, B→C does not mean A→C)</span><span class="lang-es">NO es transitiva (A→B, B→C no significa A→C)</span></li>
               </ul>
             </div>
           </div>
@@ -506,22 +506,22 @@ var DEMOS = {
       },
       {
         body: `
-          <div class="step-title">Step 2 — CRR: Cross-Region Replication</div>
-          <div class="step-desc">Replicates objects to a bucket in a different AWS region.</div>
+          <div class="step-title"><span class="lang-en">Step 2 — CRR: Cross-Region Replication</span><span class="lang-es">Paso 2 — CRR: Replicación entre Regiones</span></div>
+          <div class="step-desc"><span class="lang-en">Replicates objects to a bucket in a different AWS region.</span><span class="lang-es">Replica objetos a un bucket en una región de AWS diferente.</span></div>
           <div style="display:flex;flex-direction:column;gap:14px;">
             <div class="arch-flow">
-              <span class="arch-node node-orange">S3 Bucket<br/><span style="font-size:13px;font-weight:400;">us-east-1</span></span>
+              <span class="arch-node node-orange"><span class="lang-en">S3 Bucket</span><span class="lang-es">Bucket S3</span><br/><span style="font-size:13px;font-weight:400;">us-east-1</span></span>
               <span class="arch-arrow" style="font-size:20px;">&#x27F6;</span>
-              <span class="arch-node node-blue">S3 Bucket<br/><span style="font-size:13px;font-weight:400;">eu-west-1</span></span>
-              <span class="badge badge-blue" style="margin-left:12px;">Cross-Region</span>
+              <span class="arch-node node-blue"><span class="lang-en">S3 Bucket</span><span class="lang-es">Bucket S3</span><br/><span style="font-size:13px;font-weight:400;">eu-west-1</span></span>
+              <span class="badge badge-blue" style="margin-left:12px;"><span class="lang-en">Cross-Region</span><span class="lang-es">Entre Regiones</span></span>
             </div>
             <div class="feature-card">
-              <div class="feature-card-title">CRR Use Cases</div>
+              <div class="feature-card-title"><span class="lang-en">CRR Use Cases</span><span class="lang-es">Casos de Uso de CRR</span></div>
               <ul>
-                <li>Compliance requirements (data must exist in specific regions)</li>
-                <li>Reduce latency for users in another region</li>
-                <li>Disaster recovery across geographic regions</li>
-                <li>Replicate to another AWS account for backup isolation</li>
+                <li><span class="lang-en">Compliance requirements (data must exist in specific regions)</span><span class="lang-es">Requisitos de cumplimiento (los datos deben existir en regiones específicas)</span></li>
+                <li><span class="lang-en">Reduce latency for users in another region</span><span class="lang-es">Reduce la latencia para usuarios en otra región</span></li>
+                <li><span class="lang-en">Disaster recovery across geographic regions</span><span class="lang-es">Recuperación ante desastres en regiones geográficas</span></li>
+                <li><span class="lang-en">Replicate to another AWS account for backup isolation</span><span class="lang-es">Replica a otra cuenta de AWS para aislamiento de copia de seguridad</span></li>
               </ul>
             </div>
           </div>
@@ -529,22 +529,22 @@ var DEMOS = {
       },
       {
         body: `
-          <div class="step-title">Step 3 — SRR: Same-Region Replication</div>
-          <div class="step-desc">Replicates objects to a different bucket within the same AWS region.</div>
+          <div class="step-title"><span class="lang-en">Step 3 — SRR: Same-Region Replication</span><span class="lang-es">Paso 3 — SRR: Replicación en la Misma Región</span></div>
+          <div class="step-desc"><span class="lang-en">Replicates objects to a different bucket within the same AWS region.</span><span class="lang-es">Replica objetos a un bucket diferente dentro de la misma región de AWS.</span></div>
           <div style="display:flex;flex-direction:column;gap:14px;">
             <div class="arch-flow">
-              <span class="arch-node node-orange">S3 Bucket A<br/><span style="font-size:13px;font-weight:400;">us-east-1</span></span>
+              <span class="arch-node node-orange"><span class="lang-en">S3 Bucket A</span><span class="lang-es">Bucket S3 A</span><br/><span style="font-size:13px;font-weight:400;">us-east-1</span></span>
               <span class="arch-arrow" style="font-size:20px;">&#x27F6;</span>
-              <span class="arch-node node-green">S3 Bucket B<br/><span style="font-size:13px;font-weight:400;">us-east-1</span></span>
-              <span class="badge badge-green" style="margin-left:12px;">Same-Region</span>
+              <span class="arch-node node-green"><span class="lang-en">S3 Bucket B</span><span class="lang-es">Bucket S3 B</span><br/><span style="font-size:13px;font-weight:400;">us-east-1</span></span>
+              <span class="badge badge-green" style="margin-left:12px;"><span class="lang-en">Same-Region</span><span class="lang-es">Misma Región</span></span>
             </div>
             <div class="feature-card">
-              <div class="feature-card-title">SRR Use Cases</div>
+              <div class="feature-card-title"><span class="lang-en">SRR Use Cases</span><span class="lang-es">Casos de Uso de SRR</span></div>
               <ul>
-                <li>Log aggregation — consolidate logs from multiple buckets into one</li>
-                <li>Live replication from production to test/staging</li>
-                <li>Separate bucket for analytics without impacting prod</li>
-                <li>Account-level replication while staying in same region</li>
+                <li><span class="lang-en">Log aggregation — consolidate logs from multiple buckets into one</span><span class="lang-es">Agregación de registros — consolidar registros de múltiples buckets en uno</span></li>
+                <li><span class="lang-en">Live replication from production to test/staging</span><span class="lang-es">Replicación activa de producción a prueba/staging</span></li>
+                <li><span class="lang-en">Separate bucket for analytics without impacting prod</span><span class="lang-es">Bucket separado para análisis sin impactar prod</span></li>
+                <li><span class="lang-en">Account-level replication while staying in same region</span><span class="lang-es">Replicación a nivel de cuenta mientras se mantiene en la misma región</span></li>
               </ul>
             </div>
           </div>
@@ -552,25 +552,25 @@ var DEMOS = {
       },
       {
         body: `
-          <div class="step-title">Step 4 — Replication Rules &amp; Edge Cases</div>
-          <div class="step-desc">Critical exam details about what replication does and does NOT do.</div>
+          <div class="step-title"><span class="lang-en">Step 4 — Replication Rules &amp; Edge Cases</span><span class="lang-es">Paso 4 — Reglas de Replicación y Casos Límite</span></div>
+          <div class="step-desc"><span class="lang-en">Critical exam details about what replication does and does NOT do.</span><span class="lang-es">Detalles críticos del examen sobre qué replicación hace y NO hace.</span></div>
           <div class="grid-2" style="gap:12px;">
             <div class="compare-col">
-              <div class="compare-col-title" style="color:#6ee7b7;">What IS Replicated</div>
+              <div class="compare-col-title" style="color:#6ee7b7;"><span class="lang-en">What IS Replicated</span><span class="lang-es">Qué SÍ se Replica</span></div>
               <ul>
-                <li>New objects uploaded after enabling replication</li>
-                <li>SSE-S3 and SSE-KMS encrypted objects (with config)</li>
-                <li>Object metadata, tags, ACLs</li>
-                <li>Delete markers (optional — must opt in)</li>
+                <li><span class="lang-en">New objects uploaded after enabling replication</span><span class="lang-es">Nuevos objetos cargados después de habilitar la replicación</span></li>
+                <li><span class="lang-en">SSE-S3 and SSE-KMS encrypted objects (with config)</span><span class="lang-es">Objetos cifrados SSE-S3 y SSE-KMS (con configuración)</span></li>
+                <li><span class="lang-en">Object metadata, tags, ACLs</span><span class="lang-es">Metadatos, etiquetas y ACLs de objeto</span></li>
+                <li><span class="lang-en">Delete markers (optional — must opt in)</span><span class="lang-es">Marcadores de eliminación (opcional — debe optar)</span></li>
               </ul>
             </div>
             <div class="compare-col">
-              <div class="compare-col-title" style="color:#fca5a5;">What is NOT Replicated</div>
+              <div class="compare-col-title" style="color:#fca5a5;"><span class="lang-en">What is NOT Replicated</span><span class="lang-es">Qué NO se Replica</span></div>
               <ul>
-                <li>Objects uploaded BEFORE enabling replication (use S3 Batch Replication)</li>
-                <li>Objects already replicated (no chains: A→B→C)</li>
-                <li>Permanent deletes (by version ID) — never replicated (security feature)</li>
-                <li>Glacier/Deep Archive objects</li>
+                <li><span class="lang-en">Objects uploaded BEFORE enabling replication (use S3 Batch Replication)</span><span class="lang-es">Objetos cargados ANTES de habilitar la replicación (usa Replicación por lotes de S3)</span></li>
+                <li><span class="lang-en">Objects already replicated (no chains: A→B→C)</span><span class="lang-es">Objetos ya replicados (sin cadenas: A→B→C)</span></li>
+                <li><span class="lang-en">Permanent deletes (by version ID) — never replicated (security feature)</span><span class="lang-es">Eliminaciones permanentes (por ID de versión) — nunca replicadas (característica de seguridad)</span></li>
+                <li><span class="lang-en">Glacier/Deep Archive objects</span><span class="lang-es">Objetos de Glacier/Deep Archive</span></li>
               </ul>
             </div>
           </div>
@@ -583,26 +583,26 @@ var DEMOS = {
     steps: [
       {
         body: `
-          <div class="step-title">S3 Standard — Frequently Accessed Data</div>
-          <div class="step-desc">The default class. Best when data is accessed often and latency matters.</div>
+          <div class="step-title"><span class="lang-en">S3 Standard — Frequently Accessed Data</span><span class="lang-es">S3 Standard — Datos Accedidos Frecuentemente</span></div>
+          <div class="step-desc"><span class="lang-en">The default class. Best when data is accessed often and latency matters.</span><span class="lang-es">La clase predeterminada. Mejor cuando se accede a los datos a menudo y la latencia importa.</span></div>
           <div class="grid-2" style="gap:12px;">
             <div class="feature-card">
-              <div class="feature-card-title">Characteristics</div>
+              <div class="feature-card-title"><span class="lang-en">Characteristics</span><span class="lang-es">Características</span></div>
               <ul>
-                <li>Availability: <strong style="color:#f8fafc;">99.99%</strong></li>
-                <li>Stored across <strong style="color:#f8fafc;">minimum 3 AZs</strong></li>
-                <li>Retrieval: <strong style="color:#f8fafc;">Milliseconds (instant)</strong></li>
-                <li>No minimum storage duration</li>
-                <li>No retrieval fees</li>
+                <li><span class="lang-en">Availability: <strong style="color:#f8fafc;">99.99%</strong></span><span class="lang-es">Disponibilidad: <strong style="color:#f8fafc;">99.99%</strong></span></li>
+                <li><span class="lang-en">Stored across <strong style="color:#f8fafc;">minimum 3 AZs</strong></span><span class="lang-es">Almacenado en <strong style="color:#f8fafc;">mínimo 3 AZs</strong></span></li>
+                <li><span class="lang-en">Retrieval: <strong style="color:#f8fafc;">Milliseconds (instant)</strong></span><span class="lang-es">Recuperación: <strong style="color:#f8fafc;">Milisegundos (instantáneo)</strong></span></li>
+                <li><span class="lang-en">No minimum storage duration</span><span class="lang-es">Sin duración mínima de almacenamiento</span></li>
+                <li><span class="lang-en">No retrieval fees</span><span class="lang-es">Sin cargos de recuperación</span></li>
               </ul>
             </div>
             <div class="feature-card">
-              <div class="feature-card-title">Best For</div>
+              <div class="feature-card-title"><span class="lang-en">Best For</span><span class="lang-es">Mejor Para</span></div>
               <ul>
-                <li>Frequently accessed application data</li>
-                <li>Active content delivery</li>
-                <li>Big data analytics that runs constantly</li>
-                <li>Mobile and gaming applications</li>
+                <li><span class="lang-en">Frequently accessed application data</span><span class="lang-es">Datos de aplicación accedidos frecuentemente</span></li>
+                <li><span class="lang-en">Active content delivery</span><span class="lang-es">Entrega de contenido activo</span></li>
+                <li><span class="lang-en">Big data analytics that runs constantly</span><span class="lang-es">Análisis de big data que se ejecuta constantemente</span></li>
+                <li><span class="lang-en">Mobile and gaming applications</span><span class="lang-es">Aplicaciones móviles y de juegos</span></li>
               </ul>
             </div>
           </div>
@@ -610,25 +610,25 @@ var DEMOS = {
       },
       {
         body: `
-          <div class="step-title">S3 Standard-IA — Infrequent Access, Rapid Retrieval</div>
-          <div class="step-desc">Lower storage cost than Standard, but you pay a retrieval fee when you access the data.</div>
+          <div class="step-title"><span class="lang-en">S3 Standard-IA — Infrequent Access, Rapid Retrieval</span><span class="lang-es">S3 Standard-IA — Acceso Infrequente, Recuperación Rápida</span></div>
+          <div class="step-desc"><span class="lang-en">Lower storage cost than Standard, but you pay a retrieval fee when you access the data.</span><span class="lang-es">Costo de almacenamiento más bajo que Standard, pero pagas una tarifa de recuperación cuando accedes a los datos.</span></div>
           <div class="grid-2" style="gap:12px;">
             <div class="feature-card">
-              <div class="feature-card-title">Characteristics</div>
+              <div class="feature-card-title"><span class="lang-en">Characteristics</span><span class="lang-es">Características</span></div>
               <ul>
-                <li>Availability: <strong style="color:#f8fafc;">99.9%</strong></li>
-                <li>Stored across minimum 3 AZs</li>
-                <li>Retrieval: <strong style="color:#f8fafc;">Milliseconds (instant)</strong></li>
-                <li>Min storage duration: <strong style="color:#fb923c;">30 days</strong></li>
-                <li>Retrieval fee applies per GB</li>
+                <li><span class="lang-en">Availability: <strong style="color:#f8fafc;">99.9%</strong></span><span class="lang-es">Disponibilidad: <strong style="color:#f8fafc;">99.9%</strong></span></li>
+                <li><span class="lang-en">Stored across minimum 3 AZs</span><span class="lang-es">Almacenado en mínimo 3 AZs</span></li>
+                <li><span class="lang-en">Retrieval: <strong style="color:#f8fafc;">Milliseconds (instant)</strong></span><span class="lang-es">Recuperación: <strong style="color:#f8fafc;">Milisegundos (instantáneo)</strong></span></li>
+                <li><span class="lang-en">Min storage duration: <strong style="color:#fb923c;">30 days</strong></span><span class="lang-es">Duración mínima de almacenamiento: <strong style="color:#fb923c;">30 días</strong></span></li>
+                <li><span class="lang-en">Retrieval fee applies per GB</span><span class="lang-es">Se aplica tarifa de recuperación por GB</span></li>
               </ul>
             </div>
             <div class="feature-card">
-              <div class="feature-card-title">Best For</div>
+              <div class="feature-card-title"><span class="lang-en">Best For</span><span class="lang-es">Mejor Para</span></div>
               <ul>
-                <li>Disaster recovery copies</li>
-                <li>Backups you need quickly but rarely</li>
-                <li>Data accessed less than once per month</li>
+                <li><span class="lang-en">Disaster recovery copies</span><span class="lang-es">Copias de recuperación ante desastres</span></li>
+                <li><span class="lang-en">Backups you need quickly but rarely</span><span class="lang-es">Copias de seguridad que necesitas rápidamente pero rara vez</span></li>
+                <li><span class="lang-en">Data accessed less than once per month</span><span class="lang-es">Datos accedidos menos de una vez por mes</span></li>
               </ul>
             </div>
           </div>
@@ -636,26 +636,26 @@ var DEMOS = {
       },
       {
         body: `
-          <div class="step-title">S3 One Zone-IA — Single AZ, Lower Cost</div>
-          <div class="step-desc">Like Standard-IA but stored in only ONE AZ. Cheaper, but data is lost if the AZ fails.</div>
+          <div class="step-title"><span class="lang-en">S3 One Zone-IA — Single AZ, Lower Cost</span><span class="lang-es">S3 One Zone-IA — AZ Única, Costo Menor</span></div>
+          <div class="step-desc"><span class="lang-en">Like Standard-IA but stored in only ONE AZ. Cheaper, but data is lost if the AZ fails.</span><span class="lang-es">Como Standard-IA pero almacenado en solo UNA AZ. Más barato, pero los datos se pierden si la AZ falla.</span></div>
           <div class="grid-2" style="gap:12px;">
             <div class="feature-card">
-              <div class="feature-card-title">Characteristics</div>
+              <div class="feature-card-title"><span class="lang-en">Characteristics</span><span class="lang-es">Características</span></div>
               <ul>
-                <li>Availability: <strong style="color:#f8fafc;">99.5%</strong></li>
-                <li>Stored in <strong style="color:#fb923c;">SINGLE AZ only</strong></li>
-                <li>Retrieval: <strong style="color:#f8fafc;">Milliseconds (instant)</strong></li>
-                <li>Min storage duration: <strong style="color:#fb923c;">30 days</strong></li>
-                <li>Retrieval fee applies per GB</li>
+                <li><span class="lang-en">Availability: <strong style="color:#f8fafc;">99.5%</strong></span><span class="lang-es">Disponibilidad: <strong style="color:#f8fafc;">99.5%</strong></span></li>
+                <li><span class="lang-en">Stored in <strong style="color:#fb923c;">SINGLE AZ only</strong></span><span class="lang-es">Almacenado en <strong style="color:#fb923c;">SOLO UNA AZ</strong></span></li>
+                <li><span class="lang-en">Retrieval: <strong style="color:#f8fafc;">Milliseconds (instant)</strong></span><span class="lang-es">Recuperación: <strong style="color:#f8fafc;">Milisegundos (instantáneo)</strong></span></li>
+                <li><span class="lang-en">Min storage duration: <strong style="color:#fb923c;">30 days</strong></span><span class="lang-es">Duración mínima de almacenamiento: <strong style="color:#fb923c;">30 días</strong></span></li>
+                <li><span class="lang-en">Retrieval fee applies per GB</span><span class="lang-es">Se aplica tarifa de recuperación por GB</span></li>
               </ul>
             </div>
             <div class="feature-card">
-              <div class="feature-card-title">Best For / Warning</div>
+              <div class="feature-card-title"><span class="lang-en">Best For / Warning</span><span class="lang-es">Mejor Para / Advertencia</span></div>
               <ul>
-                <li>Secondary backup copies (source of truth elsewhere)</li>
-                <li>Thumbnail or preview versions (easily recreatable)</li>
-                <li>On-premises data backed up to S3</li>
-                <li style="color:#fca5a5;"><strong>RISK:</strong> Data permanently lost if AZ is destroyed</li>
+                <li><span class="lang-en">Secondary backup copies (source of truth elsewhere)</span><span class="lang-es">Copias de seguridad secundarias (fuente de verdad en otro lugar)</span></li>
+                <li><span class="lang-en">Thumbnail or preview versions (easily recreatable)</span><span class="lang-es">Versiones de miniatura o vista previa (fácilmente recreables)</span></li>
+                <li><span class="lang-en">On-premises data backed up to S3</span><span class="lang-es">Datos locales respaldados a S3</span></li>
+                <li style="color:#fca5a5;"><span class="lang-en"><strong>RISK:</strong> Data permanently lost if AZ is destroyed</span><span class="lang-es"><strong>RIESGO:</strong> Los datos se pierden permanentemente si la AZ se destruye</span></li>
               </ul>
             </div>
           </div>
@@ -663,24 +663,24 @@ var DEMOS = {
       },
       {
         body: `
-          <div class="step-title">Glacier Instant Retrieval — Archive with Millisecond Access</div>
-          <div class="step-desc">Cold storage pricing but instant retrieval. Ideal for data you archive but may still need quickly.</div>
+          <div class="step-title"><span class="lang-en">Glacier Instant Retrieval — Archive with Millisecond Access</span><span class="lang-es">Glacier Instant Retrieval — Archivo con Acceso en Milisegundos</span></div>
+          <div class="step-desc"><span class="lang-en">Cold storage pricing but instant retrieval. Ideal for data you archive but may still need quickly.</span><span class="lang-es">Precios de almacenamiento en frío pero recuperación instantánea. Ideal para datos que archivas pero que aún puedas necesitar rápidamente.</span></div>
           <div class="grid-2" style="gap:12px;">
             <div class="feature-card">
-              <div class="feature-card-title">Characteristics</div>
+              <div class="feature-card-title"><span class="lang-en">Characteristics</span><span class="lang-es">Características</span></div>
               <ul>
-                <li>Retrieval: <strong style="color:#f8fafc;">Milliseconds</strong></li>
-                <li>Min storage duration: <strong style="color:#fb923c;">90 days</strong></li>
-                <li>Higher retrieval cost than Standard-IA</li>
-                <li>Great durability (11 nines, 3+ AZs)</li>
+                <li><span class="lang-en">Retrieval: <strong style="color:#f8fafc;">Milliseconds</strong></span><span class="lang-es">Recuperación: <strong style="color:#f8fafc;">Milisegundos</strong></span></li>
+                <li><span class="lang-en">Min storage duration: <strong style="color:#fb923c;">90 days</strong></span><span class="lang-es">Duración mínima de almacenamiento: <strong style="color:#fb923c;">90 días</strong></span></li>
+                <li><span class="lang-en">Higher retrieval cost than Standard-IA</span><span class="lang-es">Costo de recuperación más alto que Standard-IA</span></li>
+                <li><span class="lang-en">Great durability (11 nines, 3+ AZs)</span><span class="lang-es">Gran durabilidad (11 nueves, 3+ AZs)</span></li>
               </ul>
             </div>
             <div class="feature-card">
-              <div class="feature-card-title">Best For</div>
+              <div class="feature-card-title"><span class="lang-en">Best For</span><span class="lang-es">Mejor Para</span></div>
               <ul>
-                <li>Medical imaging archives</li>
-                <li>News media assets accessed ~once per quarter</li>
-                <li>Compliance archives that may be audited</li>
+                <li><span class="lang-en">Medical imaging archives</span><span class="lang-es">Archivos de imágenes médicas</span></li>
+                <li><span class="lang-en">News media assets accessed ~once per quarter</span><span class="lang-es">Activos de medios de noticias accedidos ~una vez por trimestre</span></li>
+                <li><span class="lang-en">Compliance archives that may be audited</span><span class="lang-es">Archivos de cumplimiento que pueden ser auditados</span></li>
               </ul>
             </div>
           </div>
@@ -688,44 +688,44 @@ var DEMOS = {
       },
       {
         body: `
-          <div class="step-title">Glacier Flexible Retrieval — Three Speed Tiers</div>
-          <div class="step-desc">Choose your retrieval speed and pay accordingly. Bulk retrievals are free.</div>
+          <div class="step-title"><span class="lang-en">Glacier Flexible Retrieval — Three Speed Tiers</span><span class="lang-es">Glacier Flexible Retrieval — Tres Niveles de Velocidad</span></div>
+          <div class="step-desc"><span class="lang-en">Choose your retrieval speed and pay accordingly. Bulk retrievals are free.</span><span class="lang-es">Elige tu velocidad de recuperación y paga en consecuencia. Las recuperaciones masivas son gratis.</span></div>
           <div style="display:flex;flex-direction:column;gap:12px;">
             <div class="table-wrapper">
               <table class="data-table">
-                <thead><tr><th>Tier</th><th>Retrieval Time</th><th>Cost</th></tr></thead>
+                <thead><tr><th><span class="lang-en">Tier</span><span class="lang-es">Nivel</span></th><th><span class="lang-en">Retrieval Time</span><span class="lang-es">Tiempo de Recuperación</span></th><th><span class="lang-en">Cost</span><span class="lang-es">Costo</span></th></tr></thead>
                 <tbody>
-                  <tr><td><strong style="color:#fb923c;">Expedited</strong></td><td>1–5 minutes</td><td>Higher</td></tr>
-                  <tr><td><strong style="color:#f8fafc;">Standard</strong></td><td>3–5 hours</td><td>Moderate</td></tr>
-                  <tr><td><strong style="color:#6ee7b7;">Bulk</strong></td><td>5–12 hours</td><td>Free</td></tr>
+                  <tr><td><strong style="color:#fb923c;"><span class="lang-en">Expedited</span><span class="lang-es">Expedito</span></strong></td><td><span class="lang-en">1–5 minutes</span><span class="lang-es">1–5 minutos</span></td><td><span class="lang-en">Higher</span><span class="lang-es">Más alto</span></td></tr>
+                  <tr><td><strong style="color:#f8fafc;"><span class="lang-en">Standard</span><span class="lang-es">Estándar</span></strong></td><td><span class="lang-en">3–5 hours</span><span class="lang-es">3–5 horas</span></td><td><span class="lang-en">Moderate</span><span class="lang-es">Moderado</span></td></tr>
+                  <tr><td><strong style="color:#6ee7b7;"><span class="lang-en">Bulk</span><span class="lang-es">Masivo</span></strong></td><td><span class="lang-en">5–12 hours</span><span class="lang-es">5–12 horas</span></td><td><span class="lang-en">Free</span><span class="lang-es">Gratis</span></td></tr>
                 </tbody>
               </table>
             </div>
-            <div class="callout info">Min storage duration: <strong>90 days</strong>. Use for data archives, backups, regulatory records where you can tolerate hours of wait time to restore.</div>
+            <div class="callout info"><span class="lang-en">Min storage duration: <strong>90 days</strong>. Use for data archives, backups, regulatory records where you can tolerate hours of wait time to restore.</span><span class="lang-es">Duración mínima de almacenamiento: <strong>90 días</strong>. Úsalo para archivos de datos, copias de seguridad, registros regulatorios donde puedas tolerar horas de tiempo de espera para restaurar.</span></div>
           </div>
         `
       },
       {
         body: `
-          <div class="step-title">Glacier Deep Archive — Cheapest Long-Term Storage</div>
-          <div class="step-desc">Designed for data that is rarely if ever retrieved. Regulatory and compliance archives.</div>
+          <div class="step-title"><span class="lang-en">Glacier Deep Archive — Cheapest Long-Term Storage</span><span class="lang-es">Glacier Deep Archive — Almacenamiento a Largo Plazo Más Barato</span></div>
+          <div class="step-desc"><span class="lang-en">Designed for data that is rarely if ever retrieved. Regulatory and compliance archives.</span><span class="lang-es">Diseñado para datos que rara vez o nunca se recuperan. Archivos regulatorios y de cumplimiento.</span></div>
           <div class="grid-2" style="gap:12px;">
             <div class="feature-card">
-              <div class="feature-card-title">Characteristics</div>
+              <div class="feature-card-title"><span class="lang-en">Characteristics</span><span class="lang-es">Características</span></div>
               <ul>
-                <li>Standard retrieval: <strong style="color:#fb923c;">~12 hours</strong></li>
-                <li>Bulk retrieval: <strong style="color:#fb923c;">~48 hours</strong></li>
-                <li>Min storage duration: <strong style="color:#fb923c;">180 days</strong></li>
-                <li>Lowest cost storage class available</li>
+                <li><span class="lang-en">Standard retrieval: <strong style="color:#fb923c;">~12 hours</strong></span><span class="lang-es">Recuperación estándar: <strong style="color:#fb923c;">~12 horas</strong></span></li>
+                <li><span class="lang-en">Bulk retrieval: <strong style="color:#fb923c;">~48 hours</strong></span><span class="lang-es">Recuperación masiva: <strong style="color:#fb923c;">~48 horas</strong></span></li>
+                <li><span class="lang-en">Min storage duration: <strong style="color:#fb923c;">180 days</strong></span><span class="lang-es">Duración mínima de almacenamiento: <strong style="color:#fb923c;">180 días</strong></span></li>
+                <li><span class="lang-en">Lowest cost storage class available</span><span class="lang-es">Clase de almacenamiento de costo más bajo disponible</span></li>
               </ul>
             </div>
             <div class="feature-card">
-              <div class="feature-card-title">Best For</div>
+              <div class="feature-card-title"><span class="lang-en">Best For</span><span class="lang-es">Mejor Para</span></div>
               <ul>
-                <li>7–10 year regulatory retention requirements</li>
-                <li>Financial records, legal archives</li>
-                <li>Scientific data sets rarely needed</li>
-                <li>Magnetic tape replacement</li>
+                <li><span class="lang-en">7–10 year regulatory retention requirements</span><span class="lang-es">Requisitos de retención regulatoria de 7–10 años</span></li>
+                <li><span class="lang-en">Financial records, legal archives</span><span class="lang-es">Registros financieros, archivos legales</span></li>
+                <li><span class="lang-en">Scientific data sets rarely needed</span><span class="lang-es">Conjuntos de datos científicos raramente necesarios</span></li>
+                <li><span class="lang-en">Magnetic tape replacement</span><span class="lang-es">Reemplazo de cinta magnética</span></li>
               </ul>
             </div>
           </div>
@@ -733,22 +733,22 @@ var DEMOS = {
       },
       {
         body: `
-          <div class="step-title">S3 Intelligent-Tiering — Auto-Optimize Storage Cost</div>
-          <div class="step-desc">S3 monitors access patterns and moves objects between tiers automatically. No retrieval charges.</div>
+          <div class="step-title"><span class="lang-en">S3 Intelligent-Tiering — Auto-Optimize Storage Cost</span><span class="lang-es">S3 Intelligent-Tiering — Auto-Optimizar Costo de Almacenamiento</span></div>
+          <div class="step-desc"><span class="lang-en">S3 monitors access patterns and moves objects between tiers automatically. No retrieval charges.</span><span class="lang-es">S3 monitorea patrones de acceso y mueve objetos entre niveles automáticamente. Sin cargos de recuperación.</span></div>
           <div style="display:flex;flex-direction:column;gap:12px;">
             <div class="table-wrapper">
               <table class="data-table">
-                <thead><tr><th>Tier</th><th>Access Pattern</th><th>Retrieval</th></tr></thead>
+                <thead><tr><th><span class="lang-en">Tier</span><span class="lang-es">Nivel</span></th><th><span class="lang-en">Access Pattern</span><span class="lang-es">Patrón de Acceso</span></th><th><span class="lang-en">Retrieval</span><span class="lang-es">Recuperación</span></th></tr></thead>
                 <tbody>
-                  <tr><td>Frequent Access</td><td>Default (accessed recently)</td><td>Milliseconds</td></tr>
-                  <tr><td>Infrequent Access</td><td>Not accessed for 30 days</td><td>Milliseconds</td></tr>
-                  <tr><td>Archive Instant</td><td>Not accessed for 90 days</td><td>Milliseconds</td></tr>
-                  <tr><td>Archive</td><td>90–180 days (opt-in)</td><td>Hours</td></tr>
-                  <tr><td>Deep Archive</td><td>180+ days (opt-in)</td><td>Hours</td></tr>
+                  <tr><td><span class="lang-en">Frequent Access</span><span class="lang-es">Acceso Frecuente</span></td><td><span class="lang-en">Default (accessed recently)</span><span class="lang-es">Predeterminado (accedido recientemente)</span></td><td><span class="lang-en">Milliseconds</span><span class="lang-es">Milisegundos</span></td></tr>
+                  <tr><td><span class="lang-en">Infrequent Access</span><span class="lang-es">Acceso Infrequente</span></td><td><span class="lang-en">Not accessed for 30 days</span><span class="lang-es">No accedido en 30 días</span></td><td><span class="lang-en">Milliseconds</span><span class="lang-es">Milisegundos</span></td></tr>
+                  <tr><td><span class="lang-en">Archive Instant</span><span class="lang-es">Archivo Instantáneo</span></td><td><span class="lang-en">Not accessed for 90 days</span><span class="lang-es">No accedido en 90 días</span></td><td><span class="lang-en">Milliseconds</span><span class="lang-es">Milisegundos</span></td></tr>
+                  <tr><td><span class="lang-en">Archive</span><span class="lang-es">Archivo</span></td><td><span class="lang-en">90–180 days (opt-in)</span><span class="lang-es">90–180 días (opt-in)</span></td><td><span class="lang-en">Hours</span><span class="lang-es">Horas</span></td></tr>
+                  <tr><td><span class="lang-en">Deep Archive</span><span class="lang-es">Archivo Profundo</span></td><td><span class="lang-en">180+ days (opt-in)</span><span class="lang-es">180+ días (opt-in)</span></td><td><span class="lang-en">Hours</span><span class="lang-es">Horas</span></td></tr>
                 </tbody>
               </table>
             </div>
-            <div class="callout success">Small monthly monitoring and auto-tiering fee per object. <strong>No retrieval charges ever.</strong> Best when access patterns are unpredictable or changing over time.</div>
+            <div class="callout success"><span class="lang-en">Small monthly monitoring and auto-tiering fee per object. <strong>No retrieval charges ever.</strong> Best when access patterns are unpredictable or changing over time.</span><span class="lang-es">Pequeña tarifa mensual de monitoreo y auto-tiering por objeto. <strong>Nunca hay cargos de recuperación.</strong> Mejor cuando los patrones de acceso son impredecibles o cambian con el tiempo.</span></div>
           </div>
         `
       }

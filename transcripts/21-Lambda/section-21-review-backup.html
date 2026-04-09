@@ -672,7 +672,7 @@
         </h3>
         <div class="concept-grid">
           <div class="concept-card">
-            <h4><span class="lang-en">Free Tier</span><span class="lang-es">Nivel Gratuito</span></h4>
+            <h4>Free Tier</h4>
             <p>
               <strong>1M</strong>
               <span class="lang-en"
@@ -756,7 +756,7 @@
                 <span class="lang-en">Client handles retries</span
                 ><span class="lang-es">El cliente maneja reintentos</span>
               </li>
-              <li><span class="lang-en">ALB, API Gateway, CloudFront, CLI</span><span class="lang-es">ALB, API Gateway, CloudFront, CLI</span></li>
+              <li>ALB, API Gateway, CloudFront, CLI</li>
             </ul>
           </div>
           <div class="compare-card">
@@ -776,7 +776,7 @@
                   >Lambda reintenta <strong>3x</strong> → DLQ</span
                 >
               </li>
-              <li><span class="lang-en">S3, SNS, EventBridge</span><span class="lang-es">S3, SNS, EventBridge</span></li>
+              <li>S3, SNS, EventBridge</li>
               <li>
                 <span class="chip yellow"
                   ><span class="lang-en">Must be idempotent!</span
@@ -786,7 +786,7 @@
             </ul>
           </div>
           <div class="compare-card">
-            <h4 class="orange"><span class="lang-en">Event Source Mapping</span><span class="lang-es">Mapeo de origen de eventos</span></h4>
+            <h4 class="orange">Event Source Mapping</h4>
             <ul>
               <li>
                 <span class="lang-en"
@@ -799,7 +799,7 @@
                 <span class="lang-en">Sync invoke internally</span
                 ><span class="lang-es">Invocación sync interna</span>
               </li>
-              <li><span class="lang-en">Kinesis, DynamoDB Streams, SQS</span><span class="lang-es">Kinesis, DynamoDB Streams, SQS</span></li>
+              <li>Kinesis, DynamoDB Streams, SQS</li>
               <li>
                 <span class="lang-en">Batches, maintains order</span
                 ><span class="lang-es">Por lotes, mantiene orden</span>
@@ -816,7 +816,7 @@
           ><span class="lang-es"
             ><strong>Regla rápida:</strong> ¿Caller de cara al usuario? →
             Síncrono. ¿Servicio AWS dispara evento? → Asíncrono. ¿Lambda lee de
-            cola/stream? → Mapeo de origen de eventos.</span
+            cola/stream? → Event Source Mapping.</span
           >
         </div>
       </div>
@@ -901,8 +901,8 @@
                 ><span class="lang-es">Destinos</span></strong
               >
             </td>
-            <td><span class="lang-en">SQS, SNS</span><span class="lang-es">SQS, SNS</span></td>
-            <td><span class="lang-en">SQS, SNS, Lambda, EventBridge</span><span class="lang-es">SQS, SNS, Lambda, EventBridge</span></td>
+            <td>SQS, SNS</td>
+            <td>SQS, SNS, Lambda, EventBridge</td>
           </tr>
         </table>
         <div class="callout success">
@@ -965,7 +965,7 @@
             </p>
           </div>
           <div class="concept-card">
-            <h4><span class="lang-en">Parallelization</span><span class="lang-es">Paralelización</span></h4>
+            <h4>Parallelization</h4>
             <p>
               <span class="lang-en"
                 >Up to <strong>10</strong> batch processors per shard</span
@@ -1006,7 +1006,7 @@
             </p>
           </div>
           <div class="concept-card">
-            <h4><span class="lang-en">DLQ</span><span class="lang-es">DLQ</span></h4>
+            <h4>DLQ</h4>
             <p>
               <span class="lang-en"
                 >Set on <strong>SQS</strong>, NOT Lambda</span
@@ -1016,7 +1016,7 @@
             </p>
           </div>
           <div class="concept-card">
-            <h4><span class="lang-en">FIFO Scaling</span><span class="lang-es">Escalado FIFO</span></h4>
+            <h4>FIFO Scaling</h4>
             <p>
               <span class="lang-en"
                 >Scales to # of <strong>active message groups</strong></span
@@ -1223,7 +1223,7 @@
             </p>
           </div>
           <div class="concept-card">
-            <h4><span class="lang-en">CloudWatch Logs</span><span class="lang-es">CloudWatch Logs</span></h4>
+            <h4>CloudWatch Logs</h4>
             <p>
               <span class="lang-en"
                 ><span class="chip green">Automatic</span> — needs
@@ -1235,7 +1235,7 @@
             </p>
           </div>
           <div class="concept-card">
-            <h4><span class="lang-en">X-Ray Tracing</span><span class="lang-es">X-Ray Tracing</span></h4>
+            <h4>X-Ray Tracing</h4>
             <p>
               <span class="lang-en"
                 >Enable <strong>Active Tracing</strong> + SDK + IAM role</span
@@ -1405,13 +1405,13 @@
               <span class="lang-en">Feature</span
               ><span class="lang-es">Característica</span>
             </th>
-            <th><span class="lang-en">CloudFront Functions</span><span class="lang-es">Funciones de CloudFront</span></th>
+            <th>CloudFront Functions</th>
             <th>Lambda@Edge</th>
           </tr>
           <tr>
             <td><strong>Runtime</strong></td>
-            <td><span class="lang-en">JavaScript</span><span class="lang-es">JavaScript</span></td>
-            <td><span class="lang-en">Node.js, Python</span><span class="lang-es">Node.js, Python</span></td>
+            <td>JavaScript</td>
+            <td>Node.js, Python</td>
           </tr>
           <tr>
             <td><strong>Scale</strong></td>
@@ -2323,8 +2323,8 @@
             <td><strong>Max size</strong></td>
             <td>10 GB</td>
             <td>5 layers, 250 MB</td>
-            <td><span class="lang-en">Elastic</span><span class="lang-es">Elástico</span></td>
-            <td><span class="lang-en">Elastic</span><span class="lang-es">Elástico</span></td>
+            <td>Elastic</td>
+            <td>Elastic</td>
           </tr>
           <tr>
             <td>
@@ -2371,8 +2371,8 @@
             </td>
             <td><span class="chip green">Fastest</span></td>
             <td><span class="chip green">Fastest</span></td>
-            <td><span class="lang-en">Fast</span><span class="lang-es">Rápido</span></td>
-            <td><span class="lang-en">Very fast</span><span class="lang-es">Muy rápido</span></td>
+            <td>Fast</td>
+            <td>Very fast</td>
           </tr>
           <tr>
             <td>
@@ -2467,7 +2467,7 @@
             </ul>
           </div>
           <div class="compare-card">
-            <h4 class="green"><span class="lang-en">Reserved Concurrency</span><span class="lang-es">Concurrencia Reservada</span></h4>
+            <h4 class="green">Reserved Concurrency</h4>
             <ul>
               <li>
                 <span class="lang-en">Per-function <strong>cap</strong></span
@@ -2487,7 +2487,7 @@
             </ul>
           </div>
           <div class="compare-card">
-            <h4 class="orange"><span class="lang-en">Provisioned Concurrency</span><span class="lang-es">Concurrencia Aprovisionada</span></h4>
+            <h4 class="orange">Provisioned Concurrency</h4>
             <ul>
               <li>
                 <span class="lang-en"><strong>Pre-warm</strong> instances</span
@@ -2887,7 +2887,7 @@
 
         <div class="concept-grid">
           <div class="concept-card">
-            <h4><span class="lang-en">$LATEST</span><span class="lang-es">$LATEST</span></h4>
+            <h4>$LATEST</h4>
             <p>
               <span class="lang-en"
                 ><strong>Mutable</strong> — your source of truth, working
@@ -2914,7 +2914,7 @@
             </p>
           </div>
           <div class="concept-card">
-            <h4><span class="lang-en">Aliases</span><span class="lang-es">Alias</span></h4>
+            <h4>Aliases</h4>
             <p>
               <span class="lang-en"
                 ><strong>Mutable pointers</strong> to versions. Stable endpoint

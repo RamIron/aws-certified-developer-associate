@@ -396,19 +396,19 @@ var DEMOS = {
     steps: [
       {
         body: '<div style="display:flex;flex-direction:column;gap:16px;">' +
-          '<div class="step-title"><span class="lang-en">Two Types of AWS Limits</span><span class="lang-es">Dos tipos de límites de AWS</span></div>' +
+          '<div class="step-title">Two Types of AWS Limits</div>' +
           '<div class="grid-2">' +
             '<div style="background:#1e293b;border:1px solid #334155;border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:8px;">' +
-              '<div style="font-size:14px;font-weight:700;color:#93c5fd;"><span class="lang-en">API Rate Limits</span><span class="lang-es">Límites de velocidad de API</span></div>' +
-              '<div style="font-size:13px;color:#94a3b8;"><span class="lang-en">Limit on how many API calls per second. Example: <code>DescribeInstances</code> = 100 calls/sec for EC2.</span><span class="lang-es">Límite de cuántas llamadas API por segundo. Ejemplo: <code>DescribeInstances</code> = 100 llamadas/seg para EC2.</span></div>' +
-              '<div style="font-size:13px;color:#94a3b8;"><span class="lang-en">When exceeded: you receive <span style="color:#fca5a5;font-weight:700;">ThrottlingException</span></span><span class="lang-es">Cuando se excede: recibes <span style="color:#fca5a5;font-weight:700;">ThrottlingException</span></span></div>' +
-              '<div style="font-size:13px;color:#6ee7b7;font-weight:600;"><span class="lang-en">Solution: Exponential Backoff</span><span class="lang-es">Solución: Retroceso Exponencial</span></div>' +
+              '<div style="font-size:14px;font-weight:700;color:#93c5fd;">API Rate Limits</div>' +
+              '<div style="font-size:13px;color:#94a3b8;">Limit on how many API calls per second. Example: <code>DescribeInstances</code> = 100 calls/sec for EC2.</div>' +
+              '<div style="font-size:13px;color:#94a3b8;">When exceeded: you receive <span style="color:#fca5a5;font-weight:700;">ThrottlingException</span></div>' +
+              '<div style="font-size:13px;color:#6ee7b7;font-weight:600;">Solution: Exponential Backoff</div>' +
             '</div>' +
             '<div style="background:#1e293b;border:1px solid #334155;border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:8px;">' +
-              '<div style="font-size:14px;font-weight:700;color:#c084fc;"><span class="lang-en">Service Quotas</span><span class="lang-es">Cuotas de servicio</span></div>' +
-              '<div style="font-size:13px;color:#94a3b8;"><span class="lang-en">Limit on number of resources. Example: 1,150 on-demand EC2 instances per region.</span><span class="lang-es">Límite en número de recursos. Ejemplo: 1.150 instancias EC2 bajo demanda por región.</span></div>' +
-              '<div style="font-size:13px;color:#94a3b8;"><span class="lang-en">These are <strong style="color:#f8fafc;">soft limits</strong> — can be increased.</span><span class="lang-es">Estos son <strong style="color:#f8fafc;">límites blandos</strong> — pueden ser aumentados.</span></div>' +
-              '<div style="font-size:13px;color:#6ee7b7;font-weight:600;"><span class="lang-en">Solution: Request increase via Support or Service Quotas API</span><span class="lang-es">Solución: Solicita aumento vía Support o Service Quotas API</span></div>' +
+              '<div style="font-size:14px;font-weight:700;color:#c084fc;">Service Quotas</div>' +
+              '<div style="font-size:13px;color:#94a3b8;">Limit on number of resources. Example: 1,150 on-demand EC2 instances per region.</div>' +
+              '<div style="font-size:13px;color:#94a3b8;">These are <strong style="color:#f8fafc;">soft limits</strong> — can be increased.</div>' +
+              '<div style="font-size:13px;color:#6ee7b7;font-weight:600;">Solution: Request increase via Support or Service Quotas API</div>' +
             '</div>' +
           '</div>' +
           '<div style="background:rgba(99,102,241,0.08);border-left:4px solid #6366f1;border-radius:10px;padding:14px 18px;font-size:13px;color:#c7d2fe;">These are <strong>different problems with different solutions</strong>. Confusing them is a common exam trap.</div>' +
@@ -416,45 +416,45 @@ var DEMOS = {
       },
       {
         body: '<div style="display:flex;flex-direction:column;gap:16px;">' +
-          '<div class="step-title"><span class="lang-en">Exponential Backoff — API Rate Limit Solution</span><span class="lang-es">Retroceso Exponencial — Solución de límite de velocidad API</span></div>' +
-          '<div style="font-size:13px;color:#94a3b8;margin-bottom:4px;"><span class="lang-en">Each retry waits <strong style="color:#f8fafc;">twice as long</strong> as the previous. This prevents overwhelming the service while retrying.</span><span class="lang-es">Cada reintento espera <strong style="color:#f8fafc;">el doble de tiempo</strong> que el anterior. Esto evita sobrecargar el servicio mientras se reintenta.</span></div>' +
+          '<div class="step-title">Exponential Backoff — API Rate Limit Solution</div>' +
+          '<div style="font-size:13px;color:#94a3b8;margin-bottom:4px;">Each retry waits <strong style="color:#f8fafc;">twice as long</strong> as the previous. This prevents overwhelming the service while retrying.</div>' +
           '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">' +
-            '<div style="background:#f97316;color:#0f172a;font-weight:700;padding:10px 16px;border-radius:8px;font-size:13px;text-align:center;"><span class="lang-en">Attempt 1</span><span class="lang-es">Intento 1</span><br><span style="font-size:13px;"><span class="lang-en">0s wait</span><span class="lang-es">0s espera</span></span></div>' +
+            '<div style="background:#f97316;color:#0f172a;font-weight:700;padding:10px 16px;border-radius:8px;font-size:13px;text-align:center;">Attempt 1<br><span style="font-size:13px;">0s wait</span></div>' +
             '<div style="color:#475569;font-size:16px;">›</div>' +
-            '<div style="background:#ea580c;color:#fff;font-weight:700;padding:10px 16px;border-radius:8px;font-size:13px;text-align:center;"><span class="lang-en">Retry 1</span><span class="lang-es">Reintento 1</span><br><span style="font-size:13px;"><span class="lang-en">1s wait</span><span class="lang-es">1s espera</span></span></div>' +
+            '<div style="background:#ea580c;color:#fff;font-weight:700;padding:10px 16px;border-radius:8px;font-size:13px;text-align:center;">Retry 1<br><span style="font-size:13px;">1s wait</span></div>' +
             '<div style="color:#475569;font-size:16px;">›</div>' +
-            '<div style="background:#c2410c;color:#fff;font-weight:700;padding:10px 16px;border-radius:8px;font-size:13px;text-align:center;"><span class="lang-en">Retry 2</span><span class="lang-es">Reintento 2</span><br><span style="font-size:13px;"><span class="lang-en">2s wait</span><span class="lang-es">2s espera</span></span></div>' +
+            '<div style="background:#c2410c;color:#fff;font-weight:700;padding:10px 16px;border-radius:8px;font-size:13px;text-align:center;">Retry 2<br><span style="font-size:13px;">2s wait</span></div>' +
             '<div style="color:#475569;font-size:16px;">›</div>' +
-            '<div style="background:#9a3412;color:#fff;font-weight:700;padding:10px 16px;border-radius:8px;font-size:13px;text-align:center;"><span class="lang-en">Retry 3</span><span class="lang-es">Reintento 3</span><br><span style="font-size:13px;"><span class="lang-en">4s wait</span><span class="lang-es">4s espera</span></span></div>' +
+            '<div style="background:#9a3412;color:#fff;font-weight:700;padding:10px 16px;border-radius:8px;font-size:13px;text-align:center;">Retry 3<br><span style="font-size:13px;">4s wait</span></div>' +
             '<div style="color:#475569;font-size:16px;">›</div>' +
-            '<div style="background:#7c2d12;color:#fed7aa;font-weight:700;padding:10px 16px;border-radius:8px;font-size:13px;text-align:center;"><span class="lang-en">Retry 4</span><span class="lang-es">Reintento 4</span><br><span style="font-size:13px;"><span class="lang-en">8s wait</span><span class="lang-es">8s espera</span></span></div>' +
+            '<div style="background:#7c2d12;color:#fed7aa;font-weight:700;padding:10px 16px;border-radius:8px;font-size:13px;text-align:center;">Retry 4<br><span style="font-size:13px;">8s wait</span></div>' +
             '<div style="color:#475569;font-size:16px;">›</div>' +
-            '<div style="background:#1e293b;color:#94a3b8;font-weight:700;padding:10px 16px;border-radius:8px;font-size:13px;text-align:center;border:1px dashed #475569;"><span class="lang-en">Retry N</span><span class="lang-es">Reintento N</span><br><span style="font-size:13px;"><span class="lang-en">2^N seconds</span><span class="lang-es">2^N segundos</span></span></div>' +
+            '<div style="background:#1e293b;color:#94a3b8;font-weight:700;padding:10px 16px;border-radius:8px;font-size:13px;text-align:center;border:1px dashed #475569;">Retry N<br><span style="font-size:13px;">2^N seconds</span></div>' +
           '</div>' +
           '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:4px;">' +
-            '<div style="background:rgba(16,185,129,0.08);border-left:4px solid #10b981;border-radius:10px;padding:12px 16px;font-size:13px;color:#6ee7b7;"><strong><span class="lang-en">DO retry on:</span><span class="lang-es">SÍ reintenta en:</span></strong> <span class="lang-en">5XX server errors, ThrottlingException</span><span class="lang-es">Errores del servidor 5XX, ThrottlingException</span></div>' +
-            '<div style="background:rgba(239,68,68,0.08);border-left:4px solid #ef4444;border-radius:10px;padding:12px 16px;font-size:13px;color:#fca5a5;"><strong><span class="lang-en">NEVER retry on:</span><span class="lang-es">NUNCA reintentas en:</span></strong> <span class="lang-en">4XX client errors — these mean your request is wrong. Fix the code.</span><span class="lang-es">Errores del cliente 4XX — significan que tu solicitud es incorrecta. Corrige el código.</span></div>' +
+            '<div style="background:rgba(16,185,129,0.08);border-left:4px solid #10b981;border-radius:10px;padding:12px 16px;font-size:13px;color:#6ee7b7;"><strong>DO retry on:</strong> 5XX server errors, ThrottlingException</div>' +
+            '<div style="background:rgba(239,68,68,0.08);border-left:4px solid #ef4444;border-radius:10px;padding:12px 16px;font-size:13px;color:#fca5a5;"><strong>NEVER retry on:</strong> 4XX client errors — these mean your request is wrong. Fix the code.</div>' +
           '</div>' +
         '</div>'
       },
       {
         body: '<div style="display:flex;flex-direction:column;gap:16px;">' +
-          '<div class="step-title"><span class="lang-en">Implementation &amp; Quota Increases</span><span class="lang-es">Implementación y aumentos de cuota</span></div>' +
+          '<div class="step-title">Implementation &amp; Quota Increases</div>' +
           '<div class="grid-2">' +
             '<div style="background:#1e293b;border:1px solid #334155;border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:8px;">' +
-              '<div style="font-size:14px;font-weight:700;color:#6ee7b7;"><span class="lang-en">AWS SDK</span><span class="lang-es">AWS SDK</span></div>' +
-              '<div style="font-size:13px;color:#94a3b8;"><span class="lang-en">Exponential Backoff is <strong style="color:#f8fafc;">built-in automatically</strong>. You do not need to implement it. The SDK retries on ThrottlingException and 5XX errors by default.</span><span class="lang-es">Retroceso Exponencial está <strong style="color:#f8fafc;">integrado automáticamente</strong>. No necesitas implementarlo. El SDK reintenta en ThrottlingException y errores 5XX por defecto.</span></div>' +
+              '<div style="font-size:14px;font-weight:700;color:#6ee7b7;">AWS SDK</div>' +
+              '<div style="font-size:13px;color:#94a3b8;">Exponential Backoff is <strong style="color:#f8fafc;">built-in automatically</strong>. You do not need to implement it. The SDK retries on ThrottlingException and 5XX errors by default.</div>' +
             '</div>' +
             '<div style="background:#1e293b;border:1px solid #334155;border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:8px;">' +
-              '<div style="font-size:14px;font-weight:700;color:#fbbf24;"><span class="lang-en">Custom HTTP Client</span><span class="lang-es">Cliente HTTP personalizado</span></div>' +
-              '<div style="font-size:13px;color:#94a3b8;"><span class="lang-en">You are responsible for implementing Exponential Backoff yourself. AWS does not inject it automatically outside of the SDK.</span><span class="lang-es">Eres responsable de implementar Retroceso Exponencial tú mismo. AWS no lo inyecta automáticamente fuera del SDK.</span></div>' +
+              '<div style="font-size:14px;font-weight:700;color:#fbbf24;">Custom HTTP Client</div>' +
+              '<div style="font-size:13px;color:#94a3b8;">You are responsible for implementing Exponential Backoff yourself. AWS does not inject it automatically outside of the SDK.</div>' +
             '</div>' +
           '</div>' +
           '<div style="background:#1e293b;border:1px solid #334155;border-radius:10px;padding:18px;">' +
-            '<div style="font-size:14px;font-weight:700;color:#c084fc;margin-bottom:8px;"><span class="lang-en">Service Quota Increase</span><span class="lang-es">Aumento de cuota de servicio</span></div>' +
+            '<div style="font-size:14px;font-weight:700;color:#c084fc;margin-bottom:8px;">Service Quota Increase</div>' +
             '<div style="display:flex;flex-direction:column;gap:8px;">' +
-              '<div style="font-size:13px;color:#94a3b8;padding-left:14px;position:relative;"><span style="position:absolute;left:0;color:#f97316;">›</span> <span class="lang-en">Open an AWS Support ticket requesting the limit increase for a specific service and region</span><span class="lang-es">Abre un ticket de AWS Support solicitando el aumento de límite para un servicio y región específicos</span></div>' +
-              '<div style="font-size:13px;color:#94a3b8;padding-left:14px;position:relative;"><span style="position:absolute;left:0;color:#f97316;">›</span> <span class="lang-en">Programmatically: use the <strong style="color:#f8fafc;">Service Quotas API</strong> (<code>request-service-quota-increase</code>)</span><span class="lang-es">Programáticamente: usa la <strong style="color:#f8fafc;">API de Cuotas de servicio</strong> (<code>request-service-quota-increase</code>)</span></div>' +
+              '<div style="font-size:13px;color:#94a3b8;padding-left:14px;position:relative;"><span style="position:absolute;left:0;color:#f97316;">›</span> Open an AWS Support ticket requesting the limit increase for a specific service and region</div>' +
+              '<div style="font-size:13px;color:#94a3b8;padding-left:14px;position:relative;"><span style="position:absolute;left:0;color:#f97316;">›</span> Programmatically: use the <strong style="color:#f8fafc;">Service Quotas API</strong> (<code>request-service-quota-increase</code>)</div>' +
             '</div>' +
           '</div>' +
         '</div>'
@@ -466,33 +466,33 @@ var DEMOS = {
     steps: [
       {
         body: '<div style="display:flex;flex-direction:column;gap:14px;">' +
-          '<div class="step-title"><span class="lang-en">Priority 1 (Highest) — Command Line Options</span><span class="lang-es">Prioridad 1 (Más alta) — Opciones de línea de comandos</span></div>' +
+          '<div class="step-title">Priority 1 (Highest) — Command Line Options</div>' +
           '<div style="background:#1e293b;border:2px solid #f97316;border-radius:10px;padding:18px;">' +
             '<div style="font-family:\'Fira Code\',monospace;font-size:13px;color:#fb923c;background:#0f172a;padding:10px 14px;border-radius:8px;margin-bottom:10px;">aws s3 ls --region us-east-1 --profile myprofile</div>' +
-            '<div style="font-size:13px;color:#94a3b8;"><span class="lang-en">Flags passed directly on the CLI override everything else: <code>--region</code>, <code>--output</code>, <code>--profile</code>. These always win when explicitly specified.</span><span class="lang-es">Banderas pasadas directamente en la CLI anulan todo lo demás: <code>--region</code>, <code>--output</code>, <code>--profile</code>. Siempre ganan cuando se especifican explícitamente.</span></div>' +
+            '<div style="font-size:13px;color:#94a3b8;">Flags passed directly on the CLI override everything else: <code>--region</code>, <code>--output</code>, <code>--profile</code>. These always win when explicitly specified.</div>' +
           '</div>' +
-          '<div style="background:rgba(249,115,22,0.08);border-left:4px solid #f97316;border-radius:10px;padding:14px 18px;font-size:13px;color:#fed7aa;"><strong><span class="lang-en">Remember:</span><span class="lang-es">Recuerda:</span></strong> <span class="lang-en">First match wins — if you pass <code>--profile</code> on the command line, all lower-priority sources are ignored for this invocation.</span><span class="lang-es">El primero que coincide gana — si pasas <code>--profile</code> en la línea de comandos, todas las fuentes de menor prioridad se ignoran en esta invocación.</span></div>' +
+          '<div style="background:rgba(249,115,22,0.08);border-left:4px solid #f97316;border-radius:10px;padding:14px 18px;font-size:13px;color:#fed7aa;"><strong>Remember:</strong> First match wins — if you pass <code>--profile</code> on the command line, all lower-priority sources are ignored for this invocation.</div>' +
         '</div>'
       },
       {
         body: '<div style="display:flex;flex-direction:column;gap:14px;">' +
-          '<div class="step-title"><span class="lang-en">Priority 2 — Environment Variables</span><span class="lang-es">Prioridad 2 — Variables de entorno</span></div>' +
+          '<div class="step-title">Priority 2 — Environment Variables</div>' +
           '<div style="background:#1e293b;border:2px solid #6366f1;border-radius:10px;padding:18px;">' +
             '<div style="display:flex;flex-direction:column;gap:6px;font-family:\'Fira Code\',monospace;font-size:13px;color:#a5b4fc;background:#0f172a;padding:10px 14px;border-radius:8px;margin-bottom:10px;">' +
               '<div>export AWS_ACCESS_KEY_ID=AKIAIOSFODNN7EXAMPLE</div>' +
               '<div>export AWS_SECRET_ACCESS_KEY=wJalrXUtnFEMI/K7MDENG/...</div>' +
               '<div>export AWS_SESSION_TOKEN=FwoGZXIvYXdz...  <span style="color:#475569;"># for temp creds</span></div>' +
             '</div>' +
-            '<div style="font-size:13px;color:#94a3b8;"><span class="lang-en">Set in the shell environment. Commonly used in CI/CD pipelines and container environments. Used by both CLI and SDK.</span><span class="lang-es">Establecido en el entorno shell. Comúnmente utilizado en tuberías CI/CD y entornos de contenedor. Utilizado por CLI y SDK.</span></div>' +
+            '<div style="font-size:13px;color:#94a3b8;">Set in the shell environment. Commonly used in CI/CD pipelines and container environments. Used by both CLI and SDK.</div>' +
           '</div>' +
           '<div style="background:rgba(239,68,68,0.08);border-left:4px solid #ef4444;border-radius:10px;padding:14px 18px;font-size:13px;color:#fca5a5;"><strong>Exam trap:</strong> An EC2 instance with env vars set + an Instance Profile attached → the env vars WIN. The Instance Profile (lowest priority) is completely ignored.</div>' +
         '</div>'
       },
       {
         body: '<div style="display:flex;flex-direction:column;gap:14px;">' +
-          '<div class="step-title"><span class="lang-en">Priority 3 — CLI Credentials File</span><span class="lang-es">Prioridad 3 — Archivo de credenciales CLI</span></div>' +
+          '<div class="step-title">Priority 3 — CLI Credentials File</div>' +
           '<div style="background:#1e293b;border:2px solid #334155;border-radius:10px;padding:18px;">' +
-            '<div style="font-size:13px;color:#94a3b8;margin-bottom:10px;"><span class="lang-en">File: <code>~/.aws/credentials</code> — shared across AWS CLI and all AWS SDKs</span><span class="lang-es">Archivo: <code>~/.aws/credentials</code> — compartido entre AWS CLI y todos los SDKs de AWS</span></div>' +
+            '<div style="font-size:13px;color:#94a3b8;margin-bottom:10px;">File: <code>~/.aws/credentials</code> — shared across AWS CLI and all AWS SDKs</div>' +
             '<div style="font-family:\'Fira Code\',monospace;font-size:13px;color:#6ee7b7;background:#0f172a;padding:10px 14px;border-radius:8px;">' +
               '[default]<br>aws_access_key_id = AKIAIOSFODNN7EXAMPLE<br>aws_secret_access_key = wJalrXUtnFEMI...<br><br>[myprofile]<br>aws_access_key_id = AKIAI44QH8DHBEXAMPLE<br>aws_secret_access_key = je7MtGbClwBF...'+
             '</div>' +
@@ -502,47 +502,47 @@ var DEMOS = {
       },
       {
         body: '<div style="display:flex;flex-direction:column;gap:14px;">' +
-          '<div class="step-title"><span class="lang-en">Priority 4 — CLI Config File</span><span class="lang-es">Prioridad 4 — Archivo de configuración CLI</span></div>' +
+          '<div class="step-title">Priority 4 — CLI Config File</div>' +
           '<div style="background:#1e293b;border:2px solid #334155;border-radius:10px;padding:18px;">' +
-            '<div style="font-size:13px;color:#94a3b8;margin-bottom:10px;"><span class="lang-en">File: <code>~/.aws/config</code> — stores region, output format, and optionally credentials</span><span class="lang-es">Archivo: <code>~/.aws/config</code> — almacena región, formato de salida y opcionalmente credenciales</span></div>' +
+            '<div style="font-size:13px;color:#94a3b8;margin-bottom:10px;">File: <code>~/.aws/config</code> — stores region, output format, and optionally credentials</div>' +
             '<div style="font-family:\'Fira Code\',monospace;font-size:13px;color:#6ee7b7;background:#0f172a;padding:10px 14px;border-radius:8px;">' +
               '[default]<br>region = us-east-1<br>output = json<br><br>[profile myprofile]<br>region = eu-west-1<br>output = table' +
             '</div>' +
           '</div>' +
-          '<div style="font-size:13px;color:#94a3b8;padding:10px 14px;background:#0f172a;border-radius:8px;border:1px solid #334155;"><span class="lang-en">Note: profile sections in config use <code>[profile name]</code> (with "profile" prefix), while credentials file uses <code>[name]</code> directly.</span><span class="lang-es">Nota: las secciones de perfil en config usan <code>[profile name]</code> (con prefijo "profile"), mientras que el archivo de credenciales usa <code>[name]</code> directamente.</span></div>' +
+          '<div style="font-size:13px;color:#94a3b8;padding:10px 14px;background:#0f172a;border-radius:8px;border:1px solid #334155;">Note: profile sections in config use <code>[profile name]</code> (with "profile" prefix), while credentials file uses <code>[name]</code> directly.</div>' +
         '</div>'
       },
       {
         body: '<div style="display:flex;flex-direction:column;gap:14px;">' +
-          '<div class="step-title"><span class="lang-en">Priority 5 — Container Credentials (ECS)</span><span class="lang-es">Prioridad 5 — Credenciales de contenedor (ECS)</span></div>' +
+          '<div class="step-title">Priority 5 — Container Credentials (ECS)</div>' +
           '<div style="background:#1e293b;border:2px solid #334155;border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:8px;">' +
-            '<div style="font-size:13px;color:#94a3b8;"><span class="lang-en">When running inside an <strong style="color:#f8fafc;">ECS task</strong>, the SDK fetches credentials from the task IAM Role via the container credentials endpoint.</span><span class="lang-es">Cuando se ejecuta dentro de una <strong style="color:#f8fafc;">tarea de ECS</strong>, el SDK obtiene credenciales del Rol de IAM de la tarea a través del punto final de credenciales del contenedor.</span></div>' +
+            '<div style="font-size:13px;color:#94a3b8;">When running inside an <strong style="color:#f8fafc;">ECS task</strong>, the SDK fetches credentials from the task IAM Role via the container credentials endpoint.</div>' +
             '<div class="arch-flow" style="margin-bottom:0;">' +
               '<div class="arch-node" style="background:#0f2a1e;color:#6ee7b7;">ECS Task</div>' +
               '<div class="arch-arrow">›</div>' +
-              '<div class="arch-node" style="background:#1e293b;color:#f8fafc;"><span class="lang-en">Task IAM Role</span><span class="lang-es">Rol IAM de Tarea</span></div>' +
+              '<div class="arch-node" style="background:#1e293b;color:#f8fafc;">Task IAM Role</div>' +
               '<div class="arch-arrow">›</div>' +
-              '<div class="arch-node" style="background:#0f2a1e;color:#6ee7b7;"><span class="lang-en">Temp Credentials</span><span class="lang-es">Credenciales Temp.</span></div>' +
+              '<div class="arch-node" style="background:#0f2a1e;color:#6ee7b7;">Temp Credentials</div>' +
             '</div>' +
           '</div>' +
-          '<div style="background:rgba(16,185,129,0.08);border-left:4px solid #10b981;border-radius:10px;padding:14px 18px;font-size:13px;color:#6ee7b7;"><span class="lang-en">Best practice for ECS: always use a Task IAM Role instead of passing credentials via environment variables.</span><span class="lang-es">Mejor práctica para ECS: siempre usa un Rol de IAM de tarea en lugar de pasar credenciales a través de variables de entorno.</span></div>' +
+          '<div style="background:rgba(16,185,129,0.08);border-left:4px solid #10b981;border-radius:10px;padding:14px 18px;font-size:13px;color:#6ee7b7;">Best practice for ECS: always use a Task IAM Role instead of passing credentials via environment variables.</div>' +
         '</div>'
       },
       {
         body: '<div style="display:flex;flex-direction:column;gap:14px;">' +
-          '<div class="step-title"><span class="lang-en">Priority 6 (Lowest) — EC2 Instance Profile</span><span class="lang-es">Prioridad 6 (Más baja) — Perfil de instancia EC2</span></div>' +
+          '<div class="step-title">Priority 6 (Lowest) — EC2 Instance Profile</div>' +
           '<div style="background:#1e293b;border:2px solid #334155;border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:8px;">' +
-            '<div style="font-size:13px;color:#94a3b8;"><span class="lang-en">The IAM Role attached to the EC2 instance. The SDK retrieves temporary credentials from IMDS automatically.</span><span class="lang-es">El Rol de IAM adjunto a la instancia EC2. El SDK recupera credenciales temporales de IMDS automáticamente.</span></div>' +
+            '<div style="font-size:13px;color:#94a3b8;">The IAM Role attached to the EC2 instance. The SDK retrieves temporary credentials from IMDS automatically.</div>' +
             '<div class="arch-flow" style="margin-bottom:0;">' +
-              '<div class="arch-node" style="background:#1e2d4a;color:#93c5fd;"><span class="lang-en">EC2 Instance</span><span class="lang-es">Instancia EC2</span></div>' +
+              '<div class="arch-node" style="background:#1e2d4a;color:#93c5fd;">EC2 Instance</div>' +
               '<div class="arch-arrow">›</div>' +
               '<div class="arch-node" style="background:#1e293b;color:#f8fafc;">IMDS 169.254.169.254</div>' +
               '<div class="arch-arrow">›</div>' +
-              '<div class="arch-node" style="background:#0f2a1e;color:#6ee7b7;"><span class="lang-en">Role Credentials</span><span class="lang-es">Credenciales del Rol</span></div>' +
+              '<div class="arch-node" style="background:#0f2a1e;color:#6ee7b7;">Role Credentials</div>' +
             '</div>' +
           '</div>' +
-          '<div style="background:rgba(249,115,22,0.08);border-left:4px solid #f97316;border-radius:10px;padding:14px 18px;font-size:13px;color:#fed7aa;"><strong><span class="lang-en">Classic exam scenario:</span><span class="lang-es">Escenario clásico del examen:</span></strong> <span class="lang-en">EC2 has both env vars (broad permissions) and an Instance Profile (restricted role) → env vars win → app has too many permissions → <strong>FIX: unset the environment variables</strong>.</span><span class="lang-es">EC2 tiene tanto variables de entorno (permisos amplios) como un Perfil de instancia (rol restringido) → ganan las variables de entorno → la aplicación tiene demasiados permisos → <strong>SOLUCIÓN: desabilita las variables de entorno</strong>.</span></div>' +
-          '<div style="background:rgba(16,185,129,0.08);border-left:4px solid #10b981;border-radius:10px;padding:14px 18px;font-size:13px;color:#6ee7b7;"><strong><span class="lang-en">Best practice:</span><span class="lang-es">Mejor práctica:</span></strong> <span class="lang-en">Inside AWS → always use IAM Roles. Outside AWS → env vars or named profiles. Never hardcode credentials.</span><span class="lang-es">Dentro de AWS → siempre usa Roles de IAM. Fuera de AWS → variables de entorno o perfiles nombrados. Nunca codifiques credenciales.</span></div>' +
+          '<div style="background:rgba(249,115,22,0.08);border-left:4px solid #f97316;border-radius:10px;padding:14px 18px;font-size:13px;color:#fed7aa;"><strong>Classic exam scenario:</strong> EC2 has both env vars (broad permissions) and an Instance Profile (restricted role) → env vars win → app has too many permissions → <strong>FIX: unset the environment variables</strong>.</div>' +
+          '<div style="background:rgba(16,185,129,0.08);border-left:4px solid #10b981;border-radius:10px;padding:14px 18px;font-size:13px;color:#6ee7b7;"><strong>Best practice:</strong> Inside AWS → always use IAM Roles. Outside AWS → env vars or named profiles. Never hardcode credentials.</div>' +
         '</div>'
       }
     ]

@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title><span class="lang-en">Section 7 — ELB + ASG</span><span class="lang-es">Sección 7 — ELB + ASG</span></title>
-
+    <title>Section 7 — ELB + ASG</title>
+  
     <link rel="stylesheet" href="../shared/summary.css">
     <script src="../shared/summary.js"></script>
     <style>
@@ -570,24 +570,24 @@
     </style>
   </head>
   <body>
-    <script>initHeader("<span class='lang-en'>Section 7 — ELB + ASG</span><span class='lang-es'>Sección 7 — ELB + ASG</span>")</script>
+    <script>initHeader("Section 7 — ELB + ASG")</script>
     <div class="container">
 
       <!-- ══════════════ WEAK POINTS ══════════════ -->
       <div class="callout danger" style="margin-bottom: 2rem;">
-        <strong style="color:#f87171; display:block; margin-bottom:0.5rem;"><span class="lang-en">⚠ Weak Points — Review Before Exam</span><span class="lang-es">⚠ Puntos débiles — Revisar antes del examen</span></strong>
+        <strong style="color:#f87171; display:block; margin-bottom:0.5rem;">⚠ Weak Points — Review Before Exam</strong>
         <ul style="list-style:none; padding:0; display:flex; flex-direction:column; gap:0.4rem;">
           <li>
-            <strong style="color:#fca5a5;"><span class="lang-en">7.15 ASG Overview — 67%</span><span class="lang-es">7.15 Descripción general de ASG — 67%</span></strong>
-            <span style="color:#fca5a5; font-size:0.82rem;"><span class="lang-en"> · Confused where to update AMI — answer: <strong>launch template</strong>, not the running instances</span><span class="lang-es"> · Confundido dónde actualizar AMI — respuesta: <strong>plantilla de lanzamiento</strong>, no las instancias en ejecución</span></span>
+            <strong style="color:#fca5a5;">7.15 ASG Overview — 67%</strong>
+            <span style="color:#fca5a5; font-size:0.82rem;"> · Confused where to update AMI — answer: <strong>launch template</strong>, not the running instances</span>
           </li>
           <li>
-            <strong style="color:#fca5a5;"><span class="lang-en">7.19 ASG Instance Refresh — 50%</span><span class="lang-es">7.19 Actualización de instancia de ASG — 50%</span></strong>
-            <span style="color:#fca5a5; font-size:0.82rem;"><span class="lang-en"> · Confused warm-up time behavior — it is <strong>fixed</strong>, does NOT auto-extend</span><span class="lang-es"> · Confundido el comportamiento del tiempo de calentamiento — es <strong>fijo</strong>, NO se extiende automáticamente</span></span>
+            <strong style="color:#fca5a5;">7.19 ASG Instance Refresh — 50%</strong>
+            <span style="color:#fca5a5; font-size:0.82rem;"> · Confused warm-up time behavior — it is <strong>fixed</strong>, does NOT auto-extend</span>
           </li>
           <li>
-            <strong style="color:#fca5a5;"><span class="lang-en">Udemy quiz — 14/20</span><span class="lang-es">Quiz de Udemy — 14/20</span></strong>
-            <span style="color:#fca5a5; font-size:0.82rem;"><span class="lang-en"> · Below 75% threshold — section marked REVIEW</span><span class="lang-es"> · Por debajo del umbral del 75% — sección marcada para REVISIÓN</span></span>
+            <strong style="color:#fca5a5;">Udemy quiz — 14/20</strong>
+            <span style="color:#fca5a5; font-size:0.82rem;"> · Below 75% threshold — section marked REVIEW</span>
           </li>
         </ul>
       </div>
@@ -596,24 +596,24 @@
       <div class="card">
         <div class="card-header">
           <span class="badge">1</span>
-          <h2><span class="lang-en">Scalability &amp; High Availability</span><span class="lang-es">Escalabilidad y alta disponibilidad</span></h2>
+          <h2>Scalability &amp; High Availability</h2>
         </div>
 
         <div class="concept-grid">
           <div class="concept-card">
             <div class="icon">📈</div>
-            <h4><span class="lang-en">Vertical Scaling</span><span class="lang-es">Escalado vertical</span></h4>
-            <p><span class="lang-en">Bigger instance (scale up / down). Limited by hardware ceiling. Example: t2.micro → t2.large.</span><span class="lang-es">Instancia más grande (escalar arriba/abajo). Limitado por el techo de hardware. Ejemplo: t2.micro → t2.large.</span></p>
+            <h4>Vertical Scaling</h4>
+            <p>Bigger instance (scale up / down). Limited by hardware ceiling. Example: t2.micro → t2.large.</p>
           </div>
           <div class="concept-card">
             <div class="icon">🖥</div>
-            <h4><span class="lang-en">Horizontal Scaling</span><span class="lang-es">Escalado horizontal</span></h4>
-            <p><span class="lang-en">More instances (scale out / in). No hardware limit. Enabled by <strong>ASG + ELB</strong>.</span><span class="lang-es">Más instancias (escalar hacia afuera/adentro). Sin límite de hardware. Habilitado por <strong>ASG + ELB</strong>.</span></p>
+            <h4>Horizontal Scaling</h4>
+            <p>More instances (scale out / in). No hardware limit. Enabled by <strong>ASG + ELB</strong>.</p>
           </div>
           <div class="concept-card">
             <div class="icon">🏛</div>
-            <h4><span class="lang-en">High Availability</span><span class="lang-es">Alta disponibilidad</span></h4>
-            <p><span class="lang-en">Multi-AZ deployment — survives an AZ failure. Enabled by <strong>ASG multi-AZ</strong> + <strong>ELB multi-AZ</strong>.</span><span class="lang-es">Implementación multi-AZ — sobrevive a un fallo de AZ. Habilitado por <strong>ASG multi-AZ</strong> + <strong>ELB multi-AZ</strong>.</span></p>
+            <h4>High Availability</h4>
+            <p>Multi-AZ deployment — survives an AZ failure. Enabled by <strong>ASG multi-AZ</strong> + <strong>ELB multi-AZ</strong>.</p>
           </div>
         </div>
       </div>
@@ -622,56 +622,56 @@
       <div class="card">
         <div class="card-header">
           <span class="badge">2</span>
-          <h2><span class="lang-en">Load Balancer Comparison</span><span class="lang-es">Comparación de balanceadores de carga</span></h2>
+          <h2>Load Balancer Comparison</h2>
         </div>
 
         <div class="lb-grid">
 
           <!-- ALB -->
           <div class="lb-card alb">
-            <h4><span class="lang-en">ALB — Application Load Balancer</span><span class="lang-es">ALB — Balanceador de carga de aplicaciones</span></h4>
-            <div class="lb-sub"><span class="lang-en">Layer 7 · HTTP / HTTPS / WebSocket</span><span class="lang-es">Capa 7 · HTTP / HTTPS / WebSocket</span></div>
+            <h4>ALB — Application Load Balancer</h4>
+            <div class="lb-sub">Layer 7 · HTTP / HTTPS / WebSocket</div>
             <ul>
-              <li><span class="lang-en">Web apps, microservices, containers</span><span class="lang-es">Aplicaciones web, microservicios, contenedores</span></li>
-              <li><span class="lang-en">Routing: URL path, hostname, query string, headers</span><span class="lang-es">Enrutamiento: ruta URL, nombre de host, cadena de consulta, encabezados</span></li>
-              <li><span class="lang-en">No static IP — DNS name only</span><span class="lang-es">Sin IP estática — solo nombre DNS</span></li>
-              <li><span class="lang-en">Targets: EC2, ECS, Lambda, private IPs</span><span class="lang-es">Objetivos: EC2, ECS, Lambda, IPs privadas</span></li>
-              <li><span class="lang-en">Real client IP via <strong>X-Forwarded-For</strong> header</span><span class="lang-es">IP del cliente real a través del encabezado <strong>X-Forwarded-For</strong></span></li>
+              <li>Web apps, microservices, containers</li>
+              <li>Routing: URL path, hostname, query string, headers</li>
+              <li>No static IP — DNS name only</li>
+              <li>Targets: EC2, ECS, Lambda, private IPs</li>
+              <li>Real client IP via <strong>X-Forwarded-For</strong> header</li>
             </ul>
             <div class="lb-chip-row">
-              <span class="chip blue"><span class="lang-en">Layer 7</span><span class="lang-es">Capa 7</span></span>
+              <span class="chip blue">Layer 7</span>
             </div>
           </div>
 
           <!-- NLB -->
           <div class="lb-card nlb">
-            <h4><span class="lang-en">NLB — Network Load Balancer</span><span class="lang-es">NLB — Balanceador de carga de red</span></h4>
-            <div class="lb-sub"><span class="lang-en">Layer 4 · TCP / UDP / TLS</span><span class="lang-es">Capa 4 · TCP / UDP / TLS</span></div>
+            <h4>NLB — Network Load Balancer</h4>
+            <div class="lb-sub">Layer 4 · TCP / UDP / TLS</div>
             <ul>
-              <li><span class="lang-en">Extreme performance, ultra-low latency</span><span class="lang-es">Rendimiento extremo, latencia ultra baja</span></li>
-              <li><span class="lang-en">Static IPs per AZ (Elastic IP support)</span><span class="lang-es">IPs estáticas por AZ (soporte de IP elástica)</span></li>
-              <li><span class="lang-en">Can be placed in front of ALB</span><span class="lang-es">Puede colocarse frente a ALB</span></li>
-              <li><span class="lang-en">Targets: EC2, private IPs, ALB</span><span class="lang-es">Objetivos: EC2, IPs privadas, ALB</span></li>
-              <li><span class="lang-en">Sticky sessions via source IP (no cookies)</span><span class="lang-es">Sesiones adhesivas por IP de origen (sin cookies)</span></li>
+              <li>Extreme performance, ultra-low latency</li>
+              <li>Static IPs per AZ (Elastic IP support)</li>
+              <li>Can be placed in front of ALB</li>
+              <li>Targets: EC2, private IPs, ALB</li>
+              <li>Sticky sessions via source IP (no cookies)</li>
             </ul>
             <div class="lb-chip-row">
-              <span class="chip green"><span class="lang-en">Layer 4</span><span class="lang-es">Capa 4</span></span>
+              <span class="chip green">Layer 4</span>
             </div>
           </div>
 
           <!-- GWLB -->
           <div class="lb-card gwlb">
-            <h4><span class="lang-en">GWLB — Gateway Load Balancer</span><span class="lang-es">GWLB — Balanceador de carga de puerta de enlace</span></h4>
-            <div class="lb-sub"><span class="lang-en">Layer 3 · IP Packets · GENEVE port 6081</span><span class="lang-es">Capa 3 · Paquetes IP · Puerto GENEVE 6081</span></div>
+            <h4>GWLB — Gateway Load Balancer</h4>
+            <div class="lb-sub">Layer 3 · IP Packets · GENEVE port 6081</div>
             <ul>
-              <li><span class="lang-en">Network traffic inspection (firewalls, IDS/IPS)</span><span class="lang-es">Inspección de tráfico de red (cortafuegos, IDS/IPS)</span></li>
-              <li><span class="lang-en">Routes every packet through 3rd-party appliances</span><span class="lang-es">Enruta cada paquete a través de dispositivos de terceros</span></li>
-              <li><span class="lang-en">Uses GENEVE protocol, port 6081</span><span class="lang-es">Utiliza protocolo GENEVE, puerto 6081</span></li>
-              <li><span class="lang-en">Targets: EC2, private IPs</span><span class="lang-es">Objetivos: EC2, IPs privadas</span></li>
-              <li><span class="lang-en">Transparent to the application</span><span class="lang-es">Transparente para la aplicación</span></li>
+              <li>Network traffic inspection (firewalls, IDS/IPS)</li>
+              <li>Routes every packet through 3rd-party appliances</li>
+              <li>Uses GENEVE protocol, port 6081</li>
+              <li>Targets: EC2, private IPs</li>
+              <li>Transparent to the application</li>
             </ul>
             <div class="lb-chip-row">
-              <span class="chip purple"><span class="lang-en">Layer 3</span><span class="lang-es">Capa 3</span></span>
+              <span class="chip purple">Layer 3</span>
             </div>
           </div>
 
@@ -682,38 +682,38 @@
       <div class="card">
         <div class="card-header">
           <span class="badge">3</span>
-          <h2><span class="lang-en">Sticky Sessions</span><span class="lang-es">Sesiones adhesivas</span></h2>
+          <h2>Sticky Sessions</h2>
         </div>
 
         <div class="concept-grid">
           <div class="concept-card">
             <div class="icon">📌</div>
-            <h4><span class="lang-en">What it does</span><span class="lang-es">Qué hace</span></h4>
-            <p><span class="lang-en">Same client always routes to the same backend instance across requests.</span><span class="lang-es">El mismo cliente siempre se enruta a la misma instancia de backend en todas las solicitudes.</span></p>
+            <h4>What it does</h4>
+            <p>Same client always routes to the same backend instance across requests.</p>
           </div>
           <div class="concept-card">
             <div class="icon">🍪</div>
-            <h4><span class="lang-en">ALB — Cookie-based</span><span class="lang-es">ALB — Basado en cookies</span></h4>
-            <p><span class="lang-en"><strong>Application-based</strong> (custom cookie) or <strong>duration-based</strong> (LB-generated). Configured at target group level.</span><span class="lang-es"><strong>Basado en aplicación</strong> (cookie personalizada) o <strong>basado en duración</strong> (generado por LB). Configurado a nivel de grupo objetivo.</span></p>
+            <h4>ALB — Cookie-based</h4>
+            <p><strong>Application-based</strong> (custom cookie) or <strong>duration-based</strong> (LB-generated). Configured at target group level.</p>
           </div>
           <div class="concept-card">
             <div class="icon">🌐</div>
-            <h4><span class="lang-en">NLB — Source IP hash</span><span class="lang-es">NLB — Hash de IP de origen</span></h4>
-            <p><span class="lang-en">No cookies — uses source IP to route consistently. Simpler but less flexible.</span><span class="lang-es">Sin cookies — usa IP de origen para enrutar consistentemente. Más simple pero menos flexible.</span></p>
+            <h4>NLB — Source IP hash</h4>
+            <p>No cookies — uses source IP to route consistently. Simpler but less flexible.</p>
           </div>
           <div class="concept-card">
             <div class="icon">⚙️</div>
-            <h4><span class="lang-en">Config level</span><span class="lang-es">Nivel de configuración</span></h4>
-            <p><span class="lang-en">Sticky sessions are configured at the <strong>TARGET GROUP level</strong>, not the listener or LB itself.</span><span class="lang-es">Las sesiones adhesivas se configuran a nivel de <strong>GRUPO OBJETIVO</strong>, no en el listener o LB mismo.</span></p>
+            <h4>Config level</h4>
+            <p>Sticky sessions are configured at the <strong>TARGET GROUP level</strong>, not the listener or LB itself.</p>
           </div>
         </div>
 
         <div class="callout info" style="margin-top:1rem;">
-          <strong><span class="lang-en">Reserved cookie names:</span><span class="lang-es">Nombres de cookies reservadas:</span></strong> <span class="lang-en">AWSALB, AWSALBAPP, AWSALBTG — do not use these names in your own cookies.</span><span class="lang-es">AWSALB, AWSALBAPP, AWSALBTG — no use estos nombres en sus propias cookies.</span>
+          <strong>Reserved cookie names:</strong> AWSALB, AWSALBAPP, AWSALBTG — do not use these names in your own cookies.
         </div>
 
         <div class="callout warning">
-          <span class="lang-en">⚠ <strong>Trade-off:</strong> Sticky sessions can cause load imbalance if some users generate significantly more load than others. A "heavy" user stays pinned to one instance, overloading it while others are idle.</span><span class="lang-es">⚠ <strong>Compensación:</strong> Las sesiones adhesivas pueden causar desbalance de carga si algunos usuarios generan significativamente más carga que otros. Un usuario "pesado" se mantiene fijado a una instancia, sobrecargándola mientras otros están inactivos.</span>
+          ⚠ <strong>Trade-off:</strong> Sticky sessions can cause load imbalance if some users generate significantly more load than others. A "heavy" user stays pinned to one instance, overloading it while others are idle.
         </div>
       </div>
 
@@ -721,52 +721,52 @@
       <div class="card">
         <div class="card-header">
           <span class="badge">4</span>
-          <h2><span class="lang-en">Cross-Zone Load Balancing</span><span class="lang-es">Balanceo de carga entre zonas</span></h2>
+          <h2>Cross-Zone Load Balancing</h2>
         </div>
 
-        <p><span class="lang-en">Controls whether an ELB node in one AZ can distribute traffic to instances in <em>other</em> AZs.</span><span class="lang-es">Controla si un nodo ELB en una AZ puede distribuir tráfico a instancias en <em>otras</em> AZs.</span></p>
+        <p>Controls whether an ELB node in one AZ can distribute traffic to instances in <em>other</em> AZs.</p>
 
         <div class="demo-wrap">
           <div class="demo-title">
             <div class="mode-dot" style="background:#f97316;"></div>
-            <h4><span class="lang-en">Cross-Zone — Interactive Demo</span><span class="lang-es">Entre zonas — Demostración interactiva</span></h4>
+            <h4>Cross-Zone — Interactive Demo</h4>
           </div>
 
           <div id="cz" class="anim-body"></div>
 
           <div class="anim-controls" style="margin-top:0.75rem;">
-            <button class="nav-btn" id="cz-prev" onclick="prev('cz')">&#8592; <span class="lang-en">Prev</span><span class="lang-es">Anterior</span></button>
+            <button class="nav-btn" id="cz-prev" onclick="prev('cz')">&#8592; Prev</button>
             <div class="step-dots" id="cz-dots"></div>
-            <button class="nav-btn" id="cz-next" onclick="next('cz')"><span class="lang-en">Next</span><span class="lang-es">Siguiente</span> &#8594;</button>
+            <button class="nav-btn" id="cz-next" onclick="next('cz')">Next &#8594;</button>
             <span class="step-counter" id="cz-counter"></span>
-            <button class="restart-btn" onclick="restart('cz')">&#8635; <span class="lang-en">Restart</span><span class="lang-es">Reiniciar</span></button>
+            <button class="restart-btn" onclick="restart('cz')">&#8635; Restart</button>
           </div>
         </div>
 
-        <h3><span class="lang-en">Defaults by LB Type</span><span class="lang-es">Valores predeterminados por tipo de LB</span></h3>
+        <h3>Defaults by LB Type</h3>
         <table class="data-table">
           <thead>
             <tr>
-              <th><span class="lang-en">Load Balancer</span><span class="lang-es">Balanceador de carga</span></th>
-              <th><span class="lang-en">Cross-Zone Default</span><span class="lang-es">Valor predeterminado entre zonas</span></th>
-              <th><span class="lang-en">Inter-AZ Charges</span><span class="lang-es">Cargos entre AZs</span></th>
+              <th>Load Balancer</th>
+              <th>Cross-Zone Default</th>
+              <th>Inter-AZ Charges</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td><span style="color:#60a5fa; font-weight:700;">ALB</span></td>
-              <td><span class="chip green"><span class="lang-en">ON by default</span><span class="lang-es">ACTIVADO de forma predeterminada</span></span></td>
-              <td><span class="lang-en">No charges</span><span class="lang-es">Sin cargos</span></td>
+              <td><span class="chip green">ON by default</span></td>
+              <td>No charges</td>
             </tr>
             <tr>
               <td><span style="color:#34d399; font-weight:700;">NLB</span></td>
-              <td><span class="chip gray"><span class="lang-en">OFF by default</span><span class="lang-es">DESACTIVADO de forma predeterminada</span></span></td>
-              <td><span class="lang-en">Charges apply when enabled</span><span class="lang-es">Se aplican cargos cuando está habilitado</span></td>
+              <td><span class="chip gray">OFF by default</span></td>
+              <td>Charges apply when enabled</td>
             </tr>
             <tr>
               <td><span style="color:#c084fc; font-weight:700;">GWLB</span></td>
-              <td><span class="chip gray"><span class="lang-en">OFF by default</span><span class="lang-es">DESACTIVADO de forma predeterminada</span></span></td>
-              <td><span class="lang-en">Charges apply when enabled</span><span class="lang-es">Se aplican cargos cuando está habilitado</span></td>
+              <td><span class="chip gray">OFF by default</span></td>
+              <td>Charges apply when enabled</td>
             </tr>
           </tbody>
         </table>
@@ -776,24 +776,24 @@
       <div class="card">
         <div class="card-header">
           <span class="badge">5</span>
-          <h2><span class="lang-en">SSL / TLS Certificates</span><span class="lang-es">Certificados SSL / TLS</span></h2>
+          <h2>SSL / TLS Certificates</h2>
         </div>
 
         <div class="concept-grid">
           <div class="concept-card">
             <div class="icon">🔐</div>
-            <h4><span class="lang-en">SSL Termination</span><span class="lang-es">Terminación SSL</span></h4>
-            <p><span class="lang-en">LB decrypts HTTPS traffic, then forwards plain HTTP to backend instances. Instances don't need to hold SSL certs.</span><span class="lang-es">LB descifra tráfico HTTPS, luego reenvía HTTP simple a instancias de backend. Las instancias no necesitan contener certificados SSL.</span></p>
+            <h4>SSL Termination</h4>
+            <p>LB decrypts HTTPS traffic, then forwards plain HTTP to backend instances. Instances don't need to hold SSL certs.</p>
           </div>
           <div class="concept-card">
             <div class="icon">📜</div>
-            <h4><span class="lang-en">ACM — AWS Certificate Manager</span><span class="lang-es">ACM — Gestor de certificados de AWS</span></h4>
-            <p><span class="lang-en">Manages SSL/TLS certificates. Supports auto-renewal. Integrates natively with ALB and NLB.</span><span class="lang-es">Gestiona certificados SSL/TLS. Soporta renovación automática. Se integra nativamente con ALB y NLB.</span></p>
+            <h4>ACM — AWS Certificate Manager</h4>
+            <p>Manages SSL/TLS certificates. Supports auto-renewal. Integrates natively with ALB and NLB.</p>
           </div>
           <div class="concept-card">
             <div class="icon">🏷</div>
-            <h4><span class="lang-en">SNI — Server Name Indication</span><span class="lang-es">SNI — Indicación del nombre del servidor</span></h4>
-            <p><span class="lang-en">Allows <strong>multiple SSL certs</strong> on a single load balancer listener. Supported by <strong>ALB &amp; NLB only</strong> — Classic LB does NOT support SNI.</span><span class="lang-es">Permite <strong>múltiples certificados SSL</strong> en un único listener del balanceador de carga. Soportado por <strong>ALB y NLB únicamente</strong> — Classic LB NO soporta SNI.</span></p>
+            <h4>SNI — Server Name Indication</h4>
+            <p>Allows <strong>multiple SSL certs</strong> on a single load balancer listener. Supported by <strong>ALB &amp; NLB only</strong> — Classic LB does NOT support SNI.</p>
           </div>
         </div>
       </div>
@@ -802,29 +802,29 @@
       <div class="card">
         <div class="card-header">
           <span class="badge">6</span>
-          <h2><span class="lang-en">Connection Draining</span><span class="lang-es">Drenado de conexiones</span></h2>
+          <h2>Connection Draining</h2>
         </div>
 
         <div class="concept-grid">
           <div class="concept-card">
             <div class="icon">💧</div>
-            <h4><span class="lang-en">Also called</span><span class="lang-es">También llamado</span></h4>
-            <p><span class="lang-en"><strong>Deregistration Delay</strong> — same feature, different names depending on context.</span><span class="lang-es"><strong>Retraso de cancelación de registro</strong> — la misma característica, diferentes nombres según el contexto.</span></p>
+            <h4>Also called</h4>
+            <p><strong>Deregistration Delay</strong> — same feature, different names depending on context.</p>
           </div>
           <div class="concept-card">
             <div class="icon">⏳</div>
-            <h4><span class="lang-en">What it does</span><span class="lang-es">Qué hace</span></h4>
-            <p><span class="lang-en">In-flight requests get time to complete when an instance is deregistered or marked unhealthy. ELB stops sending NEW requests to the draining instance.</span><span class="lang-es">Las solicitudes en vuelo tienen tiempo para completarse cuando una instancia se cancela del registro o se marca como no saludable. ELB deja de enviar NUEVAS solicitudes a la instancia que se drena.</span></p>
+            <h4>What it does</h4>
+            <p>In-flight requests get time to complete when an instance is deregistered or marked unhealthy. ELB stops sending NEW requests to the draining instance.</p>
           </div>
           <div class="concept-card">
             <div class="icon">⚙️</div>
-            <h4><span class="lang-en">Timing</span><span class="lang-es">Temporización</span></h4>
-            <p><span class="lang-en"><strong>Default:</strong> 300 seconds | <strong>Range:</strong> 1–3,600 s | <strong>Disable:</strong> set to 0</span><span class="lang-es"><strong>Predeterminado:</strong> 300 segundos | <strong>Rango:</strong> 1–3.600 s | <strong>Deshabilitado:</strong> establecer en 0</span></p>
+            <h4>Timing</h4>
+            <p><strong>Default:</strong> 300 seconds | <strong>Range:</strong> 1–3,600 s | <strong>Disable:</strong> set to 0</p>
           </div>
           <div class="concept-card">
             <div class="icon">🎯</div>
-            <h4><span class="lang-en">Best practice</span><span class="lang-es">Mejor práctica</span></h4>
-            <p><span class="lang-en">Low value for short requests. High value for long uploads or connections. Set to 0 to deregister instantly.</span><span class="lang-es">Valor bajo para solicitudes cortas. Valor alto para descargas o conexiones largas. Establecer en 0 para cancelar el registro instantáneamente.</span></p>
+            <h4>Best practice</h4>
+            <p>Low value for short requests. High value for long uploads or connections. Set to 0 to deregister instantly.</p>
           </div>
         </div>
       </div>
@@ -833,35 +833,35 @@
       <div class="card">
         <div class="card-header">
           <span class="badge">7</span>
-          <h2><span class="lang-en">Auto Scaling Groups (ASG)</span><span class="lang-es">Grupos de auto escalado (ASG)</span></h2>
+          <h2>Auto Scaling Groups (ASG)</h2>
         </div>
 
         <div class="concept-grid">
           <div class="concept-card">
             <div class="icon">📋</div>
-            <h4><span class="lang-en">Launch Template</span><span class="lang-es">Plantilla de lanzamiento</span></h4>
-            <p><span class="lang-en">Blueprint for new EC2 instances — AMI, instance type, user data, security groups, key pair, etc. <strong>Never</strong> the running instance config.</span><span class="lang-es">Plantilla para nuevas instancias EC2 — AMI, tipo de instancia, datos de usuario, grupos de seguridad, par de claves, etc. <strong>Nunca</strong> la configuración de la instancia en ejecución.</span></p>
+            <h4>Launch Template</h4>
+            <p>Blueprint for new EC2 instances — AMI, instance type, user data, security groups, key pair, etc. <strong>Never</strong> the running instance config.</p>
           </div>
           <div class="concept-card">
             <div class="icon">📊</div>
-            <h4><span class="lang-en">Min / Desired / Max</span><span class="lang-es">Mín / Deseado / Máx</span></h4>
-            <p><span class="lang-en">Capacity boundaries. <strong>Min</strong>: floor, <strong>Desired</strong>: target ASG tries to maintain, <strong>Max</strong>: ceiling for scaling out.</span><span class="lang-es">Límites de capacidad. <strong>Mín</strong>: piso, <strong>Deseado</strong>: objetivo que ASG intenta mantener, <strong>Máx</strong>: techo para escalar hacia afuera.</span></p>
+            <h4>Min / Desired / Max</h4>
+            <p>Capacity boundaries. <strong>Min</strong>: floor, <strong>Desired</strong>: target ASG tries to maintain, <strong>Max</strong>: ceiling for scaling out.</p>
           </div>
           <div class="concept-card">
             <div class="icon">🔄</div>
-            <h4><span class="lang-en">Self-Healing</span><span class="lang-es">Auto-curación</span></h4>
-            <p><span class="lang-en">Unhealthy instances are terminated and replaced automatically. New instances are registered with the ELB target group.</span><span class="lang-es">Las instancias no saludables se terminan y se reemplazan automáticamente. Las nuevas instancias se registran con el grupo objetivo de ELB.</span></p>
+            <h4>Self-Healing</h4>
+            <p>Unhealthy instances are terminated and replaced automatically. New instances are registered with the ELB target group.</p>
           </div>
           <div class="concept-card">
             <div class="icon">💸</div>
-            <h4><span class="lang-en">ASGs are FREE</span><span class="lang-es">Los ASG son GRATUITOS</span></h4>
-            <p><span class="lang-en">The ASG itself costs nothing. You only pay for the EC2 instances it launches.</span><span class="lang-es">El ASG en sí no cuesta nada. Solo pagas las instancias EC2 que lanza.</span></p>
+            <h4>ASGs are FREE</h4>
+            <p>The ASG itself costs nothing. You only pay for the EC2 instances it launches.</p>
           </div>
         </div>
 
         <div class="callout danger" style="margin-top:1.25rem;">
-          <strong style="color:#f87171;"><span class="lang-en">⚠ Weak point — AMI Update</span><span class="lang-es">⚠ Punto débil — Actualización de AMI</span></strong><br>
-          <span class="lang-en">To change the AMI for <em>future</em> instances: update the <strong>Launch Template</strong> (not the running instances). Running instances keep their original config until they are terminated and replaced. The ASG does not automatically restart existing instances after a template change.</span><span class="lang-es">Para cambiar la AMI de instancias <em>futuras</em>: actualiza la <strong>plantilla de lanzamiento</strong> (no las instancias en ejecución). Las instancias en ejecución mantienen su configuración original hasta que se terminan y se reemplazan. El ASG no reinicia automáticamente las instancias existentes después de un cambio de plantilla.</span>
+          <strong style="color:#f87171;">⚠ Weak point — AMI Update</strong><br>
+          To change the AMI for <em>future</em> instances: update the <strong>Launch Template</strong> (not the running instances). Running instances keep their original config until they are terminated and replaced. The ASG does not automatically restart existing instances after a template change.
         </div>
       </div>
 
@@ -869,34 +869,34 @@
       <div class="card">
         <div class="card-header">
           <span class="badge">8</span>
-          <h2><span class="lang-en">Scaling Policies</span><span class="lang-es">Políticas de escalado</span></h2>
+          <h2>Scaling Policies</h2>
         </div>
 
         <div class="policy-grid">
           <div class="policy-card">
-            <h4><span class="lang-en">Target Tracking</span><span class="lang-es">Seguimiento de objetivos</span></h4>
-            <p><span class="lang-en">Set a metric and a target value. ASG continuously adjusts capacity to keep the metric at target.</span><span class="lang-es">Establece una métrica y un valor objetivo. ASG ajusta continuamente la capacidad para mantener la métrica en el objetivo.</span></p>
-            <div class="example"><span class="lang-en">"Keep average CPU at 40%"</span><span class="lang-es">"Mantener CPU promedio en 40%"</span></div>
+            <h4>Target Tracking</h4>
+            <p>Set a metric and a target value. ASG continuously adjusts capacity to keep the metric at target.</p>
+            <div class="example">"Keep average CPU at 40%"</div>
           </div>
           <div class="policy-card">
-            <h4><span class="lang-en">Simple / Step Scaling</span><span class="lang-es">Escalado simple / por pasos</span></h4>
-            <p><span class="lang-en">CloudWatch alarm triggers a fixed change: add or remove N instances. Step scaling supports tiered thresholds.</span><span class="lang-es">La alarma CloudWatch activa un cambio fijo: agrega o elimina N instancias. El escalado por pasos admite umbrales por niveles.</span></p>
-            <div class="example"><span class="lang-en">"CPU &gt; 70% → add 2 instances"</span><span class="lang-es">"CPU &gt; 70% → agregar 2 instancias"</span></div>
+            <h4>Simple / Step Scaling</h4>
+            <p>CloudWatch alarm triggers a fixed change: add or remove N instances. Step scaling supports tiered thresholds.</p>
+            <div class="example">"CPU &gt; 70% → add 2 instances"</div>
           </div>
           <div class="policy-card">
-            <h4><span class="lang-en">Scheduled Scaling</span><span class="lang-es">Escalado programado</span></h4>
-            <p><span class="lang-en">Scale at specific times for predictable patterns. Useful for known load spikes.</span><span class="lang-es">Escala en tiempos específicos para patrones predecibles. Útil para picos de carga conocidos.</span></p>
-            <div class="example"><span class="lang-en">"Every Friday at 5pm → min 10"</span><span class="lang-es">"Cada viernes a las 5pm → mín 10"</span></div>
+            <h4>Scheduled Scaling</h4>
+            <p>Scale at specific times for predictable patterns. Useful for known load spikes.</p>
+            <div class="example">"Every Friday at 5pm → min 10"</div>
           </div>
           <div class="policy-card">
-            <h4><span class="lang-en">Predictive Scaling</span><span class="lang-es">Escalado predictivo</span></h4>
-            <p><span class="lang-en">ML model analyzes historical CloudWatch data. Forecasts load ahead of time and schedules proactive scaling.</span><span class="lang-es">El modelo ML analiza datos históricos de CloudWatch. Pronostica carga por adelantado y programa escalado proactivo.</span></p>
-            <div class="example"><span class="lang-en">"Forecasts next week's traffic pattern"</span><span class="lang-es">"Pronostica el patrón de tráfico de la próxima semana"</span></div>
+            <h4>Predictive Scaling</h4>
+            <p>ML model analyzes historical CloudWatch data. Forecasts load ahead of time and schedules proactive scaling.</p>
+            <div class="example">"Forecasts next week's traffic pattern"</div>
           </div>
         </div>
 
         <div class="callout info" style="margin-top:1.25rem;">
-          <strong><span class="lang-en">Scaling Cooldown (default: 300 s)</span><span class="lang-es">Período de enfriamiento de escalado (predeterminado: 300 s)</span></strong> <span class="lang-en">— After a scaling action, no new scaling activity occurs during the cooldown period. Gives metrics time to stabilize before the ASG makes another decision.</span><span class="lang-es">— Después de una acción de escalado, no ocurre nueva actividad de escalado durante el período de enfriamiento. Da tiempo a las métricas para estabilizarse antes de que ASG tome otra decisión.</span>
+          <strong>Scaling Cooldown (default: 300 s)</strong> — After a scaling action, no new scaling activity occurs during the cooldown period. Gives metrics time to stabilize before the ASG makes another decision.
         </div>
       </div>
 
@@ -904,31 +904,31 @@
       <div class="card">
         <div class="card-header">
           <span class="badge">9</span>
-          <h2><span class="lang-en">ASG Instance Refresh</span><span class="lang-es">Actualización de instancia de ASG</span></h2>
+          <h2>ASG Instance Refresh</h2>
         </div>
 
-        <p><span class="lang-en">Allows rolling replacement of all instances in an ASG — triggered via the <strong>StartInstanceRefresh API</strong>. Useful when you update the launch template with a new AMI and need all running instances replaced.</span><span class="lang-es">Permite la sustitución gradual de todas las instancias en un ASG — activada a través de la <strong>API StartInstanceRefresh</strong>. Útil cuando actualiza la plantilla de lanzamiento con una nueva AMI y necesita reemplazar todas las instancias en ejecución.</span></p>
+        <p>Allows rolling replacement of all instances in an ASG — triggered via the <strong>StartInstanceRefresh API</strong>. Useful when you update the launch template with a new AMI and need all running instances replaced.</p>
 
         <div class="demo-wrap">
           <div class="demo-title">
             <div class="mode-dot" style="background:#10b981;"></div>
-            <h4><span class="lang-en">Instance Refresh — Rolling Replacement</span><span class="lang-es">Actualización de instancia — Reemplazo gradual</span></h4>
+            <h4>Instance Refresh — Rolling Replacement</h4>
           </div>
 
           <div id="ir" class="anim-body"></div>
 
           <div class="anim-controls" style="margin-top:0.75rem;">
-            <button class="nav-btn" id="ir-prev" onclick="prev('ir')">&#8592; <span class="lang-en">Prev</span><span class="lang-es">Anterior</span></button>
+            <button class="nav-btn" id="ir-prev" onclick="prev('ir')">&#8592; Prev</button>
             <div class="step-dots" id="ir-dots"></div>
-            <button class="nav-btn" id="ir-next" onclick="next('ir')"><span class="lang-en">Next</span><span class="lang-es">Siguiente</span> &#8594;</button>
+            <button class="nav-btn" id="ir-next" onclick="next('ir')">Next &#8594;</button>
             <span class="step-counter" id="ir-counter"></span>
-            <button class="restart-btn" onclick="restart('ir')">&#8635; <span class="lang-en">Restart</span><span class="lang-es">Reiniciar</span></button>
+            <button class="restart-btn" onclick="restart('ir')">&#8635; Restart</button>
           </div>
         </div>
 
         <div class="callout danger">
-          <strong style="color:#f87171;"><span class="lang-en">⚠ Weak point — Warm-up time</span><span class="lang-es">⚠ Punto débil — Tiempo de calentamiento</span></strong><br>
-          <span class="lang-en">Warm-up time does <strong>NOT auto-extend</strong>. If a new instance fails health checks during a refresh, the refresh <strong>PAUSES</strong> (because it cannot maintain the minimum healthy percentage). It does <strong>NOT</strong> extend the warm-up timer. The timer is fixed — once it expires, that instance is considered done regardless of health.</span><span class="lang-es">El tiempo de calentamiento <strong>NO se extiende automáticamente</strong>. Si una nueva instancia falla las verificaciones de estado durante una actualización, la actualización se <strong>PAUSA</strong> (porque no puede mantener el porcentaje mínimo saludable). <strong>NO</strong> extiende el temporizador de calentamiento. El temporizador es fijo — una vez que vence, esa instancia se considera completada independientemente de su estado de salud.</span>
+          <strong style="color:#f87171;">⚠ Weak point — Warm-up time</strong><br>
+          Warm-up time does <strong>NOT auto-extend</strong>. If a new instance fails health checks during a refresh, the refresh <strong>PAUSES</strong> (because it cannot maintain the minimum healthy percentage). It does <strong>NOT</strong> extend the warm-up timer. The timer is fixed — once it expires, that instance is considered done regardless of health.
         </div>
       </div>
 
@@ -936,79 +936,79 @@
       <div class="card">
         <div class="card-header">
           <span class="badge">10</span>
-          <h2><span class="lang-en">Exam Quick Reference</span><span class="lang-es">Referencia rápida del examen</span></h2>
+          <h2>Exam Quick Reference</h2>
         </div>
 
         <div class="tips-grid">
           <div class="tip">
-            <span class="trigger"><span class="lang-en">"Static IP / firewall whitelist"</span><span class="lang-es">"IP estática / lista blanca del cortafuegos"</span></span>
+            <span class="trigger">"Static IP / firewall whitelist"</span>
             <span class="arrow">→</span>
-            <span class="answer"><span class="lang-en">NLB (Elastic IP per AZ)</span><span class="lang-es">NLB (IP elástica por AZ)</span></span>
+            <span class="answer">NLB (Elastic IP per AZ)</span>
           </div>
           <div class="tip">
-            <span class="trigger"><span class="lang-en">"HTTP routing / microservices"</span><span class="lang-es">"Enrutamiento HTTP / microservicios"</span></span>
+            <span class="trigger">"HTTP routing / microservices"</span>
             <span class="arrow">→</span>
             <span class="answer">ALB</span>
           </div>
           <div class="tip">
-            <span class="trigger"><span class="lang-en">"Network inspection / GENEVE / port 6081"</span><span class="lang-es">"Inspección de red / GENEVE / puerto 6081"</span></span>
+            <span class="trigger">"Network inspection / GENEVE / port 6081"</span>
             <span class="arrow">→</span>
             <span class="answer">GWLB</span>
           </div>
           <div class="tip">
-            <span class="trigger"><span class="lang-en">"Multiple SSL certs on one listener"</span><span class="lang-es">"Múltiples certificados SSL en un listener"</span></span>
+            <span class="trigger">"Multiple SSL certs on one listener"</span>
             <span class="arrow">→</span>
-            <span class="answer"><span class="lang-en">SNI — ALB &amp; NLB only (not Classic LB)</span><span class="lang-es">SNI — solo ALB y NLB (no Classic LB)</span></span>
+            <span class="answer">SNI — ALB &amp; NLB only (not Classic LB)</span>
           </div>
           <div class="tip">
-            <span class="trigger"><span class="lang-en">"EC2 sees ___ IP from ALB"</span><span class="lang-es">"EC2 ve ___ IP del ALB"</span></span>
+            <span class="trigger">"EC2 sees ___ IP from ALB"</span>
             <span class="arrow">→</span>
-            <span class="answer"><span class="lang-en">ALB's private IP — use X-Forwarded-For for real client IP</span><span class="lang-es">IP privada del ALB — usa X-Forwarded-For para la IP del cliente real</span></span>
+            <span class="answer">ALB's private IP — use X-Forwarded-For for real client IP</span>
           </div>
           <div class="tip">
-            <span class="trigger"><span class="lang-en">"Cross-zone ON by default"</span><span class="lang-es">"Entre zonas ACTIVADO por defecto"</span></span>
+            <span class="trigger">"Cross-zone ON by default"</span>
             <span class="arrow">→</span>
-            <span class="answer"><span class="lang-en">ALB only (free). NLB &amp; GWLB off by default (charges apply)</span><span class="lang-es">Solo ALB (gratis). NLB y GWLB desactivados por defecto (se aplican cargos)</span></span>
+            <span class="answer">ALB only (free). NLB &amp; GWLB off by default (charges apply)</span>
           </div>
           <div class="tip">
-            <span class="trigger"><span class="lang-en">"Sticky sessions on NLB"</span><span class="lang-es">"Sesiones adhesivas en NLB"</span></span>
+            <span class="trigger">"Sticky sessions on NLB"</span>
             <span class="arrow">→</span>
-            <span class="answer"><span class="lang-en">Source IP hash (no cookies)</span><span class="lang-es">Hash de IP de origen (sin cookies)</span></span>
+            <span class="answer">Source IP hash (no cookies)</span>
           </div>
           <div class="tip">
-            <span class="trigger"><span class="lang-en">"Sticky sessions on ALB"</span><span class="lang-es">"Sesiones adhesivas en ALB"</span></span>
+            <span class="trigger">"Sticky sessions on ALB"</span>
             <span class="arrow">→</span>
-            <span class="answer"><span class="lang-en">Cookies (application-based or duration-based)</span><span class="lang-es">Cookies (basadas en aplicación o duración)</span></span>
+            <span class="answer">Cookies (application-based or duration-based)</span>
           </div>
           <div class="tip">
-            <span class="trigger"><span class="lang-en">"Connection draining default"</span><span class="lang-es">"Valor predeterminado de drenado de conexiones"</span></span>
+            <span class="trigger">"Connection draining default"</span>
             <span class="arrow">→</span>
-            <span class="answer"><span class="lang-en">300 seconds (range: 1–3,600 s, 0 = disabled)</span><span class="lang-es">300 segundos (rango: 1–3.600 s, 0 = deshabilitado)</span></span>
+            <span class="answer">300 seconds (range: 1–3,600 s, 0 = disabled)</span>
           </div>
           <div class="tip">
-            <span class="trigger"><span class="lang-en">"ASG launch template vs running instance"</span><span class="lang-es">"Plantilla de lanzamiento de ASG vs instancia en ejecución"</span></span>
+            <span class="trigger">"ASG launch template vs running instance"</span>
             <span class="arrow">→</span>
-            <span class="answer"><span class="lang-en">Update launch template for NEW instances; running instances unaffected</span><span class="lang-es">Actualiza plantilla de lanzamiento para NUEVAS instancias; instancias en ejecución no afectadas</span></span>
+            <span class="answer">Update launch template for NEW instances; running instances unaffected</span>
           </div>
           <div class="tip">
-            <span class="trigger"><span class="lang-en">"Instance Refresh trigger"</span><span class="lang-es">"Desencadenante de actualización de instancia"</span></span>
+            <span class="trigger">"Instance Refresh trigger"</span>
             <span class="arrow">→</span>
-            <span class="answer"><span class="lang-en">StartInstanceRefresh API</span><span class="lang-es">API StartInstanceRefresh</span></span>
+            <span class="answer">StartInstanceRefresh API</span>
           </div>
           <div class="tip">
-            <span class="trigger"><span class="lang-en">"Warm-up time behavior"</span><span class="lang-es">"Comportamiento del tiempo de calentamiento"</span></span>
+            <span class="trigger">"Warm-up time behavior"</span>
             <span class="arrow">→</span>
-            <span class="answer"><span class="lang-en">Fixed — does NOT auto-extend</span><span class="lang-es">Fijo — NO se extiende automáticamente</span></span>
+            <span class="answer">Fixed — does NOT auto-extend</span>
           </div>
           <div class="tip">
-            <span class="trigger"><span class="lang-en">"ASG self-healing"</span><span class="lang-es">"Auto-curación de ASG"</span></span>
+            <span class="trigger">"ASG self-healing"</span>
             <span class="arrow">→</span>
-            <span class="answer"><span class="lang-en">Terminates unhealthy instances, replaces automatically</span><span class="lang-es">Termina instancias no saludables, reemplaza automáticamente</span></span>
+            <span class="answer">Terminates unhealthy instances, replaces automatically</span>
           </div>
           <div class="tip">
-            <span class="trigger"><span class="lang-en">"Predictive scaling uses"</span><span class="lang-es">"Uso de escalado predictivo"</span></span>
+            <span class="trigger">"Predictive scaling uses"</span>
             <span class="arrow">→</span>
-            <span class="answer"><span class="lang-en">ML model, historical CloudWatch data, forecasts ahead</span><span class="lang-es">Modelo ML, datos históricos de CloudWatch, pronósticos adelantados</span></span>
+            <span class="answer">ML model, historical CloudWatch data, forecasts ahead</span>
           </div>
         </div>
       </div>

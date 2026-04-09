@@ -432,41 +432,46 @@
     <!-- WEAK POINTS -->
     <div class="section-block">
       <div class="callout warning">
-        <span class="callout-title">Weak Points — Review These First</span>
+        <span class="callout-title"><span class="lang-en">Weak Points — Review These First</span><span class="lang-es">Puntos débiles — Revisa estos primero</span></span>
         <div class="weak-point-item">
-          <span><strong>5.14 EC2 Purchasing Options — 75%</strong> · Confused Spot vs Reserved use cases</span>
+          <span><strong><span class="lang-en">5.14 EC2 Purchasing Options — 75%</span><span class="lang-es">5.14 Opciones de compra de EC2 — 75%</span></strong> <span class="lang-en">· Confused Spot vs Reserved use cases</span><span class="lang-es">· Confundido entre casos de uso de Spot vs Reservadas</span></span>
         </div>
       </div>
     </div>
 
     <!-- 1. EC2 BASICS -->
     <div class="section-block">
-      <div class="section-title">01 — EC2 Basics</div>
+      <div class="section-title"><span class="lang-en">01 — EC2 Basics</span><span class="lang-es">01 — Conceptos básicos de EC2</span></div>
       <div class="card-grid">
         <div class="concept-card">
-          <div class="card-label">Service Model</div>
-          <div class="card-body"><strong style="color:#f8fafc">IaaS</strong> = Infrastructure as a Service — you rent virtual machines from AWS. You manage the OS and above.</div>
+          <div class="card-label"><span class="lang-en">Service Model</span><span class="lang-es">Modelo de servicio</span></div>
+          <div class="card-body"><span class="lang-en"><strong style="color:#f8fafc">IaaS</strong> = Infrastructure as a Service — you rent virtual machines from AWS. You manage the OS and above.</span><span class="lang-es"><strong style="color:#f8fafc">IaaS</strong> = Infraestructura como servicio — alquilas máquinas virtuales de AWS. Administras el SO y superior.</span></span></div>
         </div>
         <div class="concept-card">
-          <div class="card-label">User Data</div>
-          <div class="card-body">Bootstrap script that runs <strong style="color:#f8fafc">ONCE</strong> at first launch only, executed as <strong style="color:#f8fafc">root</strong>. Used to install software, configure settings on boot.</div>
+          <div class="card-label"><span class="lang-en">User Data</span><span class="lang-es">User Data</span></div>
+          <div class="card-body"><span class="lang-en">Bootstrap script that runs <strong style="color:#f8fafc">ONCE</strong> at first launch only, executed as <strong style="color:#f8fafc">root</strong>. Used to install software, configure settings on boot.</span><span class="lang-es">Script de bootstrap que se ejecuta <strong style="color:#f8fafc">UNA SOLA VEZ</strong> en el primer lanzamiento, ejecutado como <strong style="color:#f8fafc">root</strong>. Se usa para instalar software, configurar ajustes al iniciar.</span></span></div>
         </div>
         <div class="concept-card">
-          <div class="card-label">EC2 Ecosystem</div>
+          <div class="card-label"><span class="lang-en">EC2 Ecosystem</span><span class="lang-es">Ecosistema de EC2</span></div>
           <div class="card-body">
-            EC2 instances (compute)<br>
+            <span class="lang-en">EC2 instances (compute)<br>
             EBS volumes (block storage)<br>
             ELB (load balancing)<br>
-            Auto Scaling Groups
+            Auto Scaling Groups</span><span class="lang-es">Instancias de EC2 (cómputo)<br>
+            Volúmenes de EBS (almacenamiento en bloques)<br>
+            ELB (balanceo de carga)<br>
+            Grupos de escalado automático</span>
           </div>
         </div>
         <div class="concept-card">
-          <div class="card-label">Instance Naming</div>
+          <div class="card-label"><span class="lang-en">Instance Naming</span><span class="lang-es">Nomenclatura de instancias</span></div>
           <div class="card-body">
             <code>m5.2xlarge</code><br><br>
-            <strong style="color:#f8fafc">m</strong> = instance class<br>
+            <span class="lang-en"><strong style="color:#f8fafc">m</strong> = instance class<br>
             <strong style="color:#f8fafc">5</strong> = generation<br>
-            <strong style="color:#f8fafc">2xlarge</strong> = size within class
+            <strong style="color:#f8fafc">2xlarge</strong> = size within class</span><span class="lang-es"><strong style="color:#f8fafc">m</strong> = clase de instancia<br>
+            <strong style="color:#f8fafc">5</strong> = generación<br>
+            <strong style="color:#f8fafc">2xlarge</strong> = tamaño dentro de la clase</span>
           </div>
         </div>
       </div>
@@ -474,119 +479,119 @@
 
     <!-- 2. INSTANCE TYPE CATEGORIES -->
     <div class="section-block">
-      <div class="section-title">02 — Instance Type Categories</div>
+      <div class="section-title"><span class="lang-en">02 — Instance Type Categories</span><span class="lang-es">02 — Categorías de tipos de instancia</span></div>
       <div class="instance-type-grid">
         <div class="itype-card general">
-          <div class="itype-name">General Purpose</div>
-          <div class="itype-classes">t, m families</div>
-          <div class="itype-desc">Balanced compute, memory, and network. Best for web servers, code repos, small databases.</div>
-          <div class="itype-mnemonic">"Jack of all trades"</div>
+          <div class="itype-name"><span class="lang-en">General Purpose</span><span class="lang-es">Propósito general</span></div>
+          <div class="itype-classes"><span class="lang-en">t, m families</span><span class="lang-es">familias t, m</span></div>
+          <div class="itype-desc"><span class="lang-en">Balanced compute, memory, and network. Best for web servers, code repos, small databases.</span><span class="lang-es">Cómputo balanceado, memoria y red. Mejor para servidores web, repositorios de código, bases de datos pequeñas.</span></div>
+          <div class="itype-mnemonic"><span class="lang-en">"Jack of all trades"</span><span class="lang-es">"Hábil en todas las áreas"</span></div>
         </div>
         <div class="itype-card compute">
-          <div class="itype-name">Compute Optimized</div>
-          <div class="itype-classes">C family (c5, c6g...)</div>
-          <div class="itype-desc">High-performance processors. Best for batch processing, media transcoding, HPC, ML inference, gaming servers.</div>
-          <div class="itype-mnemonic">"CPU go brrrr"</div>
+          <div class="itype-name"><span class="lang-en">Compute Optimized</span><span class="lang-es">Optimizada para cómputo</span></div>
+          <div class="itype-classes"><span class="lang-en">C family (c5, c6g...)</span><span class="lang-es">Familia C (c5, c6g...)</span></div>
+          <div class="itype-desc"><span class="lang-en">High-performance processors. Best for batch processing, media transcoding, HPC, ML inference, gaming servers.</span><span class="lang-es">Procesadores de alto rendimiento. Mejor para procesamiento por lotes, transcodificación de medios, HPC, inferencia ML, servidores de juegos.</span></div>
+          <div class="itype-mnemonic"><span class="lang-en">"CPU go brrrr"</span><span class="lang-es">"CPU va brrrr"</span></div>
         </div>
         <div class="itype-card memory">
-          <div class="itype-name">Memory Optimized</div>
-          <div class="itype-classes">R, X1, z1 families</div>
-          <div class="itype-desc">Large datasets in RAM. Best for in-memory databases (Redis), real-time processing of big unstructured data.</div>
-          <div class="itype-mnemonic">"R = RAM"</div>
+          <div class="itype-name"><span class="lang-en">Memory Optimized</span><span class="lang-es">Optimizada para memoria</span></div>
+          <div class="itype-classes"><span class="lang-en">R, X1, z1 families</span><span class="lang-es">Familias R, X1, z1</span></div>
+          <div class="itype-desc"><span class="lang-en">Large datasets in RAM. Best for in-memory databases (Redis), real-time processing of big unstructured data.</span><span class="lang-es">Conjuntos de datos grandes en RAM. Mejor para bases de datos en memoria (Redis), procesamiento en tiempo real de grandes datos no estructurados.</span></div>
+          <div class="itype-mnemonic"><span class="lang-en">"R = RAM"</span><span class="lang-es">"R = RAM"</span></div>
         </div>
         <div class="itype-card storage">
-          <div class="itype-name">Storage Optimized</div>
-          <div class="itype-classes">I, D, H1 families</div>
-          <div class="itype-desc">High sequential read/write to large datasets on local storage. Best for OLTP, NoSQL, data warehousing, Hadoop.</div>
-          <div class="itype-mnemonic">"I = I/O, D = Disk, H = HDD"</div>
+          <div class="itype-name"><span class="lang-en">Storage Optimized</span><span class="lang-es">Optimizada para almacenamiento</span></div>
+          <div class="itype-classes"><span class="lang-en">I, D, H1 families</span><span class="lang-es">Familias I, D, H1</span></div>
+          <div class="itype-desc"><span class="lang-en">High sequential read/write to large datasets on local storage. Best for OLTP, NoSQL, data warehousing, Hadoop.</span><span class="lang-es">Lectura/escritura secuencial alta en conjuntos de datos grandes en almacenamiento local. Mejor para OLTP, NoSQL, almacén de datos, Hadoop.</span></div>
+          <div class="itype-mnemonic"><span class="lang-en">"I = I/O, D = Disk, H = HDD"</span><span class="lang-es">"I = E/S, D = Disco, H = HDD"</span></div>
         </div>
       </div>
     </div>
 
     <!-- 3. SECURITY GROUPS -->
     <div class="section-block">
-      <div class="section-title">03 — Security Groups</div>
+      <div class="section-title"><span class="lang-en">03 — Security Groups</span><span class="lang-es">03 — Grupos de seguridad</span></div>
 
       <div class="sg-rules-list">
         <div class="sg-rule-item">
           <div class="sg-rule-dot"></div>
-          <div class="sg-rule-text">Only <strong>ALLOW rules</strong> — you cannot write explicit deny rules in a security group</div>
+          <div class="sg-rule-text"><span class="lang-en">Only <strong>ALLOW rules</strong> — you cannot write explicit deny rules in a security group</span><span class="lang-es">Solo reglas de <strong>PERMITIR</strong> — no puedes escribir reglas de denegación explícitas en un grupo de seguridad</span></div>
         </div>
         <div class="sg-rule-item">
           <div class="sg-rule-dot"></div>
-          <div class="sg-rule-text">Live <strong>OUTSIDE the EC2 instance</strong> — EC2 never sees blocked traffic; it is dropped at the SG level</div>
+          <div class="sg-rule-text"><span class="lang-en">Live <strong>OUTSIDE the EC2 instance</strong> — EC2 never sees blocked traffic; it is dropped at the SG level</span><span class="lang-es">Viven <strong>FUERA de la instancia EC2</strong> — EC2 nunca ve tráfico bloqueado; se descarta a nivel del SG</span></div>
         </div>
         <div class="sg-rule-item">
           <div class="sg-rule-dot"></div>
-          <div class="sg-rule-text"><strong>Default behavior:</strong> all inbound traffic BLOCKED, all outbound traffic ALLOWED</div>
+          <div class="sg-rule-text"><span class="lang-en"><strong>Default behavior:</strong> all inbound traffic BLOCKED, all outbound traffic ALLOWED</span><span class="lang-es"><strong>Comportamiento predeterminado:</strong> todo el tráfico entrante BLOQUEADO, todo el tráfico saliente PERMITIDO</span></div>
         </div>
         <div class="sg-rule-item">
           <div class="sg-rule-dot"></div>
-          <div class="sg-rule-text">Can reference <strong>other Security Groups</strong> as a source/destination — not just IP ranges or CIDR blocks</div>
+          <div class="sg-rule-text"><span class="lang-en">Can reference <strong>other Security Groups</strong> as a source/destination — not just IP ranges or CIDR blocks</span><span class="lang-es">Puede hacer referencia a <strong>otros grupos de seguridad</strong> como origen/destino — no solo rangos de IP o bloques CIDR</span></div>
         </div>
         <div class="sg-rule-item">
           <div class="sg-rule-dot"></div>
-          <div class="sg-rule-text"><strong>Stateful:</strong> return traffic is automatically allowed. If inbound is allowed, the response is allowed outbound</div>
+          <div class="sg-rule-text"><span class="lang-en"><strong>Stateful:</strong> return traffic is automatically allowed. If inbound is allowed, the response is allowed outbound</span><span class="lang-es"><strong>Con estado:</strong> el tráfico de retorno se permite automáticamente. Si se permite la entrada, la respuesta se permite hacia afuera</span></div>
         </div>
       </div>
 
       <div style="margin-top: 8px;">
-        <div class="section-heading" style="font-size:14px; color:#94a3b8; margin-bottom: 12px; font-weight:600;">Troubleshooting Guide</div>
+        <div class="section-heading" style="font-size:14px; color:#94a3b8; margin-bottom: 12px; font-weight:600;"><span class="lang-en">Troubleshooting Guide</span><span class="lang-es">Guía de solución de problemas</span></div>
         <div class="troubleshoot-grid">
           <div class="troubleshoot-card t-block">
-            <div class="t-issue"><span class="t-icon-block">🔴</span> Symptom: Timeout</div>
-            <div class="t-cause">Security Group is BLOCKING</div>
-            <div class="t-detail">Connection times out = traffic never reaches the instance. Check your inbound SG rules — the port or source IP is not allowed.</div>
+            <div class="t-issue"><span class="t-icon-block">🔴</span> <span class="lang-en">Symptom: Timeout</span><span class="lang-es">Síntoma: Agotamiento de tiempo</span></div>
+            <div class="t-cause"><span class="lang-en">Security Group is BLOCKING</span><span class="lang-es">El grupo de seguridad está BLOQUEANDO</span></div>
+            <div class="t-detail"><span class="lang-en">Connection times out = traffic never reaches the instance. Check your inbound SG rules — the port or source IP is not allowed.</span><span class="lang-es">La conexión agota el tiempo = el tráfico nunca alcanza la instancia. Comprueba tus reglas de SG de entrada — el puerto o la IP de origen no está permitida.</span></div>
           </div>
           <div class="troubleshoot-card t-refused">
-            <div class="t-issue"><span class="t-icon-block">🟡</span> Symptom: Connection Refused</div>
-            <div class="t-cause">Application Problem</div>
-            <div class="t-detail">Traffic REACHED the instance. The SG is fine. The app is not running, crashed, or is listening on wrong port.</div>
+            <div class="t-issue"><span class="t-icon-block">🟡</span> <span class="lang-en">Symptom: Connection Refused</span><span class="lang-es">Síntoma: Conexión rechazada</span></div>
+            <div class="t-cause"><span class="lang-en">Application Problem</span><span class="lang-es">Problema de aplicación</span></div>
+            <div class="t-detail"><span class="lang-en">Traffic REACHED the instance. The SG is fine. The app is not running, crashed, or is listening on wrong port.</span><span class="lang-es">El tráfico ALCANZÓ la instancia. El SG está bien. La aplicación no se está ejecutando, se ha bloqueado o está escuchando en el puerto incorrecto.</span></div>
           </div>
         </div>
       </div>
 
       <div style="margin-top: 8px;">
-        <div class="section-heading" style="font-size:14px; color:#94a3b8; margin-bottom: 12px; font-weight:600;">Classic Ports to Know</div>
+        <div class="section-heading" style="font-size:14px; color:#94a3b8; margin-bottom: 12px; font-weight:600;"><span class="lang-en">Classic Ports to Know</span><span class="lang-es">Puertos clásicos a conocer</span></div>
         <div class="table-wrapper">
           <table class="ports-table">
             <thead>
               <tr>
-                <th>Port</th>
-                <th>Protocol</th>
-                <th>Description</th>
+                <th><span class="lang-en">Port</span><span class="lang-es">Puerto</span></th>
+                <th><span class="lang-en">Protocol</span><span class="lang-es">Protocolo</span></th>
+                <th><span class="lang-en">Description</span><span class="lang-es">Descripción</span></th>
               </tr>
             </thead>
             <tbody>
               <tr>
                 <td>22</td>
                 <td><span class="port-protocol">TCP</span></td>
-                <td>SSH — Secure Shell login into Linux instances</td>
+                <td><span class="lang-en">SSH — Secure Shell login into Linux instances</span><span class="lang-es">SSH — Login seguro en instancias Linux</span></td>
               </tr>
               <tr>
                 <td>21</td>
                 <td><span class="port-protocol">TCP</span></td>
-                <td>FTP — File Transfer Protocol (upload files)</td>
+                <td><span class="lang-en">FTP — File Transfer Protocol (upload files)</span><span class="lang-es">FTP — Protocolo de transferencia de archivos (carga de archivos)</span></td>
               </tr>
               <tr>
                 <td>22</td>
                 <td><span class="port-protocol">TCP</span></td>
-                <td>SFTP — Secure FTP (also uses port 22, over SSH)</td>
+                <td><span class="lang-en">SFTP — Secure FTP (also uses port 22, over SSH)</span><span class="lang-es">SFTP — FTP seguro (también usa puerto 22, sobre SSH)</span></td>
               </tr>
               <tr>
                 <td>80</td>
                 <td><span class="port-protocol">TCP</span></td>
-                <td>HTTP — Unsecured web traffic</td>
+                <td><span class="lang-en">HTTP — Unsecured web traffic</span><span class="lang-es">HTTP — Tráfico web no seguro</span></td>
               </tr>
               <tr>
                 <td>443</td>
                 <td><span class="port-protocol">TCP</span></td>
-                <td>HTTPS — Secured web traffic (TLS/SSL)</td>
+                <td><span class="lang-en">HTTPS — Secured web traffic (TLS/SSL)</span><span class="lang-es">HTTPS — Tráfico web seguro (TLS/SSL)</span></td>
               </tr>
               <tr>
                 <td>3389</td>
                 <td><span class="port-protocol">TCP</span></td>
-                <td>RDP — Remote Desktop Protocol (Windows instances)</td>
+                <td><span class="lang-en">RDP — Remote Desktop Protocol (Windows instances)</span><span class="lang-es">RDP — Protocolo de escritorio remoto (instancias Windows)</span></td>
               </tr>
             </tbody>
           </table>
@@ -596,148 +601,153 @@
 
     <!-- 4. PURCHASING OPTIONS -->
     <div class="section-block">
-      <div class="section-title">04 — EC2 Purchasing Options</div>
+      <div class="section-title"><span class="lang-en">04 — EC2 Purchasing Options</span><span class="lang-es">04 — Opciones de compra de EC2</span></div>
 
       <div class="purchasing-grid">
 
         <div class="purchasing-card">
-          <div class="p-name">On-Demand</div>
+          <div class="p-name"><span class="lang-en">On-Demand</span><span class="lang-es">Bajo demanda</span></div>
           <div class="chips">
-            <span class="chip gray">No Discount</span>
-            <span class="chip gray">No Commitment</span>
+            <span class="chip gray"><span class="lang-en">No Discount</span><span class="lang-es">Sin descuento</span></span>
+            <span class="chip gray"><span class="lang-en">No Commitment</span><span class="lang-es">Sin compromiso</span></span>
           </div>
-          <div class="p-best-for"><strong>Best for:</strong> Short-term, unpredictable workloads. Pay by the second (Linux/Windows) or hour.</div>
+          <div class="p-best-for"><span class="lang-en"><strong>Best for:</strong> Short-term, unpredictable workloads. Pay by the second (Linux/Windows) or hour.</span><span class="lang-es"><strong>Mejor para:</strong> Cargas de trabajo a corto plazo e impredecibles. Paga por segundo (Linux/Windows) u hora.</span></span></div>
         </div>
 
         <div class="purchasing-card">
-          <div class="p-name">Reserved Instances</div>
+          <div class="p-name"><span class="lang-en">Reserved Instances</span><span class="lang-es">Instancias reservadas</span></div>
           <div class="chips">
-            <span class="chip green">~72% Discount</span>
-            <span class="chip blue">1 or 3 Years</span>
+            <span class="chip green"><span class="lang-en">~72% Discount</span><span class="lang-es">~72% de descuento</span></span>
+            <span class="chip blue"><span class="lang-en">1 or 3 Years</span><span class="lang-es">1 o 3 años</span></span>
           </div>
-          <div class="p-best-for"><strong>Best for:</strong> Steady-state workloads with predictable usage — databases, web servers with constant traffic.</div>
+          <div class="p-best-for"><span class="lang-en"><strong>Best for:</strong> Steady-state workloads with predictable usage — databases, web servers with constant traffic.</span><span class="lang-es"><strong>Mejor para:</strong> Cargas de trabajo en estado estable con uso predecible — bases de datos, servidores web con tráfico constante.</span></span></div>
         </div>
 
         <div class="purchasing-card">
-          <div class="p-name">Convertible Reserved</div>
+          <div class="p-name"><span class="lang-en">Convertible Reserved</span><span class="lang-es">Reservada convertible</span></div>
           <div class="chips">
-            <span class="chip yellow">~66% Discount</span>
-            <span class="chip blue">1 or 3 Years</span>
+            <span class="chip yellow"><span class="lang-en">~66% Discount</span><span class="lang-es">~66% de descuento</span></span>
+            <span class="chip blue"><span class="lang-en">1 or 3 Years</span><span class="lang-es">1 o 3 años</span></span>
           </div>
-          <div class="p-best-for"><strong>Best for:</strong> Steady-state but need flexibility to change instance type, OS, or tenancy during the term.</div>
+          <div class="p-best-for"><span class="lang-en"><strong>Best for:</strong> Steady-state but need flexibility to change instance type, OS, or tenancy during the term.</span><span class="lang-es"><strong>Mejor para:</strong> Estado estable pero necesita flexibilidad para cambiar tipo de instancia, SO o residencia durante el término.</span></span></div>
         </div>
 
         <div class="purchasing-card">
-          <div class="p-name">Savings Plans</div>
+          <div class="p-name"><span class="lang-en">Savings Plans</span><span class="lang-es">Planes de ahorro</span></div>
           <div class="chips">
-            <span class="chip green">~70% Discount</span>
-            <span class="chip blue">1 or 3 Years</span>
+            <span class="chip green"><span class="lang-en">~70% Discount</span><span class="lang-es">~70% de descuento</span></span>
+            <span class="chip blue"><span class="lang-en">1 or 3 Years</span><span class="lang-es">1 o 3 años</span></span>
           </div>
-          <div class="p-best-for"><strong>Best for:</strong> Commit to a $/hour spend. Flexible on instance size, OS, and region. Excess billed on-demand.</div>
+          <div class="p-best-for"><span class="lang-en"><strong>Best for:</strong> Commit to a $/hour spend. Flexible on instance size, OS, and region. Excess billed on-demand.</span><span class="lang-es"><strong>Mejor para:</strong> Compromiso a gasto $/hora. Flexible en tamaño de instancia, SO y región. Exceso facturado bajo demanda.</span></span></div>
         </div>
 
         <div class="purchasing-card">
-          <div class="p-name">Spot Instances</div>
+          <div class="p-name"><span class="lang-en">Spot Instances</span><span class="lang-es">Instancias Spot</span></div>
           <div class="chips">
-            <span class="chip green">~90% Discount</span>
-            <span class="chip red">Can be interrupted</span>
+            <span class="chip green"><span class="lang-en">~90% Discount</span><span class="lang-es">~90% de descuento</span></span>
+            <span class="chip red"><span class="lang-en">Can be interrupted</span><span class="lang-es">Puede ser interrumpida</span></span>
           </div>
-          <div class="p-best-for"><strong>Best for:</strong> Batch jobs, data analysis, image processing, distributed resilient workloads. NEVER use for DBs.</div>
+          <div class="p-best-for"><span class="lang-en"><strong>Best for:</strong> Batch jobs, data analysis, image processing, distributed resilient workloads. NEVER use for DBs.</span><span class="lang-es"><strong>Mejor para:</strong> Trabajos por lotes, análisis de datos, procesamiento de imágenes, cargas de trabajo distribuidas resilientes. NUNCA uses para BDs.</span></span></div>
         </div>
 
         <div class="purchasing-card">
-          <div class="p-name">Dedicated Hosts</div>
+          <div class="p-name"><span class="lang-en">Dedicated Hosts</span><span class="lang-es">Hosts dedicados</span></div>
           <div class="chips">
-            <span class="chip red">Most Expensive</span>
-            <span class="chip blue">On-Demand or 1–3y</span>
+            <span class="chip red"><span class="lang-en">Most Expensive</span><span class="lang-es">Más caro</span></span>
+            <span class="chip blue"><span class="lang-en">On-Demand or 1–3y</span><span class="lang-es">Bajo demanda u 1-3 años</span></span>
           </div>
-          <div class="p-best-for"><strong>Best for:</strong> Bring Your Own License (BYOL), compliance requirements. You get visibility into physical sockets and cores.</div>
+          <div class="p-best-for"><span class="lang-en"><strong>Best for:</strong> Bring Your Own License (BYOL), compliance requirements. You get visibility into physical sockets and cores.</span><span class="lang-es"><strong>Mejor para:</strong> Traiga su propia licencia (BYOL), requisitos de cumplimiento. Obtienes visibilidad en sockets físicos y núcleos.</span></span></div>
         </div>
 
         <div class="purchasing-card">
-          <div class="p-name">Dedicated Instances</div>
+          <div class="p-name"><span class="lang-en">Dedicated Instances</span><span class="lang-es">Instancias dedicadas</span></div>
           <div class="chips">
-            <span class="chip gray">No Discount</span>
-            <span class="chip gray">No Commitment</span>
+            <span class="chip gray"><span class="lang-en">No Discount</span><span class="lang-es">Sin descuento</span></span>
+            <span class="chip gray"><span class="lang-en">No Commitment</span><span class="lang-es">Sin compromiso</span></span>
           </div>
-          <div class="p-best-for"><strong>Best for:</strong> Hardware dedicated to your account (no hardware sharing with other AWS customers) but no BYOL support.</div>
+          <div class="p-best-for"><span class="lang-en"><strong>Best for:</strong> Hardware dedicated to your account (no hardware sharing with other AWS customers) but no BYOL support.</span><span class="lang-es"><strong>Mejor para:</strong> Hardware dedicado a tu cuenta (sin compartir hardware con otros clientes de AWS) pero sin soporte de BYOL.</span></span></div>
         </div>
 
         <div class="purchasing-card">
-          <div class="p-name">Capacity Reservations</div>
+          <div class="p-name"><span class="lang-en">Capacity Reservations</span><span class="lang-es">Reservas de capacidad</span></div>
           <div class="chips">
-            <span class="chip gray">No Discount</span>
-            <span class="chip gray">No Commitment</span>
+            <span class="chip gray"><span class="lang-en">No Discount</span><span class="lang-es">Sin descuento</span></span>
+            <span class="chip gray"><span class="lang-en">No Commitment</span><span class="lang-es">Sin compromiso</span></span>
           </div>
-          <div class="p-best-for"><strong>Best for:</strong> Reserve AZ capacity for any duration. You pay full on-demand rate whether or not instances are running.</div>
+          <div class="p-best-for"><span class="lang-en"><strong>Best for:</strong> Reserve AZ capacity for any duration. You pay full on-demand rate whether or not instances are running.</span><span class="lang-es"><strong>Mejor para:</strong> Reserva capacidad de AZ por cualquier duración. Pagas tarifa completa bajo demanda sin importar si las instancias se están ejecutando.</span></span></div>
         </div>
 
       </div>
 
       <div class="callout info" style="margin-top: 8px;">
-        <span class="callout-title">Hotel Analogy</span>
-        <strong>On-Demand</strong> = walk in, full price &nbsp;|&nbsp;
+        <span class="callout-title"><span class="lang-en">Hotel Analogy</span><span class="lang-es">Analogía del hotel</span></span>
+        <span class="lang-en"><strong>On-Demand</strong> = walk in, full price &nbsp;|&nbsp;
         <strong>Reserved</strong> = book 1–3 years, big discount &nbsp;|&nbsp;
         <strong>Savings Plan</strong> = commit to $X/month, change room type freely &nbsp;|&nbsp;
         <strong>Spot</strong> = last-minute deal, can be kicked out if hotel needs the room &nbsp;|&nbsp;
         <strong>Dedicated Host</strong> = rent the whole building (bring your own license) &nbsp;|&nbsp;
-        <strong>Capacity Reservation</strong> = reserve a room you might not use, still pay full price
+        <strong>Capacity Reservation</strong> = reserve a room you might not use, still pay full price</span><span class="lang-es"><strong>Bajo demanda</strong> = entra, precio completo &nbsp;|&nbsp;
+        <strong>Reservada</strong> = reserva 1-3 años, gran descuento &nbsp;|&nbsp;
+        <strong>Plan de ahorro</strong> = compromiso a $X/mes, cambia tipo de habitación libremente &nbsp;|&nbsp;
+        <strong>Spot</strong> = oferta de último momento, puede ser sacado si el hotel necesita la habitación &nbsp;|&nbsp;
+        <strong>Host dedicado</strong> = alquila el edificio completo (trae tu propia licencia) &nbsp;|&nbsp;
+        <strong>Reserva de capacidad</strong> = reserva una habitación que podrías no usar, aún pagas precio completo</span>
       </div>
     </div>
 
     <!-- 5. EXAM TIPS -->
     <div class="section-block">
-      <div class="section-title">05 — Exam Tips</div>
+      <div class="section-title"><span class="lang-en">05 — Exam Tips</span><span class="lang-es">05 — Consejos para el examen</span></div>
       <div class="exam-tips-grid">
 
         <div class="exam-tip-card">
-          <div class="tip-q">When does User Data run?</div>
-          <div class="tip-a">Once at first boot only, executed as root</div>
+          <div class="tip-q"><span class="lang-en">When does User Data run?</span><span class="lang-es">¿Cuándo se ejecuta User Data?</span></div>
+          <div class="tip-a"><span class="lang-en">Once at first boot only, executed as root</span><span class="lang-es">Una sola vez al primer inicio, ejecutado como root</span></div>
         </div>
 
         <div class="exam-tip-card">
-          <div class="tip-q">What service type is EC2?</div>
-          <div class="tip-a">IaaS — Infrastructure as a Service</div>
+          <div class="tip-q"><span class="lang-en">What service type is EC2?</span><span class="lang-es">¿Qué tipo de servicio es EC2?</span></div>
+          <div class="tip-a"><span class="lang-en">IaaS — Infrastructure as a Service</span><span class="lang-es">IaaS — Infraestructura como servicio</span></div>
         </div>
 
         <div class="exam-tip-card">
-          <div class="tip-q">Timeout connecting to EC2</div>
-          <div class="tip-a">Security group is blocking — check inbound rules</div>
+          <div class="tip-q"><span class="lang-en">Timeout connecting to EC2</span><span class="lang-es">Agotamiento de tiempo al conectar a EC2</span></div>
+          <div class="tip-a"><span class="lang-en">Security group is blocking — check inbound rules</span><span class="lang-es">El grupo de seguridad está bloqueando — verifica las reglas de entrada</span></div>
         </div>
 
         <div class="exam-tip-card">
-          <div class="tip-q">Connection refused on EC2</div>
-          <div class="tip-a">App problem — traffic reached the instance, check the application</div>
+          <div class="tip-q"><span class="lang-en">Connection refused on EC2</span><span class="lang-es">Conexión rechazada en EC2</span></div>
+          <div class="tip-a"><span class="lang-en">App problem — traffic reached the instance, check the application</span><span class="lang-es">Problema de aplicación — el tráfico llegó a la instancia, verifica la aplicación</span></div>
         </div>
 
         <div class="exam-tip-card">
-          <div class="tip-q">SSH port / RDP port</div>
-          <div class="tip-a">22 (Linux SSH) · 3389 (Windows RDP)</div>
+          <div class="tip-q"><span class="lang-en">SSH port / RDP port</span><span class="lang-es">Puerto SSH / Puerto RDP</span></div>
+          <div class="tip-a"><span class="lang-en">22 (Linux SSH) · 3389 (Windows RDP)</span><span class="lang-es">22 (SSH de Linux) · 3389 (RDP de Windows)</span></div>
         </div>
 
         <div class="exam-tip-card">
-          <div class="tip-q">Cheapest EC2 option</div>
-          <div class="tip-a">Spot (~90% off) — but can be interrupted at any time</div>
+          <div class="tip-q"><span class="lang-en">Cheapest EC2 option</span><span class="lang-es">Opción EC2 más barata</span></div>
+          <div class="tip-a"><span class="lang-en">Spot (~90% off) — but can be interrupted at any time</span><span class="lang-es">Spot (~90% de descuento) — pero puede ser interrumpida en cualquier momento</span></div>
         </div>
 
         <div class="exam-tip-card">
-          <div class="tip-q">NEVER use Spot for...</div>
-          <div class="tip-a">Databases or critical/stateful workloads — interruption risk</div>
+          <div class="tip-q"><span class="lang-en">NEVER use Spot for...</span><span class="lang-es">NUNCA uses Spot para...</span></div>
+          <div class="tip-a"><span class="lang-en">Databases or critical/stateful workloads — interruption risk</span><span class="lang-es">Bases de datos o cargas de trabajo críticas/con estado — riesgo de interrupción</span></div>
         </div>
 
         <div class="exam-tip-card">
-          <div class="tip-q">Dedicated Host vs Dedicated Instance</div>
-          <div class="tip-a">Host = whole physical server (BYOL/compliance). Instance = isolated hardware, shared within your account</div>
+          <div class="tip-q"><span class="lang-en">Dedicated Host vs Dedicated Instance</span><span class="lang-es">Host dedicado vs instancia dedicada</span></div>
+          <div class="tip-a"><span class="lang-en">Host = whole physical server (BYOL/compliance). Instance = isolated hardware, shared within your account</span><span class="lang-es">Host = servidor físico completo (BYOL/cumplimiento). Instance = hardware aislado, compartido dentro de tu cuenta</span></div>
         </div>
 
         <div class="exam-tip-card">
-          <div class="tip-q">Capacity Reservation discount?</div>
-          <div class="tip-a">None — it only guarantees AZ capacity availability</div>
+          <div class="tip-q"><span class="lang-en">Capacity Reservation discount?</span><span class="lang-es">¿Descuento de reserva de capacidad?</span></div>
+          <div class="tip-a"><span class="lang-en">None — it only guarantees AZ capacity availability</span><span class="lang-es">Ninguno — solo garantiza disponibilidad de capacidad de AZ</span></div>
         </div>
 
         <div class="exam-tip-card">
-          <div class="tip-q">Savings Plans vs Reserved</div>
-          <div class="tip-a">Savings Plans: lock instance family + region, flexible size/OS. Reserved: lock specific type + region + OS</div>
+          <div class="tip-q"><span class="lang-en">Savings Plans vs Reserved</span><span class="lang-es">Planes de ahorro vs reservadas</span></div>
+          <div class="tip-a"><span class="lang-en">Savings Plans: lock instance family + region, flexible size/OS. Reserved: lock specific type + region + OS</span><span class="lang-es">Planes de ahorro: bloquea familia de instancia + región, tamaño/SO flexible. Reservadas: bloquea tipo específico + región + SO</span></div>
         </div>
 
       </div>

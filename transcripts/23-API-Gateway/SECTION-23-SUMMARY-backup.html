@@ -4,14 +4,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Section 23 — AWS Serverless: API Gateway</title>
-
-    <link rel="stylesheet" href="../shared/summary.css" />
+  
+    <link rel="stylesheet" href="../shared/summary.css">
     <script src="../shared/summary.js"></script>
   </head>
   <body>
-    <script>
-      initHeader("Section 23 — AWS Serverless: API Gateway");
-    </script>
+
+    <script>initHeader("Section 23 — AWS Serverless: API Gateway")</script>
 
     <div class="container">
       <!-- ═══════════════════ CARD 1: OVERVIEW ═══════════════════ -->
@@ -31,55 +30,25 @@
         <table class="data-table">
           <thead>
             <tr>
-              <th>
-                <span class="lang-en">Option</span
-                ><span class="lang-es">Opción</span>
-              </th>
-              <th>
-                <span class="lang-en">Requires</span
-                ><span class="lang-es">Requiere</span>
-              </th>
-              <th>
-                <span class="lang-en">Features</span
-                ><span class="lang-es">Características</span>
-              </th>
+              <th>Option</th>
+              <th>Requires</th>
+              <th>Features</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td>
-                <span class="lang-en">Direct Lambda invoke</span
-                ><span class="lang-es">Invocación directa de Lambda</span>
-              </td>
-              <td>
-                <span class="lang-en">IAM permissions on client</span
-                ><span class="lang-es">Permisos de IAM en cliente</span>
-              </td>
-              <td>
-                <span class="lang-en">None</span
-                ><span class="lang-es">Ninguno</span>
-              </td>
+              <td>Direct Lambda invoke</td>
+              <td>IAM permissions on client</td>
+              <td>None</td>
             </tr>
             <tr>
-              <td>
-                <span class="lang-en">Application Load Balancer</span
-                ><span class="lang-es">Application Load Balancer</span>
-              </td>
-              <td>
-                <span class="lang-en">Infrastructure</span
-                ><span class="lang-es">Infraestructura</span>
-              </td>
-              <td>
-                <span class="lang-en">Basic HTTP only</span
-                ><span class="lang-es">Solo HTTP básico</span>
-              </td>
+              <td>Application Load Balancer</td>
+              <td>Infrastructure</td>
+              <td>Basic HTTP only</td>
             </tr>
             <tr>
               <td><strong>API Gateway</strong></td>
-              <td>
-                <span class="lang-en">Nothing (serverless)</span
-                ><span class="lang-es">Nada (serverless)</span>
-              </td>
+              <td>Nothing (serverless)</td>
               <td><span class="chip green">Full platform ✅</span></td>
             </tr>
           </tbody>
@@ -197,81 +166,30 @@
         </h3>
         <div class="compare-3">
           <div class="compare-card">
-            <h4 class="orange">
-              <span class="lang-en">Edge-Optimized (default)</span
-              ><span class="lang-es"
-                >Optimizado en el borde (predeterminado)</span
-              >
-            </h4>
+            <h4 class="orange">Edge-Optimized (default)</h4>
             <ul>
-              <li>
-                <span class="lang-en">Global clients</span
-                ><span class="lang-es">Clientes globales</span>
-              </li>
-              <li>
-                <span class="lang-en">Routes via CloudFront Edge</span
-                ><span class="lang-es">Enruta a través de CloudFront Edge</span>
-              </li>
-              <li>
-                <span class="lang-en"
-                  >GW still in <strong>one region</strong></span
-                ><span class="lang-es"
-                  >GW sigue en <strong>una región</strong></span
-                >
-              </li>
-              <li>
-                <span class="lang-en"
-                  >ACM cert → <strong>us-east-1</strong></span
-                ><span class="lang-es"
-                  >Cert ACM → <strong>us-east-1</strong></span
-                >
-              </li>
+              <li>Global clients</li>
+              <li>Routes via CloudFront Edge</li>
+              <li>GW still in <strong>one region</strong></li>
+              <li>ACM cert → <strong>us-east-1</strong></li>
             </ul>
           </div>
           <div class="compare-card">
             <h4 class="blue">Regional</h4>
             <ul>
-              <li>
-                <span class="lang-en">Same-region users</span
-                ><span class="lang-es">Usuarios de la misma región</span>
-              </li>
-              <li>
-                <span class="lang-en">No CloudFront</span
-                ><span class="lang-es">Sin CloudFront</span>
-              </li>
-              <li>
-                <span class="lang-en">Can add own CloudFront</span
-                ><span class="lang-es">Puede agregar su propio CloudFront</span>
-              </li>
-              <li>
-                <span class="lang-en">ACM cert → same region as stage</span
-                ><span class="lang-es"
-                  >Cert ACM → misma región que la etapa</span
-                >
-              </li>
+              <li>Same-region users</li>
+              <li>No CloudFront</li>
+              <li>Can add own CloudFront</li>
+              <li>ACM cert → same region as stage</li>
             </ul>
           </div>
           <div class="compare-card">
             <h4 class="purple">Private</h4>
             <ul>
-              <li>
-                <span class="lang-en">VPC-only access</span
-                ><span class="lang-es">Acceso solo para VPC</span>
-              </li>
-              <li>
-                <span class="lang-en">Interface VPC Endpoint</span
-                ><span class="lang-es">Punto de conexión VPC de interfaz</span>
-              </li>
-              <li>
-                <span class="lang-en">Resource policy controls access</span
-                ><span class="lang-es"
-                  >La política de recurso controla el acceso</span
-                >
-              </li>
-              <li>
-                <span class="lang-en">Not exposed to internet</span
-                ><span class="lang-es">No expuesto a internet</span>
-              </li>
+              <li>VPC-only access</li>
+              <li>Interface VPC Endpoint</li>
+              <li>Resource policy controls access</li>
+              <li>Not exposed to internet</li>
             </ul>
           </div>
         </div>
@@ -654,7 +572,7 @@
               x1="350"
               y1="111"
               x2="448"
-              y2="110"
+              y2="101"
               stroke="#64748b"
               stroke-width="1"
               marker-end="url(#ah2)"
@@ -663,7 +581,7 @@
               x1="350"
               y1="120"
               x2="448"
-              y2="140"
+              y2="130"
               stroke="#64748b"
               stroke-width="1"
               marker-end="url(#ah2)"
@@ -716,7 +634,7 @@
 
             <rect
               x="450"
-              y="100"
+              y="90"
               width="120"
               height="26"
               rx="6"
@@ -726,7 +644,7 @@
             />
             <text
               x="510"
-              y="117"
+              y="108"
               text-anchor="middle"
               fill="#e2e8f0"
               font-family="Inter,sans-serif"
@@ -738,7 +656,7 @@
 
             <rect
               x="450"
-              y="130"
+              y="120"
               width="120"
               height="26"
               rx="6"
@@ -748,7 +666,7 @@
             />
             <text
               x="510"
-              y="146"
+              y="138"
               text-anchor="middle"
               fill="#e2e8f0"
               font-family="Inter,sans-serif"
@@ -788,93 +706,42 @@
         <table class="data-table">
           <thead>
             <tr>
-              <th>
-                <span class="lang-en">Type</span
-                ><span class="lang-es">Tipo</span>
-              </th>
-              <th>
-                <span class="lang-en">Proxy?</span
-                ><span class="lang-es">¿Proxy?</span>
-              </th>
-              <th>
-                <span class="lang-en">Mapping Templates?</span
-                ><span class="lang-es">¿Plantillas de mapeo?</span>
-              </th>
-              <th>
-                <span class="lang-en">Use Case</span
-                ><span class="lang-es">Caso de uso</span>
-              </th>
+              <th>Type</th>
+              <th>Proxy?</th>
+              <th>Mapping Templates?</th>
+              <th>Use Case</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td><strong>MOCK</strong></td>
-              <td>
-                <span class="lang-en">No</span><span class="lang-es">No</span>
-              </td>
-              <td>
-                <span class="lang-en">No</span><span class="lang-es">No</span>
-              </td>
-              <td>
-                <span class="lang-en"
-                  >Fixed response, no backend. Dev/testing only.</span
-                ><span class="lang-es"
-                  >Respuesta fija, sin backend. Solo desarrollo/pruebas.</span
-                >
-              </td>
+              <td>No</td>
+              <td>No</td>
+              <td>Fixed response, no backend. Dev/testing only.</td>
             </tr>
             <tr>
               <td><strong>HTTP</strong></td>
-              <td>
-                <span class="lang-en">No</span><span class="lang-es">No</span>
-              </td>
+              <td>No</td>
               <td><span class="chip green">✅ Yes</span></td>
-              <td>
-                <span class="lang-en"
-                  >HTTP backend + modify request/response</span
-                ><span class="lang-es"
-                  >Backend HTTP + modificar solicitud/respuesta</span
-                >
-              </td>
+              <td>HTTP backend + modify request/response</td>
             </tr>
             <tr>
               <td><strong>AWS</strong></td>
-              <td>
-                <span class="lang-en">No</span><span class="lang-es">No</span>
-              </td>
+              <td>No</td>
               <td><span class="chip green">✅ Yes</span></td>
-              <td>
-                <span class="lang-en"
-                  >AWS service + modify request/response</span
-                ><span class="lang-es"
-                  >Servicio AWS + modificar solicitud/respuesta</span
-                >
-              </td>
+              <td>AWS service + modify request/response</td>
             </tr>
             <tr>
               <td><strong>AWS_PROXY</strong></td>
               <td><span class="chip blue">✅ Yes</span></td>
               <td><span class="chip red">❌ No</span></td>
-              <td>
-                <span class="lang-en"
-                  >Lambda Proxy — full request as-is to Lambda</span
-                ><span class="lang-es"
-                  >Lambda Proxy — solicitud completa tal cual a Lambda</span
-                >
-              </td>
+              <td>Lambda Proxy — full request as-is to Lambda</td>
             </tr>
             <tr>
               <td><strong>HTTP_PROXY</strong></td>
               <td><span class="chip blue">✅ Yes</span></td>
               <td><span class="chip red">❌ No</span></td>
-              <td>
-                <span class="lang-en"
-                  >HTTP backend as-is; can inject hidden headers</span
-                ><span class="lang-es"
-                  >Backend HTTP tal cual; puede inyectar encabezados
-                  ocultos</span
-                >
-              </td>
+              <td>HTTP backend as-is; can inject hidden headers</td>
             </tr>
           </tbody>
         </table>
@@ -891,10 +758,7 @@
           >
         </div>
 
-        <h3>
-          <span class="lang-en">Mapping Templates</span
-          ><span class="lang-es">Plantillas de mapeo</span>
-        </h3>
+        <h3>Mapping Templates</h3>
         <p>
           <span class="lang-en"
             >Only for HTTP/AWS (non-proxy). Written in
@@ -975,10 +839,7 @@
           </h2>
         </div>
 
-        <h3>
-          <span class="lang-en">OpenAPI</span
-          ><span class="lang-es">OpenAPI</span>
-        </h3>
+        <h3>OpenAPI</h3>
         <p>
           <span class="lang-en"
             >OpenAPI v3.0 is an <strong>industry standard</strong> (not
@@ -1037,35 +898,20 @@
         </h3>
         <div class="concept-grid">
           <div class="concept-card">
-            <h4>
-              <span class="lang-en">Default TTL</span
-              ><span class="lang-es">TTL predeterminado</span>
-            </h4>
+            <h4>Default TTL</h4>
             <p><strong>300 seconds</strong> (5 min)</p>
           </div>
           <div class="concept-card">
-            <h4>
-              <span class="lang-en">Max TTL</span
-              ><span class="lang-es">TTL máximo</span>
-            </h4>
+            <h4>Max TTL</h4>
             <p><strong>3600 seconds</strong> (1 hour)</p>
           </div>
           <div class="concept-card">
-            <h4>
-              <span class="lang-en">Cache size</span
-              ><span class="lang-es">Tamaño de caché</span>
-            </h4>
+            <h4>Cache size</h4>
             <p><strong>0.5 GB → 237 GB</strong></p>
           </div>
           <div class="concept-card">
-            <h4>
-              <span class="lang-en">Level</span
-              ><span class="lang-es">Nivel</span>
-            </h4>
-            <p>
-              <span class="lang-en">Stage (override per method)</span
-              ><span class="lang-es">Etapa (anular por método)</span>
-            </p>
+            <h4>Level</h4>
+            <p>Stage (override per method)</p>
           </div>
         </div>
         <div class="callout warning">
@@ -1206,10 +1052,7 @@
         </div>
 
         <!-- METHOD 1: IAM -->
-        <h3>
-          <span class="lang-en">Method 1 — IAM Authorization + Sig v4</span
-          ><span class="lang-es">Método 1 — Autorización IAM + Sig v4</span>
-        </h3>
+        <h3>Method 1 — IAM Authorization + Sig v4</h3>
         <p>
           <span class="lang-en"
             >Best for: <strong>internal AWS resources</strong> (EC2, Lambda, IAM
@@ -1466,10 +1309,7 @@
         </div>
 
         <!-- METHOD 2: Cognito -->
-        <h3>
-          <span class="lang-en">Method 2 — Cognito User Pools</span
-          ><span class="lang-es">Método 2 — Cognito User Pools</span>
-        </h3>
+        <h3>Method 2 — Cognito User Pools</h3>
         <p>
           <span class="lang-en"
             >Best for: <strong>external users</strong> (mobile/web). No custom
@@ -1766,13 +1606,7 @@
         </div>
 
         <!-- METHOD 3: Lambda Authorizer -->
-        <h3>
-          <span class="lang-en"
-            >Method 3 — Lambda Authorizer (Custom Authorizer)</span
-          ><span class="lang-es"
-            >Método 3 — Autorizador de Lambda (Autorizador personalizado)</span
-          >
-        </h3>
+        <h3>Method 3 — Lambda Authorizer (Custom Authorizer)</h3>
         <p>
           <span class="lang-en"
             >Best for: <strong>3rd party auth systems</strong> (Auth0, OAuth,
@@ -2234,17 +2068,9 @@
           <thead>
             <tr>
               <th></th>
-              <th>
-                <span class="lang-en">IAM</span><span class="lang-es">IAM</span>
-              </th>
-              <th>
-                <span class="lang-en">Cognito</span
-                ><span class="lang-es">Cognito</span>
-              </th>
-              <th>
-                <span class="lang-en">Lambda Authorizer</span
-                ><span class="lang-es">Autorizador de Lambda</span>
-              </th>
+              <th>IAM</th>
+              <th>Cognito</th>
+              <th>Lambda Authorizer</th>
             </tr>
           </thead>
           <tbody>
@@ -2255,30 +2081,15 @@
                   ><span class="lang-es">Mejor para</span></strong
                 >
               </td>
-              <td>
-                <span class="lang-en">Internal AWS</span
-                ><span class="lang-es">AWS interno</span>
-              </td>
-              <td>
-                <span class="lang-en">External users</span
-                ><span class="lang-es">Usuarios externos</span>
-              </td>
+              <td>Internal AWS</td>
+              <td>External users</td>
               <td>3rd party auth</td>
             </tr>
             <tr>
               <td><strong>Technology</strong></td>
-              <td>
-                <span class="lang-en">Sig v4</span
-                ><span class="lang-es">Sig v4</span>
-              </td>
-              <td>
-                <span class="lang-en">Cognito token</span
-                ><span class="lang-es">Token de Cognito</span>
-              </td>
-              <td>
-                <span class="lang-en">JWT / OAuth / Bearer</span
-                ><span class="lang-es">JWT / OAuth / Bearer</span>
-              </td>
+              <td>Sig v4</td>
+              <td>Cognito token</td>
+              <td>JWT / OAuth / Bearer</td>
             </tr>
             <tr>
               <td>
@@ -2287,12 +2098,8 @@
                   ><span class="lang-es">¿Código custom?</span></strong
                 >
               </td>
-              <td>
-                <span class="lang-en">No</span><span class="lang-es">No</span>
-              </td>
-              <td>
-                <span class="lang-en">No</span><span class="lang-es">No</span>
-              </td>
+              <td>No</td>
+              <td>No</td>
               <td><span class="chip orange">Yes</span></td>
             </tr>
             <tr>
@@ -2302,25 +2109,14 @@
                   ><span class="lang-es">¿Cross-account?</span></strong
                 >
               </td>
-              <td>
-                <span class="lang-en">Yes + resource policy</span
-                ><span class="lang-es">Sí + política de recurso</span>
-              </td>
-              <td>
-                <span class="lang-en">No</span><span class="lang-es">No</span>
-              </td>
-              <td>
-                <span class="lang-en">No</span><span class="lang-es">No</span>
-              </td>
+              <td>Yes + resource policy</td>
+              <td>No</td>
+              <td>No</td>
             </tr>
             <tr>
               <td><strong>Caching</strong></td>
-              <td>
-                <span class="lang-en">N/A</span><span class="lang-es">N/A</span>
-              </td>
-              <td>
-                <span class="lang-en">N/A</span><span class="lang-es">N/A</span>
-              </td>
+              <td>N/A</td>
+              <td>N/A</td>
               <td><span class="chip green">✅ Policy cached</span></td>
             </tr>
           </tbody>
@@ -2337,91 +2133,50 @@
           </h2>
         </div>
 
-        <h3>
-          <span class="lang-en">REST API vs HTTP API</span
-          ><span class="lang-es">REST API vs HTTP API</span>
-        </h3>
+        <h3>REST API vs HTTP API</h3>
         <table class="data-table">
           <thead>
             <tr>
-              <th>
-                <span class="lang-en">Feature</span
-                ><span class="lang-es">Característica</span>
-              </th>
-              <th>
-                <span class="lang-en">REST API</span
-                ><span class="lang-es">REST API</span>
-              </th>
-              <th>
-                <span class="lang-en">HTTP API</span
-                ><span class="lang-es">HTTP API</span>
-              </th>
+              <th>Feature</th>
+              <th>REST API</th>
+              <th>HTTP API</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td><strong>Cost</strong></td>
-              <td>
-                <span class="lang-en">Higher</span
-                ><span class="lang-es">Mayor</span>
-              </td>
+              <td>Higher</td>
               <td><span class="chip green">Much cheaper ✅</span></td>
             </tr>
             <tr>
-              <td>
-                <span class="lang-en">Mapping templates</span
-                ><span class="lang-es">Plantillas de mapeo</span>
-              </td>
+              <td>Mapping templates</td>
               <td>✅</td>
               <td>❌</td>
             </tr>
             <tr>
-              <td>
-                <span class="lang-en">Usage plans / API keys</span
-                ><span class="lang-es">Planes de uso / Claves de API</span>
-              </td>
+              <td>Usage plans / API keys</td>
               <td>✅</td>
               <td>❌</td>
             </tr>
             <tr>
-              <td>
-                <span class="lang-en">Resource policies</span
-                ><span class="lang-es">Políticas de recursos</span>
-              </td>
+              <td>Resource policies</td>
               <td>✅</td>
               <td>❌</td>
             </tr>
             <tr>
-              <td>
-                <span class="lang-en">Built-in CORS</span
-                ><span class="lang-es">CORS integrado</span>
-              </td>
+              <td>Built-in CORS</td>
               <td>❌</td>
               <td>✅</td>
             </tr>
             <tr>
-              <td>
-                <span class="lang-en">Auth options</span
-                ><span class="lang-es">Opciones de autenticación</span>
-              </td>
-              <td>
-                <span class="lang-en">IAM, Cognito, Lambda Authorizer</span
-                ><span class="lang-es"
-                  >IAM, Cognito, Autorizador de Lambda</span
-                >
-              </td>
-              <td>
-                <span class="lang-en">OIDC / OAuth 2.0 only</span
-                ><span class="lang-es">Solo OIDC / OAuth 2.0</span>
-              </td>
+              <td>Auth options</td>
+              <td>IAM, Cognito, Lambda Authorizer</td>
+              <td>OIDC / OAuth 2.0 only</td>
             </tr>
           </tbody>
         </table>
 
-        <h3>
-          <span class="lang-en">WebSocket API</span
-          ><span class="lang-es">WebSocket API</span>
-        </h3>
+        <h3>WebSocket API</h3>
         <p>
           <span class="lang-en"
             >Two-way persistent connection. Server can push to client without a

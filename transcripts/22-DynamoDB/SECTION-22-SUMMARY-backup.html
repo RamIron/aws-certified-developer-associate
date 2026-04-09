@@ -628,8 +628,8 @@
         <table class="data-table">
           <tr>
             <th></th>
-            <th><span class="lang-en">RDBMS (SQL)</span><span class="lang-es">RDBMS (SQL)</span></th>
-            <th><span class="lang-en">DynamoDB (NoSQL)</span><span class="lang-es">DynamoDB (NoSQL)</span></th>
+            <th>RDBMS (SQL)</th>
+            <th>DynamoDB (NoSQL)</th>
           </tr>
           <tr>
             <td><strong>Schema</strong></td>
@@ -690,7 +690,7 @@
         </h3>
         <div class="concept-grid">
           <div class="concept-card">
-            <h4><span class="lang-en">Multi-AZ</span><span class="lang-es">Multi-AZ</span></h4>
+            <h4>Multi-AZ</h4>
             <p>
               <span class="lang-en"
                 >Replication across AZs <strong>built in</strong> — no config
@@ -702,7 +702,7 @@
             </p>
           </div>
           <div class="concept-card">
-            <h4><span class="lang-en">Latency</span><span class="lang-es">Latencia</span></h4>
+            <h4>Latency</h4>
             <p>
               <span class="lang-en"
                 ><strong>Single-digit ms</strong> — fast and consistent</span
@@ -712,7 +712,7 @@
             </p>
           </div>
           <div class="concept-card">
-            <h4><span class="lang-en">Scale</span><span class="lang-es">Escala</span></h4>
+            <h4>Scale</h4>
             <p>
               <span class="lang-en"
                 >Millions req/sec · trillions of rows · hundreds of TB</span
@@ -823,8 +823,8 @@
         <table class="data-table">
           <tr>
             <th></th>
-            <th><span class="lang-en">Provisioned</span><span class="lang-es">Aprovisionado</span></th>
-            <th><span class="lang-en">On-Demand</span><span class="lang-es">Bajo demanda</span></th>
+            <th>Provisioned</th>
+            <th>On-Demand</th>
           </tr>
           <tr>
             <td>
@@ -870,7 +870,7 @@
                 ><span class="lang-es">Nombres de unidades</span></strong
               >
             </td>
-            <td><span class="lang-en">RCU / WCU</span><span class="lang-es">RCU / WCU</span></td>
+            <td>RCU / WCU</td>
             <td>
               RRU / WRU <span class="lang-en">(same calculation)</span
               ><span class="lang-es">(mismo cálculo)</span>
@@ -928,7 +928,7 @@
           >
         </p>
 
-        <h3><span class="lang-en">WCU — Write Capacity Unit</span><span class="lang-es">WCU — Unidad de capacidad de escritura</span></h3>
+        <h3>WCU — Write Capacity Unit</h3>
         <p>
           <span class="lang-en"
             >1 WCU = 1 write/sec for items up to <strong>1 KB</strong> — round
@@ -986,7 +986,7 @@
           </tr>
         </table>
 
-        <h3><span class="lang-en">RCU — Read Capacity Unit</span><span class="lang-es">RCU — Unidad de capacidad de lectura</span></h3>
+        <h3>RCU — Read Capacity Unit</h3>
         <p>
           <span class="lang-en"
             >1 RCU = 1 strongly consistent read/sec OR 2 eventually consistent
@@ -1035,7 +1035,7 @@
         </div>
         <table class="data-table">
           <tr>
-            <th><span class="lang-en">Mode</span><span class="lang-es">Modo</span></th>
+            <th>Mode</th>
             <th>
               <span class="lang-en">Calculation</span
               ><span class="lang-es">Cálculo</span>
@@ -1046,17 +1046,17 @@
             </th>
           </tr>
           <tr>
-            <td><span class="lang-en">Strongly Consistent</span><span class="lang-es">Fuertemente consistente</span></td>
+            <td>Strongly Consistent</td>
             <td>8 × (8/4) = 8 × 2</td>
             <td><strong>16 RCU</strong></td>
           </tr>
           <tr>
-            <td><span class="lang-en">Eventually Consistent</span><span class="lang-es">Eventualmente consistente</span></td>
+            <td>Eventually Consistent</td>
             <td>(8/2) × (8/4) = 4 × 2</td>
             <td><strong>8 RCU</strong></td>
           </tr>
           <tr>
-            <td><span class="lang-en">Transactional</span><span class="lang-es">Transaccional</span></td>
+            <td>Transactional</td>
             <td>(8 × 2) × (8/4) = 16 × 2</td>
             <td><strong>32 RCU</strong></td>
           </tr>
@@ -1088,7 +1088,7 @@
         </h3>
         <table class="data-table">
           <tr>
-            <th><span class="lang-en">API</span><span class="lang-es">API</span></th>
+            <th>API</th>
             <th>
               <span class="lang-en">Behavior</span
               ><span class="lang-es">Comportamiento</span>
@@ -1181,7 +1181,7 @@
         </h3>
         <table class="data-table">
           <tr>
-            <th><span class="lang-en">API</span><span class="lang-es">API</span></th>
+            <th>API</th>
             <th>
               <span class="lang-en">Returns</span
               ><span class="lang-es">Retorna</span>
@@ -1290,7 +1290,7 @@
           >
         </p>
 
-        <h3><span class="lang-en">ConditionExpression</span><span class="lang-es">ConditionExpression</span></h3>
+        <h3>ConditionExpression</h3>
         <p>
           <span class="lang-en"
             >Evaluated before the write. If false → write rejected with
@@ -1380,8 +1380,8 @@
         <table class="data-table">
           <tr>
             <th></th>
-            <th><span class="lang-en">FilterExpression</span><span class="lang-es">FilterExpression</span></th>
-            <th><span class="lang-en">ConditionExpression</span><span class="lang-es">ConditionExpression</span></th>
+            <th>FilterExpression</th>
+            <th>ConditionExpression</th>
           </tr>
           <tr>
             <td><strong>Side</strong></td>
@@ -1485,8 +1485,8 @@
         <table class="data-table">
           <tr>
             <th></th>
-            <th><span class="lang-en">LSI — Local Secondary Index</span><span class="lang-es">LSI — Índice secundario local</span></th>
-            <th><span class="lang-en">GSI — Global Secondary Index</span><span class="lang-es">GSI — Índice secundario global</span></th>
+            <th>LSI — Local Secondary Index</th>
+            <th>GSI — Global Secondary Index</th>
           </tr>
           <tr>
             <td><strong>Partition key</strong></td>
@@ -1591,8 +1591,8 @@
               ><span class="lang-es">Ejemplo</span>
             </h4>
             <ul>
-              <li><span class="lang-en">Base: PK=user_id, SK=game_id</span><span class="lang-es">Base: PK=user_id, SK=game_id</span></li>
-              <li><span class="lang-en">LSI: PK=user_id, SK=game_timestamp</span><span class="lang-es">LSI: PK=user_id, SK=game_timestamp</span></li>
+              <li>Base: PK=user_id, SK=game_id</li>
+              <li>LSI: PK=user_id, SK=game_timestamp</li>
               <li>
                 <span class="lang-en"
                   >"All games for user X between dates A–B"</span
@@ -1608,8 +1608,8 @@
               ><span class="lang-es">Ejemplo</span>
             </h4>
             <ul>
-              <li><span class="lang-en">Base: PK=user_id, SK=game_id</span><span class="lang-es">Base: PK=user_id, SK=game_id</span></li>
-              <li><span class="lang-en">GSI: PK=game_id, SK=game_timestamp</span><span class="lang-es">GSI: PK=game_id, SK=game_timestamp</span></li>
+              <li>Base: PK=user_id, SK=game_id</li>
+              <li>GSI: PK=game_id, SK=game_timestamp</li>
               <li>
                 <span class="lang-en">"Who played game X and when?"</span
                 ><span class="lang-es">"¿Quién jugó el juego X y cuándo?"</span>
@@ -1679,12 +1679,12 @@
           </div>
         </div>
 
-        <h3><span class="lang-en">DAX vs ElastiCache</span><span class="lang-es">DAX vs ElastiCache</span></h3>
+        <h3>DAX vs ElastiCache</h3>
         <table class="data-table">
           <tr>
             <th></th>
-            <th><span class="lang-en">DAX</span><span class="lang-es">DAX</span></th>
-            <th><span class="lang-en">ElastiCache</span><span class="lang-es">ElastiCache</span></th>
+            <th>DAX</th>
+            <th>ElastiCache</th>
           </tr>
           <tr>
             <td>
@@ -1784,7 +1784,7 @@
         </h3>
         <table class="data-table">
           <tr>
-            <th><span class="lang-en">Type</span><span class="lang-es">Tipo</span></th>
+            <th>Type</th>
             <th>
               <span class="lang-en">Included in each record</span
               ><span class="lang-es">Incluido en cada registro</span>
@@ -1937,10 +1937,10 @@
           >
         </p>
 
-        <h3><span class="lang-en">TTL — Time To Live</span><span class="lang-es">TTL — Tiempo de vida</span></h3>
+        <h3>TTL — Time To Live</h3>
         <div class="concept-grid">
           <div class="concept-card">
-            <h4><span class="lang-en">Setup</span><span class="lang-es">Configuración</span></h4>
+            <h4>Setup</h4>
             <p>
               <span class="lang-en"
                 >Attribute of type <strong>Number</strong> (Unix Epoch
@@ -1952,7 +1952,7 @@
             </p>
           </div>
           <div class="concept-card">
-            <h4><span class="lang-en">Delay</span><span class="lang-es">Retraso</span></h4>
+            <h4>Delay</h4>
             <p>
               <span class="lang-en"
                 >Deletion happens within <strong>48 hours</strong> of expiration
@@ -1981,7 +1981,7 @@
             </p>
           </div>
           <div class="concept-card">
-            <h4><span class="lang-en">Streams</span><span class="lang-es">Flujos</span></h4>
+            <h4>Streams</h4>
             <p>
               <span class="lang-en"
                 >TTL deletes appear in DynamoDB Streams →
@@ -1996,15 +1996,15 @@
           </div>
         </div>
 
-        <h3><span class="lang-en">CLI Pagination</span><span class="lang-es">Paginación de CLI</span></h3>
+        <h3>CLI Pagination</h3>
         <table class="data-table">
           <tr>
-            <th><span class="lang-en">Parameter</span><span class="lang-es">Parámetro</span></th>
+            <th>Parameter</th>
             <th>
               <span class="lang-en">What it does</span
               ><span class="lang-es">Qué hace</span>
             </th>
-            <th><span class="lang-en">NextToken?</span><span class="lang-es">NextToken?</span></th>
+            <th>NextToken?</th>
           </tr>
           <tr>
             <td><code>--page-size</code></td>
@@ -2043,7 +2043,7 @@
           </tr>
         </table>
 
-        <h3><span class="lang-en">Transactions — ACID</span><span class="lang-es">Transacciones — ACID</span></h3>
+        <h3>Transactions — ACID</h3>
         <p>
           <span class="lang-en"
             >All-or-nothing operations across one or more items/tables. Two
@@ -2097,7 +2097,7 @@
         </h3>
         <table class="data-table">
           <tr>
-            <th><span class="lang-en">Service</span><span class="lang-es">Servicio</span></th>
+            <th>Service</th>
             <th>
               <span class="lang-en">Shared?</span
               ><span class="lang-es">¿Compartido?</span>
@@ -2378,7 +2378,7 @@
         </h3>
         <table class="data-table">
           <tr>
-            <th><span class="lang-en">Operation</span><span class="lang-es">Operación</span></th>
+            <th>Operation</th>
             <th>
               <span class="lang-en">Method</span
               ><span class="lang-es">Método</span>
@@ -2407,7 +2407,7 @@
               <span class="lang-en">Copy a table</span
               ><span class="lang-es">Copiar una tabla</span>
             </td>
-            <td><span class="lang-en">AWS Backup · AWS Glue</span><span class="lang-es">AWS Backup · AWS Glue</span></td>
+            <td>AWS Backup · AWS Glue</td>
             <td>
               <span class="lang-en"
                 >Backup = simple restore; Glue = ETL with transformations</span
@@ -2443,14 +2443,14 @@
 
         <div class="compare">
           <div>
-            <h3><span class="lang-en">Security</span><span class="lang-es">Seguridad</span></h3>
+            <h3>Security</h3>
             <table class="data-table">
               <tr>
-                <th><span class="lang-en">Feature</span><span class="lang-es">Característica</span></th>
-                <th><span class="lang-en">Detail</span><span class="lang-es">Detalle</span></th>
+                <th>Feature</th>
+                <th>Detail</th>
               </tr>
               <tr>
-                <td><span class="lang-en">VPC Endpoints</span><span class="lang-es">VPC Endpoints</span></td>
+                <td>VPC Endpoints</td>
                 <td>
                   <span class="lang-en"
                     >Private access — no public internet</span
@@ -2460,7 +2460,7 @@
                 </td>
               </tr>
               <tr>
-                <td><span class="lang-en">IAM</span><span class="lang-es">IAM</span></td>
+                <td>IAM</td>
                 <td>
                   <span class="lang-en"
                     >Full access control per table/operation</span
@@ -2480,7 +2480,7 @@
                 </td>
               </tr>
               <tr>
-                <td><span class="lang-en">PITR</span><span class="lang-es">PITR</span></td>
+                <td>PITR</td>
                 <td>
                   <span class="lang-en"
                     >Point-in-time recovery — no performance impact</span
@@ -2524,7 +2524,7 @@
             </p>
             <table class="data-table">
               <tr>
-                <th><span class="lang-en">Condition</span><span class="lang-es">Condición</span></th>
+                <th>Condition</th>
                 <th>
                   <span class="lang-en">Restricts</span
                   ><span class="lang-es">Restringe</span>
@@ -2573,7 +2573,7 @@
             </h3>
             <div class="concept-grid">
               <div class="concept-card">
-                <h4><span class="lang-en">DynamoDB Local</span><span class="lang-es">DynamoDB Local</span></h4>
+                <h4>DynamoDB Local</h4>
                 <p>
                   <span class="lang-en"
                     >Dev/test simulation. No AWS, no cost.</span
@@ -2583,7 +2583,7 @@
                 </p>
               </div>
               <div class="concept-card">
-                <h4><span class="lang-en">AWS DMS</span><span class="lang-es">AWS DMS</span></h4>
+                <h4>AWS DMS</h4>
                 <p>
                   <span class="lang-en"
                     >Migrate to/from DynamoDB. MongoDB → DynamoDB, DynamoDB →
