@@ -4,15 +4,23 @@
 
 | Metric | Value |
 |--------|-------|
-| Total XP | 10975 |
-| Lessons completed | 169 |
-| Perfect quizzes (100%) | 137 |
+| Total XP | 11475 |
+| Lessons completed | 176 |
+| Perfect quizzes (100%) | 144 |
 | Lessons to review | 15 |
 
 ## Session History
 
 | Date | Section | Lesson | XP | Result |
 |------|---------|--------|----|--------|
+| 2026-04-08 | 23 - API Gateway | API Gateway Quiz (Quiz 20) - Udemy | — | Completed |
+| 2026-04-08 | 23 - API Gateway | 23.20 - API Gateway WebSocket API | +75 | PERFECT 100% |
+| 2026-04-08 | 23 - API Gateway | 23.19 - API Gateway REST API vs HTTP API | +75 | PERFECT 100% |
+| 2026-04-08 | 23 - API Gateway | 23.17 - API Gateway Authentication and Authorization | +100 | PERFECT 100% |
+| 2026-04-08 | 23 - API Gateway | 23.15 - API Gateway Monitoring, Logging and Tracing | +100 | PERFECT 100% |
+| 2026-04-08 | 23 - API Gateway | 23.14 - API Gateway Usage Plans & API Keys | +75 | PERFECT 100% |
+| 2026-04-08 | 23 - API Gateway | 23.13 - API Gateway Caching | +75 | PERFECT 100% |
+| 2026-04-07 | 23 - API Gateway | 23.9 - API Gateway Integration Types & Mappings | +75 | PERFECT 100% |
 | 2026-04-07 | 23 - API Gateway | 23.7 - API Gateway Canary Deployments | +50 | PERFECT 100% |
 | 2026-04-07 | 23 - API Gateway | 23.4 - API Gateway Stages and Deployment | +50 | REVIEW 67% |
 | 2026-04-06 | 23 - API Gateway | 23.2 - API Gateway Overview | +75 | PASSED 75% |

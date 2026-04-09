@@ -3,10 +3,10 @@
 ## Overall Progress
 
 ```
-[██████████████░░░░░░] 22/33 sections | 355/483 lessons (73.5%)
-Total XP: 10800
+[████████████████░░░░] 23/33 sections | 377/483 lessons (78.1%)
+Total XP: 11475
 
-Videos: 330 | Quizzes: 19/29 | ⏱ 23h 21min done · 8h 37min left
+Videos: 351 | Quizzes: 20/29 | ⏱ 24h 43min done · 7h 15min left
 ```
 
 > **Note:** The exact number of lessons per section will be filled in as the course progresses.
@@ -442,19 +442,20 @@ Videos: 330 | Quizzes: 19/29 | ⏱ 23h 21min done · 8h 37min left
 - [x] 23.6 - API Gateway Stages Configurations Hands On (skipped - hands-on, config options overview noted)
 - [x] 23.7 - API Gateway Canary Deployments (PERFECT 100%)
 - [x] 23.8 - API Gateway Canary Deployments Hands On (skipped - hands-on, canary workflow + :version syntax noted)
-- [ ] 23.9 - API Gateway Integration Types & Mappings
-- [ ] 23.10 - API Gateway Mapping Templates Hands On
-- [ ] 23.11 - API Gateway Open API
-- [ ] 23.12 - API Gateway Open API - Hands On
-- [ ] 23.13 - API Gateway Caching
-- [ ] 23.14 - API Gateway Usage Plans & API Keys
-- [ ] 23.15 - API Gateway Monitoring, Logging and Tracing
-- [ ] 23.16 - API Gateway CORS
-- [ ] 23.17 - API Gateway Authentication and Authorization
-- [ ] 23.18 - API Gateway Authentication and Authorization - Hands On
-- [ ] 23.19 - API Gateway REST API vs HTTP API
-- [ ] 23.20 - API Gateway Websocket API
-- [ ] 23.21 - API Gateway - Architecture
+- [x] 23.9 - API Gateway Integration Types & Mappings (PERFECT 100%)
+- [x] 23.10 - API Gateway Mapping Templates Hands On (skipped - hands-on, non-proxy response + VTL syntax noted)
+- [x] 23.11 - API Gateway Open API (PERFECT 100%)
+- [x] 23.12 - API Gateway Open API - Hands On (skipped - hands-on, import/export/SDK generation noted)
+- [x] 23.13 - API Gateway Caching (PERFECT 100%)
+- [x] 23.14 - API Gateway Usage Plans & API Keys (PERFECT 100%)
+- [x] 23.15 - API Gateway Monitoring, Logging and Tracing (PERFECT 100%)
+- [x] 23.16 - API Gateway CORS (PERFECT 100%)
+- [x] 23.17 - API Gateway Authentication and Authorization (PERFECT 100%)
+- [x] 23.18 - API Gateway Authentication and Authorization - Hands On (skipped - hands-on, console options confirmed)
+- [x] 23.19 - API Gateway REST API vs HTTP API (PERFECT 100%)
+- [x] 23.20 - API Gateway Websocket API (PERFECT 100%)
+- [x] 23.21 - API Gateway - Architecture (no quiz - architecture overview)
+- [x] API Gateway Quiz (Quiz 20) (Udemy quiz - completed)
 - [ ] API Gateway Quiz (Quiz 20)
 
 ## Section 24: AWS CICD: CodeCommit, CodePipeline, CodeBuild, CodeDeploy

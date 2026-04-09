@@ -1,0 +1,3042 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Section 23 — AWS Serverless: API Gateway</title>
+  
+    <link rel="stylesheet" href="../shared/summary.css">
+    <script src="../shared/summary.js"></script>
+  </head>
+  <body>
+
+    <script>initHeader("Section 23 — AWS Serverless: API Gateway")</script>
+
+    <div class="container">
+      <!-- ═══════════════════ CARD 1: OVERVIEW ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">1</span>
+          <h2>
+            <span class="lang-en">API Gateway Overview</span
+            ><span class="lang-es">Visión General de API Gateway</span>
+          </h2>
+        </div>
+
+        <h3>
+          <span class="lang-en">Why API Gateway?</span
+          ><span class="lang-es">¿Por qué API Gateway?</span>
+        </h3>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Option</th>
+              <th>Requires</th>
+              <th>Features</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Direct Lambda invoke</td>
+              <td>IAM permissions on client</td>
+              <td>None</td>
+            </tr>
+            <tr>
+              <td>Application Load Balancer</td>
+              <td>Infrastructure</td>
+              <td>Basic HTTP only</td>
+            </tr>
+            <tr>
+              <td><strong>API Gateway</strong></td>
+              <td>Nothing (serverless)</td>
+              <td><span class="chip green">Full platform ✅</span></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>
+          <span class="lang-en">The 3 Integrations</span
+          ><span class="lang-es">Las 3 Integraciones</span>
+        </h3>
+        <div class="vd">
+          <div
+            style="
+              display: flex;
+              align-items: center;
+              gap: 12px;
+              padding: 20px;
+              flex-wrap: wrap;
+            "
+          >
+            <div
+              style="
+                background: #0f172a;
+                border: 1.5px solid #3b82f6;
+                border-radius: 8px;
+                padding: 8px 16px;
+                color: #93c5fd;
+                font-weight: 600;
+                font-size: 13px;
+                white-space: nowrap;
+              "
+            >
+              Client
+            </div>
+            <span style="color: #64748b; font-size: 18px; flex-shrink: 0"
+              >→</span
+            >
+            <div
+              style="
+                background: #0f172a;
+                border: 1.5px solid #f97316;
+                border-radius: 8px;
+                padding: 8px 16px;
+                color: #fb923c;
+                font-weight: 700;
+                font-size: 13px;
+                white-space: nowrap;
+              "
+            >
+              API Gateway
+            </div>
+            <span style="color: #64748b; font-size: 18px; flex-shrink: 0"
+              >→</span
+            >
+            <div style="display: flex; flex-direction: column; gap: 8px">
+              <div
+                style="
+                  background: #0f172a;
+                  border: 1.5px solid #34d399;
+                  border-radius: 8px;
+                  padding: 7px 14px;
+                  color: #34d399;
+                  font-weight: 600;
+                  font-size: 13px;
+                "
+              >
+                Lambda Function
+                <span style="color: #64748b; font-weight: 400; font-size: 12px"
+                  >(most common)</span
+                >
+              </div>
+              <div
+                style="
+                  background: #0f172a;
+                  border: 1.5px solid #3b82f6;
+                  border-radius: 8px;
+                  padding: 7px 14px;
+                  color: #93c5fd;
+                  font-weight: 600;
+                  font-size: 13px;
+                "
+              >
+                HTTP Endpoint (any backend)
+              </div>
+              <div
+                style="
+                  background: #0f172a;
+                  border: 1.5px solid #c4b5fd;
+                  border-radius: 8px;
+                  padding: 7px 14px;
+                  color: #c4b5fd;
+                  font-weight: 600;
+                  font-size: 13px;
+                "
+              >
+                AWS Service (Kinesis, SQS…)
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="callout info">
+          <span class="lang-en"
+            ><strong>AWS Service integration:</strong> client needs no AWS
+            credentials — API GW handles the translation. E.g. Client → API GW →
+            Kinesis → Firehose → S3</span
+          ><span class="lang-es"
+            ><strong>Integración con servicio AWS:</strong> el cliente no
+            necesita credenciales. Ej: Client → API GW → Kinesis → Firehose →
+            S3</span
+          >
+        </div>
+
+        <h3>
+          <span class="lang-en">Endpoint Types</span
+          ><span class="lang-es">Tipos de Endpoint</span>
+        </h3>
+        <div class="compare-3">
+          <div class="compare-card">
+            <h4 class="orange">Edge-Optimized (default)</h4>
+            <ul>
+              <li>Global clients</li>
+              <li>Routes via CloudFront Edge</li>
+              <li>GW still in <strong>one region</strong></li>
+              <li>ACM cert → <strong>us-east-1</strong></li>
+            </ul>
+          </div>
+          <div class="compare-card">
+            <h4 class="blue">Regional</h4>
+            <ul>
+              <li>Same-region users</li>
+              <li>No CloudFront</li>
+              <li>Can add own CloudFront</li>
+              <li>ACM cert → same region as stage</li>
+            </ul>
+          </div>
+          <div class="compare-card">
+            <h4 class="purple">Private</h4>
+            <ul>
+              <li>VPC-only access</li>
+              <li>Interface VPC Endpoint</li>
+              <li>Resource policy controls access</li>
+              <li>Not exposed to internet</li>
+            </ul>
+          </div>
+        </div>
+        <div class="callout warning">
+          ⚠️
+          <strong
+            ><span class="lang-en">Exam trap:</span
+            ><span class="lang-es">Trampa del examen:</span></strong
+          >
+          <span class="lang-en"
+            >Edge-Optimized ACM certificate must be in
+            <strong>us-east-1</strong> (CloudFront requirement). Regional → same
+            region as stage.</span
+          ><span class="lang-es"
+            >El certificado ACM para Edge-Optimized debe estar en
+            <strong>us-east-1</strong>. Regional → misma región que el
+            stage.</span
+          >
+        </div>
+      </div>
+
+      <!-- ═══════════════════ CARD 2: STAGES ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">2</span>
+          <h2>
+            <span class="lang-en">Stages, Deployment & Canary</span
+            ><span class="lang-es">Stages, Deployment y Canary</span>
+          </h2>
+        </div>
+
+        <div class="callout danger">
+          🚨
+          <span class="lang-en"
+            ><strong>Most common confusion:</strong> changes are NOT live until
+            you deploy to a stage.</span
+          ><span class="lang-es"
+            ><strong>Confusión más común:</strong> los cambios NO están activos
+            hasta deployar en un stage.</span
+          >
+        </div>
+
+        <h3>
+          <span class="lang-en">Stage Variables</span
+          ><span class="lang-es">Variables de Stage</span>
+        </h3>
+        <p>
+          <span class="lang-en"
+            >Like environment variables for stages. Change config without
+            redeploying. Passed to Lambda via the
+            <strong>context object</strong>.</span
+          ><span class="lang-es"
+            >Como variables de entorno para stages. Cambian config sin
+            redesplegar. Se pasan a Lambda via el
+            <strong>objeto context</strong>.</span
+          >
+        </p>
+        <div class="compare">
+          <div class="compare-card">
+            <h4 class="blue">
+              <span class="lang-en">General syntax</span
+              ><span class="lang-es">Sintaxis general</span>
+            </h4>
+            <ul>
+              <li>
+                <code
+                  style="
+                    color: #fb923c;
+                    font-family: &quot;Fira Code&quot;, monospace;
+                  "
+                  >$stageVariables.varName</code
+                >
+              </li>
+            </ul>
+          </div>
+          <div class="compare-card">
+            <h4 class="green">
+              <span class="lang-en">Inside Lambda ARN</span
+              ><span class="lang-es">Dentro de un ARN de Lambda</span>
+            </h4>
+            <ul>
+              <li>
+                <code
+                  style="
+                    color: #fb923c;
+                    font-family: &quot;Fira Code&quot;, monospace;
+                  "
+                  >${stageVariables.varName}</code
+                >
+              </li>
+              <li>
+                <span class="lang-en"
+                  >Curly braces required for string interpolation</span
+                ><span class="lang-es"
+                  >Las llaves son necesarias para interpolación de string</span
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>
+          <span class="lang-en">Stage Variables + Lambda Aliases Pattern</span
+          ><span class="lang-es">Patrón Stage Variables + Lambda Aliases</span>
+        </h3>
+        <div class="vd">
+          <svg
+            viewBox="0 0 680 160"
+            xmlns="http://www.w3.org/2000/svg"
+            style="width: 100%; height: auto; display: block"
+          >
+            <defs>
+              <marker
+                id="ah2"
+                markerWidth="8"
+                markerHeight="6"
+                refX="8"
+                refY="3"
+                orient="auto"
+              >
+                <path d="M0,0 L8,3 L0,6" fill="#64748b" />
+              </marker>
+            </defs>
+            <!-- Labels -->
+            <text
+              x="110"
+              y="18"
+              text-anchor="middle"
+              fill="#94a3b8"
+              font-family="Inter,sans-serif"
+              font-size="10"
+              font-weight="700"
+              letter-spacing="0.05em"
+            >
+              API GATEWAY STAGES
+            </text>
+            <text
+              x="340"
+              y="18"
+              text-anchor="middle"
+              fill="#94a3b8"
+              font-family="Inter,sans-serif"
+              font-size="10"
+              font-weight="700"
+              letter-spacing="0.05em"
+            >
+              LAMBDA ALIASES
+            </text>
+            <text
+              x="560"
+              y="18"
+              text-anchor="middle"
+              fill="#94a3b8"
+              font-family="Inter,sans-serif"
+              font-size="10"
+              font-weight="700"
+              letter-spacing="0.05em"
+            >
+              LAMBDA VERSIONS
+            </text>
+
+            <!-- dev stage -->
+            <rect
+              x="20"
+              y="30"
+              width="80"
+              height="26"
+              rx="6"
+              fill="#1e293b"
+              stroke="#60a5fa"
+              stroke-width="1.2"
+            />
+            <text
+              x="60"
+              y="48"
+              text-anchor="middle"
+              fill="#93c5fd"
+              font-family="Inter,sans-serif"
+              font-size="12"
+              font-weight="600"
+            >
+              dev stage
+            </text>
+            <line
+              x1="100"
+              y1="43"
+              x2="268"
+              y2="43"
+              stroke="#64748b"
+              stroke-width="1"
+              stroke-dasharray="4,3"
+              marker-end="url(#ah2)"
+            />
+
+            <!-- test stage -->
+            <rect
+              x="20"
+              y="67"
+              width="80"
+              height="26"
+              rx="6"
+              fill="#1e293b"
+              stroke="#fcd34d"
+              stroke-width="1.2"
+            />
+            <text
+              x="60"
+              y="85"
+              text-anchor="middle"
+              fill="#fcd34d"
+              font-family="Inter,sans-serif"
+              font-size="12"
+              font-weight="600"
+            >
+              test stage
+            </text>
+            <line
+              x1="100"
+              y1="80"
+              x2="268"
+              y2="80"
+              stroke="#64748b"
+              stroke-width="1"
+              stroke-dasharray="4,3"
+              marker-end="url(#ah2)"
+            />
+
+            <!-- prod stage -->
+            <rect
+              x="20"
+              y="104"
+              width="80"
+              height="26"
+              rx="6"
+              fill="#1e293b"
+              stroke="#fb923c"
+              stroke-width="1.2"
+            />
+            <text
+              x="60"
+              y="122"
+              text-anchor="middle"
+              fill="#fb923c"
+              font-family="Inter,sans-serif"
+              font-size="12"
+              font-weight="600"
+            >
+              prod stage
+            </text>
+            <line
+              x1="100"
+              y1="117"
+              x2="268"
+              y2="117"
+              stroke="#64748b"
+              stroke-width="1"
+              stroke-dasharray="4,3"
+              marker-end="url(#ah2)"
+            />
+
+            <!-- stageVar labels -->
+            <text
+              x="184"
+              y="38"
+              text-anchor="middle"
+              fill="#94a3b8"
+              font-family="Inter,sans-serif"
+              font-size="9"
+            >
+              stageVar
+            </text>
+            <text
+              x="184"
+              y="75"
+              text-anchor="middle"
+              fill="#94a3b8"
+              font-family="Inter,sans-serif"
+              font-size="9"
+            >
+              stageVar
+            </text>
+            <text
+              x="184"
+              y="112"
+              text-anchor="middle"
+              fill="#94a3b8"
+              font-family="Inter,sans-serif"
+              font-size="9"
+            >
+              stageVar
+            </text>
+
+            <!-- dev alias -->
+            <rect
+              x="270"
+              y="30"
+              width="80"
+              height="26"
+              rx="6"
+              fill="#1e293b"
+              stroke="#34d399"
+              stroke-width="1.2"
+            />
+            <text
+              x="310"
+              y="48"
+              text-anchor="middle"
+              fill="#34d399"
+              font-family="Inter,sans-serif"
+              font-size="12"
+              font-weight="600"
+            >
+              dev alias
+            </text>
+            <line
+              x1="350"
+              y1="43"
+              x2="448"
+              y2="43"
+              stroke="#64748b"
+              stroke-width="1"
+              marker-end="url(#ah2)"
+            />
+
+            <!-- test alias -->
+            <rect
+              x="270"
+              y="67"
+              width="80"
+              height="26"
+              rx="6"
+              fill="#1e293b"
+              stroke="#34d399"
+              stroke-width="1.2"
+            />
+            <text
+              x="310"
+              y="85"
+              text-anchor="middle"
+              fill="#34d399"
+              font-family="Inter,sans-serif"
+              font-size="12"
+              font-weight="600"
+            >
+              test alias
+            </text>
+            <line
+              x1="350"
+              y1="80"
+              x2="448"
+              y2="80"
+              stroke="#64748b"
+              stroke-width="1"
+              marker-end="url(#ah2)"
+            />
+
+            <!-- prod alias -->
+            <rect
+              x="270"
+              y="104"
+              width="80"
+              height="26"
+              rx="6"
+              fill="#1e293b"
+              stroke="#34d399"
+              stroke-width="1.2"
+            />
+            <text
+              x="310"
+              y="122"
+              text-anchor="middle"
+              fill="#34d399"
+              font-family="Inter,sans-serif"
+              font-size="12"
+              font-weight="600"
+            >
+              prod alias
+            </text>
+            <line
+              x1="350"
+              y1="111"
+              x2="448"
+              y2="101"
+              stroke="#64748b"
+              stroke-width="1"
+              marker-end="url(#ah2)"
+            />
+            <line
+              x1="350"
+              y1="120"
+              x2="448"
+              y2="130"
+              stroke="#64748b"
+              stroke-width="1"
+              marker-end="url(#ah2)"
+            />
+
+            <!-- versions -->
+            <rect
+              x="450"
+              y="30"
+              width="120"
+              height="26"
+              rx="6"
+              fill="#1e293b"
+              stroke="#94a3b8"
+              stroke-width="1"
+            />
+            <text
+              x="510"
+              y="48"
+              text-anchor="middle"
+              fill="#e2e8f0"
+              font-family="Inter,sans-serif"
+              font-size="11"
+              font-weight="600"
+            >
+              $LATEST (100%)
+            </text>
+
+            <rect
+              x="450"
+              y="67"
+              width="120"
+              height="26"
+              rx="6"
+              fill="#1e293b"
+              stroke="#94a3b8"
+              stroke-width="1"
+            />
+            <text
+              x="510"
+              y="85"
+              text-anchor="middle"
+              fill="#e2e8f0"
+              font-family="Inter,sans-serif"
+              font-size="11"
+              font-weight="600"
+            >
+              v2 (100%)
+            </text>
+
+            <rect
+              x="450"
+              y="90"
+              width="120"
+              height="26"
+              rx="6"
+              fill="#1e293b"
+              stroke="#94a3b8"
+              stroke-width="1"
+            />
+            <text
+              x="510"
+              y="108"
+              text-anchor="middle"
+              fill="#e2e8f0"
+              font-family="Inter,sans-serif"
+              font-size="11"
+              font-weight="600"
+            >
+              v1 (95%)
+            </text>
+
+            <rect
+              x="450"
+              y="120"
+              width="120"
+              height="26"
+              rx="6"
+              fill="#1e293b"
+              stroke="#94a3b8"
+              stroke-width="1"
+            />
+            <text
+              x="510"
+              y="138"
+              text-anchor="middle"
+              fill="#e2e8f0"
+              font-family="Inter,sans-serif"
+              font-size="11"
+              font-weight="600"
+            >
+              v2 (5%)
+            </text>
+          </svg>
+        </div>
+        <div class="callout success">
+          ✅
+          <span class="lang-en"
+            >API Gateway never changes. All traffic shifting happens at the
+            <strong>Lambda alias level</strong>. Canary deployment =
+            <strong>Blue/Green with API GW + Lambda</strong>.</span
+          ><span class="lang-es"
+            >API Gateway nunca cambia. Todo el tráfico se gestiona a nivel de
+            <strong>Lambda alias</strong>. Canary =
+            <strong>Blue/Green con API GW + Lambda</strong>.</span
+          >
+        </div>
+      </div>
+
+      <!-- ═══════════════════ CARD 3: INTEGRATIONS ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">3</span>
+          <h2>
+            <span class="lang-en">Integration Types & Mapping Templates</span
+            ><span class="lang-es"
+              >Tipos de Integración y Mapping Templates</span
+            >
+          </h2>
+        </div>
+
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Type</th>
+              <th>Proxy?</th>
+              <th>Mapping Templates?</th>
+              <th>Use Case</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>MOCK</strong></td>
+              <td>No</td>
+              <td>No</td>
+              <td>Fixed response, no backend. Dev/testing only.</td>
+            </tr>
+            <tr>
+              <td><strong>HTTP</strong></td>
+              <td>No</td>
+              <td><span class="chip green">✅ Yes</span></td>
+              <td>HTTP backend + modify request/response</td>
+            </tr>
+            <tr>
+              <td><strong>AWS</strong></td>
+              <td>No</td>
+              <td><span class="chip green">✅ Yes</span></td>
+              <td>AWS service + modify request/response</td>
+            </tr>
+            <tr>
+              <td><strong>AWS_PROXY</strong></td>
+              <td><span class="chip blue">✅ Yes</span></td>
+              <td><span class="chip red">❌ No</span></td>
+              <td>Lambda Proxy — full request as-is to Lambda</td>
+            </tr>
+            <tr>
+              <td><strong>HTTP_PROXY</strong></td>
+              <td><span class="chip blue">✅ Yes</span></td>
+              <td><span class="chip red">❌ No</span></td>
+              <td>HTTP backend as-is; can inject hidden headers</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="callout warning">
+          ⚠️
+          <span class="lang-en"
+            ><strong>API Gateway timeout: 29 seconds max</strong> — regardless
+            of Lambda timeout. Exceeding →
+            <code style="color: #93c5fd">504</code></span
+          ><span class="lang-es"
+            ><strong>Timeout de API Gateway: 29 segundos máximo</strong> — sin
+            importar el timeout de Lambda. Si supera →
+            <code style="color: #93c5fd">504</code></span
+          >
+        </div>
+
+        <h3>Mapping Templates</h3>
+        <p>
+          <span class="lang-en"
+            >Only for HTTP/AWS (non-proxy). Written in
+            <strong>VTL (Velocity Template Language)</strong>. Content-Type must
+            be <code style="color: #93c5fd">application/json</code> or
+            <code style="color: #93c5fd">application/xml</code>.</span
+          ><span class="lang-es"
+            >Solo para HTTP/AWS (sin proxy). Escritos en <strong>VTL</strong>.
+            Content-Type: <code style="color: #93c5fd">application/json</code> o
+            <code style="color: #93c5fd">application/xml</code>.</span
+          >
+        </p>
+        <div class="compare">
+          <div class="compare-card">
+            <h4 class="orange">
+              REST → SOAP
+              <span style="color: #64748b; font-weight: 400"
+                >(classic exam)</span
+              >
+            </h4>
+            <ul>
+              <li>
+                <span class="lang-en"
+                  >Client speaks JSON, backend speaks XML</span
+                ><span class="lang-es"
+                  >Cliente habla JSON, backend habla XML</span
+                >
+              </li>
+              <li>
+                <span class="lang-en"
+                  >Template: JSON→XML (request); XML→JSON (response)</span
+                ><span class="lang-es"
+                  >Template: JSON→XML (request); XML→JSON (response)</span
+                >
+              </li>
+              <li>
+                <span class="lang-en">Client never knows SOAP is involved</span
+                ><span class="lang-es">El cliente no sabe que hay SOAP</span>
+              </li>
+            </ul>
+          </div>
+          <div class="compare-card">
+            <h4 class="blue">
+              <span class="lang-en">Rename Query Params</span
+              ><span class="lang-es">Renombrar Query Params</span>
+            </h4>
+            <ul>
+              <li>
+                <span class="lang-en"
+                  >Client sends: <code>?name=foo&other=bar</code></span
+                ><span class="lang-es"
+                  >Cliente envía: <code>?name=foo&other=bar</code></span
+                >
+              </li>
+              <li>
+                <span class="lang-en"
+                  >Lambda receives: <code>{"myVariable":"foo"}</code></span
+                ><span class="lang-es"
+                  >Lambda recibe: <code>{"myVariable":"foo"}</code></span
+                >
+              </li>
+              <li>
+                <span class="lang-en">Renamed at the gateway layer</span
+                ><span class="lang-es">Renombrado en la capa del gateway</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════ CARD 4: OPENAPI + CACHING ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">4</span>
+          <h2>
+            <span class="lang-en">OpenAPI & Caching</span
+            ><span class="lang-es">OpenAPI y Caché</span>
+          </h2>
+        </div>
+
+        <h3>OpenAPI</h3>
+        <p>
+          <span class="lang-en"
+            >OpenAPI v3.0 is an <strong>industry standard</strong> (not
+            AWS-specific, formerly Swagger). Spec format: YAML or JSON.</span
+          ><span class="lang-es"
+            >OpenAPI v3.0 es un <strong>estándar de la industria</strong> (no es
+            de AWS, antes llamado Swagger). Formato: YAML o JSON.</span
+          >
+        </p>
+        <div class="compare">
+          <div class="compare-card">
+            <h4 class="green">Import → API GW</h4>
+            <ul>
+              <li>
+                <span class="lang-en"
+                  >Auto-creates methods, integrations, responses</span
+                ><span class="lang-es"
+                  >Crea automáticamente métodos, integraciones, respuestas</span
+                >
+              </li>
+              <li>AWS extensions: <code>x-amazon-apigateway-</code></li>
+            </ul>
+          </div>
+          <div class="compare-card">
+            <h4 class="blue">Export → OpenAPI spec</h4>
+            <ul>
+              <li>
+                <span class="lang-en">Per stage, YAML or JSON</span
+                ><span class="lang-es">Por stage, YAML o JSON</span>
+              </li>
+              <li>
+                <span class="lang-en"
+                  >Generate client SDKs (Android, JS, iOS, Java, Ruby…)</span
+                ><span class="lang-es"
+                  >Generar SDKs (Android, JS, iOS, Java, Ruby…)</span
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="callout info">
+          <span class="lang-en"
+            ><strong>Request Validation:</strong> API GW rejects invalid
+            requests with <strong>400</strong> before hitting backend.
+            Validates: URI params, query strings, headers (non-blank), request
+            body (JSON Schema).</span
+          ><span class="lang-es"
+            ><strong>Validación de Requests:</strong> API GW rechaza con
+            <strong>400</strong> antes del backend. Valida: params URI, query
+            strings, headers, body (JSON Schema).</span
+          >
+        </div>
+
+        <h3>
+          <span class="lang-en">Caching</span><span class="lang-es">Caché</span>
+        </h3>
+        <div class="concept-grid">
+          <div class="concept-card">
+            <h4>Default TTL</h4>
+            <p><strong>300 seconds</strong> (5 min)</p>
+          </div>
+          <div class="concept-card">
+            <h4>Max TTL</h4>
+            <p><strong>3600 seconds</strong> (1 hour)</p>
+          </div>
+          <div class="concept-card">
+            <h4>Cache size</h4>
+            <p><strong>0.5 GB → 237 GB</strong></p>
+          </div>
+          <div class="concept-card">
+            <h4>Level</h4>
+            <p>Stage (override per method)</p>
+          </div>
+        </div>
+        <div class="callout warning">
+          ⚠️
+          <span class="lang-en"
+            >Cache is <strong>expensive</strong> — production only. Client
+            invalidates with
+            <code style="color: #93c5fd">Cache-Control: max-age=0</code>.
+            Requires <strong>IAM authorization</strong> — without it anyone can
+            flush the cache.</span
+          ><span class="lang-es"
+            >La caché es <strong>cara</strong> — solo producción. Cliente
+            invalida con
+            <code style="color: #93c5fd">Cache-Control: max-age=0</code>.
+            Requiere <strong>autorización IAM</strong>.</span
+          >
+        </div>
+      </div>
+
+      <!-- ═══════════════════ CARD 5: USAGE PLANS + MONITORING ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">5</span>
+          <h2>
+            <span class="lang-en">Usage Plans, API Keys & Monitoring</span
+            ><span class="lang-es">Usage Plans, API Keys y Monitoreo</span>
+          </h2>
+        </div>
+
+        <p>
+          <span class="lang-en"
+            >API key sent via
+            <code style="color: #93c5fd">x-api-key</code> header. Usage plan
+            sets <strong>throttle</strong> (req/sec) +
+            <strong>quota</strong> (req/period) per key.</span
+          ><span class="lang-es"
+            >API key enviada via header
+            <code style="color: #93c5fd">x-api-key</code>. Usage plan define
+            <strong>throttle</strong> + <strong>quota</strong> por key.</span
+          >
+        </p>
+        <div class="callout danger">
+          🚨
+          <span class="lang-en"
+            ><strong>Setup order:</strong> 1) Create API + require key on
+            methods + deploy → 2) Generate API keys → 3) Create usage plan → 4)
+            <strong>Associate stages + keys to usage plan</strong> ← easy to
+            forget!</span
+          ><span class="lang-es"
+            ><strong>Orden de setup:</strong> 1) API → 2) Keys → 3) Usage plan →
+            4) <strong>Asociar stages + keys</strong> ← ¡fácil de olvidar!</span
+          >
+        </div>
+
+        <h3>
+          <span class="lang-en">CloudWatch Metrics</span
+          ><span class="lang-es">Métricas de CloudWatch</span>
+        </h3>
+        <div class="compare">
+          <div class="compare-card">
+            <h4 class="blue">Metrics</h4>
+            <ul>
+              <li>
+                <strong>CacheHitCount</strong> —
+                <span class="lang-en">served from cache</span
+                ><span class="lang-es">servido desde caché</span>
+              </li>
+              <li>
+                <strong>CacheMissCount</strong> —
+                <span class="lang-en">hit backend</span
+                ><span class="lang-es">llegó al backend</span>
+              </li>
+              <li>
+                <strong>Count</strong> —
+                <span class="lang-en">total requests in period</span
+                ><span class="lang-es">requests totales en el período</span>
+              </li>
+              <li>
+                <strong>IntegrationLatency</strong> —
+                <span class="lang-en">backend time only</span
+                ><span class="lang-es">solo tiempo del backend</span>
+              </li>
+              <li>
+                <strong>Latency</strong> —
+                <span class="lang-en"
+                  >full round trip (always ≥ IntegrationLatency)</span
+                ><span class="lang-es"
+                  >round trip completo (siempre ≥ IntegrationLatency)</span
+                >
+              </li>
+            </ul>
+          </div>
+          <div class="compare-card">
+            <h4 class="orange">
+              <span class="lang-en">Throttling & Error Codes</span
+              ><span class="lang-es">Throttling y Códigos de Error</span>
+            </h4>
+            <ul>
+              <li>
+                <span class="lang-en"
+                  >Account limit: <strong>10,000 req/s</strong> (soft, shared
+                  across all APIs)</span
+                ><span class="lang-es"
+                  >Límite de cuenta: <strong>10,000 req/s</strong> (soft,
+                  compartido)</span
+                >
+              </li>
+              <li>
+                <span class="lang-en"
+                  >One overloaded API can throttle others</span
+                ><span class="lang-es"
+                  >Una API sobrecargada puede throttlear a las demás</span
+                >
+              </li>
+              <li><strong>429</strong> → throttling → exponential backoff</li>
+              <li>
+                <strong>400</strong> Bad Request · <strong>403</strong> Access
+                Denied / WAF
+              </li>
+              <li>
+                <strong>502</strong> Lambda bad response ·
+                <strong>503</strong> Backend unavailable
+              </li>
+              <li><strong>504</strong> Timeout (29s exceeded)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════ CARD 6: AUTH ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">6</span>
+          <h2>
+            <span class="lang-en">Authentication & Authorization</span
+            ><span class="lang-es">Autenticación y Autorización</span>
+          </h2>
+        </div>
+
+        <!-- METHOD 1: IAM -->
+        <h3>Method 1 — IAM Authorization + Sig v4</h3>
+        <p>
+          <span class="lang-en"
+            >Best for: <strong>internal AWS resources</strong> (EC2, Lambda, IAM
+            users). Uses Signature v4.</span
+          ><span class="lang-es"
+            >Mejor para: <strong>recursos internos de AWS</strong> (EC2, Lambda,
+            usuarios IAM). Usa Signature v4.</span
+          >
+        </p>
+        <div class="vd">
+          <svg
+            viewBox="0 0 760 130"
+            xmlns="http://www.w3.org/2000/svg"
+            style="width: 100%; height: auto; display: block"
+          >
+            <defs>
+              <marker
+                id="ah-iam-g"
+                markerWidth="8"
+                markerHeight="6"
+                refX="8"
+                refY="3"
+                orient="auto"
+              >
+                <path d="M0,0 L8,3 L0,6" fill="#64748b" />
+              </marker>
+              <marker
+                id="ah-iam-r"
+                markerWidth="8"
+                markerHeight="6"
+                refX="8"
+                refY="3"
+                orient="auto"
+              >
+                <path d="M0,0 L8,3 L0,6" fill="#f87171" />
+              </marker>
+              <marker
+                id="ah-iam-gr"
+                markerWidth="8"
+                markerHeight="6"
+                refX="8"
+                refY="3"
+                orient="auto"
+              >
+                <path d="M0,0 L8,3 L0,6" fill="#34d399" />
+              </marker>
+            </defs>
+            <!-- Row 1 -->
+            <rect
+              x="20"
+              y="20"
+              width="80"
+              height="28"
+              rx="7"
+              fill="#1e293b"
+              stroke="#3b82f6"
+              stroke-width="1.2"
+            />
+            <text
+              x="60"
+              y="39"
+              text-anchor="middle"
+              fill="#93c5fd"
+              font-family="Inter,sans-serif"
+              font-size="12"
+              font-weight="600"
+            >
+              Client
+            </text>
+            <text
+              x="152"
+              y="26"
+              text-anchor="middle"
+              fill="#94a3b8"
+              font-family="Inter,sans-serif"
+              font-size="9"
+            >
+              REST API w/ Sig v4
+            </text>
+            <line
+              x1="100"
+              y1="34"
+              x2="208"
+              y2="34"
+              stroke="#64748b"
+              stroke-width="1.2"
+              marker-end="url(#ah-iam-g)"
+            />
+            <rect
+              x="210"
+              y="20"
+              width="110"
+              height="28"
+              rx="7"
+              fill="#1e293b"
+              stroke="#f97316"
+              stroke-width="1.5"
+            />
+            <text
+              x="265"
+              y="39"
+              text-anchor="middle"
+              fill="#fb923c"
+              font-family="Inter,sans-serif"
+              font-size="12"
+              font-weight="700"
+            >
+              API Gateway
+            </text>
+            <!-- bidirectional IAM -->
+            <text
+              x="380"
+              y="26"
+              text-anchor="middle"
+              fill="#94a3b8"
+              font-family="Inter,sans-serif"
+              font-size="9"
+            >
+              IAM Policy check
+            </text>
+            <line
+              x1="320"
+              y1="30"
+              x2="418"
+              y2="30"
+              stroke="#f87171"
+              stroke-width="1.2"
+              marker-end="url(#ah-iam-r)"
+            />
+            <line
+              x1="418"
+              y1="38"
+              x2="320"
+              y2="38"
+              stroke="#f87171"
+              stroke-width="1.2"
+              marker-end="url(#ah-iam-r)"
+            />
+            <rect
+              x="420"
+              y="20"
+              width="60"
+              height="28"
+              rx="7"
+              fill="#1e293b"
+              stroke="#f87171"
+              stroke-width="1.2"
+            />
+            <text
+              x="450"
+              y="39"
+              text-anchor="middle"
+              fill="#fca5a5"
+              font-family="Inter,sans-serif"
+              font-size="12"
+              font-weight="600"
+            >
+              IAM
+            </text>
+            <!-- Row 2 -->
+            <rect
+              x="210"
+              y="80"
+              width="110"
+              height="28"
+              rx="7"
+              fill="#1e293b"
+              stroke="#f97316"
+              stroke-width="1.5"
+            />
+            <text
+              x="265"
+              y="99"
+              text-anchor="middle"
+              fill="#fb923c"
+              font-family="Inter,sans-serif"
+              font-size="12"
+              font-weight="700"
+            >
+              API Gateway
+            </text>
+            <line
+              x1="265"
+              y1="48"
+              x2="265"
+              y2="78"
+              stroke="#64748b"
+              stroke-width="1.2"
+              stroke-dasharray="4,3"
+            />
+            <line
+              x1="320"
+              y1="94"
+              x2="418"
+              y2="94"
+              stroke="#34d399"
+              stroke-width="1.2"
+              marker-end="url(#ah-iam-gr)"
+            />
+            <rect
+              x="420"
+              y="80"
+              width="130"
+              height="28"
+              rx="7"
+              fill="#1e293b"
+              stroke="#34d399"
+              stroke-width="1.2"
+            />
+            <text
+              x="485"
+              y="99"
+              text-anchor="middle"
+              fill="#34d399"
+              font-family="Inter,sans-serif"
+              font-size="12"
+              font-weight="600"
+            >
+              Backend (Lambda)
+            </text>
+            <!-- Resource Policy note -->
+            <rect
+              x="552"
+              y="15"
+              width="198"
+              height="42"
+              rx="6"
+              fill="#1e3a5f22"
+              stroke="#3b82f688"
+              stroke-width="1"
+            />
+            <text
+              x="651"
+              y="33"
+              text-anchor="middle"
+              fill="#93c5fd"
+              font-family="Inter,sans-serif"
+              font-size="10"
+              font-weight="700"
+            >
+              Resource Policy extends
+            </text>
+            <text
+              x="651"
+              y="48"
+              text-anchor="middle"
+              fill="#93c5fd"
+              font-family="Inter,sans-serif"
+              font-size="10"
+            >
+              cross-account · IP filter · VPC
+            </text>
+          </svg>
+        </div>
+
+        <!-- METHOD 2: Cognito -->
+        <h3>Method 2 — Cognito User Pools</h3>
+        <p>
+          <span class="lang-en"
+            >Best for: <strong>external users</strong> (mobile/web). No custom
+            auth code. API GW validates token natively with Cognito.</span
+          ><span class="lang-es"
+            >Mejor para: <strong>usuarios externos</strong> (mobile/web). Sin
+            código de auth custom. API GW valida el token directamente con
+            Cognito.</span
+          >
+        </p>
+        <div class="vd">
+          <svg
+            viewBox="0 0 680 180"
+            xmlns="http://www.w3.org/2000/svg"
+            style="width: 100%; height: auto; display: block"
+          >
+            <defs>
+              <marker
+                id="ah-cog"
+                markerWidth="8"
+                markerHeight="6"
+                refX="8"
+                refY="3"
+                orient="auto"
+              >
+                <path d="M0,0 L8,3 L0,6" fill="#64748b" />
+              </marker>
+              <marker
+                id="ah-cog-p"
+                markerWidth="8"
+                markerHeight="6"
+                refX="8"
+                refY="3"
+                orient="auto"
+              >
+                <path d="M0,0 L8,3 L0,6" fill="#c4b5fd" />
+              </marker>
+              <marker
+                id="ah-cog-g"
+                markerWidth="8"
+                markerHeight="6"
+                refX="8"
+                refY="3"
+                orient="auto"
+              >
+                <path d="M0,0 L8,3 L0,6" fill="#34d399" />
+              </marker>
+            </defs>
+            <!-- Row 1: authenticate -->
+            <rect
+              x="20"
+              y="15"
+              width="80"
+              height="28"
+              rx="7"
+              fill="#1e293b"
+              stroke="#3b82f6"
+              stroke-width="1.2"
+            />
+            <text
+              x="60"
+              y="34"
+              text-anchor="middle"
+              fill="#93c5fd"
+              font-family="Inter,sans-serif"
+              font-size="12"
+              font-weight="600"
+            >
+              Client
+            </text>
+            <text
+              x="200"
+              y="15"
+              text-anchor="middle"
+              fill="#94a3b8"
+              font-family="Inter,sans-serif"
+              font-size="9"
+            >
+              Authenticate + retrieve token
+            </text>
+            <line
+              x1="100"
+              y1="29"
+              x2="298"
+              y2="29"
+              stroke="#c4b5fd"
+              stroke-width="1.2"
+              marker-end="url(#ah-cog-p)"
+            />
+            <rect
+              x="300"
+              y="15"
+              width="140"
+              height="28"
+              rx="7"
+              fill="#1e293b"
+              stroke="#c4b5fd"
+              stroke-width="1.2"
+            />
+            <text
+              x="370"
+              y="34"
+              text-anchor="middle"
+              fill="#c4b5fd"
+              font-family="Inter,sans-serif"
+              font-size="12"
+              font-weight="600"
+            >
+              Cognito User Pools
+            </text>
+            <!-- Row 2: pass token -->
+            <rect
+              x="20"
+              y="75"
+              width="80"
+              height="28"
+              rx="7"
+              fill="#1e293b"
+              stroke="#3b82f6"
+              stroke-width="1.2"
+            />
+            <text
+              x="60"
+              y="94"
+              text-anchor="middle"
+              fill="#93c5fd"
+              font-family="Inter,sans-serif"
+              font-size="12"
+              font-weight="600"
+            >
+              Client
+            </text>
+            <text
+              x="150"
+              y="70"
+              text-anchor="middle"
+              fill="#94a3b8"
+              font-family="Inter,sans-serif"
+              font-size="9"
+            >
+              REST API + Pass Token
+            </text>
+            <line
+              x1="100"
+              y1="89"
+              x2="198"
+              y2="89"
+              stroke="#64748b"
+              stroke-width="1.2"
+              marker-end="url(#ah-cog)"
+            />
+            <rect
+              x="200"
+              y="75"
+              width="110"
+              height="28"
+              rx="7"
+              fill="#1e293b"
+              stroke="#f97316"
+              stroke-width="1.5"
+            />
+            <text
+              x="255"
+              y="94"
+              text-anchor="middle"
+              fill="#fb923c"
+              font-family="Inter,sans-serif"
+              font-size="12"
+              font-weight="700"
+            >
+              API Gateway
+            </text>
+            <!-- evaluate -->
+            <text
+              x="355"
+              y="70"
+              text-anchor="middle"
+              fill="#94a3b8"
+              font-family="Inter,sans-serif"
+              font-size="9"
+            >
+              Evaluate Cognito Token
+            </text>
+            <line
+              x1="310"
+              y1="85"
+              x2="398"
+              y2="85"
+              stroke="#c4b5fd"
+              stroke-width="1.2"
+              marker-end="url(#ah-cog-p)"
+            />
+            <line
+              x1="398"
+              y1="93"
+              x2="310"
+              y2="93"
+              stroke="#c4b5fd"
+              stroke-width="1.2"
+              marker-end="url(#ah-cog-p)"
+            />
+            <rect
+              x="400"
+              y="75"
+              width="140"
+              height="28"
+              rx="7"
+              fill="#1e293b"
+              stroke="#c4b5fd"
+              stroke-width="1.2"
+            />
+            <text
+              x="470"
+              y="94"
+              text-anchor="middle"
+              fill="#c4b5fd"
+              font-family="Inter,sans-serif"
+              font-size="12"
+              font-weight="600"
+            >
+              Cognito
+            </text>
+            <!-- Row 3: backend -->
+            <rect
+              x="200"
+              y="135"
+              width="110"
+              height="28"
+              rx="7"
+              fill="#1e293b"
+              stroke="#f97316"
+              stroke-width="1.5"
+            />
+            <text
+              x="255"
+              y="154"
+              text-anchor="middle"
+              fill="#fb923c"
+              font-family="Inter,sans-serif"
+              font-size="12"
+              font-weight="700"
+            >
+              API Gateway
+            </text>
+            <line
+              x1="255"
+              y1="103"
+              x2="255"
+              y2="133"
+              stroke="#64748b"
+              stroke-width="1.2"
+              stroke-dasharray="4,3"
+            />
+            <line
+              x1="310"
+              y1="149"
+              x2="398"
+              y2="149"
+              stroke="#34d399"
+              stroke-width="1.2"
+              marker-end="url(#ah-cog-g)"
+            />
+            <rect
+              x="400"
+              y="135"
+              width="130"
+              height="28"
+              rx="7"
+              fill="#1e293b"
+              stroke="#34d399"
+              stroke-width="1.2"
+            />
+            <text
+              x="465"
+              y="154"
+              text-anchor="middle"
+              fill="#34d399"
+              font-family="Inter,sans-serif"
+              font-size="12"
+              font-weight="600"
+            >
+              Backend (Lambda)
+            </text>
+          </svg>
+        </div>
+        <div class="callout info">
+          <span class="lang-en"
+            ><strong>Note:</strong> Authorization logic still lives in the
+            backend Lambda function.</span
+          ><span class="lang-es"
+            ><strong>Nota:</strong> La lógica de autorización sigue en el Lambda
+            del backend.</span
+          >
+        </div>
+
+        <!-- METHOD 3: Lambda Authorizer -->
+        <h3>Method 3 — Lambda Authorizer (Custom Authorizer)</h3>
+        <p>
+          <span class="lang-en"
+            >Best for: <strong>3rd party auth systems</strong> (Auth0, OAuth,
+            JWT). Most flexible, most work. Returns IAM policy (cached).</span
+          ><span class="lang-es"
+            >Mejor para: <strong>sistemas de auth de terceros</strong> (Auth0,
+            OAuth, JWT). Más flexible, más trabajo. Retorna IAM policy
+            (cacheada).</span
+          >
+        </p>
+        <div class="vd">
+          <svg
+            viewBox="0 0 700 260"
+            xmlns="http://www.w3.org/2000/svg"
+            style="width: 100%; height: auto; display: block"
+          >
+            <defs>
+              <marker
+                id="ah-la"
+                markerWidth="8"
+                markerHeight="6"
+                refX="8"
+                refY="3"
+                orient="auto"
+              >
+                <path d="M0,0 L8,3 L0,6" fill="#64748b" />
+              </marker>
+              <marker
+                id="ah-la-y"
+                markerWidth="8"
+                markerHeight="6"
+                refX="8"
+                refY="3"
+                orient="auto"
+              >
+                <path d="M0,0 L8,3 L0,6" fill="#fcd34d" />
+              </marker>
+              <marker
+                id="ah-la-g"
+                markerWidth="8"
+                markerHeight="6"
+                refX="8"
+                refY="3"
+                orient="auto"
+              >
+                <path d="M0,0 L8,3 L0,6" fill="#34d399" />
+              </marker>
+              <marker
+                id="ah-la-o"
+                markerWidth="8"
+                markerHeight="6"
+                refX="8"
+                refY="3"
+                orient="auto"
+              >
+                <path d="M0,0 L8,3 L0,6" fill="#fb923c" />
+              </marker>
+            </defs>
+            <!-- Row 1: 3rd party auth -->
+            <rect
+              x="20"
+              y="15"
+              width="70"
+              height="28"
+              rx="7"
+              fill="#1e293b"
+              stroke="#3b82f6"
+              stroke-width="1.2"
+            />
+            <text
+              x="55"
+              y="34"
+              text-anchor="middle"
+              fill="#93c5fd"
+              font-family="Inter,sans-serif"
+              font-size="12"
+              font-weight="600"
+            >
+              Client
+            </text>
+            <text
+              x="185"
+              y="12"
+              text-anchor="middle"
+              fill="#94a3b8"
+              font-family="Inter,sans-serif"
+              font-size="9"
+            >
+              Authenticate + retrieve token
+            </text>
+            <line
+              x1="90"
+              y1="29"
+              x2="278"
+              y2="29"
+              stroke="#fcd34d"
+              stroke-width="1.2"
+              marker-end="url(#ah-la-y)"
+            />
+            <rect
+              x="280"
+              y="15"
+              width="140"
+              height="28"
+              rx="7"
+              fill="#1e293b"
+              stroke="#fcd34d"
+              stroke-width="1.2"
+            />
+            <text
+              x="350"
+              y="34"
+              text-anchor="middle"
+              fill="#fcd34d"
+              font-family="Inter,sans-serif"
+              font-size="12"
+              font-weight="600"
+            >
+              3rd Party Auth System
+            </text>
+
+            <!-- Row 2: bearer token to API GW, then to Lambda Authorizer -->
+            <rect
+              x="20"
+              y="80"
+              width="70"
+              height="28"
+              rx="7"
+              fill="#1e293b"
+              stroke="#3b82f6"
+              stroke-width="1.2"
+            />
+            <text
+              x="55"
+              y="99"
+              text-anchor="middle"
+              fill="#93c5fd"
+              font-family="Inter,sans-serif"
+              font-size="12"
+              font-weight="600"
+            >
+              Client
+            </text>
+            <text
+              x="140"
+              y="75"
+              text-anchor="middle"
+              fill="#94a3b8"
+              font-family="Inter,sans-serif"
+              font-size="9"
+            >
+              Bearer token
+            </text>
+            <line
+              x1="90"
+              y1="94"
+              x2="188"
+              y2="94"
+              stroke="#64748b"
+              stroke-width="1.2"
+              marker-end="url(#ah-la)"
+            />
+            <rect
+              x="190"
+              y="80"
+              width="110"
+              height="28"
+              rx="7"
+              fill="#1e293b"
+              stroke="#f97316"
+              stroke-width="1.5"
+            />
+            <text
+              x="245"
+              y="99"
+              text-anchor="middle"
+              fill="#fb923c"
+              font-family="Inter,sans-serif"
+              font-size="12"
+              font-weight="700"
+            >
+              API Gateway
+            </text>
+            <text
+              x="340"
+              y="75"
+              text-anchor="middle"
+              fill="#94a3b8"
+              font-family="Inter,sans-serif"
+              font-size="9"
+            >
+              Context + token
+            </text>
+            <line
+              x1="300"
+              y1="94"
+              x2="388"
+              y2="94"
+              stroke="#64748b"
+              stroke-width="1.2"
+              marker-end="url(#ah-la)"
+            />
+            <rect
+              x="390"
+              y="80"
+              width="130"
+              height="28"
+              rx="7"
+              fill="#1e293b"
+              stroke="#34d399"
+              stroke-width="1.2"
+            />
+            <text
+              x="455"
+              y="99"
+              text-anchor="middle"
+              fill="#34d399"
+              font-family="Inter,sans-serif"
+              font-size="12"
+              font-weight="600"
+            >
+              Lambda Authorizer
+            </text>
+
+            <!-- Row 3: return IAM policy -->
+            <rect
+              x="390"
+              y="150"
+              width="130"
+              height="28"
+              rx="7"
+              fill="#1e293b"
+              stroke="#34d399"
+              stroke-width="1.2"
+            />
+            <text
+              x="455"
+              y="169"
+              text-anchor="middle"
+              fill="#34d399"
+              font-family="Inter,sans-serif"
+              font-size="12"
+              font-weight="600"
+            >
+              Lambda Authorizer
+            </text>
+            <line
+              x1="455"
+              y1="108"
+              x2="455"
+              y2="148"
+              stroke="#64748b"
+              stroke-width="1.2"
+              stroke-dasharray="4,3"
+            />
+            <text
+              x="345"
+              y="138"
+              text-anchor="middle"
+              fill="#94a3b8"
+              font-family="Inter,sans-serif"
+              font-size="9"
+            >
+              IAM Principal
+            </text>
+            <text
+              x="345"
+              y="148"
+              text-anchor="middle"
+              fill="#94a3b8"
+              font-family="Inter,sans-serif"
+              font-size="9"
+            >
+              +
+            </text>
+            <text
+              x="345"
+              y="158"
+              text-anchor="middle"
+              fill="#94a3b8"
+              font-family="Inter,sans-serif"
+              font-size="9"
+            >
+              IAM Policy
+            </text>
+            <line
+              x1="390"
+              y1="164"
+              x2="302"
+              y2="164"
+              stroke="#fb923c"
+              stroke-width="1.2"
+              marker-end="url(#ah-la-o)"
+            />
+            <rect
+              x="190"
+              y="150"
+              width="110"
+              height="28"
+              rx="7"
+              fill="#1e293b"
+              stroke="#f97316"
+              stroke-width="1.5"
+            />
+            <text
+              x="245"
+              y="169"
+              text-anchor="middle"
+              fill="#fb923c"
+              font-family="Inter,sans-serif"
+              font-size="12"
+              font-weight="700"
+            >
+              API Gateway
+            </text>
+            <line
+              x1="300"
+              y1="164"
+              x2="388"
+              y2="164"
+              stroke="#64748b"
+              stroke-width="1.2"
+              stroke-dasharray="4,3"
+              marker-end="url(#ah-la)"
+            />
+            <!-- Policy Cache -->
+            <rect
+              x="390"
+              y="150"
+              width="130"
+              height="28"
+              rx="7"
+              fill="#1e293b"
+              stroke="#34d399"
+              stroke-width="1.2"
+            />
+            <text
+              x="455"
+              y="169"
+              text-anchor="middle"
+              fill="#34d399"
+              font-family="Inter,sans-serif"
+              font-size="12"
+              font-weight="600"
+            >
+              Lambda Authorizer
+            </text>
+            <line
+              x1="520"
+              y1="164"
+              x2="568"
+              y2="164"
+              stroke="#64748b"
+              stroke-width="1.2"
+              marker-end="url(#ah-la)"
+            />
+            <rect
+              x="570"
+              y="150"
+              width="100"
+              height="28"
+              rx="7"
+              fill="#1e293b"
+              stroke="#94a3b8"
+              stroke-width="1"
+            />
+            <text
+              x="620"
+              y="169"
+              text-anchor="middle"
+              fill="#e2e8f0"
+              font-family="Inter,sans-serif"
+              font-size="11"
+              font-weight="600"
+            >
+              Policy Cache
+            </text>
+
+            <!-- Row 4: to backend -->
+            <rect
+              x="190"
+              y="220"
+              width="110"
+              height="28"
+              rx="7"
+              fill="#1e293b"
+              stroke="#f97316"
+              stroke-width="1.5"
+            />
+            <text
+              x="245"
+              y="239"
+              text-anchor="middle"
+              fill="#fb923c"
+              font-family="Inter,sans-serif"
+              font-size="12"
+              font-weight="700"
+            >
+              API Gateway
+            </text>
+            <line
+              x1="245"
+              y1="178"
+              x2="245"
+              y2="218"
+              stroke="#64748b"
+              stroke-width="1.2"
+              stroke-dasharray="4,3"
+            />
+            <line
+              x1="300"
+              y1="234"
+              x2="388"
+              y2="234"
+              stroke="#34d399"
+              stroke-width="1.2"
+              marker-end="url(#ah-la-g)"
+            />
+            <rect
+              x="390"
+              y="220"
+              width="130"
+              height="28"
+              rx="7"
+              fill="#1e293b"
+              stroke="#34d399"
+              stroke-width="1.2"
+            />
+            <text
+              x="455"
+              y="239"
+              text-anchor="middle"
+              fill="#34d399"
+              font-family="Inter,sans-serif"
+              font-size="12"
+              font-weight="600"
+            >
+              Backend (Lambda)
+            </text>
+          </svg>
+        </div>
+        <div class="callout warning">
+          ⚠️
+          <span class="lang-en"
+            >Result is cached, but you
+            <strong>still pay per Lambda Authorizer invocation</strong>.</span
+          ><span class="lang-es"
+            >El resultado se cachea, pero aún
+            <strong>pagás por cada invocación del Lambda Authorizer</strong
+            >.</span
+          >
+        </div>
+
+        <h3>
+          <span class="lang-en">Comparison</span
+          ><span class="lang-es">Comparación</span>
+        </h3>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th></th>
+              <th>IAM</th>
+              <th>Cognito</th>
+              <th>Lambda Authorizer</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <strong
+                  ><span class="lang-en">Best for</span
+                  ><span class="lang-es">Mejor para</span></strong
+                >
+              </td>
+              <td>Internal AWS</td>
+              <td>External users</td>
+              <td>3rd party auth</td>
+            </tr>
+            <tr>
+              <td><strong>Technology</strong></td>
+              <td>Sig v4</td>
+              <td>Cognito token</td>
+              <td>JWT / OAuth / Bearer</td>
+            </tr>
+            <tr>
+              <td>
+                <strong
+                  ><span class="lang-en">Custom code?</span
+                  ><span class="lang-es">¿Código custom?</span></strong
+                >
+              </td>
+              <td>No</td>
+              <td>No</td>
+              <td><span class="chip orange">Yes</span></td>
+            </tr>
+            <tr>
+              <td>
+                <strong
+                  ><span class="lang-en">Cross-account?</span
+                  ><span class="lang-es">¿Cross-account?</span></strong
+                >
+              </td>
+              <td>Yes + resource policy</td>
+              <td>No</td>
+              <td>No</td>
+            </tr>
+            <tr>
+              <td><strong>Caching</strong></td>
+              <td>N/A</td>
+              <td>N/A</td>
+              <td><span class="chip green">✅ Policy cached</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ═══════════════════ CARD 7: REST vs HTTP + WEBSOCKET ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">7</span>
+          <h2>
+            <span class="lang-en">REST API vs HTTP API & WebSocket</span
+            ><span class="lang-es">REST API vs HTTP API y WebSocket</span>
+          </h2>
+        </div>
+
+        <h3>REST API vs HTTP API</h3>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Feature</th>
+              <th>REST API</th>
+              <th>HTTP API</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Cost</strong></td>
+              <td>Higher</td>
+              <td><span class="chip green">Much cheaper ✅</span></td>
+            </tr>
+            <tr>
+              <td>Mapping templates</td>
+              <td>✅</td>
+              <td>❌</td>
+            </tr>
+            <tr>
+              <td>Usage plans / API keys</td>
+              <td>✅</td>
+              <td>❌</td>
+            </tr>
+            <tr>
+              <td>Resource policies</td>
+              <td>✅</td>
+              <td>❌</td>
+            </tr>
+            <tr>
+              <td>Built-in CORS</td>
+              <td>❌</td>
+              <td>✅</td>
+            </tr>
+            <tr>
+              <td>Auth options</td>
+              <td>IAM, Cognito, Lambda Authorizer</td>
+              <td>OIDC / OAuth 2.0 only</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>WebSocket API</h3>
+        <p>
+          <span class="lang-en"
+            >Two-way persistent connection. Server can push to client without a
+            request. Use cases: chat apps, multiplayer games, live
+            trading.</span
+          ><span class="lang-es"
+            >Conexión persistente bidireccional. El servidor puede enviar datos
+            sin que el cliente los solicite.</span
+          >
+        </p>
+
+        <div class="vd">
+          <div
+            style="
+              display: flex;
+              flex-direction: column;
+              gap: 14px;
+              padding: 20px;
+            "
+          >
+            <!-- Row 1: connect -->
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                flex-wrap: wrap;
+              "
+            >
+              <div
+                style="
+                  background: #0f172a;
+                  border: 1.5px solid #3b82f6;
+                  border-radius: 8px;
+                  padding: 7px 14px;
+                  color: #93c5fd;
+                  font-weight: 600;
+                  font-size: 13px;
+                  white-space: nowrap;
+                "
+              >
+                Client connects
+              </div>
+              <span style="color: #64748b; font-size: 16px; flex-shrink: 0"
+                >→</span
+              >
+              <div
+                style="
+                  background: #0f172a;
+                  border: 1.5px solid #34d399;
+                  border-radius: 8px;
+                  padding: 7px 14px;
+                  color: #34d399;
+                  font-weight: 600;
+                  font-size: 13px;
+                  white-space: nowrap;
+                "
+              >
+                $connect Lambda
+              </div>
+              <span style="color: #64748b; font-size: 16px; flex-shrink: 0"
+                >→</span
+              >
+              <div
+                style="
+                  background: #0f172a;
+                  border: 1.5px solid #fcd34d;
+                  border-radius: 8px;
+                  padding: 7px 14px;
+                  color: #fcd34d;
+                  font-weight: 600;
+                  font-size: 13px;
+                "
+              >
+                Store connectionId → DynamoDB
+              </div>
+            </div>
+            <!-- Row 2: send -->
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                flex-wrap: wrap;
+              "
+            >
+              <div
+                style="
+                  background: #0f172a;
+                  border: 1.5px solid #3b82f6;
+                  border-radius: 8px;
+                  padding: 7px 14px;
+                  color: #93c5fd;
+                  font-weight: 600;
+                  font-size: 13px;
+                  white-space: nowrap;
+                "
+              >
+                Client sends frame
+              </div>
+              <span style="color: #64748b; font-size: 16px; flex-shrink: 0"
+                >→</span
+              >
+              <div
+                style="
+                  background: #0f172a;
+                  border: 1.5px solid #34d399;
+                  border-radius: 8px;
+                  padding: 7px 14px;
+                  color: #34d399;
+                  font-weight: 600;
+                  font-size: 13px;
+                "
+              >
+                sendMessage Lambda
+                <div
+                  style="
+                    color: #94a3b8;
+                    font-weight: 400;
+                    font-size: 11px;
+                    margin-top: 2px;
+                  "
+                >
+                  (same connectionId throughout)
+                </div>
+              </div>
+            </div>
+            <!-- Row 3: disconnect -->
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                flex-wrap: wrap;
+              "
+            >
+              <div
+                style="
+                  background: #0f172a;
+                  border: 1.5px solid #3b82f6;
+                  border-radius: 8px;
+                  padding: 7px 14px;
+                  color: #93c5fd;
+                  font-weight: 600;
+                  font-size: 13px;
+                  white-space: nowrap;
+                "
+              >
+                Client leaves
+              </div>
+              <span style="color: #64748b; font-size: 16px; flex-shrink: 0"
+                >→</span
+              >
+              <div
+                style="
+                  background: #0f172a;
+                  border: 1.5px solid #f87171;
+                  border-radius: 8px;
+                  padding: 7px 14px;
+                  color: #fca5a5;
+                  font-weight: 600;
+                  font-size: 13px;
+                  white-space: nowrap;
+                "
+              >
+                $disconnect Lambda
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="formula-block">
+          <div class="f-label">
+            <span class="lang-en"
+              >Server → Client (Connection Callback URL)</span
+            ><span class="lang-es">Servidor → Cliente (URL de Callback)</span>
+          </div>
+          <div class="f-expr">
+            POST
+            https://{id}.execute-api.{region}.amazonaws.com/{stage}/@connections/{connectionId}
+          </div>
+          <div class="f-note">
+            GET = check status · DELETE = disconnect client · Must sign with IAM
+            Sig v4
+          </div>
+        </div>
+
+        <h3>
+          <span class="lang-en">WebSocket Routing</span
+          ><span class="lang-es">Routing de WebSocket</span>
+        </h3>
+        <div class="route-wrap">
+          <div>
+            <div class="route-label">
+              <span class="lang-en">Route Selection Expression</span
+              ><span class="lang-es">Expresión de selección de ruta</span>
+            </div>
+            <div class="formula-block" style="margin: 0">
+              <div class="f-expr" style="font-size: 12px">
+                $request.body.action → "join"
+              </div>
+              <div class="f-note" style="margin-top: 6px">
+                <span class="lang-en">Incoming: </span
+                ><span class="lang-es">Entrante: </span
+                ><code
+                  style="
+                    color: #93c5fd;
+                    font-family: &quot;Fira Code&quot;, monospace;
+                  "
+                  >{ "action": "join", "data": { "room": "room1234" } }</code
+                >
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="route-label">Route Key Table</div>
+            <div class="route-table">
+              <div class="route-row mandatory">
+                <div class="route-key">$connect</div>
+                <div class="route-desc">mandatory</div>
+              </div>
+              <div class="route-row mandatory">
+                <div class="route-key">$disconnect</div>
+                <div class="route-desc">mandatory</div>
+              </div>
+              <div class="route-row mandatory">
+                <div class="route-key">$default</div>
+                <div class="route-desc">
+                  <span class="lang-en">fallback — no match</span
+                  ><span class="lang-es">fallback — sin match</span>
+                </div>
+              </div>
+              <div class="route-row custom">
+                <div class="route-key">join</div>
+                <div class="route-desc">→ backend integration ✅</div>
+              </div>
+              <div class="route-row custom">
+                <div class="route-key">quit</div>
+                <div class="route-desc">custom</div>
+              </div>
+              <div class="route-row custom">
+                <div class="route-key">delete</div>
+                <div class="route-desc">custom</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════ CARD 8: ARCHITECTURE ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">8</span>
+          <h2>
+            <span class="lang-en">API Gateway Architecture</span
+            ><span class="lang-es">Arquitectura de API Gateway</span>
+          </h2>
+        </div>
+        <p>
+          <span class="lang-en"
+            >API Gateway acts as a <strong>unified facade</strong> for multiple
+            backends — not just Lambda.</span
+          ><span class="lang-es"
+            >API Gateway actúa como <strong>fachada unificada</strong> para
+            múltiples backends — no solo Lambda.</span
+          >
+        </p>
+
+        <div class="vd">
+          <svg
+            viewBox="0 0 680 340"
+            xmlns="http://www.w3.org/2000/svg"
+            style="width: 100%; height: auto; display: block"
+          >
+            <defs>
+              <marker
+                id="ah-arch"
+                markerWidth="8"
+                markerHeight="6"
+                refX="8"
+                refY="3"
+                orient="auto"
+              >
+                <path d="M0,0 L8,3 L0,6" fill="#64748b" />
+              </marker>
+              <marker
+                id="ah-arch-g"
+                markerWidth="8"
+                markerHeight="6"
+                refX="8"
+                refY="3"
+                orient="auto"
+              >
+                <path d="M0,0 L8,3 L0,6" fill="#34d399" />
+              </marker>
+              <marker
+                id="ah-arch-b"
+                markerWidth="8"
+                markerHeight="6"
+                refX="8"
+                refY="3"
+                orient="auto"
+              >
+                <path d="M0,0 L8,3 L0,6" fill="#60a5fa" />
+              </marker>
+              <marker
+                id="ah-arch-p"
+                markerWidth="8"
+                markerHeight="6"
+                refX="8"
+                refY="3"
+                orient="auto"
+              >
+                <path d="M0,0 L8,3 L0,6" fill="#c4b5fd" />
+              </marker>
+            </defs>
+
+            <!-- customer1 -->
+            <rect
+              x="60"
+              y="10"
+              width="160"
+              height="28"
+              rx="7"
+              fill="#1e293b"
+              stroke="#3b82f6"
+              stroke-width="1.2"
+            />
+            <text
+              x="140"
+              y="29"
+              text-anchor="middle"
+              fill="#93c5fd"
+              font-family="Inter,sans-serif"
+              font-size="12"
+              font-weight="600"
+            >
+              customer1.example.com
+            </text>
+
+            <!-- customer2 -->
+            <rect
+              x="300"
+              y="10"
+              width="160"
+              height="28"
+              rx="7"
+              fill="#1e293b"
+              stroke="#3b82f6"
+              stroke-width="1.2"
+            />
+            <text
+              x="380"
+              y="29"
+              text-anchor="middle"
+              fill="#93c5fd"
+              font-family="Inter,sans-serif"
+              font-size="12"
+              font-weight="600"
+            >
+              customer2.example.com
+            </text>
+
+            <!-- Route 53 -->
+            <rect
+              x="530"
+              y="10"
+              width="130"
+              height="28"
+              rx="7"
+              fill="#1e293b"
+              stroke="#f97316"
+              stroke-width="1"
+            />
+            <text
+              x="595"
+              y="25"
+              text-anchor="middle"
+              fill="#fb923c"
+              font-family="Inter,sans-serif"
+              font-size="11"
+              font-weight="700"
+            >
+              Route 53
+            </text>
+            <text
+              x="595"
+              y="33"
+              text-anchor="middle"
+              fill="#94a3b8"
+              font-family="Inter,sans-serif"
+              font-size="9"
+            >
+              Domain Registrar + DNS
+            </text>
+
+            <!-- Arrows from clients to API GW -->
+            <line
+              x1="140"
+              y1="38"
+              x2="270"
+              y2="88"
+              stroke="#64748b"
+              stroke-width="1.2"
+              marker-end="url(#ah-arch)"
+            />
+            <line
+              x1="380"
+              y1="38"
+              x2="310"
+              y2="88"
+              stroke="#64748b"
+              stroke-width="1.2"
+              marker-end="url(#ah-arch)"
+            />
+
+            <!-- API Gateway -->
+            <rect
+              x="220"
+              y="90"
+              width="160"
+              height="32"
+              rx="8"
+              fill="#1e293b"
+              stroke="#f97316"
+              stroke-width="2"
+            />
+            <text
+              x="300"
+              y="113"
+              text-anchor="middle"
+              fill="#fb923c"
+              font-family="Inter,sans-serif"
+              font-size="14"
+              font-weight="700"
+            >
+              ⚡ API Gateway
+            </text>
+
+            <!-- path labels -->
+            <text
+              x="100"
+              y="158"
+              text-anchor="middle"
+              fill="#e2e8f0"
+              font-family="Inter,sans-serif"
+              font-size="11"
+              font-weight="600"
+            >
+              /service1
+            </text>
+            <text
+              x="270"
+              y="158"
+              text-anchor="middle"
+              fill="#e2e8f0"
+              font-family="Inter,sans-serif"
+              font-size="11"
+              font-weight="600"
+            >
+              /docs
+            </text>
+            <text
+              x="500"
+              y="158"
+              text-anchor="middle"
+              fill="#e2e8f0"
+              font-family="Inter,sans-serif"
+              font-size="11"
+              font-weight="600"
+            >
+              /service2
+            </text>
+
+            <!-- Arrows from API GW to paths -->
+            <line
+              x1="250"
+              y1="122"
+              x2="130"
+              y2="165"
+              stroke="#34d399"
+              stroke-width="1.2"
+              marker-end="url(#ah-arch-g)"
+            />
+            <line
+              x1="300"
+              y1="122"
+              x2="300"
+              y2="165"
+              stroke="#60a5fa"
+              stroke-width="1.2"
+              marker-end="url(#ah-arch-b)"
+            />
+            <line
+              x1="350"
+              y1="122"
+              x2="470"
+              y2="165"
+              stroke="#c4b5fd"
+              stroke-width="1.2"
+              marker-end="url(#ah-arch-p)"
+            />
+
+            <!-- ELB left -->
+            <rect
+              x="70"
+              y="168"
+              width="100"
+              height="28"
+              rx="7"
+              fill="#1e293b"
+              stroke="#fcd34d"
+              stroke-width="1.2"
+            />
+            <text
+              x="120"
+              y="187"
+              text-anchor="middle"
+              fill="#fcd34d"
+              font-family="Inter,sans-serif"
+              font-size="12"
+              font-weight="700"
+            >
+              ELB
+            </text>
+            <line
+              x1="120"
+              y1="196"
+              x2="120"
+              y2="223"
+              stroke="#64748b"
+              stroke-width="1.2"
+              marker-end="url(#ah-arch)"
+            />
+
+            <!-- S3 Bucket -->
+            <rect
+              x="240"
+              y="168"
+              width="120"
+              height="28"
+              rx="7"
+              fill="#1e293b"
+              stroke="#60a5fa"
+              stroke-width="1.2"
+            />
+            <text
+              x="300"
+              y="183"
+              text-anchor="middle"
+              fill="#93c5fd"
+              font-family="Inter,sans-serif"
+              font-size="12"
+              font-weight="600"
+            >
+              S3 Bucket
+            </text>
+            <text
+              x="300"
+              y="193"
+              text-anchor="middle"
+              fill="#94a3b8"
+              font-family="Inter,sans-serif"
+              font-size="9"
+            >
+              (static content)
+            </text>
+
+            <!-- ELB right -->
+            <rect
+              x="430"
+              y="168"
+              width="100"
+              height="28"
+              rx="7"
+              fill="#1e293b"
+              stroke="#fcd34d"
+              stroke-width="1.2"
+            />
+            <text
+              x="480"
+              y="187"
+              text-anchor="middle"
+              fill="#fcd34d"
+              font-family="Inter,sans-serif"
+              font-size="12"
+              font-weight="700"
+            >
+              ELB
+            </text>
+            <line
+              x1="480"
+              y1="196"
+              x2="480"
+              y2="223"
+              stroke="#64748b"
+              stroke-width="1.2"
+              marker-end="url(#ah-arch)"
+            />
+
+            <!-- ECS Cluster -->
+            <rect
+              x="50"
+              y="226"
+              width="140"
+              height="34"
+              rx="8"
+              fill="#1e293b"
+              stroke="#34d399"
+              stroke-width="1.2"
+            />
+            <text
+              x="120"
+              y="240"
+              text-anchor="middle"
+              fill="#34d399"
+              font-family="Inter,sans-serif"
+              font-size="12"
+              font-weight="600"
+            >
+              ECS Cluster
+            </text>
+            <text
+              x="120"
+              y="253"
+              text-anchor="middle"
+              fill="#94a3b8"
+              font-family="Inter,sans-serif"
+              font-size="10"
+            >
+              (Microservices)
+            </text>
+
+            <!-- EC2 Auto Scaling -->
+            <rect
+              x="410"
+              y="226"
+              width="140"
+              height="34"
+              rx="8"
+              fill="#1e293b"
+              stroke="#c4b5fd"
+              stroke-width="1.2"
+            />
+            <text
+              x="480"
+              y="240"
+              text-anchor="middle"
+              fill="#c4b5fd"
+              font-family="Inter,sans-serif"
+              font-size="12"
+              font-weight="600"
+            >
+              EC2 Auto Scaling
+            </text>
+            <text
+              x="480"
+              y="253"
+              text-anchor="middle"
+              fill="#94a3b8"
+              font-family="Inter,sans-serif"
+              font-size="10"
+            >
+              Group
+            </text>
+
+            <!-- Note -->
+            <rect
+              x="80"
+              y="290"
+              width="520"
+              height="36"
+              rx="8"
+              fill="#064e3b22"
+              stroke="#10b98188"
+              stroke-width="1"
+            />
+            <text
+              x="340"
+              y="308"
+              text-anchor="middle"
+              fill="#6ee7b7"
+              font-family="Inter,sans-serif"
+              font-size="11"
+              font-weight="600"
+            >
+              API GW is not just for Lambda — it can front any backend
+            </text>
+            <text
+              x="340"
+              y="320"
+              text-anchor="middle"
+              fill="#6ee7b7"
+              font-family="Inter,sans-serif"
+              font-size="10"
+            >
+              Route 53 handles DNS · Custom domains per client · SSL via ACM
+            </text>
+          </svg>
+        </div>
+      </div>
+
+      <!-- ═══════════════════ CARD 9: EXAM TIPS ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">★</span>
+          <h2>
+            <span class="lang-en">Consolidated Exam Tips</span
+            ><span class="lang-es">Tips de Examen Consolidados</span>
+          </h2>
+        </div>
+        <div class="tips-grid">
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en">Changes not live</span
+              ><span class="lang-es">Cambios no activos</span></span
+            ><span class="arr">→</span
+            ><span class="answer"
+              ><span class="lang-en">Forgot to deploy to a stage</span
+              ><span class="lang-es">Olvidaron deployar en un stage</span></span
+            >
+          </div>
+          <div class="tip">
+            <span class="trigger">Stage var syntax</span
+            ><span class="arr">→</span
+            ><span class="answer">$stageVariables.varName</span>
+          </div>
+          <div class="tip">
+            <span class="trigger">Stage var inside ARN</span
+            ><span class="arr">→</span
+            ><span class="answer"
+              >${stageVariables.varName} (curly braces!)</span
+            >
+          </div>
+          <div class="tip">
+            <span class="trigger">Stage vars in Lambda</span
+            ><span class="arr">→</span
+            ><span class="answer"
+              ><span class="lang-en">Via context object</span
+              ><span class="lang-es">Via objeto context</span></span
+            >
+          </div>
+          <div class="tip">
+            <span class="trigger">Canary deployment =</span
+            ><span class="arr">→</span
+            ><span class="answer">Blue/Green with API GW + Lambda</span>
+          </div>
+          <div class="tip">
+            <span class="trigger">REST → SOAP</span><span class="arr">→</span
+            ><span class="answer">Non-proxy HTTP + mapping template</span>
+          </div>
+          <div class="tip">
+            <span class="trigger">No backend needed</span
+            ><span class="arr">→</span
+            ><span class="answer">MOCK integration</span>
+          </div>
+          <div class="tip">
+            <span class="trigger">Hidden header from client</span
+            ><span class="arr">→</span
+            ><span class="answer">HTTP Proxy — inject at GW level</span>
+          </div>
+          <div class="tip">
+            <span class="trigger">API GW timeout</span><span class="arr">→</span
+            ><span class="answer">29 seconds max → 504</span>
+          </div>
+          <div class="tip">
+            <span class="trigger">Edge-Optimized ACM cert</span
+            ><span class="arr">→</span
+            ><span class="answer">Must be in us-east-1</span>
+          </div>
+          <div class="tip">
+            <span class="trigger">Cache invalidation header</span
+            ><span class="arr">→</span
+            ><span class="answer"
+              >Cache-Control: max-age=0 (IAM auth required)</span
+            >
+          </div>
+          <div class="tip">
+            <span class="trigger">Default cache TTL</span
+            ><span class="arr">→</span
+            ><span class="answer">300s · Max: 3600s · Size: 0.5–237 GB</span>
+          </div>
+          <div class="tip">
+            <span class="trigger">Usage plan — easy to forget</span
+            ><span class="arr">→</span
+            ><span class="answer">Associate stages + keys to the plan</span>
+          </div>
+          <div class="tip">
+            <span class="trigger">API key header</span><span class="arr">→</span
+            ><span class="answer">x-api-key</span>
+          </div>
+          <div class="tip">
+            <span class="trigger">Account throttle limit</span
+            ><span class="arr">→</span
+            ><span class="answer"
+              >10,000 req/s (soft, shared across all APIs)</span
+            >
+          </div>
+          <div class="tip">
+            <span class="trigger">Throttling error</span
+            ><span class="arr">→</span
+            ><span class="answer">429 → exponential backoff</span>
+          </div>
+          <div class="tip">
+            <span class="trigger">Integration timeout</span
+            ><span class="arr">→</span
+            ><span class="answer">504 (after 29s)</span>
+          </div>
+          <div class="tip">
+            <span class="trigger">IntegrationLatency vs Latency</span
+            ><span class="arr">→</span
+            ><span class="answer"
+              >Latency = backend + GW processing (always bigger)</span
+            >
+          </div>
+          <div class="tip">
+            <span class="trigger">Internal AWS access</span
+            ><span class="arr">→</span><span class="answer">IAM + Sig v4</span>
+          </div>
+          <div class="tip">
+            <span class="trigger">External users (mobile/web)</span
+            ><span class="arr">→</span
+            ><span class="answer">Cognito User Pools</span>
+          </div>
+          <div class="tip">
+            <span class="trigger">3rd party auth (Auth0, JWT)</span
+            ><span class="arr">→</span
+            ><span class="answer">Lambda Authorizer → IAM policy (cached)</span>
+          </div>
+          <div class="tip">
+            <span class="trigger">Cross-account API access</span
+            ><span class="arr">→</span
+            ><span class="answer">IAM + Resource Policy (both required)</span>
+          </div>
+          <div class="tip">
+            <span class="trigger">Cheapest/simplest option</span
+            ><span class="arr">→</span
+            ><span class="answer"
+              >HTTP API (no mapping/usage plans/resource policies)</span
+            >
+          </div>
+          <div class="tip">
+            <span class="trigger">WebSocket: push to client</span
+            ><span class="arr">→</span
+            ><span class="answer">POST to /@connections/{connectionId}</span>
+          </div>
+          <div class="tip">
+            <span class="trigger">WebSocket: no route match</span
+            ><span class="arr">→</span
+            ><span class="answer">$default route</span>
+          </div>
+          <div class="tip">
+            <span class="trigger">CORS pre-flight</span
+            ><span class="arr">→</span
+            ><span class="answer"
+              >OPTIONS · Allow-Methods · Allow-Headers · Allow-Origin</span
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

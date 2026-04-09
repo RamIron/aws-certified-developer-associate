@@ -84,6 +84,6 @@ It should aggregate all lesson notes from that section into a single reference f
 
 ## Current State
 
-- **Current section:** Section 21 - AWS Serverless: Lambda
-- **Total XP:** 8700
-- **Lessons completed:** 280
+- **Current section:** Section 24 - AWS CICD: CodeCommit, CodePipeline, CodeBuild, CodeDeploy
+- **Total XP:** 11,475
+- **Lessons completed:** 377

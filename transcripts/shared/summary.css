@@ -1,0 +1,472 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap");
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Inter", sans-serif;
+  background: #0f172a;
+  color: #e2e8f0;
+  line-height: 1.6;
+  padding: 0 0 64px;
+}
+
+/* ── LANGUAGE TOGGLE (fixed) ── */
+.lang-es {
+  display: none;
+}
+body.es .lang-en {
+  display: none;
+}
+body.es .lang-es {
+  display: inline;
+}
+body.es .lang-es-block {
+  display: block;
+}
+.lang-es-block {
+  display: none;
+}
+body.es .lang-en-block {
+  display: none;
+}
+
+.lang-toggle {
+  position: fixed;
+  top: 0;
+  right: 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #0f172a;
+  color: #94a3b8;
+  border: 1px solid #334155;
+  border-radius: 999px;
+  padding: 7px 18px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: "Inter", sans-serif;
+  transition:
+    color 0.2s,
+    border-color 0.2s,
+    background 0.2s;
+  margin-top: 16px;
+  z-index: 100;
+}
+.lang-toggle:hover {
+  color: #e2e8f0;
+  border-color: #64748b;
+  background: #1e293b;
+}
+
+/* ── HERO ── */
+.hero {
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 60%, #1a1a2e 100%);
+  border-bottom: 1px solid #334155;
+  padding: 48px 32px 40px;
+  text-align: center;
+}
+.hero-eyebrow {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #f97316;
+  margin-bottom: 12px;
+}
+h1 {
+  font-size: clamp(26px, 4vw, 40px);
+  font-weight: 800;
+  color: #f8fafc;
+  margin-bottom: 8px;
+  letter-spacing: -0.02em;
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 40px 24px 0;
+}
+
+/* ── CARDS ── */
+.card {
+  background: #1e293b;
+  border-radius: 16px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  border: 1px solid #334155;
+}
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+.badge {
+  background: #f97316;
+  color: #0f172a;
+  font-weight: 800;
+  font-size: 13px;
+  padding: 0.25rem 0.65rem;
+  border-radius: 6px;
+}
+h2 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #f8fafc;
+}
+h3 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #cbd5e1;
+  margin: 1.5rem 0 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+p {
+  color: #cbd5e1;
+  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
+}
+p strong {
+  color: #f8fafc;
+}
+
+/* ── CONCEPT GRID ── */
+.concept-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.9rem;
+}
+.concept-card {
+  background: #0f172a;
+  border-radius: 12px;
+  padding: 1.1rem 1.2rem;
+  border: 1px solid #334155;
+}
+.concept-card h4 {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #f8fafc;
+  margin-bottom: 0.3rem;
+}
+.concept-card p {
+  font-size: 13px;
+  color: #cbd5e1;
+  margin: 0;
+}
+
+/* ── CALLOUTS ── */
+.callout {
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  margin: 1rem 0;
+  font-size: 0.85rem;
+}
+.callout.warning {
+  background: #451a0322;
+  border: 1px dashed #f97316;
+  color: #fdba74;
+}
+.callout.danger {
+  background: #7f1d1d22;
+  border: 1px solid #dc262688;
+  color: #fca5a5;
+}
+.callout.info {
+  background: #1e3a5f22;
+  border-left: 3px solid #3b82f6;
+  color: #93c5fd;
+}
+.callout.success {
+  background: #064e3b22;
+  border-left: 3px solid #10b981;
+  color: #6ee7b7;
+}
+
+/* ── CHIPS ── */
+.chip {
+  font-size: 13px;
+  font-weight: 700;
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+.chip.red {
+  background: #7f1d1d;
+  color: #fca5a5;
+}
+.chip.green {
+  background: #064e3b;
+  color: #6ee7b7;
+}
+.chip.blue {
+  background: #1e3a5f;
+  color: #93c5fd;
+}
+.chip.orange {
+  background: #431407;
+  color: #fb923c;
+}
+.chip.yellow {
+  background: #422006;
+  color: #fcd34d;
+}
+.chip.purple {
+  background: #2e1065;
+  color: #c4b5fd;
+}
+
+/* ── CODE BLOCK ── */
+.code-block {
+  background: #020617;
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+  font-family: "Fira Code", "Courier New", monospace;
+  font-size: 13px;
+  line-height: 1.9;
+  border: 1px solid #334155;
+  overflow-x: auto;
+  margin: 0.75rem 0;
+  white-space: pre;
+}
+.ck {
+  color: #60a5fa;
+}
+.cv {
+  color: #34d399;
+}
+.cs {
+  color: #fb923c;
+}
+
+/* ── DATA TABLE ── */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin: 0.75rem 0;
+}
+.data-table th {
+  background: #0f172a;
+  color: #94a3b8;
+  font-weight: 700;
+  text-align: left;
+  padding: 0.55rem 0.9rem;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  border-bottom: 1px solid #334155;
+}
+.data-table td {
+  padding: 0.55rem 0.9rem;
+  border-bottom: 1px solid #334155;
+  color: #cbd5e1;
+  vertical-align: top;
+}
+.data-table tr:last-child td {
+  border-bottom: none;
+}
+.data-table td strong {
+  color: #f8fafc;
+}
+.data-table td code {
+  font-family: "Fira Code", monospace;
+  background: #0f172a;
+  padding: 0.1rem 0.35rem;
+  border-radius: 4px;
+  color: #93c5fd;
+  font-size: 12px;
+}
+
+/* ── EXAM TIPS ── */
+.tips-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 0.7rem;
+}
+.tip {
+  background: #0f172a;
+  border-left: 3px solid #f97316;
+  border-radius: 0 8px 8px 0;
+  padding: 0.65rem 1rem;
+  font-size: 0.83rem;
+}
+.tip .trigger {
+  color: #94a3b8;
+}
+.tip .arr {
+  color: #64748b;
+  margin: 0 0.25rem;
+}
+.tip .answer {
+  color: #f8fafc;
+  font-weight: 700;
+}
+
+/* ── COMPARE ── */
+.compare {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin: 0.75rem 0;
+}
+.compare-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1rem;
+  margin: 0.75rem 0;
+}
+.compare-card {
+  background: #0f172a;
+  border-radius: 10px;
+  padding: 1rem;
+  border: 1px solid #334155;
+}
+.compare-card h4 {
+  font-size: 0.82rem;
+  font-weight: 700;
+  margin-bottom: 0.65rem;
+}
+.compare-card h4.blue {
+  color: #60a5fa;
+}
+.compare-card h4.green {
+  color: #34d399;
+}
+.compare-card h4.orange {
+  color: #fb923c;
+}
+.compare-card h4.purple {
+  color: #c4b5fd;
+}
+.compare-card h4.yellow {
+  color: #fcd34d;
+}
+.compare-card h4.red {
+  color: #fca5a5;
+}
+.compare-card ul {
+  list-style: none;
+  padding: 0;
+}
+.compare-card li {
+  font-size: 13px;
+  color: #cbd5e1;
+  padding: 0.18rem 0 0.18rem 1rem;
+  position: relative;
+}
+.compare-card li::before {
+  content: "·";
+  position: absolute;
+  left: 0;
+  color: #94a3b8;
+}
+.compare-card li code {
+  font-family: "Fira Code", monospace;
+  color: #93c5fd;
+  font-size: 12px;
+}
+
+/* ── VD (visual diagram) container ── */
+.vd {
+  background: #0f172a;
+  border-radius: 12px;
+  border: 1px solid #334155;
+  margin: 0.75rem 0;
+  overflow: hidden;
+  padding: 20px;
+}
+
+/* ── FORMULA ── */
+.formula-block {
+  background: #020617;
+  border: 1px solid #334155;
+  border-radius: 10px;
+  padding: 1.2rem 1.5rem;
+  margin: 0.75rem 0;
+}
+.formula-block .f-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #94a3b8;
+  margin-bottom: 0.4rem;
+  font-weight: 600;
+}
+.formula-block .f-expr {
+  font-family: "Fira Code", monospace;
+  font-size: 13px;
+  font-weight: 600;
+  color: #f97316;
+}
+.formula-block .f-note {
+  font-size: 12px;
+  color: #94a3b8;
+  margin-top: 4px;
+}
+
+/* ── ROUTE TABLE ── */
+.route-wrap {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  padding: 1.25rem;
+}
+.route-label {
+  font-size: 11px;
+  color: #94a3b8;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+.route-table {
+  background: #0f172a;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #334155;
+}
+.route-row {
+  display: flex;
+  align-items: center;
+  padding: 0.45rem 1rem;
+  border-bottom: 1px solid #334155;
+  font-size: 13px;
+  gap: 1rem;
+}
+.route-row:last-child {
+  border-bottom: none;
+}
+.route-key {
+  font-family: "Fira Code", monospace;
+  font-weight: 600;
+  min-width: 120px;
+}
+.route-row.mandatory .route-key {
+  color: #34d399;
+}
+.route-row.custom .route-key {
+  color: #93c5fd;
+}
+.route-desc {
+  color: #cbd5e1;
+  font-size: 12px;
+}
+
+@media (max-width: 680px) {
+  h1 {
+    font-size: 1.4rem;
+  }
+  .compare,
+  .compare-3 {
+    grid-template-columns: 1fr;
+  }
+}
