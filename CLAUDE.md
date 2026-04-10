@@ -82,6 +82,28 @@ It should aggregate all lesson notes from that section into a single reference f
 - 100% = PERFECT
 - Below 75% = Marked as "REVIEW" in STUDY_PLAN.md
 
+## Section Review HTML — Standards & Process
+
+Each section gets a `SECTION-{N}-SUMMARY.html` review file. These are the standards learned from iterating on previous sections.
+
+### Process
+- **Build the HTML incrementally as lessons are completed**, not all at once at the end. After each lesson (or small group of lessons), add/update the relevant card so the user can verify it while the content is fresh.
+- After the section is fully done, do a final pass to check for gaps.
+
+### Content standards for each card
+Every card must follow this pattern — no exceptions:
+
+1. **Card-level intro paragraph** — before any table, diagram, or list, explain in plain language what this card is about and why it matters. Never open a card with a table or diagram cold.
+2. **Subsection intro** — every `<h3>` subsection that contains a table or diagram must have a `<p>` explaining what it shows before showing it.
+3. **Tables** — must have a subtitle (`<h3>`) and an intro sentence. Never float a table without context.
+4. **Diagrams (SVG)** — must have an explanatory paragraph before them. If the diagram shows a multi-step flow, add numbered step labels on the arrows. If it combines two independent concepts, add a clarifying note.
+5. **"What is this?"** rule — if a term, feature, or mechanism is introduced (e.g. stage variables, route keys, policy cache), explain what it IS before explaining how it works.
+
+### Weak Points section
+- Add a `<!-- WEAK POINTS -->` callout block at the very top of the HTML (before card 1).
+- Populate it with tricky Udemy quiz questions as the user encounters them.
+- Each entry: question summary + correct answer + explanation of why.
+
 ## Current State
 
 - **Current section:** Section 24 - AWS CICD: CodeCommit, CodePipeline, CodeBuild, CodeDeploy
