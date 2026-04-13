@@ -4,15 +4,26 @@
 
 | Metric | Value |
 |--------|-------|
-| Total XP | 11475 |
-| Lessons completed | 176 |
-| Perfect quizzes (100%) | 144 |
+| Total XP | 12075 |
+| Lessons completed | 186 |
+| Perfect quizzes (100%) | 151 |
 | Lessons to review | 15 |
 
 ## Session History
 
 | Date | Section | Lesson | XP | Result |
 |------|---------|--------|----|--------|
+| 2026-04-13 | 24 - CICD | 24.17 - CodeGuru | +75 | PERFECT 100% |
+| 2026-04-13 | 24 - CICD | 24.16 - CodeArtifact Hands On | — | Skipped (hands-on) |
+| 2026-04-11 | 24 - CICD | 24.15 - CodeArtifact | +75 | PERFECT 100% |
+| 2026-04-11 | 24 - CICD | 24.14 - CodeDeploy EC2 and ASG | +75 | PERFECT 100% |
+| 2026-04-11 | 24 - CICD | 24.13 - CodeDeploy Hands On | — | Skipped (hands-on) |
+| 2026-04-11 | 24 - CICD | 24.12 - CodeDeploy Overview | +75 | PERFECT 100% |
+| 2026-04-11 | 24 - CICD | 24.10/24.11 - CodeBuild Hands On | — | Skipped (hands-on) |
+| 2026-04-11 | 24 - CICD | 24.9 - CodeBuild Overview | +75 | PERFECT 100% |
+| 2026-04-11 | 24 - CICD | 24.6 - CodePipeline Overview | +75 | PERFECT 100% |
+| 2026-04-11 | 24 - CICD | 24.3 - CodeCommit Overview | +75 | PERFECT 100% |
+| 2026-04-10 | 24 - CICD | 24.2 - Introduction to CICD in AWS | +75 | PERFECT 100% |
 | 2026-04-08 | 23 - API Gateway | API Gateway Quiz (Quiz 20) - Udemy | — | Completed |
 | 2026-04-08 | 23 - API Gateway | 23.20 - API Gateway WebSocket API | +75 | PERFECT 100% |
 | 2026-04-08 | 23 - API Gateway | 23.19 - API Gateway REST API vs HTTP API | +75 | PERFECT 100% |

@@ -7,14 +7,14 @@ Study notes for AWS DVA-C02, assisted by Claude.
 ## 📊 Progress
 
 ```
-████████████████████████░░░░░░ 78.1% (377/483 lessons)
+█████████████████████████░░░░░ 82.0% (396/483 lessons)
 ```
 
-📹 Videos: 351/446 · 📄 Articles: 6/8 · ❓ Quizzes: 20/29
+📹 Videos: 369/446 · 📄 Articles: 6/8 · ❓ Quizzes: 21/29
 
-**Current section:** 24 - AWS CICD: CodeCommit, CodePipeline, CodeBuild, CodeDeploy
+**Current section:** 25 - AWS Serverless: SAM - Serverless Application Model
 
-**XP:** 11,475
+**XP:** 12,075
 
 ### Course Sections
 
@@ -43,7 +43,7 @@ Study notes for AWS DVA-C02, assisted by Claude.
 | 21: AWS Serverless: Lambda | 3h 4 min | ✅ |
 | 22: AWS Serverless: DynamoDB | 1h 46 min | ✅ |
 | 23: AWS Serverless: API Gateway | 1h 22 min | ✅ |
-| 24: AWS CICD: CodeCommit, CodePipeline, CodeBuild, CodeDeploy | 1h 38 min | |
+| 24: AWS CICD: CodeCommit, CodePipeline, CodeBuild, CodeDeploy | 1h 38 min | ✅ |
 | 25: AWS Serverless: SAM | 35 min | |
 | 26: Cloud Development Kit (CDK) | 26 min | |
 | 27: Cognito: Cognito User Pools, Cognito Identity Pools & Cognito Sync | 39 min | |
@@ -54,8 +54,8 @@ Study notes for AWS DVA-C02, assisted by Claude.
 | 32: AWS Final Cleanup | 3 min | |
 | 33: Preparing for the Exam | 21 min | |
 | 34: Congratulations | 9 min | |
-| **Completed** | **~24h 43 min** | |
-| **Remaining** | **~7h 15 min** | |
+| **Completed** | **~26h 21 min** | |
+| **Remaining** | **~5h 37 min** | |
 
 ---
 

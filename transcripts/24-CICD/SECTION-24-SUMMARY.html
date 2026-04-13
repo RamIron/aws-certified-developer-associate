@@ -1,0 +1,5338 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Section 24 — AWS CICD</title>
+    <link rel="stylesheet" href="../shared/summary.css" />
+    <script src="../shared/summary.js"></script>
+    <style>
+      /* ── STEPPER ── */
+      .demo-wrap {
+        background: #0f172a;
+        border: 1px solid #1e293b;
+        border-radius: 10px;
+        padding: 1rem 1.25rem;
+        margin-top: 0.75rem;
+      }
+      .demo-title {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        margin-bottom: 0.6rem;
+      }
+      .demo-title h4 {
+        margin: 0;
+        font-size: 0.9rem;
+        color: #e2e8f0;
+      }
+      .mode-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+      .anim-body {
+        min-height: 80px;
+      }
+      .anim-controls {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-top: 0.6rem;
+        flex-wrap: wrap;
+      }
+      .nav-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+        background: transparent;
+        color: #3b82f6;
+        border: 1px solid #3b82f6;
+        border-radius: 8px;
+        padding: 0.35rem 0.8rem;
+        font-weight: 700;
+        font-size: 0.8rem;
+        cursor: pointer;
+        transition: background 0.2s;
+        font-family: inherit;
+        white-space: nowrap;
+      }
+      .nav-btn:hover:not(:disabled) {
+        background: #3b82f618;
+      }
+      .nav-btn:disabled {
+        opacity: 0.22;
+        cursor: default;
+      }
+      .restart-btn {
+        background: transparent;
+        color: #475569;
+        border: 1px solid #1e293b;
+        border-radius: 8px;
+        padding: 0.35rem 0.7rem;
+        font-size: 0.78rem;
+        cursor: pointer;
+        transition:
+          color 0.2s,
+          border-color 0.2s;
+        font-family: inherit;
+        margin-left: auto;
+      }
+      .restart-btn:hover {
+        color: #94a3b8;
+        border-color: #334155;
+      }
+      .step-dots {
+        display: flex;
+        gap: 5px;
+      }
+      .sdot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #1e293b;
+        transition:
+          background 0.3s,
+          transform 0.3s;
+      }
+      .sdot.active {
+        background: #3b82f6;
+        transform: scale(1.3);
+      }
+      .step-counter {
+        font-size: 0.78rem;
+        color: #64748b;
+      }
+      /* instance boxes */
+      .instance-row {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+        margin-bottom: 0.5rem;
+      }
+      .inst {
+        border-radius: 6px;
+        padding: 0.3rem 0.7rem;
+        font-size: 0.78rem;
+        font-weight: 700;
+      }
+      .inst.v1 {
+        background: #1e3a5f;
+        color: #93c5fd;
+        border: 1px solid #3b82f6;
+      }
+      .inst.v2 {
+        background: #14532d;
+        color: #86efac;
+        border: 1px solid #22c55e;
+      }
+      .inst.off {
+        background: #1e293b;
+        color: #475569;
+        border: 1px solid #334155;
+      }
+      .inst.temp {
+        background: #431407;
+        color: #fdba74;
+        border: 1px solid #f97316;
+      }
+      /* ASG boxes */
+      .dual-asg {
+        display: flex;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+        margin-bottom: 0.5rem;
+      }
+      .asg-box {
+        flex: 1;
+        min-width: 140px;
+        border: 1px solid #1e293b;
+        border-radius: 8px;
+        padding: 0.5rem 0.75rem;
+      }
+      .asg-label {
+        font-size: 0.72rem;
+        font-weight: 700;
+        margin-bottom: 0.4rem;
+      }
+      .asg-label.main {
+        color: #93c5fd;
+      }
+      .asg-label.temp {
+        color: #fdba74;
+      }
+      .asg-label.blue {
+        color: #93c5fd;
+      }
+      .asg-label.green {
+        color: #86efac;
+      }
+      .asg-label.tg1 {
+        color: #93c5fd;
+      }
+      .asg-label.tg2 {
+        color: #86efac;
+      }
+      /* traffic bar */
+      .traffic-wrap {
+        margin-bottom: 0.5rem;
+      }
+      .traffic-label {
+        font-size: 0.72rem;
+        color: #64748b;
+        margin-bottom: 0.25rem;
+      }
+      .traffic-bar {
+        display: flex;
+        height: 18px;
+        border-radius: 4px;
+        overflow: hidden;
+      }
+      .tbar-v1 {
+        background: #1d4ed8;
+        color: #bfdbfe;
+        font-size: 0.68rem;
+        display: flex;
+        align-items: center;
+        padding: 0 6px;
+        transition: width 0.4s;
+      }
+      .tbar-v2 {
+        background: #15803d;
+        color: #bbf7d0;
+        font-size: 0.68rem;
+        display: flex;
+        align-items: center;
+        padding: 0 6px;
+        transition: width 0.4s;
+      }
+      /* step description */
+      .step-desc {
+        border-left: 3px solid #334155;
+        padding: 0.4rem 0.75rem;
+        font-size: 0.83rem;
+        color: #94a3b8;
+        line-height: 1.5;
+        border-radius: 0 4px 4px 0;
+        background: #0f172a;
+      }
+      .hl-v1 {
+        color: #93c5fd;
+        font-weight: 700;
+      }
+      .hl-v2 {
+        color: #86efac;
+        font-weight: 700;
+      }
+      .hl-d {
+        color: #f87171;
+        font-weight: 700;
+      }
+      .hl-ok {
+        color: #4ade80;
+        font-weight: 700;
+      }
+      .hl-tmp {
+        color: #fdba74;
+        font-weight: 700;
+      }
+      /* badge chip */
+      .chip-sm {
+        font-size: 0.7rem;
+        font-weight: 700;
+        padding: 0.15rem 0.5rem;
+        border-radius: 99px;
+        margin-left: auto;
+      }
+      .chip-sm.red {
+        background: #450a0a;
+        color: #fca5a5;
+      }
+      .chip-sm.green {
+        background: #052e16;
+        color: #86efac;
+      }
+      .chip-sm.blue {
+        background: #172554;
+        color: #93c5fd;
+      }
+      .chip-sm.orange {
+        background: #431407;
+        color: #fdba74;
+      }
+    </style>
+  </head>
+  <body>
+    <script>
+      initHeader(
+        "Section 24 — AWS CICD: CodeCommit, CodePipeline, CodeBuild, CodeDeploy",
+      );
+    </script>
+
+    <div class="container">
+
+      <!-- ═══════════════════ CARD 1: CICD OVERVIEW ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">1</span>
+          <h2>
+            <span class="lang-en">CICD Overview</span
+            ><span class="lang-es">Visión General de CICD</span>
+          </h2>
+        </div>
+
+        <p>
+          <span class="lang-en"
+            >Everything done manually so far in the course — clicking the
+            console, running CLI commands, deploying via Beanstalk — is slow and
+            error-prone at scale. CICD automates the full path from a code push
+            to a production deployment, adding both
+            <strong>speed</strong> (deploy constantly, not once every 3 months)
+            and <strong>safety</strong> (nothing ships untested). You can also
+            define multiple stages (dev → test → staging → prod) with optional
+            manual approvals before hitting production.</span
+          ><span class="lang-es"
+            >Todo lo hecho manualmente hasta ahora en el curso — consola, CLI,
+            Beanstalk a mano — es lento y propenso a errores a escala. CICD
+            automatiza el camino completo desde un push de código hasta
+            producción, agregando <strong>velocidad</strong> (deployar
+            constantemente, no cada 3 meses) y <strong>seguridad</strong> (nada
+            llega a producción sin testear). También podés definir múltiples
+            stages (dev → test → staging → prod) con aprobaciones manuales
+            opcionales antes de producción.</span
+          >
+        </p>
+
+        <h3>
+          <span class="lang-en">CI vs CD</span
+          ><span class="lang-es">CI vs CD</span>
+        </h3>
+        <p>
+          <span class="lang-en"
+            >The two halves of the pipeline have distinct responsibilities.
+            <strong>CI (Continuous Integration)</strong> is about the left side
+            — every code push triggers an automatic build and test cycle, giving
+            developers fast feedback without testing on their own machine.
+            <strong>CD (Continuous Delivery)</strong> extends that — every green
+            build is automatically deployed to application servers, shifting the
+            team away from rare, risky big-bang releases toward small, frequent,
+            automated ones.</span
+          ><span class="lang-es"
+            >Las dos mitades del pipeline tienen responsabilidades distintas.
+            <strong>CI (Integración Continua)</strong> es el lado izquierdo —
+            cada push dispara un ciclo automático de build y test, dando
+            feedback rápido sin necesidad de testear en la máquina local.
+            <strong>CD (Entrega Continua)</strong> lo extiende — cada build
+            verde se deploya automáticamente, alejando al equipo de releases
+            grandes y riesgosas hacia releases pequeñas, frecuentes y
+            automatizadas.</span
+          >
+        </p>
+
+        <div class="compare">
+          <div class="compare-card">
+            <h4 class="blue">
+              <span class="lang-en">CI — Continuous Integration</span
+              ><span class="lang-es">CI — Integración Continua</span>
+            </h4>
+            <ul>
+              <li>
+                <span class="lang-en">Developer pushes code to repo</span
+                ><span class="lang-es">Developer pushea código al repo</span>
+              </li>
+              <li>
+                <span class="lang-en"
+                  >Build server fetches + tests automatically</span
+                ><span class="lang-es"
+                  >El servidor de build testea automáticamente</span
+                >
+              </li>
+              <li>
+                <span class="lang-en">Developer gets ✅ / ❌ feedback fast</span
+                ><span class="lang-es"
+                  >El developer recibe feedback ✅ / ❌ rápido</span
+                >
+              </li>
+              <li>
+                <span class="lang-en"
+                  >Bugs caught at push time, not release time</span
+                ><span class="lang-es"
+                  >Bugs detectados al pushear, no al releasear</span
+                >
+              </li>
+              <li>
+                <span class="lang-en"
+                  >Tools: <strong>CodeBuild</strong>, Jenkins CI</span
+                ><span class="lang-es"
+                  >Herramientas: <strong>CodeBuild</strong>, Jenkins CI</span
+                >
+              </li>
+            </ul>
+          </div>
+          <div class="compare-card">
+            <h4 class="green">
+              <span class="lang-en">CD — Continuous Delivery</span
+              ><span class="lang-es">CD — Entrega Continua</span>
+            </h4>
+            <ul>
+              <li>
+                <span class="lang-en"
+                  >Every green build → automatically deployed</span
+                ><span class="lang-es"
+                  >Cada build verde → se deploya automáticamente</span
+                >
+              </li>
+              <li>
+                <span class="lang-en"
+                  >From "1 release / 3 months" → "5 releases / day"</span
+                ><span class="lang-es"
+                  >De "1 release cada 3 meses" → "5 releases por día"</span
+                >
+              </li>
+              <li>
+                <span class="lang-en"
+                  >Deploy to dev → test → staging → prod</span
+                ><span class="lang-es"
+                  >Deploy a dev → test → staging → prod</span
+                >
+              </li>
+              <li>
+                <span class="lang-en">Optional manual approval before prod</span
+                ><span class="lang-es"
+                  >Aprobación manual opcional antes de prod</span
+                >
+              </li>
+              <li>
+                <span class="lang-en"
+                  >Tools: <strong>CodeDeploy</strong>, Jenkins CD,
+                  Spinnaker</span
+                ><span class="lang-es"
+                  >Herramientas: <strong>CodeDeploy</strong>, Jenkins CD,
+                  Spinnaker</span
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>
+          <span class="lang-en">AWS CICD Tech Stack</span
+          ><span class="lang-es">Stack de Tecnología CICD en AWS</span>
+        </h3>
+        <p>
+          <span class="lang-en"
+            >AWS has a native service for each phase of the pipeline. The
+            diagram below maps each phase to its AWS service and available
+            third-party alternatives. <strong>CodePipeline</strong> sits
+            underneath everything — it doesn't build or deploy itself, it
+            orchestrates the entire flow.</span
+          ><span class="lang-es"
+            >AWS tiene un servicio nativo para cada fase del pipeline. El
+            diagrama muestra cada fase con su servicio AWS y las alternativas de
+            terceros disponibles. <strong>CodePipeline</strong> está debajo de
+            todo — no buildea ni deploya, sino que orquesta el flujo
+            completo.</span
+          >
+        </p>
+
+        <!-- Tech Stack Diagram -->
+        <div class="vd">
+          <svg
+            viewBox="0 0 800 200"
+            xmlns="http://www.w3.org/2000/svg"
+            style="width: 100%; height: auto; display: block"
+          >
+            <defs>
+              <marker
+                id="ah-cicd"
+                markerWidth="8"
+                markerHeight="6"
+                refX="8"
+                refY="3"
+                orient="auto"
+              >
+                <path d="M0,0 L8,3 L0,6" fill="#64748b" />
+              </marker>
+            </defs>
+
+            <!-- Phase labels — centred over each column's service box -->
+            <text
+              x="80"
+              y="15"
+              text-anchor="middle"
+              fill="#94a3b8"
+              font-family="Inter,sans-serif"
+              font-size="10"
+              font-weight="700"
+              letter-spacing="0.05em"
+            >
+              CODE
+            </text>
+            <text
+              x="254"
+              y="15"
+              text-anchor="middle"
+              fill="#94a3b8"
+              font-family="Inter,sans-serif"
+              font-size="10"
+              font-weight="700"
+              letter-spacing="0.05em"
+            >
+              BUILD + TEST
+            </text>
+            <text
+              x="434"
+              y="15"
+              text-anchor="middle"
+              fill="#94a3b8"
+              font-family="Inter,sans-serif"
+              font-size="10"
+              font-weight="700"
+              letter-spacing="0.05em"
+            >
+              DEPLOY
+            </text>
+            <text
+              x="655"
+              y="15"
+              text-anchor="middle"
+              fill="#94a3b8"
+              font-family="Inter,sans-serif"
+              font-size="10"
+              font-weight="700"
+              letter-spacing="0.05em"
+            >
+              PROVISION
+            </text>
+
+            <!-- Main service row -->
+            <!-- CodeCommit -->
+            <rect
+              x="10"
+              y="22"
+              width="140"
+              height="32"
+              rx="7"
+              fill="#1e293b"
+              stroke="#3b82f6"
+              stroke-width="1.5"
+            />
+            <text
+              x="80"
+              y="43"
+              text-anchor="middle"
+              fill="#93c5fd"
+              font-family="Inter,sans-serif"
+              font-size="12"
+              font-weight="700"
+            >
+              CodeCommit
+            </text>
+
+            <line
+              x1="150"
+              y1="38"
+              x2="163"
+              y2="38"
+              stroke="#64748b"
+              stroke-width="1.2"
+              marker-end="url(#ah-cicd)"
+            />
+
+            <!-- CodeBuild -->
+            <rect
+              x="165"
+              y="22"
+              width="178"
+              height="32"
+              rx="7"
+              fill="#1e293b"
+              stroke="#6366f1"
+              stroke-width="1.5"
+            />
+            <text
+              x="254"
+              y="43"
+              text-anchor="middle"
+              fill="#a5b4fc"
+              font-family="Inter,sans-serif"
+              font-size="12"
+              font-weight="700"
+            >
+              CodeBuild
+            </text>
+
+            <line
+              x1="343"
+              y1="38"
+              x2="358"
+              y2="38"
+              stroke="#64748b"
+              stroke-width="1.2"
+              marker-end="url(#ah-cicd)"
+            />
+
+            <!-- CodeDeploy -->
+            <rect
+              x="360"
+              y="22"
+              width="148"
+              height="32"
+              rx="7"
+              fill="#1e293b"
+              stroke="#f97316"
+              stroke-width="1.5"
+            />
+            <text
+              x="434"
+              y="43"
+              text-anchor="middle"
+              fill="#fb923c"
+              font-family="Inter,sans-serif"
+              font-size="12"
+              font-weight="700"
+            >
+              CodeDeploy
+            </text>
+
+            <line
+              x1="508"
+              y1="38"
+              x2="522"
+              y2="38"
+              stroke="#64748b"
+              stroke-width="1.2"
+              marker-end="url(#ah-cicd)"
+            />
+
+            <!-- Provision targets — PROVISION column only -->
+            <rect
+              x="524"
+              y="22"
+              width="262"
+              height="32"
+              rx="7"
+              fill="#0f172a"
+              stroke="#334155"
+              stroke-width="1.2"
+            />
+            <text
+              x="655"
+              y="36"
+              text-anchor="middle"
+              fill="#94a3b8"
+              font-family="Inter,sans-serif"
+              font-size="10"
+            >
+              EC2 · On-premises · Lambda · ECS
+            </text>
+            <text
+              x="655"
+              y="49"
+              text-anchor="middle"
+              fill="#64748b"
+              font-family="Inter,sans-serif"
+              font-size="9"
+            >
+              (CodeDeploy targets)
+            </text>
+
+            <!-- Elastic Beanstalk — spans DEPLOY + PROVISION as a single alternative -->
+            <text
+              x="353"
+              y="81"
+              text-anchor="end"
+              fill="#64748b"
+              font-family="Inter,sans-serif"
+              font-size="9"
+              font-style="italic"
+            >
+              OR
+            </text>
+            <rect
+              x="360"
+              y="64"
+              width="426"
+              height="32"
+              rx="7"
+              fill="#1e293b"
+              stroke="#f97316"
+              stroke-width="1.2"
+              stroke-dasharray="5,3"
+            />
+            <text
+              x="573"
+              y="77"
+              text-anchor="middle"
+              fill="#fb923c"
+              font-family="Inter,sans-serif"
+              font-size="11"
+              font-weight="600"
+            >
+              Elastic Beanstalk
+            </text>
+            <text
+              x="573"
+              y="89"
+              text-anchor="middle"
+              fill="#64748b"
+              font-family="Inter,sans-serif"
+              font-size="9"
+            >
+              (alternative: handles deploy + provision)
+            </text>
+
+            <!-- Third-party alternatives -->
+            <rect
+              x="10"
+              y="106"
+              width="140"
+              height="38"
+              rx="6"
+              fill="#0f172a"
+              stroke="#334155"
+              stroke-width="1"
+            />
+            <text
+              x="80"
+              y="121"
+              text-anchor="middle"
+              fill="#94a3b8"
+              font-family="Inter,sans-serif"
+              font-size="10"
+            >
+              GitHub
+            </text>
+            <text
+              x="80"
+              y="135"
+              text-anchor="middle"
+              fill="#94a3b8"
+              font-family="Inter,sans-serif"
+              font-size="10"
+            >
+              Bitbucket / any Git
+            </text>
+
+            <rect
+              x="165"
+              y="106"
+              width="178"
+              height="38"
+              rx="6"
+              fill="#0f172a"
+              stroke="#334155"
+              stroke-width="1"
+            />
+            <text
+              x="254"
+              y="121"
+              text-anchor="middle"
+              fill="#94a3b8"
+              font-family="Inter,sans-serif"
+              font-size="10"
+            >
+              Jenkins CI
+            </text>
+            <text
+              x="254"
+              y="135"
+              text-anchor="middle"
+              fill="#94a3b8"
+              font-family="Inter,sans-serif"
+              font-size="10"
+            >
+              any 3rd party CI server
+            </text>
+
+            <!-- CodePipeline orchestration bar -->
+            <rect
+              x="10"
+              y="157"
+              width="776"
+              height="36"
+              rx="8"
+              fill="#1e3a5f"
+              stroke="#3b82f6"
+              stroke-width="1.5"
+            />
+            <text
+              x="398"
+              y="172"
+              text-anchor="middle"
+              fill="#94a3b8"
+              font-family="Inter,sans-serif"
+              font-size="10"
+            >
+              orchestrate using:
+            </text>
+            <text
+              x="398"
+              y="186"
+              text-anchor="middle"
+              fill="#93c5fd"
+              font-family="Inter,sans-serif"
+              font-size="13"
+              font-weight="700"
+            >
+              AWS CodePipeline
+            </text>
+          </svg>
+        </div>
+
+        <h3>
+          <span class="lang-en">Service Roles at a Glance</span
+          ><span class="lang-es">Roles de Servicios de un Vistazo</span>
+        </h3>
+        <p>
+          <span class="lang-en"
+            >The table below summarises what each AWS CICD service does and its
+            third-party equivalent, if any.</span
+          ><span class="lang-es"
+            >La tabla resume qué hace cada servicio AWS de CICD y su equivalente
+            de terceros, si existe.</span
+          >
+        </p>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Service</th>
+              <th>
+                <span class="lang-en">Role</span
+                ><span class="lang-es">Rol</span>
+              </th>
+              <th>
+                <span class="lang-en">Alternatives</span
+                ><span class="lang-es">Alternativas</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>CodeCommit</strong></td>
+              <td>
+                <span class="lang-en">Git repository (source)</span
+                ><span class="lang-es">Repositorio Git (fuente)</span>
+              </td>
+              <td>GitHub, Bitbucket</td>
+            </tr>
+            <tr>
+              <td><strong>CodeBuild</strong></td>
+              <td>
+                <span class="lang-en">Build + test</span
+                ><span class="lang-es">Build + test</span>
+              </td>
+              <td>Jenkins CI</td>
+            </tr>
+            <tr>
+              <td><strong>CodeDeploy</strong></td>
+              <td>
+                <span class="lang-en"
+                  >Deploy to existing infra (EC2, Lambda, ECS, on-prem)</span
+                ><span class="lang-es"
+                  >Deploy a infra existente (EC2, Lambda, ECS, on-prem)</span
+                >
+              </td>
+              <td>Jenkins CD, Spinnaker</td>
+            </tr>
+            <tr>
+              <td><strong>Elastic Beanstalk</strong></td>
+              <td>
+                <span class="lang-en">Deploy + provision infrastructure</span
+                ><span class="lang-es"
+                  >Deploy + provisiona infraestructura</span
+                >
+              </td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <td><strong>CodePipeline</strong></td>
+              <td>
+                <span class="lang-en"
+                  >Orchestrates the full pipeline — doesn't build or deploy
+                  itself</span
+                ><span class="lang-es"
+                  >Orquesta el pipeline completo — no buildea ni deploya por sí
+                  mismo</span
+                >
+              </td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <td><strong>CodeStar</strong></td>
+              <td>
+                <span class="lang-en"
+                  >Unified dashboard for all CICD services</span
+                ><span class="lang-es"
+                  >Dashboard unificado para todos los servicios CICD</span
+                >
+              </td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <td><strong>CodeArtifact</strong></td>
+              <td>
+                <span class="lang-en"
+                  >Package repository (npm, Maven, PyPI…) hosted on AWS</span
+                ><span class="lang-es"
+                  >Repositorio de paquetes (npm, Maven, PyPI…) hosteado en
+                  AWS</span
+                >
+              </td>
+              <td>npm registry, Maven Central</td>
+            </tr>
+            <tr>
+              <td><strong>CodeGuru</strong></td>
+              <td>
+                <span class="lang-en"
+                  >ML-powered code reviews (Reviewer) + performance profiling
+                  (Profiler)</span
+                ><span class="lang-es"
+                  >Code reviews con ML (Reviewer) + profiling de performance
+                  (Profiler)</span
+                >
+              </td>
+              <td>—</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="callout info" style="margin-top: 1rem">
+          <span class="lang-en"
+            ><strong>CodeDeploy vs Beanstalk:</strong> CodeDeploy deploys to
+            <em>existing</em> infrastructure. Beanstalk deploys
+            <em>and</em> provisions — use it when you don't want to manage the
+            infra yourself.</span
+          ><span class="lang-es"
+            ><strong>CodeDeploy vs Beanstalk:</strong> CodeDeploy deploya en
+            infraestructura <em>ya existente</em>. Beanstalk deploya
+            <em>y</em> provisiona — usalo cuando no querés gestionar la infra
+            vos mismo.</span
+          >
+        </div>
+        <div class="callout warn" style="margin-top: 0.75rem">
+          <span class="lang-en">⚠️ <strong>CodeGuru is being decommissioned.</strong> Still included in the course (and possibly the exam) — know the high-level concepts: Reviewer (automated code reviews) and Profiler (performance profiling).</span>
+          <span class="lang-es">⚠️ <strong>CodeGuru está siendo dado de baja.</strong> Sigue incluido en el curso (y posiblemente en el examen) — conocé los conceptos de alto nivel: Reviewer (code reviews automatizados) y Profiler (profiling de performance).</span>
+        </div>
+      </div>
+
+      <!-- ═══════════════════ CARD 2: CODECOMMIT ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">2</span>
+          <h2>
+            <span class="lang-en">CodeCommit</span
+            ><span class="lang-es">CodeCommit</span>
+          </h2>
+        </div>
+
+        <p>
+          <span class="lang-en"
+            >CodeCommit is AWS's managed private Git repository service. You use
+            the exact same <code>git push</code> / <code>git pull</code> /
+            <code>git clone</code> commands as any Git workflow — the difference
+            is that your code stays entirely within your AWS VPC, never leaving
+            the AWS cloud. This makes it the go-to choice for teams with
+            compliance requirements that prohibit storing code on third-party
+            servers.</span
+          >
+          <span class="lang-es"
+            >CodeCommit es el servicio de repositorios Git privados y
+            gestionados de AWS. Usás los mismos comandos de siempre (<code
+              >git push</code
+            >, <code>git pull</code>, <code>git clone</code>), pero el código
+            queda dentro de tu VPC en AWS, sin salir jamás de la nube. Esto lo
+            hace ideal para equipos con requisitos de compliance que prohíben
+            almacenar código en servidores de terceros.</span
+          >
+        </p>
+
+        <h3>
+          <span class="lang-en">Why CodeCommit over GitHub/GitLab?</span
+          ><span class="lang-es"
+            >¿Por qué CodeCommit en lugar de GitHub/GitLab?</span
+          >
+        </h3>
+        <p>
+          <span class="lang-en"
+            >The three core advantages are security, integration, and cost
+            predictability.</span
+          >
+          <span class="lang-es"
+            >Las tres ventajas principales son seguridad, integración y costo
+            predecible.</span
+          >
+        </p>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>
+                <span class="lang-en">Advantage</span
+                ><span class="lang-es">Ventaja</span>
+              </th>
+              <th>
+                <span class="lang-en">Detail</span
+                ><span class="lang-es">Detalle</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <span class="lang-en">Code stays in AWS</span
+                ><span class="lang-es">Código en AWS</span>
+              </td>
+              <td>
+                <span class="lang-en"
+                  >Lives inside your VPC — never on third-party servers</span
+                ><span class="lang-es"
+                  >Vive dentro de tu VPC, nunca en servidores de terceros</span
+                >
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span class="lang-en">No size limit</span
+                ><span class="lang-es">Sin límite de tamaño</span>
+              </td>
+              <td>
+                <span class="lang-en">Scales to gigabytes of code</span
+                ><span class="lang-es">Escala a gigabytes de código</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span class="lang-en">Single security plane</span
+                ><span class="lang-es">Plano de seguridad único</span>
+              </td>
+              <td>
+                <span class="lang-en"
+                  >IAM manages everything — no separate accounts</span
+                ><span class="lang-es"
+                  >IAM gestiona todo, sin cuentas separadas</span
+                >
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span class="lang-en">Fully managed / HA</span
+                ><span class="lang-es">Gestionado / Alta disponibilidad</span>
+              </td>
+              <td>
+                <span class="lang-en">No infrastructure to run or patch</span
+                ><span class="lang-es">Sin infra que operar o parchear</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>
+          <span class="lang-en">Security Model</span
+          ><span class="lang-es">Modelo de Seguridad</span>
+        </h3>
+        <p>
+          <span class="lang-en"
+            >CodeCommit has four distinct security layers. Authentication (who
+            you are), authorization (what you can do), encryption at rest, and
+            encryption in transit.</span
+          >
+          <span class="lang-es"
+            >CodeCommit tiene cuatro capas de seguridad: autenticación (quién
+            sos), autorización (qué podés hacer), cifrado en reposo y cifrado en
+            tránsito.</span
+          >
+        </p>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>
+                <span class="lang-en">Layer</span
+                ><span class="lang-es">Capa</span>
+              </th>
+              <th>
+                <span class="lang-en">Mechanism</span
+                ><span class="lang-es">Mecanismo</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <span class="lang-en">Authentication</span
+                ><span class="lang-es">Autenticación</span>
+              </td>
+              <td>
+                <span class="lang-en"
+                  >SSH keys <em>or</em> HTTPS (username/password)</span
+                ><span class="lang-es"
+                  >SSH keys <em>o</em> HTTPS (usuario/contraseña)</span
+                >
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span class="lang-en">Authorization</span
+                ><span class="lang-es">Autorización</span>
+              </td>
+              <td>
+                <span class="lang-en"
+                  >IAM policies (per user, per role, per repo)</span
+                ><span class="lang-es"
+                  >Políticas IAM (por usuario, rol o repo)</span
+                >
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span class="lang-en">Encryption at rest</span
+                ><span class="lang-es">Cifrado en reposo</span>
+              </td>
+              <td>
+                <span class="lang-en">AWS KMS (automatic)</span
+                ><span class="lang-es">AWS KMS (automático)</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span class="lang-en">Encryption in transit</span
+                ><span class="lang-es">Cifrado en tránsito</span>
+              </td>
+              <td>
+                <span class="lang-en">HTTPS or SSH protocols</span
+                ><span class="lang-es">Protocolos HTTPS o SSH</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>
+          <span class="lang-en">Cross-Account Access</span
+          ><span class="lang-es">Acceso entre cuentas</span>
+        </h3>
+        <p>
+          <span class="lang-en"
+            >When a developer in Account B needs access to a CodeCommit repo in
+            Account A, you must
+            <strong>never share SSH keys or credentials</strong>. The correct
+            pattern uses an IAM Role and STS.</span
+          >
+          <span class="lang-es"
+            >Cuando un developer de la Cuenta B necesita acceso a un repo en la
+            Cuenta A, <strong>nunca compartir SSH keys ni credenciales</strong>.
+            El patrón correcto usa un IAM Role y STS.</span
+          >
+        </p>
+        <div class="vd">
+          <svg
+            viewBox="0 0 580 80"
+            xmlns="http://www.w3.org/2000/svg"
+            style="width: 100%; height: auto; display: block"
+          >
+            <defs>
+              <marker
+                id="ah-cc"
+                markerWidth="8"
+                markerHeight="6"
+                refX="8"
+                refY="3"
+                orient="auto"
+              >
+                <path d="M0,0 L8,3 L0,6" fill="#64748b" />
+              </marker>
+            </defs>
+            <!-- Account B -->
+            <rect
+              x="10"
+              y="20"
+              width="100"
+              height="40"
+              rx="7"
+              fill="#1e293b"
+              stroke="#6366f1"
+              stroke-width="1.5"
+            />
+            <text
+              x="60"
+              y="36"
+              text-anchor="middle"
+              fill="#a5b4fc"
+              font-family="Inter,sans-serif"
+              font-size="10"
+              font-weight="700"
+            >
+              Account B
+            </text>
+            <text
+              x="60"
+              y="51"
+              text-anchor="middle"
+              fill="#94a3b8"
+              font-family="Inter,sans-serif"
+              font-size="9"
+            >
+              Developer
+            </text>
+            <!-- step 1 arrow — 80px gap -->
+            <line
+              x1="110"
+              y1="35"
+              x2="193"
+              y2="35"
+              stroke="#64748b"
+              stroke-width="1.2"
+              marker-end="url(#ah-cc)"
+            />
+            <text
+              x="151"
+              y="29"
+              text-anchor="middle"
+              fill="#64748b"
+              font-family="Inter,sans-serif"
+              font-size="8"
+            >
+              1. AssumeRole
+            </text>
+            <!-- STS / IAM Role -->
+            <rect
+              x="195"
+              y="10"
+              width="125"
+              height="60"
+              rx="7"
+              fill="#1e293b"
+              stroke="#f59e0b"
+              stroke-width="1.5"
+            />
+            <text
+              x="257"
+              y="32"
+              text-anchor="middle"
+              fill="#fcd34d"
+              font-family="Inter,sans-serif"
+              font-size="10"
+              font-weight="700"
+            >
+              STS
+            </text>
+            <text
+              x="257"
+              y="47"
+              text-anchor="middle"
+              fill="#94a3b8"
+              font-family="Inter,sans-serif"
+              font-size="9"
+            >
+              IAM Role (Account A)
+            </text>
+            <text
+              x="257"
+              y="62"
+              text-anchor="middle"
+              fill="#64748b"
+              font-family="Inter,sans-serif"
+              font-size="8"
+            >
+              2. Temp credentials
+            </text>
+            <!-- step 3 arrow — 80px gap -->
+            <line
+              x1="320"
+              y1="40"
+              x2="403"
+              y2="40"
+              stroke="#64748b"
+              stroke-width="1.2"
+              marker-end="url(#ah-cc)"
+            />
+            <text
+              x="361"
+              y="34"
+              text-anchor="middle"
+              fill="#64748b"
+              font-family="Inter,sans-serif"
+              font-size="8"
+            >
+              3. Access repo
+            </text>
+            <!-- CodeCommit -->
+            <rect
+              x="405"
+              y="20"
+              width="155"
+              height="40"
+              rx="7"
+              fill="#1e293b"
+              stroke="#3b82f6"
+              stroke-width="1.5"
+            />
+            <text
+              x="482"
+              y="36"
+              text-anchor="middle"
+              fill="#93c5fd"
+              font-family="Inter,sans-serif"
+              font-size="10"
+              font-weight="700"
+            >
+              CodeCommit
+            </text>
+            <text
+              x="482"
+              y="51"
+              text-anchor="middle"
+              fill="#94a3b8"
+              font-family="Inter,sans-serif"
+              font-size="9"
+            >
+              (Account A repo)
+            </text>
+          </svg>
+        </div>
+
+        <h3>
+          <span class="lang-en">CodeCommit vs GitHub</span
+          ><span class="lang-es">CodeCommit vs GitHub</span>
+        </h3>
+        <p>
+          <span class="lang-en"
+            >Both services support the same core Git workflows. The differences
+            that matter for the exam are auth model, hosting location, and UI
+            quality.</span
+          >
+          <span class="lang-es"
+            >Ambos servicios soportan los mismos flujos de Git. Las diferencias
+            que importan para el examen son el modelo de autenticación, dónde
+            vive el código y la calidad de la UI.</span
+          >
+        </p>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>
+                <span class="lang-en">Feature</span
+                ><span class="lang-es">Feature</span>
+              </th>
+              <th>CodeCommit</th>
+              <th>GitHub</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <span class="lang-en">Pull requests</span
+                ><span class="lang-es">Pull requests</span>
+              </td>
+              <td>✅</td>
+              <td>✅</td>
+            </tr>
+            <tr>
+              <td>
+                <span class="lang-en">CodeBuild integration</span
+                ><span class="lang-es">Integración con CodeBuild</span>
+              </td>
+              <td>✅</td>
+              <td>✅</td>
+            </tr>
+            <tr>
+              <td>
+                <span class="lang-en">HTTPS / SSL auth</span
+                ><span class="lang-es">Auth HTTPS / SSL</span>
+              </td>
+              <td>✅</td>
+              <td>✅</td>
+            </tr>
+            <tr>
+              <td>
+                <span class="lang-en">Auth model</span
+                ><span class="lang-es">Modelo de auth</span>
+              </td>
+              <td>
+                <span class="lang-en">IAM users &amp; roles</span
+                ><span class="lang-es">Usuarios y roles IAM</span>
+              </td>
+              <td>
+                <span class="lang-en">GitHub users / Enterprise SSO</span
+                ><span class="lang-es">Usuarios GitHub / SSO Enterprise</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span class="lang-en">Code hosting</span
+                ><span class="lang-es">Hosting del código</span>
+              </td>
+              <td>
+                <span class="lang-en">AWS cloud only</span
+                ><span class="lang-es">Solo en AWS</span>
+              </td>
+              <td>
+                <span class="lang-en">GitHub.com or self-hosted</span
+                ><span class="lang-es">GitHub.com o self-hosted</span>
+              </td>
+            </tr>
+            <tr>
+              <td>UI</td>
+              <td>
+                <span class="lang-en">Minimal</span
+                ><span class="lang-es">Mínima</span>
+              </td>
+              <td>
+                <span class="lang-en">Fully featured</span
+                ><span class="lang-es">Completa</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="callout warn" style="margin-top: 1rem">
+          <span class="lang-en"
+            >⚠️ <strong>CodeCommit is discontinued.</strong> Stephane explicitly
+            states this in lesson 24.8. It still appears as a source provider
+            option in the console but is no longer recommended.
+            <strong>GitHub v2</strong> is the recommended alternative.</span
+          >
+          <span class="lang-es"
+            >⚠️ <strong>CodeCommit está discontinuado.</strong> Stephane lo dice
+            explícitamente en la lección 24.8. Sigue apareciendo como opción en
+            la consola pero ya no se recomienda. <strong>GitHub v2</strong> es
+            la alternativa recomendada.</span
+          >
+        </div>
+
+        <h3>
+          <span class="lang-en">Setting Up Credentials (IAM)</span
+          ><span class="lang-es">Configurar Credenciales (IAM)</span>
+        </h3>
+        <p>
+          <span class="lang-en"
+            >Both SSH and HTTPS credentials for CodeCommit are configured in the
+            same place:
+            <strong
+              >IAM → Users → [user] → Security Credentials → scroll down</strong
+            >. Root accounts cannot use SSH — an IAM user is required.</span
+          >
+          <span class="lang-es"
+            >Tanto las SSH keys como las credenciales HTTPS para CodeCommit se
+            configuran en el mismo lugar:
+            <strong
+              >IAM → Users → [usuario] → Security Credentials → scrollear
+              abajo</strong
+            >. Las cuentas root no pueden usar SSH — se requiere un usuario
+            IAM.</span
+          >
+        </p>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>
+                <span class="lang-en">Method</span
+                ><span class="lang-es">Método</span>
+              </th>
+              <th>
+                <span class="lang-en">Where in IAM</span
+                ><span class="lang-es">Dónde en IAM</span>
+              </th>
+              <th>
+                <span class="lang-en">How it works</span
+                ><span class="lang-es">Cómo funciona</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>SSH</td>
+              <td>
+                <span class="lang-en">"SSH keys for AWS CodeCommit"</span
+                ><span class="lang-es">"SSH keys for AWS CodeCommit"</span>
+              </td>
+              <td>
+                <span class="lang-en"
+                  >Upload your public key → use SSH clone URL</span
+                ><span class="lang-es"
+                  >Subís tu clave pública → usás SSH clone URL</span
+                >
+              </td>
+            </tr>
+            <tr>
+              <td>HTTPS</td>
+              <td>
+                <span class="lang-en"
+                  >"HTTPS Git credentials for AWS CodeCommit"</span
+                ><span class="lang-es"
+                  >"HTTPS Git credentials for AWS CodeCommit"</span
+                >
+              </td>
+              <td>
+                <span class="lang-en"
+                  >Generate username/password (up to 2 pairs) → use HTTPS clone
+                  URL</span
+                ><span class="lang-es"
+                  >Generás usuario/contraseña (hasta 2 pares) → usás HTTPS clone
+                  URL</span
+                >
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>
+          <span class="lang-en">Notifications vs Triggers</span
+          ><span class="lang-es">Notifications vs Triggers</span>
+        </h3>
+        <p>
+          <span class="lang-en"
+            >Both are configured in <strong>Repository Settings</strong> and
+            react to repo events, but they serve different purposes and support
+            different targets.</span
+          >
+          <span class="lang-es"
+            >Ambos se configuran en <strong>Repository Settings</strong> y
+            reaccionan a eventos del repo, pero tienen propósitos distintos y
+            soportan targets diferentes.</span
+          >
+        </p>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th></th>
+              <th>Notifications</th>
+              <th>Triggers</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <span class="lang-en">Purpose</span
+                ><span class="lang-es">Propósito</span>
+              </td>
+              <td>
+                <span class="lang-en">Inform humans / teams</span
+                ><span class="lang-es">Informar personas / equipos</span>
+              </td>
+              <td>
+                <span class="lang-en">Invoke a service automatically</span
+                ><span class="lang-es"
+                  >Invocar un servicio automáticamente</span
+                >
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span class="lang-en">Targets</span
+                ><span class="lang-es">Targets</span>
+              </td>
+              <td>
+                <span class="lang-en">SNS topic, AWS Chatbot (Slack)</span
+                ><span class="lang-es">SNS topic, AWS Chatbot (Slack)</span>
+              </td>
+              <td>
+                <span class="lang-en"
+                  >SNS topic, <strong>Lambda function</strong></span
+                ><span class="lang-es"
+                  >SNS topic, <strong>Lambda function</strong></span
+                >
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span class="lang-en">SNS naming</span
+                ><span class="lang-es">Nombre SNS</span>
+              </td>
+              <td><code>codestar-notification-*</code></td>
+              <td>
+                <span class="lang-en">Any SNS topic</span
+                ><span class="lang-es">Cualquier SNS topic</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span class="lang-en">Exclusive events</span
+                ><span class="lang-es">Eventos exclusivos</span>
+              </td>
+              <td>
+                <span class="lang-en">PR comments, approvals</span
+                ><span class="lang-es">Comentarios PR, aprobaciones</span>
+              </td>
+              <td>
+                <span class="lang-en"
+                  >Push to existing branch (e.g. <code>main</code>)</span
+                ><span class="lang-es"
+                  >Push a rama existente (ej. <code>main</code>)</span
+                >
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="callout info" style="margin-top: 0.75rem">
+          <span class="lang-en"
+            ><strong>Key distinction:</strong> Only
+            <strong>Triggers</strong> can invoke a Lambda function directly.
+            Notifications go to SNS or Chatbot only.</span
+          >
+          <span class="lang-es"
+            ><strong>Distinción clave:</strong> Solo los
+            <strong>Triggers</strong> pueden invocar una Lambda directamente.
+            Las Notifications van a SNS o Chatbot únicamente.</span
+          >
+        </div>
+      </div>
+
+      <!-- ═══════════════════ CARD 3: CODEPIPELINE ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">3</span>
+          <h2>
+            <span class="lang-en">CodePipeline</span
+            ><span class="lang-es">CodePipeline</span>
+          </h2>
+        </div>
+
+        <p>
+          <span class="lang-en"
+            >CodePipeline is the <strong>orchestrator</strong> of your CI/CD
+            workflow. It doesn't build or deploy anything itself — it connects
+            and sequences the services that do. You define a pipeline as a
+            series of stages, each stage containing one or more actions that can
+            run sequentially or in parallel. A manual approval action can be
+            inserted at any stage.</span
+          >
+          <span class="lang-es"
+            >CodePipeline es el <strong>orquestador</strong> de tu flujo CI/CD.
+            No buildea ni deploya por sí mismo — conecta y secuencia los
+            servicios que lo hacen. Definís un pipeline como una serie de
+            stages, cada uno con una o más acciones que pueden correr en
+            secuencia o en paralelo. Se puede insertar una aprobación manual en
+            cualquier stage.</span
+          >
+        </p>
+
+        <h3>
+          <span class="lang-en">Stages & Supported Services</span
+          ><span class="lang-es">Stages y Servicios Soportados</span>
+        </h3>
+        <p>
+          <span class="lang-en"
+            >Each stage in a pipeline maps to a specific role. You pick one
+            service per stage.</span
+          >
+          <span class="lang-es"
+            >Cada stage cumple un rol específico. Se elige un servicio por
+            stage.</span
+          >
+        </p>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Stage</th>
+              <th>
+                <span class="lang-en">AWS native</span
+                ><span class="lang-es">Nativo AWS</span>
+              </th>
+              <th>
+                <span class="lang-en">Third-party</span
+                ><span class="lang-es">Terceros</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Source</td>
+              <td>CodeCommit, ECR, S3</td>
+              <td>GitHub, Bitbucket</td>
+            </tr>
+            <tr>
+              <td>Build</td>
+              <td>CodeBuild</td>
+              <td>Jenkins, CloudBees, TeamCity</td>
+            </tr>
+            <tr>
+              <td>Test</td>
+              <td>CodeBuild, Device Farm</td>
+              <td>
+                <span class="lang-en">Any 3rd party</span
+                ><span class="lang-es">Cualquier tercero</span>
+              </td>
+            </tr>
+            <tr>
+              <td>Deploy</td>
+              <td>CodeDeploy, Beanstalk, CloudFormation, ECS, S3</td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <td>Invoke</td>
+              <td>Lambda, Step Functions</td>
+              <td>—</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>
+          <span class="lang-en"
+            >Artifacts & S3 — How Stages Talk to Each Other</span
+          ><span class="lang-es"
+            >Artifacts y S3 — Cómo se Comunican los Stages</span
+          >
+        </h3>
+        <p>
+          <span class="lang-en"
+            >Each stage that produces output generates an
+            <strong>artifact</strong> — a package of files stored in S3. The
+            next stage picks it up from S3 as its input. Stages never
+            communicate directly with each other; S3 is always the intermediary.
+            The final Deploy stage is a consumer only — it receives the build
+            artifact and deploys it, but produces no artifact of its own.</span
+          >
+          <span class="lang-es"
+            >Cada stage que produce output genera un <strong>artifact</strong> —
+            un paquete de archivos almacenado en S3. El siguiente stage lo
+            levanta de S3 como input. Los stages nunca se comunican directamente
+            entre sí; S3 es siempre el intermediario. El stage Deploy final es
+            solo consumidor — recibe el artifact del build y lo deploya, pero no
+            produce ningún artifact propio.</span
+          >
+        </p>
+
+        <!-- Artifacts diagram based on Stephane's slide -->
+        <div class="vd">
+          <svg
+            viewBox="0 0 750 180"
+            xmlns="http://www.w3.org/2000/svg"
+            style="width: 100%; height: auto; display: block"
+          >
+            <defs>
+              <marker
+                id="ah-cp"
+                markerWidth="8"
+                markerHeight="6"
+                refX="8"
+                refY="3"
+                orient="auto"
+              >
+                <path d="M0,0 L8,3 L0,6" fill="#64748b" />
+              </marker>
+            </defs>
+
+            <!-- CodePipeline outer dashed border — wide with generous padding -->
+            <rect
+              x="65"
+              y="10"
+              width="660"
+              height="155"
+              rx="10"
+              fill="none"
+              stroke="#3b82f6"
+              stroke-width="1.2"
+              stroke-dasharray="6,3"
+            />
+            <text
+              x="395"
+              y="23"
+              text-anchor="middle"
+              fill="#93c5fd"
+              font-family="Inter,sans-serif"
+              font-size="9"
+              font-weight="700"
+              letter-spacing="0.05em"
+            >
+              AWS CodePipeline
+            </text>
+
+            <!-- Developer -->
+            <text
+              x="28"
+              y="47"
+              text-anchor="middle"
+              fill="#94a3b8"
+              font-family="Inter,sans-serif"
+              font-size="9"
+            >
+              Developer
+            </text>
+            <text
+              x="28"
+              y="64"
+              text-anchor="middle"
+              fill="#64748b"
+              font-family="Inter,sans-serif"
+              font-size="15"
+            >
+              👤
+            </text>
+            <line
+              x1="45"
+              y1="53"
+              x2="73"
+              y2="53"
+              stroke="#64748b"
+              stroke-width="1.2"
+              marker-end="url(#ah-cp)"
+            />
+            <text
+              x="59"
+              y="47"
+              text-anchor="middle"
+              fill="#64748b"
+              font-family="Inter,sans-serif"
+              font-size="8"
+            >
+              Push
+            </text>
+
+            <!-- CodeCommit -->
+            <rect
+              x="75"
+              y="32"
+              width="138"
+              height="42"
+              rx="7"
+              fill="#1e293b"
+              stroke="#3b82f6"
+              stroke-width="1.5"
+            />
+            <text
+              x="144"
+              y="50"
+              text-anchor="middle"
+              fill="#93c5fd"
+              font-family="Inter,sans-serif"
+              font-size="10"
+              font-weight="700"
+            >
+              CodeCommit
+            </text>
+            <text
+              x="144"
+              y="65"
+              text-anchor="middle"
+              fill="#94a3b8"
+              font-family="Inter,sans-serif"
+              font-size="8"
+            >
+              (Source)
+            </text>
+
+            <!-- CodeBuild -->
+            <rect
+              x="280"
+              y="32"
+              width="138"
+              height="42"
+              rx="7"
+              fill="#1e293b"
+              stroke="#6366f1"
+              stroke-width="1.5"
+            />
+            <text
+              x="349"
+              y="50"
+              text-anchor="middle"
+              fill="#a5b4fc"
+              font-family="Inter,sans-serif"
+              font-size="10"
+              font-weight="700"
+            >
+              CodeBuild
+            </text>
+            <text
+              x="349"
+              y="65"
+              text-anchor="middle"
+              fill="#94a3b8"
+              font-family="Inter,sans-serif"
+              font-size="8"
+            >
+              (Build)
+            </text>
+
+            <!-- CodeDeploy -->
+            <rect
+              x="485"
+              y="32"
+              width="138"
+              height="42"
+              rx="7"
+              fill="#1e293b"
+              stroke="#f97316"
+              stroke-width="1.5"
+            />
+            <text
+              x="554"
+              y="50"
+              text-anchor="middle"
+              fill="#fb923c"
+              font-family="Inter,sans-serif"
+              font-size="10"
+              font-weight="700"
+            >
+              CodeDeploy
+            </text>
+            <text
+              x="554"
+              y="65"
+              text-anchor="middle"
+              fill="#94a3b8"
+              font-family="Inter,sans-serif"
+              font-size="8"
+            >
+              (Deploy)
+            </text>
+            <line
+              x1="623"
+              y1="53"
+              x2="658"
+              y2="53"
+              stroke="#64748b"
+              stroke-width="1.2"
+              marker-end="url(#ah-cp)"
+            />
+            <text
+              x="675"
+              y="57"
+              text-anchor="middle"
+              fill="#94a3b8"
+              font-family="Inter,sans-serif"
+              font-size="9"
+            >
+              deploy
+            </text>
+
+            <!-- S3 Bucket — centered below CodeBuild -->
+            <rect
+              x="270"
+              y="122"
+              width="158"
+              height="34"
+              rx="7"
+              fill="#0f172a"
+              stroke="#22c55e"
+              stroke-width="1.4"
+            />
+            <text
+              x="349"
+              y="137"
+              text-anchor="middle"
+              fill="#86efac"
+              font-family="Inter,sans-serif"
+              font-size="10"
+              font-weight="700"
+            >
+              S3 Bucket
+            </text>
+            <text
+              x="349"
+              y="150"
+              text-anchor="middle"
+              fill="#64748b"
+              font-family="Inter,sans-serif"
+              font-size="8"
+            >
+              (artifact store)
+            </text>
+
+            <!-- 1. CodeCommit → S3: elbow down then right -->
+            <path
+              d="M144,74 L144,138 L270,138"
+              fill="none"
+              stroke="#64748b"
+              stroke-width="1.2"
+              marker-end="url(#ah-cp)"
+            />
+            <text
+              x="152"
+              y="97"
+              text-anchor="start"
+              fill="#64748b"
+              font-family="Inter,sans-serif"
+              font-size="8"
+            >
+              output
+            </text>
+            <text
+              x="152"
+              y="107"
+              text-anchor="start"
+              fill="#64748b"
+              font-family="Inter,sans-serif"
+              font-size="8"
+            >
+              artifact
+            </text>
+
+            <!-- 2. S3 → CodeBuild: straight vertical up (input, left of centre) -->
+            <line
+              x1="334"
+              y1="122"
+              x2="334"
+              y2="74"
+              stroke="#64748b"
+              stroke-width="1.2"
+              marker-end="url(#ah-cp)"
+            />
+            <text
+              x="325"
+              y="97"
+              text-anchor="end"
+              fill="#64748b"
+              font-family="Inter,sans-serif"
+              font-size="8"
+            >
+              input
+            </text>
+            <text
+              x="325"
+              y="107"
+              text-anchor="end"
+              fill="#64748b"
+              font-family="Inter,sans-serif"
+              font-size="8"
+            >
+              artifact
+            </text>
+
+            <!-- 3. CodeBuild → S3: straight vertical down (output, right of centre) -->
+            <line
+              x1="364"
+              y1="74"
+              x2="364"
+              y2="122"
+              stroke="#64748b"
+              stroke-width="1.2"
+              marker-end="url(#ah-cp)"
+            />
+            <text
+              x="372"
+              y="97"
+              text-anchor="start"
+              fill="#64748b"
+              font-family="Inter,sans-serif"
+              font-size="8"
+            >
+              output
+            </text>
+            <text
+              x="372"
+              y="107"
+              text-anchor="start"
+              fill="#64748b"
+              font-family="Inter,sans-serif"
+              font-size="8"
+            >
+              artifact
+            </text>
+
+            <!-- 4. S3 → CodeDeploy: elbow right then up -->
+            <path
+              d="M428,138 L554,138 L554,74"
+              fill="none"
+              stroke="#64748b"
+              stroke-width="1.2"
+              marker-end="url(#ah-cp)"
+            />
+            <text
+              x="562"
+              y="107"
+              text-anchor="start"
+              fill="#64748b"
+              font-family="Inter,sans-serif"
+              font-size="8"
+            >
+              input
+            </text>
+            <text
+              x="562"
+              y="117"
+              text-anchor="start"
+              fill="#64748b"
+              font-family="Inter,sans-serif"
+              font-size="8"
+            >
+              artifact
+            </text>
+          </svg>
+        </div>
+
+        <h3>
+          <span class="lang-en">Troubleshooting</span
+          ><span class="lang-es">Troubleshooting</span>
+        </h3>
+        <p>
+          <span class="lang-en"
+            >Three tools cover different failure scenarios in
+            CodePipeline.</span
+          >
+          <span class="lang-es"
+            >Tres herramientas cubren distintos escenarios de fallo en
+            CodePipeline.</span
+          >
+        </p>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>
+                <span class="lang-en">Problem</span
+                ><span class="lang-es">Problema</span>
+              </th>
+              <th>
+                <span class="lang-en">Tool / Action</span
+                ><span class="lang-es">Herramienta / Acción</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <span class="lang-en"
+                  >Monitor pipeline events (failures, cancellations)</span
+                ><span class="lang-es"
+                  >Monitorear eventos del pipeline (fallos, cancelaciones)</span
+                >
+              </td>
+              <td>EventBridge / CloudWatch Events</td>
+            </tr>
+            <tr>
+              <td>
+                <span class="lang-en">Stage failed — see which one</span
+                ><span class="lang-es">Un stage falló — ver cuál</span>
+              </td>
+              <td>
+                <span class="lang-en">CodePipeline console (visual)</span
+                ><span class="lang-es">Consola de CodePipeline (visual)</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span class="lang-en"
+                  >Stage fails with access error (can't pull code, can't invoke
+                  CodeBuild…)</span
+                ><span class="lang-es"
+                  >Stage falla con error de acceso (no puede hacer pull, invocar
+                  CodeBuild…)</span
+                >
+              </td>
+              <td>
+                <span class="lang-en"
+                  >Fix the <strong>IAM service role</strong> of
+                  CodePipeline</span
+                ><span class="lang-es"
+                  >Corregir el <strong>IAM service role</strong> de
+                  CodePipeline</span
+                >
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span class="lang-en">Audit AWS API calls</span
+                ><span class="lang-es">Auditar llamadas a la API de AWS</span>
+              </td>
+              <td>CloudTrail</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ═══════════════════ CARD 4: CODEBUILD ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">4</span>
+          <h2>
+            <span class="lang-en">CodeBuild</span
+            ><span class="lang-es">CodeBuild</span>
+          </h2>
+        </div>
+
+        <p>
+          <span class="lang-en"
+            >CodeBuild is a fully managed build service. You point it at source
+            code and it spins up a Docker container, runs your build and test
+            instructions, and produces output artifacts. AWS provides pre-built
+            Docker images for common runtimes (Java, Python, Node.js, Go, Ruby,
+            .NET Core, Android, PHP) so you don't need to know Docker for those.
+            For anything else, you extend a Docker image yourself. CodeBuild can
+            be triggered standalone or invoked by CodePipeline as its Build
+            stage.</span
+          >
+          <span class="lang-es"
+            >CodeBuild es un servicio de build completamente gestionado. Apuntás
+            al código fuente y levanta un contenedor Docker, ejecuta las
+            instrucciones de build y test, y produce artifacts de salida. AWS
+            provee imágenes Docker pre-construidas para los runtimes más comunes
+            (Java, Python, Node.js, Go, Ruby, .NET Core, Android, PHP), por lo
+            que no necesitás saber Docker para esos casos. Para cualquier otro
+            entorno, extendés una imagen Docker propia. CodeBuild puede
+            ejecutarse de forma standalone o ser invocado por CodePipeline como
+            su stage de Build.</span
+          >
+        </p>
+
+        <h3>
+          <span class="lang-en">buildspec.yml</span
+          ><span class="lang-es">buildspec.yml</span>
+        </h3>
+        <p>
+          <span class="lang-en"
+            >The <code>buildspec.yml</code> file must be placed at the
+            <strong>root</strong> of the repository. It defines every
+            instruction CodeBuild runs. Alternatively, instructions can be
+            entered manually in the console, but that is not best practice. The
+            file has four key sections.</span
+          >
+          <span class="lang-es"
+            >El archivo <code>buildspec.yml</code> debe estar en la
+            <strong>raíz</strong> del repositorio. Define cada instrucción que
+            ejecuta CodeBuild. Alternativamente, las instrucciones pueden
+            ingresarse manualmente en la consola, pero no es una buena práctica.
+            El archivo tiene cuatro secciones clave.</span
+          >
+        </p>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>
+                <span class="lang-en">Section</span
+                ><span class="lang-es">Sección</span>
+              </th>
+              <th>
+                <span class="lang-en">Purpose</span
+                ><span class="lang-es">Propósito</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>env</code></td>
+              <td>
+                <span class="lang-en"
+                  >Environment variables — plaintext, SSM Parameter Store, or
+                  Secrets Manager</span
+                ><span class="lang-es"
+                  >Variables de entorno — texto plano, SSM Parameter Store o
+                  Secrets Manager</span
+                >
+              </td>
+            </tr>
+            <tr>
+              <td><code>phases.install</code></td>
+              <td>
+                <span class="lang-en">Install required packages</span
+                ><span class="lang-es">Instalar paquetes requeridos</span>
+              </td>
+            </tr>
+            <tr>
+              <td><code>phases.pre_build</code></td>
+              <td>
+                <span class="lang-en"
+                  >Commands before the build (e.g. run tests)</span
+                ><span class="lang-es"
+                  >Comandos antes del build (ej. correr tests)</span
+                >
+              </td>
+            </tr>
+            <tr>
+              <td><code>phases.build</code></td>
+              <td>
+                <span class="lang-en">The actual build commands</span
+                ><span class="lang-es"
+                  >Los comandos de build propiamente dichos</span
+                >
+              </td>
+            </tr>
+            <tr>
+              <td><code>phases.post_build</code></td>
+              <td>
+                <span class="lang-en">Finishing touches (e.g. create zip)</span
+                ><span class="lang-es">Toques finales (ej. crear zip)</span>
+              </td>
+            </tr>
+            <tr>
+              <td><code>artifacts</code></td>
+              <td>
+                <span class="lang-en"
+                  >Files to extract from the container and upload to S3</span
+                ><span class="lang-es"
+                  >Archivos a extraer del contenedor y subir a S3</span
+                >
+              </td>
+            </tr>
+            <tr>
+              <td><code>cache</code></td>
+              <td>
+                <span class="lang-en"
+                  >Paths to cache in S3 between builds (e.g.
+                  <code>node_modules</code>)</span
+                ><span class="lang-es"
+                  >Rutas a cachear en S3 entre builds (ej.
+                  <code>node_modules</code>)</span
+                >
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p style="margin-top: 0.75rem">
+          <span class="lang-en"
+            >Here is what a typical <code>buildspec.yml</code> looks like in
+            practice:</span
+          >
+          <span class="lang-es"
+            >Así luce un <code>buildspec.yml</code> típico en la práctica:</span
+          >
+        </p>
+        <pre
+          style="
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 1rem;
+            font-size: 0.78rem;
+            line-height: 1.6;
+            overflow-x: auto;
+            color: #94a3b8;
+          "
+        ><code><span style="color:#64748b"># buildspec.yml — must be at the ROOT of the repo</span>
+version: 0.2
+
+<span style="color:#fcd34d">env:</span>
+  variables:
+    MY_VAR: <span style="color:#86efac">"hello"</span>           <span style="color:#64748b"># plaintext</span>
+  parameter-store:
+    DB_PASS: <span style="color:#86efac">"/myapp/db/pass"</span>  <span style="color:#64748b"># SSM Parameter Store</span>
+  secrets-manager:
+    API_KEY: <span style="color:#86efac">"myapp/apikey"</span>    <span style="color:#64748b"># Secrets Manager</span>
+
+<span style="color:#fcd34d">phases:</span>
+  install:
+    commands:
+      - npm install
+  pre_build:
+    commands:
+      - npm test
+  build:
+    commands:
+      - npm run build
+  post_build:
+    commands:
+      - zip -r app.zip ./dist
+
+<span style="color:#fcd34d">artifacts:</span>
+  files:
+    - app.zip             <span style="color:#64748b"># uploaded to S3 (encrypted)</span>
+
+<span style="color:#fcd34d">cache:</span>
+  paths:
+    - node_modules/**/*   <span style="color:#64748b"># cached in S3 for faster future builds</span></code></pre>
+
+        <h3>
+          <span class="lang-en">How a Build Runs End-to-End</span
+          ><span class="lang-es">Cómo corre un Build de principio a fin</span>
+        </h3>
+        <p>
+          <span class="lang-en"
+            >The container is ephemeral — everything inside it is gone after the
+            build. Only what you explicitly send to S3 (artifacts and cache)
+            survives. Here is the full sequence:</span
+          >
+          <span class="lang-es"
+            >El contenedor es efímero — todo lo que contiene desaparece al
+            terminar el build. Solo sobrevive lo que explícitamente enviás a S3
+            (artifacts y cache). Esta es la secuencia completa:</span
+          >
+        </p>
+        <ol
+          style="
+            margin: 0.5rem 0 0 1.25rem;
+            line-height: 1.9;
+            color: var(--text-secondary);
+            font-size: 0.88rem;
+          "
+        >
+          <li>
+            <span class="lang-en"
+              >CodeBuild pulls the <strong>source code</strong> (CodeCommit /
+              GitHub / S3 / Bitbucket) — which includes
+              <code>buildspec.yml</code> at the root.</span
+            ><span class="lang-es"
+              >CodeBuild descarga el <strong>código fuente</strong> (CodeCommit
+              / GitHub / S3 / Bitbucket), que incluye
+              <code>buildspec.yml</code> en la raíz.</span
+            >
+          </li>
+          <li>
+            <span class="lang-en"
+              >It spins up a <strong>Docker container</strong> using a pre-built
+              AWS image (or your custom image).</span
+            ><span class="lang-es"
+              >Levanta un <strong>contenedor Docker</strong> usando una imagen
+              pre-construida de AWS (o una imagen propia).</span
+            >
+          </li>
+          <li>
+            <span class="lang-en"
+              >The container runs the four phases in order:
+              <code>install</code> → <code>pre_build</code> →
+              <code>build</code> → <code>post_build</code>.</span
+            ><span class="lang-es"
+              >El contenedor ejecuta las cuatro fases en orden:
+              <code>install</code> → <code>pre_build</code> →
+              <code>build</code> → <code>post_build</code>.</span
+            >
+          </li>
+          <li>
+            <span class="lang-en"
+              >Build <strong>logs</strong> stream in real-time to
+              <strong>CloudWatch Logs</strong> (and optionally to S3).</span
+            ><span class="lang-es"
+              >Los <strong>logs</strong> del build fluyen en tiempo real a
+              <strong>CloudWatch Logs</strong> (y opcionalmente a S3).</span
+            >
+          </li>
+          <li>
+            <span class="lang-en"
+              >The container is <strong>destroyed</strong> — it is ephemeral,
+              nothing persists inside it.</span
+            ><span class="lang-es"
+              >El contenedor se <strong>destruye</strong> — es efímero, nada
+              persiste dentro de él.</span
+            >
+          </li>
+          <li>
+            <span class="lang-en"
+              ><strong>Artifacts</strong> (build output) and
+              <strong>cache</strong> (e.g. <code>node_modules</code>) are
+              uploaded to <strong>S3</strong> and passed to the next pipeline
+              stage.</span
+            ><span class="lang-es"
+              >Los <strong>artifacts</strong> (salida del build) y el
+              <strong>cache</strong> (ej. <code>node_modules</code>) se suben a
+              <strong>S3</strong> y se pasan al siguiente stage del
+              pipeline.</span
+            >
+          </li>
+        </ol>
+        <div class="vd">
+          <svg
+            viewBox="0 0 600 145"
+            xmlns="http://www.w3.org/2000/svg"
+            style="width: 100%; height: auto; display: block"
+          >
+            <defs>
+              <marker
+                id="ah-cb"
+                markerWidth="8"
+                markerHeight="6"
+                refX="8"
+                refY="3"
+                orient="auto"
+              >
+                <path d="M0,0 L8,3 L0,6" fill="#64748b" />
+              </marker>
+            </defs>
+
+            <!-- Source Code -->
+            <rect
+              x="10"
+              y="35"
+              width="110"
+              height="40"
+              rx="7"
+              fill="#1e293b"
+              stroke="#3b82f6"
+              stroke-width="1.5"
+            />
+            <text
+              x="65"
+              y="52"
+              text-anchor="middle"
+              fill="#93c5fd"
+              font-family="Inter,sans-serif"
+              font-size="9"
+              font-weight="700"
+            >
+              Source Code
+            </text>
+            <text
+              x="65"
+              y="66"
+              text-anchor="middle"
+              fill="#64748b"
+              font-family="Inter,sans-serif"
+              font-size="8"
+            >
+              + buildspec.yml
+            </text>
+            <line
+              x1="120"
+              y1="55"
+              x2="148"
+              y2="55"
+              stroke="#64748b"
+              stroke-width="1.2"
+              marker-end="url(#ah-cb)"
+            />
+
+            <!-- Docker Container -->
+            <rect
+              x="150"
+              y="15"
+              width="155"
+              height="82"
+              rx="7"
+              fill="#1e293b"
+              stroke="#6366f1"
+              stroke-width="1.5"
+            />
+            <text
+              x="227"
+              y="32"
+              text-anchor="middle"
+              fill="#a5b4fc"
+              font-family="Inter,sans-serif"
+              font-size="9"
+              font-weight="700"
+            >
+              Docker Container
+            </text>
+            <text
+              x="227"
+              y="46"
+              text-anchor="middle"
+              fill="#94a3b8"
+              font-family="Inter,sans-serif"
+              font-size="8"
+            >
+              install → pre_build
+            </text>
+            <text
+              x="227"
+              y="58"
+              text-anchor="middle"
+              fill="#94a3b8"
+              font-family="Inter,sans-serif"
+              font-size="8"
+            >
+              → build → post_build
+            </text>
+            <text
+              x="227"
+              y="86"
+              text-anchor="middle"
+              fill="#475569"
+              font-family="Inter,sans-serif"
+              font-size="7"
+              font-style="italic"
+            >
+              (ephemeral)
+            </text>
+
+            <!-- → CloudWatch Logs (wider gap so labels have room) -->
+            <line
+              x1="305"
+              y1="28"
+              x2="378"
+              y2="28"
+              stroke="#64748b"
+              stroke-width="1.2"
+              marker-end="url(#ah-cb)"
+            />
+            <text
+              x="341"
+              y="23"
+              text-anchor="middle"
+              fill="#64748b"
+              font-family="Inter,sans-serif"
+              font-size="7"
+            >
+              logs
+            </text>
+            <rect
+              x="380"
+              y="13"
+              width="125"
+              height="30"
+              rx="6"
+              fill="#0f172a"
+              stroke="#334155"
+              stroke-width="1"
+            />
+            <text
+              x="442"
+              y="32"
+              text-anchor="middle"
+              fill="#94a3b8"
+              font-family="Inter,sans-serif"
+              font-size="9"
+            >
+              CloudWatch Logs
+            </text>
+
+            <!-- → S3 Bucket — label below the arrow, centered in the gap -->
+            <line
+              x1="305"
+              y1="72"
+              x2="378"
+              y2="72"
+              stroke="#64748b"
+              stroke-width="1.2"
+              marker-end="url(#ah-cb)"
+            />
+            <text
+              x="341"
+              y="82"
+              text-anchor="middle"
+              fill="#64748b"
+              font-family="Inter,sans-serif"
+              font-size="7"
+            >
+              artifacts + cache
+            </text>
+            <rect
+              x="380"
+              y="57"
+              width="125"
+              height="30"
+              rx="6"
+              fill="#0f172a"
+              stroke="#22c55e"
+              stroke-width="1.2"
+            />
+            <text
+              x="442"
+              y="76"
+              text-anchor="middle"
+              fill="#86efac"
+              font-family="Inter,sans-serif"
+              font-size="9"
+            >
+              S3 Bucket
+            </text>
+
+            <!-- S3 → next stage -->
+            <line
+              x1="505"
+              y1="72"
+              x2="540"
+              y2="72"
+              stroke="#64748b"
+              stroke-width="1.2"
+              marker-end="url(#ah-cb)"
+            />
+            <text
+              x="556"
+              y="68"
+              text-anchor="middle"
+              fill="#94a3b8"
+              font-family="Inter,sans-serif"
+              font-size="8"
+            >
+              next
+            </text>
+            <text
+              x="556"
+              y="79"
+              text-anchor="middle"
+              fill="#94a3b8"
+              font-family="Inter,sans-serif"
+              font-size="8"
+            >
+              stage
+            </text>
+
+            <!-- EventBridge -->
+            <line
+              x1="227"
+              y1="97"
+              x2="227"
+              y2="113"
+              stroke="#64748b"
+              stroke-width="1.2"
+              marker-end="url(#ah-cb)"
+            />
+            <rect
+              x="147"
+              y="115"
+              width="160"
+              height="18"
+              rx="4"
+              fill="#0f172a"
+              stroke="#f59e0b"
+              stroke-width="1"
+            />
+            <text
+              x="227"
+              y="127"
+              text-anchor="middle"
+              fill="#fcd34d"
+              font-family="Inter,sans-serif"
+              font-size="7"
+            >
+              EventBridge (failed build → SNS)
+            </text>
+          </svg>
+        </div>
+
+        <h3>
+          <span class="lang-en">Monitoring &amp; Integration</span
+          ><span class="lang-es">Monitoreo e Integración</span>
+        </h3>
+        <p>
+          <span class="lang-en"
+            >CodeBuild surfaces observability data through standard AWS
+            services. The key pattern for the exam: a failed build triggers an
+            <strong>EventBridge</strong> rule, which fans out to SNS
+            (email/Slack) or a Lambda function — you never poll CodeBuild
+            manually.</span
+          >
+          <span class="lang-es"
+            >CodeBuild expone datos de observabilidad a través de servicios
+            estándar de AWS. El patrón clave para el examen: un build fallido
+            dispara una regla de <strong>EventBridge</strong> que distribuye a
+            SNS (email/Slack) o una función Lambda — nunca se hace polling
+            manual de CodeBuild.</span
+          >
+        </p>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>
+                <span class="lang-en">Tool</span
+                ><span class="lang-es">Herramienta</span>
+              </th>
+              <th>
+                <span class="lang-en">What it provides</span
+                ><span class="lang-es">Qué provee</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>CloudWatch Logs</td>
+              <td>
+                <span class="lang-en"
+                  >Real-time build logs (also optionally sent to S3)</span
+                ><span class="lang-es"
+                  >Logs del build en tiempo real (también opcionalmente a
+                  S3)</span
+                >
+              </td>
+            </tr>
+            <tr>
+              <td>CloudWatch Metrics</td>
+              <td>
+                <span class="lang-en"
+                  >Build statistics: counts, failed builds, duration</span
+                ><span class="lang-es"
+                  >Estadísticas: cantidad de builds, builds fallidos,
+                  duración</span
+                >
+              </td>
+            </tr>
+            <tr>
+              <td>CloudWatch Alarms</td>
+              <td>
+                <span class="lang-en"
+                  >Alert when failure rate exceeds a threshold</span
+                ><span class="lang-es"
+                  >Alerta cuando la tasa de fallas supera un umbral</span
+                >
+              </td>
+            </tr>
+            <tr>
+              <td>EventBridge</td>
+              <td>
+                <span class="lang-en"
+                  >Detect build state changes (e.g. FAILED) → invoke SNS /
+                  Lambda</span
+                ><span class="lang-es"
+                  >Detecta cambios de estado (ej. FAILED) → invoca SNS /
+                  Lambda</span
+                >
+              </td>
+            </tr>
+            <tr>
+              <td>Amazon S3</td>
+              <td>
+                <span class="lang-en">Logs, artifacts, and cache storage</span
+                ><span class="lang-es"
+                  >Almacenamiento de logs, artifacts y cache</span
+                >
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ═══════════════════ CARD 5: CODEDEPLOY ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">5</span>
+          <h2>
+            <span class="lang-en">CodeDeploy</span
+            ><span class="lang-es">CodeDeploy</span>
+          </h2>
+        </div>
+
+        <p>
+          <span class="lang-en"
+            >CodeDeploy automates application deployments (v1 → v2) across three
+            different target platforms. Each platform has its own set of
+            deployment strategies. A rollback can be triggered automatically on
+            failure or on a CloudWatch Alarm. Deployment behaviour is controlled
+            by an <strong>appspec.yml</strong> file at the root of the
+            repository.</span
+          >
+          <span class="lang-es"
+            >CodeDeploy automatiza deployments (v1 → v2) en tres tipos de
+            destinos. Cada plataforma tiene sus propias estrategias. El rollback
+            puede dispararse automáticamente ante fallos o alarmas de
+            CloudWatch. El comportamiento se controla con un
+            <strong>appspec.yml</strong> en la raíz del repo.</span
+          >
+        </p>
+
+        <h3>
+          <span class="lang-en">Platform Comparison</span
+          ><span class="lang-es">Comparación de Plataformas</span>
+        </h3>
+        <p>
+          <span class="lang-en"
+            >Three platforms, three sets of rules — this table is the
+            reference.</span
+          ><span class="lang-es"
+            >Tres plataformas, tres sets de reglas — esta tabla es la
+            referencia.</span
+          >
+        </p>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>
+                <span class="lang-en">Platform</span
+                ><span class="lang-es">Plataforma</span>
+              </th>
+              <th>
+                <span class="lang-en">Deployment Types</span
+                ><span class="lang-es">Tipos de Deploy</span>
+              </th>
+              <th>
+                <span class="lang-en">Key Requirement</span
+                ><span class="lang-es">Requisito Clave</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>EC2 / On-Premises</strong></td>
+              <td>
+                <span class="lang-en">In-Place or Blue/Green</span
+                ><span class="lang-es">In-Place o Blue/Green</span>
+              </td>
+              <td>
+                <span class="lang-en"
+                  ><strong>CodeDeploy agent</strong> on each instance + IAM role
+                  with S3 read access</span
+                ><span class="lang-es"
+                  ><strong>Agente CodeDeploy</strong> en cada instancia + IAM
+                  role con acceso S3</span
+                >
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Lambda</strong></td>
+              <td>
+                <span class="lang-en"
+                  >Traffic shift on alias (Linear / Canary / AllAtOnce)</span
+                ><span class="lang-es"
+                  >Shift de tráfico en alias (Linear / Canary / AllAtOnce)</span
+                >
+              </td>
+              <td>
+                <span class="lang-en"
+                  >Lambda alias pointing to two versions; integrated with
+                  SAM</span
+                ><span class="lang-es"
+                  >Alias Lambda apuntando a dos versiones; integrado con
+                  SAM</span
+                >
+              </td>
+            </tr>
+            <tr>
+              <td><strong>ECS</strong></td>
+              <td>
+                <span class="lang-en"
+                  >Blue/Green only (new task definition)</span
+                ><span class="lang-es"
+                  >Solo Blue/Green (nueva task definition)</span
+                >
+              </td>
+              <td>
+                <span class="lang-en"
+                  >ALB + two target groups; same traffic strategies as
+                  Lambda</span
+                ><span class="lang-es"
+                  >ALB + dos target groups; mismas estrategias de tráfico que
+                  Lambda</span
+                >
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3 style="margin-top: 1.5rem">
+          <span class="lang-en">EC2 — In-Place Deployment (HalfAtATime)</span
+          ><span class="lang-es">EC2 — Deploy In-Place (HalfAtATime)</span>
+        </h3>
+        <p>
+          <span class="lang-en"
+            >The same instances are reused — the agent stops the app, installs
+            the new revision from S3, then restarts. No new infrastructure is
+            created.</span
+          ><span class="lang-es"
+            >Se reutilizan las mismas instancias — el agente detiene la app,
+            instala la nueva revisión desde S3 y la reinicia. No se crea nueva
+            infraestructura.</span
+          >
+        </p>
+        <div class="demo-wrap">
+          <div class="demo-title">
+            <div class="mode-dot" style="background: #3b82f6"></div>
+            <h4>In-Place · HalfAtATime</h4>
+            <span class="chip-sm blue" style="margin-left: auto"
+              ><span class="lang-en">Same instances reused</span
+              ><span class="lang-es">Mismas instancias</span></span
+            >
+          </div>
+          <div id="ip" class="anim-body"></div>
+          <div class="anim-controls">
+            <button class="nav-btn" id="ip-prev" onclick="prev('ip')">
+              ◀ Prev
+            </button>
+            <button class="nav-btn" id="ip-next" onclick="next('ip')">
+              Next ▶
+            </button>
+            <div class="step-dots" id="ip-dots"></div>
+            <span class="step-counter" id="ip-counter"></span>
+            <button class="restart-btn" onclick="restart('ip')">
+              ↺ Restart
+            </button>
+          </div>
+        </div>
+
+        <h3 style="margin-top: 1.5rem">
+          <span class="lang-en">EC2 — Blue/Green Deployment</span
+          ><span class="lang-es">EC2 — Deploy Blue/Green</span>
+        </h3>
+        <p>
+          <span class="lang-en"
+            >New EC2 instances are provisioned in a separate Auto Scaling group.
+            The ALB shifts traffic to the new group, then the old one is
+            terminated. Easy rollback — just point back to blue.</span
+          ><span class="lang-es"
+            >Se crean nuevas instancias en un ASG separado. El ALB redirige el
+            tráfico al nuevo grupo, luego el viejo se termina. Rollback fácil —
+            volver a apuntar a blue.</span
+          >
+        </p>
+        <div class="demo-wrap">
+          <div class="demo-title">
+            <div class="mode-dot" style="background: #8b5cf6"></div>
+            <h4>Blue/Green · EC2</h4>
+            <span class="chip-sm green" style="margin-left: auto"
+              ><span class="lang-en">New infrastructure · easy rollback</span
+              ><span class="lang-es">Nueva infra · rollback fácil</span></span
+            >
+          </div>
+          <div id="bg" class="anim-body"></div>
+          <div class="anim-controls">
+            <button class="nav-btn" id="bg-prev" onclick="prev('bg')">
+              ◀ Prev
+            </button>
+            <button class="nav-btn" id="bg-next" onclick="next('bg')">
+              Next ▶
+            </button>
+            <div class="step-dots" id="bg-dots"></div>
+            <span class="step-counter" id="bg-counter"></span>
+            <button class="restart-btn" onclick="restart('bg')">
+              ↺ Restart
+            </button>
+          </div>
+        </div>
+
+        <h3 style="margin-top: 1.5rem">
+          <span class="lang-en">Lambda — Traffic Shifting Strategies</span
+          ><span class="lang-es">Lambda — Estrategias de Traffic Shifting</span>
+        </h3>
+        <p>
+          <span class="lang-en"
+            >CodeDeploy shifts traffic between two Lambda versions under a
+            single alias. X% goes to v2, the rest stays on v1, and X grows until
+            it reaches 100%. Three strategies control how X evolves.</span
+          ><span class="lang-es"
+            >CodeDeploy desplaza el tráfico entre dos versiones Lambda bajo un
+            mismo alias. X% va a v2, el resto a v1, y X crece hasta llegar al
+            100%. Tres estrategias controlan cómo evoluciona X.</span
+          >
+        </p>
+
+        <div class="demo-wrap">
+          <div class="demo-title">
+            <div class="mode-dot" style="background: #3b82f6"></div>
+            <h4>
+              Linear ·
+              <code style="font-size: 0.78rem"
+                >LambdaLinear10PercentEvery3Minutes</code
+              >
+            </h4>
+            <span class="chip-sm blue" style="margin-left: auto"
+              ><span class="lang-en">Steady ramp</span
+              ><span class="lang-es">Incremento constante</span></span
+            >
+          </div>
+          <div id="lin" class="anim-body"></div>
+          <div class="anim-controls">
+            <button class="nav-btn" id="lin-prev" onclick="prev('lin')">
+              ◀ Prev
+            </button>
+            <button class="nav-btn" id="lin-next" onclick="next('lin')">
+              Next ▶
+            </button>
+            <div class="step-dots" id="lin-dots"></div>
+            <span class="step-counter" id="lin-counter"></span>
+            <button class="restart-btn" onclick="restart('lin')">
+              ↺ Restart
+            </button>
+          </div>
+        </div>
+
+        <div class="demo-wrap">
+          <div class="demo-title">
+            <div class="mode-dot" style="background: #f97316"></div>
+            <h4>
+              Canary ·
+              <code style="font-size: 0.78rem"
+                >LambdaCanary10Percent5Minutes</code
+              >
+            </h4>
+            <span class="chip-sm orange" style="margin-left: auto"
+              ><span class="lang-en">Small test → full jump</span
+              ><span class="lang-es">Test pequeño → salto total</span></span
+            >
+          </div>
+          <div id="can" class="anim-body"></div>
+          <div class="anim-controls">
+            <button class="nav-btn" id="can-prev" onclick="prev('can')">
+              ◀ Prev
+            </button>
+            <button class="nav-btn" id="can-next" onclick="next('can')">
+              Next ▶
+            </button>
+            <div class="step-dots" id="can-dots"></div>
+            <span class="step-counter" id="can-counter"></span>
+            <button class="restart-btn" onclick="restart('can')">
+              ↺ Restart
+            </button>
+          </div>
+        </div>
+
+        <div class="demo-wrap">
+          <div class="demo-title">
+            <div class="mode-dot" style="background: #ef4444"></div>
+            <h4>
+              AllAtOnce ·
+              <code style="font-size: 0.78rem">LambdaAllAtOnce</code>
+            </h4>
+            <span class="chip-sm red" style="margin-left: auto"
+              ><span class="lang-en">Instant — no test window</span
+              ><span class="lang-es"
+                >Instantáneo — sin ventana de prueba</span
+              ></span
+            >
+          </div>
+          <div id="aao" class="anim-body"></div>
+          <div class="anim-controls">
+            <button class="nav-btn" id="aao-prev" onclick="prev('aao')">
+              ◀ Prev
+            </button>
+            <button class="nav-btn" id="aao-next" onclick="next('aao')">
+              Next ▶
+            </button>
+            <div class="step-dots" id="aao-dots"></div>
+            <span class="step-counter" id="aao-counter"></span>
+            <button class="restart-btn" onclick="restart('aao')">
+              ↺ Restart
+            </button>
+          </div>
+        </div>
+
+        <h3 style="margin-top: 1.5rem">
+          <span class="lang-en">ECS — Blue/Green (only option)</span
+          ><span class="lang-es">ECS — Blue/Green (única opción)</span>
+        </h3>
+        <p>
+          <span class="lang-en"
+            >CodeDeploy deploys a new ECS task definition into a second target
+            group, then shifts ALB traffic from the old (blue) target group to
+            the new (green) one. The same Linear/Canary/AllAtOnce strategies
+            apply.</span
+          ><span class="lang-es"
+            >CodeDeploy despliega una nueva task definition de ECS en un segundo
+            target group, luego desplaza el tráfico del ALB del TG viejo (blue)
+            al nuevo (green). Las mismas estrategias Linear/Canary/AllAtOnce
+            aplican.</span
+          >
+        </p>
+        <div class="demo-wrap">
+          <div class="demo-title">
+            <div class="mode-dot" style="background: #22c55e"></div>
+            <h4>ECS Blue/Green</h4>
+            <span class="chip-sm green" style="margin-left: auto"
+              ><span class="lang-en">Blue/Green only · new task definition</span
+              ><span class="lang-es"
+                >Solo Blue/Green · nueva task definition</span
+              ></span
+            >
+          </div>
+          <div id="ecs" class="anim-body"></div>
+          <div class="anim-controls">
+            <button class="nav-btn" id="ecs-prev" onclick="prev('ecs')">
+              ◀ Prev
+            </button>
+            <button class="nav-btn" id="ecs-next" onclick="next('ecs')">
+              Next ▶
+            </button>
+            <div class="step-dots" id="ecs-dots"></div>
+            <span class="step-counter" id="ecs-counter"></span>
+            <button class="restart-btn" onclick="restart('ecs')">
+              ↺ Restart
+            </button>
+          </div>
+        </div>
+
+        <h3 style="margin-top: 1.5rem">
+          <span class="lang-en">appspec.yml — Deployment Instructions</span
+          ><span class="lang-es">appspec.yml — Instrucciones de Deploy</span>
+        </h3>
+        <p>
+          <span class="lang-en"
+            >Just like CodeBuild has <code>buildspec.yml</code>, CodeDeploy has
+            <code>appspec.yml</code> — placed at the <strong>root</strong> of
+            the revision. It defines which files to copy where, and which
+            scripts to run at each hook.</span
+          ><span class="lang-es"
+            >Así como CodeBuild tiene <code>buildspec.yml</code>, CodeDeploy
+            tiene <code>appspec.yml</code> — en la <strong>raíz</strong> de la
+            revisión. Define qué archivos copiar y qué scripts ejecutar en cada
+            hook.</span
+          >
+        </p>
+        <pre
+          style="
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 1rem 1.25rem;
+            font-size: 0.78rem;
+            line-height: 1.6;
+            overflow-x: auto;
+            color: #94a3b8;
+          "
+        ><code><span style="color:#64748b"># appspec.yml — root of the revision zip</span>
+version: 0.0
+os: linux
+
+<span style="color:#fcd34d">files:</span>
+  - source: index.html
+    destination: /var/www/html    <span style="color:#64748b"># copy to Apache web root</span>
+
+<span style="color:#fcd34d">hooks:</span>
+  BeforeInstall:
+    - location: scripts/install_dependencies.sh   <span style="color:#64748b"># installs httpd</span>
+  ApplicationStop:
+    - location: scripts/stop_server.sh            <span style="color:#64748b"># stop old version</span>
+  ApplicationStart:
+    - location: scripts/start_server.sh           <span style="color:#64748b"># start new version</span></code></pre>
+
+        <h3 style="margin-top: 1.5rem">
+          <span class="lang-en">Lifecycle Events (EC2)</span
+          ><span class="lang-es">Eventos del Ciclo de Vida (EC2)</span>
+        </h3>
+        <p>
+          <span class="lang-en"
+            >Every EC2 deployment runs through a fixed sequence of lifecycle
+            events, visible in the CodeDeploy console. Your hooks plug into
+            specific points in this sequence.</span
+          ><span class="lang-es"
+            >Todo deploy en EC2 sigue una secuencia fija de eventos, visible en
+            la consola de CodeDeploy. Tus hooks se conectan a puntos específicos
+            de esta secuencia.</span
+          >
+        </p>
+        <div
+          style="
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.35rem;
+            align-items: center;
+            margin: 0.5rem 0 1rem;
+          "
+        >
+          <span
+            style="
+              background: #1e293b;
+              color: #93c5fd;
+              border: 1px solid #3b82f6;
+              border-radius: 6px;
+              padding: 0.25rem 0.6rem;
+              font-size: 0.78rem;
+              font-weight: 700;
+            "
+            >ApplicationStop</span
+          >
+          <span style="color: #475569; font-size: 1rem">→</span>
+          <span
+            style="
+              background: #1e293b;
+              color: #94a3b8;
+              border: 1px solid #334155;
+              border-radius: 6px;
+              padding: 0.25rem 0.6rem;
+              font-size: 0.78rem;
+            "
+            >DownloadBundle</span
+          >
+          <span style="color: #475569; font-size: 1rem">→</span>
+          <span
+            style="
+              background: #1e293b;
+              color: #94a3b8;
+              border: 1px solid #334155;
+              border-radius: 6px;
+              padding: 0.25rem 0.6rem;
+              font-size: 0.78rem;
+            "
+            >BeforeInstall</span
+          >
+          <span style="color: #475569; font-size: 1rem">→</span>
+          <span
+            style="
+              background: #1e293b;
+              color: #94a3b8;
+              border: 1px solid #334155;
+              border-radius: 6px;
+              padding: 0.25rem 0.6rem;
+              font-size: 0.78rem;
+            "
+            >Install</span
+          >
+          <span style="color: #475569; font-size: 1rem">→</span>
+          <span
+            style="
+              background: #1e293b;
+              color: #94a3b8;
+              border: 1px solid #334155;
+              border-radius: 6px;
+              padding: 0.25rem 0.6rem;
+              font-size: 0.78rem;
+            "
+            >AfterInstall</span
+          >
+          <span style="color: #475569; font-size: 1rem">→</span>
+          <span
+            style="
+              background: #1e293b;
+              color: #86efac;
+              border: 1px solid #22c55e;
+              border-radius: 6px;
+              padding: 0.25rem 0.6rem;
+              font-size: 0.78rem;
+              font-weight: 700;
+            "
+            >ApplicationStart</span
+          >
+          <span style="color: #475569; font-size: 1rem">→</span>
+          <span
+            style="
+              background: #1e293b;
+              color: #86efac;
+              border: 1px solid #22c55e;
+              border-radius: 6px;
+              padding: 0.25rem 0.6rem;
+              font-size: 0.78rem;
+              font-weight: 700;
+            "
+            >ValidateService</span
+          >
+        </div>
+
+        <h3>
+          <span class="lang-en">Targeting Instances with Tags</span
+          ><span class="lang-es">Seleccionar Instancias con Tags</span>
+        </h3>
+        <p>
+          <span class="lang-en"
+            >CodeDeploy deployment groups select EC2 instances via
+            <strong>tag key/value pairs</strong> — not IPs or instance IDs. This
+            is how you separate dev from prod: tag instances with
+            <code>Environment = Development</code> or
+            <code>Environment = Production</code>, and create a separate
+            deployment group for each. This also allows Systems Manager to
+            automate agent installation on the right instances.</span
+          ><span class="lang-es"
+            >Los deployment groups de CodeDeploy seleccionan instancias EC2
+            mediante <strong>pares clave/valor de tags</strong> — no IPs ni IDs.
+            Así separás dev de prod: taggeás las instancias con
+            <code>Environment = Development</code> o
+            <code>Environment = Production</code> y creás un deployment group
+            por cada una.</span
+          >
+        </p>
+
+        <div
+          class="callout"
+          style="
+            border-left: 3px solid #f59e0b;
+            background: #1c1709;
+            padding: 0.75rem 1rem;
+            border-radius: 0 8px 8px 0;
+            margin-top: 0.5rem;
+            font-size: 0.85rem;
+            color: #94a3b8;
+          "
+        >
+          ⚠
+          <strong style="color: #fcd34d"
+            ><span class="lang-en">Common gotcha:</span
+            ><span class="lang-es">Error frecuente:</span></strong
+          >
+          <span class="lang-en">
+            If the first deployment fails with a download error, check that the
+            EC2 instance has the <strong>IAM instance profile</strong> attached
+            with S3 read permissions. The agent cannot pull the revision without
+            it.</span
+          >
+          <span class="lang-es">
+            Si el primer deployment falla con un error de descarga, verificá que
+            la instancia EC2 tenga el
+            <strong>IAM instance profile</strong> adjunto con permisos de
+            lectura en S3. El agente no puede bajar la revisión sin él.</span
+          >
+        </div>
+
+        <h3 style="margin-top: 1.5rem">
+          <span class="lang-en">ASG — In-Place: New Instances Auto-Deploy</span
+          ><span class="lang-es"
+            >ASG — In-Place: Nuevas Instancias se Auto-Deployean</span
+          >
+        </h3>
+        <p>
+          <span class="lang-en"
+            >When CodeDeploy uses in-place on an ASG, it behaves the same as a
+            fixed fleet — but with one key bonus: if the ASG scales out and
+            launches new EC2 instances, CodeDeploy
+            <strong>automatically deploys the latest revision</strong> to them.
+            No manual intervention needed.</span
+          ><span class="lang-es"
+            >Cuando CodeDeploy usa in-place en un ASG, funciona igual que en una
+            flota fija — pero con un bonus clave: si el ASG escala y lanza
+            nuevas instancias EC2, CodeDeploy
+            <strong>despliega automáticamente la última revisión</strong> en
+            ellas. Sin intervención manual.</span
+          >
+        </p>
+        <div class="demo-wrap">
+          <div class="demo-title">
+            <div class="mode-dot" style="background: #3b82f6"></div>
+            <h4>ASG In-Place + Scale Out</h4>
+            <span class="chip-sm blue" style="margin-left: auto"
+              ><span class="lang-en">New instances auto-deploy</span
+              ><span class="lang-es"
+                >Nuevas instancias se auto-deployean</span
+              ></span
+            >
+          </div>
+          <div id="asgip" class="anim-body"></div>
+          <div class="anim-controls">
+            <button class="nav-btn" id="asgip-prev" onclick="prev('asgip')">
+              ◀ Prev
+            </button>
+            <button class="nav-btn" id="asgip-next" onclick="next('asgip')">
+              Next ▶
+            </button>
+            <div class="step-dots" id="asgip-dots"></div>
+            <span class="step-counter" id="asgip-counter"></span>
+            <button class="restart-btn" onclick="restart('asgip')">
+              ↺ Restart
+            </button>
+          </div>
+        </div>
+
+        <h3 style="margin-top: 1.5rem">
+          <span class="lang-en">ASG — Blue/Green: New ASG Created</span
+          ><span class="lang-es">ASG — Blue/Green: Nuevo ASG Creado</span>
+        </h3>
+        <p>
+          <span class="lang-en"
+            >For blue/green on an ASG, CodeDeploy creates a
+            <strong>brand new ASG</strong> with the same settings as the
+            original, deploys v2 to it, then redirects the ELB. You configure
+            how long the old ASG is kept alive before termination — useful as a
+            rollback safety window.</span
+          ><span class="lang-es"
+            >Para blue/green en un ASG, CodeDeploy crea un
+            <strong>nuevo ASG</strong> con la misma configuración que el
+            original, despliega v2, y redirige el ELB. Configurás cuánto tiempo
+            se mantiene vivo el viejo ASG antes de terminarlo — útil como
+            ventana de rollback.</span
+          >
+        </p>
+        <div class="demo-wrap">
+          <div class="demo-title">
+            <div class="mode-dot" style="background: #8b5cf6"></div>
+            <h4>ASG Blue/Green</h4>
+            <span class="chip-sm green" style="margin-left: auto"
+              ><span class="lang-en"
+                >New ASG · configurable termination wait</span
+              ><span class="lang-es"
+                >Nuevo ASG · espera de terminación configurable</span
+              ></span
+            >
+          </div>
+          <div id="asgbg" class="anim-body"></div>
+          <div class="anim-controls">
+            <button class="nav-btn" id="asgbg-prev" onclick="prev('asgbg')">
+              ◀ Prev
+            </button>
+            <button class="nav-btn" id="asgbg-next" onclick="next('asgbg')">
+              Next ▶
+            </button>
+            <div class="step-dots" id="asgbg-dots"></div>
+            <span class="step-counter" id="asgbg-counter"></span>
+            <button class="restart-btn" onclick="restart('asgbg')">
+              ↺ Restart
+            </button>
+          </div>
+        </div>
+
+        <h3 style="margin-top: 1.5rem">
+          <span class="lang-en">Rollbacks</span
+          ><span class="lang-es">Rollbacks</span>
+        </h3>
+        <p>
+          <span class="lang-en"
+            >A rollback is <strong>not a restore</strong> — CodeDeploy performs
+            a <strong>brand new deployment</strong> using the last known good
+            revision, running all lifecycle events again from scratch. Can be
+            triggered automatically or manually, and can be disabled
+            entirely.</span
+          ><span class="lang-es"
+            >Un rollback <strong>no es una restauración</strong> — CodeDeploy
+            hace un <strong>nuevo deployment</strong> con la última revisión
+            conocida buena, ejecutando todos los eventos del ciclo de vida desde
+            cero. Puede dispararse automáticamente, manualmente, o
+            deshabilitarse.</span
+          >
+        </p>
+        <div class="demo-wrap">
+          <div class="demo-title">
+            <div class="mode-dot" style="background: #ef4444"></div>
+            <h4>
+              <span class="lang-en">Rollback Flow</span
+              ><span class="lang-es">Flujo de Rollback</span>
+            </h4>
+            <span class="chip-sm red" style="margin-left: auto"
+              ><span class="lang-en">New deploy, not a restore</span
+              ><span class="lang-es"
+                >Nuevo deploy, no una restauración</span
+              ></span
+            >
+          </div>
+          <div id="rlb" class="anim-body"></div>
+          <div class="anim-controls">
+            <button class="nav-btn" id="rlb-prev" onclick="prev('rlb')">
+              ◀ Prev
+            </button>
+            <button class="nav-btn" id="rlb-next" onclick="next('rlb')">
+              Next ▶
+            </button>
+            <div class="step-dots" id="rlb-dots"></div>
+            <span class="step-counter" id="rlb-counter"></span>
+            <button class="restart-btn" onclick="restart('rlb')">
+              ↺ Restart
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════ CARD 6: CODEARTIFACT ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">6</span>
+          <h2>
+            <span class="lang-en">CodeArtifact</span
+            ><span class="lang-es">CodeArtifact</span>
+          </h2>
+        </div>
+
+        <p>
+          <span class="lang-en"
+            >CodeArtifact is a managed artifact repository — it stores the
+            software packages your code depends on. Instead of developers
+            fetching directly from public registries (npm, PyPI, Maven Central,
+            NuGet), they point their package manager at CodeArtifact, which acts
+            as a <strong>proxy and cache</strong>. Packages are fetched once and
+            stored; if the public registry goes down, builds keep working.</span
+          >
+          <span class="lang-es"
+            >CodeArtifact es un repositorio de artefactos gestionado — almacena
+            los paquetes de software de los que depende tu código. En lugar de
+            que los desarrolladores busquen directamente en registros públicos
+            (npm, PyPI, Maven Central, NuGet), apuntan su gestor de paquetes a
+            CodeArtifact, que actúa como <strong>proxy y caché</strong>. Los
+            paquetes se obtienen una vez y se almacenan; si el registro público
+            cae, las builds siguen funcionando.</span
+          >
+        </p>
+
+        <h3>
+          <span class="lang-en">Architecture: Proxy + Cache</span
+          ><span class="lang-es">Arquitectura: Proxy + Caché</span>
+        </h3>
+        <p>
+          <span class="lang-en"
+            >CodeArtifact lives inside your VPC and sits between
+            developers/CodeBuild and the public internet. An IT leader can
+            publish and approve internal packages. CodeBuild fetches
+            dependencies from CodeArtifact instead of the public registry.</span
+          ><span class="lang-es"
+            >CodeArtifact vive dentro de tu VPC y se sitúa entre los
+            desarrolladores/CodeBuild y la internet pública. Un líder de TI
+            puede publicar y aprobar paquetes internos. CodeBuild descarga
+            dependencias desde CodeArtifact en lugar del registro público.</span
+          >
+        </p>
+        <div class="vd">
+          <svg
+            viewBox="0 0 480 235"
+            xmlns="http://www.w3.org/2000/svg"
+            style="width: 100%; height: auto; display: block"
+          >
+            <defs>
+              <marker
+                id="ah-ca"
+                markerWidth="8"
+                markerHeight="6"
+                refX="8"
+                refY="3"
+                orient="auto"
+              >
+                <path d="M0,0 L8,3 L0,6" fill="#64748b" />
+              </marker>
+              <marker
+                id="ah-ca-v"
+                markerWidth="8"
+                markerHeight="6"
+                refX="8"
+                refY="3"
+                orient="auto"
+              >
+                <path d="M0,0 L8,3 L0,6" fill="#a5b4fc" />
+              </marker>
+            </defs>
+
+            <!-- === BOXES FIRST (drawn below arrows) === -->
+
+            <!-- Public repos box -->
+            <rect
+              x="5"
+              y="28"
+              width="108"
+              height="110"
+              rx="8"
+              fill="#0f172a"
+              stroke="#334155"
+              stroke-width="1"
+              stroke-dasharray="4,3"
+            />
+            <text
+              x="59"
+              y="46"
+              text-anchor="middle"
+              fill="#64748b"
+              font-family="Inter,sans-serif"
+              font-size="7.5"
+              font-weight="700"
+            >
+              Public Artifact Repos
+            </text>
+            <text
+              x="59"
+              y="65"
+              text-anchor="middle"
+              fill="#94a3b8"
+              font-family="Inter,sans-serif"
+              font-size="9"
+            >
+              npm
+            </text>
+            <text
+              x="59"
+              y="81"
+              text-anchor="middle"
+              fill="#94a3b8"
+              font-family="Inter,sans-serif"
+              font-size="9"
+            >
+              PyPI
+            </text>
+            <text
+              x="59"
+              y="97"
+              text-anchor="middle"
+              fill="#94a3b8"
+              font-family="Inter,sans-serif"
+              font-size="9"
+            >
+              Maven Central
+            </text>
+            <text
+              x="59"
+              y="113"
+              text-anchor="middle"
+              fill="#94a3b8"
+              font-family="Inter,sans-serif"
+              font-size="9"
+            >
+              NuGet
+            </text>
+
+            <!-- VPC box (CodeArtifact + CodeBuild inside) -->
+            <rect
+              x="130"
+              y="5"
+              width="335"
+              height="188"
+              rx="10"
+              fill="#0f172a"
+              stroke="#22c55e"
+              stroke-width="1.5"
+            />
+            <text
+              x="145"
+              y="20"
+              fill="#4ade80"
+              font-family="Inter,sans-serif"
+              font-size="8"
+              font-weight="700"
+            >
+              VPC
+            </text>
+
+            <!-- CodeArtifact box -->
+            <rect
+              x="140"
+              y="22"
+              width="190"
+              height="160"
+              rx="8"
+              fill="#0f172a"
+              stroke="#6366f1"
+              stroke-width="1.2"
+              stroke-dasharray="4,3"
+            />
+            <text
+              x="235"
+              y="38"
+              text-anchor="middle"
+              fill="#a5b4fc"
+              font-family="Inter,sans-serif"
+              font-size="9"
+              font-weight="700"
+            >
+              AWS CodeArtifact
+            </text>
+
+            <!-- Domain box -->
+            <rect
+              x="150"
+              y="48"
+              width="168"
+              height="122"
+              rx="6"
+              fill="#0f172a"
+              stroke="#475569"
+              stroke-width="1"
+              stroke-dasharray="3,2"
+            />
+            <text
+              x="234"
+              y="63"
+              text-anchor="middle"
+              fill="#64748b"
+              font-family="Inter,sans-serif"
+              font-size="8"
+            >
+              Domain
+            </text>
+
+            <!-- Repo A -->
+            <rect
+              x="155"
+              y="70"
+              width="74"
+              height="72"
+              rx="5"
+              fill="#1e293b"
+              stroke="#3b82f6"
+              stroke-width="1"
+            />
+            <text
+              x="192"
+              y="85"
+              text-anchor="middle"
+              fill="#93c5fd"
+              font-family="Inter,sans-serif"
+              font-size="8"
+              font-weight="700"
+            >
+              Repository A
+            </text>
+            <rect
+              x="169"
+              y="93"
+              width="46"
+              height="28"
+              rx="4"
+              fill="#0f172a"
+              stroke="#6366f1"
+              stroke-width="1"
+            />
+            <text
+              x="192"
+              y="111"
+              text-anchor="middle"
+              fill="#a5b4fc"
+              font-family="Inter,sans-serif"
+              font-size="8"
+            >
+              Package 1
+            </text>
+
+            <!-- Repo B -->
+            <rect
+              x="238"
+              y="70"
+              width="72"
+              height="72"
+              rx="5"
+              fill="#1e293b"
+              stroke="#f59e0b"
+              stroke-width="1"
+            />
+            <text
+              x="274"
+              y="85"
+              text-anchor="middle"
+              fill="#fcd34d"
+              font-family="Inter,sans-serif"
+              font-size="8"
+              font-weight="700"
+            >
+              Repository B
+            </text>
+            <rect
+              x="250"
+              y="93"
+              width="46"
+              height="28"
+              rx="4"
+              fill="#0f172a"
+              stroke="#8b5cf6"
+              stroke-width="1"
+            />
+            <text
+              x="273"
+              y="111"
+              text-anchor="middle"
+              fill="#c4b5fd"
+              font-family="Inter,sans-serif"
+              font-size="8"
+            >
+              Package 2
+            </text>
+
+            <!-- CodeBuild box (inside VPC) -->
+            <rect
+              x="377"
+              y="60"
+              width="80"
+              height="44"
+              rx="7"
+              fill="#1e293b"
+              stroke="#a5b4fc"
+              stroke-width="1.2"
+            />
+            <text
+              x="417"
+              y="87"
+              text-anchor="middle"
+              fill="#a5b4fc"
+              font-family="Inter,sans-serif"
+              font-size="9"
+              font-weight="700"
+            >
+              CodeBuild
+            </text>
+
+            <!-- === ARROWS ON TOP (drawn after boxes) === -->
+
+            <!-- proxy arrow: drawn last so it renders on top of VPC/CodeArtifact borders -->
+            <line
+              x1="113"
+              y1="83"
+              x2="140"
+              y2="83"
+              stroke="#64748b"
+              stroke-width="1.2"
+              marker-end="url(#ah-ca)"
+            />
+            <text
+              x="141"
+              y="77"
+              text-anchor="middle"
+              fill="#64748b"
+              font-family="Inter,sans-serif"
+              font-size="7"
+            >
+              proxy
+            </text>
+
+            <!-- fetch arrow: CodeArtifact → CodeBuild (prominent) -->
+            <line
+              x1="332"
+              y1="82"
+              x2="375"
+              y2="82"
+              stroke="#a5b4fc"
+              stroke-width="2"
+              marker-end="url(#ah-ca-v)"
+            />
+            <text
+              x="353"
+              y="74"
+              text-anchor="middle"
+              fill="#a5b4fc"
+              font-family="Inter,sans-serif"
+              font-size="8"
+              font-weight="700"
+            >
+              fetch
+            </text>
+
+            <!-- IT Leader below VPC -->
+            <line
+              x1="235"
+              y1="220"
+              x2="235"
+              y2="196"
+              stroke="#64748b"
+              stroke-width="1"
+              stroke-dasharray="3,2"
+              marker-end="url(#ah-ca)"
+            />
+            <text
+              x="235"
+              y="230"
+              text-anchor="middle"
+              fill="#64748b"
+              font-family="Inter,sans-serif"
+              font-size="7.5"
+            >
+              IT Leader: publish / approve packages
+            </text>
+          </svg>
+        </div>
+        <p
+          style="
+            font-size: 0.8rem;
+            color: #64748b;
+            margin-top: 0.5rem;
+            font-style: italic;
+          "
+        >
+          <span class="lang-en"
+            ><strong>fetch</strong>: When configured to use CodeArtifact,
+            CodeBuild pulls packages from there instead of going directly to
+            public registries — getting both private/internal packages and
+            cached public ones (npm, PyPI, Maven, NuGet) in a single place.
+            CodeBuild can still reach public registries directly if not
+            configured otherwise.</span
+          >
+          <span class="lang-es"
+            ><strong>fetch</strong>: Cuando se configura para usar CodeArtifact,
+            CodeBuild descarga paquetes desde ahí en lugar de ir directo a los
+            registros públicos — obteniendo tanto paquetes privados/internos
+            como públicos cacheados (npm, PyPI, Maven, NuGet) desde un solo
+            lugar. CodeBuild puede seguir accediendo a registros públicos
+            directamente si no se configura de otra manera.</span
+          >
+        </p>
+
+        <h3 style="margin-top: 1.25rem">
+          <span class="lang-en">EventBridge Integration</span
+          ><span class="lang-es">Integración con EventBridge</span>
+        </h3>
+        <p>
+          <span class="lang-en"
+            >Any time a package version is created, modified, or deleted,
+            CodeArtifact emits an event to EventBridge. This lets you trigger
+            automated reactions — the most powerful being a full rebuild +
+            redeploy pipeline whenever a dependency changes.</span
+          ><span class="lang-es"
+            >Cada vez que una versión de paquete es creada, modificada o
+            eliminada, CodeArtifact emite un evento a EventBridge. Esto permite
+            disparar reacciones automáticas — la más poderosa es un pipeline
+            completo de rebuild + redeploy cada vez que una dependencia
+            cambia.</span
+          >
+        </p>
+        <div class="vd">
+          <svg
+            viewBox="0 0 580 175"
+            xmlns="http://www.w3.org/2000/svg"
+            style="width: 100%; height: auto; display: block"
+          >
+            <defs>
+              <marker
+                id="ah-eb"
+                markerWidth="8"
+                markerHeight="6"
+                refX="8"
+                refY="3"
+                orient="auto"
+              >
+                <path d="M0,0 L8,3 L0,6" fill="#64748b" />
+              </marker>
+            </defs>
+
+            <!-- CodeArtifact -->
+            <rect
+              x="5"
+              y="60"
+              width="100"
+              height="40"
+              rx="7"
+              fill="#1e293b"
+              stroke="#6366f1"
+              stroke-width="1.5"
+            />
+            <text
+              x="55"
+              y="78"
+              text-anchor="middle"
+              fill="#a5b4fc"
+              font-family="Inter,sans-serif"
+              font-size="8"
+              font-weight="700"
+            >
+              CodeArtifact
+            </text>
+            <text
+              x="55"
+              y="91"
+              text-anchor="middle"
+              fill="#64748b"
+              font-family="Inter,sans-serif"
+              font-size="7"
+            >
+              pkg created/modified/deleted
+            </text>
+
+            <!-- arrow to EventBridge -->
+            <line
+              x1="105"
+              y1="80"
+              x2="148"
+              y2="80"
+              stroke="#64748b"
+              stroke-width="1.2"
+              marker-end="url(#ah-eb)"
+            />
+            <text
+              x="126"
+              y="74"
+              text-anchor="middle"
+              fill="#64748b"
+              font-family="Inter,sans-serif"
+              font-size="7"
+            >
+              events
+            </text>
+
+            <!-- EventBridge -->
+            <rect
+              x="150"
+              y="60"
+              width="90"
+              height="40"
+              rx="7"
+              fill="#1e293b"
+              stroke="#ec4899"
+              stroke-width="1.5"
+            />
+            <text
+              x="195"
+              y="84"
+              text-anchor="middle"
+              fill="#f9a8d4"
+              font-family="Inter,sans-serif"
+              font-size="9"
+              font-weight="700"
+            >
+              EventBridge
+            </text>
+
+            <!-- Fan-out arrows -->
+            <line
+              x1="240"
+              y1="70"
+              x2="288"
+              y2="22"
+              stroke="#64748b"
+              stroke-width="1"
+              marker-end="url(#ah-eb)"
+            />
+            <line
+              x1="240"
+              y1="75"
+              x2="288"
+              y2="55"
+              stroke="#64748b"
+              stroke-width="1"
+              marker-end="url(#ah-eb)"
+            />
+            <line
+              x1="240"
+              y1="82"
+              x2="288"
+              y2="88"
+              stroke="#64748b"
+              stroke-width="1"
+              marker-end="url(#ah-eb)"
+            />
+            <line
+              x1="240"
+              y1="88"
+              x2="288"
+              y2="121"
+              stroke="#64748b"
+              stroke-width="1"
+              marker-end="url(#ah-eb)"
+            />
+
+            <!-- Targets -->
+            <rect
+              x="290"
+              y="8"
+              width="100"
+              height="22"
+              rx="5"
+              fill="#1e293b"
+              stroke="#f97316"
+              stroke-width="1"
+            />
+            <text
+              x="340"
+              y="23"
+              text-anchor="middle"
+              fill="#fdba74"
+              font-family="Inter,sans-serif"
+              font-size="8"
+            >
+              Lambda Function
+            </text>
+
+            <rect
+              x="290"
+              y="43"
+              width="100"
+              height="22"
+              rx="5"
+              fill="#1e293b"
+              stroke="#ec4899"
+              stroke-width="1"
+            />
+            <text
+              x="340"
+              y="58"
+              text-anchor="middle"
+              fill="#f9a8d4"
+              font-family="Inter,sans-serif"
+              font-size="8"
+            >
+              Step Functions
+            </text>
+
+            <rect
+              x="290"
+              y="76"
+              width="100"
+              height="22"
+              rx="5"
+              fill="#1e293b"
+              stroke="#ec4899"
+              stroke-width="1"
+            />
+            <text
+              x="340"
+              y="91"
+              text-anchor="middle"
+              fill="#f9a8d4"
+              font-family="Inter,sans-serif"
+              font-size="8"
+            >
+              SNS / SQS
+            </text>
+
+            <!-- CodePipeline chain -->
+            <rect
+              x="290"
+              y="109"
+              width="100"
+              height="22"
+              rx="5"
+              fill="#1e293b"
+              stroke="#3b82f6"
+              stroke-width="1"
+            />
+            <text
+              x="340"
+              y="124"
+              text-anchor="middle"
+              fill="#93c5fd"
+              font-family="Inter,sans-serif"
+              font-size="8"
+            >
+              CodePipeline
+            </text>
+
+            <line
+              x1="390"
+              y1="120"
+              x2="408"
+              y2="120"
+              stroke="#64748b"
+              stroke-width="1"
+              marker-end="url(#ah-eb)"
+            />
+            <rect
+              x="410"
+              y="109"
+              width="60"
+              height="22"
+              rx="5"
+              fill="#1e293b"
+              stroke="#a5b4fc"
+              stroke-width="1"
+            />
+            <text
+              x="440"
+              y="124"
+              text-anchor="middle"
+              fill="#a5b4fc"
+              font-family="Inter,sans-serif"
+              font-size="8"
+            >
+              CodeBuild
+            </text>
+
+            <line
+              x1="470"
+              y1="120"
+              x2="488"
+              y2="120"
+              stroke="#64748b"
+              stroke-width="1"
+              marker-end="url(#ah-eb)"
+            />
+            <rect
+              x="490"
+              y="109"
+              width="65"
+              height="22"
+              rx="5"
+              fill="#1e293b"
+              stroke="#22c55e"
+              stroke-width="1"
+            />
+            <text
+              x="522"
+              y="124"
+              text-anchor="middle"
+              fill="#86efac"
+              font-family="Inter,sans-serif"
+              font-size="8"
+            >
+              CodeDeploy
+            </text>
+
+            <rect
+              x="395"
+              y="138"
+              width="185"
+              height="18"
+              rx="4"
+              fill="#0f172a"
+              stroke="#334155"
+              stroke-width="1"
+            />
+            <text
+              x="487"
+              y="151"
+              text-anchor="middle"
+              fill="#475569"
+              font-family="Inter,sans-serif"
+              font-size="7"
+            >
+              Rebuild &amp; Redeploy with latest security fixes
+            </text>
+          </svg>
+        </div>
+
+        <h3 style="margin-top: 1.25rem">
+          <span class="lang-en">Cross-Account Access</span
+          ><span class="lang-es">Acceso entre Cuentas</span>
+        </h3>
+        <p>
+          <span class="lang-en"
+            >Same-account access uses IAM policies on the user/role.
+            Cross-account access requires a
+            <strong>resource policy on the repository</strong> in Account A
+            granting Account B access. Important: access is all-or-nothing — you
+            cannot restrict to specific packages within the repo.</span
+          ><span class="lang-es"
+            >El acceso en la misma cuenta usa políticas IAM en el usuario/rol.
+            El acceso entre cuentas requiere una
+            <strong>resource policy en el repositorio</strong> en la Cuenta A
+            otorgando acceso a la Cuenta B. Importante: el acceso es todo o nada
+            — no podés restringir a paquetes específicos del repo.</span
+          >
+        </p>
+      </div>
+
+      <!-- ═══════════════════ CARD 7: CODEGURU ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">7</span>
+          <h2>
+            <span class="lang-en">CodeGuru</span><span class="lang-es">CodeGuru</span>
+          </h2>
+        </div>
+
+        <div class="callout warn">
+          <span class="lang-en">⚠️ <strong>Being decommissioned</strong> — still study the high-level concepts for the exam.</span>
+          <span class="lang-es">⚠️ <strong>En proceso de baja</strong> — igual estudiá los conceptos de alto nivel para el examen.</span>
+        </div>
+
+        <p style="margin-top:0.75rem">
+          <span class="lang-en">CodeGuru is an ML-powered service that automates two things developers normally do manually: reviewing code for bugs and vulnerabilities, and profiling applications to find performance bottlenecks. It was trained on thousands of open-source repositories and Amazon's own internal codebases.</span>
+          <span class="lang-es">CodeGuru es un servicio con ML que automatiza dos cosas que los developers normalmente hacen de forma manual: revisar código en busca de bugs y vulnerabilidades, y perfilar aplicaciones para encontrar cuellos de botella de performance. Fue entrenado en miles de repositorios open source y en las propias bases de código internas de Amazon.</span>
+        </p>
+
+        <h3><span class="lang-en">The Two Components</span><span class="lang-es">Los Dos Componentes</span></h3>
+        <p>
+          <span class="lang-en">CodeGuru Reviewer performs static code analysis every time you push a commit. It integrates with your repository, scans the lines of code, and surfaces actionable recommendations — catching things like resource leaks, security holes, and input validation issues before another human reviewer would. CodeGuru Profiler works at runtime (both pre-production and in production), identifying expensive lines of code, excessive CPU usage, and memory problems, then giving you cost and performance improvement recommendations directly tied to your code.</span>
+          <span class="lang-es">CodeGuru Reviewer realiza análisis estático de código cada vez que hacés un push. Se integra con tu repositorio, escanea las líneas de código y muestra recomendaciones accionables — detectando cosas como resource leaks, agujeros de seguridad y problemas de validación de entrada antes de que otro reviewer humano lo haga. CodeGuru Profiler trabaja en tiempo de ejecución (tanto en pre-producción como en producción), identificando líneas de código costosas, uso excesivo de CPU y problemas de memoria, para luego darte recomendaciones de mejora de costo y performance directamente ligadas a tu código.</span>
+        </p>
+
+        <table class="data-table" style="margin-top:0.75rem">
+          <thead>
+            <tr>
+              <th></th>
+              <th><span class="lang-en">CodeGuru Reviewer</span><span class="lang-es">CodeGuru Reviewer</span></th>
+              <th><span class="lang-en">CodeGuru Profiler</span><span class="lang-es">CodeGuru Profiler</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong><span class="lang-en">What</span><span class="lang-es">Qué hace</span></strong></td>
+              <td><span class="lang-en">Automated code reviews (static analysis)</span><span class="lang-es">Code reviews automatizados (análisis estático)</span></td>
+              <td><span class="lang-en">Performance profiling at runtime</span><span class="lang-es">Profiling de performance en runtime</span></td>
+            </tr>
+            <tr>
+              <td><strong><span class="lang-en">When</span><span class="lang-es">Cuándo</span></strong></td>
+              <td><span class="lang-en">On every commit / push</span><span class="lang-es">En cada commit / push</span></td>
+              <td><span class="lang-en">Pre-production and production</span><span class="lang-es">Pre-producción y producción</span></td>
+            </tr>
+            <tr>
+              <td><strong><span class="lang-en">Detects</span><span class="lang-es">Detecta</span></strong></td>
+              <td><span class="lang-en">Bugs, security vulnerabilities, resource leaks, input validation issues</span><span class="lang-es">Bugs, vulnerabilidades, resource leaks, problemas de validación</span></td>
+              <td><span class="lang-en">CPU waste, memory issues, expensive lines of code, anomalies</span><span class="lang-es">Desperdicio de CPU, problemas de memoria, líneas costosas, anomalías</span></td>
+            </tr>
+            <tr>
+              <td><strong><span class="lang-en">Languages</span><span class="lang-es">Lenguajes</span></strong></td>
+              <td><span class="lang-en">Java and Python</span><span class="lang-es">Java y Python</span></td>
+              <td><span class="lang-en">Any (including on-premises apps)</span><span class="lang-es">Cualquiera (incluso apps on-premises)</span></td>
+            </tr>
+            <tr>
+              <td><strong><span class="lang-en">Integrations</span><span class="lang-es">Integraciones</span></strong></td>
+              <td>GitHub, Bitbucket, CodeCommit</td>
+              <td><span class="lang-en">AWS Cloud + on-premises (minimal overhead)</span><span class="lang-es">AWS Cloud + on-premises (overhead mínimo)</span></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3 style="margin-top:1.25rem"><span class="lang-en">Profiler Agent Configuration</span><span class="lang-es">Configuración del Agente del Profiler</span></h3>
+        <p><span class="lang-en">The Profiler runs via an agent embedded in your application. You don't need to memorize every parameter — the key is understanding what each setting controls so you can reason through exam questions from the name alone.</span><span class="lang-es">El Profiler corre mediante un agente embebido en tu aplicación. No necesitás memorizar cada parámetro — lo clave es entender qué controla cada setting para poder razonar las preguntas del examen solo con el nombre.</span></p>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th><span class="lang-en">Parameter</span><span class="lang-es">Parámetro</span></th>
+              <th><span class="lang-en">What it controls</span><span class="lang-es">Qué controla</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>MaxStackDepth</strong></td>
+              <td><span class="lang-en">How deep into the call stack the profiler goes. A→B→C→D = depth 4. If set to 2, only A and B are profiled.</span><span class="lang-es">Qué tan profundo en el call stack llega el profiler. A→B→C→D = profundidad 4. Si se setea en 2, solo se perfilan A y B.</span></td>
+            </tr>
+            <tr>
+              <td><strong>MemoryUsageLimitPercent</strong></td>
+              <td><span class="lang-en">Max % of memory the profiler agent is allowed to consume.</span><span class="lang-es">Máximo % de memoria que puede usar el agente del profiler.</span></td>
+            </tr>
+            <tr>
+              <td><strong>MinimumTimeForReportingInMilliseconds</strong></td>
+              <td><span class="lang-en">Minimum interval between sending reports. Acts as a floor for the reporting interval.</span><span class="lang-es">Intervalo mínimo entre envíos de reportes. Actúa como piso para el intervalo de reporte.</span></td>
+            </tr>
+            <tr>
+              <td><strong>ReportingIntervalInMilliseconds</strong></td>
+              <td><span class="lang-en">How often the agent sends profiling data (bounded by the minimum above).</span><span class="lang-es">Con qué frecuencia el agente envía datos de profiling (acotado por el mínimo de arriba).</span></td>
+            </tr>
+            <tr>
+              <td><strong>SamplingIntervalInMilliseconds</strong></td>
+              <td><span class="lang-en">How often the app is sampled. <strong>Lower = higher sampling rate = more detail</strong> (more methods captured, more overhead).</span><span class="lang-es">Con qué frecuencia se samplea la app. <strong>Menor = mayor tasa de muestreo = más detalle</strong> (más métodos capturados, más overhead).</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ═══════════════════ CARD 8: EXAM TIPS ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge" style="font-size: 1rem">★</span>
+          <h2>
+            <span class="lang-en">Consolidated Exam Tips</span
+            ><span class="lang-es">Tips de Examen Consolidados</span>
+          </h2>
+        </div>
+        <div class="tips-grid">
+          <!-- CodeCommit -->
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en">Authentication to CodeCommit</span
+              ><span class="lang-es">Autenticación a CodeCommit</span></span
+            ><span class="arr">→</span
+            ><span class="answer">SSH keys or HTTPS Git credentials (IAM)</span>
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en">Authorization in CodeCommit</span
+              ><span class="lang-es">Autorización en CodeCommit</span></span
+            ><span class="arr">→</span
+            ><span class="answer"
+              ><span class="lang-en">IAM policies</span
+              ><span class="lang-es">Políticas IAM</span></span
+            >
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en">CodeCommit encryption at rest</span
+              ><span class="lang-es"
+                >Cifrado en reposo en CodeCommit</span
+              ></span
+            ><span class="arr">→</span><span class="answer">KMS</span>
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en">Cross-account repo access</span
+              ><span class="lang-es">Acceso entre cuentas al repo</span></span
+            ><span class="arr">→</span
+            ><span class="answer"
+              >IAM Role + <code>STS:AssumeRole</code> — never share SSH
+              keys</span
+            >
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en">"Code must stay in AWS"</span
+              ><span class="lang-es"
+                >"El código debe quedarse en AWS"</span
+              ></span
+            ><span class="arr">→</span><span class="answer">CodeCommit</span>
+          </div>
+
+          <!-- CodePipeline -->
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en">How artifacts pass between stages</span
+              ><span class="lang-es"
+                >Cómo pasan los artifacts entre stages</span
+              ></span
+            ><span class="arr">→</span
+            ><span class="answer"
+              ><span class="lang-en">Via S3 — services never talk directly</span
+              ><span class="lang-es"
+                >Vía S3 — los servicios nunca hablan directamente</span
+              ></span
+            >
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en">CodePipeline can't perform an action</span
+              ><span class="lang-es"
+                >CodePipeline no puede ejecutar una acción</span
+              ></span
+            ><span class="arr">→</span
+            ><span class="answer"
+              ><span class="lang-en">Check its IAM service role</span
+              ><span class="lang-es"
+                >Revisar el IAM service role del pipeline</span
+              ></span
+            >
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en"
+                >Pipeline event monitoring (failures, etc.)</span
+              ><span class="lang-es"
+                >Monitoreo de eventos del pipeline</span
+              ></span
+            ><span class="arr">→</span><span class="answer">EventBridge</span>
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en">Audit AWS API calls in CodePipeline</span
+              ><span class="lang-es"
+                >Auditar llamadas a la API de CodePipeline</span
+              ></span
+            ><span class="arr">→</span><span class="answer">CloudTrail</span>
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en">Multiple action groups in a stage</span
+              ><span class="lang-es"
+                >Múltiples action groups en un stage</span
+              ></span
+            ><span class="arr">→</span
+            ><span class="answer"
+              ><span class="lang-en">Run sequentially</span
+              ><span class="lang-es">Corren secuencialmente</span></span
+            >
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en">Manual approval placement</span
+              ><span class="lang-es">Dónde va la aprobación manual</span></span
+            ><span class="arr">→</span
+            ><span class="answer"
+              ><span class="lang-en">Before any action group in any stage</span
+              ><span class="lang-es"
+                >Antes de cualquier action group en cualquier stage</span
+              ></span
+            >
+          </div>
+
+          <!-- CodeBuild -->
+          <div class="tip">
+            <span class="trigger">buildspec.yml location</span
+            ><span class="arr">→</span
+            ><span class="answer"
+              ><span class="lang-en">Root of the repository</span
+              ><span class="lang-es">Raíz del repositorio</span></span
+            >
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en">Secrets / passwords in buildspec</span
+              ><span class="lang-es"
+                >Secrets / contraseñas en buildspec</span
+              ></span
+            ><span class="arr">→</span
+            ><span class="answer"
+              >SSM Parameter Store or Secrets Manager — never plaintext</span
+            >
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en">Custom build runtime</span
+              ><span class="lang-es">Runtime de build personalizado</span></span
+            ><span class="arr">→</span
+            ><span class="answer"
+              ><span class="lang-en">Extend a Docker image</span
+              ><span class="lang-es">Extender una imagen Docker</span></span
+            >
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en">Build artifacts &amp; cache stored in</span
+              ><span class="lang-es"
+                >Artifacts y cache se almacenan en</span
+              ></span
+            ><span class="arr">→</span><span class="answer">S3</span>
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en">Failed build notification</span
+              ><span class="lang-es">Notificación de build fallido</span></span
+            ><span class="arr">→</span
+            ><span class="answer">EventBridge → SNS</span>
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en">CodeBuild container after the build</span
+              ><span class="lang-es"
+                >Contenedor de CodeBuild al terminar</span
+              ></span
+            ><span class="arr">→</span
+            ><span class="answer"
+              ><span class="lang-en"
+                >Destroyed (ephemeral) — only S3 output survives</span
+              ><span class="lang-es"
+                >Destruido (efímero) — solo sobrevive lo que va a S3</span
+              ></span
+            >
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en">CodeBuild can run…</span
+              ><span class="lang-es">CodeBuild puede correr…</span></span
+            ><span class="arr">→</span
+            ><span class="answer"
+              ><span class="lang-en">Standalone or invoked by CodePipeline</span
+              ><span class="lang-es"
+                >De forma standalone o invocado por CodePipeline</span
+              ></span
+            >
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en">CodeBuild access to VPC resources</span
+              ><span class="lang-es"
+                >Acceso de CodeBuild a recursos en VPC</span
+              ></span
+            ><span class="arr">→</span
+            ><span class="answer"
+              ><span class="lang-en"
+                >Configure CodeBuild to run inside a VPC</span
+              ><span class="lang-es"
+                >Configurar CodeBuild para correr dentro de una VPC</span
+              ></span
+            >
+          </div>
+
+          <!-- CodeDeploy -->
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en">CodeDeploy config file</span
+              ><span class="lang-es"
+                >Archivo de config de CodeDeploy</span
+              ></span
+            ><span class="arr">→</span
+            ><span class="answer">appspec.yml (root of repo)</span>
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en">EC2/On-Prem mandatory prerequisite</span
+              ><span class="lang-es"
+                >Prerequisito obligatorio EC2/On-Prem</span
+              ></span
+            ><span class="arr">→</span
+            ><span class="answer"
+              ><span class="lang-en"
+                >CodeDeploy agent installed on every instance</span
+              ><span class="lang-es"
+                >Agente CodeDeploy instalado en cada instancia</span
+              ></span
+            >
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en">Agent gets the revision from</span
+              ><span class="lang-es"
+                >El agente obtiene la revisión de</span
+              ></span
+            ><span class="arr">→</span
+            ><span class="answer"
+              ><span class="lang-en"
+                >S3 (EC2 role needs S3 read permissions)</span
+              ><span class="lang-es"
+                >S3 (el rol de EC2 necesita permisos de lectura en S3)</span
+              ></span
+            >
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en">In-place vs Blue/Green EC2</span
+              ><span class="lang-es">In-place vs Blue/Green EC2</span></span
+            ><span class="arr">→</span
+            ><span class="answer"
+              ><span class="lang-en"
+                >In-place reuses same instances; Blue/Green creates new
+                ASG</span
+              ><span class="lang-es"
+                >In-place reutiliza las mismas instancias; Blue/Green crea un
+                nuevo ASG</span
+              ></span
+            >
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en">Lambda CodeDeploy = traffic shift on</span
+              ><span class="lang-es"
+                >CodeDeploy en Lambda = shift de tráfico en</span
+              ></span
+            ><span class="arr">→</span
+            ><span class="answer"
+              ><span class="lang-en">Lambda alias (v1 → v2 gradually)</span
+              ><span class="lang-es"
+                >Alias Lambda (v1 → v2 gradualmente)</span
+              ></span
+            >
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en"
+                >Lambda: test small % then jump to 100%</span
+              ><span class="lang-es"
+                >Lambda: probar pequeño % y saltar a 100%</span
+              ></span
+            ><span class="arr">→</span
+            ><span class="answer">Canary strategy</span>
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en">Lambda: even increments every N min</span
+              ><span class="lang-es"
+                >Lambda: incrementos parejos cada N min</span
+              ></span
+            ><span class="arr">→</span
+            ><span class="answer">Linear strategy</span>
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en">ECS CodeDeploy deployment type</span
+              ><span class="lang-es"
+                >Tipo de deploy CodeDeploy en ECS</span
+              ></span
+            ><span class="arr">→</span
+            ><span class="answer"
+              ><span class="lang-en">Blue/Green only (no in-place)</span
+              ><span class="lang-es">Solo Blue/Green (no in-place)</span></span
+            >
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en">Rollback trigger</span
+              ><span class="lang-es">Disparador de rollback</span></span
+            ><span class="arr">→</span
+            ><span class="answer"
+              ><span class="lang-en"
+                >Automatic on failure or CloudWatch Alarm</span
+              ><span class="lang-es"
+                >Automático ante fallo o alarma de CloudWatch</span
+              ></span
+            >
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en">CodeDeploy + SAM framework</span
+              ><span class="lang-es">CodeDeploy + SAM framework</span></span
+            ><span class="arr">→</span
+            ><span class="answer"
+              ><span class="lang-en"
+                >Lambda traffic shifting is built into SAM</span
+              ><span class="lang-es"
+                >El traffic shifting de Lambda está integrado en SAM</span
+              ></span
+            >
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en">ASG scales out during in-place deploy</span
+              ><span class="lang-es"
+                >ASG escala durante deploy in-place</span
+              ></span
+            ><span class="arr">→</span
+            ><span class="answer"
+              ><span class="lang-en"
+                >CodeDeploy auto-deploys latest revision to new instances</span
+              ><span class="lang-es"
+                >CodeDeploy despliega automáticamente la última revisión en las
+                nuevas instancias</span
+              ></span
+            >
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en">ASG Blue/Green — what gets created</span
+              ><span class="lang-es">ASG Blue/Green — qué se crea</span></span
+            ><span class="arr">→</span
+            ><span class="answer"
+              ><span class="lang-en"
+                >New ASG with copied settings; ELB shifts traffic; old ASG kept
+                for configurable time</span
+              ><span class="lang-es"
+                >Nuevo ASG con configuración copiada; ELB redirige tráfico;
+                viejo ASG se mantiene por tiempo configurable</span
+              ></span
+            >
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en"
+                >What a CodeDeploy rollback actually does</span
+              ><span class="lang-es"
+                >Qué hace realmente un rollback de CodeDeploy</span
+              ></span
+            ><span class="arr">→</span
+            ><span class="answer"
+              ><span class="lang-en"
+                >New deployment of last known good revision — NOT a
+                restore</span
+              ><span class="lang-es"
+                >Nuevo deployment de la última revisión buena conocida — NO es
+                una restauración</span
+              ></span
+            >
+          </div>
+
+          <!-- CodeArtifact -->
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en"
+                >Artifact / dependency management in AWS</span
+              ><span class="lang-es"
+                >Gestión de artefactos/dependencias en AWS</span
+              ></span
+            ><span class="arr">→</span><span class="answer">CodeArtifact</span>
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en"
+                >CodeArtifact role when running npm install</span
+              ><span class="lang-es"
+                >Rol de CodeArtifact al correr npm install</span
+              ></span
+            ><span class="arr">→</span
+            ><span class="answer"
+              ><span class="lang-en"
+                >Proxy + cache — fetches from public registry once, stores
+                locally</span
+              ><span class="lang-es"
+                >Proxy + caché — descarga del registro público una vez, almacena
+                localmente</span
+              ></span
+            >
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en"
+                >Package updated in CodeArtifact → trigger pipeline</span
+              ><span class="lang-es"
+                >Paquete actualizado en CodeArtifact → disparar pipeline</span
+              ></span
+            ><span class="arr">→</span
+            ><span class="answer"
+              >CodeArtifact → EventBridge → CodePipeline → CodeBuild →
+              CodeDeploy</span
+            >
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en">Cross-account CodeArtifact access</span
+              ><span class="lang-es"
+                >Acceso cross-account a CodeArtifact</span
+              ></span
+            ><span class="arr">→</span
+            ><span class="answer"
+              ><span class="lang-en"
+                >Resource policy on the repository (not IAM policy)</span
+              ><span class="lang-es"
+                >Resource policy en el repositorio (no política IAM)</span
+              ></span
+            >
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en"
+                >Can you grant access to specific packages only?</span
+              ><span class="lang-es"
+                >¿Se puede dar acceso solo a paquetes específicos?</span
+              ></span
+            ><span class="arr">→</span
+            ><span class="answer"
+              ><span class="lang-en"
+                >No — access is all-or-nothing per repository</span
+              ><span class="lang-es"
+                >No — el acceso es todo o nada por repositorio</span
+              ></span
+            >
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en">CodeArtifact auth token validity</span
+              ><span class="lang-es"
+                >Validez del token de auth en CodeArtifact</span
+              ></span
+            ><span class="arr">→</span
+            ><span class="answer"
+              ><span class="lang-en"
+                >12 hours — must re-run get-authorization-token after
+                expiry</span
+              ><span class="lang-es"
+                >12 horas — hay que volver a correr get-authorization-token al
+                expirar</span
+              ></span
+            >
+          </div>
+
+          <!-- CodeGuru -->
+          <div class="tip">
+            <span class="trigger"><span class="lang-en">CodeGuru's two components</span><span class="lang-es">Los dos componentes de CodeGuru</span></span><span class="arr">→</span><span class="answer"><span class="lang-en">Reviewer (automated code reviews on push) + Profiler (performance profiling at runtime)</span><span class="lang-es">Reviewer (code reviews automatizados al hacer push) + Profiler (profiling de performance en runtime)</span></span>
+          </div>
+          <div class="tip">
+            <span class="trigger"><span class="lang-en">CodeGuru Reviewer — supported languages</span><span class="lang-es">CodeGuru Reviewer — lenguajes soportados</span></span><span class="arr">→</span><span class="answer">Java and Python</span>
+          </div>
+          <div class="tip">
+            <span class="trigger"><span class="lang-en">CodeGuru Reviewer — repo integrations</span><span class="lang-es">CodeGuru Reviewer — integraciones de repo</span></span><span class="arr">→</span><span class="answer">GitHub, Bitbucket, CodeCommit</span>
+          </div>
+          <div class="tip">
+            <span class="trigger"><span class="lang-en">CodeGuru Profiler — where it runs</span><span class="lang-es">CodeGuru Profiler — dónde corre</span></span><span class="arr">→</span><span class="answer"><span class="lang-en">Pre-production AND production — AWS Cloud or on-premises, minimal overhead</span><span class="lang-es">Pre-producción Y producción — AWS Cloud u on-premises, overhead mínimo</span></span>
+          </div>
+          <div class="tip">
+            <span class="trigger"><span class="lang-en">CodeGuru status</span><span class="lang-es">Estado de CodeGuru</span></span><span class="arr">→</span><span class="answer"><span class="lang-en">Being decommissioned — know Reviewer + Profiler at high level for the exam</span><span class="lang-es">En proceso de baja — conocé Reviewer + Profiler a alto nivel para el examen</span></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- WEAK POINTS -->
+      <div class="card" style="border-color:#f59e0b;background:#1c1400">
+        <div class="card-header">
+          <span class="badge" style="background:#92400e;color:#fcd34d">⚠</span>
+          <h2 style="color:#fcd34d"><span class="lang-en">Tricky Quiz Questions</span><span class="lang-es">Preguntas Tricky del Quiz</span></h2>
+        </div>
+        <p style="color:#94a3b8;font-size:0.85rem;margin-bottom:0.75rem">
+          <span class="lang-en">Questions from the Udemy section quiz that were tricky or required extra thought.</span>
+          <span class="lang-es">Preguntas del quiz de Udemy que fueron tricky o requirieron más análisis.</span>
+        </p>
+
+        <!-- Q1 -->
+        <div style="border:1px solid #92400e;border-radius:8px;padding:0.85rem;margin-bottom:0.75rem;background:#0f172a">
+          <p style="color:#fcd34d;font-weight:600;margin:0 0 0.4rem">
+            <span class="lang-en">Q: To prevent developers from committing secret credentials to CodeCommit, you want to automatically trigger code analysis after each commit. How?</span>
+            <span class="lang-es">Q: Para prevenir que los developers hagan commit de credenciales secretas en CodeCommit, querés disparar análisis de código automáticamente tras cada commit. ¿Cómo?</span>
+          </p>
+          <p style="color:#f87171;margin:0 0 0.2rem">
+            ✗ <span class="lang-en">Setup AWS CloudWatch Events in CodeCommit</span><span class="lang-es">Configurar AWS CloudWatch Events en CodeCommit</span>
+          </p>
+          <p style="color:#4ade80;margin:0 0 0.4rem">
+            ✅ <strong><span class="lang-en">Setup AWS SNS / Lambda integration in CodeCommit</span><span class="lang-es">Configurar integración de AWS SNS / Lambda en CodeCommit</span></strong>
+          </p>
+          <p style="color:#94a3b8;font-size:0.85rem;margin:0">
+            <span class="lang-en">CodeCommit has native <strong>repository triggers</strong> that can directly invoke a Lambda function or send to an SNS topic on every push — without going through EventBridge. That Lambda then runs the code analysis (e.g. scans for secrets). CloudWatch Events is used for notifications/monitoring, not for direct trigger-on-commit workflows.</span>
+            <span class="lang-es">CodeCommit tiene <strong>repository triggers</strong> nativos que pueden invocar directamente una función Lambda o enviar a un topic SNS en cada push — sin pasar por EventBridge. Ese Lambda luego corre el análisis (p.ej. escanea credenciales). CloudWatch Events se usa para notificaciones/monitoreo, no para workflows de trigger-on-commit directos.</span>
+          </p>
+        </div>
+        <!-- Q2 -->
+        <div style="border:1px solid #92400e;border-radius:8px;padding:0.85rem;margin-bottom:0.75rem;background:#0f172a">
+          <p style="color:#fcd34d;font-weight:600;margin:0 0 0.4rem">
+            <span class="lang-en">Q: A CodePipeline pipeline failed to deploy to Elastic Beanstalk even though code was pushed to CodeCommit successfully. The pipeline was working fine 10 minutes ago. Most likely reason?</span>
+            <span class="lang-es">Q: Un pipeline de CodePipeline falló al deployar a Elastic Beanstalk aunque el código se subió bien a CodeCommit. El pipeline funcionaba bien hace 10 minutos. ¿Razón más probable?</span>
+          </p>
+          <p style="color:#4ade80;margin:0 0 0.2rem">
+            ✅ <strong><span class="lang-en">Your CodeBuild stage probably failed some tests</span><span class="lang-es">El stage de CodeBuild probablemente falló algunos tests</span></strong>
+          </p>
+          <p style="color:#94a3b8;font-size:0.85rem;margin:0">
+            <span class="lang-en">Even though the pipeline worked 10 minutes ago, every new commit can break tests. In real-world CI/CD, a failing test stage is by far the most common reason a pipeline stops before reaching the deploy stage. "Someone deleted the Beanstalk environment" is also plausible but considered an edge case. On the exam, <strong>"most likely"</strong> = most common day-to-day scenario, not the most dramatic one.</span>
+            <span class="lang-es">Aunque el pipeline funcionaba hace 10 minutos, cada nuevo commit puede romper tests. En el mundo real, un stage de test fallido es la razón más común por la que un pipeline se detiene antes de llegar al deploy. "Alguien borró el environment de Beanstalk" también es plausible pero es un edge case. En el examen, <strong>"most likely"</strong> = el escenario más cotidiano, no el más dramático.</span>
+          </p>
+        </div>
+
+        <!-- Q4 -->
+        <div style="border:1px solid #92400e;border-radius:8px;padding:0.85rem;margin-bottom:0.75rem;background:#0f172a">
+          <p style="color:#fcd34d;font-weight:600;margin:0 0 0.4rem">
+            <span class="lang-en">Q (Hard): You want to automatically deploy a SPA to S3 after generating static files from markdown files. Which AWS services?</span>
+            <span class="lang-es">Q (Difícil): Querés deployar automáticamente una SPA a S3 después de generar static files desde markdown. ¿Qué servicios AWS usás?</span>
+          </p>
+          <p style="color:#4ade80;margin:0 0 0.4rem">
+            ✅ <strong>CodePipeline + CodeBuild</strong>
+          </p>
+          <p style="color:#94a3b8;font-size:0.85rem;margin:0">
+            <span class="lang-en"><strong>CodeBuild can run any command</strong> — including generating static files from markdown AND copying them to S3 with <code>aws s3 cp</code>. CodeDeploy is for EC2/Lambda/ECS, not S3. CodePipeline orchestrates the flow; CodeBuild does the build + deploy in one stage.</span>
+            <span class="lang-es"><strong>CodeBuild puede correr cualquier comando</strong> — incluyendo generar static files desde markdown Y copiarlos a S3 con <code>aws s3 cp</code>. CodeDeploy es para EC2/Lambda/ECS, no para S3. CodePipeline orquesta el flujo; CodeBuild hace el build + deploy en un solo stage.</span>
+          </p>
+        </div>
+
+        <!-- Q5 -->
+        <div style="border:1px solid #92400e;border-radius:8px;padding:0.85rem;margin-bottom:0.75rem;background:#0f172a">
+          <p style="color:#fcd34d;font-weight:600;margin:0 0 0.4rem">
+            <span class="lang-en">Q (T/F): CodeBuild containers are run outside of a VPC and it's impossible to connect to resources in your VPC.</span>
+            <span class="lang-es">Q (V/F): Los contenedores de CodeBuild corren fuera de un VPC y es imposible conectarse a recursos del VPC.</span>
+          </p>
+          <p style="color:#4ade80;margin:0 0 0.4rem">
+            ✅ <strong>False</strong>
+          </p>
+          <p style="color:#94a3b8;font-size:0.85rem;margin:0">
+            <span class="lang-en">You can configure CodeBuild to run its build containers <strong>inside a VPC</strong>, giving them access to private resources such as RDS databases, internal load balancers, or ElastiCache.</span>
+            <span class="lang-es">Podés configurar CodeBuild para que corra sus contenedores de build <strong>dentro de un VPC</strong>, dándoles acceso a recursos privados como bases de datos RDS, load balancers internos o ElastiCache.</span>
+          </p>
+        </div>
+
+        <!-- Q3 -->
+        <div style="border:1px solid #92400e;border-radius:8px;padding:0.85rem;margin-bottom:0.75rem;background:#0f172a">
+          <p style="color:#fcd34d;font-weight:600;margin:0 0 0.4rem">
+            <span class="lang-en">Q: Your manager wants to receive emails when a CodePipeline pipeline fails. How can you achieve this?</span>
+            <span class="lang-es">Q: Tu manager quiere recibir emails cuando un pipeline de CodePipeline falla. ¿Cómo lo lográs?</span>
+          </p>
+          <p style="color:#f87171;margin:0 0 0.2rem">
+            ✗ <span class="lang-en">Setup an SNS notification</span><span class="lang-es">Configurar una notificación SNS</span>
+          </p>
+          <p style="color:#4ade80;margin:0 0 0.4rem">
+            ✅ <strong><span class="lang-en">Setup an AWS CloudWatch Event Rule</span><span class="lang-es">Configurar un AWS CloudWatch Event Rule</span></strong>
+          </p>
+          <p style="color:#94a3b8;font-size:0.85rem;margin:0">
+            <span class="lang-en">SNS alone doesn't know when CodePipeline fails — you need a <strong>CloudWatch Event Rule</strong> to detect the pipeline <code>FAILED</code> state change first. That rule then triggers the notification (via SNS/email). Contrast with Q1: when you need to <em>execute code</em> on a commit → SNS/Lambda; when you need to <em>detect a pipeline event</em> → CloudWatch Event Rule.</span>
+            <span class="lang-es">SNS solo no sabe cuándo CodePipeline falla — primero necesitás un <strong>CloudWatch Event Rule</strong> que detecte el cambio de estado <code>FAILED</code> del pipeline. Ese rule dispara la notificación (vía SNS/email). Contrastar con Q1: cuando necesitás <em>ejecutar código</em> en un commit → SNS/Lambda; cuando necesitás <em>detectar un evento de pipeline</em> → CloudWatch Event Rule.</span>
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </body>
+  <script>
+    // ── HELPERS ──
+    const I = (lbl, cls) => `<div class="inst ${cls}">${lbl}</div>`;
+    const V1 = (n) => Array.from({ length: n }, () => I("v1", "v1")).join("");
+    const V2 = (n) => Array.from({ length: n }, () => I("v2", "v2")).join("");
+    const OF = (n) => Array.from({ length: n }, () => I("—", "off")).join("");
+    const R = (...a) => `<div class="instance-row">${a.join("")}</div>`;
+    const ASG = (lbl, cls, content) =>
+      `<div class="asg-box"><div class="asg-label ${cls}">${lbl}</div>${content}</div>`;
+    const DUAL = (...a) => `<div class="dual-asg">${a.join("")}</div>`;
+    const TBAR = (p1, p2) => {
+      const s1 =
+        p1 > 0
+          ? `<div class="tbar-v1" style="width:${p1}%">${p1 > 12 ? `v1·${p1}%` : ""}</div>`
+          : "";
+      const s2 =
+        p2 > 0
+          ? `<div class="tbar-v2" style="width:${p2}%">${p2 > 12 ? `v2·${p2}%` : ""}</div>`
+          : "";
+      return `<div class="traffic-wrap"><div class="traffic-label">Traffic (PROD alias)</div><div class="traffic-bar">${s1}${s2}</div></div>`;
+    };
+    const TBAR_ECS = (p1, p2) => {
+      const s1 =
+        p1 > 0
+          ? `<div class="tbar-v1" style="width:${p1}%">${p1 > 12 ? `TG1·${p1}%` : ""}</div>`
+          : "";
+      const s2 =
+        p2 > 0
+          ? `<div class="tbar-v2" style="width:${p2}%">${p2 > 12 ? `TG2·${p2}%` : ""}</div>`
+          : "";
+      return `<div class="traffic-wrap"><div class="traffic-label">ALB Traffic</div><div class="traffic-bar">${s1}${s2}</div></div>`;
+    };
+    const DESC = (html, color = "#334155") =>
+      `<div class="step-desc" style="border-left-color:${color}">${html}</div>`;
+    const EMPTY_ASG = (lbl, cls) =>
+      ASG(
+        lbl,
+        cls,
+        `<div style="font-size:0.75rem;color:#334155;padding:0.4rem 0">— empty —</div>`,
+      );
+    const GONE_ASG = (lbl, cls) =>
+      ASG(
+        lbl,
+        cls,
+        `<div style="font-size:0.75rem;color:#334155;padding:0.4rem 0">— terminated —</div>`,
+      );
+
+    // ── DEMO DEFINITIONS ──
+    const DEMOS = {
+      // EC2 In-Place HalfAtATime
+      ip: {
+        color: "#3b82f6",
+        steps: [
+          {
+            body:
+              R(V1(4)) +
+              DESC(
+                '<span class="hl-v1">4 instances</span> running v1 — all healthy, full capacity',
+              ),
+          },
+          {
+            body:
+              R(OF(2), V1(2)) +
+              DESC(
+                '<span class="hl-d">First 2 instances stopped</span> — agent stops app, capacity drops to 2/4',
+                "#ef4444",
+              ),
+          },
+          {
+            body:
+              R(V2(2), V1(2)) +
+              DESC(
+                '<span class="hl-v2">First 2 updated to v2</span> — v1 and v2 running simultaneously. Back to 4/4.',
+              ),
+          },
+          {
+            body:
+              R(V2(2), OF(2)) +
+              DESC(
+                '<span class="hl-d">Other 2 stopped</span> — agent installs new revision from S3...',
+                "#ef4444",
+              ),
+          },
+          {
+            body:
+              R(V2(4)) +
+              DESC(
+                '<span class="hl-ok">All 4 instances on v2.</span> Same infrastructure reused — no new resources created.',
+                "#10b981",
+              ),
+          },
+        ],
+      },
+      // EC2 Blue/Green
+      bg: {
+        color: "#8b5cf6",
+        steps: [
+          {
+            body:
+              DUAL(
+                ASG("Blue ASG · v1 (active)", "blue", R(V1(3))),
+                EMPTY_ASG("Green ASG · v2", "green"),
+              ) +
+              TBAR(100, 0) +
+              DESC(
+                '<span class="hl-v1">ALB → 100% to Blue ASG.</span> Green ASG does not exist yet.',
+              ),
+          },
+          {
+            body:
+              DUAL(
+                ASG("Blue ASG · v1", "blue", R(V1(3))),
+                ASG("Green ASG · v2 (new)", "green", R(V2(3))),
+              ) +
+              TBAR(100, 0) +
+              DESC(
+                '<span class="hl-tmp">CodeDeploy creates new Green ASG</span> with same capacity. Both running in parallel.',
+                "#f97316",
+              ),
+          },
+          {
+            body:
+              DUAL(
+                ASG("Blue ASG · v1", "blue", R(V1(3))),
+                ASG("Green ASG · v2 (active)", "green", R(V2(3))),
+              ) +
+              TBAR(0, 100) +
+              DESC(
+                '<span class="hl-ok">ALB shifted to Green (100%).</span> Blue kept as standby — rollback = shift ALB back. Then Blue is terminated.',
+                "#10b981",
+              ),
+          },
+        ],
+      },
+      // Lambda Linear
+      lin: {
+        color: "#3b82f6",
+        steps: [
+          {
+            body:
+              TBAR(100, 0) +
+              DESC(
+                '<span class="hl-v1">100% on v1.</span> CodeDeploy starts shifting traffic to v2 every 3 minutes (+10%).',
+              ),
+          },
+          {
+            body:
+              TBAR(70, 30) +
+              DESC(
+                '<span class="hl-v2">30% on v2</span> after 9 minutes. Traffic increases in even steps: 10% → 20% → 30% ...',
+              ),
+          },
+          {
+            body:
+              TBAR(50, 50) +
+              DESC(
+                '<span class="hl-v2">50% on v2</span> after 15 minutes. Both versions handle equal load.',
+              ),
+          },
+          {
+            body:
+              TBAR(10, 90) +
+              DESC(
+                '<span class="hl-v2">90% on v2</span> after 27 minutes. Rollback auto-triggers if errors spike.',
+              ),
+          },
+          {
+            body:
+              TBAR(0, 100) +
+              DESC(
+                '<span class="hl-ok">100% on v2</span> after 30 minutes. Gradual, predictable ramp — safe for critical functions.',
+                "#10b981",
+              ),
+          },
+        ],
+      },
+      // Lambda Canary
+      can: {
+        color: "#f97316",
+        steps: [
+          {
+            body:
+              TBAR(100, 0) +
+              DESC(
+                '<span class="hl-v1">100% on v1.</span> CodeDeploy will route a small slice to v2 for a test window.',
+              ),
+          },
+          {
+            body:
+              TBAR(90, 10) +
+              DESC(
+                '<span class="hl-tmp">10% routed to v2</span> for 5 minutes. CloudWatch alarms monitor for errors. If alarm triggers → auto-rollback to v1.',
+                "#f97316",
+              ),
+          },
+          {
+            body:
+              TBAR(0, 100) +
+              DESC(
+                '<span class="hl-ok">No errors detected → 100% jumps to v2 immediately.</span> The jump is instant — there\'s no gradual increase after the canary window.',
+                "#10b981",
+              ),
+          },
+        ],
+      },
+      // Lambda AllAtOnce
+      aao: {
+        color: "#ef4444",
+        steps: [
+          {
+            body:
+              TBAR(100, 0) +
+              DESC(
+                '<span class="hl-v1">100% on v1.</span> CodeDeploy will switch everything instantly — no test window.',
+              ),
+          },
+          {
+            body:
+              TBAR(0, 100) +
+              DESC(
+                '<span class="hl-d">100% switched to v2 immediately.</span> Fastest strategy — but if v2 has a bug, all traffic is affected instantly. No canary protection.',
+                "#ef4444",
+              ),
+          },
+        ],
+      },
+      // ECS Blue/Green
+      ecs: {
+        color: "#22c55e",
+        steps: [
+          {
+            body:
+              DUAL(
+                ASG("Target Group 1 · v1 (blue)", "tg1", R(V1(3))),
+                EMPTY_ASG("Target Group 2 · v2 (green)", "tg2"),
+              ) +
+              TBAR_ECS(100, 0) +
+              DESC(
+                '<span class="hl-v1">ALB → 100% to TG1</span> (v1 ECS tasks). New task definition exists but TG2 not deployed yet.',
+              ),
+          },
+          {
+            body:
+              DUAL(
+                ASG("Target Group 1 · v1", "tg1", R(V1(3))),
+                ASG("Target Group 2 · v2 (new)", "tg2", R(V2(3))),
+              ) +
+              TBAR_ECS(100, 0) +
+              DESC(
+                '<span class="hl-tmp">CodeDeploy starts v2 tasks in TG2</span> using the new task definition. Same capacity. Both run in parallel.',
+                "#f97316",
+              ),
+          },
+          {
+            body:
+              DUAL(
+                ASG("Target Group 1 · v1", "tg1", R(V1(3))),
+                ASG("Target Group 2 · v2 (active)", "tg2", R(V2(3))),
+              ) +
+              TBAR_ECS(50, 50) +
+              DESC(
+                '<span class="hl-v2">Traffic shifting in progress</span> (Linear/Canary/AllAtOnce). During shift, both TGs serve requests.',
+              ),
+          },
+          {
+            body:
+              DUAL(
+                GONE_ASG("Target Group 1 · v1 (terminated)", "tg1"),
+                ASG("Target Group 2 · v2 (active)", "tg2", R(V2(3))),
+              ) +
+              TBAR_ECS(0, 100) +
+              DESC(
+                '<span class="hl-ok">100% on TG2 (v2).</span> TG1 tasks terminated. ECS CodeDeploy is always Blue/Green — no in-place option.',
+                "#10b981",
+              ),
+          },
+        ],
+      },
+      // ASG In-Place + scale out
+      asgip: {
+        color: "#3b82f6",
+        steps: [
+          {
+            body:
+              ASG("ASG · v1 (original fleet)", "main", R(V1(3))) +
+              DESC(
+                '<span class="hl-v1">3 instances running v1.</span> CodeDeploy does in-place update — same instances reused.',
+              ),
+          },
+          {
+            body:
+              ASG("ASG · v2 (updated)", "main", R(V2(3))) +
+              DESC(
+                '<span class="hl-v2">All 3 instances updated to v2</span> in-place. Deployment complete.',
+              ),
+          },
+          {
+            body:
+              ASG(
+                "ASG · v2 (+ scale out)",
+                "main",
+                R(V2(3)) + R(I("v2*", "v2")),
+              ) +
+              DESC(
+                '<span class="hl-ok">ASG scales out — new instance launched.</span> CodeDeploy <strong>automatically</strong> deploys latest revision (v2) to it. No manual action needed.',
+                "#10b981",
+              ),
+          },
+        ],
+      },
+      // ASG Blue/Green
+      asgbg: {
+        color: "#8b5cf6",
+        steps: [
+          {
+            body:
+              DUAL(
+                ASG("v1 ASG (active)", "blue", R(V1(3))),
+                EMPTY_ASG("v2 ASG", "green"),
+              ) +
+              DESC(
+                '<span class="hl-v1">ELB → 100% to v1 ASG.</span> CodeDeploy will create a new ASG with copied settings.',
+              ),
+          },
+          {
+            body:
+              DUAL(
+                ASG("v1 ASG (blue)", "blue", R(V1(3))),
+                ASG("v2 ASG (new)", "green", R(V2(3))),
+              ) +
+              DESC(
+                '<span class="hl-tmp">New ASG created with same settings. v2 deployed to it.</span> Both ASGs running. ELB still serving v1.',
+                "#f97316",
+              ),
+          },
+          {
+            body:
+              DUAL(
+                ASG("v1 ASG (blue)", "blue", R(V1(3))),
+                ASG("v2 ASG (active)", "green", R(V2(3))),
+              ) +
+              DESC(
+                '<span class="hl-v2">ELB shifted to v2 ASG.</span> v1 ASG kept alive for configurable wait period — instant rollback available.',
+              ),
+          },
+          {
+            body:
+              DUAL(
+                GONE_ASG("v1 ASG (terminated)", "blue"),
+                ASG("v2 ASG (active)", "green", R(V2(3))),
+              ) +
+              DESC(
+                '<span class="hl-ok">v1 ASG terminated after wait period.</span> Full blue/green complete. Rollback window closed.',
+                "#10b981",
+              ),
+          },
+        ],
+      },
+      // Rollback flow
+      rlb: {
+        color: "#ef4444",
+        steps: [
+          {
+            body:
+              ASG("Production · v1", "main", R(V1(3))) +
+              DESC(
+                '<span class="hl-v1">v1 running in production.</span> This is the "last known good revision". A new v2 deployment is about to start.',
+              ),
+          },
+          {
+            body:
+              ASG("Production · v2 (FAILED)", "main", R(OF(3))) +
+              DESC(
+                '<span class="hl-d">v2 deployment failed</span> (or CloudWatch Alarm fired). Instances are in a bad state. Rollback triggered automatically.',
+                "#ef4444",
+              ),
+          },
+          {
+            body:
+              ASG("Production · v1 (restored)", "main", R(V1(3))) +
+              DESC(
+                '<span class="hl-ok">CodeDeploy runs a <strong>brand new deployment</strong> of the last known good revision (v1).</span> All lifecycle events run again from scratch. This is NOT a restore — it\'s a fresh deploy of the old code.',
+                "#10b981",
+              ),
+          },
+        ],
+      },
+    };
+
+    // ── ENGINE ──
+    const states = {};
+    function initDemo(id) {
+      states[id] = 0;
+      const el = document.getElementById(`${id}-dots`);
+      el.innerHTML = Array.from(
+        { length: DEMOS[id].steps.length },
+        (_, i) => `<div class="sdot" id="${id}-dot-${i}"></div>`,
+      ).join("");
+      renderStep(id, 0);
+    }
+    function renderStep(id, step) {
+      const demo = DEMOS[id];
+      const total = demo.steps.length;
+      document.getElementById(id).innerHTML = demo.steps[step].body;
+      document.getElementById(`${id}-counter`).textContent =
+        `Step ${step + 1} / ${total}`;
+      document
+        .querySelectorAll(`[id^="${id}-dot-"]`)
+        .forEach((d, i) => d.classList.toggle("active", i === step));
+      const desc = document.getElementById(id).querySelector(".step-desc");
+      if (desc) desc.style.borderLeftColor = demo.color;
+      const p = document.getElementById(`${id}-prev`),
+        n = document.getElementById(`${id}-next`);
+      if (p) p.disabled = step === 0;
+      if (n) n.disabled = step === total - 1;
+      states[id] = step;
+    }
+    function prev(id) {
+      if (states[id] > 0) renderStep(id, states[id] - 1);
+    }
+    function next(id) {
+      if (states[id] < DEMOS[id].steps.length - 1)
+        renderStep(id, states[id] + 1);
+    }
+    function restart(id) {
+      renderStep(id, 0);
+    }
+    Object.keys(DEMOS).forEach(initDemo);
+  </script>
+</html>

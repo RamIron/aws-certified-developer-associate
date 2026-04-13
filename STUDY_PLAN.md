@@ -3,10 +3,10 @@
 ## Overall Progress
 
 ```
-[████████████████░░░░] 23/33 sections | 377/483 lessons (78.1%)
-Total XP: 11475
+[████████████████░░░░] 23/33 sections | 396/483 lessons (82.0%)
+Total XP: 12,075
 
-Videos: 351 | Quizzes: 20/29 | ⏱ 24h 43min done · 7h 15min left
+Videos: 369 | Quizzes: 21/29 | ⏱ 24h 43min done · 7h 15min left
 ```
 
 > **Note:** The exact number of lessons per section will be filled in as the course progresses.
@@ -460,25 +460,25 @@ Videos: 351 | Quizzes: 20/29 | ⏱ 24h 43min done · 7h 15min left
 
 ## Section 24: AWS CICD: CodeCommit, CodePipeline, CodeBuild, CodeDeploy
 
-- [ ] 24.1 - AWS CICD - Section Introduction (intro)
-- [ ] 24.2 - Introduction to CICD in AWS
-- [ ] 24.3 - CodeCommit Overview
-- [ ] 24.4 - CodeCommit Hands On Part I
-- [ ] 24.5 - CodeCommit Hands On Part 2
-- [ ] 24.6 - CodePipeline Overview
-- [ ] 24.7 - CodePipeline - Hands On - Prerequisite
-- [ ] 24.8 - CodePipeline - Hands On
-- [ ] 24.9 - CodeBuild Overview
-- [ ] 24.10 - CodeBuild Hands On Part I
-- [ ] 24.11 - CodeBuild Hands On Part 2
-- [ ] 24.12 - CodeDeploy Overview
-- [ ] 24.13 - CodeDeploy Hands On
-- [ ] 24.14 - CodeDeploy for EC2 and ASG
-- [ ] 24.15 - CodeArtifact - Overview
-- [ ] 24.16 - CodeArtifact - Hands On
-- [ ] 24.17 - CodeGuru - Overview
-- [ ] 24.18 - CodeGuru - Agent Configuration
-- [ ] AWS CICD Quiz (Quiz 21)
+- [x] 24.1 - AWS CICD - Section Introduction (intro)
+- [x] 24.2 - Introduction to CICD in AWS ✅ PERFECT
+- [x] 24.3 - CodeCommit Overview (PERFECT 100%)
+- [x] 24.4 - CodeCommit Hands On Part I (skipped - hands-on; notifications vs triggers distinction noted)
+- [x] 24.5 - CodeCommit Hands On Part 2 (skipped - hands-on; IAM credential setup for SSH/HTTPS noted)
+- [x] 24.6 - CodePipeline Overview (PERFECT 100%)
+- [x] 24.7 - CodePipeline - Hands On - Prerequisite (skipped - creates Beanstalk envs for next hands-on)
+- [x] 24.8 - CodePipeline - Hands On (skipped - hands-on; CodeCommit discontinued noted; manual approval + action groups confirmed)
+- [x] 24.9 - CodeBuild Overview (PERFECT 100%)
+- [x] 24.10 - CodeBuild Hands On Part I (skipped - hands-on)
+- [x] 24.11 - CodeBuild Hands On Part II (skipped - hands-on)
+- [x] 24.12 - CodeDeploy Overview (PERFECT 100%)
+- [x] 24.13 - CodeDeploy Hands On (skipped - hands-on)
+- [x] 24.14 - CodeDeploy for EC2 and ASG (PERFECT 100%)
+- [x] 24.15 - CodeArtifact Overview (PERFECT 100%)
+- [x] 24.16 - CodeArtifact Hands On (skipped - hands-on; token expiry 12h noted)
+- [x] 24.17 - CodeGuru Overview (PERFECT 100% — being decommissioned)
+- [x] 24.18 - CodeGuru Agent Configuration (skipped - agent params; reason from name)
+- [x] AWS CICD Quiz (Quiz 21) — completed, tricky questions registered in HTML
 
 ## Section 25: AWS Serverless: SAM - Serverless Application Model
 

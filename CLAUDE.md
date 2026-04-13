@@ -106,6 +106,6 @@ Every card must follow this pattern — no exceptions:
 
 ## Current State
 
-- **Current section:** Section 24 - AWS CICD: CodeCommit, CodePipeline, CodeBuild, CodeDeploy
-- **Total XP:** 11,475
-- **Lessons completed:** 377
+- **Current section:** Section 25 - AWS Serverless: SAM - Serverless Application Model
+- **Total XP:** 12,075
+- **Lessons completed:** 392
