@@ -4,15 +4,26 @@
 
 | Metric | Value |
 |--------|-------|
-| Total XP | 12075 |
-| Lessons completed | 186 |
-| Perfect quizzes (100%) | 151 |
+| Total XP | 12675 |
+| Lessons completed | 195 |
+| Perfect quizzes (100%) | 160 |
 | Lessons to review | 15 |
 
 ## Session History
 
 | Date | Section | Lesson | XP | Result |
 |------|---------|--------|----|--------|
+| 2026-04-14 | 26 - CDK | CDK Quiz (Quiz 23) - Udemy | — | Completed |
+| 2026-04-14 | 26 - CDK | 26.5 - CDK Unit Testing | +75 | PERFECT 100% |
+| 2026-04-14 | 26 - CDK | 26.4 - CDK Commands & Bootstrapping | +50 | PERFECT 100% |
+| 2026-04-14 | 26 - CDK | 26.3 - CDK Constructs | +75 | PERFECT 100% |
+| 2026-04-14 | 26 - CDK | 26.1 - CDK Overview | +75 | PERFECT 100% |
+| 2026-04-13 | 25 - SAM | SAM Quiz (Quiz 22) - Udemy | — | Completed |
+| 2026-04-13 | 25 - SAM | 25.8 - SAM Multiple Environments | +50 | PERFECT 100% |
+| 2026-04-13 | 25 - SAM | 25.7 - SAM Local Capabilities | +75 | PERFECT 100% |
+| 2026-04-13 | 25 - SAM | 25.6 - SAM with CodeDeploy | +75 | PERFECT 100% |
+| 2026-04-13 | 25 - SAM | 25.5 - SAM Policy Templates | +50 | PERFECT 100% |
+| 2026-04-13 | 25 - SAM | 25.2 - SAM Overview | +75 | PERFECT 100% |
 | 2026-04-13 | 24 - CICD | 24.17 - CodeGuru | +75 | PERFECT 100% |
 | 2026-04-13 | 24 - CICD | 24.16 - CodeArtifact Hands On | — | Skipped (hands-on) |
 | 2026-04-11 | 24 - CICD | 24.15 - CodeArtifact | +75 | PERFECT 100% |

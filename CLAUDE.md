@@ -100,12 +100,26 @@ Every card must follow this pattern — no exceptions:
 5. **"What is this?"** rule — if a term, feature, or mechanism is introduced (e.g. stage variables, route keys, policy cache), explain what it IS before explaining how it works.
 
 ### Weak Points section
-- Add a `<!-- WEAK POINTS -->` callout block at the very top of the HTML (before card 1).
+- Add a `<!-- WEAK POINTS -->` tricky questions card at the **bottom** of the HTML (after Exam Tips, last card).
 - Populate it with tricky Udemy quiz questions as the user encounters them.
 - Each entry: question summary + correct answer + explanation of why.
+- **Internal question cards use a darker purple border:** `border:1px solid #4c1d95;border-radius:8px;padding:0.85rem;margin-bottom:0.75rem;background:#0f172a`
+- **Always use this exact style for the tricky questions card:**
+```html
+<div class="card" style="border-color:#7c3aed; background:#13102a;">
+  <div class="card-header">
+    <span class="badge" style="background:#7c3aed;">🧩</span>
+    <h2 style="color:#c4b5fd;">
+      <span class="lang-en">Tricky Quiz Questions</span>
+      <span class="lang-es">Preguntas Tricky del Quiz</span>
+    </h2>
+  </div>
+  ...
+</div>
+```
 
 ## Current State
 
-- **Current section:** Section 25 - AWS Serverless: SAM - Serverless Application Model
-- **Total XP:** 12,075
-- **Lessons completed:** 392
+- **Current section:** Section 27
+- **Total XP:** 12,675
+- **Lessons completed:** 411

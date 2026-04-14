@@ -3,10 +3,10 @@
 ## Overall Progress
 
 ```
-[████████████████░░░░] 23/33 sections | 396/483 lessons (82.0%)
-Total XP: 12,075
+[███████████████████░] 26/33 sections | 411/483 lessons (85.1%)
+Total XP: 12,675
 
-Videos: 369 | Quizzes: 21/29 | ⏱ 24h 43min done · 7h 15min left
+Videos: 382 | Quizzes: 23/29 | ⏱ 26h 19min done · 5h 39min left
 ```
 
 > **Note:** The exact number of lessons per section will be filled in as the course progresses.
@@ -482,24 +482,24 @@ Videos: 369 | Quizzes: 21/29 | ⏱ 24h 43min done · 7h 15min left
 
 ## Section 25: AWS Serverless: SAM - Serverless Application Model
 
-- [ ] 25.1 - AWS SAM - Section Introduction (intro)
-- [ ] 25.2 - SAM Overview
-- [ ] 25.3 - SAM - Hands On
-- [ ] 25.4 - SAM with DynamoDB - Hands On
-- [ ] 25.5 - SAM Policy Templates
-- [ ] 25.6 - SAM with CodeDeploy
-- [ ] 25.7 - SAM - Local Capabilities
-- [ ] 25.8 - SAM - Multiple Environments
-- [ ] SAM Quiz (Quiz 22)
+- [x] 25.1 - AWS SAM - Section Introduction (intro)
+- [x] 25.2 - SAM Overview (PERFECT 100% - 75 XP)
+- [x] 25.3 - SAM - Hands On (skipped)
+- [x] 25.4 - SAM with DynamoDB - Hands On (skipped)
+- [x] 25.5 - SAM Policy Templates (PERFECT 100% - 50 XP)
+- [x] 25.6 - SAM with CodeDeploy (PERFECT 100% - 75 XP)
+- [x] 25.7 - SAM - Local Capabilities (PERFECT 100% - 75 XP)
+- [x] 25.8 - SAM - Multiple Environments (PERFECT 100% - 50 XP)
+- [x] SAM Quiz (Quiz 22) ✅
 
 ## Section 26: Cloud Development Kit (CDK)
 
-- [ ] 26.1 - CDK Overview
-- [ ] 26.2 - CDK - Hands On
-- [ ] 26.3 - CDK - Constructs
-- [ ] 26.4 - CDK - Commands & Bootstraping
-- [ ] 26.5 - CDK - Unit Testing
-- [ ] CDK Quiz (Quiz 23)
+- [x] 26.1 - CDK Overview (PERFECT 100% - 75 XP)
+- [x] 26.2 - CDK - Hands On (skipped - hands-on walkthrough)
+- [x] 26.3 - CDK - Constructs (PERFECT 100% - 75 XP)
+- [x] 26.4 - CDK - Commands & Bootstrapping (PERFECT 100% - 50 XP)
+- [x] 26.5 - CDK - Unit Testing (PERFECT 100% - 75 XP)
+- [x] CDK Quiz (Quiz 23) - Completed ✅
 
 ## Section 27: Cognito: Cognito User Pools, Cognito Identity Pools & Cognito Sync
 

@@ -1,0 +1,1042 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Section 26 — AWS Cloud Development Kit (CDK)</title>
+    <link rel="stylesheet" href="../shared/summary.css" />
+    <script src="../shared/summary.js"></script>
+  </head>
+  <body>
+    <script>
+      initHeader("Section 26 — AWS Cloud Development Kit (CDK)");
+    </script>
+
+    <div class="container">
+      <!-- ═══════════════════ CARD 1: CDK OVERVIEW ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">1</span>
+          <h2>
+            <span class="lang-en">CDK — Cloud Development Kit</span>
+            <span class="lang-es">CDK — Cloud Development Kit</span>
+          </h2>
+        </div>
+
+        <p>
+          <span class="lang-en">
+            CDK (Cloud Development Kit) lets you define AWS infrastructure using
+            a real programming language — TypeScript, JavaScript, Python, Java,
+            or .NET — instead of writing YAML or JSON by hand. Under the hood it
+            generates a CloudFormation template, so everything still deploys
+            through CloudFormation. The key advantage over raw CloudFormation:
+            CDK is <strong>typesafe</strong> — if your code doesn't compile, no
+            template is generated and you catch errors before any deployment
+            happens.
+          </span>
+          <span class="lang-es">
+            CDK (Cloud Development Kit) permite definir infraestructura AWS
+            usando un lenguaje de programación real — TypeScript, JavaScript,
+            Python, Java o .NET — en lugar de escribir YAML o JSON a mano. Por
+            debajo genera un template de CloudFormation, así que todo sigue
+            deployando a través de CloudFormation. La ventaja clave sobre
+            CloudFormation puro: CDK es <strong>typesafe</strong> — si el código
+            no compila, no se genera template y los errores se detectan antes de
+            cualquier deploy.
+          </span>
+        </p>
+
+        <h3>
+          <span class="lang-en">CDK Flow</span>
+          <span class="lang-es">Flujo de CDK</span>
+        </h3>
+        <p>
+          <span class="lang-en"
+            >You write CDK code, synthesize it into a CloudFormation template,
+            then deploy. The diagram below shows the full pipeline from code to
+            AWS resources:</span
+          >
+          <span class="lang-es"
+            >Escribís código CDK, lo sintetizás en un template de
+            CloudFormation, y luego deployás. El diagrama muestra el pipeline
+            completo desde el código hasta los recursos AWS:</span
+          >
+        </p>
+
+        <div class="vd">
+          <svg
+            viewBox="0 0 720 100"
+            xmlns="http://www.w3.org/2000/svg"
+            style="width: 100%; height: auto; display: block"
+          >
+            <defs>
+              <marker
+                id="ah-cdk"
+                markerWidth="8"
+                markerHeight="6"
+                refX="8"
+                refY="3"
+                orient="auto"
+              >
+                <polygon points="0 0, 8 3, 0 6" fill="#64748b" />
+              </marker>
+            </defs>
+            <!-- Boxes -->
+            <rect
+              x="10"
+              y="20"
+              width="150"
+              height="55"
+              rx="6"
+              fill="#1e293b"
+              stroke="#3b82f6"
+              stroke-width="1.5"
+            />
+            <text
+              x="85"
+              y="44"
+              text-anchor="middle"
+              fill="#93c5fd"
+              font-size="10"
+              font-weight="700"
+              font-family="monospace"
+            >
+              CDK Code
+            </text>
+            <text
+              x="85"
+              y="60"
+              text-anchor="middle"
+              fill="#64748b"
+              font-size="9"
+              font-family="monospace"
+            >
+              TS / Python / Java / .NET
+            </text>
+
+            <rect
+              x="240"
+              y="20"
+              width="160"
+              height="55"
+              rx="6"
+              fill="#1e293b"
+              stroke="#6366f1"
+              stroke-width="1.5"
+            />
+            <text
+              x="320"
+              y="44"
+              text-anchor="middle"
+              fill="#a5b4fc"
+              font-size="10"
+              font-weight="700"
+              font-family="monospace"
+            >
+              CloudFormation
+            </text>
+            <text
+              x="320"
+              y="60"
+              text-anchor="middle"
+              fill="#64748b"
+              font-size="9"
+              font-family="monospace"
+            >
+              Template (JSON/YAML)
+            </text>
+
+            <rect
+              x="490"
+              y="20"
+              width="150"
+              height="55"
+              rx="6"
+              fill="#1e293b"
+              stroke="#22c55e"
+              stroke-width="1.5"
+            />
+            <text
+              x="565"
+              y="44"
+              text-anchor="middle"
+              fill="#86efac"
+              font-size="10"
+              font-weight="700"
+              font-family="monospace"
+            >
+              AWS Resources
+            </text>
+            <text
+              x="565"
+              y="60"
+              text-anchor="middle"
+              fill="#64748b"
+              font-size="9"
+              font-family="monospace"
+            >
+              Lambda, VPC, ECS...
+            </text>
+
+            <!-- Arrows -->
+            <line
+              x1="161"
+              y1="47"
+              x2="238"
+              y2="47"
+              stroke="#64748b"
+              stroke-width="1.5"
+              marker-end="url(#ah-cdk)"
+            />
+            <text
+              x="200"
+              y="40"
+              text-anchor="middle"
+              fill="#64748b"
+              font-size="9"
+              font-family="monospace"
+            >
+              cdk synth
+            </text>
+
+            <line
+              x1="401"
+              y1="47"
+              x2="488"
+              y2="47"
+              stroke="#64748b"
+              stroke-width="1.5"
+              marker-end="url(#ah-cdk)"
+            />
+            <text
+              x="445"
+              y="40"
+              text-anchor="middle"
+              fill="#64748b"
+              font-size="9"
+              font-family="monospace"
+            >
+              cdk deploy
+            </text>
+          </svg>
+        </div>
+
+        <h3>
+          <span class="lang-en">CDK Constructs</span>
+          <span class="lang-es">CDK Constructs</span>
+        </h3>
+        <p>
+          <span class="lang-en">
+            Constructs are high-level reusable components — each one generates
+            multiple underlying CloudFormation resources automatically. For
+            example, a single
+            <code>ApplicationLoadBalancedFargateService</code> construct creates
+            the Fargate task definition, ECS service, ALB, target group,
+            security groups, and IAM roles — all from a few lines of code.
+          </span>
+          <span class="lang-es">
+            Los constructs son componentes reutilizables de alto nivel — cada
+            uno genera múltiples recursos de CloudFormation automáticamente. Por
+            ejemplo, un solo construct
+            <code>ApplicationLoadBalancedFargateService</code> crea la task
+            definition de Fargate, el servicio ECS, el ALB, el target group,
+            security groups y roles IAM — todo desde pocas líneas de código.
+          </span>
+        </p>
+        <div class="code-block">
+          // TypeScript example const vpc = new ec2.Vpc(this, 'MyVpc', { maxAzs:
+          3 }); const cluster = new ecs.Cluster(this, 'MyCluster', { vpc }); new
+          ecs_patterns.ApplicationLoadBalancedFargateService(this, 'MyFargate',
+          { cluster, cpu: 512, desiredCount: 6, taskImageOptions: { image:
+          ecs.ContainerImage.fromRegistry('my-image') }, memoryLimitMiB: 2048,
+          publicLoadBalancer: true, });
+        </div>
+
+        <h3>
+          <span class="lang-en">CDK vs SAM</span>
+          <span class="lang-es">CDK vs SAM</span>
+        </h3>
+        <p>
+          <span class="lang-en"
+            >Both generate CloudFormation under the hood, but they serve
+            different purposes. SAM is serverless-first; CDK is a superset of
+            CloudFormation that supports every AWS service.</span
+          >
+          <span class="lang-es"
+            >Ambos generan CloudFormation por debajo, pero sirven propósitos
+            distintos. SAM es serverless-first; CDK es un superset de
+            CloudFormation que soporta todos los servicios AWS.</span
+          >
+        </p>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th></th>
+              <th>SAM</th>
+              <th>CDK</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <span class="lang-en">Focus</span
+                ><span class="lang-es">Foco</span>
+              </td>
+              <td>
+                <span class="lang-en">Serverless (Lambda-first)</span
+                ><span class="lang-es">Serverless (Lambda-first)</span>
+              </td>
+              <td>
+                <span class="lang-en">All AWS services</span
+                ><span class="lang-es">Todos los servicios AWS</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span class="lang-en">Template format</span
+                ><span class="lang-es">Formato del template</span>
+              </td>
+              <td>
+                <span class="lang-en">Declarative YAML/JSON</span
+                ><span class="lang-es">YAML/JSON declarativo</span>
+              </td>
+              <td>
+                <span class="lang-en">Real programming language</span
+                ><span class="lang-es">Lenguaje de programación real</span>
+              </td>
+            </tr>
+            <tr>
+              <td>Typesafe</td>
+              <td>❌</td>
+              <td>✅</td>
+            </tr>
+            <tr>
+              <td>Backend</td>
+              <td>CloudFormation</td>
+              <td>CloudFormation</td>
+            </tr>
+            <tr>
+              <td>
+                <span class="lang-en">Best for</span
+                ><span class="lang-es">Mejor para</span>
+              </td>
+              <td>
+                <span class="lang-en">Quick Lambda/serverless apps</span
+                ><span class="lang-es">Apps serverless rápidas</span>
+              </td>
+              <td>
+                <span class="lang-en">Complex infra, any AWS service</span
+                ><span class="lang-es"
+                  >Infra compleja, cualquier servicio AWS</span
+                >
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>
+          <span class="lang-en">CDK + SAM Together</span>
+          <span class="lang-es">CDK + SAM juntos</span>
+        </h3>
+        <p>
+          <span class="lang-en"
+            >You can use SAM CLI to locally test Lambda functions defined in a
+            CDK app. Run <code>cdk synth</code> first to generate the
+            CloudFormation template, then point <code>sam local invoke</code> at
+            it:</span
+          >
+          <span class="lang-es"
+            >Podés usar SAM CLI para testear localmente funciones Lambda
+            definidas en una app CDK. Primero corrés <code>cdk synth</code> para
+            generar el template, luego apuntás <code>sam local invoke</code> a
+            él:</span
+          >
+        </p>
+        <div class="code-block">
+          cdk synth sam local invoke -t cdk.out/MyStack.template.json MyFunction
+        </div>
+      </div>
+      <!-- END CARD 1 -->
+
+      <!-- ═══════════════════ CARD 2: CDK CONSTRUCTS ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">2</span>
+          <h2>
+            <span class="lang-en">CDK Constructs — L1 / L2 / L3</span>
+            <span class="lang-es">CDK Constructs — L1 / L2 / L3</span>
+          </h2>
+        </div>
+
+        <p>
+          <span class="lang-en">
+            Constructs are the building blocks of CDK — components that
+            encapsulate everything needed to create one or more CloudFormation
+            resources. They come from the built-in
+            <strong>Construct Library</strong> (covers every AWS service) or
+            from <strong>Construct Hub</strong> (third-party and open-source
+            community constructs). There are three levels of abstraction, each
+            progressively higher.
+          </span>
+          <span class="lang-es">
+            Los Constructs son los bloques de construcción de CDK — componentes
+            que encapsulan todo lo necesario para crear uno o más recursos de
+            CloudFormation. Vienen de la
+            <strong>Construct Library</strong> integrada (cubre todos los
+            servicios AWS) o del <strong>Construct Hub</strong> (constructs de
+            terceros y comunidad open-source). Hay tres niveles de abstracción,
+            cada uno progresivamente más alto.
+          </span>
+        </p>
+
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>
+                <span class="lang-en">Level</span
+                ><span class="lang-es">Nivel</span>
+              </th>
+              <th>
+                <span class="lang-en">Name</span
+                ><span class="lang-es">Nombre</span>
+              </th>
+              <th>
+                <span class="lang-en">Prefix</span
+                ><span class="lang-es">Prefijo</span>
+              </th>
+              <th>
+                <span class="lang-en">What it does</span
+                ><span class="lang-es">Qué hace</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>L1</strong></td>
+              <td>
+                <span class="lang-en">CFN Resources</span
+                ><span class="lang-es">CFN Resources</span>
+              </td>
+              <td><code>Cfn*</code></td>
+              <td>
+                <span class="lang-en"
+                  >1:1 CF mapping, all properties required, no defaults</span
+                ><span class="lang-es"
+                  >Mapeo 1:1 a CF, todas las propiedades requeridas, sin
+                  defaults</span
+                >
+              </td>
+            </tr>
+            <tr>
+              <td><strong>L2</strong></td>
+              <td>
+                <span class="lang-en">AWS Resources</span
+                ><span class="lang-es">AWS Resources</span>
+              </td>
+              <td>
+                <span class="lang-en">No <code>Cfn</code></span
+                ><span class="lang-es">Sin <code>Cfn</code></span>
+              </td>
+              <td>
+                <span class="lang-en"
+                  >Same resource, convenient defaults + helper methods
+                  (<code>grantRead()</code>,
+                  <code>addLifeCycleRule()</code>…)</span
+                ><span class="lang-es"
+                  >Mismo recurso, defaults convenientes + métodos helper
+                  (<code>grantRead()</code>,
+                  <code>addLifeCycleRule()</code>…)</span
+                >
+              </td>
+            </tr>
+            <tr>
+              <td><strong>L3</strong></td>
+              <td>Patterns</td>
+              <td>N/A</td>
+              <td>
+                <span class="lang-en"
+                  >Multiple related resources combined, fully wired — e.g.
+                  <code>ApplicationLoadBalancedFargateService</code>,
+                  <code>LambdaRestApi</code></span
+                ><span class="lang-es"
+                  >Múltiples recursos combinados y conectados — ej.
+                  <code>ApplicationLoadBalancedFargateService</code>,
+                  <code>LambdaRestApi</code></span
+                >
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>
+          <span class="lang-en">L1 Example</span>
+          <span class="lang-es">Ejemplo L1</span>
+        </h3>
+        <p>
+          <span class="lang-en"
+            >Direct CloudFormation mapping — you provide every property
+            yourself:</span
+          ><span class="lang-es"
+            >Mapeo directo a CloudFormation — vos especificás cada
+            propiedad:</span
+          >
+        </p>
+        <div class="code-block">
+          new s3.CfnBucket(this, 'MyBucket', { bucketName: 'my-bucket', // all
+          required CF properties must be set manually });
+        </div>
+
+        <h3>
+          <span class="lang-en">L2 Example</span>
+          <span class="lang-es">Ejemplo L2</span>
+        </h3>
+        <p>
+          <span class="lang-en"
+            >Intent-based API — say what you want, CDK handles the
+            CloudFormation details:</span
+          ><span class="lang-es"
+            >API basada en intención — decís qué querés, CDK maneja los detalles
+            de CloudFormation:</span
+          >
+        </p>
+        <div class="code-block">
+          const bucket = new s3.Bucket(this, 'MyBucket', { versioned: true,
+          encryption: s3.BucketEncryption.KMS, }); bucket.grantRead(myLambdaFn);
+          // generates correct IAM policy automatically
+        </div>
+
+        <h3>
+          <span class="lang-en">L3 Example</span>
+          <span class="lang-es">Ejemplo L3</span>
+        </h3>
+        <p>
+          <span class="lang-en"
+            >Multiple resources fully wired — ALB + Fargate + security groups +
+            listeners in one construct:</span
+          ><span class="lang-es"
+            >Múltiples recursos totalmente conectados — ALB + Fargate + security
+            groups + listeners en un solo construct:</span
+          >
+        </p>
+        <div class="code-block">
+          new ecs_patterns.ApplicationLoadBalancedFargateService(this,
+          'MyService', { cluster, cpu: 512, desiredCount: 6, publicLoadBalancer:
+          true, });
+        </div>
+      </div>
+      <!-- END CARD 2 -->
+
+      <!-- ═══════════════════ CARD 3: COMMANDS & BOOTSTRAPPING ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">3</span>
+          <h2>
+            <span class="lang-en">CDK Commands &amp; Bootstrapping</span>
+            <span class="lang-es">Comandos CDK y Bootstrapping</span>
+          </h2>
+        </div>
+
+        <p>
+          <span class="lang-en">
+            Beyond <code>cdk synth</code> and <code>cdk deploy</code>, there are
+            a few more CLI commands worth knowing. <code>cdk bootstrap</code> is
+            special — it's a one-time setup that must run before you can deploy
+            any CDK stack to a new AWS account/region combination.
+          </span>
+          <span class="lang-es">
+            Más allá de <code>cdk synth</code> y <code>cdk deploy</code>, hay
+            otros comandos CLI importantes. <code>cdk bootstrap</code> es
+            especial — es un setup único que debe correr antes de poder deployar
+            cualquier stack CDK en una nueva combinación de cuenta/región AWS.
+          </span>
+        </p>
+
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>
+                <span class="lang-en">Command</span
+                ><span class="lang-es">Comando</span>
+              </th>
+              <th>
+                <span class="lang-en">What it does</span
+                ><span class="lang-es">Qué hace</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>cdk init</code></td>
+              <td>
+                <span class="lang-en"
+                  >Initialize a new CDK app from a template (choose
+                  language)</span
+                ><span class="lang-es"
+                  >Inicializa una nueva app CDK desde un template (elegís
+                  lenguaje)</span
+                >
+              </td>
+            </tr>
+            <tr>
+              <td><code>cdk synth</code></td>
+              <td>
+                <span class="lang-en"
+                  >Synthesize CDK code → CloudFormation template (prints to
+                  stdout)</span
+                ><span class="lang-es"
+                  >Sintetiza código CDK → template CloudFormation (imprime en
+                  stdout)</span
+                >
+              </td>
+            </tr>
+            <tr>
+              <td><code>cdk bootstrap</code></td>
+              <td>
+                <span class="lang-en"
+                  ><strong>One-time per account/region</strong> — creates
+                  CDKToolkit CF stack (S3 bucket + IAM roles)</span
+                ><span class="lang-es"
+                  ><strong>Una vez por cuenta/región</strong> — crea el CF stack
+                  CDKToolkit (S3 bucket + roles IAM)</span
+                >
+              </td>
+            </tr>
+            <tr>
+              <td><code>cdk deploy</code></td>
+              <td>
+                <span class="lang-en"
+                  >Deploy the CDK stack to AWS via CloudFormation</span
+                ><span class="lang-es"
+                  >Deploya el stack CDK a AWS vía CloudFormation</span
+                >
+              </td>
+            </tr>
+            <tr>
+              <td><code>cdk diff</code></td>
+              <td>
+                <span class="lang-en"
+                  >Show difference between local changes and what's currently
+                  deployed</span
+                ><span class="lang-es"
+                  >Muestra la diferencia entre cambios locales y lo que está
+                  deployado</span
+                >
+              </td>
+            </tr>
+            <tr>
+              <td><code>cdk destroy</code></td>
+              <td>
+                <span class="lang-en"
+                  >Destroy the deployed CloudFormation stack and its
+                  resources</span
+                ><span class="lang-es"
+                  >Destruye el stack CloudFormation deployado y sus
+                  recursos</span
+                >
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>
+          <span class="lang-en">What is Bootstrapping?</span>
+          <span class="lang-es">¿Qué es el Bootstrapping?</span>
+        </h3>
+        <p>
+          <span class="lang-en">
+            Before deploying any CDK app to an AWS
+            <strong>environment</strong> (account + region), you must bootstrap
+            it. Bootstrapping creates a CloudFormation stack called
+            <strong>CDKToolkit</strong> that contains an S3 bucket (for storing
+            synthesized assets) and IAM roles (required for deployments).
+            Without it, your deploy fails with:
+          </span>
+          <span class="lang-es">
+            Antes de deployar cualquier app CDK a un
+            <strong>entorno</strong> AWS (cuenta + región), debés
+            bootstrapearlo. El bootstrapping crea un stack de CloudFormation
+            llamado <strong>CDKToolkit</strong> que contiene un S3 bucket (para
+            almacenar assets sintetizados) y roles IAM (necesarios para
+            deploys). Sin él, el deploy falla con:
+          </span>
+        </p>
+        <div class="code-block">
+          Error: Policy contains a statement with one or more invalid principals
+        </div>
+        <div class="code-block">
+          cdk bootstrap aws://&lt;account_id&gt;/&lt;region&gt; # e.g. cdk
+          bootstrap aws://123456789012/eu-west-1
+        </div>
+
+        <div class="vd">
+          <svg viewBox="0 0 660 270" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;">
+            <defs>
+              <marker
+                id="ah-boot"
+                markerWidth="8"
+                markerHeight="6"
+                refX="8"
+                refY="3"
+                orient="auto"
+              >
+                <polygon points="0 0, 8 3, 0 6" fill="#64748b" />
+              </marker>
+            </defs>
+
+            <!-- LEFT: User + command -->
+            <text x="90" y="38" text-anchor="middle" fill="#e2e8f0" font-size="18" font-weight="700" font-family="sans-serif">User</text>
+            <text x="90" y="78" text-anchor="middle" fill="#f59e0b" font-size="13" font-weight="700" font-family="monospace">cdk bootstrap</text>
+            <text x="90" y="98" text-anchor="middle" fill="#f59e0b" font-size="11" font-family="monospace">aws://123456789012</text>
+            <text x="90" y="114" text-anchor="middle" fill="#f59e0b" font-size="11" font-family="monospace">/eu-west-1</text>
+
+            <!-- AWS Account box -->
+            <rect x="195" y="12" width="450" height="248" rx="8" fill="#0f172a" stroke="#334155" stroke-width="2"/>
+            <rect x="195" y="12" width="48" height="20" rx="4" fill="#334155"/>
+            <text x="219" y="27" text-anchor="middle" fill="#94a3b8" font-size="11" font-weight="700" font-family="sans-serif">aws</text>
+            <text x="420" y="50" text-anchor="middle" fill="#e2e8f0" font-size="14" font-weight="700" font-family="sans-serif">AWS Account (123456789012)</text>
+
+            <!-- AWS Region box -->
+            <rect x="212" y="62" width="416" height="184" rx="6" fill="#0f172a" stroke="#3b82f6" stroke-width="2" stroke-dasharray="6,3"/>
+            <text x="420" y="84" text-anchor="middle" fill="#93c5fd" font-size="13" font-weight="700" font-family="sans-serif">AWS Region (eu-west-1)</text>
+
+            <!-- CDKToolkit Stack box -->
+            <rect x="228" y="96" width="384" height="136" rx="6" fill="#1e293b" stroke="#6366f1" stroke-width="2" stroke-dasharray="6,3"/>
+            <text x="420" y="122" text-anchor="middle" fill="#a5b4fc" font-size="14" font-weight="700" font-family="sans-serif">CloudFormation Stack (CDKToolkit)</text>
+
+            <!-- S3 Bucket -->
+            <rect x="245" y="138" width="160" height="78" rx="5" fill="#0f172a" stroke="#22c55e" stroke-width="1.5"/>
+            <text x="325" y="166" text-anchor="middle" fill="#86efac" font-size="14" font-weight="700" font-family="sans-serif">S3 Bucket</text>
+            <text x="325" y="186" text-anchor="middle" fill="#64748b" font-size="12" font-family="sans-serif">(synthesized assets)</text>
+
+            <!-- IAM Role -->
+            <rect x="435" y="138" width="160" height="78" rx="5" fill="#0f172a" stroke="#f87171" stroke-width="1.5"/>
+            <text x="515" y="166" text-anchor="middle" fill="#fca5a5" font-size="14" font-weight="700" font-family="sans-serif">IAM Role</text>
+            <text x="515" y="186" text-anchor="middle" fill="#64748b" font-size="12" font-family="sans-serif">(deployments)</text>
+
+            <!-- Arrow from left to CDKToolkit box -->
+            <line x1="168" y1="100" x2="226" y2="155" stroke="#64748b" stroke-width="2" marker-end="url(#ah-boot)"/>
+          </svg>
+        </div>
+      </div>
+      <!-- END CARD 3 -->
+
+      <!-- ═══════════════════ CARD 4: CDK UNIT TESTING ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">4</span>
+          <h2>
+            <span class="lang-en">CDK Unit Testing</span>
+            <span class="lang-es">CDK Unit Testing</span>
+          </h2>
+        </div>
+
+        <p>
+          <span class="lang-en">
+            Because CDK uses real code, you can test your infrastructure the same way you'd test any application —
+            with Jest (JavaScript/TypeScript) or Pytest (Python). The <strong>CDK Assertions Module</strong> lets you
+            synthesize a stack into a CloudFormation template in memory and run assertions against it — no AWS calls, no deployment needed.
+          </span>
+          <span class="lang-es">
+            Como CDK usa código real, podés testear tu infraestructura igual que cualquier aplicación —
+            con Jest (JavaScript/TypeScript) o Pytest (Python). El <strong>CDK Assertions Module</strong> permite
+            sintetizar un stack en un template de CloudFormation en memoria y correr assertions — sin llamadas a AWS, sin deployar.
+          </span>
+        </p>
+
+        <h3>
+          <span class="lang-en">Loading the Template</span>
+          <span class="lang-es">Cargando el Template</span>
+        </h3>
+        <p><span class="lang-en">Two ways to get a template to test against:</span><span class="lang-es">Dos formas de obtener un template para testear:</span></p>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th><span class="lang-en">Method</span><span class="lang-es">Método</span></th>
+              <th><span class="lang-en">When to use</span><span class="lang-es">Cuándo usar</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>Template.fromStack(MyStack)</code></td>
+              <td><span class="lang-en">Stack defined in CDK — synthesize directly from code</span><span class="lang-es">Stack definido en CDK — sintetiza directo desde el código</span></td>
+            </tr>
+            <tr>
+              <td><code>Template.fromString(myString)</code></td>
+              <td><span class="lang-en">External CloudFormation template — load as a JSON/YAML string</span><span class="lang-es">Template CloudFormation externo — cargar como string JSON/YAML</span></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>
+          <span class="lang-en">Fine-Grained Assertions (most common)</span>
+          <span class="lang-es">Fine-Grained Assertions (más comunes)</span>
+        </h3>
+        <p><span class="lang-en">Test that specific resources exist with specific properties:</span><span class="lang-es">Verifican que recursos específicos existen con propiedades específicas:</span></p>
+        <div class="code-block">const template = Template.fromStack(MyStack);
+
+// Assert Lambda has correct handler and runtime
+template.hasResourceProperties('AWS::Lambda::Function', {
+  Handler: 'index.handler',
+  Runtime: 'nodejs14.x',
+});
+
+// Assert exactly 1 SNS subscription exists
+template.resourceCountIs('AWS::SNS::Subscription', 1);</div>
+
+        <h3>
+          <span class="lang-en">Snapshot Tests</span>
+          <span class="lang-es">Snapshot Tests</span>
+        </h3>
+        <p><span class="lang-en">Compare the entire synthesized template against a previously saved baseline. Catches unexpected changes — if anything shifts, the test fails:</span><span class="lang-es">Comparan el template completo contra una baseline guardada previamente. Detectan cambios inesperados — si algo cambia, el test falla:</span></p>
+        <div class="code-block">test('matches snapshot', () => {
+  // Use fromStack when testing a CDK stack directly
+  const template = Template.fromStack(MyStack);
+  // OR: use fromString for an external CloudFormation template
+  // const template = Template.fromString(myString);
+  expect(template.toJSON()).toMatchSnapshot();
+});</div>
+      </div>
+      <!-- END CARD 4 -->
+
+      <!-- ═══════════════════ EXAM TIPS ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge" style="font-size: 1rem">★</span>
+          <h2>
+            <span class="lang-en">Consolidated Exam Tips</span>
+            <span class="lang-es">Tips de Examen Consolidados</span>
+          </h2>
+        </div>
+        <div class="tips-grid">
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en">CDK generates</span
+              ><span class="lang-es">CDK genera</span></span
+            >
+            <span class="arr">→</span>
+            <span class="answer"
+              ><span class="lang-en"
+                >CloudFormation templates — same backend as SAM</span
+              ><span class="lang-es"
+                >Templates de CloudFormation — mismo backend que SAM</span
+              ></span
+            >
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en">Supported CDK languages</span
+              ><span class="lang-es">Lenguajes CDK soportados</span></span
+            >
+            <span class="arr">→</span>
+            <span class="answer"
+              >TypeScript, JavaScript, Python, Java, .NET</span
+            >
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en"
+                >CDK command to generate CloudFormation template</span
+              ><span class="lang-es"
+                >Comando CDK para generar template de CloudFormation</span
+              ></span
+            >
+            <span class="arr">→</span>
+            <span class="answer"><code>cdk synth</code></span>
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en"
+                >Key CDK advantage over CloudFormation YAML</span
+              ><span class="lang-es"
+                >Ventaja clave de CDK sobre CloudFormation YAML</span
+              ></span
+            >
+            <span class="arr">→</span>
+            <span class="answer"
+              ><span class="lang-en"
+                >Typesafe — bad code won't compile, no broken template
+                generated</span
+              ><span class="lang-es"
+                >Typesafe — código malo no compila, no se genera template
+                roto</span
+              ></span
+            >
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en">CDK vs SAM scope</span
+              ><span class="lang-es">Alcance CDK vs SAM</span></span
+            >
+            <span class="arr">→</span>
+            <span class="answer"
+              ><span class="lang-en"
+                >SAM = serverless-first &nbsp;|&nbsp; CDK = all AWS
+                services</span
+              ><span class="lang-es"
+                >SAM = serverless-first &nbsp;|&nbsp; CDK = todos los servicios
+                AWS</span
+              ></span
+            >
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en">Locally test a CDK Lambda with SAM</span
+              ><span class="lang-es"
+                >Testear localmente un Lambda CDK con SAM</span
+              ></span
+            >
+            <span class="arr">→</span>
+            <span class="answer"
+              ><code>cdk synth</code> →
+              <code
+                >sam local invoke -t cdk.out/MyStack.template.json</code
+              ></span
+            >
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en"><code>cdk bootstrap</code> runs</span
+              ><span class="lang-es"
+                ><code>cdk bootstrap</code> corre</span
+              ></span
+            >
+            <span class="arr">→</span>
+            <span class="answer"
+              ><span class="lang-en"
+                >Once per account/region — creates CDK Toolkit stack needed for
+                deployments</span
+              ><span class="lang-es"
+                >Una vez por cuenta/región — crea el CDK Toolkit stack necesario
+                para deploys</span
+              ></span
+            >
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en"
+                >Preview CloudFormation template without deploying</span
+              ><span class="lang-es"
+                >Preview del template CloudFormation sin deployar</span
+              ></span
+            >
+            <span class="arr">→</span>
+            <span class="answer"><code>cdk synth</code></span>
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en">Destroy all CDK stack resources</span
+              ><span class="lang-es"
+                >Destruir todos los recursos del stack CDK</span
+              ></span
+            >
+            <span class="arr">→</span>
+            <span class="answer"><code>cdk destroy</code></span>
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en">L1 construct identifier</span
+              ><span class="lang-es">Identificador de construct L1</span></span
+            >
+            <span class="arr">→</span>
+            <span class="answer"
+              ><span class="lang-en"
+                >Starts with <code>Cfn</code> (e.g. <code>CfnBucket</code>) —
+                1:1 CF mapping, no defaults</span
+              ><span class="lang-es"
+                >Empieza con <code>Cfn</code> (ej. <code>CfnBucket</code>) —
+                mapeo 1:1 a CF, sin defaults</span
+              ></span
+            >
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en">L2 vs L1 key difference</span
+              ><span class="lang-es">Diferencia clave L2 vs L1</span></span
+            >
+            <span class="arr">→</span>
+            <span class="answer"
+              ><span class="lang-en"
+                >L2 adds convenient defaults + helper methods like
+                <code>grantRead()</code></span
+              ><span class="lang-es"
+                >L2 agrega defaults convenientes + métodos helper como
+                <code>grantRead()</code></span
+              ></span
+            >
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en">L3 constructs are called</span
+              ><span class="lang-es">Los constructs L3 se llaman</span></span
+            >
+            <span class="arr">→</span>
+            <span class="answer"
+              ><span class="lang-en"
+                >Patterns — combine multiple resources fully wired
+                together</span
+              ><span class="lang-es"
+                >Patterns — combinan múltiples recursos totalmente
+                conectados</span
+              ></span
+            >
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en">Missing bootstrap error message</span
+              ><span class="lang-es">Error por falta de bootstrap</span></span
+            >
+            <span class="arr">→</span>
+            <span class="answer"
+              >"Policy contains a statement with one or more invalid
+              principals"</span
+            >
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en">CDK environment = </span
+              ><span class="lang-es">Entorno CDK = </span></span
+            >
+            <span class="arr">→</span>
+            <span class="answer"
+              ><span class="lang-en">account + region combination</span
+              ><span class="lang-es">combinación de cuenta + región</span></span
+            >
+          </div>
+          <div class="tip">
+            <span class="trigger"><span class="lang-en">See what will change before deploying</span><span class="lang-es">Ver qué cambiará antes de deployar</span></span>
+            <span class="arr">→</span>
+            <span class="answer"><code>cdk diff</code></span>
+          </div>
+          <div class="tip">
+            <span class="trigger"><span class="lang-en">CDK test frameworks</span><span class="lang-es">Frameworks de testing CDK</span></span>
+            <span class="arr">→</span>
+            <span class="answer">Jest (JS/TS) / Pytest (Python) — uses CDK Assertions Module</span>
+          </div>
+          <div class="tip">
+            <span class="trigger"><span class="lang-en">Fine-grained assertions test</span><span class="lang-es">Las fine-grained assertions testean</span></span>
+            <span class="arr">→</span>
+            <span class="answer"><span class="lang-en">Specific resource properties — <code>hasResourceProperties()</code>, <code>resourceCountIs()</code></span><span class="lang-es">Propiedades específicas de recursos — <code>hasResourceProperties()</code>, <code>resourceCountIs()</code></span></span>
+          </div>
+          <div class="tip">
+            <span class="trigger"><span class="lang-en">Snapshot tests compare</span><span class="lang-es">Los snapshot tests comparan</span></span>
+            <span class="arr">→</span>
+            <span class="answer"><span class="lang-en">Entire template against a saved baseline — catches unexpected changes</span><span class="lang-es">Template completo contra una baseline guardada — detecta cambios inesperados</span></span>
+          </div>
+          <div class="tip">
+            <span class="trigger"><span class="lang-en">Load external CF template for testing</span><span class="lang-es">Cargar template CF externo para testear</span></span>
+            <span class="arr">→</span>
+            <span class="answer"><code>Template.fromString()</code></span>
+          </div>
+          <div class="tip">
+            <span class="trigger"><span class="lang-en">Load CDK stack for testing</span><span class="lang-es">Cargar stack CDK para testear</span></span>
+            <span class="arr">→</span>
+            <span class="answer"><code>Template.fromStack(MyStack)</code></span>
+          </div>
+        </div>
+      </div>
+      <!-- END EXAM TIPS -->
+
+    </div>
+    <!-- end .container -->
+  </body>
+</html>
