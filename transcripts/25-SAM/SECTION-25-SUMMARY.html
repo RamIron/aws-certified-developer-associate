@@ -1,0 +1,645 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Section 25 — AWS Serverless: SAM</title>
+    <link rel="stylesheet" href="../shared/summary.css" />
+    <script src="../shared/summary.js"></script>
+  </head>
+  <body>
+    <script>
+      initHeader("Section 25 — AWS Serverless: SAM — Serverless Application Model");
+    </script>
+
+    <div class="container">
+
+      <!-- ═══════════════════ CARD 1: SAM OVERVIEW ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">1</span>
+          <h2>
+            <span class="lang-en">SAM — Serverless Application Model</span>
+            <span class="lang-es">SAM — Modelo de Aplicación Serverless</span>
+          </h2>
+        </div>
+
+        <p>
+          <span class="lang-en">
+            SAM (Serverless Application Model) is a YAML framework that lets you define serverless
+            applications using a simplified shorthand. Under the hood it's just CloudFormation with a
+            <strong>transform step</strong> — AWS takes your short SAM template, expands it into a full
+            CloudFormation template, and deploys it. It is <em>not</em> a separate deployment service;
+            it's a productivity layer on top of CloudFormation.
+          </span>
+          <span class="lang-es">
+            SAM (Serverless Application Model) es un framework YAML que permite definir aplicaciones
+            serverless de forma simplificada. Por debajo es simplemente CloudFormation con un paso de
+            <strong>transformación</strong> — AWS toma tu template SAM corto, lo expande en un template
+            de CloudFormation completo y lo deploya. <em>No</em> es un servicio de deploy separado;
+            es una capa de productividad encima de CloudFormation.
+          </span>
+        </p>
+
+        <p>
+          <span class="lang-en">Every SAM template must declare this header at the top — without it CloudFormation doesn't know to transform the <code>AWS::Serverless::*</code> resource types and will throw an error:</span>
+          <span class="lang-es">Todo template SAM debe declarar este header al principio — sin él CloudFormation no sabe transformar los tipos <code>AWS::Serverless::*</code> y fallará:</span>
+        </p>
+        <div class="code-block">Transform: 'AWS::Serverless-2016-10-31'</div>
+
+        <h3>
+          <span class="lang-en">SAM Constructs</span>
+          <span class="lang-es">Constructs de SAM</span>
+        </h3>
+        <p>
+          <span class="lang-en">SAM provides three shorthand resource types. Each one expands into multiple CloudFormation resources automatically — IAM roles, stages, and configurations included.</span>
+          <span class="lang-es">SAM provee tres tipos de recursos abreviados que se expanden automáticamente en múltiples recursos de CloudFormation, incluyendo roles IAM, stages y configuraciones.</span>
+        </p>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th><span class="lang-en">SAM Resource</span><span class="lang-es">Recurso SAM</span></th>
+              <th><span class="lang-en">Generates in CloudFormation</span><span class="lang-es">Genera en CloudFormation</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>AWS::Serverless::Function</code></td>
+              <td><span class="lang-en">Lambda Function + IAM execution role</span><span class="lang-es">Lambda Function + IAM execution role</span></td>
+            </tr>
+            <tr>
+              <td><code>AWS::Serverless::Api</code></td>
+              <td><span class="lang-en">API Gateway REST API + stages + deployments</span><span class="lang-es">API Gateway REST API + stages + deployments</span></td>
+            </tr>
+            <tr>
+              <td><code>AWS::Serverless::SimpleTable</code></td>
+              <td><span class="lang-en">DynamoDB table with basic config</span><span class="lang-es">DynamoDB table con configuración básica</span></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>
+          <span class="lang-en">Deploy Flow: <code>sam build</code> → <code>sam deploy</code></span>
+          <span class="lang-es">Flujo de Deploy: <code>sam build</code> → <code>sam deploy</code></span>
+        </h3>
+        <p>
+          <span class="lang-en">
+            <code>sam build</code> runs locally — it compiles code, resolves dependencies, and produces a CloudFormation-ready artifact.
+            <code>sam deploy</code> is a unified command that zips the artifact, uploads it to S3, creates a CloudFormation ChangeSet, and executes it.
+            This replaced the old two-step <code>sam package</code> + <code>sam deploy</code> flow.
+          </span>
+          <span class="lang-es">
+            <code>sam build</code> corre localmente — compila el código, resuelve dependencias y produce un artefacto listo para CloudFormation.
+            <code>sam deploy</code> es un comando unificado que zipea el artefacto, lo sube a S3, crea un CloudFormation ChangeSet y lo ejecuta.
+            Reemplazó el viejo flujo de dos pasos <code>sam package</code> + <code>sam deploy</code>.
+          </span>
+        </p>
+
+        <div class="vd">
+          <svg viewBox="0 0 760 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;">
+            <defs>
+              <marker id="ah-sam" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+                <polygon points="0 0, 8 3, 0 6" fill="#64748b"/>
+              </marker>
+            </defs>
+
+            <!-- Phase labels -->
+            <text x="100" y="18" text-anchor="middle" fill="#3b82f6" font-size="11" font-weight="700" font-family="monospace">sam build</text>
+            <text x="490" y="18" text-anchor="middle" fill="#22c55e" font-size="11" font-weight="700" font-family="monospace">sam deploy</text>
+
+            <!-- Boxes -->
+            <rect x="10" y="30" width="120" height="60" rx="6" fill="#1e293b" stroke="#3b82f6" stroke-width="1.5"/>
+            <text x="70" y="52" text-anchor="middle" fill="#93c5fd" font-size="10" font-weight="700" font-family="monospace">SAM Template</text>
+            <text x="70" y="66" text-anchor="middle" fill="#64748b" font-size="9" font-family="monospace">(YAML)</text>
+            <text x="70" y="82" text-anchor="middle" fill="#64748b" font-size="9" font-family="monospace">+ App Code</text>
+
+            <rect x="210" y="30" width="130" height="60" rx="6" fill="#1e293b" stroke="#6366f1" stroke-width="1.5"/>
+            <text x="275" y="52" text-anchor="middle" fill="#a5b4fc" font-size="10" font-weight="700" font-family="monospace">CloudFormation</text>
+            <text x="275" y="66" text-anchor="middle" fill="#a5b4fc" font-size="10" font-weight="700" font-family="monospace">Template</text>
+            <text x="275" y="82" text-anchor="middle" fill="#64748b" font-size="9" font-family="monospace">+ App Code</text>
+
+            <rect x="400" y="30" width="100" height="60" rx="6" fill="#1e293b" stroke="#22c55e" stroke-width="1.5"/>
+            <text x="450" y="55" text-anchor="middle" fill="#86efac" font-size="10" font-weight="700" font-family="monospace">S3 Bucket</text>
+            <text x="450" y="71" text-anchor="middle" fill="#64748b" font-size="9" font-family="monospace">(ZIP artifact)</text>
+
+            <rect x="560" y="30" width="110" height="60" rx="6" fill="#1e293b" stroke="#f59e0b" stroke-width="1.5"/>
+            <text x="615" y="52" text-anchor="middle" fill="#fcd34d" font-size="10" font-weight="700" font-family="monospace">CloudFormation</text>
+            <text x="615" y="68" text-anchor="middle" fill="#64748b" font-size="9" font-family="monospace">ChangeSet</text>
+
+            <rect x="450" y="130" width="280" height="55" rx="6" fill="#0f172a" stroke="#f59e0b" stroke-width="1" stroke-dasharray="5,3"/>
+            <text x="590" y="150" text-anchor="middle" fill="#fcd34d" font-size="10" font-weight="700" font-family="monospace">CloudFormation Stack</text>
+            <text x="530" y="170" text-anchor="middle" fill="#86efac" font-size="9" font-family="monospace">Lambda</text>
+            <text x="590" y="170" text-anchor="middle" fill="#93c5fd" font-size="9" font-family="monospace">API GW</text>
+            <text x="660" y="170" text-anchor="middle" fill="#c084fc" font-size="9" font-family="monospace">DynamoDB</text>
+
+            <!-- Arrows (after all boxes) -->
+            <line x1="131" y1="60" x2="208" y2="60" stroke="#64748b" stroke-width="1.5" marker-end="url(#ah-sam)"/>
+            <text x="170" y="52" text-anchor="middle" fill="#64748b" font-size="9" font-family="monospace">transform</text>
+
+            <line x1="341" y1="60" x2="398" y2="60" stroke="#64748b" stroke-width="1.5" marker-end="url(#ah-sam)"/>
+            <text x="370" y="52" text-anchor="middle" fill="#64748b" font-size="9" font-family="monospace">zip &amp; upload</text>
+
+            <line x1="501" y1="60" x2="558" y2="60" stroke="#64748b" stroke-width="1.5" marker-end="url(#ah-sam)"/>
+            <text x="530" y="52" text-anchor="middle" fill="#64748b" font-size="8" font-family="monospace">ChangeSet</text>
+
+            <line x1="615" y1="91" x2="615" y2="128" stroke="#f59e0b" stroke-width="1.5" marker-end="url(#ah-sam)"/>
+            <text x="625" y="115" fill="#64748b" font-size="9" font-family="monospace">deploy</text>
+          </svg>
+        </div>
+
+        <h3>
+          <span class="lang-en">SAM Accelerate — <code>sam sync</code></span>
+          <span class="lang-es">SAM Accelerate — <code>sam sync</code></span>
+        </h3>
+        <p>
+          <span class="lang-en">
+            The problem with <code>sam deploy</code>: every change — even a one-liner fix — triggers the full CloudFormation cycle (minutes).
+            SAM Accelerate bypasses CloudFormation entirely for code-only changes, pushing directly via the service API in seconds.
+            This is a <strong>development speed tool</strong>, not for production deployments.
+          </span>
+          <span class="lang-es">
+            El problema con <code>sam deploy</code>: cualquier cambio dispara el ciclo completo de CloudFormation (minutos).
+            SAM Accelerate bypasea CloudFormation para cambios de código, enviándolos directo por la API del servicio en segundos.
+            Es una <strong>herramienta de velocidad de desarrollo</strong>, no para producción.
+          </span>
+        </p>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th><span class="lang-en">Command</span><span class="lang-es">Comando</span></th>
+              <th><span class="lang-en">What it does</span><span class="lang-es">Qué hace</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>sam sync</code></td>
+              <td><span class="lang-en">Synchronize code and infrastructure (still uses CloudFormation)</span><span class="lang-es">Sincroniza código e infra (usa CloudFormation)</span></td>
+            </tr>
+            <tr>
+              <td><code>sam sync --code</code></td>
+              <td><span class="lang-en">Code changes only — <strong>bypasses CloudFormation</strong>, updates via service API (seconds)</span><span class="lang-es">Solo cambios de código — <strong>bypasea CloudFormation</strong>, actualiza vía API del servicio (segundos)</span></td>
+            </tr>
+            <tr>
+              <td><code>sam sync --code --resource AWS::Serverless::Function</code></td>
+              <td><span class="lang-en">Synchronize only all Lambda functions and their dependencies</span><span class="lang-es">Sincroniza solo todas las funciones Lambda y sus dependencias</span></td>
+            </tr>
+            <tr>
+              <td><code>sam sync --code --resource-id HelloWorldLambdaFunction</code></td>
+              <td><span class="lang-en">Synchronize only a specific resource by its ID</span><span class="lang-es">Sincroniza solo un recurso específico por su ID</span></td>
+            </tr>
+            <tr>
+              <td><code>sam sync --watch</code></td>
+              <td>
+                <span class="lang-en">Monitor for file changes and auto-sync. <strong>Smart:</strong> config changed → uses <code>sam sync</code> &nbsp;|&nbsp; code only → uses <code>sam sync --code</code></span>
+                <span class="lang-es">Monitorea cambios y sincroniza automáticamente. <strong>Inteligente:</strong> cambió config → <code>sam sync</code> &nbsp;|&nbsp; solo código → <code>sam sync --code</code></span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+      </div>
+      <!-- END CARD 1 -->
+
+      <!-- ═══════════════════ CARD 2: SAM POLICY TEMPLATES ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">2</span>
+          <h2>
+            <span class="lang-en">SAM Policy Templates</span>
+            <span class="lang-es">SAM Policy Templates</span>
+          </h2>
+        </div>
+
+        <p>
+          <span class="lang-en">
+            Instead of writing raw IAM roles and policies in CloudFormation, SAM provides a curated list
+            of pre-built permission templates you attach to Lambda functions by name. SAM transforms them
+            into proper IAM policies at deploy time. The naming is intentional — the name of the template
+            tells you exactly what permissions it grants.
+          </span>
+          <span class="lang-es">
+            En lugar de escribir roles y políticas IAM crudas en CloudFormation, SAM provee una lista
+            de templates de permisos pre-construidos que adjuntás a funciones Lambda por nombre. SAM los
+            transforma en políticas IAM correctas al deployar. El nombre del template te dice exactamente
+            qué permisos otorga.
+          </span>
+        </p>
+
+        <h3>
+          <span class="lang-en">Key Policy Templates (Exam-Relevant)</span>
+          <span class="lang-es">Policy Templates Clave (relevantes para el examen)</span>
+        </h3>
+        <p>
+          <span class="lang-en">There are many available templates, but these three appear on the exam:</span>
+          <span class="lang-es">Hay muchos templates disponibles, pero estos tres aparecen en el examen:</span>
+        </p>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th><span class="lang-en">Policy Template</span><span class="lang-es">Policy Template</span></th>
+              <th><span class="lang-en">What it grants</span><span class="lang-es">Qué otorga</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>S3ReadPolicy</code></td>
+              <td><span class="lang-en">Read-only access to objects in an S3 bucket</span><span class="lang-es">Acceso de solo lectura a objetos en un S3 bucket</span></td>
+            </tr>
+            <tr>
+              <td><code>SQSPollerPolicy</code></td>
+              <td><span class="lang-en">Permission to poll an SQS queue</span><span class="lang-es">Permiso para hacer polling de una cola SQS</span></td>
+            </tr>
+            <tr>
+              <td><code>DynamoDBCrudPolicy</code></td>
+              <td><span class="lang-en">Create, Read, Update, Delete on a DynamoDB table</span><span class="lang-es">Create, Read, Update, Delete sobre una tabla DynamoDB</span></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>
+          <span class="lang-en">Usage in Template</span>
+          <span class="lang-es">Uso en el Template</span>
+        </h3>
+        <p>
+          <span class="lang-en">You reference the template by name under <code>Policies</code> and pass the target resource as a parameter. SAM generates the full IAM policy automatically:</span>
+          <span class="lang-es">Referenciás el template por nombre bajo <code>Policies</code> y pasás el recurso objetivo como parámetro. SAM genera la política IAM completa automáticamente:</span>
+        </p>
+        <div class="code-block">MyFunction:
+  Type: 'AWS::Serverless::Function'
+  Properties:
+    CodeUri: ${codeuri}
+    Handler: hello.handler
+    Runtime: python2.7
+    Policies:
+      - SQSPollerPolicy:
+          QueueName: !GetAtt MyQueue.QueueName</div>
+      </div>
+      <!-- END CARD 2 -->
+
+      <!-- ═══════════════════ CARD 3: SAM + CODEDEPLOY ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">3</span>
+          <h2>
+            <span class="lang-en">SAM with CodeDeploy</span>
+            <span class="lang-es">SAM con CodeDeploy</span>
+          </h2>
+        </div>
+
+        <p>
+          <span class="lang-en">
+            SAM natively integrates with CodeDeploy to enable safe Lambda deployments using traffic shifting.
+            You don't configure CodeDeploy manually — SAM creates the service role and deployment group automatically.
+            The key enabler is <code>AutoPublishAlias</code>: SAM detects new code, publishes a new Lambda version,
+            and uses CodeDeploy to shift traffic from old to new gradually.
+          </span>
+          <span class="lang-es">
+            SAM integra nativamente con CodeDeploy para deployos seguros de Lambda usando traffic shifting.
+            No configurás CodeDeploy manualmente — SAM crea el service role y el deployment group automáticamente.
+            El habilitador clave es <code>AutoPublishAlias</code>: SAM detecta código nuevo, publica una nueva versión
+            de Lambda y usa CodeDeploy para cambiar el tráfico gradualmente.
+          </span>
+        </p>
+
+        <h3>
+          <span class="lang-en">Template Structure</span>
+          <span class="lang-es">Estructura del Template</span>
+        </h3>
+        <p>
+          <span class="lang-en">The full SAM CodeDeploy setup fits in a few lines under the function's <code>Properties</code>:</span>
+          <span class="lang-es">La configuración completa de SAM + CodeDeploy cabe en pocas líneas bajo <code>Properties</code> de la función:</span>
+        </p>
+        <div class="code-block">MyFunction:
+  Type: AWS::Serverless::Function
+  Properties:
+    AutoPublishAlias: live              # Creates version + updates alias on every deploy
+    DeploymentPreference:
+      Type: Canary10Percent10Minutes    # Traffic shifting strategy
+      Alarms:                           # CloudWatch alarms → auto rollback if triggered
+        - !Ref AliasErrorMetricAlarm
+      Hooks:                            # Optional Lambda validators
+        PreTraffic: !Ref PreTrafficFn
+        PostTraffic: !Ref PostTrafficFn</div>
+
+        <h3>
+          <span class="lang-en">DeploymentPreference Types</span>
+          <span class="lang-es">Tipos de DeploymentPreference</span>
+        </h3>
+        <p>
+          <span class="lang-en">These map directly to CodeDeploy Lambda deployment strategies:</span>
+          <span class="lang-es">Estos mapean directamente a las estrategias de deploy de Lambda en CodeDeploy:</span>
+        </p>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th><span class="lang-en">Type</span><span class="lang-es">Tipo</span></th>
+              <th><span class="lang-en">Behavior</span><span class="lang-es">Comportamiento</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>Canary10Percent10Minutes</code></td>
+              <td><span class="lang-en">10% traffic to new version for 10 min, then 100%</span><span class="lang-es">10% tráfico a nueva versión por 10 min, luego 100%</span></td>
+            </tr>
+            <tr>
+              <td><code>Linear10PercentEvery10Minutes</code></td>
+              <td><span class="lang-en">Adds 10% every 10 min until 100%</span><span class="lang-es">Suma 10% cada 10 min hasta llegar a 100%</span></td>
+            </tr>
+            <tr>
+              <td><code>AllAtOnce</code></td>
+              <td><span class="lang-en">Immediate 100% switch — no gradual shift</span><span class="lang-es">Cambio inmediato al 100% — sin gradualidad</span></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>
+          <span class="lang-en">Hooks &amp; Automatic Rollback</span>
+          <span class="lang-es">Hooks y Rollback Automático</span>
+        </h3>
+        <p>
+          <span class="lang-en">
+            Hooks are regular Lambda functions that run at two optional checkpoints during the deployment.
+            If either hook returns a failure, or if a CloudWatch alarm fires during the traffic shift,
+            CodeDeploy rolls back to the previous version automatically.
+          </span>
+          <span class="lang-es">
+            Los hooks son funciones Lambda normales que corren en dos puntos opcionales durante el deploy.
+            Si algún hook retorna falla, o si un alarm de CloudWatch se dispara durante el traffic shift,
+            CodeDeploy hace rollback a la versión anterior automáticamente.
+          </span>
+        </p>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th><span class="lang-en">Hook</span><span class="lang-es">Hook</span></th>
+              <th><span class="lang-en">When it runs</span><span class="lang-es">Cuándo corre</span></th>
+              <th><span class="lang-en">Purpose</span><span class="lang-es">Propósito</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>PreTraffic</code></td>
+              <td><span class="lang-en">Before any traffic shifts</span><span class="lang-es">Antes de cualquier cambio de tráfico</span></td>
+              <td><span class="lang-en">Validate new version is healthy</span><span class="lang-es">Validar que la nueva versión está sana</span></td>
+            </tr>
+            <tr>
+              <td><code>PostTraffic</code></td>
+              <td><span class="lang-en">After full shift completes</span><span class="lang-es">Después de que completa el shift</span></td>
+              <td><span class="lang-en">Run integration / smoke tests</span><span class="lang-es">Correr tests de integración / smoke</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <!-- END CARD 3 -->
+
+      <!-- ═══════════════════ CARD 4: SAM LOCAL CAPABILITIES ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">4</span>
+          <h2>
+            <span class="lang-en">SAM Local Capabilities</span>
+            <span class="lang-es">Capacidades Locales de SAM</span>
+          </h2>
+        </div>
+
+        <p>
+          <span class="lang-en">
+            SAM provides four CLI commands for local development and testing — letting you run and test
+            Lambda functions on your machine without deploying to AWS. This dramatically speeds up
+            the inner dev loop: write code, test locally, then deploy when ready.
+          </span>
+          <span class="lang-es">
+            SAM provee cuatro comandos CLI para desarrollo y testing local — permitiéndote correr
+            y probar funciones Lambda en tu máquina sin deployar a AWS. Esto acelera enormemente
+            el ciclo de desarrollo: escribís código, probás localmente, y deployás cuando está listo.
+          </span>
+        </p>
+
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th><span class="lang-en">Command</span><span class="lang-es">Comando</span></th>
+              <th><span class="lang-en">What it does</span><span class="lang-es">Qué hace</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>sam local start-lambda</code></td>
+              <td><span class="lang-en">Starts a persistent local Lambda endpoint — use for automated test suites</span><span class="lang-es">Inicia un endpoint Lambda local persistente — úsalo para suites de tests automáticos</span></td>
+            </tr>
+            <tr>
+              <td><code>sam local invoke</code></td>
+              <td><span class="lang-en">One-shot Lambda invocation with a payload, then quits. Use <code>--profile</code> if function calls real AWS services</span><span class="lang-es">Invocación one-shot con payload, luego termina. Usá <code>--profile</code> si la función llama servicios AWS reales</span></td>
+            </tr>
+            <tr>
+              <td><code>sam local start-api</code></td>
+              <td><span class="lang-en">Local HTTP server hosting all APIs + functions. <strong>Hot-reloads</strong> on code change automatically</span><span class="lang-es">Servidor HTTP local con todas las APIs + funciones. <strong>Hot-reload</strong> automático al cambiar código</span></td>
+            </tr>
+            <tr>
+              <td><code>sam local generate-event</code></td>
+              <td><span class="lang-en">Generates sample event payloads for any Lambda source (S3, SQS, SNS, Kinesis, DynamoDB…)</span><span class="lang-es">Genera payloads de eventos de muestra para cualquier fuente Lambda (S3, SQS, SNS, Kinesis, DynamoDB…)</span></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>
+          <span class="lang-en">Combining generate-event with invoke</span>
+          <span class="lang-es">Combinando generate-event con invoke</span>
+        </h3>
+        <p>
+          <span class="lang-en">You can pipe a generated event directly into <code>sam local invoke</code> — no need to write or store JSON payloads manually:</span>
+          <span class="lang-es">Podés pipear un evento generado directamente a <code>sam local invoke</code> — sin necesidad de escribir o guardar payloads JSON a mano:</span>
+        </p>
+        <div class="code-block">sam local generate-event s3 put --bucket my-bucket --key my-key \
+  | sam local invoke MyFunction</div>
+      </div>
+      <!-- END CARD 4 -->
+
+      <!-- ═══════════════════ CARD 5: MULTIPLE ENVIRONMENTS ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">5</span>
+          <h2>
+            <span class="lang-en">SAM — Multiple Environments</span>
+            <span class="lang-es">SAM — Múltiples Entornos</span>
+          </h2>
+        </div>
+
+        <p>
+          <span class="lang-en">
+            When you need to deploy the same SAM template to multiple environments (dev, staging, prod),
+            you create a <code>samconfig.toml</code> file alongside your template. It stores all deployment
+            parameters per environment in TOML format. The SAM CLI reads the correct block automatically
+            based on the <code>--config-env</code> flag you pass.
+          </span>
+          <span class="lang-es">
+            Cuando necesitás deployar el mismo template SAM a múltiples entornos (dev, staging, prod),
+            creás un archivo <code>samconfig.toml</code> junto a tu template. Almacena todos los parámetros
+            de deploy por entorno en formato TOML. El SAM CLI lee el bloque correcto automáticamente
+            según el flag <code>--config-env</code> que pasás.
+          </span>
+        </p>
+
+        <h3>
+          <span class="lang-en">samconfig.toml Structure</span>
+          <span class="lang-es">Estructura de samconfig.toml</span>
+        </h3>
+        <p>
+          <span class="lang-en">Each block follows the pattern <code>[environment.command.parameters]</code>. You can define as many environments as needed:</span>
+          <span class="lang-es">Cada bloque sigue el patrón <code>[entorno.comando.parameters]</code>. Podés definir tantos entornos como necesités:</span>
+        </p>
+        <div class="code-block">[dev.deploy.parameters]
+stack_name          = "my-app-dev"
+s3_bucket           = "my-bucket-dev"
+region              = "us-east-1"
+capabilities        = "CAPABILITY_IAM"
+parameter_overrides = "Environment=development"
+
+[prod.deploy.parameters]
+stack_name          = "my-app-prod"
+s3_bucket           = "my-bucket-prod"
+region              = "us-east-1"
+capabilities        = "CAPABILITY_IAM"
+parameter_overrides = "Environment=production"</div>
+
+        <h3>
+          <span class="lang-en">Usage</span>
+          <span class="lang-es">Uso</span>
+        </h3>
+        <p>
+          <span class="lang-en">Pass <code>--config-env</code> to select the environment block. Works for both <code>sam deploy</code> and <code>sam sync</code>:</span>
+          <span class="lang-es">Pasá <code>--config-env</code> para seleccionar el bloque de entorno. Funciona tanto para <code>sam deploy</code> como <code>sam sync</code>:</span>
+        </p>
+        <div class="code-block">sam deploy --config-env dev    # reads [dev.deploy.parameters]
+sam deploy --config-env prod   # reads [prod.deploy.parameters]
+sam sync   --config-env dev    # reads [dev.sync.parameters]</div>
+      </div>
+      <!-- END CARD 5 -->
+
+      <!-- ═══════════════════ EXAM TIPS ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge" style="font-size:1rem">★</span>
+          <h2>
+            <span class="lang-en">Consolidated Exam Tips</span>
+            <span class="lang-es">Tips de Examen Consolidados</span>
+          </h2>
+        </div>
+        <div class="tips-grid">
+          <div class="tip">
+            <span class="trigger"><span class="lang-en">SAM is built on top of</span><span class="lang-es">SAM está construido sobre</span></span>
+            <span class="arr">→</span>
+            <span class="answer">CloudFormation (transform, not a separate service)</span>
+          </div>
+          <div class="tip">
+            <span class="trigger"><span class="lang-en">Required header in every SAM template</span><span class="lang-es">Header obligatorio en todo template SAM</span></span>
+            <span class="arr">→</span>
+            <span class="answer"><code>Transform: 'AWS::Serverless-2016-10-31'</code></span>
+          </div>
+          <div class="tip">
+            <span class="trigger"><span class="lang-en">SAM shorthand for Lambda</span><span class="lang-es">Shorthand SAM para Lambda</span></span>
+            <span class="arr">→</span>
+            <span class="answer"><code>AWS::Serverless::Function</code></span>
+          </div>
+          <div class="tip">
+            <span class="trigger"><span class="lang-en">SAM shorthand for DynamoDB</span><span class="lang-es">Shorthand SAM para DynamoDB</span></span>
+            <span class="arr">→</span>
+            <span class="answer"><code>AWS::Serverless::SimpleTable</code></span>
+          </div>
+          <div class="tip">
+            <span class="trigger"><span class="lang-en">Replaced <code>sam package</code> + <code>sam deploy</code></span><span class="lang-es">Reemplazó <code>sam package</code> + <code>sam deploy</code></span></span>
+            <span class="arr">→</span>
+            <span class="answer"><code>sam deploy</code> (unified)</span>
+          </div>
+          <div class="tip">
+            <span class="trigger"><span class="lang-en">Fastest way to push code changes in dev</span><span class="lang-es">Forma más rápida de pushear cambios de código en dev</span></span>
+            <span class="arr">→</span>
+            <span class="answer"><code>sam sync --code</code> — bypasses CloudFormation entirely</span>
+          </div>
+          <div class="tip">
+            <span class="trigger"><span class="lang-en"><code>sam sync --watch</code> detects change type and</span><span class="lang-es"><code>sam sync --watch</code> detecta el tipo de cambio y</span></span>
+            <span class="arr">→</span>
+            <span class="answer"><span class="lang-en">config change → <code>sam sync</code> &nbsp;|&nbsp; code only → <code>sam sync --code</code></span><span class="lang-es">config → <code>sam sync</code> &nbsp;|&nbsp; solo código → <code>sam sync --code</code></span></span>
+          </div>
+          <div class="tip">
+            <span class="trigger"><span class="lang-en">SAM policy templates replace</span><span class="lang-es">Los SAM policy templates reemplazan</span></span>
+            <span class="arr">→</span>
+            <span class="answer"><span class="lang-en">raw IAM role definitions — one-liner per permission</span><span class="lang-es">definiciones crudas de IAM role — una línea por permiso</span></span>
+          </div>
+          <div class="tip">
+            <span class="trigger"><span class="lang-en">Lambda needs to poll SQS</span><span class="lang-es">Lambda necesita hacer polling de SQS</span></span>
+            <span class="arr">→</span>
+            <span class="answer"><code>SQSPollerPolicy</code></span>
+          </div>
+          <div class="tip">
+            <span class="trigger"><span class="lang-en">Lambda needs full DynamoDB access</span><span class="lang-es">Lambda necesita acceso completo a DynamoDB</span></span>
+            <span class="arr">→</span>
+            <span class="answer"><code>DynamoDBCrudPolicy</code> (Create, Read, Update, Delete)</span>
+          </div>
+          <div class="tip">
+            <span class="trigger"><span class="lang-en">Lambda needs read-only S3 access</span><span class="lang-es">Lambda necesita acceso de solo lectura a S3</span></span>
+            <span class="arr">→</span>
+            <span class="answer"><code>S3ReadPolicy</code></span>
+          </div>
+          <div class="tip">
+            <span class="trigger"><span class="lang-en">SAM property that enables CodeDeploy traffic shifting</span><span class="lang-es">Propiedad SAM que habilita el traffic shifting de CodeDeploy</span></span>
+            <span class="arr">→</span>
+            <span class="answer"><code>AutoPublishAlias</code></span>
+          </div>
+          <div class="tip">
+            <span class="trigger"><span class="lang-en">Canary vs Linear deployment</span><span class="lang-es">Deploy Canary vs Linear</span></span>
+            <span class="arr">→</span>
+            <span class="answer"><span class="lang-en">Canary: small % → wait → 100% &nbsp;|&nbsp; Linear: steady incremental climb</span><span class="lang-es">Canary: % pequeño → espera → 100% &nbsp;|&nbsp; Linear: sube gradualmente</span></span>
+          </div>
+          <div class="tip">
+            <span class="trigger"><span class="lang-en">CloudWatch alarm fires during canary deployment</span><span class="lang-es">Alarm de CloudWatch se dispara durante deploy canary</span></span>
+            <span class="arr">→</span>
+            <span class="answer"><span class="lang-en">CodeDeploy automatically rolls back</span><span class="lang-es">CodeDeploy hace rollback automáticamente</span></span>
+          </div>
+          <div class="tip">
+            <span class="trigger"><span class="lang-en">Hook that validates before traffic shifts</span><span class="lang-es">Hook que valida antes del traffic shift</span></span>
+            <span class="arr">→</span>
+            <span class="answer"><code>PreTraffic</code></span>
+          </div>
+          <div class="tip">
+            <span class="trigger"><span class="lang-en">Hook that runs integration tests after full shift</span><span class="lang-es">Hook que corre integration tests después del shift completo</span></span>
+            <span class="arr">→</span>
+            <span class="answer"><code>PostTraffic</code></span>
+          </div>
+          <div class="tip">
+            <span class="trigger"><span class="lang-en">Persistent local Lambda endpoint for automated tests</span><span class="lang-es">Endpoint Lambda local persistente para tests automáticos</span></span>
+            <span class="arr">→</span>
+            <span class="answer"><code>sam local start-lambda</code></span>
+          </div>
+          <div class="tip">
+            <span class="trigger"><span class="lang-en">One-shot local Lambda invocation with payload</span><span class="lang-es">Invocación local one-shot con payload</span></span>
+            <span class="arr">→</span>
+            <span class="answer"><code>sam local invoke</code> (add <code>--profile</code> if calling real AWS)</span>
+          </div>
+          <div class="tip">
+            <span class="trigger"><span class="lang-en">Local API Gateway with hot reload</span><span class="lang-es">API Gateway local con hot reload</span></span>
+            <span class="arr">→</span>
+            <span class="answer"><code>sam local start-api</code></span>
+          </div>
+          <div class="tip">
+            <span class="trigger"><span class="lang-en">Generate a sample S3/SQS/SNS/etc. event payload</span><span class="lang-es">Generar payload de evento S3/SQS/SNS/etc.</span></span>
+            <span class="arr">→</span>
+            <span class="answer"><code>sam local generate-event</code> — pipe into <code>sam local invoke</code></span>
+          </div>
+          <div class="tip">
+            <span class="trigger"><span class="lang-en">File that stores per-environment SAM parameters</span><span class="lang-es">Archivo que almacena parámetros SAM por entorno</span></span>
+            <span class="arr">→</span>
+            <span class="answer"><code>samconfig.toml</code></span>
+          </div>
+          <div class="tip">
+            <span class="trigger"><span class="lang-en">Flag to select environment in samconfig.toml</span><span class="lang-es">Flag para seleccionar entorno en samconfig.toml</span></span>
+            <span class="arr">→</span>
+            <span class="answer"><code>--config-env &lt;env&gt;</code> (e.g. <code>sam deploy --config-env prod</code>)</span>
+          </div>
+        </div>
+      </div>
+      <!-- END EXAM TIPS -->
+
+    </div><!-- end .container -->
+  </body>
+</html>
