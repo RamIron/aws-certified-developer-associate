@@ -1,0 +1,974 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Section 27 — Cognito</title>
+    <link rel="stylesheet" href="../shared/summary.css" />
+    <script src="../shared/summary.js"></script>
+  </head>
+  <body>
+    <script>
+      initHeader("Section 27 — Cognito: User Pools, Identity Pools &amp; Cognito Sync");
+    </script>
+
+    <div class="container">
+
+      <!-- ═══════════════════ CARD 1: COGNITO OVERVIEW ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">1</span>
+          <h2>
+            <span class="lang-en">Amazon Cognito — Overview</span>
+            <span class="lang-es">Amazon Cognito — Visión General</span>
+          </h2>
+        </div>
+
+        <p>
+          <span class="lang-en">
+            Amazon Cognito gives identity to the users of your web and mobile
+            applications. These users are <strong>external</strong> — your
+            customers, not your AWS admins. They sit outside your AWS account,
+            and Cognito is the service that manages who they are and what they
+            can access. Think of it as the bridge between "random people on
+            the internet" and "authenticated users with controlled access."
+          </span>
+          <span class="lang-es">
+            Amazon Cognito le da identidad a los usuarios de tus aplicaciones
+            web y móviles. Son usuarios <strong>externos</strong> — tus
+            clientes, no tus admins de AWS. Están fuera de tu cuenta AWS, y
+            Cognito gestiona quiénes son y a qué pueden acceder. Es el puente
+            entre "gente random de internet" y "usuarios autenticados con
+            acceso controlado."
+          </span>
+        </p>
+
+        <h3>
+          <span class="lang-en">Cognito vs IAM</span>
+          <span class="lang-es">Cognito vs IAM</span>
+        </h3>
+        <p>
+          <span class="lang-en">IAM manages AWS staff; Cognito manages your app's customers.</span>
+          <span class="lang-es">IAM gestiona el staff de AWS; Cognito gestiona los clientes de tu app.</span>
+        </p>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th><span class="lang-en">Service</span><span class="lang-es">Servicio</span></th>
+              <th><span class="lang-en">Users</span><span class="lang-es">Usuarios</span></th>
+              <th><span class="lang-en">Scale</span><span class="lang-es">Escala</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>IAM</strong></td>
+              <td><span class="lang-en">AWS staff / devs / admins — inside AWS</span><span class="lang-es">Staff AWS / devs / admins — dentro de AWS</span></td>
+              <td><span class="lang-en">Dozens</span><span class="lang-es">Decenas</span></td>
+            </tr>
+            <tr>
+              <td><strong>Cognito</strong></td>
+              <td><span class="lang-en">App customers — outside AWS</span><span class="lang-es">Clientes de la app — fuera de AWS</span></td>
+              <td><span class="lang-en">Millions</span><span class="lang-es">Millones</span></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>
+          <span class="lang-en">Exam Tip</span>
+          <span class="lang-es">Tip del Examen</span>
+        </h3>
+        <div class="tips-grid">
+          <div class="tip">
+            <span class="trigger">
+              <span class="lang-en">Hundreds/millions of users · mobile users · SAML/social auth · web/mobile app</span>
+              <span class="lang-es">Cientos/millones de usuarios · usuarios móviles · auth SAML/social · app web/móvil</span>
+            </span>
+            <span class="arr">→</span>
+            <span class="answer">Cognito</span>
+          </div>
+        </div>
+      </div>
+      <!-- END CARD 1 -->
+
+      <!-- ═══════════════════ CARD 2: COGNITO USER POOLS ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">2</span>
+          <h2>
+            <span class="lang-en">Cognito User Pools (CUP)</span>
+            <span class="lang-es">Cognito User Pools (CUP)</span>
+          </h2>
+        </div>
+
+        <p>
+          <span class="lang-en">
+            A Cognito User Pool is a <strong>serverless user database + authentication system</strong>
+            for your app. AWS handles sign-up, sign-in, password reset, MFA,
+            and email/phone verification out of the box. On successful login,
+            CUP returns a <strong>JWT (JSON Web Token)</strong> — not AWS
+            credentials. That distinction is an exam favourite.
+          </span>
+          <span class="lang-es">
+            Un Cognito User Pool es una <strong>base de datos de usuarios serverless + sistema de autenticación</strong>
+            para tu app. AWS gestiona sign-up, sign-in, reset de contraseña,
+            MFA y verificación de email/teléfono out of the box. Tras el login,
+            CUP retorna un <strong>JWT (JSON Web Token)</strong> — no
+            credenciales AWS. Esa distinción es favorita del examen.
+          </span>
+        </p>
+
+        <h3>
+          <span class="lang-en">Key Features</span>
+          <span class="lang-es">Características Clave</span>
+        </h3>
+        <p>
+          <span class="lang-en">What CUP provides out of the box:</span>
+          <span class="lang-es">Lo que CUP provee out of the box:</span>
+        </p>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th><span class="lang-en">Feature</span><span class="lang-es">Feature</span></th>
+              <th><span class="lang-en">Details</span><span class="lang-es">Detalle</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="lang-en">Login</span><span class="lang-es">Login</span></td>
+              <td><span class="lang-en">Username/email + password</span><span class="lang-es">Username/email + contraseña</span></td>
+            </tr>
+            <tr>
+              <td>MFA</td>
+              <td><span class="lang-en">Built-in multi-factor authentication</span><span class="lang-es">MFA integrado</span></td>
+            </tr>
+            <tr>
+              <td><span class="lang-en">Verification</span><span class="lang-es">Verificación</span></td>
+              <td><span class="lang-en">Email and phone number verification</span><span class="lang-es">Verificación de email y teléfono</span></td>
+            </tr>
+            <tr>
+              <td><span class="lang-en">Compromised credentials</span><span class="lang-es">Credenciales comprometidas</span></td>
+              <td><span class="lang-en">AWS scans the web and blocks users with leaked passwords</span><span class="lang-es">AWS escanea la web y bloquea usuarios con contraseñas filtradas</span></td>
+            </tr>
+            <tr>
+              <td><span class="lang-en">Federated Identities</span><span class="lang-es">Identidades Federadas</span></td>
+              <td><span class="lang-en">Google, Facebook, Amazon, SAML, OpenID Connect</span><span class="lang-es">Google, Facebook, Amazon, SAML, OpenID Connect</span></td>
+            </tr>
+            <tr>
+              <td><span class="lang-en">Return value</span><span class="lang-es">Valor retornado</span></td>
+              <td><strong>JWT</strong> <span class="lang-en">(NOT AWS credentials)</span><span class="lang-es">(NO credenciales AWS)</span></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>
+          <span class="lang-en">Integration with API Gateway</span>
+          <span class="lang-es">Integración con API Gateway</span>
+        </h3>
+        <p>
+          <span class="lang-en">
+            CUP integrates natively with API Gateway. The client logs in, gets a JWT,
+            then sends it with every API request. API Gateway calls Cognito to validate
+            the token before forwarding to the backend — no custom validation code needed.
+          </span>
+          <span class="lang-es">
+            CUP se integra nativamente con API Gateway. El cliente se loguea, obtiene
+            un JWT y lo envía con cada request. API Gateway llama a Cognito para validar
+            el token antes de hacer forward al backend — sin código de validación custom.
+          </span>
+        </p>
+
+        <div class="vd">
+          <svg viewBox="0 0 760 245" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block">
+            <defs>
+              <marker id="ah27a" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+                <polygon points="0 0,8 3,0 6" fill="#94a3b8"/>
+              </marker>
+            </defs>
+
+            <!-- Client (left, same row as Cognito) -->
+            <rect x="15" y="25" width="130" height="65" rx="8" fill="#1e293b" stroke="#38bdf8" stroke-width="1.5"/>
+            <text x="80" y="52" text-anchor="middle" fill="#e2e8f0" font-size="13" font-family="Inter,sans-serif">Client</text>
+            <text x="80" y="69" text-anchor="middle" fill="#94a3b8" font-size="12" font-family="Inter,sans-serif">(Web/Mobile)</text>
+
+            <!-- Cognito (right column, top — same row as Client) -->
+            <rect x="325" y="25" width="155" height="65" rx="8" fill="#1e293b" stroke="#38bdf8" stroke-width="1.5"/>
+            <text x="402" y="52" text-anchor="middle" fill="#e2e8f0" font-size="13" font-family="Inter,sans-serif">Cognito</text>
+            <text x="402" y="69" text-anchor="middle" fill="#94a3b8" font-size="12" font-family="Inter,sans-serif">User Pool</text>
+
+            <!-- API GW (right column, bottom — vertically aligned with Cognito) -->
+            <rect x="325" y="148" width="145" height="65" rx="8" fill="#1e293b" stroke="#a78bfa" stroke-width="1.5"/>
+            <text x="397" y="185" text-anchor="middle" fill="#e2e8f0" font-size="13" font-family="Inter,sans-serif">API Gateway</text>
+
+            <!-- Backend (right of API GW — compact) -->
+            <rect x="545" y="148" width="200" height="65" rx="8" fill="#1e293b" stroke="#4ade80" stroke-width="1.5"/>
+            <text x="645" y="172" text-anchor="middle" fill="#e2e8f0" font-size="13" font-family="Inter,sans-serif">Backend</text>
+            <text x="645" y="189" text-anchor="middle" fill="#94a3b8" font-size="12" font-family="Inter,sans-serif">(Lambda / EC2)</text>
+
+            <!-- Arrow 1: Client → Cognito (horizontal top lane) -->
+            <line x1="145" y1="48" x2="325" y2="48" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#ah27a)"/>
+            <text x="235" y="41" text-anchor="middle" fill="#fbbf24" font-size="12" font-family="Inter,sans-serif">1. Authenticate</text>
+
+            <!-- Arrow 2: Cognito → Client (horizontal bottom lane) -->
+            <line x1="325" y1="67" x2="145" y2="67" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#ah27a)"/>
+            <text x="235" y="83" text-anchor="middle" fill="#fbbf24" font-size="12" font-family="Inter,sans-serif">2. JWT token</text>
+
+            <!-- Arrow 3: Client → API GW (L-shape 90°: down then right) -->
+            <path d="M 80,90 L 80,181 L 325,181" fill="none" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#ah27a)"/>
+            <text x="202" y="200" text-anchor="middle" fill="#fbbf24" font-size="12" font-family="Inter,sans-serif">3. REST API + Pass Token</text>
+
+            <!-- Arrow 4a: API GW → Cognito (vertical up) -->
+            <line x1="385" y1="148" x2="385" y2="90" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#ah27a)"/>
+
+            <!-- Arrow 4b: Cognito → API GW (vertical down, offset) -->
+            <line x1="400" y1="90" x2="400" y2="148" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#ah27a)"/>
+
+            <!-- Label 4: centered in the gap between boxes, right next to arrows -->
+            <text x="415" y="122" text-anchor="start" fill="#fbbf24" font-size="12" font-family="Inter,sans-serif">4. Evaluate token</text>
+
+            <!-- Arrow 5: API GW → Backend -->
+            <line x1="470" y1="181" x2="545" y2="181" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#ah27a)"/>
+            <text x="507" y="172" text-anchor="middle" fill="#fbbf24" font-size="12" font-family="Inter,sans-serif">5. forward</text>
+          </svg>
+        </div>
+
+        <h3>
+          <span class="lang-en">Integration with Application Load Balancer</span>
+          <span class="lang-es">Integración con Application Load Balancer</span>
+        </h3>
+        <p>
+          <span class="lang-en">
+            The ALB can handle the full authentication flow before traffic reaches
+            your backend. It redirects the user to the CUP login page, receives the
+            token, then forwards only authenticated requests to your target —
+            EC2, ECS, or Lambda.
+          </span>
+          <span class="lang-es">
+            El ALB puede manejar el flujo completo de autenticación antes de que el
+            tráfico llegue al backend. Redirige al usuario a la página de login de CUP,
+            recibe el token, y luego hace forward solo de los requests autenticados
+            al target — EC2, ECS o Lambda.
+          </span>
+        </p>
+
+        <div class="vd">
+          <svg viewBox="0 0 760 170" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block">
+            <defs>
+              <marker id="ah27b" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+                <polygon points="0 0,8 3,0 6" fill="#94a3b8"/>
+              </marker>
+            </defs>
+
+            <!-- Boxes -->
+            <!-- Client -->
+            <rect x="15" y="85" width="120" height="50" rx="8" fill="#1e293b" stroke="#38bdf8" stroke-width="1.5"/>
+            <text x="75" y="106" text-anchor="middle" fill="#e2e8f0" font-size="13" font-family="Inter,sans-serif">Client</text>
+            <text x="75" y="122" text-anchor="middle" fill="#94a3b8" font-size="12" font-family="Inter,sans-serif">(Web/Mobile)</text>
+
+            <!-- ALB -->
+            <rect x="210" y="85" width="120" height="50" rx="8" fill="#1e293b" stroke="#a78bfa" stroke-width="1.5"/>
+            <text x="270" y="106" text-anchor="middle" fill="#e2e8f0" font-size="13" font-family="Inter,sans-serif">ALB</text>
+            <text x="270" y="122" text-anchor="middle" fill="#94a3b8" font-size="12" font-family="Inter,sans-serif">(auth listener)</text>
+
+            <!-- CUP -->
+            <rect x="390" y="15" width="155" height="50" rx="8" fill="#1e293b" stroke="#38bdf8" stroke-width="1.5"/>
+            <text x="467" y="36" text-anchor="middle" fill="#e2e8f0" font-size="13" font-family="Inter,sans-serif">Cognito</text>
+            <text x="467" y="52" text-anchor="middle" fill="#94a3b8" font-size="12" font-family="Inter,sans-serif">User Pool</text>
+
+            <!-- Target -->
+            <rect x="570" y="85" width="170" height="50" rx="8" fill="#1e293b" stroke="#4ade80" stroke-width="1.5"/>
+            <text x="655" y="106" text-anchor="middle" fill="#e2e8f0" font-size="13" font-family="Inter,sans-serif">Target Group</text>
+            <text x="655" y="122" text-anchor="middle" fill="#4ade80" font-size="12" font-family="Inter,sans-serif">EC2, ECS or Lambda</text>
+
+            <!-- Arrow 1: Client → ALB -->
+            <path d="M 135,110 L 210,110" fill="none" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#ah27b)"/>
+            <text x="172" y="103" text-anchor="middle" fill="#fbbf24" font-size="12" font-family="Inter,sans-serif">1. request</text>
+
+            <!-- Arrow 2: ALB → CUP (redirect) — bent: up then right -->
+            <path d="M 270,85 L 270,40 L 390,40" fill="none" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#ah27b)"/>
+            <text x="320" y="30" text-anchor="middle" fill="#fbbf24" font-size="12" font-family="Inter,sans-serif">2. redirect to login</text>
+
+            <!-- Arrow 3: CUP → ALB (token) — bent: left then down -->
+            <path d="M 390,55 L 310,55 L 310,85" fill="none" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#ah27b)"/>
+            <text x="337" y="72" text-anchor="middle" fill="#fbbf24" font-size="12" font-family="Inter,sans-serif">3. token</text>
+
+            <!-- Arrow 4: ALB → Target -->
+            <path d="M 330,110 L 570,110" fill="none" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#ah27b)"/>
+            <text x="450" y="103" text-anchor="middle" fill="#fbbf24" font-size="12" font-family="Inter,sans-serif">4. forward authenticated request</text>
+          </svg>
+        </div>
+
+      </div>
+      <!-- END CARD 2 -->
+
+      <!-- ═══════════════════ CARD 3: CUP ADVANCED (27.3 + 27.4) ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">3</span>
+          <h2>
+            <span class="lang-en">CUP — Lambda Triggers, Managed Login &amp; Adaptive Auth</span>
+            <span class="lang-es">CUP — Lambda Triggers, Managed Login y Adaptive Auth</span>
+          </h2>
+        </div>
+
+        <p>
+          <span class="lang-en">
+            Cognito User Pools can be extended through Lambda triggers — hooks invoked
+            synchronously at specific points in the user lifecycle. This allows custom
+            validation, token modification, user migration, and message customization
+            without replacing CUP with a custom auth system.
+          </span>
+          <span class="lang-es">
+            Los Cognito User Pools se pueden extender a través de Lambda triggers —
+            hooks invocados sincrónicamente en puntos específicos del ciclo de vida
+            del usuario. Permiten validación custom, modificación de tokens, migración
+            de usuarios y personalización de mensajes sin reemplazar CUP.
+          </span>
+        </p>
+
+        <h3>
+          <span class="lang-en">Lambda Triggers Reference</span>
+          <span class="lang-es">Referencia de Lambda Triggers</span>
+        </h3>
+        <p>
+          <span class="lang-en">The full table of CUP trigger points and their purpose:</span>
+          <span class="lang-es">La tabla completa de puntos de trigger de CUP y su propósito:</span>
+        </p>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th><span class="lang-en">User Pool Flow</span><span class="lang-es">Flujo</span></th>
+              <th><span class="lang-en">Operation</span><span class="lang-es">Operación</span></th>
+              <th><span class="lang-en">Description</span><span class="lang-es">Descripción</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td rowspan="3"><strong><span class="lang-en">Authentication Events</span><span class="lang-es">Eventos de Autenticación</span></strong></td>
+              <td><span class="lang-en">Pre Authentication</span><span class="lang-es">Pre Authentication</span></td>
+              <td><span class="lang-en">Custom validation to accept or deny the sign-in request</span><span class="lang-es">Validación custom para aceptar o rechazar el sign-in</span></td>
+            </tr>
+            <tr>
+              <td><span class="lang-en">Post Authentication</span><span class="lang-es">Post Authentication</span></td>
+              <td><span class="lang-en">Event logging for custom analytics</span><span class="lang-es">Logging de eventos para analytics custom</span></td>
+            </tr>
+            <tr>
+              <td><span class="lang-en">Pre Token Generation</span><span class="lang-es">Pre Token Generation</span></td>
+              <td><span class="lang-en">Augment or suppress token claims</span><span class="lang-es">Aumentar o suprimir claims del token</span></td>
+            </tr>
+            <tr>
+              <td rowspan="3"><strong>Sign-Up</strong></td>
+              <td><span class="lang-en">Pre Sign-up</span><span class="lang-es">Pre Sign-up</span></td>
+              <td><span class="lang-en">Custom validation to accept or deny the sign-up request</span><span class="lang-es">Validación custom para aceptar o rechazar el sign-up</span></td>
+            </tr>
+            <tr>
+              <td><span class="lang-en">Post Confirmation</span><span class="lang-es">Post Confirmation</span></td>
+              <td><span class="lang-en">Custom welcome messages or event logging for custom analytics</span><span class="lang-es">Mensajes de bienvenida o logging tras confirmación</span></td>
+            </tr>
+            <tr>
+              <td><span class="lang-en">Migrate User</span><span class="lang-es">Migrate User</span></td>
+              <td><span class="lang-en">Migrate a user from an existing user directory to user pools</span><span class="lang-es">Migrar usuarios de un directorio existente al pool</span></td>
+            </tr>
+            <tr>
+              <td><strong>Messages</strong></td>
+              <td><span class="lang-en">Custom Message</span><span class="lang-es">Custom Message</span></td>
+              <td><span class="lang-en">Advanced customization and localization of messages</span><span class="lang-es">Personalización avanzada y localización de mensajes</span></td>
+            </tr>
+            <tr>
+              <td><strong><span class="lang-en">Token Creation</span><span class="lang-es">Creación de Token</span></strong></td>
+              <td><span class="lang-en">Pre Token Generation</span><span class="lang-es">Pre Token Generation</span></td>
+              <td><span class="lang-en">Add or remove attributes in Id tokens</span><span class="lang-es">Agregar o quitar atributos en Id tokens</span></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>
+          <span class="lang-en">Managed Login &amp; Email Limits</span>
+          <span class="lang-es">Managed Login y Límites de Email</span>
+        </h3>
+        <p>
+          <span class="lang-en">
+            Managed Login (formerly <strong>Hosted UI</strong>) is an AWS-hosted sign-in page — no
+            frontend auth code needed. Supports custom domains and logo/CSS branding.
+            CUP's built-in mailer is limited to <strong>50 emails/day</strong>; production workloads
+            must use <strong>Amazon SES</strong>.
+          </span>
+          <span class="lang-es">
+            Managed Login (antes <strong>Hosted UI</strong>) es una página de login hosteada por AWS —
+            sin código de auth frontend. Soporta dominios custom y branding (logo/CSS).
+            El mailer nativo de CUP está limitado a <strong>50 emails/día</strong>; producción
+            requiere <strong>Amazon SES</strong>.
+          </span>
+        </p>
+        <div class="callout warning">
+          <span class="lang-en"><strong>Custom domain + Managed Login:</strong> the ACM certificate must always be created in <strong>us-east-1</strong>, regardless of which region your User Pool is in.</span>
+          <span class="lang-es"><strong>Dominio custom + Managed Login:</strong> el certificado ACM siempre debe crearse en <strong>us-east-1</strong>, sin importar en qué región esté el User Pool.</span>
+        </div>
+
+        <h3>
+          <span class="lang-en">Adaptive Authentication</span>
+          <span class="lang-es">Autenticación Adaptativa</span>
+        </h3>
+        <p>
+          <span class="lang-en">
+            CUP assigns a risk score (low / medium / high) to each sign-in based on device,
+            location, and IP. High-risk logins trigger MFA challenges automatically. All
+            activity is logged to CloudWatch Logs.
+          </span>
+          <span class="lang-es">
+            CUP asigna un risk score (bajo / medio / alto) a cada sign-in según dispositivo,
+            ubicación e IP. Logins de alto riesgo activan MFA automáticamente. Toda la
+            actividad se loguea en CloudWatch Logs.
+          </span>
+        </p>
+        <div class="callout info">
+          <span class="lang-en"><strong>Pre Token Generation</strong> is the trigger to customize JWT claims. <strong>Post Confirmation</strong> is the trigger for welcome emails after sign-up.</span>
+          <span class="lang-es"><strong>Pre Token Generation</strong> es el trigger para customizar claims del JWT. <strong>Post Confirmation</strong> es el trigger para emails de bienvenida tras el sign-up.</span>
+        </div>
+
+        <h3>
+          <span class="lang-en">JWT Token Structure</span>
+          <span class="lang-es">Estructura del JWT Token</span>
+        </h3>
+        <p>
+          <span class="lang-en">
+            A Cognito JWT has three Base64-encoded sections separated by dots:
+            <code>header.payload.signature</code>. Always verify the signature before
+            trusting any payload claims. The key field for identifying a user in
+            your own database is <code>sub</code> — a permanent UUID that never changes,
+            unlike <code>username</code>.
+          </span>
+          <span class="lang-es">
+            Un JWT de Cognito tiene tres secciones codificadas en Base64 separadas por puntos:
+            <code>header.payload.signature</code>. Siempre verificar la firma antes de
+            confiar en los claims del payload. El campo clave para identificar a un usuario
+            en tu propia base de datos es <code>sub</code> — un UUID permanente que nunca cambia,
+            a diferencia de <code>username</code>.
+          </span>
+        </p>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th><span class="lang-en">JWT Field</span><span class="lang-es">Campo JWT</span></th>
+              <th><span class="lang-en">Meaning</span><span class="lang-es">Significado</span></th>
+              <th><span class="lang-en">Exam Note</span><span class="lang-es">Nota Examen</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>sub</code></td>
+              <td><span class="lang-en">Permanent UUID for the user</span><span class="lang-es">UUID permanente del usuario</span></td>
+              <td><strong><span class="lang-en">Use this as DB key — never changes</span><span class="lang-es">Usar como clave en DB — nunca cambia</span></strong></td>
+            </tr>
+            <tr>
+              <td><code>username</code></td>
+              <td><span class="lang-en">Cognito username</span><span class="lang-es">Username de Cognito</span></td>
+              <td><span class="lang-en">Can change — do not use as DB key</span><span class="lang-es">Puede cambiar — no usar como clave en DB</span></td>
+            </tr>
+            <tr>
+              <td><code>cognito:groups</code></td>
+              <td><span class="lang-en">Groups the user belongs to</span><span class="lang-es">Grupos a los que pertenece el usuario</span></td>
+              <td><span class="lang-en">Useful for role-based access</span><span class="lang-es">Útil para acceso basado en roles</span></td>
+            </tr>
+            <tr>
+              <td><code>exp</code></td>
+              <td><span class="lang-en">Token expiry (Unix timestamp)</span><span class="lang-es">Expiración del token (Unix timestamp)</span></td>
+              <td><span class="lang-en">Check before trusting the token</span><span class="lang-es">Verificar antes de confiar en el token</span></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="callout danger">
+          <span class="lang-en"><strong>Always use <code>sub</code> as your database key</strong> — not <code>username</code>. The <code>sub</code> UUID is permanent; <code>username</code> can be changed by the user.</span>
+          <span class="lang-es"><strong>Siempre usar <code>sub</code> como clave en la base de datos</strong> — no <code>username</code>. El UUID <code>sub</code> es permanente; <code>username</code> puede ser cambiado por el usuario.</span>
+        </div>
+      </div>
+      <!-- END CARD 3 -->
+
+      <!-- ═══════════════════ CARD 4: ALB USER AUTHENTICATION (27.5) ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">4</span>
+          <h2>
+            <span class="lang-en">ALB — User Authentication</span>
+            <span class="lang-es">ALB — Autenticación de Usuarios</span>
+          </h2>
+        </div>
+
+        <p>
+          <span class="lang-en">
+            The Application Load Balancer can authenticate users before requests reach
+            your backend, offloading auth logic from your application entirely. Two
+            options are supported: Cognito User Pools or any OIDC-compliant identity
+            provider. The listener <strong>must be HTTPS</strong> for either option.
+          </span>
+          <span class="lang-es">
+            El ALB puede autenticar usuarios antes de que los requests lleguen al backend,
+            delegando la lógica de auth fuera de la aplicación. Se soportan dos opciones:
+            Cognito User Pools o cualquier proveedor OIDC. El listener <strong>debe ser HTTPS</strong>
+            en ambos casos.
+          </span>
+        </p>
+
+        <h3>
+          <span class="lang-en">Authentication Options</span>
+          <span class="lang-es">Opciones de Autenticación</span>
+        </h3>
+        <p>
+          <span class="lang-en">The ALB rule action determines which option is used:</span>
+          <span class="lang-es">La acción de la regla del ALB determina qué opción se usa:</span>
+        </p>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th><span class="lang-en">Rule Action</span><span class="lang-es">Acción</span></th>
+              <th><span class="lang-en">Use Case</span><span class="lang-es">Caso de Uso</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>authenticate-cognito</code></td>
+              <td><span class="lang-en">Social login (Google, Facebook, Amazon) or corporate (SAML, LDAP, AD) via Cognito User Pool</span><span class="lang-es">Login social (Google, Facebook, Amazon) o corporativo (SAML, LDAP, AD) vía Cognito User Pool</span></td>
+            </tr>
+            <tr>
+              <td><code>authenticate-oidc</code></td>
+              <td><span class="lang-en">Any OIDC-compliant IdP directly — no Cognito needed, more configuration required</span><span class="lang-es">Cualquier IdP OIDC directamente — sin Cognito, requiere más configuración</span></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>
+          <span class="lang-en">Unauthenticated Request Behavior</span>
+          <span class="lang-es">Comportamiento ante Requests No Autenticados</span>
+        </h3>
+        <p>
+          <span class="lang-en">When a user is not yet authenticated, three behaviors can be configured per rule:</span>
+          <span class="lang-es">Cuando un usuario no está autenticado, se pueden configurar tres comportamientos por regla:</span>
+        </p>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th><span class="lang-en">Behavior</span><span class="lang-es">Comportamiento</span></th>
+              <th><span class="lang-en">Result</span><span class="lang-es">Resultado</span></th>
+              <th><span class="lang-en">Use for</span><span class="lang-es">Usar para</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>authenticate</strong> <span class="lang-en">(default)</span><span class="lang-es">(default)</span></td>
+              <td><span class="lang-en">Redirect to login</span><span class="lang-es">Redirigir al login</span></td>
+              <td><span class="lang-en">Protected routes</span><span class="lang-es">Rutas protegidas</span></td>
+            </tr>
+            <tr>
+              <td><strong>deny</strong></td>
+              <td>401 / 403</td>
+              <td><span class="lang-en">Strict block</span><span class="lang-es">Bloqueo estricto</span></td>
+            </tr>
+            <tr>
+              <td><strong>allow</strong></td>
+              <td><span class="lang-en">Pass through without auth</span><span class="lang-es">Pasar sin autenticar</span></td>
+              <td><span class="lang-en">Public pages like <code>/login</code></span><span class="lang-es">Páginas públicas como <code>/login</code></span></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="callout info">
+          <span class="lang-en">Set <strong>allow</strong> for your login/signup routes so unauthenticated users can reach them. All other routes use the default <strong>authenticate</strong>.</span>
+          <span class="lang-es">Configurar <strong>allow</strong> en las rutas de login/signup para que los usuarios no autenticados puedan acceder. El resto de rutas usan <strong>authenticate</strong> por defecto.</span>
+        </div>
+
+        <h3>
+          <span class="lang-en">OIDC Flow (3 endpoints)</span>
+          <span class="lang-es">Flujo OIDC (3 endpoints)</span>
+        </h3>
+        <p>
+          <span class="lang-en">
+            When using <code>authenticate-oidc</code>, the ALB communicates with three
+            distinct endpoints on the identity provider. You must configure all three,
+            plus a client ID, client secret, and redirect URLs.
+          </span>
+          <span class="lang-es">
+            Al usar <code>authenticate-oidc</code>, el ALB se comunica con tres endpoints
+            distintos del proveedor de identidad. Hay que configurar los tres, más un
+            client ID, client secret y redirect URLs.
+          </span>
+        </p>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th><span class="lang-en">Endpoint</span><span class="lang-es">Endpoint</span></th>
+              <th><span class="lang-en">Purpose</span><span class="lang-es">Propósito</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="lang-en">Authorization</span><span class="lang-es">Authorization</span></td>
+              <td><span class="lang-en">Redirects user to login → returns authorization code</span><span class="lang-es">Redirige al usuario al login → retorna authorization code</span></td>
+            </tr>
+            <tr>
+              <td><span class="lang-en">Token</span><span class="lang-es">Token</span></td>
+              <td><span class="lang-en">Exchanges auth code → returns ID token + access token</span><span class="lang-es">Intercambia auth code → retorna ID token + access token</span></td>
+            </tr>
+            <tr>
+              <td><span class="lang-en">User Info</span><span class="lang-es">User Info</span></td>
+              <td><span class="lang-en">Exchanges access token → returns user claims</span><span class="lang-es">Intercambia access token → retorna user claims</span></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>
+          <span class="lang-en">OIDC Authentication Flow</span>
+          <span class="lang-es">Flujo de Autenticación OIDC</span>
+        </h3>
+        <p>
+          <span class="lang-en">
+            When using <code>authenticate-oidc</code>, the ALB orchestrates three
+            separate round-trips to the identity provider — one per endpoint —
+            before forwarding the enriched request to the backend.
+          </span>
+          <span class="lang-es">
+            Al usar <code>authenticate-oidc</code>, el ALB orquesta tres round-trips
+            separados al proveedor de identidad — uno por endpoint — antes de
+            hacer forward del request enriquecido al backend.
+          </span>
+        </p>
+        <div class="vd">
+          <svg viewBox="0 0 760 330" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block">
+            <defs>
+              <marker id="ah27c" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+                <polygon points="0 0,8 3,0 6" fill="#94a3b8"/>
+              </marker>
+            </defs>
+
+            <!-- Identity Provider label (above the 3 endpoint boxes) -->
+            <text x="537" y="10" text-anchor="middle" fill="#94a3b8" font-size="12" font-weight="bold" font-family="Inter,sans-serif">Identity Provider</text>
+
+            <!-- User -->
+            <rect x="10" y="15" width="110" height="55" rx="8" fill="#1e293b" stroke="#38bdf8" stroke-width="1.5"/>
+            <text x="65" y="38" text-anchor="middle" fill="#e2e8f0" font-size="13" font-family="Inter,sans-serif">User</text>
+            <text x="65" y="55" text-anchor="middle" fill="#94a3b8" font-size="12" font-family="Inter,sans-serif">(Browser)</text>
+
+            <!-- ALB (taller — extends down for step 8 exit) -->
+            <rect x="200" y="30" width="120" height="200" rx="8" fill="#1e293b" stroke="#a78bfa" stroke-width="1.5"/>
+            <text x="260" y="135" text-anchor="middle" fill="#e2e8f0" font-size="13" font-family="Inter,sans-serif">ALB</text>
+
+            <!-- Auth Endpoint -->
+            <rect x="435" y="15" width="205" height="55" rx="8" fill="#1e293b" stroke="#38bdf8" stroke-width="1.5"/>
+            <text x="537" y="38" text-anchor="middle" fill="#e2e8f0" font-size="13" font-family="Inter,sans-serif">Authorization</text>
+            <text x="537" y="55" text-anchor="middle" fill="#94a3b8" font-size="12" font-family="Inter,sans-serif">Endpoint</text>
+
+            <!-- Token Endpoint -->
+            <rect x="435" y="90" width="205" height="55" rx="8" fill="#1e293b" stroke="#38bdf8" stroke-width="1.5"/>
+            <text x="537" y="113" text-anchor="middle" fill="#e2e8f0" font-size="13" font-family="Inter,sans-serif">Token</text>
+            <text x="537" y="130" text-anchor="middle" fill="#94a3b8" font-size="12" font-family="Inter,sans-serif">Endpoint</text>
+
+            <!-- User Info Endpoint -->
+            <rect x="435" y="165" width="205" height="55" rx="8" fill="#1e293b" stroke="#38bdf8" stroke-width="1.5"/>
+            <text x="537" y="188" text-anchor="middle" fill="#e2e8f0" font-size="13" font-family="Inter,sans-serif">User Info</text>
+            <text x="537" y="205" text-anchor="middle" fill="#94a3b8" font-size="12" font-family="Inter,sans-serif">Endpoint</text>
+
+            <!-- Backend — below ALB, clearly separated from IdP boxes -->
+            <rect x="175" y="268" width="170" height="52" rx="8" fill="#1e293b" stroke="#4ade80" stroke-width="1.5"/>
+            <text x="260" y="291" text-anchor="middle" fill="#e2e8f0" font-size="13" font-family="Inter,sans-serif">Backend</text>
+            <text x="260" y="308" text-anchor="middle" fill="#94a3b8" font-size="12" font-family="Inter,sans-serif">(ECS / EC2 / Lambda)</text>
+
+            <!-- 1. User → ALB -->
+            <line x1="120" y1="42" x2="200" y2="62" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#ah27c)"/>
+            <text x="155" y="43" text-anchor="middle" fill="#fbbf24" font-size="12" font-family="Inter,sans-serif">1. request</text>
+
+            <!-- 2. ALB → Auth endpoint -->
+            <line x1="320" y1="62" x2="435" y2="42" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#ah27c)"/>
+            <text x="375" y="42" text-anchor="middle" fill="#fbbf24" font-size="12" font-family="Inter,sans-serif">2. redirect to login</text>
+
+            <!-- 3. Auth → ALB (auth code) -->
+            <line x1="435" y1="57" x2="320" y2="77" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#ah27c)"/>
+            <text x="375" y="78" text-anchor="middle" fill="#fbbf24" font-size="12" font-family="Inter,sans-serif">3. auth code</text>
+
+            <!-- 4. ALB → Token endpoint -->
+            <line x1="320" y1="112" x2="435" y2="112" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#ah27c)"/>
+            <text x="375" y="104" text-anchor="middle" fill="#fbbf24" font-size="12" font-family="Inter,sans-serif">4. send code</text>
+
+            <!-- 5. Token → ALB (tokens) -->
+            <line x1="435" y1="128" x2="320" y2="128" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#ah27c)"/>
+            <text x="375" y="143" text-anchor="middle" fill="#fbbf24" font-size="12" font-family="Inter,sans-serif">5. ID + access token</text>
+
+            <!-- 6. ALB → UserInfo endpoint -->
+            <line x1="320" y1="178" x2="435" y2="185" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#ah27c)"/>
+            <text x="373" y="170" text-anchor="middle" fill="#fbbf24" font-size="12" font-family="Inter,sans-serif">6. access token</text>
+
+            <!-- 7. UserInfo → ALB (claims) -->
+            <line x1="435" y1="202" x2="320" y2="208" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#ah27c)"/>
+            <text x="373" y="222" text-anchor="middle" fill="#fbbf24" font-size="12" font-family="Inter,sans-serif">7. user claims</text>
+
+            <!-- 8. ALB → Backend (straight down, no overlap) -->
+            <line x1="260" y1="230" x2="260" y2="268" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#ah27c)"/>
+            <text x="302" y="254" text-anchor="start" fill="#fbbf24" font-size="12" font-family="Inter,sans-serif">8. request + user claims</text>
+          </svg>
+        </div>
+      </div>
+      <!-- END CARD 4 -->
+
+      <!-- ═══════════════════ CARD 5: COGNITO IDENTITY POOLS ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">5</span>
+          <h2>
+            <span class="lang-en">Cognito Identity Pools (Federated Identities)</span>
+            <span class="lang-es">Cognito Identity Pools (Identidades Federadas)</span>
+          </h2>
+        </div>
+
+        <p>
+          <span class="lang-en">
+            Cognito Identity Pools solve a different problem than User Pools: your external users
+            need to call AWS services directly (S3, DynamoDB) but you can't create IAM users
+            for millions of customers. Identity Pools act as a <strong>credential vending machine</strong>
+            — a user proves their identity via any supported login provider, and in return gets
+            temporary AWS credentials they can use with the SDK. No JWT is returned here;
+            real AWS credentials come out via STS.
+          </span>
+          <span class="lang-es">
+            Cognito Identity Pools resuelven un problema distinto al de User Pools: los usuarios
+            externos necesitan llamar a servicios AWS directamente (S3, DynamoDB) pero no puedes
+            crear usuarios IAM para millones de clientes. Los Identity Pools actúan como una
+            <strong>máquina expendedora de credenciales</strong> — el usuario prueba su identidad
+            con cualquier proveedor soportado y recibe credenciales AWS temporales via STS.
+          </span>
+        </p>
+
+        <h3>
+          <span class="lang-en">CUP vs Identity Pools — Core Distinction</span>
+          <span class="lang-es">CUP vs Identity Pools — Distinción Central</span>
+        </h3>
+        <p>
+          <span class="lang-en">The exam frequently tests whether you can tell these two apart. The table below captures the key differences.</span>
+          <span class="lang-es">El examen frecuentemente pone a prueba si puedes distinguirlos. La tabla captura las diferencias clave.</span>
+        </p>
+        <table class="data-table">
+          <thead><tr><th></th><th>Cognito User Pools</th><th>Cognito Identity Pools</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Returns</strong></td><td>JWT (ID / access / refresh token)</td><td>Temporary AWS credentials</td></tr>
+            <tr><td><strong>Purpose</strong></td><td>App authentication</td><td>Direct AWS resource access</td></tr>
+            <tr><td><strong>Stores users?</strong></td><td>Yes — serverless user DB</td><td>No — only credential broker</td></tr>
+            <tr><td><strong>Integrates with</strong></td><td>API Gateway, ALB</td><td>S3, DynamoDB, any AWS service</td></tr>
+            <tr><td><strong>Guest access</strong></td><td>No</td><td>Yes — unauthenticated role supported</td></tr>
+          </tbody>
+        </table>
+
+        <h3>
+          <span class="lang-en">Supported Identity Providers</span>
+          <span class="lang-es">Proveedores de Identidad Soportados</span>
+        </h3>
+        <p>
+          <span class="lang-en">Identity Pools accept tokens from any of the following — you configure which ones to trust.</span>
+          <span class="lang-es">Los Identity Pools aceptan tokens de cualquiera de los siguientes — configuras cuáles confiar.</span>
+        </p>
+        <table class="data-table">
+          <thead><tr><th>Provider Type</th><th>Examples</th></tr></thead>
+          <tbody>
+            <tr><td>Social IdPs</td><td>Google, Facebook, Amazon, Apple</td></tr>
+            <tr><td>Cognito User Pool</td><td>Most common combo — CUP issues JWT → exchanged for credentials</td></tr>
+            <tr><td>OIDC / SAML</td><td>Any compliant enterprise IdP</td></tr>
+            <tr><td>Developer Authenticated</td><td>Your own custom login server</td></tr>
+            <tr><td>Guest (unauthenticated)</td><td>No login required — restricted IAM role assigned</td></tr>
+          </tbody>
+        </table>
+
+        <h3>
+          <span class="lang-en">Credential Flow</span>
+          <span class="lang-es">Flujo de Credenciales</span>
+        </h3>
+        <p>
+          <span class="lang-en">Every credential request follows the same pattern regardless of which identity provider is used.</span>
+          <span class="lang-es">Cada solicitud de credenciales sigue el mismo patrón independientemente del proveedor de identidad.</span>
+        </p>
+        <div class="vd">
+          <svg viewBox="0 0 720 290" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block">
+            <defs>
+              <marker id="ah27ip" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+                <polygon points="0 0,8 3,0 6" fill="#94a3b8"/>
+              </marker>
+            </defs>
+
+            <!-- STS (top center) -->
+            <rect x="455" y="15" width="130" height="55" rx="8" fill="#1e293b" stroke="#fb923c" stroke-width="1.5"/>
+            <text x="520" y="47" text-anchor="middle" fill="#e2e8f0" font-size="13" font-family="Inter,sans-serif">STS</text>
+
+            <!-- IdP (middle-left) -->
+            <rect x="20" y="105" width="110" height="60" rx="8" fill="#1e293b" stroke="#f472b6" stroke-width="1.5"/>
+            <text x="75" y="131" text-anchor="middle" fill="#e2e8f0" font-size="13" font-family="Inter,sans-serif">Identity</text>
+            <text x="75" y="148" text-anchor="middle" fill="#94a3b8" font-size="12" font-family="Inter,sans-serif">Provider</text>
+
+            <!-- App/User (middle) -->
+            <rect x="200" y="105" width="130" height="60" rx="8" fill="#1e293b" stroke="#38bdf8" stroke-width="1.5"/>
+            <text x="265" y="131" text-anchor="middle" fill="#e2e8f0" font-size="13" font-family="Inter,sans-serif">App / User</text>
+            <text x="265" y="148" text-anchor="middle" fill="#94a3b8" font-size="12" font-family="Inter,sans-serif">(web / mobile)</text>
+
+            <!-- Cognito Identity Pool (middle-right) -->
+            <rect x="420" y="105" width="160" height="60" rx="8" fill="#1e293b" stroke="#a78bfa" stroke-width="1.5"/>
+            <text x="500" y="131" text-anchor="middle" fill="#e2e8f0" font-size="13" font-family="Inter,sans-serif">Cognito</text>
+            <text x="500" y="148" text-anchor="middle" fill="#94a3b8" font-size="12" font-family="Inter,sans-serif">Identity Pool</text>
+
+            <!-- AWS Service (bottom) -->
+            <rect x="205" y="215" width="200" height="55" rx="8" fill="#1e293b" stroke="#4ade80" stroke-width="1.5"/>
+            <text x="305" y="240" text-anchor="middle" fill="#e2e8f0" font-size="13" font-family="Inter,sans-serif">AWS Service</text>
+            <text x="305" y="258" text-anchor="middle" fill="#94a3b8" font-size="12" font-family="Inter,sans-serif">(S3, DynamoDB…)</text>
+
+            <!-- 1. App → IdP (left, upper row) -->
+            <line x1="200" y1="122" x2="130" y2="122" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#ah27ip)"/>
+            <text x="165" y="116" text-anchor="middle" fill="#fbbf24" font-size="12" font-family="Inter,sans-serif">1. login</text>
+
+            <!-- 2. IdP → App (right, lower row) -->
+            <line x1="130" y1="148" x2="200" y2="148" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#ah27ip)"/>
+            <text x="165" y="162" text-anchor="middle" fill="#fbbf24" font-size="12" font-family="Inter,sans-serif">2. token</text>
+
+            <!-- 3. App → IP (right, upper row) -->
+            <line x1="330" y1="122" x2="420" y2="122" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#ah27ip)"/>
+            <text x="375" y="116" text-anchor="middle" fill="#fbbf24" font-size="12" font-family="Inter,sans-serif">3. send token</text>
+
+            <!-- 5. IP → App (left, lower row) -->
+            <line x1="420" y1="148" x2="330" y2="148" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#ah27ip)"/>
+            <text x="375" y="162" text-anchor="middle" fill="#fbbf24" font-size="12" font-family="Inter,sans-serif">5. temp credentials</text>
+
+            <!-- 4. IP → STS (up) -->
+            <line x1="500" y1="105" x2="500" y2="70" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#ah27ip)"/>
+            <text x="510" y="92" text-anchor="start" fill="#fbbf24" font-size="12" font-family="Inter,sans-serif">4. AssumeRole</text>
+
+            <!-- 6. App → AWS (down) -->
+            <line x1="265" y1="165" x2="265" y2="215" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#ah27ip)"/>
+            <text x="274" y="192" text-anchor="start" fill="#fbbf24" font-size="12" font-family="Inter,sans-serif">6. direct AWS call</text>
+
+            <!-- Note about step 5 flow -->
+            <text x="360" y="285" text-anchor="middle" fill="#64748b" font-size="11" font-family="Inter,sans-serif" font-style="italic">(STS returns credentials to Identity Pool, which forwards them to the app as step 5)</text>
+          </svg>
+        </div>
+
+        <h3>
+          <span class="lang-en">IAM Role Mapping &amp; Fine-Grained Access</span>
+          <span class="lang-es">Mapeo de Roles IAM y Acceso Granular</span>
+        </h3>
+        <p>
+          <span class="lang-en">
+            You define which IAM role each user gets. There is always a default role for authenticated users
+            and one for guests. You can add rules to route specific users to specific roles, and use
+            policy variables to give each user access only to their own data.
+          </span>
+          <span class="lang-es">
+            Defines qué rol IAM recibe cada usuario. Siempre hay un rol por defecto para autenticados
+            y otro para guests. Puedes agregar reglas para dirigir usuarios específicos a roles específicos,
+            y usar variables de política para que cada usuario solo acceda a sus propios datos.
+          </span>
+        </p>
+        <table class="data-table">
+          <thead><tr><th>Mechanism</th><th>How it works</th><th>Use case</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>Default authenticated role</td>
+              <td>All logged-in users get this role</td>
+              <td>General app access</td>
+            </tr>
+            <tr>
+              <td>Default guest role</td>
+              <td>Unauthenticated users get this role</td>
+              <td>Read-only public access</td>
+            </tr>
+            <tr>
+              <td>Role rules</td>
+              <td>Map user ID / claims → specific role</td>
+              <td>Premium vs free tier users</td>
+            </tr>
+            <tr>
+              <td>Attributes for access control <small>(console label)</small></td>
+              <td>Maps token attributes into IAM policy variables</td>
+              <td>Enables per-user S3 / DynamoDB fine-grained access</td>
+            </tr>
+            <tr>
+              <td>Policy variable (S3)</td>
+              <td><code>${cognito-identity.amazonaws.com:sub}</code> as S3 prefix</td>
+              <td>Per-user folder in S3</td>
+            </tr>
+            <tr>
+              <td>Policy variable (DynamoDB)</td>
+              <td><code>dynamodb:LeadingKeys</code> = user sub</td>
+              <td>Row-level security</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="callout warning">
+          <strong>STS internals:</strong> Identity Pool calls STS with <code>AssumeRoleForWebIdentity</code>.
+          The IAM roles must have a trust policy allowing <code>cognito-identity.amazonaws.com</code>.
+        </div>
+      </div>
+      <!-- END CARD 5 -->
+
+      <!-- ═══════════════════ EXAM TIPS (global) ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">💡</span>
+          <h2>
+            <span class="lang-en">Exam Tips</span>
+            <span class="lang-es">Tips del Examen</span>
+          </h2>
+        </div>
+        <p>
+          <span class="lang-en">Consolidated tips for the full section — grows as lessons are completed.</span>
+          <span class="lang-es">Tips consolidados para toda la sección — crece a medida que se completan las lecciones.</span>
+        </p>
+        <div class="tips-grid">
+          <div class="tip">
+            <span class="trigger"><span class="lang-en">Users outside AWS needing app login</span><span class="lang-es">Usuarios fuera de AWS que necesitan login en la app</span></span>
+            <span class="arr">→</span>
+            <span class="answer">Cognito User Pool</span>
+          </div>
+          <div class="tip">
+            <span class="trigger"><span class="lang-en">Users needing temporary AWS credentials</span><span class="lang-es">Usuarios que necesitan credenciales AWS temporales</span></span>
+            <span class="arr">→</span>
+            <span class="answer">Cognito Identity Pool</span>
+          </div>
+          <div class="tip">
+            <span class="trigger"><span class="lang-en">CUP returns</span><span class="lang-es">CUP retorna</span></span>
+            <span class="arr">→</span>
+            <span class="answer">JWT (not AWS creds)</span>
+          </div>
+          <div class="tip">
+            <span class="trigger"><span class="lang-en">CUP + API GW / ALB</span><span class="lang-es">CUP + API GW / ALB</span></span>
+            <span class="arr">→</span>
+            <span class="answer"><span class="lang-en">Native integration — no custom auth code needed</span><span class="lang-es">Integración nativa — sin código de auth custom</span></span>
+          </div>
+          <div class="tip">
+            <span class="trigger"><span class="lang-en">ALB auth listener requirement</span><span class="lang-es">Requisito del listener ALB para auth</span></span>
+            <span class="arr">→</span>
+            <span class="answer">HTTPS</span>
+          </div>
+          <div class="tip">
+            <span class="trigger"><span class="lang-en">ALB unauthenticated behavior for public pages (e.g. /login)</span><span class="lang-es">Comportamiento para páginas públicas en ALB</span></span>
+            <span class="arr">→</span>
+            <span class="answer">allow</span>
+          </div>
+          <div class="tip">
+            <span class="trigger"><span class="lang-en">OIDC flow endpoints (in order)</span><span class="lang-es">Endpoints del flujo OIDC (en orden)</span></span>
+            <span class="arr">→</span>
+            <span class="answer">Authorization → Token → User Info</span>
+          </div>
+          <div class="tip">
+            <span class="trigger"><span class="lang-en">Identity Pool STS API call</span><span class="lang-es">Llamada STS del Identity Pool</span></span>
+            <span class="arr">→</span>
+            <span class="answer">AssumeRoleForWebIdentity</span>
+          </div>
+          <div class="tip">
+            <span class="trigger"><span class="lang-en">Per-user S3 folder / DynamoDB row security</span><span class="lang-es">Carpeta S3 por usuario / seguridad por fila en DynamoDB</span></span>
+            <span class="arr">→</span>
+            <span class="answer"><span class="lang-en">IAM policy variable: <code>${cognito-identity.amazonaws.com:sub}</code></span><span class="lang-es">Variable de política IAM: <code>${cognito-identity.amazonaws.com:sub}</code></span></span>
+          </div>
+          <div class="tip">
+            <span class="trigger"><span class="lang-en">Guest / unauthenticated AWS access</span><span class="lang-es">Acceso AWS como guest / no autenticado</span></span>
+            <span class="arr">→</span>
+            <span class="answer">Cognito Identity Pool — guest role</span>
+          </div>
+        </div>
+      </div>
+      <!-- END EXAM TIPS -->
+
+
+    </div>
+    <!-- end .container -->
+  </body>
+</html>

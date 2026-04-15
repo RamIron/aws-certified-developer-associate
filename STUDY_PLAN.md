@@ -3,10 +3,10 @@
 ## Overall Progress
 
 ```
-[███████████████████░] 26/33 sections | 411/483 lessons (85.1%)
-Total XP: 12,675
+[████████████████████░] 27/33 sections | 420/483 lessons (87.0%)
+Total XP: 13,075
 
-Videos: 382 | Quizzes: 23/29 | ⏱ 26h 19min done · 5h 39min left
+Videos: 390/446 | Quizzes: 24/29 | ⏱ 28h 1min done · 3h 57min left
 ```
 
 > **Note:** The exact number of lessons per section will be filled in as the course progresses.
@@ -503,15 +503,15 @@ Videos: 382 | Quizzes: 23/29 | ⏱ 26h 19min done · 5h 39min left
 
 ## Section 27: Cognito: Cognito User Pools, Cognito Identity Pools & Cognito Sync
 
-- [ ] 27.1 - Cognito Overview
-- [ ] 27.2 - Cognito User Pools
-- [ ] 27.3 - Cognito User Pools Hands On
-- [ ] 27.4 - Cognito User Pools - Others
-- [ ] 27.5 - Application Load Balancer - User Authentication
-- [ ] 27.6 - Cognito Identity Pools
-- [ ] 27.7 - Cognito Identity Pools Hands On
-- [ ] 27.8 - Cognito User Pools vs Cognito Identity Pools
-- [ ] Cognito Quiz (Quiz 24)
+- [x] 27.1 - Cognito Overview
+- [x] 27.2 - Cognito User Pools
+- [x] 27.3 - Cognito User Pools Hands On
+- [x] 27.4 - Cognito User Pools - Others ⚠️ REVIEW
+- [x] 27.5 - Application Load Balancer - User Authentication
+- [x] 27.6 - Cognito Identity Pools (PERFECT 100%)
+- [x] 27.7 - Cognito Identity Pools Hands On (PERFECT 100%)
+- [x] 27.8 - Cognito User Pools vs Cognito Identity Pools (skipped - comparison already covered in 27.1 & 27.6)
+- [x] Cognito Quiz (Quiz 24) — Completed ✅
 
 ## Section 28: Other Serverless: Step Functions & AppSync
 

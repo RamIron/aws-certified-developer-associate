@@ -4,15 +4,23 @@
 
 | Metric | Value |
 |--------|-------|
-| Total XP | 12675 |
-| Lessons completed | 195 |
-| Perfect quizzes (100%) | 160 |
-| Lessons to review | 15 |
+| Total XP | 13075 |
+| Lessons completed | 202 |
+| Perfect quizzes (100%) | 166 |
+| Lessons to review | 16 |
 
 ## Session History
 
 | Date | Section | Lesson | XP | Result |
 |------|---------|--------|----|--------|
+| 2026-04-15 | 27 - Cognito | Cognito Quiz (Quiz 24) - Udemy | — | Completed ✅ |
+| 2026-04-15 | 27 - Cognito | 27.7 - Cognito Identity Pools Hands On | +50 | PERFECT 100% |
+| 2026-04-15 | 27 - Cognito | 27.6 - Cognito Identity Pools | +75 | PERFECT 100% |
+| 2026-04-14 | 27 - Cognito | 27.5 - ALB User Authentication | +75 | PERFECT 100% |
+| 2026-04-14 | 27 - Cognito | 27.4 - Cognito User Pools Others | +50 | REVIEW 67% |
+| 2026-04-14 | 27 - Cognito | 27.3 - Cognito User Pools Hands On | +50 | PERFECT 100% |
+| 2026-04-14 | 27 - Cognito | 27.2 - Cognito User Pools | +50 | PERFECT 100% |
+| 2026-04-14 | 27 - Cognito | 27.1 - Cognito Overview | +50 | PERFECT 100% |
 | 2026-04-14 | 26 - CDK | CDK Quiz (Quiz 23) - Udemy | — | Completed |
 | 2026-04-14 | 26 - CDK | 26.5 - CDK Unit Testing | +75 | PERFECT 100% |
 | 2026-04-14 | 26 - CDK | 26.4 - CDK Commands & Bootstrapping | +50 | PERFECT 100% |

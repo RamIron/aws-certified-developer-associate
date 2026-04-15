@@ -44,10 +44,25 @@ Run an interactive quiz after finishing the explanation.
 ### Step 6: Update progress
 Update `progress/quiz-results.md` and `STUDY_PLAN.md`.
 
+### Step 6b: Update section HTML
+After every lesson (not just at the end of a section), add or update the relevant card(s) in `SECTION-{N}-SUMMARY.html` inside the section's transcripts folder. If the file doesn't exist yet, create it from scratch using the shared CSS/JS (`../shared/summary.css`, `../shared/summary.js`). This keeps the HTML in sync with each lesson while the content is fresh.
+
 ### Step 7: Next lesson
 Indicate the next lesson and wait for the user.
 
-### Step 8: Section summary (when a section is fully completed)
+### Step 8: Section completed — update README.md and STUDY_PLAN.md
+When a section is fully completed, update **both** files with:
+1. **Videos count** for the completed section in the README.md table (Videos column)
+2. **Time**: add the section duration to the running total. Formula:
+   - New done = previous done + section duration
+   - New remaining = previous remaining − section duration
+   - Update BOTH the README.md progress line AND the section table's Completed/Remaining rows AND STUDY_PLAN.md stats line
+3. **Lesson count**: lessons = previous + videos + quizzes in that section
+4. **Quizzes count**: increment if a Udemy quiz was done
+5. Mark section as ✅ in the README table
+6. Update current section name in README and CLAUDE.md
+
+### Step 9: Section summary (when a section is fully completed)
 Create a `SECTION-{N}-SUMMARY.md` file inside the section's transcripts folder.
 It should aggregate all lesson notes from that section into a single reference file:
 - List all lessons (completed, skipped)
@@ -99,6 +114,9 @@ Every card must follow this pattern — no exceptions:
 4. **Diagrams (SVG)** — must have an explanatory paragraph before them. If the diagram shows a multi-step flow, add numbered step labels on the arrows. If it combines two independent concepts, add a clarifying note.
 5. **"What is this?"** rule — if a term, feature, or mechanism is introduced (e.g. stage variables, route keys, policy cache), explain what it IS before explaining how it works.
 
+### SVG font size minimum
+- All SVG `<text>` elements must use **font-size 12 minimum** (box labels: 13, secondary labels: 12). Never use 9, 10, or 11.
+
 ### Weak Points section
 - Add a `<!-- WEAK POINTS -->` tricky questions card at the **bottom** of the HTML (after Exam Tips, last card).
 - Populate it with tricky Udemy quiz questions as the user encounters them.
@@ -120,6 +138,6 @@ Every card must follow this pattern — no exceptions:
 
 ## Current State
 
-- **Current section:** Section 27
-- **Total XP:** 12,675
-- **Lessons completed:** 411
+- **Current section:** Section 28
+- **Total XP:** 13,075
+- **Lessons completed:** 420
