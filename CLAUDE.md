@@ -138,6 +138,6 @@ Every card must follow this pattern — no exceptions:
 
 ## Current State
 
-- **Current section:** Section 28
-- **Total XP:** 13,075
-- **Lessons completed:** 420
+- **Current section:** Section 29
+- **Total XP:** 13,700
+- **Lessons completed:** 433

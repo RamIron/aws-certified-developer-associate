@@ -4,15 +4,22 @@
 
 | Metric | Value |
 |--------|-------|
-| Total XP | 13075 |
-| Lessons completed | 202 |
-| Perfect quizzes (100%) | 166 |
+| Total XP | 13700 |
+| Lessons completed | 210 |
+| Perfect quizzes (100%) | 173 |
 | Lessons to review | 16 |
 
 ## Session History
 
 | Date | Section | Lesson | XP | Result |
 |------|---------|--------|----|--------|
+| 2026-04-15 | 28 - Step Functions & AppSync | 28.11 - AWS Amplify | +100 | PERFECT 100% |
+| 2026-04-15 | 28 - Step Functions & AppSync | 28.9 - AppSync Overview | +100 | PERFECT 100% |
+| 2026-04-15 | 28 - Step Functions & AppSync | 28.8 - Step Functions Standard vs Express | +100 | PERFECT 100% |
+| 2026-04-15 | 28 - Step Functions & AppSync | 28.7 - Step Functions Activity Tasks | +75 | PERFECT 100% |
+| 2026-04-15 | 28 - Step Functions & AppSync | 28.6 - Step Functions Wait For Task Token | +75 | PERFECT 100% |
+| 2026-04-15 | 28 - Step Functions & AppSync | 28.4 - Step Functions Error Handling | +100 | PERFECT 100% |
+| 2026-04-15 | 28 - Step Functions & AppSync | 28.1 - Step Functions Overview | +75 | PERFECT 100% |
 | 2026-04-15 | 27 - Cognito | Cognito Quiz (Quiz 24) - Udemy | — | Completed ✅ |
 | 2026-04-15 | 27 - Cognito | 27.7 - Cognito Identity Pools Hands On | +50 | PERFECT 100% |
 | 2026-04-15 | 27 - Cognito | 27.6 - Cognito Identity Pools | +75 | PERFECT 100% |

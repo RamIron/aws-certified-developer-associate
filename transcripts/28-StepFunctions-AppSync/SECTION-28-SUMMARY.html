@@ -1,0 +1,3607 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Section 28 — Step Functions &amp; AppSync</title>
+    <link rel="stylesheet" href="../shared/summary.css" />
+    <script src="../shared/summary.js"></script>
+  </head>
+  <body>
+    <script>
+      initHeader("Section 28 — Other Serverless: Step Functions &amp; AppSync");
+    </script>
+
+    <div class="container">
+      <!-- ═══════════════════ CARD 1: STEP FUNCTIONS OVERVIEW ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">1</span>
+          <h2>
+            <span class="lang-en">AWS Step Functions — Overview</span>
+            <span class="lang-es">AWS Step Functions — Visión General</span>
+          </h2>
+        </div>
+
+        <p>
+          <span class="lang-en">
+            Step Functions lets you model any multi-step process as a
+            <strong>state machine</strong>
+            — a graph of states connected by transitions and conditions, defined
+            in JSON and visualized automatically in the console. It is an
+            orchestrator: it doesn't do compute itself, it tells other services
+            (Lambda, ECS, DynamoDB…) when to run, waits for them, handles
+            failures, and tracks every execution step-by-step.
+          </span>
+          <span class="lang-es">
+            Step Functions permite modelar cualquier proceso multi-paso como una
+            <strong>máquina de estados</strong> — un grafo de estados conectados
+            por transiciones y condiciones, definido en JSON y visualizado
+            automáticamente. Es un orquestador: no hace cómputo por sí mismo, le
+            dice a otros servicios cuándo correr, espera por ellos, maneja
+            fallas y registra cada ejecución paso a paso.
+          </span>
+        </p>
+
+        <h3>
+          <span class="lang-en">Key Facts</span>
+          <span class="lang-es">Datos Clave</span>
+        </h3>
+        <p>
+          <span class="lang-en">The core properties to know for the exam.</span>
+          <span class="lang-es"
+            >Las propiedades principales para el examen.</span
+          >
+        </p>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Property</th>
+              <th>Detail</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Unit</td>
+              <td>One state machine per workflow</td>
+            </tr>
+            <tr>
+              <td>Definition</td>
+              <td>JSON (Amazon States Language)</td>
+            </tr>
+            <tr>
+              <td>Visualization</td>
+              <td>Automatic — console shows live execution graph</td>
+            </tr>
+            <tr>
+              <td>History</td>
+              <td>Full execution history available per run</td>
+            </tr>
+            <tr>
+              <td>Use cases</td>
+              <td>
+                Order fulfillment, data pipelines, web app flows, any multi-step
+                workflow
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>
+          <span class="lang-en">How to Start a Workflow</span>
+          <span class="lang-es">Cómo Iniciar un Workflow</span>
+        </h3>
+        <p>
+          <span class="lang-en"
+            >A state machine execution can be triggered from any of these
+            sources.</span
+          >
+          <span class="lang-es"
+            >Una ejecución puede ser disparada desde cualquiera de estas
+            fuentes.</span
+          >
+        </p>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Trigger</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>SDK API call (programmatic)</td>
+            </tr>
+            <tr>
+              <td>API Gateway</td>
+            </tr>
+            <tr>
+              <td>CloudWatch Events / EventBridge</td>
+            </tr>
+            <tr>
+              <td>AWS Console (manual)</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>
+          <span class="lang-en">Task State — The Core Building Block</span>
+          <span class="lang-es">Task State — El Bloque Fundamental</span>
+        </h3>
+        <p>
+          <span class="lang-en">
+            Every step that does real work is a Task state. There are two
+            flavors: AWS service integrations (Step Functions invokes the
+            service) and Activities (the worker polls Step Functions for work).
+          </span>
+          <span class="lang-es">
+            Cada paso que hace trabajo real es un Task state. Hay dos tipos:
+            integraciones de servicios AWS (Step Functions invoca al servicio) y
+            Activities (el worker hace polling a Step Functions para recibir
+            trabajo).
+          </span>
+        </p>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Task type</th>
+              <th>Who initiates</th>
+              <th>Examples</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>AWS service integration</td>
+              <td>Step Functions invokes</td>
+              <td>
+                Lambda, Batch, ECS task, DynamoDB write, SNS/SQS publish,
+                another Step Functions workflow
+              </td>
+            </tr>
+            <tr>
+              <td>Activity</td>
+              <td>Worker polls Step Functions</td>
+              <td>
+                EC2, ECS, or on-premises server pulls work, does it, reports
+                back — similar to legacy SWF
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>
+          <span class="lang-en">The 7 State Types</span>
+          <span class="lang-es">Los 7 Tipos de Estado</span>
+        </h3>
+        <p>
+          <span class="lang-en"
+            >Every box in a workflow is one of these states. Task and Parallel
+            are the most exam-relevant.</span
+          >
+          <span class="lang-es"
+            >Cada caja del workflow es uno de estos estados. Task y Parallel son
+            los más relevantes para el examen.</span
+          >
+        </p>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>State</th>
+              <th>Purpose</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Task</strong></td>
+              <td>Does work — invokes Lambda, Batch, ECS, DynamoDB, etc.</td>
+            </tr>
+            <tr>
+              <td><strong>Choice</strong></td>
+              <td>Branches on a condition (if/else)</td>
+            </tr>
+            <tr>
+              <td><strong>Parallel</strong> ⭐</td>
+              <td>
+                Runs multiple branches simultaneously — most exam-relevant
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Map</strong></td>
+              <td>Iterates over a list, runs steps for each item</td>
+            </tr>
+            <tr>
+              <td><strong>Wait</strong></td>
+              <td>Pauses for N seconds or until a specific datetime</td>
+            </tr>
+            <tr>
+              <td><strong>Pass</strong></td>
+              <td>
+                Passes input → output, optionally injects fixed data. No work
+                done.
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Fail / Succeed</strong></td>
+              <td>Stops execution with explicit failure or success</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="callout warning">
+          <strong>Exam focus:</strong> Know <strong>Parallel</strong> state (run
+          branches simultaneously) and <strong>Task</strong> state (the
+          workhorse). The transcript explicitly calls Parallel the most
+          exam-relevant state type.
+        </div>
+
+        <div class="callout info">
+          <strong>Activity vs service integration:</strong> Activities flip the
+          direction — the worker <em>polls</em> Step Functions rather than being
+          invoked by it. This is similar to the legacy SWF service pattern.
+        </div>
+
+        <div class="callout info">
+          <strong>Amazon States Language (ASL):</strong> The official name for
+          the JSON format that defines a Step Functions workflow. The Workflow
+          Studio (drag-and-drop console builder) generates ASL automatically.
+          Standard vs Express workflow type is selected at creation — difference
+          is duration and cost.
+        </div>
+
+        <div class="callout info">
+          <strong>Execution role:</strong> When a state machine needs to access
+          other AWS services (Lambda, X-Ray, etc.), an IAM execution role is
+          <strong>automatically created</strong> with the required permissions —
+          no manual setup needed.
+        </div>
+      </div>
+      <!-- END CARD 1 -->
+
+      <!-- ═══════════════════ CARD 2: ERROR HANDLING ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">2</span>
+          <h2>
+            <span class="lang-en">Step Functions — Error Handling</span>
+            <span class="lang-es">Step Functions — Manejo de Errores</span>
+          </h2>
+        </div>
+
+        <p>
+          <span class="lang-en">
+            Error handling in Step Functions is defined in the
+            <strong>state machine (ASL/JSON)</strong>, not inside the
+            application code (e.g., Lambda). This keeps Lambda functions small
+            and fast, lets you change retry logic without redeploying, and gives
+            you full execution history of every retry and catch directly in the
+            console. There are two mechanisms: <strong>Retry</strong> (retry the
+            failing task) and <strong>Catch</strong> (transition to a fallback
+            state).
+          </span>
+          <span class="lang-es">
+            El manejo de errores se define en la
+            <strong>máquina de estados (ASL/JSON)</strong>, no dentro del código
+            de la aplicación. Esto mantiene Lambda pequeña y rápida, te permite
+            cambiar la lógica de retry sin redesplegar, y te da historial
+            completo de cada retry y catch en la consola. Hay dos mecanismos:
+            <strong>Retry</strong> (reintentar la tarea) y
+            <strong>Catch</strong> (ir a un estado de fallback).
+          </span>
+        </p>
+
+        <h3>
+          <span class="lang-en">Predefined Error Codes</span>
+          <span class="lang-es">Códigos de Error Predefinidos</span>
+        </h3>
+        <p>
+          <span class="lang-en"
+            >These are the built-in error codes you can reference in Retry and
+            Catch blocks.</span
+          >
+          <span class="lang-es"
+            >Estos son los códigos de error integrados que podés usar en bloques
+            Retry y Catch.</span
+          >
+        </p>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Error Code</th>
+              <th>
+                <span class="lang-en">When it fires</span
+                ><span class="lang-es">Cuándo se dispara</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>States.ALL</code></td>
+              <td>
+                <span class="lang-en"
+                  >Wildcard — matches any error. Put it last.</span
+                ><span class="lang-es"
+                  >Comodín — coincide con cualquier error. Ponelo último.</span
+                >
+              </td>
+            </tr>
+            <tr>
+              <td><code>States.Timeout</code></td>
+              <td>
+                <span class="lang-en"
+                  >Task exceeded TimeoutSeconds or no heartbeat received</span
+                ><span class="lang-es"
+                  >La tarea superó TimeoutSeconds o no se recibió
+                  heartbeat</span
+                >
+              </td>
+            </tr>
+            <tr>
+              <td><code>States.TaskFailed</code></td>
+              <td>
+                <span class="lang-en"
+                  >Task execution failure (e.g., Lambda threw an
+                  exception)</span
+                ><span class="lang-es"
+                  >Fallo en la ejecución (ej: Lambda lanzó una excepción)</span
+                >
+              </td>
+            </tr>
+            <tr>
+              <td><code>States.Permissions</code></td>
+              <td>
+                <span class="lang-en"
+                  >Insufficient IAM permissions to execute</span
+                ><span class="lang-es"
+                  >Permisos IAM insuficientes para ejecutar</span
+                >
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>
+          <span class="lang-en">Retry — Fields</span>
+          <span class="lang-es">Retry — Campos</span>
+        </h3>
+        <p>
+          <span class="lang-en">
+            Retry blocks are evaluated <strong>top to bottom</strong>. When all
+            MaxAttempts are exhausted, the Catch block activates.
+          </span>
+          <span class="lang-es">
+            Los bloques Retry se evalúan <strong>de arriba hacia abajo</strong>.
+            Cuando se agotan todos los MaxAttempts, activa el bloque Catch.
+          </span>
+        </p>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Field</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>ErrorEquals</code></td>
+              <td>
+                <span class="lang-en">Which errors this retry applies to</span
+                ><span class="lang-es"
+                  >Errores a los que aplica este retry</span
+                >
+              </td>
+            </tr>
+            <tr>
+              <td><code>IntervalSeconds</code></td>
+              <td>
+                <span class="lang-en">Wait time before the first retry</span
+                ><span class="lang-es"
+                  >Tiempo de espera antes del primer retry</span
+                >
+              </td>
+            </tr>
+            <tr>
+              <td><code>BackoffRate</code></td>
+              <td>
+                <span class="lang-en"
+                  >Multiplier applied after each retry (exponential
+                  backoff)</span
+                ><span class="lang-es"
+                  >Multiplicador aplicado después de cada retry (backoff
+                  exponencial)</span
+                >
+              </td>
+            </tr>
+            <tr>
+              <td><code>MaxAttempts</code></td>
+              <td>
+                <span class="lang-en"
+                  >Max retries. Default: <strong>3</strong>. Set to
+                  <strong>0</strong> to never retry.</span
+                ><span class="lang-es"
+                  >Máx retries. Por defecto: <strong>3</strong>. En
+                  <strong>0</strong> nunca reintenta.</span
+                >
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>
+          <span class="lang-en">Catch — Fields</span>
+          <span class="lang-es">Catch — Campos</span>
+        </h3>
+        <p>
+          <span class="lang-en">
+            Catch blocks are also evaluated <strong>top to bottom</strong>. On
+            match, Step Functions transitions to the <code>Next</code> state and
+            passes output shaped by <code>ResultPath</code>.
+          </span>
+          <span class="lang-es">
+            Los bloques Catch también se evalúan
+            <strong>de arriba hacia abajo</strong>. Al coincidir, Step Functions
+            va al estado <code>Next</code> con el output definido por
+            <code>ResultPath</code>.
+          </span>
+        </p>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Field</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>ErrorEquals</code></td>
+              <td>
+                <span class="lang-en">Which errors this catch applies to</span
+                ><span class="lang-es"
+                  >Errores a los que aplica este catch</span
+                >
+              </td>
+            </tr>
+            <tr>
+              <td><code>Next</code></td>
+              <td>
+                <span class="lang-en">State to transition to on match</span
+                ><span class="lang-es"
+                  >Estado al que transicionar al coincidir</span
+                >
+              </td>
+            </tr>
+            <tr>
+              <td><code>ResultPath</code></td>
+              <td>
+                <span class="lang-en"
+                  >Where to write the error in the output (see below)</span
+                ><span class="lang-es"
+                  >Dónde escribir el error en el output (ver abajo)</span
+                >
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>
+          <span class="lang-en">ResultPath — Exam Trap ⚠️</span>
+          <span class="lang-es">ResultPath — Trampa del Examen ⚠️</span>
+        </h3>
+        <p>
+          <span class="lang-en">
+            <code>ResultPath</code> controls what the fallback state receives.
+            Three behaviors depending on the value:
+          </span>
+          <span class="lang-es">
+            <code>ResultPath</code> controla qué recibe el estado de fallback.
+            Tres comportamientos según el valor:
+          </span>
+        </p>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>ResultPath value</th>
+              <th>
+                <span class="lang-en">What fallback state receives</span
+                ><span class="lang-es">Qué recibe el estado de fallback</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <span class="lang-en">Not defined</span
+                ><span class="lang-es">No definido</span>
+              </td>
+              <td>
+                <span class="lang-en"
+                  >❌ Only the error — original input is lost</span
+                ><span class="lang-es"
+                  >❌ Solo el error — input original se pierde</span
+                >
+              </td>
+            </tr>
+            <tr>
+              <td><code>null</code></td>
+              <td>
+                <span class="lang-en"
+                  >✅ Only the original input — error is discarded</span
+                ><span class="lang-es"
+                  >✅ Solo el input original — error se descarta</span
+                >
+              </td>
+            </tr>
+            <tr>
+              <td><code>"$.error"</code></td>
+              <td>
+                <span class="lang-en"
+                  >✅ Original input preserved + error appended under
+                  <code>$.error</code></span
+                ><span class="lang-es"
+                  >✅ Input original preservado + error agregado en
+                  <code>$.error</code></span
+                >
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="callout info">
+          <strong
+            ><span class="lang-en">Why keep error handling outside Lambda?</span
+            ><span class="lang-es"
+              >¿Por qué manejar errores fuera de Lambda?</span
+            ></strong
+          >
+          <span class="lang-en">
+            Lambda stays small and fast. Retry logic can be changed without
+            redeployment. Full execution history is visible in Step Functions
+            console.</span
+          >
+          <span class="lang-es">
+            Lambda se mantiene pequeña y rápida. La lógica de retry se puede
+            cambiar sin redesplegar. El historial completo de ejecución está
+            visible en la consola.</span
+          >
+        </div>
+
+        <h3>
+          <span class="lang-en"
+            >Complete ASL Example — Retry + Catch + ResultPath</span
+          >
+          <span class="lang-es"
+            >Ejemplo ASL Completo — Retry + Catch + ResultPath</span
+          >
+        </h3>
+        <p>
+          <span class="lang-en">
+            A full Task state showing all error handling blocks together. The
+            <code>Retry</code> array is evaluated first (top to bottom). If all
+            retries are exhausted, the <code>Catch</code> array kicks in (also
+            top to bottom). <code>ResultPath</code> on each catch entry controls
+            what the fallback state receives.
+          </span>
+          <span class="lang-es">
+            Un Task state completo mostrando todos los bloques de manejo de
+            errores juntos. El array
+            <code>Retry</code> se evalúa primero (de arriba hacia abajo). Si se
+            agotan todos los retries, activa el array
+            <code>Catch</code> (también de arriba hacia abajo).
+            <code>ResultPath</code>
+            en cada entrada de Catch controla qué recibe el estado de fallback.
+          </span>
+        </p>
+        <pre
+          style="
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 1.2rem;
+            overflow-x: auto;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #e2e8f0;
+            margin: 0.75rem 0;
+          "
+        ><code><span style="color:#94a3b8">// A Task state with full error handling</span>
+<span style="color:#7dd3fc">"ProcessOrder"</span>: {
+  <span style="color:#7dd3fc">"Type"</span>: <span style="color:#86efac">"Task"</span>,
+  <span style="color:#7dd3fc">"Resource"</span>: <span style="color:#86efac">"arn:aws:lambda:us-east-1:123456789:function:ProcessOrder"</span>,
+
+  <span style="color:#94a3b8">// ── RETRY array (evaluated top → bottom) ─────────────────</span>
+  <span style="color:#7dd3fc">"Retry"</span>: [
+    {
+      <span style="color:#7dd3fc">"ErrorEquals"</span>: [<span style="color:#86efac">"CustomError"</span>],   <span style="color:#94a3b8">// specific custom error first</span>
+      <span style="color:#7dd3fc">"IntervalSeconds"</span>: <span style="color:#fbbf24">1</span>,              <span style="color:#94a3b8">// wait 1s before first retry</span>
+      <span style="color:#7dd3fc">"BackoffRate"</span>: <span style="color:#fbbf24">2</span>,                 <span style="color:#94a3b8">// double the wait each time: 1s → 2s → 4s</span>
+      <span style="color:#7dd3fc">"MaxAttempts"</span>: <span style="color:#fbbf24">2</span>                  <span style="color:#94a3b8">// retry up to 2 times</span>
+    },
+    {
+      <span style="color:#7dd3fc">"ErrorEquals"</span>: [<span style="color:#86efac">"States.TaskFailed"</span>], <span style="color:#94a3b8">// generic task failure</span>
+      <span style="color:#7dd3fc">"IntervalSeconds"</span>: <span style="color:#fbbf24">30</span>,
+      <span style="color:#7dd3fc">"BackoffRate"</span>: <span style="color:#fbbf24">2</span>,
+      <span style="color:#7dd3fc">"MaxAttempts"</span>: <span style="color:#fbbf24">2</span>
+    },
+    {
+      <span style="color:#7dd3fc">"ErrorEquals"</span>: [<span style="color:#86efac">"States.ALL"</span>],      <span style="color:#94a3b8">// wildcard — always last!</span>
+      <span style="color:#7dd3fc">"IntervalSeconds"</span>: <span style="color:#fbbf24">5</span>,
+      <span style="color:#7dd3fc">"BackoffRate"</span>: <span style="color:#fbbf24">2</span>,
+      <span style="color:#7dd3fc">"MaxAttempts"</span>: <span style="color:#fbbf24">5</span>
+    }
+  ],
+
+  <span style="color:#94a3b8">// ── CATCH array (kicks in when retries are exhausted) ─────</span>
+  <span style="color:#7dd3fc">"Catch"</span>: [
+    {
+      <span style="color:#7dd3fc">"ErrorEquals"</span>: [<span style="color:#86efac">"CustomError"</span>],
+      <span style="color:#7dd3fc">"Next"</span>: <span style="color:#86efac">"CustomErrorFallback"</span>,
+      <span style="color:#7dd3fc">"ResultPath"</span>: <span style="color:#86efac">"$.error"</span>   <span style="color:#94a3b8">// original input preserved + error at $.error</span>
+    },
+    {
+      <span style="color:#7dd3fc">"ErrorEquals"</span>: [<span style="color:#86efac">"States.Timeout"</span>],
+      <span style="color:#7dd3fc">"Next"</span>: <span style="color:#86efac">"TimeoutFallback"</span>,
+      <span style="color:#7dd3fc">"ResultPath"</span>: <span style="color:#c084fc">null</span>        <span style="color:#94a3b8">// error discarded, only original input forwarded</span>
+    },
+    {
+      <span style="color:#7dd3fc">"ErrorEquals"</span>: [<span style="color:#86efac">"States.ALL"</span>],
+      <span style="color:#7dd3fc">"Next"</span>: <span style="color:#86efac">"CatchAllFallback"</span>
+                                  <span style="color:#94a3b8">// no ResultPath → error replaces the entire input</span>
+    }
+  ],
+
+  <span style="color:#7dd3fc">"Next"</span>: <span style="color:#86efac">"SuccessState"</span>           <span style="color:#94a3b8">// where to go if task succeeds</span>
+}</code></pre>
+
+        <p style="margin-top: 0.5rem; font-size: 0.88rem; color: #94a3b8">
+          <span class="lang-en">
+            💡 <strong>Reading order:</strong> Retry[0] → Retry[1] → Retry[2]
+            (each exhausts MaxAttempts) → then Catch[0] → Catch[1] → Catch[2]
+            until one matches.
+          </span>
+          <span class="lang-es">
+            💡 <strong>Orden de lectura:</strong> Retry[0] → Retry[1] → Retry[2]
+            (cada uno agota MaxAttempts) → luego Catch[0] → Catch[1] → Catch[2]
+            hasta que uno coincida.
+          </span>
+        </p>
+
+        <h3>
+          <span class="lang-en">Hands-On Observations (28.5)</span>
+          <span class="lang-es">Observaciones del Hands-On (28.5)</span>
+        </h3>
+        <p>
+          <span class="lang-en">
+            Two executions were run to demonstrate how different error types
+            produce different retry timing and different catch branches —
+            confirming that error handling is fully driven by the error type.
+          </span>
+          <span class="lang-es">
+            Se ejecutaron dos flujos para demostrar cómo distintos tipos de
+            error producen distintos tiempos de retry y distintas ramas de catch
+            — confirmando que el manejo de errores está totalmente controlado
+            por el tipo de error.
+          </span>
+        </p>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>
+                <span class="lang-en">Error thrown</span
+                ><span class="lang-es">Error lanzado</span>
+              </th>
+              <th>
+                <span class="lang-en">Retry timing</span
+                ><span class="lang-es">Timing del retry</span>
+              </th>
+              <th>
+                <span class="lang-en">Catch branch</span
+                ><span class="lang-es">Rama del catch</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>CustomError</code></td>
+              <td>
+                <span class="lang-en">1s → 2s (BackoffRate 2, fast)</span
+                ><span class="lang-es">1s → 2s (BackoffRate 2, rápido)</span>
+              </td>
+              <td><code>CustomErrorFallback</code></td>
+            </tr>
+            <tr>
+              <td><code>NotCustomError</code> (unmatched)</td>
+              <td>
+                <span class="lang-en"
+                  >30s → 60s (BackoffRate 2, slow — clearly visible in event
+                  history)</span
+                ><span class="lang-es"
+                  >30s → 60s (BackoffRate 2, lento — visible en el
+                  historial)</span
+                >
+              </td>
+              <td><code>ReservedTypeFallback</code></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="callout info">
+          <strong
+            ><span class="lang-en">Event history shows everything:</span
+            ><span class="lang-es"
+              >El historial de eventos muestra todo:</span
+            ></strong
+          >
+          <span class="lang-en">
+            Lambda started → failed → scheduled (retry) → started → failed → … →
+            TaskStateExited → Catch matched → execution succeeded via
+            fallback.</span
+          >
+          <span class="lang-es">
+            Lambda started → failed → scheduled (retry) → started → failed → … →
+            TaskStateExited → Catch coincidió → ejecución exitosa vía
+            fallback.</span
+          >
+        </div>
+      </div>
+      <!-- END CARD 2 -->
+
+      <!-- ═══════════════════ CARD 3: WAIT FOR TASK TOKEN ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">3</span>
+          <h2>
+            <span class="lang-en">Step Functions — Wait For Task Token</span>
+            <span class="lang-es">Step Functions — Wait For Task Token</span>
+          </h2>
+        </div>
+
+        <p>
+          <span class="lang-en">
+            <code>waitForTaskToken</code> lets a Step Functions task
+            <strong>pause indefinitely</strong>
+            until an external system signals back. Without it, Step Functions
+            would fire a message and immediately move on — there'd be no way to
+            wait for async work done outside AWS. Use it whenever your workflow
+            depends on something external: human approval, a third-party API, a
+            legacy system, or any async integration.
+          </span>
+          <span class="lang-es">
+            <code>waitForTaskToken</code> permite que una tarea de Step
+            Functions <strong>se pause indefinidamente</strong>
+            hasta que un sistema externo señale de vuelta. Sin él, Step
+            Functions dispararía el mensaje y seguiría de inmediato. Usalo
+            cuando tu workflow depende de algo externo: aprobación humana, una
+            API de terceros, un sistema legado, o cualquier integración async.
+          </span>
+        </p>
+
+        <h3>
+          <span class="lang-en">Use Cases</span>
+          <span class="lang-es">Casos de Uso</span>
+        </h3>
+        <p>
+          <span class="lang-en"
+            >Any scenario where work is done outside Step Functions before the
+            workflow can continue.</span
+          >
+          <span class="lang-es"
+            >Cualquier escenario donde el trabajo se hace fuera de Step
+            Functions antes de que el workflow pueda continuar.</span
+          >
+        </p>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>
+                <span class="lang-en">Use case</span
+                ><span class="lang-es">Caso de uso</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <span class="lang-en"
+                  >Human approval (e.g., a manager clicks Approve)</span
+                ><span class="lang-es"
+                  >Aprobación humana (ej: un manager hace clic en Aprobar)</span
+                >
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span class="lang-en">Third-party API async processing</span
+                ><span class="lang-es"
+                  >Procesamiento async de una API de terceros</span
+                >
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span class="lang-en"
+                  >Legacy / on-premises system integration</span
+                ><span class="lang-es"
+                  >Integración con sistemas legados / on-premises</span
+                >
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span class="lang-en">Another AWS service doing async work</span
+                ><span class="lang-es"
+                  >Otro servicio AWS haciendo trabajo async</span
+                >
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>
+          <span class="lang-en">Configuration</span>
+          <span class="lang-es">Configuración</span>
+        </h3>
+        <p>
+          <span class="lang-en"
+            >Two things are required in the task definition: appending the
+            suffix to the Resource, and passing the token in the message
+            body.</span
+          >
+          <span class="lang-es"
+            >Se requieren dos cosas en la definición de la tarea: agregar el
+            sufijo al Resource, y pasar el token en el cuerpo del mensaje.</span
+          >
+        </p>
+        <pre
+          style="
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 1.2rem;
+            overflow-x: auto;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #e2e8f0;
+            margin: 0.75rem 0;
+          "
+        ><code><span style="color:#7dd3fc">"CheckClientCredits"</span>: {
+  <span style="color:#7dd3fc">"Type"</span>: <span style="color:#86efac">"Task"</span>,
+
+  <span style="color:#94a3b8">// Step 1 — append .waitForTaskToken to the resource</span>
+  <span style="color:#7dd3fc">"Resource"</span>: <span style="color:#86efac">"arn:aws:states:::sqs:sendMessage.waitForTaskToken"</span>,
+
+  <span style="color:#7dd3fc">"Parameters"</span>: {
+    <span style="color:#7dd3fc">"QueueUrl"</span>: <span style="color:#86efac">"https://sqs.us-east-1.amazonaws.com/123/MyQueue"</span>,
+    <span style="color:#7dd3fc">"MessageBody"</span>: {
+      <span style="color:#7dd3fc">"Input.$"</span>: <span style="color:#86efac">"$"</span>,                  <span style="color:#94a3b8">// pass the task input</span>
+
+      <span style="color:#94a3b8">// Step 2 — include the token so the external system can call back</span>
+      <span style="color:#7dd3fc">"TaskToken.$"</span>: <span style="color:#86efac">"$$.Task.Token"</span>   <span style="color:#94a3b8">// $$ = context object (not input)</span>
+    }
+  },
+  <span style="color:#7dd3fc">"Next"</span>: <span style="color:#86efac">"SuccessState"</span>
+}</code></pre>
+
+        <h3>
+          <span class="lang-en">Full Flow</span>
+          <span class="lang-es">Flujo Completo</span>
+        </h3>
+        <p>
+          <span class="lang-en">
+            The state machine pauses after sending the message. The external
+            system receives the message, does its work, then calls back with the
+            token. Step Functions matches the token and resumes.
+          </span>
+          <span class="lang-es">
+            La máquina de estados se pausa tras enviar el mensaje. El sistema
+            externo recibe el mensaje, hace su trabajo, y luego llama de vuelta
+            con el token. Step Functions lo identifica y continúa.
+          </span>
+        </p>
+        <!-- waitForTaskToken diagram -->
+        <svg
+          viewBox="0 0 780 305"
+          xmlns="http://www.w3.org/2000/svg"
+          style="
+            width: 100%;
+            max-width: 780px;
+            display: block;
+            margin: 0.75rem auto;
+          "
+        >
+          <defs>
+            <marker
+              id="wftt-arr"
+              markerWidth="8"
+              markerHeight="8"
+              refX="6"
+              refY="3"
+              orient="auto"
+            >
+              <path d="M0,0 L0,6 L8,3 z" fill="#94a3b8" />
+            </marker>
+            <marker
+              id="wftt-arr-g"
+              markerWidth="8"
+              markerHeight="8"
+              refX="6"
+              refY="3"
+              orient="auto"
+            >
+              <path d="M0,0 L0,6 L8,3 z" fill="#4ade80" />
+            </marker>
+          </defs>
+
+          <!-- Step Functions Workflow box -->
+          <rect
+            x="5"
+            y="15"
+            width="152"
+            height="225"
+            rx="8"
+            fill="#1e1b4b"
+            stroke="#a78bfa"
+            stroke-width="2"
+          />
+          <text
+            x="81"
+            y="36"
+            text-anchor="middle"
+            font-size="12"
+            fill="#c4b5fd"
+            font-weight="bold"
+          >
+            Step Functions
+          </text>
+          <text
+            x="81"
+            y="51"
+            text-anchor="middle"
+            font-size="12"
+            fill="#c4b5fd"
+            font-weight="bold"
+          >
+            Workflow
+          </text>
+
+          <!-- Start -->
+          <circle cx="81" cy="77" r="18" fill="#3b82f6" />
+          <text
+            x="81"
+            y="82"
+            text-anchor="middle"
+            font-size="13"
+            fill="#fff"
+            font-weight="bold"
+          >
+            Start
+          </text>
+          <line
+            x1="81"
+            y1="95"
+            x2="81"
+            y2="111"
+            stroke="#94a3b8"
+            stroke-width="1.5"
+            marker-end="url(#wftt-arr)"
+          />
+
+          <!-- Check Credit (dashed, paused) -->
+          <rect
+            x="26"
+            y="113"
+            width="110"
+            height="44"
+            rx="6"
+            fill="#1e3a5f"
+            stroke="#60a5fa"
+            stroke-width="2"
+            stroke-dasharray="5,3"
+          />
+          <text
+            x="81"
+            y="131"
+            text-anchor="middle"
+            font-size="13"
+            fill="#93c5fd"
+            font-weight="bold"
+          >
+            Check Credit
+          </text>
+          <text
+            x="81"
+            y="149"
+            text-anchor="middle"
+            font-size="12"
+            fill="#60a5fa"
+          >
+            ⏸ PAUSED
+          </text>
+
+          <!-- Dotted arrow down to End -->
+          <line
+            x1="81"
+            y1="157"
+            x2="81"
+            y2="200"
+            stroke="#475569"
+            stroke-width="1.5"
+            stroke-dasharray="4,4"
+            marker-end="url(#wftt-arr)"
+          />
+          <text
+            x="96"
+            y="174"
+            font-size="12"
+            fill="#64748b"
+            font-style="italic"
+          >
+            resumes on
+          </text>
+          <text
+            x="96"
+            y="189"
+            font-size="12"
+            fill="#64748b"
+            font-style="italic"
+          >
+            callback
+          </text>
+
+          <!-- End -->
+          <circle cx="81" cy="220" r="18" fill="#3b82f6" />
+          <text
+            x="81"
+            y="225"
+            text-anchor="middle"
+            font-size="13"
+            fill="#fff"
+            font-weight="bold"
+          >
+            End
+          </text>
+
+          <!-- JSON top box (call with token) -->
+          <rect
+            x="168"
+            y="12"
+            width="245"
+            height="92"
+            rx="6"
+            fill="#0f172a"
+            stroke="#334155"
+            stroke-width="1.5"
+          />
+          <text
+            x="180"
+            y="30"
+            font-size="12"
+            fill="#7dd3fc"
+            font-family="monospace"
+          >
+            "Resource":
+          </text>
+          <text
+            x="180"
+            y="46"
+            font-size="12"
+            fill="#86efac"
+            font-family="monospace"
+          >
+            "...sqs:sendMessage
+          </text>
+          <text
+            x="180"
+            y="62"
+            font-size="12"
+            fill="#86efac"
+            font-family="monospace"
+          >
+            .waitForTaskToken"
+          </text>
+          <text
+            x="180"
+            y="78"
+            font-size="12"
+            fill="#fbbf24"
+            font-family="monospace"
+          >
+            "TaskToken.$":
+          </text>
+          <text
+            x="180"
+            y="94"
+            font-size="12"
+            fill="#fbbf24"
+            font-family="monospace"
+          >
+            "$$.Task.Token"
+          </text>
+
+          <!-- Arrow: Step Functions → SQS -->
+          <path
+            d="M138,130 Q283,136 428,68"
+            fill="none"
+            stroke="#94a3b8"
+            stroke-width="1.5"
+            marker-end="url(#wftt-arr)"
+          />
+          <text
+            x="355"
+            y="126"
+            text-anchor="middle"
+            font-size="12"
+            fill="#e2e8f0"
+          >
+            call SQS with Task Token
+          </text>
+
+          <!-- SQS Queue box -->
+          <rect
+            x="432"
+            y="30"
+            width="118"
+            height="62"
+            rx="8"
+            fill="#1a2744"
+            stroke="#60a5fa"
+            stroke-width="2"
+          />
+          <text
+            x="491"
+            y="55"
+            text-anchor="middle"
+            font-size="13"
+            fill="#93c5fd"
+            font-weight="bold"
+          >
+            SQS Queue
+          </text>
+          <text
+            x="491"
+            y="72"
+            text-anchor="middle"
+            font-size="12"
+            fill="#7dd3fc"
+          >
+            (MyQueue)
+          </text>
+
+          <!-- Arrow: SQS → Workers (down) -->
+          <line
+            x1="491"
+            y1="92"
+            x2="491"
+            y2="192"
+            stroke="#94a3b8"
+            stroke-width="1.5"
+            marker-end="url(#wftt-arr)"
+          />
+          <text x="506" y="147" font-size="12" fill="#94a3b8">
+            poll messages
+          </text>
+
+          <!-- Workers box -->
+          <rect
+            x="428"
+            y="195"
+            width="130"
+            height="72"
+            rx="8"
+            fill="#1a2744"
+            stroke="#60a5fa"
+            stroke-width="2"
+          />
+          <text
+            x="493"
+            y="218"
+            text-anchor="middle"
+            font-size="13"
+            fill="#93c5fd"
+            font-weight="bold"
+          >
+            Lambda / ECS
+          </text>
+          <text
+            x="493"
+            y="235"
+            text-anchor="middle"
+            font-size="12"
+            fill="#7dd3fc"
+          >
+            3rd Party / EC2
+          </text>
+          <text
+            x="493"
+            y="252"
+            text-anchor="middle"
+            font-size="12"
+            fill="#94a3b8"
+          >
+            Process Messages
+          </text>
+
+          <!-- JSON callback box -->
+          <rect
+            x="168"
+            y="200"
+            width="245"
+            height="65"
+            rx="6"
+            fill="#0f172a"
+            stroke="#334155"
+            stroke-width="1.5"
+          />
+          <text
+            x="180"
+            y="220"
+            font-size="12"
+            fill="#7dd3fc"
+            font-family="monospace"
+          >
+            "output": "CreditAccepted",
+          </text>
+          <text
+            x="180"
+            y="236"
+            font-size="12"
+            fill="#fbbf24"
+            font-family="monospace"
+          >
+            "taskToken": "83p1E0dMcc
+          </text>
+          <text
+            x="180"
+            y="252"
+            font-size="12"
+            fill="#fbbf24"
+            font-family="monospace"
+          >
+            ...xFhglsdkzpK9mBVKZ"
+          </text>
+
+          <!-- Arrow: Workers → Step Functions (back, green curved, arcs above callback box) -->
+          <path
+            d="M428,210 C385,148 252,138 140,140"
+            fill="none"
+            stroke="#4ade80"
+            stroke-width="1.5"
+            marker-end="url(#wftt-arr-g)"
+          />
+          <text
+            x="280"
+            y="180"
+            text-anchor="middle"
+            font-size="12"
+            fill="#4ade80"
+          >
+            SendTaskSuccess(token, output)
+          </text>
+        </svg>
+
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>
+                <span class="lang-en">Callback API</span
+                ><span class="lang-es">API de callback</span>
+              </th>
+              <th>
+                <span class="lang-en">What it does</span
+                ><span class="lang-es">Qué hace</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>SendTaskSuccess(token, output)</code></td>
+              <td>
+                <span class="lang-en"
+                  >Resumes the task, passes output to next state</span
+                ><span class="lang-es"
+                  >Reanuda la tarea, pasa el output al siguiente estado</span
+                >
+              </td>
+            </tr>
+            <tr>
+              <td><code>SendTaskFailure(token, error, cause)</code></td>
+              <td>
+                <span class="lang-en"
+                  >Signals failure — triggers Retry/Catch logic</span
+                ><span class="lang-es"
+                  >Señala falla — activa la lógica Retry/Catch</span
+                >
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="callout warning">
+          <strong
+            ><span class="lang-en">Timeout:</span
+            ><span class="lang-es">Timeout:</span></strong
+          >
+          <span class="lang-en">
+            If no callback arrives within <code>TimeoutSeconds</code>, Step
+            Functions fires <code>States.Timeout</code> — which you can handle
+            with Retry/Catch like any other error.</span
+          >
+          <span class="lang-es">
+            Si no llega ningún callback dentro de <code>TimeoutSeconds</code>,
+            Step Functions dispara <code>States.Timeout</code> — que podés
+            manejar con Retry/Catch como cualquier otro error.</span
+          >
+        </div>
+      </div>
+      <!-- END CARD 3 -->
+
+      <!-- ═══════════════════ CARD 4: ACTIVITY TASKS ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">4</span>
+          <h2>
+            <span class="lang-en">Step Functions — Activity Tasks</span>
+            <span class="lang-es">Step Functions — Activity Tasks</span>
+          </h2>
+        </div>
+
+        <p>
+          <span class="lang-en">
+            Activity Tasks let an external worker (EC2, Lambda, mobile, on-prem)
+            <strong>poll Step Functions for work</strong> rather than being
+            invoked by it. The worker regularly asks "anything for me?" using
+            <code>GetActivityTask</code>, receives the input and a task token,
+            does the work, and reports back — all while the state machine waits
+            paused.
+          </span>
+          <span class="lang-es">
+            Los Activity Tasks permiten que un worker externo (EC2, Lambda,
+            móvil, on-prem)
+            <strong>haga polling a Step Functions en busca de trabajo</strong>
+            en lugar de ser invocado por él. El worker pregunta periódicamente
+            con <code>GetActivityTask</code>, recibe el input y un task token,
+            hace el trabajo y reporta — mientras la máquina de estados espera
+            pausada.
+          </span>
+        </p>
+
+        <h3>
+          <span class="lang-en">Architecture Diagram</span>
+          <span class="lang-es">Diagrama de Arquitectura</span>
+        </h3>
+        <p>
+          <span class="lang-en"
+            >The worker initiates every interaction by polling. Step Functions
+            responds with work and waits for the result.</span
+          >
+          <span class="lang-es"
+            >El worker inicia cada interacción haciendo polling. Step Functions
+            responde con trabajo y espera el resultado.</span
+          >
+        </p>
+
+        <svg
+          viewBox="0 0 600 290"
+          xmlns="http://www.w3.org/2000/svg"
+          style="
+            width: 100%;
+            max-width: 600px;
+            display: block;
+            margin: 0.75rem auto;
+          "
+        >
+          <defs>
+            <marker
+              id="act-arr"
+              markerWidth="8"
+              markerHeight="8"
+              refX="6"
+              refY="3"
+              orient="auto"
+            >
+              <path d="M0,0 L0,6 L8,3 z" fill="#94a3b8" />
+            </marker>
+          </defs>
+
+          <!-- Step Functions box -->
+          <rect
+            x="215"
+            y="20"
+            width="140"
+            height="46"
+            rx="6"
+            fill="#1a2744"
+            stroke="#60a5fa"
+            stroke-width="2"
+          />
+          <text
+            x="285"
+            y="48"
+            text-anchor="middle"
+            font-size="13"
+            fill="#93c5fd"
+            font-weight="bold"
+          >
+            Step Functions
+          </text>
+
+          <!-- EC2 box -->
+          <rect
+            x="215"
+            y="224"
+            width="140"
+            height="46"
+            rx="6"
+            fill="#1a2744"
+            stroke="#60a5fa"
+            stroke-width="2"
+          />
+          <text
+            x="285"
+            y="244"
+            text-anchor="middle"
+            font-size="13"
+            fill="#93c5fd"
+            font-weight="bold"
+          >
+            EC2 Instance
+          </text>
+          <text
+            x="285"
+            y="260"
+            text-anchor="middle"
+            font-size="12"
+            fill="#7dd3fc"
+          >
+            (Activity Worker)
+          </text>
+
+          <!-- ARROW 3: EC2 left → SF left (up, L-shape with 2 breaks) -->
+          <path
+            d="M215,248 L150,248 L150,43 L215,43"
+            fill="none"
+            stroke="#94a3b8"
+            stroke-width="1.5"
+            marker-end="url(#act-arr)"
+          />
+          <text
+            x="142"
+            y="135"
+            text-anchor="end"
+            font-size="12"
+            fill="#e2e8f0"
+            font-weight="bold"
+          >
+            3. Task completed
+          </text>
+          <text x="142" y="150" text-anchor="end" font-size="12" fill="#94a3b8">
+            (output &amp; TaskToken)
+          </text>
+          <text x="142" y="165" text-anchor="end" font-size="12" fill="#94a3b8">
+            (SendTaskSuccess)
+          </text>
+
+          <!-- ARROW 2: SF bottom → EC2 top (down, straight through center) -->
+          <line
+            x1="285"
+            y1="66"
+            x2="285"
+            y2="224"
+            stroke="#94a3b8"
+            stroke-width="1.5"
+            marker-end="url(#act-arr)"
+          />
+          <text
+            x="293"
+            y="135"
+            font-size="12"
+            fill="#e2e8f0"
+            font-weight="bold"
+          >
+            2. Task
+          </text>
+          <text x="293" y="150" font-size="12" fill="#94a3b8">
+            (input &amp; TaskToken)
+          </text>
+
+          <!-- ARROW 1: EC2 right → SF right (up, L-shape with 2 breaks, further right) -->
+          <path
+            d="M355,258 L422,258 L422,30 L355,30"
+            fill="none"
+            stroke="#94a3b8"
+            stroke-width="1.5"
+            marker-end="url(#act-arr)"
+          />
+          <!-- Clock icon near EC2, right of track -->
+          <circle
+            cx="447"
+            cy="258"
+            r="12"
+            fill="none"
+            stroke="#94a3b8"
+            stroke-width="1.5"
+          />
+          <path
+            d="M447,251 A7,7 0 1,1 440,258"
+            fill="none"
+            stroke="#94a3b8"
+            stroke-width="1.5"
+          />
+          <path
+            d="M440,255 L440,258 L443,258"
+            fill="none"
+            stroke="#94a3b8"
+            stroke-width="1.5"
+            stroke-linecap="round"
+          />
+          <text
+            x="430"
+            y="135"
+            font-size="12"
+            fill="#e2e8f0"
+            font-weight="bold"
+          >
+            1. Poll for Task
+          </text>
+          <text x="430" y="150" font-size="12" fill="#94a3b8">
+            (GetActivityTask)
+          </text>
+        </svg>
+
+        <h3>
+          <span class="lang-en"
+            >Pull vs Push — Activity Tasks vs waitForTaskToken</span
+          >
+          <span class="lang-es"
+            >Pull vs Push — Activity Tasks vs waitForTaskToken</span
+          >
+        </h3>
+        <p>
+          <span class="lang-en"
+            >The most important exam distinction between the two patterns is
+            <em>who initiates the work handoff</em>.</span
+          >
+          <span class="lang-es"
+            >La distinción más importante entre los dos patrones es
+            <em>quién inicia la entrega de trabajo</em>.</span
+          >
+        </p>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th></th>
+              <th>Activity Tasks</th>
+              <th>waitForTaskToken</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <strong
+                  ><span class="lang-en">Mechanism</span
+                  ><span class="lang-es">Mecanismo</span></strong
+                >
+              </td>
+              <td><strong>Pull</strong></td>
+              <td><strong>Push</strong></td>
+            </tr>
+            <tr>
+              <td>
+                <strong
+                  ><span class="lang-en">Who initiates</span
+                  ><span class="lang-es">Quién inicia</span></strong
+                >
+              </td>
+              <td>
+                <span class="lang-en">Worker polls Step Functions</span
+                ><span class="lang-es"
+                  >Worker hace polling a Step Functions</span
+                >
+              </td>
+              <td>
+                <span class="lang-en"
+                  >Step Functions pushes event out (e.g. SQS)</span
+                ><span class="lang-es"
+                  >Step Functions envía evento (ej. SQS)</span
+                >
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <strong
+                  ><span class="lang-en">API to get work</span
+                  ><span class="lang-es">API para obtener trabajo</span></strong
+                >
+              </td>
+              <td><code>GetActivityTask</code></td>
+              <td>
+                <span class="lang-en">N/A — worker receives the message</span
+                ><span class="lang-es">N/A — worker recibe el mensaje</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <strong
+                  ><span class="lang-en">Callback</span
+                  ><span class="lang-es">Callback</span></strong
+                >
+              </td>
+              <td colspan="2" style="text-align: center">
+                <code>SendTaskSuccess</code> /
+                <code>SendTaskFailure</code> (same for both)
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="callout info">
+          <strong>Mental model:</strong><br />
+          <span class="lang-en">
+            🔵 <strong>Activity Tasks (PULL):</strong>
+            <em>"Hey Step Functions, anything for me?"</em> — EC2 polls.<br />
+            🟢 <strong>waitForTaskToken (PUSH):</strong>
+            <em
+              >"Hey EC2, here's something for you to do. I'll be waiting for
+              your return."</em
+            >
+            — Step Functions pushes to SQS.
+          </span>
+          <span class="lang-es">
+            🔵 <strong>Activity Tasks (PULL):</strong>
+            <em>"Ey Step Functions, ¿hay algo para mí?"</em> — EC2 hace
+            polling.<br />
+            🟢 <strong>waitForTaskToken (PUSH):</strong>
+            <em
+              >"Ey EC2, acá te mando algo para hacer. Te voy a estar
+              esperando."</em
+            >
+            — Step Functions pushea a SQS.
+          </span>
+        </div>
+
+        <h3>
+          <span class="lang-en">TimeoutSeconds &amp; Heartbeat</span>
+          <span class="lang-es">TimeoutSeconds y Heartbeat</span>
+        </h3>
+        <p>
+          <span class="lang-en"
+            >Two parameters control how long an Activity Task stays alive while
+            the worker processes it.</span
+          >
+          <span class="lang-es"
+            >Dos parámetros controlan cuánto tiempo permanece viva una Activity
+            Task mientras el worker la procesa.</span
+          >
+        </p>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>
+                <span class="lang-en">Parameter</span
+                ><span class="lang-es">Parámetro</span>
+              </th>
+              <th>
+                <span class="lang-en">What it does</span
+                ><span class="lang-es">Qué hace</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>TimeoutSeconds</code></td>
+              <td>
+                <span class="lang-en"
+                  >Hard deadline — if the worker doesn't respond within this
+                  time, the task fails.</span
+                ><span class="lang-es"
+                  >Límite duro — si el worker no responde en este tiempo, la
+                  tarea falla.</span
+                >
+              </td>
+            </tr>
+            <tr>
+              <td><code>HeartBeatSeconds</code></td>
+              <td>
+                <span class="lang-en"
+                  >Max time between heartbeats. Worker calls
+                  <code>SendTaskHeartbeat</code> periodically to signal it's
+                  alive.
+                  <strong
+                    >If no heartbeat arrives within this window, Step Functions
+                    considers the worker dead and fails the task — even if
+                    <code>TimeoutSeconds</code> hasn't been reached yet.</strong
+                  >
+                  Best practice: send at ~half the interval (e.g. every 5s if
+                  HeartBeatSeconds=10).</span
+                ><span class="lang-es"
+                  >Tiempo máximo entre heartbeats. El worker llama a
+                  <code>SendTaskHeartbeat</code> para señalar que sigue vivo.
+                  <strong
+                    >Si no llega ningún heartbeat dentro de este tiempo, Step
+                    Functions considera al worker muerto y falla la tarea —
+                    incluso si <code>TimeoutSeconds</code> no se alcanzó
+                    todavía.</strong
+                  >
+                  Buena práctica: enviar cada ~mitad del intervalo.</span
+                >
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="callout warning">
+          <strong
+            ><span class="lang-en">Maximum wait time: 1 year.</span
+            ><span class="lang-es"
+              >Tiempo máximo de espera: 1 año.</span
+            ></strong
+          >
+          <span class="lang-en">
+            With a long <code>TimeoutSeconds</code> and consistent heartbeats, a
+            Standard workflow task can stay paused for up to one year — designed
+            for long-running human approval flows and async integrations.</span
+          >
+          <span class="lang-es">
+            Con un <code>TimeoutSeconds</code> largo y heartbeats consistentes,
+            una tarea de flujo Standard puede quedar pausada hasta un año —
+            diseñado para flujos de aprobación humana e integraciones async
+            largas.</span
+          >
+        </div>
+      </div>
+      <!-- END CARD 4 -->
+
+      <!-- ═══════════════════ CARD 5: STANDARD VS EXPRESS ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">5</span>
+          <h2>
+            <span class="lang-en">Step Functions — Standard vs Express</span>
+            <span class="lang-es">Step Functions — Standard vs Express</span>
+          </h2>
+        </div>
+
+        <p>
+          <span class="lang-en">
+            Step Functions offers two workflow types optimized for opposite ends
+            of the spectrum:
+            <strong>Standard</strong> for long-running, reliable, non-idempotent
+            workflows, and <strong>Express</strong> for short, extremely
+            high-volume workloads. Express is further split into
+            <strong>Asynchronous</strong> (at-least-once, fire-and-forget) and
+            <strong>Synchronous</strong> (at-most-once, waits for result).
+          </span>
+          <span class="lang-es">
+            Step Functions ofrece dos tipos de workflow optimizados para
+            extremos opuestos:
+            <strong>Standard</strong> para workflows largos, confiables y
+            no-idempotentes, y <strong>Express</strong> para cargas de trabajo
+            cortas y de altísimo volumen. Express se divide en
+            <strong>Asynchronous</strong> (at-least-once, fire-and-forget) y
+            <strong>Synchronous</strong> (at-most-once, espera el resultado).
+          </span>
+        </p>
+
+        <!-- Tree diagram -->
+        <svg
+          viewBox="0 0 500 272"
+          xmlns="http://www.w3.org/2000/svg"
+          style="
+            width: 100%;
+            max-width: 500px;
+            display: block;
+            margin: 0.75rem auto;
+          "
+        >
+          <defs>
+            <marker
+              id="tree-arr"
+              markerWidth="8"
+              markerHeight="8"
+              refX="6"
+              refY="3"
+              orient="auto"
+            >
+              <path d="M0,0 L0,6 L8,3 z" fill="#94a3b8" />
+            </marker>
+          </defs>
+
+          <!-- Step Functions Workflows (top, blue) -->
+          <rect x="155" y="12" width="190" height="52" rx="10" fill="#3b82f6" />
+          <text
+            x="250"
+            y="35"
+            text-anchor="middle"
+            font-size="13"
+            fill="#fff"
+            font-weight="bold"
+          >
+            Step Functions
+          </text>
+          <text
+            x="250"
+            y="52"
+            text-anchor="middle"
+            font-size="13"
+            fill="#fff"
+            font-weight="bold"
+          >
+            Workflows
+          </text>
+
+          <!-- Arrow top → Standard -->
+          <path
+            d="M215,64 Q150,97 117,128"
+            fill="none"
+            stroke="#94a3b8"
+            stroke-width="1.5"
+            marker-end="url(#tree-arr)"
+          />
+          <!-- Arrow top → Express -->
+          <path
+            d="M285,64 Q330,97 365,128"
+            fill="none"
+            stroke="#94a3b8"
+            stroke-width="1.5"
+            marker-end="url(#tree-arr)"
+          />
+
+          <!-- Standard (orange) -->
+          <rect x="38" y="130" width="158" height="52" rx="10" fill="#f97316" />
+          <text
+            x="117"
+            y="153"
+            text-anchor="middle"
+            font-size="13"
+            fill="#fff"
+            font-weight="bold"
+          >
+            Standard
+          </text>
+          <text x="117" y="170" text-anchor="middle" font-size="12" fill="#fff">
+            (default)
+          </text>
+
+          <!-- Express (green) -->
+          <rect
+            x="302"
+            y="130"
+            width="130"
+            height="52"
+            rx="10"
+            fill="#16a34a"
+          />
+          <text
+            x="367"
+            y="162"
+            text-anchor="middle"
+            font-size="13"
+            fill="#fff"
+            font-weight="bold"
+          >
+            Express
+          </text>
+
+          <!-- Arrow Express → Async -->
+          <path
+            d="M340,182 Q300,200 268,218"
+            fill="none"
+            stroke="#94a3b8"
+            stroke-width="1.5"
+            marker-end="url(#tree-arr)"
+          />
+          <!-- Arrow Express → Sync -->
+          <path
+            d="M394,182 Q415,200 425,218"
+            fill="none"
+            stroke="#94a3b8"
+            stroke-width="1.5"
+            marker-end="url(#tree-arr)"
+          />
+
+          <!-- Asynchronous (purple) -->
+          <rect
+            x="155"
+            y="220"
+            width="160"
+            height="48"
+            rx="10"
+            fill="#7c3aed"
+          />
+          <text
+            x="235"
+            y="239"
+            text-anchor="middle"
+            font-size="13"
+            fill="#fff"
+            font-weight="bold"
+          >
+            Asynchronous
+          </text>
+          <text
+            x="235"
+            y="256"
+            text-anchor="middle"
+            font-size="12"
+            fill="#ddd6fe"
+            font-style="italic"
+          >
+            At-least once
+          </text>
+
+          <!-- Synchronous (dark blue) -->
+          <rect
+            x="328"
+            y="220"
+            width="150"
+            height="48"
+            rx="10"
+            fill="#1e40af"
+          />
+          <text
+            x="403"
+            y="239"
+            text-anchor="middle"
+            font-size="13"
+            fill="#fff"
+            font-weight="bold"
+          >
+            Synchronous
+          </text>
+          <text
+            x="403"
+            y="256"
+            text-anchor="middle"
+            font-size="12"
+            fill="#bfdbfe"
+            font-style="italic"
+          >
+            At-most once
+          </text>
+        </svg>
+
+        <h3>
+          <span class="lang-en">Standard Workflow</span>
+          <span class="lang-es">Standard Workflow</span>
+        </h3>
+        <p>
+          <span class="lang-en"
+            >The default type. Built for long-running, reliable workflows where
+            each step must execute exactly once — critical for non-idempotent
+            actions like payments, where running a step twice would cause
+            real-world harm.</span
+          >
+          <span class="lang-es"
+            >El tipo por defecto. Diseñado para workflows largos y confiables
+            donde cada paso debe ejecutarse exactamente una vez — crítico para
+            acciones no-idempotentes como pagos, donde ejecutar un paso dos
+            veces causaría daño real.</span
+          >
+        </p>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>
+                <span class="lang-en">Property</span
+                ><span class="lang-es">Propiedad</span>
+              </th>
+              <th>
+                <span class="lang-en">Value</span
+                ><span class="lang-es">Valor</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <span class="lang-en">Max duration</span
+                ><span class="lang-es">Duración máx.</span>
+              </td>
+              <td><strong>1 year</strong></td>
+            </tr>
+            <tr>
+              <td>
+                <span class="lang-en">Execution model</span
+                ><span class="lang-es">Modelo de ejecución</span>
+              </td>
+              <td><strong>Exactly-once</strong></td>
+            </tr>
+            <tr>
+              <td>
+                <span class="lang-en">Throughput</span
+                ><span class="lang-es">Rendimiento</span>
+              </td>
+              <td>~2,000 executions/second</td>
+            </tr>
+            <tr>
+              <td>
+                <span class="lang-en">Execution history</span
+                ><span class="lang-es">Historial</span>
+              </td>
+              <td>
+                <span class="lang-en"
+                  >90 days in console; unlimited via CloudWatch</span
+                ><span class="lang-es"
+                  >90 días en consola; ilimitado en CloudWatch</span
+                >
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span class="lang-en">Pricing</span
+                ><span class="lang-es">Precio</span>
+              </td>
+              <td>
+                <span class="lang-en"
+                  >Per <strong>state transition</strong></span
+                ><span class="lang-es"
+                  >Por <strong>state transition</strong></span
+                >
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span class="lang-en">Use cases</span
+                ><span class="lang-es">Casos de uso</span>
+              </td>
+              <td>
+                <span class="lang-en"
+                  >Non-idempotent actions — e.g.
+                  <strong>payment processing</strong></span
+                ><span class="lang-es"
+                  >Acciones no-idempotentes — ej.
+                  <strong>procesamiento de pagos</strong></span
+                >
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>
+          <span class="lang-en">Express Workflows — Async vs Sync</span>
+          <span class="lang-es">Express Workflows — Async vs Sync</span>
+        </h3>
+        <p>
+          <span class="lang-en"
+            >Express is built for high speed and volume. Both subtypes share the
+            same base characteristics but differ critically in execution model
+            and whether they wait for a result.</span
+          >
+          <span class="lang-es"
+            >Express está pensado para alta velocidad y volumen. Ambos subtipos
+            comparten características base pero difieren críticamente en el
+            modelo de ejecución y si esperan un resultado.</span
+          >
+        </p>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th></th>
+              <th>
+                <span class="lang-en">Async Express</span
+                ><span class="lang-es">Express Asíncrono</span>
+              </th>
+              <th>
+                <span class="lang-en">Sync Express</span
+                ><span class="lang-es">Express Síncrono</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <strong
+                  ><span class="lang-en">Execution model</span
+                  ><span class="lang-es">Modelo</span></strong
+                >
+              </td>
+              <td><strong>At-least-once</strong></td>
+              <td><strong>At-most-once</strong></td>
+            </tr>
+            <tr>
+              <td>
+                <strong
+                  ><span class="lang-en">Waits for result?</span
+                  ><span class="lang-es">¿Espera resultado?</span></strong
+                >
+              </td>
+              <td>
+                <span class="lang-en">No — fire &amp; forget</span
+                ><span class="lang-es">No — dispara y sigue</span>
+              </td>
+              <td>
+                <span class="lang-en">Yes — waits for completion</span
+                ><span class="lang-es">Sí — espera a que termine</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <strong
+                  ><span class="lang-en">Results via</span
+                  ><span class="lang-es">Resultados vía</span></strong
+                >
+              </td>
+              <td>CloudWatch logs</td>
+              <td>
+                <span class="lang-en">Direct response</span
+                ><span class="lang-es">Respuesta directa</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <strong
+                  ><span class="lang-en">Invoked from</span
+                  ><span class="lang-es">Se invoca desde</span></strong
+                >
+              </td>
+              <td>
+                <span class="lang-en">Anything</span
+                ><span class="lang-es">Cualquier cosa</span>
+              </td>
+              <td>API Gateway / Lambda</td>
+            </tr>
+            <tr>
+              <td>
+                <strong
+                  ><span class="lang-en">On failure</span
+                  ><span class="lang-es">Si falla</span></strong
+                >
+              </td>
+              <td>
+                <span class="lang-en"
+                  >SF may auto-retry → same action may run twice</span
+                ><span class="lang-es"
+                  >SF puede reintentar → la misma acción puede correr dos
+                  veces</span
+                >
+              </td>
+              <td>
+                <span class="lang-en">Caller decides whether to retry</span
+                ><span class="lang-es">El caller decide si reintenta</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <strong
+                  ><span class="lang-en">Idempotency</span
+                  ><span class="lang-es">Idempotencia</span></strong
+                >
+              </td>
+              <td>
+                <span class="lang-en">Must manage manually</span
+                ><span class="lang-es">Debés manejarla vos</span>
+              </td>
+              <td>
+                <span class="lang-en">Not required</span
+                ><span class="lang-es">No requerida</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <strong
+                  ><span class="lang-en">Use cases</span
+                  ><span class="lang-es">Casos de uso</span></strong
+                >
+              </td>
+              <td>
+                <span class="lang-en">IoT ingestion, streaming, messaging</span
+                ><span class="lang-es">IoT, streaming, mensajería</span>
+              </td>
+              <td>
+                <span class="lang-en"
+                  >Microservice orchestration, immediate response</span
+                ><span class="lang-es"
+                  >Orquestación de microservicios, respuesta inmediata</span
+                >
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="callout warning">
+          <strong
+            ><span class="lang-en">Async Express — idempotency trap:</span
+            ><span class="lang-es"
+              >Express Async — trampa de idempotencia:</span
+            ></strong
+          >
+          <span class="lang-en">
+            Because of at-least-once, the same step may execute twice. You must
+            design your actions so that running them twice produces the same
+            result as running them once.</span
+          >
+          <span class="lang-es">
+            Debido al at-least-once, el mismo paso puede ejecutarse dos veces.
+            Debés diseñar tus acciones para que ejecutarlas dos veces produzca
+            el mismo resultado que ejecutarlas una vez.</span
+          >
+        </div>
+      </div>
+      <!-- END CARD 5 -->
+
+      <!-- ═══════════════════ CARD 6: APPSYNC ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">6</span>
+          <h2>
+            <span class="lang-en">AWS AppSync</span>
+            <span class="lang-es">AWS AppSync</span>
+          </h2>
+        </div>
+
+        <p>
+          <span class="lang-en">
+            AppSync is a managed AWS service for building
+            <strong>GraphQL APIs</strong>. Instead of REST (where you get a
+            fixed response from each endpoint), GraphQL lets the client specify
+            exactly which fields it needs — AppSync fetches only that data from
+            your sources and returns it. It has two exam angles: managed GraphQL
+            API, and real-time / offline mobile sync.
+          </span>
+          <span class="lang-es">
+            AppSync es un servicio managed de AWS para construir
+            <strong>APIs GraphQL</strong>. A diferencia de REST (donde cada
+            endpoint devuelve una respuesta fija), GraphQL permite que el
+            cliente especifique exactamente qué campos necesita — AppSync busca
+            solo esos datos en tus fuentes y los devuelve. Tiene dos ángulos en
+            el examen: API GraphQL managed, y sincronización en tiempo real /
+            offline para mobile.
+          </span>
+        </p>
+
+        <h3>
+          <span class="lang-en">Two Exam Angles</span>
+          <span class="lang-es">Dos Ángulos del Examen</span>
+        </h3>
+        <p>
+          <span class="lang-en"
+            >AppSync appears in two distinct exam scenarios — know both keyword
+            triggers.</span
+          >
+          <span class="lang-es"
+            >AppSync aparece en dos escenarios distintos del examen — conocé
+            ambos triggers de keywords.</span
+          >
+        </p>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>
+                <span class="lang-en">Angle</span
+                ><span class="lang-es">Ángulo</span>
+              </th>
+              <th>
+                <span class="lang-en">Keyword triggers</span
+                ><span class="lang-es">Keywords del examen</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <strong
+                  ><span class="lang-en">Managed GraphQL API</span
+                  ><span class="lang-es">API GraphQL managed</span></strong
+                >
+              </td>
+              <td>
+                <span class="lang-en"
+                  >"GraphQL on AWS", "query exactly the fields you need",
+                  "combine multiple data sources"</span
+                ><span class="lang-es"
+                  >"GraphQL en AWS", "obtener exactamente los campos que
+                  necesitás", "combinar múltiples fuentes"</span
+                >
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <strong
+                  ><span class="lang-en">Real-time / Offline sync</span
+                  ><span class="lang-es"
+                    >Tiempo real / Sync offline</span
+                  ></strong
+                >
+              </td>
+              <td>
+                <span class="lang-en"
+                  >"real-time WebSocket", "offline data sync", "replace Cognito
+                  Sync"</span
+                ><span class="lang-es"
+                  >"WebSocket en tiempo real", "sincronización offline",
+                  "reemplazar Cognito Sync"</span
+                >
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>
+          <span class="lang-en">Architecture — How it Works</span>
+          <span class="lang-es">Arquitectura — Cómo funciona</span>
+        </h3>
+        <p>
+          <span class="lang-en">
+            AppSync sits between clients and data sources. The client uploads a
+            GraphQL schema once; AppSync uses <strong>resolvers</strong> to
+            fetch data from the right source for each field in the query, then
+            assembles and returns the exact JSON the client asked for.
+          </span>
+          <span class="lang-es">
+            AppSync se ubica entre los clientes y las fuentes de datos. El
+            cliente sube un schema GraphQL una vez; AppSync usa
+            <strong>resolvers</strong> para buscar datos de la fuente correcta
+            para cada campo de la query, y devuelve el JSON exacto que el
+            cliente pidió.
+          </span>
+        </p>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>
+                <span class="lang-en">Data Source</span
+                ><span class="lang-es">Fuente de datos</span>
+              </th>
+              <th>
+                <span class="lang-en">Notes</span
+                ><span class="lang-es">Notas</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>DynamoDB</strong></td>
+              <td>
+                <span class="lang-en">Direct integration — most common</span
+                ><span class="lang-es">Integración directa — la más común</span>
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Aurora</strong></td>
+              <td>
+                <span class="lang-en">Direct integration</span
+                ><span class="lang-es">Integración directa</span>
+              </td>
+            </tr>
+            <tr>
+              <td><strong>OpenSearch</strong></td>
+              <td>
+                <span class="lang-en">Direct integration</span
+                ><span class="lang-es">Integración directa</span>
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Lambda</strong></td>
+              <td>
+                <span class="lang-en"
+                  >Any source — full flexibility ("any data from
+                  anywhere")</span
+                ><span class="lang-es"
+                  >Cualquier fuente — flexibilidad total</span
+                >
+              </td>
+            </tr>
+            <tr>
+              <td><strong>HTTP endpoint</strong></td>
+              <td>
+                <span class="lang-en">Existing public APIs</span
+                ><span class="lang-es">APIs públicas existentes</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>
+          <span class="lang-en">Security — 4 Authorization Modes</span>
+          <span class="lang-es">Seguridad — 4 Modos de Autorización</span>
+        </h3>
+        <p>
+          <span class="lang-en"
+            >AppSync supports exactly four authorization modes. The exam tests
+            all four.</span
+          >
+          <span class="lang-es"
+            >AppSync soporta exactamente cuatro modos de autorización. El examen
+            los testea todos.</span
+          >
+        </p>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>
+                <span class="lang-en">Mode</span
+                ><span class="lang-es">Modo</span>
+              </th>
+              <th>
+                <span class="lang-en">Use case</span
+                ><span class="lang-es">Caso de uso</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>API_KEY</code></td>
+              <td>
+                <span class="lang-en"
+                  >Generate keys and distribute to users — like API
+                  Gateway</span
+                ><span class="lang-es"
+                  >Generar claves y distribuirlas — igual que API Gateway</span
+                >
+              </td>
+            </tr>
+            <tr>
+              <td><code>AWS_IAM</code></td>
+              <td>
+                <span class="lang-en"
+                  >IAM users, roles, cross-account access</span
+                ><span class="lang-es"
+                  >Usuarios IAM, roles, acceso cross-account</span
+                >
+              </td>
+            </tr>
+            <tr>
+              <td><code>OPENID_CONNECT</code></td>
+              <td>
+                <span class="lang-en">OpenID Connect provider + JWT</span
+                ><span class="lang-es">Provider OpenID Connect + JWT</span>
+              </td>
+            </tr>
+            <tr>
+              <td><code>AMAZON_COGNITO_USER_POOLS</code></td>
+              <td>
+                <span class="lang-en"
+                  >Cognito User Pools — supports social login federation</span
+                ><span class="lang-es"
+                  >Cognito User Pools — soporta federación con social
+                  login</span
+                >
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="callout info">
+          <strong
+            ><span class="lang-en">HTTPS with custom domain:</span
+            ><span class="lang-es">HTTPS con dominio custom:</span></strong
+          >
+          <span class="lang-en">
+            AppSync has no native custom domain + HTTPS support. Recommended
+            solution: put <strong>CloudFront in front of AppSync</strong>.</span
+          >
+          <span class="lang-es">
+            AppSync no tiene soporte nativo de dominio custom + HTTPS. Solución
+            recomendada: poner
+            <strong>CloudFront delante de AppSync</strong>.</span
+          >
+        </div>
+      </div>
+      <!-- END CARD 6 -->
+
+      <!-- ═══════════════════ CARD 7: AWS AMPLIFY ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">7</span>
+          <h2>
+            <span class="lang-en">AWS Amplify</span>
+            <span class="lang-es">AWS Amplify</span>
+          </h2>
+        </div>
+
+        <p>
+          <span class="lang-en">
+            AWS Amplify is the
+            <strong>"Elastic Beanstalk for mobile and web applications"</strong
+            >. Instead of manually wiring together Cognito, AppSync, DynamoDB,
+            S3, and CloudFront, you run a single CLI command and Amplify
+            provisions the entire stack for you. It abstracts infrastructure
+            completely — you focus on features, not AWS console configuration.
+          </span>
+          <span class="lang-es">
+            AWS Amplify es el
+            <strong>"Elastic Beanstalk para aplicaciones mobile y web"</strong>.
+            En vez de conectar manualmente Cognito, AppSync, DynamoDB, S3 y
+            CloudFront, ejecutás un comando CLI y Amplify provisiona todo el
+            stack. Abstrae la infraestructura por completo — vos te enfocás en
+            las features, no en configurar la consola de AWS.
+          </span>
+        </p>
+
+        <h3>
+          <span class="lang-en">The 4 Components</span>
+          <span class="lang-es">Los 4 Componentes</span>
+        </h3>
+        <p>
+          <span class="lang-en"
+            >Amplify is made up of four distinct pieces that work together to
+            cover the full development lifecycle.</span
+          >
+          <span class="lang-es"
+            >Amplify está compuesto por cuatro piezas que cubren el ciclo de
+            vida completo de desarrollo.</span
+          >
+        </p>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>
+                <span class="lang-en">Component</span
+                ><span class="lang-es">Componente</span>
+              </th>
+              <th>
+                <span class="lang-en">What it is</span
+                ><span class="lang-es">Qué es</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Amplify Studio</strong></td>
+              <td>
+                <span class="lang-en"
+                  >Visual drag-and-drop builder for frontend UI and backend
+                  resources</span
+                ><span class="lang-es"
+                  >Constructor visual drag-and-drop para UI y recursos de
+                  backend</span
+                >
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Amplify CLI</strong></td>
+              <td>
+                <span class="lang-en"
+                  ><code>amplify init</code> /
+                  <code>amplify add &lt;feature&gt;</code> — command-line
+                  toolchain</span
+                ><span class="lang-es"
+                  ><code>amplify init</code> /
+                  <code>amplify add &lt;feature&gt;</code> — toolchain de línea
+                  de comandos</span
+                >
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Amplify Libraries</strong></td>
+              <td>
+                <span class="lang-en"
+                  >Client-side SDKs for React, Vue, JavaScript, iOS, Android,
+                  Flutter</span
+                ><span class="lang-es"
+                  >SDKs para React, Vue, JavaScript, iOS, Android, Flutter</span
+                >
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Amplify Hosting</strong></td>
+              <td>
+                <span class="lang-en"
+                  >CI/CD pipeline + CloudFront deployment (like Netlify/Vercel
+                  on AWS)</span
+                ><span class="lang-es"
+                  >Pipeline CI/CD + deploy a CloudFront (como Netlify/Vercel en
+                  AWS)</span
+                >
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>
+          <span class="lang-en">Feature 1 — Authentication</span>
+          <span class="lang-es">Feature 1 — Autenticación</span>
+        </h3>
+        <p>
+          <span class="lang-en"
+            >Running <code>amplify add auth</code> provisions a Cognito User
+            Pool automatically. You get MFA, social sign-in (Google, Facebook,
+            Amazon, Apple), and pre-built UI components — zero frontend auth
+            code required.</span
+          >
+          <span class="lang-es"
+            >Ejecutar <code>amplify add auth</code> provisiona un Cognito User
+            Pool automáticamente. Incluye MFA, social sign-in (Google, Facebook,
+            etc.) y componentes UI pre-construidos — sin código de autenticación
+            en el frontend.</span
+          >
+        </p>
+
+        <h3>
+          <span class="lang-en"
+            >Feature 2 — DataStore (Offline + Real-time)</span
+          >
+          <span class="lang-es"
+            >Feature 2 — DataStore (Offline + Tiempo Real)</span
+          >
+        </h3>
+        <p>
+          <span class="lang-en"
+            >Running <code>amplify add api</code> provisions AppSync + DynamoDB
+            and gives you the DataStore client library. The app writes to a
+            local store first — offline capable — and syncs to the cloud via
+            AppSync (GraphQL + WebSocket) when back online. You only define a
+            GraphQL schema; resolvers and the DynamoDB table are
+            auto-generated.</span
+          >
+          <span class="lang-es"
+            >Ejecutar <code>amplify add api</code> provisiona AppSync + DynamoDB
+            y entrega la librería DataStore. La app escribe localmente primero —
+            funciona offline — y sincroniza a la nube via AppSync (GraphQL +
+            WebSocket) al reconectarse. Solo definís un esquema GraphQL; los
+            resolvers y la tabla DynamoDB se generan solos.</span
+          >
+        </p>
+
+        <!-- DataStore flow diagram -->
+        <svg
+          viewBox="0 0 500 160"
+          xmlns="http://www.w3.org/2000/svg"
+          style="
+            width: 100%;
+            max-width: 500px;
+            display: block;
+            margin: 0.75rem auto;
+          "
+        >
+          <defs>
+            <marker
+              id="amp-arr"
+              markerWidth="8"
+              markerHeight="8"
+              refX="6"
+              refY="3"
+              orient="auto"
+            >
+              <path d="M0,0 L0,6 L8,3 z" fill="#94a3b8" />
+            </marker>
+            <marker
+              id="amp-arr-green"
+              markerWidth="8"
+              markerHeight="8"
+              refX="6"
+              refY="3"
+              orient="auto"
+            >
+              <path d="M0,0 L0,6 L8,3 z" fill="#4ade80" />
+            </marker>
+          </defs>
+
+          <!-- App box -->
+          <rect
+            x="20"
+            y="55"
+            width="130"
+            height="50"
+            rx="6"
+            fill="#1a2744"
+            stroke="#60a5fa"
+            stroke-width="2"
+          />
+          <text
+            x="85"
+            y="77"
+            text-anchor="middle"
+            font-size="13"
+            fill="#93c5fd"
+            font-weight="bold"
+          >
+            App
+          </text>
+          <text
+            x="85"
+            y="94"
+            text-anchor="middle"
+            font-size="12"
+            fill="#7dd3fc"
+          >
+            (Local DataStore)
+          </text>
+
+          <!-- AppSync box -->
+          <rect
+            x="185"
+            y="55"
+            width="130"
+            height="50"
+            rx="6"
+            fill="#1a2744"
+            stroke="#60a5fa"
+            stroke-width="2"
+          />
+          <text
+            x="250"
+            y="77"
+            text-anchor="middle"
+            font-size="13"
+            fill="#93c5fd"
+            font-weight="bold"
+          >
+            AppSync
+          </text>
+          <text
+            x="250"
+            y="94"
+            text-anchor="middle"
+            font-size="12"
+            fill="#7dd3fc"
+          >
+            (GraphQL API)
+          </text>
+
+          <!-- DynamoDB box -->
+          <rect
+            x="350"
+            y="55"
+            width="130"
+            height="50"
+            rx="6"
+            fill="#1a2744"
+            stroke="#60a5fa"
+            stroke-width="2"
+          />
+          <text
+            x="415"
+            y="77"
+            text-anchor="middle"
+            font-size="13"
+            fill="#93c5fd"
+            font-weight="bold"
+          >
+            DynamoDB
+          </text>
+          <text
+            x="415"
+            y="94"
+            text-anchor="middle"
+            font-size="12"
+            fill="#7dd3fc"
+          >
+            (Cloud store)
+          </text>
+
+          <!-- Arrow: App → AppSync (online sync) -->
+          <line
+            x1="150"
+            y1="75"
+            x2="183"
+            y2="75"
+            stroke="#4ade80"
+            stroke-width="1.5"
+            marker-end="url(#amp-arr-green)"
+          />
+          <text
+            x="167"
+            y="70"
+            text-anchor="middle"
+            font-size="11"
+            fill="#4ade80"
+          >
+            online
+          </text>
+
+          <!-- Arrow: AppSync → DynamoDB -->
+          <line
+            x1="315"
+            y1="80"
+            x2="348"
+            y2="80"
+            stroke="#94a3b8"
+            stroke-width="1.5"
+            marker-end="url(#amp-arr)"
+          />
+
+          <!-- Offline label -->
+          <text
+            x="85"
+            y="130"
+            text-anchor="middle"
+            font-size="12"
+            fill="#f87171"
+          >
+            ↑ works offline (local only)
+          </text>
+          <text
+            x="85"
+            y="145"
+            text-anchor="middle"
+            font-size="12"
+            fill="#94a3b8"
+          >
+            syncs when reconnected
+          </text>
+        </svg>
+
+        <h3>
+          <span class="lang-en">Feature 3 — Hosting &amp; CI/CD</span>
+          <span class="lang-es">Feature 3 — Hosting y CI/CD</span>
+        </h3>
+        <p>
+          <span class="lang-en"
+            >Running <code>amplify add hosting</code> connects a Git repository
+            and sets up a full CI/CD pipeline. Every push triggers a build
+            (defined in <code>amplify.yml</code>) and deploys to CloudFront. PR
+            previews, custom domains, monitoring, and environment variables are
+            all included — comparable to Netlify/Vercel but entirely within your
+            AWS account.</span
+          >
+          <span class="lang-es"
+            >Ejecutar <code>amplify add hosting</code> conecta un repositorio
+            Git y configura un pipeline CI/CD completo. Cada push dispara un
+            build (definido en <code>amplify.yml</code>) y despliega a
+            CloudFront. Incluye PR previews, dominios custom, monitoreo y
+            variables de entorno — comparable a Netlify/Vercel pero todo en tu
+            cuenta AWS.</span
+          >
+        </p>
+
+        <!-- CI/CD flow diagram -->
+        <svg
+          viewBox="0 0 560 120"
+          xmlns="http://www.w3.org/2000/svg"
+          style="
+            width: 100%;
+            max-width: 560px;
+            display: block;
+            margin: 0.75rem auto;
+          "
+        >
+          <defs>
+            <marker
+              id="cicd-arr"
+              markerWidth="8"
+              markerHeight="8"
+              refX="6"
+              refY="3"
+              orient="auto"
+            >
+              <path d="M0,0 L0,6 L8,3 z" fill="#94a3b8" />
+            </marker>
+          </defs>
+
+          <!-- Git repo box -->
+          <rect
+            x="10"
+            y="15"
+            width="130"
+            height="85"
+            rx="6"
+            fill="#1a2744"
+            stroke="#60a5fa"
+            stroke-width="2"
+          />
+          <text
+            x="75"
+            y="38"
+            text-anchor="middle"
+            font-size="13"
+            fill="#93c5fd"
+            font-weight="bold"
+          >
+            Git Repo
+          </text>
+          <text
+            x="75"
+            y="55"
+            text-anchor="middle"
+            font-size="12"
+            fill="#7dd3fc"
+          >
+            GitHub / GitLab
+          </text>
+          <text
+            x="75"
+            y="72"
+            text-anchor="middle"
+            font-size="12"
+            fill="#7dd3fc"
+          >
+            Bitbucket /
+          </text>
+          <text
+            x="75"
+            y="86"
+            text-anchor="middle"
+            font-size="12"
+            fill="#7dd3fc"
+          >
+            CodeCommit
+          </text>
+
+          <!-- Arrow -->
+          <line
+            x1="140"
+            y1="50"
+            x2="163"
+            y2="50"
+            stroke="#94a3b8"
+            stroke-width="1.5"
+            marker-end="url(#cicd-arr)"
+          />
+
+          <!-- Amplify Build box -->
+          <rect
+            x="165"
+            y="15"
+            width="130"
+            height="70"
+            rx="6"
+            fill="#1a2744"
+            stroke="#60a5fa"
+            stroke-width="2"
+          />
+          <text
+            x="230"
+            y="45"
+            text-anchor="middle"
+            font-size="13"
+            fill="#93c5fd"
+            font-weight="bold"
+          >
+            Amplify Build
+          </text>
+          <text
+            x="230"
+            y="63"
+            text-anchor="middle"
+            font-size="12"
+            fill="#7dd3fc"
+          >
+            (amplify.yml)
+          </text>
+
+          <!-- Arrow -->
+          <line
+            x1="295"
+            y1="50"
+            x2="318"
+            y2="50"
+            stroke="#94a3b8"
+            stroke-width="1.5"
+            marker-end="url(#cicd-arr)"
+          />
+
+          <!-- CloudFront box -->
+          <rect
+            x="320"
+            y="15"
+            width="130"
+            height="70"
+            rx="6"
+            fill="#1a2744"
+            stroke="#60a5fa"
+            stroke-width="2"
+          />
+          <text
+            x="385"
+            y="45"
+            text-anchor="middle"
+            font-size="13"
+            fill="#93c5fd"
+            font-weight="bold"
+          >
+            CloudFront
+          </text>
+          <text
+            x="385"
+            y="63"
+            text-anchor="middle"
+            font-size="12"
+            fill="#7dd3fc"
+          >
+            (CDN + HTTPS)
+          </text>
+
+          <!-- Arrow -->
+          <line
+            x1="450"
+            y1="50"
+            x2="473"
+            y2="50"
+            stroke="#94a3b8"
+            stroke-width="1.5"
+            marker-end="url(#cicd-arr)"
+          />
+
+          <!-- Users box -->
+          <rect
+            x="475"
+            y="15"
+            width="70"
+            height="70"
+            rx="6"
+            fill="#1a2744"
+            stroke="#60a5fa"
+            stroke-width="2"
+          />
+          <text
+            x="510"
+            y="54"
+            text-anchor="middle"
+            font-size="13"
+            fill="#93c5fd"
+            font-weight="bold"
+          >
+            Users
+          </text>
+        </svg>
+
+        <h3>
+          <span class="lang-en">Testing — Cypress E2E in amplify.yml</span>
+          <span class="lang-es">Testing — Cypress E2E en amplify.yml</span>
+        </h3>
+        <p>
+          <span class="lang-en">
+            Amplify supports two types of tests defined in
+            <code>amplify.yml</code>. Unit tests run at build time. End-to-end
+            tests use <strong>Cypress</strong> — it simulates real browser
+            clicks, fills forms, and generates a UI test report. If Cypress
+            tests fail, the deployment to CloudFront is
+            <strong>blocked</strong>.
+          </span>
+          <span class="lang-es">
+            Amplify soporta dos tipos de tests definidos en
+            <code>amplify.yml</code>. Los unit tests corren en el build. Los
+            end-to-end usan <strong>Cypress</strong> — simula clicks reales del
+            navegador y genera un reporte UI. Si los tests de Cypress fallan, el
+            deploy a CloudFront queda <strong>bloqueado</strong>.
+          </span>
+        </p>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>
+                <span class="lang-en">Test Type</span
+                ><span class="lang-es">Tipo de Test</span>
+              </th>
+              <th>
+                <span class="lang-en">When</span
+                ><span class="lang-es">Cuándo</span>
+              </th>
+              <th>
+                <span class="lang-en">Tool</span
+                ><span class="lang-es">Herramienta</span>
+              </th>
+              <th>
+                <span class="lang-en">Fail behavior</span
+                ><span class="lang-es">Si falla</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <span class="lang-en">Unit tests</span
+                ><span class="lang-es">Unit tests</span>
+              </td>
+              <td>
+                <span class="lang-en">At build time</span
+                ><span class="lang-es">En el build</span>
+              </td>
+              <td>
+                <span class="lang-en">Any (Jest, etc.)</span
+                ><span class="lang-es">Cualquiera (Jest, etc.)</span>
+              </td>
+              <td>
+                <span class="lang-en">Build fails</span
+                ><span class="lang-es">Build falla</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span class="lang-en">End-to-end tests</span
+                ><span class="lang-es">Tests end-to-end</span>
+              </td>
+              <td>
+                <span class="lang-en">After build, before deploy</span
+                ><span class="lang-es"
+                  >Después del build, antes del deploy</span
+                >
+              </td>
+              <td><strong>Cypress</strong></td>
+              <td>
+                <span class="lang-en">Deploy blocked</span
+                ><span class="lang-es">Deploy bloqueado</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <!-- END CARD 7 -->
+
+      <!-- ═══════════════════ EXAM TIPS ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">💡</span>
+          <h2>
+            <span class="lang-en">Exam Tips</span>
+            <span class="lang-es">Tips del Examen</span>
+          </h2>
+        </div>
+        <p>
+          <span class="lang-en"
+            >Consolidated tips for the full section — grows as lessons are
+            completed.</span
+          >
+          <span class="lang-es"
+            >Tips consolidados para toda la sección — crece a medida que se
+            completan las lecciones.</span
+          >
+        </p>
+        <div class="tips-grid">
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en">Run multiple branches at same time</span
+              ><span class="lang-es"
+                >Ejecutar múltiples ramas al mismo tiempo</span
+              ></span
+            >
+            <span class="arr">→</span>
+            <span class="answer">Parallel state</span>
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en">Worker pulls work from Step Functions</span
+              ><span class="lang-es"
+                >Worker hace pull de Step Functions</span
+              ></span
+            >
+            <span class="arr">→</span>
+            <span class="answer">Activity (not service integration)</span>
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en"
+                >Step Functions workflow definition format</span
+              ><span class="lang-es"
+                >Formato de definición de workflow</span
+              ></span
+            >
+            <span class="arr">→</span>
+            <span class="answer">JSON (Amazon States Language)</span>
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en">Step Functions role</span
+              ><span class="lang-es">Rol de Step Functions</span></span
+            >
+            <span class="arr">→</span>
+            <span class="answer"
+              ><span class="lang-en"
+                >Orchestrator — does not compute, coordinates other
+                services</span
+              ><span class="lang-es"
+                >Orquestador — no computa, coordina otros servicios</span
+              ></span
+            >
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en">Where to define retry/catch logic</span
+              ><span class="lang-es"
+                >Dónde definir lógica de retry/catch</span
+              ></span
+            >
+            <span class="arr">→</span>
+            <span class="answer"
+              ><span class="lang-en"
+                >In the state machine (ASL), NOT inside Lambda</span
+              ><span class="lang-es"
+                >En la máquina de estados (ASL), NO dentro de Lambda</span
+              ></span
+            >
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en">Default MaxAttempts in Retry</span
+              ><span class="lang-es"
+                >MaxAttempts por defecto en Retry</span
+              ></span
+            >
+            <span class="arr">→</span>
+            <span class="answer">3</span>
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en"
+                >Wildcard error code (catches everything)</span
+              ><span class="lang-es"
+                >Código de error comodín (captura todo)</span
+              ></span
+            >
+            <span class="arr">→</span>
+            <span class="answer">States.ALL — always put it last</span>
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en"
+                >Preserve original input + append error in Catch</span
+              ><span class="lang-es"
+                >Preservar input original + agregar error en Catch</span
+              ></span
+            >
+            <span class="arr">→</span>
+            <span class="answer"><code>ResultPath: "$.error"</code></span>
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en">ResultPath: null in Catch</span
+              ><span class="lang-es">ResultPath: null en Catch</span></span
+            >
+            <span class="arr">→</span>
+            <span class="answer"
+              ><span class="lang-en"
+                >Discard error, pass original input only</span
+              ><span class="lang-es"
+                >Descarta el error, pasa solo el input original</span
+              ></span
+            >
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en"
+                >Pause Step Functions and wait for external system / human
+                approval</span
+              ><span class="lang-es"
+                >Pausar Step Functions y esperar un sistema externo / aprobación
+                humana</span
+              ></span
+            >
+            <span class="arr">→</span>
+            <span class="answer"
+              ><code>.waitForTaskToken</code> suffix on Resource</span
+            >
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en"
+                >How to inject the task token into the message</span
+              ><span class="lang-es"
+                >Cómo inyectar el task token en el mensaje</span
+              ></span
+            >
+            <span class="arr">→</span>
+            <span class="answer"
+              ><code>"TaskToken.$": "$$.Task.Token"</code> (context object,
+              double $$)</span
+            >
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en"
+                >External system signals success back to Step Functions</span
+              ><span class="lang-es"
+                >Sistema externo señala éxito a Step Functions</span
+              ></span
+            >
+            <span class="arr">→</span>
+            <span class="answer"
+              ><code>SendTaskSuccess(token, output)</code></span
+            >
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en">Activity Tasks mechanism</span
+              ><span class="lang-es">Mecanismo de Activity Tasks</span></span
+            >
+            <span class="arr">→</span>
+            <span class="answer"
+              ><span class="lang-en"
+                >Pull — worker polls Step Functions with
+                <code>GetActivityTask</code></span
+              ><span class="lang-es"
+                >Pull — worker hace polling con
+                <code>GetActivityTask</code></span
+              ></span
+            >
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en">waitForTaskToken mechanism</span
+              ><span class="lang-es">Mecanismo de waitForTaskToken</span></span
+            >
+            <span class="arr">→</span>
+            <span class="answer"
+              ><span class="lang-en"
+                >Push — Step Functions pushes event out (e.g. to SQS)</span
+              ><span class="lang-es"
+                >Push — Step Functions envía el evento (ej. a SQS)</span
+              ></span
+            >
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en"
+                >Keep Activity Task alive between heartbeats</span
+              ><span class="lang-es"
+                >Mantener Activity Task viva entre heartbeats</span
+              ></span
+            >
+            <span class="arr">→</span>
+            <span class="answer"
+              ><code>SendTaskHeartbeat</code> —
+              <span class="lang-en"
+                >send at ~half the HeartBeatSeconds interval</span
+              ><span class="lang-es"
+                >enviar cada ~mitad del intervalo HeartBeatSeconds</span
+              ></span
+            >
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en"
+                >Maximum duration of a Step Functions Standard workflow
+                task</span
+              ><span class="lang-es"
+                >Duración máxima de una tarea en Standard workflow</span
+              ></span
+            >
+            <span class="arr">→</span>
+            <span class="answer">1 year</span>
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en">Standard execution model</span
+              ><span class="lang-es">Modelo de ejecución Standard</span></span
+            >
+            <span class="arr">→</span>
+            <span class="answer"
+              >Exactly-once — safe for non-idempotent actions (e.g.
+              payments)</span
+            >
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en">Express max duration</span
+              ><span class="lang-es">Duración máx. Express</span></span
+            >
+            <span class="arr">→</span>
+            <span class="answer">5 minutes — 100,000+ executions/second</span>
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en">Express execution history</span
+              ><span class="lang-es">Historial de ejecución Express</span></span
+            >
+            <span class="arr">→</span>
+            <span class="answer"
+              >CloudWatch logs only — no console history</span
+            >
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en">Async Express execution model</span
+              ><span class="lang-es"
+                >Modelo de ejecución Express Async</span
+              ></span
+            >
+            <span class="arr">→</span>
+            <span class="answer"
+              ><strong>At-least-once</strong> — same action may run twice → must
+              handle idempotency</span
+            >
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en">Sync Express execution model</span
+              ><span class="lang-es"
+                >Modelo de ejecución Express Sync</span
+              ></span
+            >
+            <span class="arr">→</span>
+            <span class="answer"
+              ><strong>At-most-once</strong> — waits for result, invoked from
+              API Gateway or Lambda</span
+            >
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en">Standard pricing model</span
+              ><span class="lang-es">Modelo de precios Standard</span></span
+            >
+            <span class="arr">→</span>
+            <span class="answer"
+              ><span class="lang-en">Per state transition</span
+              ><span class="lang-es">Por state transition</span></span
+            >
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en">Express pricing model</span
+              ><span class="lang-es">Modelo de precios Express</span></span
+            >
+            <span class="arr">→</span>
+            <span class="answer"
+              ><span class="lang-en">Per execution + duration + memory</span
+              ><span class="lang-es"
+                >Por ejecución + duración + memoria</span
+              ></span
+            >
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en">GraphQL API on AWS</span
+              ><span class="lang-es">API GraphQL en AWS</span></span
+            >
+            <span class="arr">→</span>
+            <span class="answer">AppSync</span>
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en">AppSync real-time subscriptions</span
+              ><span class="lang-es"
+                >Suscripciones en tiempo real en AppSync</span
+              ></span
+            >
+            <span class="arr">→</span>
+            <span class="answer">WebSocket or MQTT on WebSocket</span>
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en"
+                >Offline mobile data sync / replace Cognito Sync</span
+              ><span class="lang-es"
+                >Sync offline en mobile / reemplazar Cognito Sync</span
+              ></span
+            >
+            <span class="arr">→</span>
+            <span class="answer">AppSync</span>
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en"
+                >AppSync resolver for unsupported data source</span
+              ><span class="lang-es"
+                >Resolver AppSync para fuente no soportada</span
+              ></span
+            >
+            <span class="arr">→</span>
+            <span class="answer">Lambda function</span>
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en">HTTPS + custom domain for AppSync</span
+              ><span class="lang-es"
+                >HTTPS + dominio custom para AppSync</span
+              ></span
+            >
+            <span class="arr">→</span>
+            <span class="answer">CloudFront in front of AppSync</span>
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en">AppSync authorization modes (4)</span
+              ><span class="lang-es"
+                >Modos de autorización AppSync (4)</span
+              ></span
+            >
+            <span class="arr">→</span>
+            <span class="answer"
+              >API_KEY, AWS_IAM, OPENID_CONNECT, AMAZON_COGNITO_USER_POOLS</span
+            >
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en">Amplify mental model</span
+              ><span class="lang-es">Modelo mental de Amplify</span></span
+            >
+            <span class="arr">→</span>
+            <span class="answer"
+              ><span class="lang-en"
+                >"Elastic Beanstalk for mobile and web apps"</span
+              ><span class="lang-es"
+                >"Elastic Beanstalk para apps mobile y web"</span
+              ></span
+            >
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en"
+                >Amplify auth → which service under the hood</span
+              ><span class="lang-es"
+                >Auth en Amplify → qué servicio usa</span
+              ></span
+            >
+            <span class="arr">→</span>
+            <span class="answer"
+              >Cognito (MFA, social sign-in, pre-built UI components)</span
+            >
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en"
+                >Amplify DataStore → which services under the hood</span
+              ><span class="lang-es"
+                >DataStore en Amplify → qué servicios usa</span
+              ></span
+            >
+            <span class="arr">→</span>
+            <span class="answer"
+              >AppSync + DynamoDB (offline-first, real-time via WebSocket)</span
+            >
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en"
+                >Amplify Hosting → CDN + CI/CD from Git</span
+              ><span class="lang-es"
+                >Amplify Hosting → CDN + CI/CD desde Git</span
+              ></span
+            >
+            <span class="arr">→</span>
+            <span class="answer"
+              ><span class="lang-en"
+                >CloudFront — supports GitHub, GitLab, Bitbucket,
+                <strong>CodeCommit</strong></span
+              ><span class="lang-es"
+                >CloudFront — soporta GitHub, GitLab, Bitbucket,
+                <strong>CodeCommit</strong></span
+              ></span
+            >
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en">Amplify E2E testing framework</span
+              ><span class="lang-es"
+                >Framework de testing E2E en Amplify</span
+              ></span
+            >
+            <span class="arr">→</span>
+            <span class="answer"
+              ><strong>Cypress</strong> —
+              <span class="lang-en"
+                >defined in amplify.yml; blocks deploy if tests fail</span
+              ><span class="lang-es"
+                >definido en amplify.yml; bloquea el deploy si los tests
+                fallan</span
+              ></span
+            >
+          </div>
+        </div>
+      </div>
+      <!-- END EXAM TIPS -->
+
+      <!-- WEAK POINTS -->
+      <div class="card" style="border-color: #7c3aed; background: #13102a">
+        <div class="card-header">
+          <span class="badge" style="background: #7c3aed">🧩</span>
+          <h2 style="color: #c4b5fd">
+            <span class="lang-en">Tricky Quiz Questions</span>
+            <span class="lang-es">Preguntas Tricky del Quiz</span>
+          </h2>
+        </div>
+        <div
+          style="
+            border: 1px solid #4c1d95;
+            border-radius: 8px;
+            padding: 0.85rem;
+            margin-bottom: 0.75rem;
+            background: #0f172a;
+          "
+        >
+          <p style="font-weight: bold; color: #c4b5fd; margin: 0 0 0.4rem 0">
+            <span class="lang-en"
+              >Which AWS service does NOT support the WebSocket protocol?</span
+            >
+            <span class="lang-es"
+              >¿Qué servicio de AWS NO soporta el protocolo WebSocket?</span
+            >
+          </p>
+          <p style="margin: 0 0 0.4rem 0">
+            <span style="color: #4ade80; font-weight: bold">✅ DynamoDB</span>
+          </p>
+          <p style="margin: 0; color: #94a3b8; font-size: 0.9rem">
+            <span class="lang-en"
+              >ALB, API Gateway, and AppSync all support WebSocket natively.
+              DynamoDB is a database — it can trigger events via Streams →
+              Lambda, but it has no WebSocket protocol support of its own.</span
+            >
+            <span class="lang-es"
+              >ALB, API Gateway y AppSync soportan WebSocket nativamente.
+              DynamoDB es una base de datos — puede disparar eventos via Streams
+              → Lambda, pero no tiene soporte WebSocket propio.</span
+            >
+          </p>
+        </div>
+      </div>
+      <!-- END WEAK POINTS -->
+    </div>
+    <!-- end .container -->
+  </body>
+</html>

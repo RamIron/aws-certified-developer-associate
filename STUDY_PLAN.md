@@ -3,10 +3,10 @@
 ## Overall Progress
 
 ```
-[████████████████████░] 27/33 sections | 420/483 lessons (87.0%)
-Total XP: 13,075
+[█████████████████████░] 28/33 sections | 433/483 lessons (89.6%)
+Total XP: 13,700
 
-Videos: 390/446 | Quizzes: 24/29 | ⏱ 28h 1min done · 3h 57min left
+Videos: 402/446 | Quizzes: 25/29 | ⏱ 28h 59min done · 2h 59min left
 ```
 
 > **Note:** The exact number of lessons per section will be filled in as the course progresses.
@@ -515,19 +515,19 @@ Videos: 390/446 | Quizzes: 24/29 | ⏱ 28h 1min done · 3h 57min left
 
 ## Section 28: Other Serverless: Step Functions & AppSync
 
-- [ ] 28.1 - Step Functions Overview
-- [ ] 28.2 - Step Functions - Hands On
-- [ ] 28.3 - Step Functions - Invoke Lambda - Hands On
-- [ ] 28.4 - Step Functions - Error Handling
-- [ ] 28.5 - Step Functions - Error Handling Hands On
-- [ ] 28.6 - Step Functions - Wait For Task Token
-- [ ] 28.7 - Step Functions - Activity Tasks
-- [ ] 28.8 - Step Functions - Standard vs Express
-- [ ] 28.9 - AppSync Overview
-- [ ] 28.10 - AppSync Hands On
-- [ ] 28.11 - AWS Amplify
-- [ ] 28.12 - AWS Amplify - Hands On
-- [ ] Other Serverless Quiz (Quiz 25)
+- [x] 28.1 - Step Functions Overview (PERFECT 100%)
+- [x] 28.2 - Step Functions - Hands On (skipped - hands-on walkthrough; ASL name + Standard vs Express noted)
+- [x] 28.3 - Step Functions - Invoke Lambda - Hands On (skipped - hands-on; execution role auto-created noted)
+- [x] 28.4 - Step Functions - Error Handling (PERFECT 100%)
+- [x] 28.5 - Step Functions - Error Handling Hands On (skipped - hands-on; retry timing + different catch branches observed)
+- [x] 28.6 - Step Functions - Wait For Task Token (PERFECT 100%)
+- [x] 28.7 - Step Functions - Activity Tasks (PERFECT 100%)
+- [x] 28.8 - Step Functions - Standard vs Express (PERFECT 100%)
+- [x] 28.9 - AppSync Overview (PERFECT 100%)
+- [x] 28.10 - AppSync Hands On (skipped - hands-on; DynamoDB-backed GraphQL API created + 4 auth modes confirmed)
+- [x] 28.11 - AWS Amplify (PERFECT 100%)
+- [x] 28.12 - AWS Amplify - Hands On (skipped - hands-on; Amplify studio UI, DataStore, CloudFormation stacks, Data Manager observed)
+- [x] Other Serverless Quiz (Quiz 25) — Completed ✅
 
 ## Section 29: Advanced Identity
 

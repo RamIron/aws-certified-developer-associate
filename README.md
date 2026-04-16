@@ -7,14 +7,14 @@ Study notes for AWS DVA-C02, assisted by Claude.
 ## 📊 Progress
 
 ```
-██████████████████████████░░░░ 87.0% (420/483 lessons)
+███████████████████████████░░░ 89.6% (433/483 lessons)
 ```
 
-📹 Videos: 390/446 · 📄 Articles: 6/8 · ❓ Quizzes: 24/29
+📹 Videos: 402/446 · 📄 Articles: 6/8 · ❓ Quizzes: 25/29
 
-**Current section:** 28 - Other Serverless: Step Functions & AppSync
+**Current section:** 29 - Advanced Identity
 
-**XP:** 13,075
+**XP:** 13,700
 
 ### Course Sections
 
@@ -47,15 +47,15 @@ Study notes for AWS DVA-C02, assisted by Claude.
 | 25: AWS Serverless: SAM | 35 min | ✅ |
 | 26: Cloud Development Kit (CDK) | 26 min | ✅ |
 | 27: Cognito: Cognito User Pools, Cognito Identity Pools & Cognito Sync | 39 min | ✅ |
-| 28: Other Serverless: Step Functions & AppSync | 58 min | |
+| 28: Other Serverless: Step Functions & AppSync | 58 min | ✅ |
 | 29: Advanced Identity | 23 min | |
 | 30: AWS Security & Encryption: KMS, Encryption SDK, SSM Parameter Store, IAM & STS | 1h 29 min | |
 | 31: AWS Other Services | 34 min | |
 | 32: AWS Final Cleanup | 3 min | |
 | 33: Preparing for the Exam | 21 min | |
 | 34: Congratulations | 9 min | |
-| **Completed (1–27)** | **~28h 1min** | |
-| **Remaining (28–34)** | **~3h 57min** | |
+| **Completed (1–28)** | **~28h 59min** | |
+| **Remaining (29–34)** | **~2h 59min** | |
 
 ---
 
