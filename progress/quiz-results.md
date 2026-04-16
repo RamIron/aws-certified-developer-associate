@@ -4,15 +4,20 @@
 
 | Metric | Value |
 |--------|-------|
-| Total XP | 13700 |
-| Lessons completed | 210 |
-| Perfect quizzes (100%) | 173 |
+| Total XP | 14025 |
+| Lessons completed | 214 |
+| Perfect quizzes (100%) | 176 |
 | Lessons to review | 16 |
 
 ## Session History
 
 | Date | Section | Lesson | XP | Result |
 |------|---------|--------|----|--------|
+| 2026-04-16 | 29 - Advanced Identity | Quiz 26 (Advanced Identity) - Udemy | — | Completed ✅ |
+| 2026-04-16 | 29 - Advanced Identity | 29.4 - AWS Directory Services | +75 | PERFECT 100% |
+| 2026-04-16 | 29 - Advanced Identity | 29.3 - IAM PassRole | +50 | REVIEW 67% |
+| 2026-04-16 | 29 - Advanced Identity | 29.2 - Advanced IAM Policies | +100 | PERFECT 100% |
+| 2026-04-16 | 29 - Advanced Identity | 29.1 - STS Overview | +100 | PERFECT 100% |
 | 2026-04-15 | 28 - Step Functions & AppSync | 28.11 - AWS Amplify | +100 | PERFECT 100% |
 | 2026-04-15 | 28 - Step Functions & AppSync | 28.9 - AppSync Overview | +100 | PERFECT 100% |
 | 2026-04-15 | 28 - Step Functions & AppSync | 28.8 - Step Functions Standard vs Express | +100 | PERFECT 100% |

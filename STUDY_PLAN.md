@@ -3,10 +3,10 @@
 ## Overall Progress
 
 ```
-[█████████████████████░] 28/33 sections | 433/483 lessons (89.6%)
-Total XP: 13,700
+[██████████████████████░] 29/33 sections | 438/483 lessons (90.6%)
+Total XP: 14,025
 
-Videos: 402/446 | Quizzes: 25/29 | ⏱ 28h 59min done · 2h 59min left
+Videos: 406/446 | Quizzes: 26/29 | ⏱ 29h 22min done · 2h 36min left
 ```
 
 > **Note:** The exact number of lessons per section will be filled in as the course progresses.
@@ -531,11 +531,11 @@ Videos: 402/446 | Quizzes: 25/29 | ⏱ 28h 59min done · 2h 59min left
 
 ## Section 29: Advanced Identity
 
-- [ ] 29.1 - STS Overview
-- [ ] 29.2 - Advanced IAM
-- [ ] 29.3 - Granting a User Permissions to Pass a Role to an AWS Service
-- [ ] 29.4 - AWS Directory Services
-- [ ] Advanced IAM Quiz (Quiz 26)
+- [x] 29.1 - STS Overview (PERFECT 100%)
+- [x] 29.2 - Advanced IAM (PERFECT 100%)
+- [x] 29.3 - Granting a User Permissions to Pass a Role to an AWS Service (REVIEW 67%)
+- [x] 29.4 - AWS Directory Services (PERFECT 100%)
+- [x] 29.5 - Advanced Identity Quiz (Quiz 26) — Completed ✅
 
 ## Section 30: AWS Security & Encryption: KMS, Encryption SDK, SSM Parameter Store, IAM & STS
 

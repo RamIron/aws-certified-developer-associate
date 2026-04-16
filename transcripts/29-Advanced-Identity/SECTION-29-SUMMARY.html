@@ -1,0 +1,829 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Section 29 — Advanced Identity</title>
+    <link rel="stylesheet" href="../shared/summary.css" />
+    <script src="../shared/summary.js"></script>
+  </head>
+  <body>
+    <script>
+      initHeader("Section 29 — Advanced Identity");
+    </script>
+
+    <div class="container">
+
+      <!-- ═══════════════════ CARD 1: STS ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">1</span>
+          <h2>
+            <span class="lang-en">AWS Security Token Service (STS)</span>
+            <span class="lang-es">AWS Security Token Service (STS)</span>
+          </h2>
+        </div>
+
+        <p>
+          <span class="lang-en">
+            STS issues <strong>temporary security credentials</strong> — valid for up to one hour — that allow
+            users, applications, and services to access AWS resources without needing permanent IAM users
+            or long-term access keys. The core pattern is: call an STS API → receive temporary credentials →
+            use those credentials to act as an IAM role or federated identity.
+          </span>
+          <span class="lang-es">
+            STS emite <strong>credenciales de seguridad temporales</strong> — válidas hasta una hora — que
+            permiten a usuarios, aplicaciones y servicios acceder a recursos de AWS sin necesitar usuarios IAM
+            permanentes ni access keys de largo plazo. El patrón central es: llamar a una API de STS →
+            recibir credenciales temporales → usarlas para actuar como un rol IAM o identidad federada.
+          </span>
+        </p>
+
+        <h3>
+          <span class="lang-en">The 7 STS APIs</span>
+          <span class="lang-es">Las 7 APIs de STS</span>
+        </h3>
+        <p>
+          <span class="lang-en">These are the STS API calls you need to recognize on the exam. The four highlighted ones are the most exam-relevant.</span>
+          <span class="lang-es">Estas son las APIs de STS que necesitás reconocer en el examen. Las cuatro destacadas son las más relevantes.</span>
+        </p>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>API</th>
+              <th><span class="lang-en">Purpose</span><span class="lang-es">Propósito</span></th>
+              <th><span class="lang-en">Exam priority</span><span class="lang-es">Prioridad examen</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>AssumeRole</code></td>
+              <td><span class="lang-en">Assume a role within your account or cross-account</span><span class="lang-es">Asumir un rol en tu cuenta o cross-account</span></td>
+              <td>⭐⭐⭐</td>
+            </tr>
+            <tr>
+              <td><code>AssumeRoleWithSAML</code></td>
+              <td><span class="lang-en">Temporary credentials for users logged in with SAML</span><span class="lang-es">Credenciales temporales para usuarios con SAML</span></td>
+              <td>⭐⭐</td>
+            </tr>
+            <tr>
+              <td><code>AssumeRoleWithWebIdentity</code></td>
+              <td><span class="lang-en">Roles for users logged in with Facebook/Google/OIDC — <strong>deprecated, use Cognito Identity Pools instead</strong></span><span class="lang-es">Roles para usuarios con Facebook/Google/OIDC — <strong>deprecado, usar Cognito Identity Pools</strong></span></td>
+              <td>⭐⭐</td>
+            </tr>
+            <tr>
+              <td><code>GetSessionToken</code></td>
+              <td><span class="lang-en">For MFA — returns Access Key + Secret Key + Session Token + Expiry</span><span class="lang-es">Para MFA — devuelve Access Key + Secret Key + Session Token + Expiración</span></td>
+              <td>⭐⭐⭐</td>
+            </tr>
+            <tr>
+              <td><code>GetFederationToken</code></td>
+              <td><span class="lang-en">Temporary credentials for a federated user</span><span class="lang-es">Credenciales temporales para usuario federado</span></td>
+              <td>⭐</td>
+            </tr>
+            <tr>
+              <td><code>GetCallerIdentity</code></td>
+              <td><span class="lang-en">"Who am I?" — returns IAM user/role details + account number</span><span class="lang-es">"¿Quién soy?" — devuelve usuario/rol IAM + número de cuenta</span></td>
+              <td>⭐⭐⭐</td>
+            </tr>
+            <tr>
+              <td><code>DecodeAuthorizationMessage</code></td>
+              <td><span class="lang-en">Decodes an AWS API denial error message</span><span class="lang-es">Decodifica un mensaje de error de denegación de API de AWS</span></td>
+              <td>⭐⭐⭐</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>
+          <span class="lang-en">AssumeRole Flow</span>
+          <span class="lang-es">Flujo de AssumeRole</span>
+        </h3>
+        <p>
+          <span class="lang-en">AssumeRole is the most fundamental STS pattern. Your user or application calls STS, which checks permissions and returns temporary credentials — allowing you to act as the target role for up to one hour.</span>
+          <span class="lang-es">AssumeRole es el patrón STS más fundamental. Tu usuario o aplicación llama a STS, que verifica permisos y devuelve credenciales temporales — permitiéndote actuar como el rol objetivo por hasta una hora.</span>
+        </p>
+
+        <!-- AssumeRole diagram -->
+        <svg viewBox="0 0 520 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:520px;display:block;margin:0.75rem auto;">
+          <defs>
+            <marker id="sts-arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+              <path d="M0,0 L0,6 L8,3 z" fill="#94a3b8"/>
+            </marker>
+            <marker id="sts-arr-green" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+              <path d="M0,0 L0,6 L8,3 z" fill="#4ade80"/>
+            </marker>
+          </defs>
+
+          <!-- User/App box -->
+          <rect x="10" y="85" width="120" height="50" rx="6" fill="#1a2744" stroke="#60a5fa" stroke-width="2"/>
+          <text x="70" y="106" text-anchor="middle" font-size="13" fill="#93c5fd" font-weight="bold">User / App</text>
+          <text x="70" y="123" text-anchor="middle" font-size="12" fill="#7dd3fc">(IAM principal)</text>
+
+          <!-- STS box -->
+          <rect x="195" y="85" width="130" height="50" rx="6" fill="#1a2744" stroke="#60a5fa" stroke-width="2"/>
+          <text x="260" y="106" text-anchor="middle" font-size="13" fill="#93c5fd" font-weight="bold">AWS STS</text>
+          <text x="260" y="123" text-anchor="middle" font-size="12" fill="#7dd3fc">checks permissions</text>
+
+          <!-- Role box -->
+          <rect x="385" y="85" width="125" height="50" rx="6" fill="#1a2744" stroke="#60a5fa" stroke-width="2"/>
+          <text x="447" y="106" text-anchor="middle" font-size="13" fill="#93c5fd" font-weight="bold">IAM Role</text>
+          <text x="447" y="123" text-anchor="middle" font-size="12" fill="#7dd3fc">(temp credentials)</text>
+
+          <!-- Arrow 1: User → STS (above midline, label above arrow) -->
+          <line x1="130" y1="103" x2="193" y2="103" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#sts-arr)"/>
+          <text x="161" y="72" text-anchor="middle" font-size="12" fill="#e2e8f0" font-weight="bold">1. AssumeRole</text>
+          <line x1="161" y1="75" x2="161" y2="100" stroke="#94a3b8" stroke-width="0.5" stroke-dasharray="3,2"/>
+
+          <!-- Arrow 2: STS → Role (below midline, label below arrow) -->
+          <line x1="325" y1="118" x2="383" y2="118" stroke="#4ade80" stroke-width="1.5" marker-end="url(#sts-arr-green)"/>
+          <text x="354" y="148" text-anchor="middle" font-size="12" fill="#4ade80" font-weight="bold">2. Temp creds</text>
+          <text x="354" y="163" text-anchor="middle" font-size="12" fill="#94a3b8">(15 min – 1 hr)</text>
+
+          <!-- Bottom note -->
+          <text x="260" y="200" text-anchor="middle" font-size="12" fill="#94a3b8">same-account OR cross-account</text>
+        </svg>
+
+        <h3>
+          <span class="lang-en">STS with MFA — GetSessionToken</span>
+          <span class="lang-es">STS con MFA — GetSessionToken</span>
+        </h3>
+        <p>
+          <span class="lang-en">
+            When a user or root account has MFA enabled, they call <code>GetSessionToken</code> to get temporary credentials.
+            The response includes three items: an Access Key ID, a Secret Access Key, and a <strong>Session Token</strong>.
+            The IAM policy must include the condition <code>"aws:MultiFactorAuthPresent": "true"</code> to enforce MFA before sensitive actions.
+          </span>
+          <span class="lang-es">
+            Cuando un usuario o cuenta root tiene MFA habilitado, llama a <code>GetSessionToken</code> para obtener credenciales temporales.
+            La respuesta incluye tres elementos: un Access Key ID, un Secret Access Key y un <strong>Session Token</strong>.
+            La política IAM debe incluir la condición <code>"aws:MultiFactorAuthPresent": "true"</code> para exigir MFA antes de acciones sensibles.
+          </span>
+        </p>
+        <div class="callout warning">
+          <strong><span class="lang-en">GetSessionToken returns 4 things:</span><span class="lang-es">GetSessionToken devuelve 4 cosas:</span></strong>
+          <span class="lang-en"> Access Key ID · Secret Access Key · <strong>Session Token</strong> · <strong>Expiry date</strong></span>
+          <span class="lang-es"> Access Key ID · Secret Access Key · <strong>Session Token</strong> · <strong>Fecha de expiración</strong></span>
+        </div>
+
+        <div class="callout info">
+          <strong><span class="lang-en">AssumeRoleWithWebIdentity is deprecated.</span><span class="lang-es">AssumeRoleWithWebIdentity está deprecado.</span></strong>
+          <span class="lang-en"> AWS no longer recommends it for Facebook/Google/OIDC login. Use <strong>Cognito Identity Pools</strong> instead.</span>
+          <span class="lang-es"> AWS ya no lo recomienda para login con Facebook/Google/OIDC. Usar <strong>Cognito Identity Pools</strong> en su lugar.</span>
+        </div>
+      </div>
+      <!-- END CARD 1 -->
+
+      <!-- ═══════════════════ CARD 2: ADVANCED IAM ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">2</span>
+          <h2>
+            <span class="lang-en">Advanced IAM Policies</span>
+            <span class="lang-es">Políticas IAM Avanzadas</span>
+          </h2>
+        </div>
+
+        <p>
+          <span class="lang-en">
+            This card covers three IAM concepts that are easy to get wrong on the exam: how policy evaluation
+            actually works (deny vs allow precedence), how IAM and S3 bucket policies interact (union evaluation),
+            and two techniques for writing more maintainable policies (dynamic variables and managed vs inline).
+          </span>
+          <span class="lang-es">
+            Esta card cubre tres conceptos de IAM que son fáciles de confundir en el examen: cómo funciona
+            realmente la evaluación de políticas (precedencia deny vs allow), cómo interactúan las políticas IAM
+            y de bucket S3 (evaluación por unión), y dos técnicas para políticas más mantenibles (variables dinámicas
+            y managed vs inline).
+          </span>
+        </p>
+
+        <h3>
+          <span class="lang-en">1. Policy Evaluation Model</span>
+          <span class="lang-es">1. Modelo de Evaluación de Políticas</span>
+        </h3>
+        <p>
+          <span class="lang-en">IAM evaluates all applicable policies for a request in this order. An explicit deny always terminates the evaluation immediately — no allow can override it.</span>
+          <span class="lang-es">IAM evalúa todas las políticas aplicables a un request en este orden. Un deny explícito siempre termina la evaluación de inmediato — ningún allow puede sobreescribirlo.</span>
+        </p>
+
+        <!-- Evaluation flow diagram -->
+        <svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:400px;display:block;margin:0.75rem auto;">
+          <defs>
+            <marker id="iam-arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+              <path d="M0,0 L0,6 L8,3 z" fill="#94a3b8"/>
+            </marker>
+          </defs>
+
+          <!-- Start: Default DENY -->
+          <rect x="130" y="10" width="140" height="38" rx="6" fill="#1a2744" stroke="#60a5fa" stroke-width="2"/>
+          <text x="200" y="34" text-anchor="middle" font-size="13" fill="#93c5fd" font-weight="bold">Default: DENY</text>
+
+          <!-- Arrow down -->
+          <line x1="200" y1="48" x2="200" y2="68" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#iam-arr)"/>
+
+          <!-- Explicit DENY? -->
+          <rect x="100" y="70" width="200" height="38" rx="6" fill="#1a2744" stroke="#f97316" stroke-width="2"/>
+          <text x="200" y="94" text-anchor="middle" font-size="13" fill="#fdba74">Explicit DENY?</text>
+
+          <!-- YES → DENY (right) -->
+          <line x1="300" y1="89" x2="360" y2="89" stroke="#ef4444" stroke-width="1.5" marker-end="url(#iam-arr)"/>
+          <text x="330" y="84" text-anchor="middle" font-size="12" fill="#ef4444">YES</text>
+          <rect x="362" y="72" width="28" height="34" rx="4" fill="#450a0a" stroke="#ef4444" stroke-width="2"/>
+          <text x="376" y="94" text-anchor="middle" font-size="12" fill="#ef4444" font-weight="bold">✗</text>
+
+          <!-- Arrow down -->
+          <line x1="200" y1="108" x2="200" y2="128" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#iam-arr)"/>
+
+          <!-- Explicit ALLOW? -->
+          <rect x="100" y="130" width="200" height="38" rx="6" fill="#1a2744" stroke="#4ade80" stroke-width="2"/>
+          <text x="200" y="154" text-anchor="middle" font-size="13" fill="#86efac">Explicit ALLOW?</text>
+
+          <!-- YES → ALLOW (right) -->
+          <line x1="300" y1="149" x2="360" y2="149" stroke="#4ade80" stroke-width="1.5" marker-end="url(#iam-arr)"/>
+          <text x="330" y="144" text-anchor="middle" font-size="12" fill="#4ade80">YES</text>
+          <rect x="362" y="132" width="28" height="34" rx="4" fill="#052e16" stroke="#4ade80" stroke-width="2"/>
+          <text x="376" y="154" text-anchor="middle" font-size="12" fill="#4ade80" font-weight="bold">✓</text>
+
+          <!-- Arrow down -->
+          <line x1="200" y1="168" x2="200" y2="188" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#iam-arr)"/>
+
+          <!-- DENY (implicit) -->
+          <rect x="130" y="190" width="140" height="24" rx="4" fill="#450a0a" stroke="#ef4444" stroke-width="1.5"/>
+          <text x="200" y="207" text-anchor="middle" font-size="12" fill="#ef4444">DENY (implicit)</text>
+        </svg>
+
+        <h3>
+          <span class="lang-en">2. IAM Policy + S3 Bucket Policy = Union</span>
+          <span class="lang-es">2. Política IAM + Política de Bucket S3 = Unión</span>
+        </h3>
+        <p>
+          <span class="lang-en">When an IAM principal takes action on S3, AWS evaluates the <strong>union</strong> of the IAM policy and the S3 bucket policy together. An explicit deny in either one wins. An allow in either one is sufficient (unless countered by a deny).</span>
+          <span class="lang-es">Cuando un principal IAM actúa sobre S3, AWS evalúa la <strong>unión</strong> de la política IAM y la política de bucket S3 juntas. Un deny explícito en cualquiera de las dos gana. Un allow en cualquiera es suficiente (salvo que lo contradiga un deny).</span>
+        </p>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th><span class="lang-en">IAM Policy</span><span class="lang-es">Política IAM</span></th>
+              <th><span class="lang-en">S3 Bucket Policy</span><span class="lang-es">Política de Bucket S3</span></th>
+              <th><span class="lang-en">Result</span><span class="lang-es">Resultado</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="lang-en">Allow read/write</span><span class="lang-es">Allow lectura/escritura</span></td>
+              <td><span class="lang-en">None</span><span class="lang-es">Ninguna</span></td>
+              <td style="color:#4ade80">✅ <span class="lang-en">Allowed</span><span class="lang-es">Permitido</span></td>
+            </tr>
+            <tr>
+              <td><span class="lang-en">Allow read/write</span><span class="lang-es">Allow lectura/escritura</span></td>
+              <td><span class="lang-en">Explicit DENY for this role</span><span class="lang-es">DENY explícito para este rol</span></td>
+              <td style="color:#ef4444">❌ <span class="lang-en">Denied (deny wins)</span><span class="lang-es">Denegado (deny gana)</span></td>
+            </tr>
+            <tr>
+              <td><span class="lang-en">Empty (no S3 perms)</span><span class="lang-es">Vacía (sin permisos S3)</span></td>
+              <td><span class="lang-en">Allow read/write for this role</span><span class="lang-es">Allow lectura/escritura para este rol</span></td>
+              <td style="color:#4ade80">✅ <span class="lang-en">Allowed (bucket policy sufficient)</span><span class="lang-es">Permitido (bucket policy alcanza)</span></td>
+            </tr>
+            <tr>
+              <td><span class="lang-en">Explicit DENY</span><span class="lang-es">DENY explícito</span></td>
+              <td><span class="lang-en">Allow read/write</span><span class="lang-es">Allow lectura/escritura</span></td>
+              <td style="color:#ef4444">❌ <span class="lang-en">Denied (deny wins)</span><span class="lang-es">Denegado (deny gana)</span></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>
+          <span class="lang-en">3. Dynamic IAM Policies</span>
+          <span class="lang-es">3. Políticas IAM Dinámicas</span>
+        </h3>
+        <p>
+          <span class="lang-en">Instead of creating one policy per user (which doesn't scale), you use <strong>policy variables</strong> that are resolved at runtime. The most common variable is <code>${aws:username}</code>, which is replaced by the caller's IAM username when the policy is evaluated.</span>
+          <span class="lang-es">En lugar de crear una política por usuario (lo cual no escala), se usan <strong>variables de política</strong> que se resuelven en tiempo de ejecución. La variable más común es <code>${aws:username}</code>, que se reemplaza por el nombre de usuario IAM del llamador al evaluar la política.</span>
+        </p>
+        <div class="callout info">
+          <strong><span class="lang-en">Example:</span><span class="lang-es">Ejemplo:</span></strong>
+          <code>"arn:aws:s3:::my-bucket/home/${aws:username}/*"</code>
+          <br/>
+          <span class="lang-en">One policy → all users → each user can only access their own <code>/home/username/</code> folder.</span>
+          <span class="lang-es">Una política → todos los usuarios → cada usuario solo accede a su propia carpeta <code>/home/username/</code>.</span>
+        </div>
+
+        <h3>
+          <span class="lang-en">4. Inline vs Managed Policies</span>
+          <span class="lang-es">4. Políticas Inline vs Managed</span>
+        </h3>
+        <p>
+          <span class="lang-en">There are three policy types in AWS. AWS Managed and Customer Managed are reusable and centrally managed. Inline policies are embedded directly in a principal and have significant limitations.</span>
+          <span class="lang-es">Hay tres tipos de políticas en AWS. AWS Managed y Customer Managed son reutilizables y de gestión centralizada. Las políticas inline están embebidas directamente en un principal y tienen limitaciones importantes.</span>
+        </p>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th><span class="lang-en">Type</span><span class="lang-es">Tipo</span></th>
+              <th><span class="lang-en">Managed by</span><span class="lang-es">Gestionada por</span></th>
+              <th><span class="lang-en">Reusable</span><span class="lang-es">Reutilizable</span></th>
+              <th><span class="lang-en">Version control</span><span class="lang-es">Control de versiones</span></th>
+              <th><span class="lang-en">Notes</span><span class="lang-es">Notas</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong><span class="lang-en">AWS Managed</span><span class="lang-es">AWS Managed</span></strong></td>
+              <td>AWS</td>
+              <td>✅</td>
+              <td><span class="lang-en">AWS updates automatically</span><span class="lang-es">AWS actualiza automáticamente</span></td>
+              <td><span class="lang-en">Good for standard job functions (admin, power user)</span><span class="lang-es">Para funciones estándar (admin, power user)</span></td>
+            </tr>
+            <tr>
+              <td><strong><span class="lang-en">Customer Managed</span><span class="lang-es">Customer Managed</span></strong></td>
+              <td><span class="lang-en">You</span><span class="lang-es">Vos</span></td>
+              <td>✅</td>
+              <td>✅ <span class="lang-en">(rollback available)</span><span class="lang-es">(rollback disponible)</span></td>
+              <td><span class="lang-en"><strong>Best practice</strong> — granular, central change mgmt</span><span class="lang-es"><strong>Mejor práctica</strong> — granular, gestión centralizada</span></td>
+            </tr>
+            <tr>
+              <td><strong>Inline</strong></td>
+              <td><span class="lang-en">You (embedded in principal)</span><span class="lang-es">Vos (embebida en principal)</span></td>
+              <td>❌</td>
+              <td>❌</td>
+              <td><span class="lang-en">1:1 with principal; deleted if principal deleted; size-limited</span><span class="lang-es">1:1 con principal; se borra si se borra el principal; limitada en tamaño</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <!-- END CARD 2 -->
+
+      <!-- ═══════════════════ CARD 3: IAM PASSROLE ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">3</span>
+          <h2>
+            <span class="lang-en">IAM PassRole</span>
+            <span class="lang-es">IAM PassRole</span>
+          </h2>
+        </div>
+
+        <p>
+          <span class="lang-en">
+            Every time you assign an IAM role to an AWS service — creating an EC2 instance with a role, deploying a Lambda with an execution role, configuring CodePipeline — you are <em>passing</em> that role. Passing a role requires a specific IAM permission: <code>iam:PassRole</code>. Without it, the assignment is denied, even if you have full admin access to EC2 or Lambda.
+          </span>
+          <span class="lang-es">
+            Cada vez que asignás un rol IAM a un servicio de AWS — creando una instancia EC2 con rol, desplegando una Lambda con rol de ejecución, configurando CodePipeline — estás <em>pasando</em> ese rol. Pasar un rol requiere un permiso IAM específico: <code>iam:PassRole</code>. Sin él, la asignación se deniega, aunque tengas acceso total a EC2 o Lambda.
+          </span>
+        </p>
+
+        <h3>
+          <span class="lang-en">Required Permissions</span>
+          <span class="lang-es">Permisos Necesarios</span>
+        </h3>
+        <p>
+          <span class="lang-en">To pass a role to a service, your user needs two permissions. Note that <code>iam:PassRole</code> can be scoped to a specific role ARN — you don't have to allow passing any role.</span>
+          <span class="lang-es">Para pasar un rol a un servicio, tu usuario necesita dos permisos. Notá que <code>iam:PassRole</code> puede restringirse a un ARN de rol específico — no tenés que permitir pasar cualquier rol.</span>
+        </p>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th><span class="lang-en">Permission</span><span class="lang-es">Permiso</span></th>
+              <th><span class="lang-en">Purpose</span><span class="lang-es">Propósito</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>iam:PassRole</code></td>
+              <td><span class="lang-en">Allows you to assign the role to the target service</span><span class="lang-es">Permite asignar el rol al servicio destino</span></td>
+            </tr>
+            <tr>
+              <td><code>iam:GetRole</code></td>
+              <td><span class="lang-en">Allows you to view the role being passed (often paired with PassRole)</span><span class="lang-es">Permite ver el rol que se va a pasar (frecuentemente va junto a PassRole)</span></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>
+          <span class="lang-en">PassRole Flow</span>
+          <span class="lang-es">Flujo de PassRole</span>
+        </h3>
+        <p>
+          <span class="lang-en">The diagram below shows the two conditions that must both be true for a role to be passed successfully: the developer needs <code>iam:PassRole</code>, and the target service must be listed in the role's trust policy.</span>
+          <span class="lang-es">El diagrama muestra las dos condiciones que deben cumplirse para pasar un rol exitosamente: el desarrollador necesita <code>iam:PassRole</code>, y el servicio destino debe estar en la trust policy del rol.</span>
+        </p>
+
+        <!-- PassRole diagram -->
+        <svg viewBox="0 0 560 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:560px;display:block;margin:0.75rem auto;">
+          <defs>
+            <marker id="pr-arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+              <path d="M0,0 L0,6 L8,3 z" fill="#94a3b8"/>
+            </marker>
+            <marker id="pr-arr-green" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+              <path d="M0,0 L0,6 L8,3 z" fill="#4ade80"/>
+            </marker>
+          </defs>
+
+          <!-- Developer box -->
+          <rect x="10" y="80" width="120" height="50" rx="6" fill="#1a2744" stroke="#60a5fa" stroke-width="2"/>
+          <text x="70" y="101" text-anchor="middle" font-size="13" fill="#93c5fd" font-weight="bold">Developer</text>
+          <text x="70" y="118" text-anchor="middle" font-size="12" fill="#7dd3fc">(IAM user)</text>
+
+          <!-- Arrow 1: Developer → Service (above midline, label above) -->
+          <line x1="130" y1="98" x2="198" y2="98" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#pr-arr)"/>
+          <text x="164" y="68" text-anchor="middle" font-size="12" fill="#e2e8f0" font-weight="bold">iam:PassRole</text>
+          <line x1="164" y1="71" x2="164" y2="95" stroke="#94a3b8" stroke-width="0.5" stroke-dasharray="3,2"/>
+
+          <!-- Service box -->
+          <rect x="200" y="80" width="140" height="50" rx="6" fill="#1a2744" stroke="#60a5fa" stroke-width="2"/>
+          <text x="270" y="101" text-anchor="middle" font-size="13" fill="#93c5fd" font-weight="bold">AWS Service</text>
+          <text x="270" y="118" text-anchor="middle" font-size="12" fill="#7dd3fc">EC2 / Lambda / etc.</text>
+
+          <!-- Arrow 2: Service → Role (below midline, labels below) -->
+          <line x1="340" y1="113" x2="418" y2="113" stroke="#4ade80" stroke-width="1.5" marker-end="url(#pr-arr-green)"/>
+          <text x="379" y="145" text-anchor="middle" font-size="12" fill="#4ade80" font-weight="bold">AssumeRole</text>
+          <text x="379" y="160" text-anchor="middle" font-size="12" fill="#94a3b8">(trust policy)</text>
+
+          <!-- Role box -->
+          <rect x="420" y="80" width="130" height="50" rx="6" fill="#1a2744" stroke="#60a5fa" stroke-width="2"/>
+          <text x="485" y="101" text-anchor="middle" font-size="13" fill="#93c5fd" font-weight="bold">IAM Role</text>
+          <text x="485" y="118" text-anchor="middle" font-size="12" fill="#7dd3fc">(S3Access, etc.)</text>
+
+          <!-- Bottom note -->
+          <text x="280" y="195" text-anchor="middle" font-size="12" fill="#fbbf24">Principal: &#123; "Service": "ec2.amazonaws.com" &#125;</text>
+        </svg>
+
+        <div class="callout warning">
+          <strong><span class="lang-en">Can any role be passed to any service?</span><span class="lang-es">¿Se puede pasar cualquier rol a cualquier servicio?</span></strong>
+          <span class="lang-en"> No. The role's <strong>trust policy</strong> defines which services are allowed to assume it. A role with <code>Principal: ec2.amazonaws.com</code> cannot be passed to Lambda.</span>
+          <span class="lang-es"> No. La <strong>trust policy</strong> del rol define qué servicios pueden asumirlo. Un rol con <code>Principal: ec2.amazonaws.com</code> no se puede pasar a Lambda.</span>
+        </div>
+
+        <h3>
+          <span class="lang-en">Mental Model — 3 Pieces</span>
+          <span class="lang-es">Modelo Mental — 3 Piezas</span>
+        </h3>
+        <p>
+          <span class="lang-en">A role is like a key. Three things must align for it to work:</span>
+          <span class="lang-es">Un rol es como una llave. Tres cosas deben alinearse para que funcione:</span>
+        </p>
+        <div class="callout info">
+          <span class="lang-en">
+            <strong>Trust policy</strong> → "this role can be assumed by Lambda"<br/>
+            <strong>Permissions</strong> → "this role can read S3"<br/>
+            <strong>PassRole</strong> → "this user can assign this role to a service"
+          </span>
+          <span class="lang-es">
+            <strong>Trust policy</strong> → "este rol puede ser asumido por Lambda"<br/>
+            <strong>Permisos</strong> → "este rol puede leer S3"<br/>
+            <strong>PassRole</strong> → "este usuario puede asignar este rol a un servicio"
+          </span>
+        </div>
+
+        <div class="callout warning">
+          <strong><span class="lang-en">PassRole vs AssumeRole — easy to confuse:</span><span class="lang-es">PassRole vs AssumeRole — fácil de confundir:</span></strong><br/>
+          <span class="lang-en">
+            <code>iam:PassRole</code> — the <strong>developer</strong> needs this to assign a role to a service.<br/>
+            <code>sts:AssumeRole</code> — the <strong>service itself</strong> uses this to actually take on the role once assigned.<br/>
+            They are two separate layers of the same flow. The developer passes the key; the service uses it to open the door.
+          </span>
+          <span class="lang-es">
+            <code>iam:PassRole</code> — el <strong>desarrollador</strong> necesita esto para asignar un rol a un servicio.<br/>
+            <code>sts:AssumeRole</code> — el <strong>servicio en sí</strong> lo usa para asumir el rol una vez que se le asignó.<br/>
+            Son dos capas separadas del mismo flujo. El desarrollador pasa la llave; el servicio la usa para abrir la puerta.
+          </span>
+        </div>
+
+        <h3>
+          <span class="lang-en">JSON Examples</span>
+          <span class="lang-es">Ejemplos JSON</span>
+        </h3>
+        <p>
+          <span class="lang-en">The trust policy below lives on the role itself and says only EC2 can assume it. The user policy below grants full EC2 access but restricts PassRole to a single role ARN.</span>
+          <span class="lang-es">La trust policy vive en el rol mismo y dice que solo EC2 puede asumirlo. La política de usuario otorga acceso total a EC2 pero restringe PassRole a un único ARN de rol.</span>
+        </p>
+
+        <p><strong><span class="lang-en">Trust Policy (on the role):</span><span class="lang-es">Trust Policy (en el rol):</span></strong></p>
+        <pre style="background:#0f172a;border:1px solid #1e3a5f;border-radius:6px;padding:0.85rem;font-size:0.82rem;overflow-x:auto;color:#e2e8f0;"><code><span style="color:#94a3b8">{</span>
+  <span style="color:#7dd3fc">"Version"</span>: <span style="color:#86efac">"2012-10-17"</span>,
+  <span style="color:#7dd3fc">"Statement"</span>: <span style="color:#94a3b8">{</span>
+    <span style="color:#7dd3fc">"Sid"</span>: <span style="color:#86efac">"TrustPolicyStatementThatAllowsEC2ServiceToAssumeTheAttachedRole"</span>,
+    <span style="color:#7dd3fc">"Effect"</span>: <span style="color:#86efac">"Allow"</span>,
+    <span style="color:#7dd3fc">"Principal"</span>: <span style="color:#94a3b8">{</span>
+      <span style="color:#7dd3fc">"Service"</span>: <span style="color:#86efac">"ec2.amazonaws.com"</span>
+    <span style="color:#94a3b8">}</span>,
+    <span style="color:#7dd3fc">"Action"</span>: <span style="color:#86efac">"sts:AssumeRole"</span>
+  <span style="color:#94a3b8">}</span>
+<span style="color:#94a3b8">}</span></code></pre>
+
+        <p><strong><span class="lang-en">User Policy (with PassRole scoped to one role):</span><span class="lang-es">Política de usuario (PassRole restringido a un rol):</span></strong></p>
+        <pre style="background:#0f172a;border:1px solid #1e3a5f;border-radius:6px;padding:0.85rem;font-size:0.82rem;overflow-x:auto;color:#e2e8f0;"><code><span style="color:#94a3b8">{</span>
+  <span style="color:#7dd3fc">"Version"</span>: <span style="color:#86efac">"2012-10-17"</span>,
+  <span style="color:#7dd3fc">"Statement"</span>: <span style="color:#94a3b8">[</span>
+    <span style="color:#94a3b8">{</span>
+      <span style="color:#7dd3fc">"Effect"</span>: <span style="color:#86efac">"Allow"</span>,
+      <span style="color:#7dd3fc">"Action"</span>: <span style="color:#94a3b8">[</span> <span style="color:#86efac">"ec2:*"</span> <span style="color:#94a3b8">]</span>,
+      <span style="color:#7dd3fc">"Resource"</span>: <span style="color:#86efac">"*"</span>
+    <span style="color:#94a3b8">}</span>,
+    <span style="color:#94a3b8">{</span>
+      <span style="color:#7dd3fc">"Effect"</span>: <span style="color:#86efac">"Allow"</span>,
+      <span style="color:#7dd3fc">"Action"</span>: <span style="color:#86efac">"iam:PassRole"</span>,
+      <span style="color:#7dd3fc">"Resource"</span>: <span style="color:#86efac">"arn:aws:iam::123456789012:role/S3Access"</span>
+    <span style="color:#94a3b8">}</span>
+  <span style="color:#94a3b8">]</span>
+<span style="color:#94a3b8">}</span></code></pre>
+      </div>
+      <!-- END CARD 3 -->
+
+      <!-- ═══════════════════ CARD 4: DIRECTORY SERVICES ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">4</span>
+          <h2>
+            <span class="lang-en">AWS Directory Services</span>
+            <span class="lang-es">AWS Directory Services</span>
+          </h2>
+        </div>
+
+        <p>
+          <span class="lang-en">
+            Microsoft Active Directory (AD) is the Windows-world identity system — a database of users, computers, and groups managed by a <strong>Domain Controller</strong>. All Windows machines on the network authenticate against it. AWS Directory Services gives you three ways to bring AD into AWS, each with different trade-offs between where users live and whether an on-premise AD is required.
+          </span>
+          <span class="lang-es">
+            Microsoft Active Directory (AD) es el sistema de identidades del mundo Windows — una base de datos de usuarios, computadoras y grupos gestionada por un <strong>Domain Controller</strong>. Todas las máquinas Windows de la red se autentican contra él. AWS Directory Services ofrece tres formas de llevar AD a AWS, cada una con distintos trade-offs entre dónde viven los usuarios y si se requiere un AD on-premise.
+          </span>
+        </p>
+
+        <h3>
+          <span class="lang-en">What is Active Directory?</span>
+          <span class="lang-es">¿Qué es Active Directory?</span>
+        </h3>
+        <p>
+          <span class="lang-en">A Domain Controller holds all user accounts. Every Windows machine in the network connects to it — when you log in to any machine, it validates your credentials centrally against the DC. A collection of AD trees is called a <strong>forest</strong>.</span>
+          <span class="lang-es">Un Domain Controller almacena todas las cuentas de usuario. Cada máquina Windows de la red se conecta a él — cuando iniciás sesión en cualquier máquina, valida tus credenciales centralmente contra el DC. Una colección de árboles AD se llama <strong>forest</strong>.</span>
+        </p>
+
+        <h3>
+          <span class="lang-en">The 3 Flavors</span>
+          <span class="lang-es">Los 3 Sabores</span>
+        </h3>
+        <p>
+          <span class="lang-en">The table below summarizes the three AWS Directory Services options. The exam tests which flavor to choose based on where users are managed and whether an on-premise AD exists.</span>
+          <span class="lang-es">La tabla resume las tres opciones de AWS Directory Services. El examen evalúa qué sabor elegir según dónde se gestionan los usuarios y si existe un AD on-premise.</span>
+        </p>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th><span class="lang-en">Service</span><span class="lang-es">Servicio</span></th>
+              <th><span class="lang-en">What it does</span><span class="lang-es">Qué hace</span></th>
+              <th><span class="lang-en">Users managed in</span><span class="lang-es">Usuarios gestionados en</span></th>
+              <th>MFA</th>
+              <th><span class="lang-en">On-prem AD needed?</span><span class="lang-es">¿AD on-prem requerido?</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong><span class="lang-en">AWS Managed Microsoft AD</span></strong></td>
+              <td><span class="lang-en">Full AD in AWS; optional trust with on-prem</span><span class="lang-es">AD completo en AWS; trust opcional con on-prem</span></td>
+              <td><span class="lang-en">AWS + on-prem (both)</span><span class="lang-es">AWS + on-prem (ambos)</span></td>
+              <td>✅</td>
+              <td><span class="lang-en">Optional</span><span class="lang-es">Opcional</span></td>
+            </tr>
+            <tr>
+              <td><strong>AD Connector</strong></td>
+              <td><span class="lang-en">Proxy only — redirects auth to on-prem AD</span><span class="lang-es">Solo proxy — redirige auth al AD on-prem</span></td>
+              <td><span class="lang-en">On-prem only</span><span class="lang-es">Solo on-prem</span></td>
+              <td>✅</td>
+              <td>✅ <span class="lang-en">Required</span><span class="lang-es">Requerido</span></td>
+            </tr>
+            <tr>
+              <td><strong>Simple AD</strong></td>
+              <td><span class="lang-en">Standalone AD-compatible directory in AWS</span><span class="lang-es">Directorio standalone compatible con AD en AWS</span></td>
+              <td><span class="lang-en">AWS only</span><span class="lang-es">Solo AWS</span></td>
+              <td>❌</td>
+              <td>❌ <span class="lang-en">Not supported</span><span class="lang-es">No soportado</span></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>
+          <span class="lang-en">Architecture Diagrams</span>
+          <span class="lang-es">Diagramas de Arquitectura</span>
+        </h3>
+        <p>
+          <span class="lang-en">The three options differ in where user data lives and how auth requests are resolved. The diagrams below show each pattern.</span>
+          <span class="lang-es">Las tres opciones difieren en dónde viven los datos de usuario y cómo se resuelven los requests de autenticación. Los diagramas muestran cada patrón.</span>
+        </p>
+
+        <!-- Directory Services diagrams -->
+        <svg viewBox="0 0 520 310" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:520px;display:block;margin:0.75rem auto;">
+          <defs>
+            <marker id="ds-arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+              <path d="M0,0 L0,6 L8,3 z" fill="#94a3b8"/>
+            </marker>
+          </defs>
+
+          <!-- ── Row 1: AWS Managed Microsoft AD ── -->
+          <text x="260" y="16" text-anchor="middle" font-size="12" fill="#fbbf24" font-weight="bold">① AWS Managed Microsoft AD</text>
+
+          <rect x="15" y="26" width="150" height="44" rx="6" fill="#1a2744" stroke="#60a5fa" stroke-width="2"/>
+          <text x="90" y="45" text-anchor="middle" font-size="12" fill="#93c5fd" font-weight="bold">AWS Managed AD</text>
+          <text x="90" y="61" text-anchor="middle" font-size="12" fill="#7dd3fc">(users in AWS)</text>
+
+          <text x="215" y="51" text-anchor="middle" font-size="12" fill="#94a3b8">←— trust —→</text>
+
+          <rect x="245" y="26" width="150" height="44" rx="6" fill="#1a2744" stroke="#60a5fa" stroke-width="2"/>
+          <text x="320" y="45" text-anchor="middle" font-size="12" fill="#93c5fd" font-weight="bold">On-Premise AD</text>
+          <text x="320" y="61" text-anchor="middle" font-size="12" fill="#7dd3fc">(users on-prem)</text>
+
+          <!-- "both accessible" placed BELOW row 1 boxes -->
+          <text x="205" y="88" text-anchor="middle" font-size="12" fill="#4ade80">↕ both accessible from either side</text>
+
+          <!-- ── Row 2: AD Connector ── -->
+          <text x="260" y="115" text-anchor="middle" font-size="12" fill="#fbbf24" font-weight="bold">② AD Connector (proxy)</text>
+
+          <rect x="15" y="125" width="115" height="44" rx="6" fill="#1a2744" stroke="#60a5fa" stroke-width="2"/>
+          <text x="72" y="144" text-anchor="middle" font-size="12" fill="#93c5fd" font-weight="bold">User / App</text>
+          <text x="72" y="160" text-anchor="middle" font-size="12" fill="#7dd3fc">(AWS side)</text>
+
+          <line x1="130" y1="147" x2="158" y2="147" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#ds-arr)"/>
+
+          <rect x="160" y="125" width="130" height="44" rx="6" fill="#1a2744" stroke="#f97316" stroke-width="2"/>
+          <text x="225" y="144" text-anchor="middle" font-size="12" fill="#fdba74" font-weight="bold">AD Connector</text>
+          <text x="225" y="160" text-anchor="middle" font-size="12" fill="#fed7aa">(proxy only)</text>
+
+          <line x1="290" y1="147" x2="318" y2="147" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#ds-arr)"/>
+
+          <rect x="320" y="125" width="150" height="44" rx="6" fill="#1a2744" stroke="#60a5fa" stroke-width="2"/>
+          <text x="395" y="144" text-anchor="middle" font-size="12" fill="#93c5fd" font-weight="bold">On-Premise AD</text>
+          <text x="395" y="160" text-anchor="middle" font-size="12" fill="#7dd3fc">(all users here)</text>
+
+          <!-- ── Row 3: Simple AD ── -->
+          <text x="260" y="200" text-anchor="middle" font-size="12" fill="#fbbf24" font-weight="bold">③ Simple AD (standalone)</text>
+
+          <rect x="155" y="210" width="210" height="44" rx="6" fill="#1a2744" stroke="#60a5fa" stroke-width="2"/>
+          <text x="260" y="229" text-anchor="middle" font-size="12" fill="#93c5fd" font-weight="bold">Simple AD</text>
+          <text x="260" y="245" text-anchor="middle" font-size="12" fill="#7dd3fc">(AWS-only, no on-prem)</text>
+
+          <text x="260" y="278" text-anchor="middle" font-size="12" fill="#94a3b8">No trust to on-premise</text>
+          <text x="260" y="294" text-anchor="middle" font-size="12" fill="#94a3b8">Cannot be joined with on-prem AD</text>
+        </svg>
+
+        <div class="callout info">
+          <strong><span class="lang-en">Why have AD in AWS at all?</span><span class="lang-es">¿Por qué tener AD en AWS?</span></strong>
+          <span class="lang-en"> EC2 instances running Windows can <strong>join the domain controller</strong> — sharing logins and credentials across all instances. Having AD in AWS keeps it close to your Windows EC2 instances and reduces latency.</span>
+          <span class="lang-es"> Las instancias EC2 con Windows pueden <strong>unirse al domain controller</strong> — compartiendo logins y credenciales entre todas las instancias. Tener AD en AWS lo mantiene cerca de las instancias EC2 Windows y reduce la latencia.</span>
+        </div>
+      </div>
+      <!-- END CARD 4 -->
+
+      <!-- ═══════════════════ EXAM TIPS ═══════════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge" style="background:#f59e0b;">💡</span>
+          <h2>
+            <span class="lang-en">Exam Tips — Section 29</span>
+            <span class="lang-es">Tips del Examen — Sección 29</span>
+          </h2>
+        </div>
+        <div class="tips-grid">
+          <div class="tip">
+            <span class="trigger"><span class="lang-en">STS credential duration</span><span class="lang-es">Duración credenciales STS</span></span>
+            <span class="arr">→</span>
+            <span class="answer"><span class="lang-en">Up to 1 hour (temporary)</span><span class="lang-es">Hasta 1 hora (temporales)</span></span>
+          </div>
+          <div class="tip">
+            <span class="trigger"><span class="lang-en">Facebook/Google login → AWS roles</span><span class="lang-es">Login con Facebook/Google → roles AWS</span></span>
+            <span class="arr">→</span>
+            <span class="answer"><span class="lang-en">Cognito Identity Pools (NOT AssumeRoleWithWebIdentity — deprecated)</span><span class="lang-es">Cognito Identity Pools (NO AssumeRoleWithWebIdentity — deprecado)</span></span>
+          </div>
+          <div class="tip">
+            <span class="trigger"><span class="lang-en">MFA → STS API to use</span><span class="lang-es">MFA → API STS a usar</span></span>
+            <span class="arr">→</span>
+            <span class="answer"><code>GetSessionToken</code> — <span class="lang-en">returns access key + secret + session token + expiry</span><span class="lang-es">devuelve access key + secret + session token + expiración</span></span>
+          </div>
+          <div class="tip">
+            <span class="trigger"><span class="lang-en">"Who is making this API call?" → STS API</span><span class="lang-es">"¿Quién hace esta API call?" → API STS</span></span>
+            <span class="arr">→</span>
+            <span class="answer"><code>GetCallerIdentity</code></span>
+          </div>
+          <div class="tip">
+            <span class="trigger"><span class="lang-en">Decode AWS API error message</span><span class="lang-es">Decodificar mensaje de error de API AWS</span></span>
+            <span class="arr">→</span>
+            <span class="answer"><code>DecodeAuthorizationMessage</code></span>
+          </div>
+          <div class="tip">
+            <span class="trigger"><span class="lang-en">Explicit deny vs explicit allow — which wins?</span><span class="lang-es">Deny explícito vs allow explícito — ¿cuál gana?</span></span>
+            <span class="arr">→</span>
+            <span class="answer"><span class="lang-en">Explicit DENY always wins</span><span class="lang-es">El DENY explícito siempre gana</span></span>
+          </div>
+          <div class="tip">
+            <span class="trigger"><span class="lang-en">S3 action evaluation — IAM policy + bucket policy</span><span class="lang-es">Evaluación de acción S3 — política IAM + bucket policy</span></span>
+            <span class="arr">→</span>
+            <span class="answer"><span class="lang-en">Union of both — allow in either is sufficient unless there's a deny in either</span><span class="lang-es">Unión de ambas — allow en cualquiera alcanza, salvo que haya deny en alguna</span></span>
+          </div>
+          <div class="tip">
+            <span class="trigger"><span class="lang-en">One IAM policy for all users with per-user S3 folders</span><span class="lang-es">Una política IAM para todos con carpetas S3 por usuario</span></span>
+            <span class="arr">→</span>
+            <span class="answer"><code>${aws:username}</code> <span class="lang-en">dynamic policy variable</span><span class="lang-es">variable de política dinámica</span></span>
+          </div>
+          <div class="tip">
+            <span class="trigger"><span class="lang-en">Best practice policy type (not AWS managed)</span><span class="lang-es">Tipo de política best practice (no AWS managed)</span></span>
+            <span class="arr">→</span>
+            <span class="answer"><span class="lang-en">Customer Managed — reusable, versioned, central change management</span><span class="lang-es">Customer Managed — reutilizable, versionada, gestión centralizada</span></span>
+          </div>
+          <div class="tip">
+            <span class="trigger"><span class="lang-en">Permission needed to assign a role to an EC2/Lambda/CodePipeline</span><span class="lang-es">Permiso necesario para asignar un rol a EC2/Lambda/CodePipeline</span></span>
+            <span class="arr">→</span>
+            <span class="answer"><code>iam:PassRole</code> <span class="lang-en">(+ iam:GetRole)</span><span class="lang-es">(+ iam:GetRole)</span></span>
+          </div>
+          <div class="tip">
+            <span class="trigger"><span class="lang-en">What controls which services can assume a role</span><span class="lang-es">Qué controla qué servicios pueden asumir un rol</span></span>
+            <span class="arr">→</span>
+            <span class="answer"><span class="lang-en">Trust Policy on the role</span><span class="lang-es">Trust Policy del rol</span></span>
+          </div>
+          <div class="tip">
+            <span class="trigger"><span class="lang-en">Proxy Windows auth to on-premise AD</span><span class="lang-es">Proxear auth Windows a AD on-premise</span></span>
+            <span class="arr">→</span>
+            <span class="answer">AD Connector</span>
+          </div>
+          <div class="tip">
+            <span class="trigger"><span class="lang-en">Full AD in AWS with optional on-prem trust</span><span class="lang-es">AD completo en AWS con trust on-prem opcional</span></span>
+            <span class="arr">→</span>
+            <span class="answer"><span class="lang-en">AWS Managed Microsoft AD</span><span class="lang-es">AWS Managed Microsoft AD</span></span>
+          </div>
+          <div class="tip">
+            <span class="trigger"><span class="lang-en">Standalone AD in AWS, no on-prem</span><span class="lang-es">AD standalone en AWS, sin on-prem</span></span>
+            <span class="arr">→</span>
+            <span class="answer">Simple AD</span>
+          </div>
+        </div>
+      </div>
+      <!-- END EXAM TIPS -->
+
+      <!-- WEAK POINTS -->
+      <div class="card" style="border-color: #7c3aed; background: #13102a">
+        <div class="card-header">
+          <span class="badge" style="background: #7c3aed">🧩</span>
+          <h2 style="color: #c4b5fd">
+            <span class="lang-en">Tricky Quiz Questions</span>
+            <span class="lang-es">Preguntas Tricky del Quiz</span>
+          </h2>
+        </div>
+        <div style="border:1px solid #4c1d95;border-radius:8px;padding:0.85rem;margin-bottom:0.75rem;background:#0f172a">
+          <p style="font-weight:bold;color:#c4b5fd;margin:0 0 0.4rem 0;">
+            <span class="lang-en">You have an on-premises AD. You need to create another AD in AWS and establish a trust relationship with the on-premises one. Which service?</span>
+            <span class="lang-es">Tenés un AD on-premise. Necesitás crear otro AD en AWS y establecer una trust relationship con el on-premise. ¿Qué servicio?</span>
+          </p>
+          <p style="margin:0 0 0.4rem 0;">
+            <span style="color:#4ade80;font-weight:bold;">✅ AWS Managed Microsoft AD</span>
+          </p>
+          <p style="margin:0;color:#94a3b8;font-size:0.9rem;">
+            <span class="lang-en">The trap is AD Connector — "trust relationship" sounds like a connection to on-premise, which points to AD Connector. But a trust relationship requires TWO ADs. AD Connector is not an AD, it's a proxy — it creates nothing in AWS. AWS Managed Microsoft AD actually creates a real AD in AWS and supports bidirectional trust with on-premise.</span>
+            <span class="lang-es">La trampa es AD Connector — "trust relationship" suena a conexión con on-premise, lo que apunta a AD Connector. Pero una trust relationship requiere DOS ADs. AD Connector no es un AD, es un proxy — no crea nada en AWS. AWS Managed Microsoft AD sí crea un AD real en AWS y soporta trust bidireccional con on-premise.</span>
+          </p>
+        </div>
+
+        <div style="border:1px solid #4c1d95;border-radius:8px;padding:0.85rem;margin-bottom:0.75rem;background:#0f172a">
+          <p style="font-weight:bold;color:#c4b5fd;margin:0 0 0.4rem 0;">
+            <span class="lang-en">An EC2 instance had an IAM role with read/write to S3. The role was removed. Writes stopped but reads still work. Why?</span>
+            <span class="lang-es">Una EC2 tenía un IAM role con read/write a S3. Se removió el rol. Las escrituras fallaron pero las lecturas siguen funcionando. ¿Por qué?</span>
+          </p>
+          <p style="margin:0 0 0.4rem 0;">
+            <span style="color:#4ade80;font-weight:bold;"><span class="lang-en">✅ The S3 bucket policy still authorizes reads</span><span class="lang-es">✅ La S3 bucket policy sigue autorizando lecturas</span></span>
+          </p>
+          <p style="margin:0;color:#94a3b8;font-size:0.9rem;">
+            <span class="lang-en">This is union evaluation in action. Even with no IAM role on the EC2, if the S3 bucket policy explicitly allows reads for that instance, the reads still go through. The write permission only existed in the IAM role — once removed, writes fail. Reads survive because the bucket policy covers them independently.</span>
+            <span class="lang-es">Esto es la evaluación por unión en acción. Aunque la EC2 no tenga IAM role, si la S3 bucket policy permite lecturas explícitamente, las lecturas funcionan igual. El permiso de escritura solo existía en el IAM role — al removerse, las escrituras fallan. Las lecturas sobreviven porque la bucket policy las cubre de forma independiente.</span>
+          </p>
+        </div>
+
+        <div style="border:1px solid #4c1d95;border-radius:8px;padding:0.85rem;margin-bottom:0.75rem;background:#0f172a">
+          <p style="font-weight:bold;color:#c4b5fd;margin:0 0 0.4rem 0;">
+            <span class="lang-en">What does this policy allow? (ec2:* on *, iam:PassRole on arn:aws:iam:::role/RDS-*)</span>
+            <span class="lang-es">¿Qué permite esta política? (ec2:* en *, iam:PassRole en arn:aws:iam:::role/RDS-*)</span>
+          </p>
+          <p style="margin:0 0 0.4rem 0;">
+            <span style="color:#4ade80;font-weight:bold;"><span class="lang-en">✅ It allows you to assign RDS full access to EC2 instances</span><span class="lang-es">✅ Permite asignar acceso completo a RDS a instancias EC2</span></span>
+          </p>
+          <p style="margin:0;color:#94a3b8;font-size:0.9rem;">
+            <span class="lang-en">The trap is the wildcard: <code>arn:aws:iam:::role/RDS-*</code> restricts PassRole to only roles whose name starts with <code>RDS-</code>. Those are RDS-access roles — so EC2 can only be assigned RDS roles, not any role. The policy is NOT about assigning roles to RDS instances — it's about assigning RDS-prefixed roles TO EC2.</span>
+            <span class="lang-es">La trampa es el wildcard: <code>arn:aws:iam:::role/RDS-*</code> restringe PassRole a roles cuyo nombre empieza con <code>RDS-</code>. Esos son roles de acceso a RDS — entonces EC2 solo puede recibir roles de RDS, no cualquier rol. La política NO es sobre asignar roles a instancias RDS — es sobre asignar roles con prefijo RDS A EC2.</span>
+          </p>
+        </div>
+
+        <div style="border:1px solid #4c1d95;border-radius:8px;padding:0.85rem;margin-bottom:0.75rem;background:#0f172a">
+          <p style="font-weight:bold;color:#c4b5fd;margin:0 0 0.4rem 0;">
+            <span class="lang-en">Which two permissions does a developer need to pass a role to an AWS service?</span>
+            <span class="lang-es">¿Qué dos permisos necesita un desarrollador para pasar un rol a un servicio AWS?</span>
+          </p>
+          <p style="margin:0 0 0.4rem 0;">
+            <span style="color:#4ade80;font-weight:bold;">✅ iam:PassRole + iam:GetRole</span>
+          </p>
+          <p style="margin:0;color:#94a3b8;font-size:0.9rem;">
+            <span class="lang-en">The trap is <code>sts:AssumeRole</code> — that's what the <strong>service</strong> uses internally to take on the role, not what the developer needs. The developer passes the role (<code>iam:PassRole</code>) and can view it (<code>iam:GetRole</code>). The service assumes it (<code>sts:AssumeRole</code>).</span>
+            <span class="lang-es">La trampa es <code>sts:AssumeRole</code> — eso lo usa el <strong>servicio</strong> internamente para asumir el rol, no el desarrollador. El desarrollador pasa el rol (<code>iam:PassRole</code>) y puede verlo (<code>iam:GetRole</code>). El servicio lo asume (<code>sts:AssumeRole</code>).</span>
+          </p>
+        </div>
+      </div>
+      <!-- END WEAK POINTS -->
+
+    </div>
+    <!-- end .container -->
+  </body>
+</html>
