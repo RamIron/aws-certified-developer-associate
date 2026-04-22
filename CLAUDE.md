@@ -117,6 +117,9 @@ Every card must follow this pattern — no exceptions:
 ### SVG font size minimum
 - All SVG `<text>` elements must use **font-size 12 minimum** (box labels: 13, secondary labels: 12). Never use 9, 10, or 11.
 
+### Tables — always use `class="data-table"`
+- Every `<table>` in the HTML **must** use `<table class="data-table">`. Never use a bare `<table>` without this class. This ensures consistent styling across all cards.
+
 ### Weak Points section
 - Add a `<!-- WEAK POINTS -->` tricky questions card at the **bottom** of the HTML (after Exam Tips, last card).
 - Populate it with tricky Udemy quiz questions as the user encounters them.
@@ -138,6 +141,6 @@ Every card must follow this pattern — no exceptions:
 
 ## Current State
 
-- **Current section:** Section 30
-- **Total XP:** 14,025
-- **Lessons completed:** 438
+- **Current section:** Section 31
+- **Total XP:** 15,000
+- **Lessons completed:** 459

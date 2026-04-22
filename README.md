@@ -7,14 +7,14 @@ Study notes for AWS DVA-C02, assisted by Claude.
 ## 📊 Progress
 
 ```
-███████████████████████████░░░ 90.6% (438/483 lessons)
+█████████████████████████████░ 95.0% (459/483 lessons)
 ```
 
-📹 Videos: 406/446 · 📄 Articles: 6/8 · ❓ Quizzes: 26/29
+📹 Videos: 426/446 · 📄 Articles: 6/8 · ❓ Quizzes: 27/29
 
-**Current section:** 30 - AWS Security & Encryption
+**Current section:** 31 - AWS Other Services
 
-**XP:** 14,025
+**XP:** 15,000
 
 ### Course Sections
 
@@ -49,13 +49,13 @@ Study notes for AWS DVA-C02, assisted by Claude.
 | 27: Cognito: Cognito User Pools, Cognito Identity Pools & Cognito Sync | 39 min | ✅ |
 | 28: Other Serverless: Step Functions & AppSync | 58 min | ✅ |
 | 29: Advanced Identity | 23 min | ✅ |
-| 30: AWS Security & Encryption: KMS, Encryption SDK, SSM Parameter Store, IAM & STS | 1h 29 min | |
+| 30: AWS Security & Encryption: KMS, Encryption SDK, SSM Parameter Store, IAM & STS | 1h 29 min | ✅ |
 | 31: AWS Other Services | 34 min | |
 | 32: AWS Final Cleanup | 3 min | |
 | 33: Preparing for the Exam | 21 min | |
 | 34: Congratulations | 9 min | |
-| **Completed (1–29)** | **~29h 22min** | |
-| **Remaining (30–34)** | **~2h 36min** | |
+| **Completed (1–30)** | **~30h 51min** | |
+| **Remaining (31–34)** | **~1h 07min** | |
 
 ---
 

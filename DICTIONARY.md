@@ -21,6 +21,7 @@ A reference for acronyms and English terms encountered in the course, with Spani
 | BYOL    | Bring Your Own License                  | Trae tu propia licencia                           |
 | CIDR    | Classless Inter-Domain Routing          | Enrutamiento entre dominios sin clases            |
 | CLI     | Command Line Interface                  | Interfaz de línea de comandos                     |
+| CMK     | Customer Managed Key                    | Clave gestionada por el cliente (KMS). $1/mes. Control total: políticas propias, rotación configurable, acceso cross-account. |
 | CMS     | Content Management System               | Sistema de gestión de contenido                   |
 | CDN     | Content Delivery Network                | Red de distribución de contenido                  |
 | CORS    | Cross-Origin Resource Sharing           | Intercambio de recursos entre orígenes            |
@@ -29,6 +30,7 @@ A reference for acronyms and English terms encountered in the course, with Spani
 | CSV     | Comma-Separated Values                  | Valores separados por comas                       |
 | DAX     | DynamoDB Accelerator                    | Acelerador de DynamoDB (caché en memoria)         |
 | DDoS    | Distributed Denial of Service           | Denegación de servicio distribuida                |
+| DEK     | Data Encryption Key                     | Clave de cifrado de datos. En envelope encryption, el DEK cifra los datos; la KMS key cifra el DEK. |
 | DLQ     | Dead Letter Queue                       | Cola de mensajes fallidos                         |
 | DNS     | Domain Name System                      | Sistema de nombres de dominio                     |
 | EBS     | Elastic Block Store                     | Almacenamiento en bloque elástico                 |
@@ -37,10 +39,12 @@ A reference for acronyms and English terms encountered in the course, with Spani
 | ECR     | Elastic Container Registry              | Registro de contenedores elástico                 |
 | EKS     | Elastic Kubernetes Service              | Servicio de Kubernetes elástico                   |
 | EFS     | Elastic File System                     | Sistema de archivos elástico                      |
+| EIF     | Enclave Image File                      | Formato de imagen compilada para correr apps dentro de un Nitro Enclave. |
 | ETL     | Extract, Transform, Load                | Extraer, transformar, cargar                      |
 | ELB     | Elastic Load Balancer                   | Balanceador de carga elástico                     |
 | ENI     | Elastic Network Interface               | Interfaz de red elástica                          |
 | FIFO    | First In, First Out                     | Primero en entrar, primero en salir               |
+| FIPS    | Federal Information Processing Standards | Estándares de seguridad del gobierno de EE.UU. CloudHSM es FIPS 140-2 Level 3. |
 | FTP     | File Transfer Protocol                  | Protocolo de transferencia de archivos            |
 | FQDN    | Fully Qualified Domain Name             | Nombre de dominio completamente cualificado       |
 | GSI     | Global Secondary Index                  | Índice secundario global (DynamoDB)               |
@@ -48,6 +52,7 @@ A reference for acronyms and English terms encountered in the course, with Spani
 | HA      | High Availability                       | Alta disponibilidad                               |
 | HDD     | Hard Disk Drive                         | Disco duro                                        |
 | HPC     | High-Performance Computing              | Computación de alto rendimiento                   |
+| HSM     | Hardware Security Module                | Módulo de seguridad de hardware. Dispositivo físico dedicado a operaciones criptográficas. CloudHSM usa HSMs single-tenant. |
 | HTTP    | HyperText Transfer Protocol             | Protocolo de transferencia de hipertexto          |
 | HTTPS   | HyperText Transfer Protocol Secure      | Protocolo de transferencia de hipertexto seguro   |
 | IaaS    | Infrastructure as a Service             | Infraestructura como servicio                     |
@@ -95,6 +100,9 @@ A reference for acronyms and English terms encountered in the course, with Spani
 | SSH     | Secure Shell                            | Shell seguro                                      |
 | SRR     | Same-Region Replication                 | Replicación en la misma región                    |
 | SSE     | Server-Side Encryption                  | Cifrado del lado del servidor                     |
+| SSE-C   | SSE with Customer-Provided Keys         | Cifrado S3 donde vos proveés la clave por request; S3 la usa y la descarta. |
+| SSE-KMS | SSE with KMS Keys                       | Cifrado S3 usando una KMS key. Auditable, soporta key policies. |
+| SSE-S3  | SSE with S3-Managed Keys                | Cifrado S3 usando claves propias de AWS. Transparente para el usuario. |
 | SSRF    | Server-Side Request Forgery             | Falsificación de solicitud del lado del servidor  |
 | SSM     | Systems Manager                         | Administrador de sistemas                         |
 | STS     | Security Token Service                  | Servicio de token de seguridad                    |

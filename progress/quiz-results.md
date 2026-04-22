@@ -4,15 +4,31 @@
 
 | Metric | Value |
 |--------|-------|
-| Total XP | 14025 |
-| Lessons completed | 214 |
-| Perfect quizzes (100%) | 176 |
+| Total XP | 15000 |
+| Lessons completed | 223 |
+| Perfect quizzes (100%) | 190 |
 | Lessons to review | 16 |
 
 ## Session History
 
 | Date | Section | Lesson | XP | Result |
+| 2026-04-22 | 30 - Security & Encryption | Quiz 27 - AWS Security & Encryption | +0 | Completed (Udemy) |
+| 2026-04-22 | 30 - Security & Encryption | 30.20 - Nitro Enclaves | +50 | PERFECT 100% |
+| 2026-04-22 | 30 - Security & Encryption | 30.19 - CodeBuild Security | +50 | PERFECT 100% |
+| 2026-04-22 | 30 - Security & Encryption | 30.18 - CloudWatch Logs Encryption | +50 | PERFECT 100% |
+| 2026-04-21 | 30 - Security & Encryption | 30.17 - CloudFormation Dynamic References | +50 | PERFECT 100% |
+| 2026-04-21 | 30 - Security & Encryption | 30.14 - Secrets Manager - Overview | +75 | PERFECT 100% |
+| 2026-04-20 | 30 - Security & Encryption | 30.5 - KMS Encryption Patterns and Envelope Encryption | +75 | PERFECT 100% |
+| 2026-04-20 | 30 - Security & Encryption | 30.7 - KMS Request Quotas | +50 | PERFECT 100% |
+| 2026-04-20 | 30 - Security & Encryption | 30.8 - KMS and AWS Lambda Practice | +75 | PERFECT 100% |
+| 2026-04-20 | 30 - Security & Encryption | 30.9 - S3 Bucket Key | +50 | PERFECT 100% |
+| 2026-04-20 | 30 - Security & Encryption | 30.10 - KMS Key Policies & IAM Principals | +75 | PERFECT 100% |
+| 2026-04-20 | 30 - Security & Encryption | 30.11 - CloudHSM Overview | +75 | PERFECT 100% |
+| 2026-04-20 | 30 - Security & Encryption | 30.12 - SSM Parameter Store Overview | +75 | PERFECT 100% |
 |------|---------|--------|----|--------|
+| 2026-04-16 | 30 - Security & Encryption | 30.4 - KMS Hands On | +25 | PERFECT 100% |
+| 2026-04-16 | 30 - Security & Encryption | 30.3 - KMS Overview | +75 | 75% ✅ |
+| 2026-04-16 | 30 - Security & Encryption | 30.2 - Encryption 101 | +75 | PERFECT 100% |
 | 2026-04-16 | 29 - Advanced Identity | Quiz 26 (Advanced Identity) - Udemy | — | Completed ✅ |
 | 2026-04-16 | 29 - Advanced Identity | 29.4 - AWS Directory Services | +75 | PERFECT 100% |
 | 2026-04-16 | 29 - Advanced Identity | 29.3 - IAM PassRole | +50 | REVIEW 67% |

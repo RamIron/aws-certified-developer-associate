@@ -4,9 +4,9 @@
 
 ```
 [██████████████████████░] 29/33 sections | 438/483 lessons (90.6%)
-Total XP: 14,025
+Total XP: 15,000
 
-Videos: 406/446 | Quizzes: 26/29 | ⏱ 29h 22min done · 2h 36min left
+Videos: 406/446 | Quizzes: 26/29 | ⏱ 30h 51min done · 1h 07min left
 ```
 
 > **Note:** The exact number of lessons per section will be filled in as the course progresses.
@@ -456,7 +456,6 @@ Videos: 406/446 | Quizzes: 26/29 | ⏱ 29h 22min done · 2h 36min left
 - [x] 23.20 - API Gateway Websocket API (PERFECT 100%)
 - [x] 23.21 - API Gateway - Architecture (no quiz - architecture overview)
 - [x] API Gateway Quiz (Quiz 20) (Udemy quiz - completed)
-- [ ] API Gateway Quiz (Quiz 20)
 
 ## Section 24: AWS CICD: CodeCommit, CodePipeline, CodeBuild, CodeDeploy
 
@@ -539,27 +538,27 @@ Videos: 406/446 | Quizzes: 26/29 | ⏱ 29h 22min done · 2h 36min left
 
 ## Section 30: AWS Security & Encryption: KMS, Encryption SDK, SSM Parameter Store, IAM & STS
 
-- [ ] 30.1 - AWS Security - Section Introduction (intro)
-- [ ] 30.2 - Encryption 101
-- [ ] 30.3 - KMS Overview
-- [ ] 30.4 - KMS Hands On w/ CLI
-- [ ] 30.5 - KMS Encryption Patterns and Envelope Encryption
-- [ ] 30.6 - Encryption SDK CLI Hands On
-- [ ] 30.7 - KMS Limits
-- [ ] 30.8 - KMS and AWS Lambda Practice
-- [ ] 30.9 - S3 Bucket Key
-- [ ] 30.10 - KMS Key Policies & IAM Principals
-- [ ] 30.11 - CloudHSM Overview
-- [ ] 30.12 - SSM Parameter Store Overview
-- [ ] 30.13 - SSM Parameter Store Hands On (CLI)
-- [ ] 30.14 - Secrets Manager - Overview
-- [ ] 30.15 - Secrets Manager - Hands On
-- [ ] 30.16 - SSM Parameter Store vs Secrets Manager
-- [ ] 30.17 - CloudFormation - Secrets Manager & SSM Integration
-- [ ] 30.18 - CloudWatch Logs Encryption
-- [ ] 30.19 - CodeBuild Security
-- [ ] 30.20 - AWS Nitro Enclaves
-- [ ] AWS Security & Encryption Quiz (Quiz 27)
+- [x] 30.1 - AWS Security - Section Introduction (intro)
+- [x] 30.2 - Encryption 101
+- [x] 30.3 - KMS Overview
+- [x] 30.4 - KMS Hands On w/ CLI
+- [x] 30.5 - KMS Encryption Patterns and Envelope Encryption (PERFECT 100%)
+- [x] 30.6 - Encryption SDK CLI Hands On (skipped - hands-on)
+- [x] 30.7 - KMS Limits (PERFECT 100%)
+- [x] 30.8 - KMS and AWS Lambda Practice (PERFECT 100%)
+- [x] 30.9 - S3 Bucket Key (PERFECT 100%)
+- [x] 30.10 - KMS Key Policies & IAM Principals (PERFECT 100%)
+- [x] 30.11 - CloudHSM Overview (PERFECT 100%)
+- [x] 30.12 - SSM Parameter Store Overview (PERFECT 100%)
+- [x] 30.13 - SSM Parameter Store Hands On (CLI) (skipped - hands-on)
+- [x] 30.14 - Secrets Manager - Overview (PERFECT 100%)
+- [x] 30.15 - Secrets Manager - Hands On
+- [x] 30.16 - SSM Parameter Store vs Secrets Manager (skipped quiz - cheatsheet)
+- [x] 30.17 - CloudFormation - Secrets Manager & SSM Integration (PERFECT 100%)
+- [x] 30.18 - CloudWatch Logs Encryption (PERFECT 100%)
+- [x] 30.19 - CodeBuild Security (PERFECT 100%)
+- [x] 30.20 - AWS Nitro Enclaves (PERFECT 100%)
+- [x] AWS Security & Encryption Quiz (Quiz 27) ✅
 
 ## Section 31: AWS Other Services
 
