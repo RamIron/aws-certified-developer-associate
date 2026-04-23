@@ -18,6 +18,7 @@ A reference for acronyms and English terms encountered in the course, with Spani
 | ASG     | Auto Scaling Group                      | Grupo de autoescalado                             |
 | AZ      | Availability Zone                       | Zona de disponibilidad                            |
 | BI      | Business Intelligence                   | Inteligencia de negocios                          |
+| CA      | Certificate Authority                   | Autoridad de certificación (entidad que emite y firma certificados digitales) |
 | BYOL    | Bring Your Own License                  | Trae tu propia licencia                           |
 | CIDR    | Classless Inter-Domain Routing          | Enrutamiento entre dominios sin clases            |
 | CLI     | Command Line Interface                  | Interfaz de línea de comandos                     |
@@ -77,9 +78,11 @@ A reference for acronyms and English terms encountered in the course, with Spani
 | NLB     | Network Load Balancer                   | Balanceador de carga de red                       |
 | NoSQL   | Not Only SQL                            | No solo SQL                                       |
 | OAC     | Origin Access Control                   | Control de acceso al origen                       |
+| ORC     | Optimized Row Columnar                  | Formato de archivo columnar optimizado. Recomendado para Athena (menos datos escaneados = menor costo). |
 | OLTP    | Online Transaction Processing           | Procesamiento de transacciones en línea           |
 | OSI     | Open Systems Interconnection            | Interconexión de sistemas abiertos                |
 | PII     | Personally Identifiable Information     | Información de identificación personal            |
+| PKI     | Public Key Infrastructure               | Infraestructura de clave pública. Sistema de CAs, certificados y políticas para gestionar cifrado asimétrico en una organización. ACM Private CA permite crear una PKI en AWS. |
 | RAID    | Redundant Array of Independent Disks    | Conjunto redundante de discos independientes      |
 | RAM     | Random Access Memory                    | Memoria de acceso aleatorio                       |
 | RCU     | Read Capacity Unit                      | Unidad de capacidad de lectura (DynamoDB)         |
@@ -87,6 +90,8 @@ A reference for acronyms and English terms encountered in the course, with Spani
 | RRU     | Read Request Unit                       | Unidad de solicitud de lectura (DynamoDB On-Demand) |
 | RDP     | Remote Desktop Protocol                 | Protocolo de escritorio remoto                    |
 | SDK     | Software Development Kit                | Kit de desarrollo de software                     |
+| SES     | Simple Email Service                    | Servicio de email simple. Envía y recibe emails via SMTP o SDK. Si la pregunta habla de email → SES. |
+| SMTP    | Simple Mail Transfer Protocol           | Protocolo estándar para envío de emails           |
 | SFTP    | Secure File Transfer Protocol           | Protocolo seguro de transferencia de archivos     |
 | SHA     | Secure Hash Algorithm                   | Algoritmo de hash seguro                          |
 | SNI     | Server Name Indication                  | Indicación de nombre de servidor                  |

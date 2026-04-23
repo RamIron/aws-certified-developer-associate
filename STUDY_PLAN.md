@@ -3,10 +3,10 @@
 ## Overall Progress
 
 ```
-[██████████████████████░] 29/33 sections | 438/483 lessons (90.6%)
-Total XP: 15,000
+[███████████████████████░] 30/33 sections | 471/483 lessons (97.5%)
+Total XP: 15,325
 
-Videos: 406/446 | Quizzes: 26/29 | ⏱ 30h 51min done · 1h 07min left
+Videos: 437/446 | Quizzes: 28/29 | ⏱ 31h 25min done · 33min left
 ```
 
 > **Note:** The exact number of lessons per section will be filled in as the course progresses.
@@ -562,18 +562,18 @@ Videos: 406/446 | Quizzes: 26/29 | ⏱ 30h 51min done · 1h 07min left
 
 ## Section 31: AWS Other Services
 
-- [ ] 31.1 - AWS Other Services - Section Introduction (intro)
-- [ ] 31.2 - AWS SES
-- [ ] 31.3 - Amazon OpenSearch Service - Overview
-- [ ] 31.4 - Amazon Athena - Overview
-- [ ] 31.5 - Amazon Athena - Hands On
-- [ ] 31.6 - Amazon MSK - Overview
-- [ ] 31.7 - Amazon Certificate Manager (ACM)
-- [ ] 31.8 - Amazon Certificate Manager (ACM) Hands On
-- [ ] 31.9 - ACM Private CA - Overview
-- [ ] 31.10 - Amazon Macie
-- [ ] 31.11 - AWS AppConfig - Overview
-- [ ] Other Services Quiz (Quiz 28)
+- [x] 31.1 - AWS Other Services - Section Introduction (intro - no quiz)
+- [x] 31.2 - AWS SES
+- [x] 31.3 - Amazon OpenSearch Service - Overview (PERFECT 100%)
+- [x] 31.4 - Amazon Athena - Overview (PERFECT 100%)
+- [x] 31.5 - Amazon Athena - Hands On (skipped - hands-on walkthrough)
+- [x] 31.6 - Amazon MSK - Overview (PERFECT 100%)
+- [x] 31.7 - Amazon Certificate Manager (ACM) (PERFECT 100%)
+- [x] 31.8 - Amazon Certificate Manager (ACM) Hands On (skipped - hands-on walkthrough)
+- [x] 31.9 - ACM Private CA - Overview
+- [x] 31.10 - Amazon Macie
+- [x] 31.11 - AWS AppConfig - Overview
+- [x] Other Services Quiz (Quiz 28)
 
 ## Section 32: AWS Final Cleanup
 

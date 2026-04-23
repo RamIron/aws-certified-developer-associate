@@ -1,0 +1,3207 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Section 31 - AWS Other Services</title>
+    <link rel="stylesheet" href="../shared/summary.css" />
+    <script src="../shared/summary.js"></script>
+  </head>
+  <body>
+    <script>
+      initHeader("Section 31 - AWS Other Services");
+    </script>
+    <div class="container">
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">1</span>
+          <h2>
+            <span class="lang-en">AWS SES - Simple Email Service</span>
+            <span class="lang-es">AWS SES - Simple Email Service</span>
+          </h2>
+        </div>
+        <p>
+          <span class="lang-en"
+            >SES is the AWS service for sending and receiving emails. It is
+            intentionally simple. Exam questions sometimes include SES as a
+            distractor in non-email scenarios - the key rule is: if the question
+            is about email, think SES first.</span
+          >
+          <span class="lang-es"
+            >SES es el servicio de AWS para enviar y recibir emails. Las
+            preguntas del examen lo incluyen como distractor en escenarios sin
+            email. Regla: si la pregunta habla de email, pensá en SES
+            primero.</span
+          >
+        </p>
+        <h3>
+          <span class="lang-en">Key Facts</span
+          ><span class="lang-es">Datos Clave</span>
+        </h3>
+        <p>
+          <span class="lang-en"
+            >The table below summarizes everything you need to know about SES
+            for the exam.</span
+          ><span class="lang-es"
+            >La tabla resume todo lo que necesitas saber sobre SES para el
+            examen.</span
+          >
+        </p>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>
+                <span class="lang-en">Feature</span
+                ><span class="lang-es">Caracteristica</span>
+              </th>
+              <th>
+                <span class="lang-en">Detail</span
+                ><span class="lang-es">Detalle</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <span class="lang-en">Send emails via</span
+                ><span class="lang-es">Enviar emails via</span>
+              </td>
+              <td>
+                <span class="lang-en">SMTP interface or AWS SDK</span
+                ><span class="lang-es">Interfaz SMTP o AWS SDK</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span class="lang-en">Receive emails</span
+                ><span class="lang-es">Recibir emails</span>
+              </td>
+              <td>
+                <span class="lang-en">Yes - can trigger S3, SNS, or Lambda</span
+                ><span class="lang-es"
+                  >Si - puede disparar S3, SNS o Lambda</span
+                >
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span class="lang-en">Permissions</span
+                ><span class="lang-es">Permisos</span>
+              </td>
+              <td>
+                <span class="lang-en">IAM permissions required</span
+                ><span class="lang-es">Se requieren permisos IAM</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <h3>
+          <span class="lang-en">How it fits together</span
+          ><span class="lang-es">Como encaja</span>
+        </h3>
+        <p>
+          <span class="lang-en"
+            >The diagram shows both directions: an application sending emails
+            via SES, and SES receiving inbound emails and routing them to S3,
+            SNS, or Lambda.</span
+          ><span class="lang-es"
+            >El diagrama muestra ambas direcciones: una app enviando emails via
+            SES, y SES recibiendo emails entrantes y enrutandolos a S3, SNS o
+            Lambda.</span
+          >
+        </p>
+        <svg
+          viewBox="0 0 600 200"
+          xmlns="http://www.w3.org/2000/svg"
+          style="
+            width: 100%;
+            max-width: 600px;
+            display: block;
+            margin: 0.75rem auto;
+          "
+        >
+          <defs>
+            <marker
+              id="arr-ses"
+              markerWidth="8"
+              markerHeight="8"
+              refX="6"
+              refY="3"
+              orient="auto"
+            >
+              <path d="M0,0 L0,6 L8,3 z" fill="#94a3b8" />
+            </marker>
+          </defs>
+          <rect
+            x="10"
+            y="75"
+            width="110"
+            height="50"
+            rx="6"
+            fill="#1a2744"
+            stroke="#60a5fa"
+            stroke-width="2"
+          />
+          <text
+            x="65"
+            y="97"
+            text-anchor="middle"
+            font-size="13"
+            fill="#93c5fd"
+            font-weight="bold"
+          >
+            Your App
+          </text>
+          <text
+            x="65"
+            y="114"
+            text-anchor="middle"
+            font-size="12"
+            fill="#94a3b8"
+          >
+            SMTP / SDK
+          </text>
+          <line
+            x1="122"
+            y1="100"
+            x2="198"
+            y2="100"
+            stroke="#94a3b8"
+            stroke-width="1.5"
+            marker-end="url(#arr-ses)"
+          />
+          <text
+            x="160"
+            y="92"
+            text-anchor="middle"
+            font-size="12"
+            fill="#64748b"
+          >
+            Send
+          </text>
+          <rect
+            x="200"
+            y="60"
+            width="120"
+            height="80"
+            rx="6"
+            fill="#1a2744"
+            stroke="#a78bfa"
+            stroke-width="2"
+          />
+          <text
+            x="260"
+            y="95"
+            text-anchor="middle"
+            font-size="14"
+            fill="#c4b5fd"
+            font-weight="bold"
+          >
+            AWS SES
+          </text>
+          <text
+            x="260"
+            y="114"
+            text-anchor="middle"
+            font-size="12"
+            fill="#94a3b8"
+          >
+            Send / Receive
+          </text>
+          <line
+            x1="322"
+            y1="80"
+            x2="398"
+            y2="55"
+            stroke="#94a3b8"
+            stroke-width="1.5"
+            marker-end="url(#arr-ses)"
+          />
+          <text
+            x="360"
+            y="52"
+            text-anchor="middle"
+            font-size="12"
+            fill="#64748b"
+          >
+            Inbound
+          </text>
+          <rect
+            x="400"
+            y="25"
+            width="90"
+            height="40"
+            rx="6"
+            fill="#1a2744"
+            stroke="#34d399"
+            stroke-width="2"
+          />
+          <text
+            x="445"
+            y="50"
+            text-anchor="middle"
+            font-size="13"
+            fill="#6ee7b7"
+            font-weight="bold"
+          >
+            S3
+          </text>
+          <line
+            x1="322"
+            y1="100"
+            x2="398"
+            y2="100"
+            stroke="#94a3b8"
+            stroke-width="1.5"
+            marker-end="url(#arr-ses)"
+          />
+          <rect
+            x="400"
+            y="80"
+            width="90"
+            height="40"
+            rx="6"
+            fill="#1a2744"
+            stroke="#fbbf24"
+            stroke-width="2"
+          />
+          <text
+            x="445"
+            y="105"
+            text-anchor="middle"
+            font-size="13"
+            fill="#fde68a"
+            font-weight="bold"
+          >
+            SNS
+          </text>
+          <line
+            x1="322"
+            y1="120"
+            x2="398"
+            y2="145"
+            stroke="#94a3b8"
+            stroke-width="1.5"
+            marker-end="url(#arr-ses)"
+          />
+          <rect
+            x="400"
+            y="130"
+            width="90"
+            height="40"
+            rx="6"
+            fill="#1a2744"
+            stroke="#f87171"
+            stroke-width="2"
+          />
+          <text
+            x="445"
+            y="155"
+            text-anchor="middle"
+            font-size="13"
+            fill="#fca5a5"
+            font-weight="bold"
+          >
+            Lambda
+          </text>
+        </svg>
+        <p>
+          &#11088;
+          <strong
+            ><span class="lang-en">Exam rule:</span
+            ><span class="lang-es">Regla del examen:</span></strong
+          >
+          <span class="lang-en"
+            >SES = Email. Mentioned in a non-email context? It's a
+            distractor.</span
+          ><span class="lang-es"
+            >SES = Email. Aparece en contexto sin email? Es un distractor.</span
+          >
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">2</span>
+          <h2>
+            <span class="lang-en">Amazon OpenSearch Service</span>
+            <span class="lang-es">Amazon OpenSearch Service</span>
+          </h2>
+        </div>
+        <p>
+          <span class="lang-en"
+            >Amazon OpenSearch (formerly ElasticSearch, renamed due to
+            licensing) lets you query <strong>any field</strong>, including
+            partial matches. Unlike DynamoDB which only queries by primary key
+            or indexes, OpenSearch is used as a <strong>complement</strong> to
+            another database, not a replacement.</span
+          >
+          <span class="lang-es"
+            >Amazon OpenSearch (antes ElasticSearch, renombrado por licencias)
+            permite consultar <strong>cualquier campo</strong>, incluyendo
+            coincidencias parciales. A diferencia de DynamoDB que solo consulta
+            por clave primaria o indices, se usa como
+            <strong>complemento</strong>, no reemplazo.</span
+          >
+        </p>
+        <h3>
+          <span class="lang-en">DynamoDB vs OpenSearch</span
+          ><span class="lang-es">DynamoDB vs OpenSearch</span>
+        </h3>
+        <p>
+          <span class="lang-en"
+            >The key exam differentiator: how each service can be queried.</span
+          ><span class="lang-es"
+            >El diferenciador clave para el examen: como se puede consultar cada
+            servicio.</span
+          >
+        </p>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>
+                <span class="lang-en">Feature</span
+                ><span class="lang-es">Caracteristica</span>
+              </th>
+              <th>DynamoDB</th>
+              <th>OpenSearch</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <span class="lang-en">Query by</span
+                ><span class="lang-es">Consulta por</span>
+              </td>
+              <td>
+                <span class="lang-en">Primary key or indexes only</span
+                ><span class="lang-es">Clave primaria o indices</span>
+              </td>
+              <td>
+                <strong
+                  ><span class="lang-en">Any field, partial matches</span
+                  ><span class="lang-es"
+                    >Cualquier campo, coincidencias parciales</span
+                  ></strong
+                >
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span class="lang-en">Role</span
+                ><span class="lang-es">Rol</span>
+              </td>
+              <td>
+                <span class="lang-en">Main data store</span
+                ><span class="lang-es">Fuente principal</span>
+              </td>
+              <td>
+                <span class="lang-en">Search complement</span
+                ><span class="lang-es">Complemento de busqueda</span>
+              </td>
+            </tr>
+            <tr>
+              <td>SQL</td>
+              <td>
+                <span class="lang-en">No native SQL</span
+                ><span class="lang-es">No SQL nativo</span>
+              </td>
+              <td>
+                <span class="lang-en">Own query language; SQL via plugin</span
+                ><span class="lang-es">Lenguaje propio; SQL via plugin</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <h3>
+          <span class="lang-en">Pattern 1: DynamoDB + OpenSearch</span
+          ><span class="lang-es">Patron 1: DynamoDB + OpenSearch</span>
+        </h3>
+        <p>
+          <span class="lang-en"
+            >The most common pattern. DynamoDB is the source of truth.
+            OpenSearch provides partial-match search. The app searches
+            OpenSearch to get an item ID, then retrieves the full item from
+            DynamoDB.</span
+          ><span class="lang-es"
+            >El patron mas comun. DynamoDB es la fuente de verdad. OpenSearch
+            provee busqueda parcial. La app busca en OpenSearch para obtener el
+            ID y luego recupera el item completo de DynamoDB.</span
+          >
+        </p>
+        <svg
+          viewBox="0 0 920 165"
+          xmlns="http://www.w3.org/2000/svg"
+          style="
+            width: 100%;
+            max-width: 920px;
+            display: block;
+            margin: 0.75rem auto;
+          "
+        >
+          <defs>
+            <marker
+              id="arr-os1"
+              markerWidth="8"
+              markerHeight="8"
+              refX="6"
+              refY="3"
+              orient="auto"
+            >
+              <path d="M0,0 L0,6 L8,3 z" fill="#94a3b8" />
+            </marker>
+          </defs>
+          <rect
+            x="10"
+            y="50"
+            width="130"
+            height="55"
+            rx="6"
+            fill="#1a2744"
+            stroke="#60a5fa"
+            stroke-width="2"
+          />
+          <text
+            x="75"
+            y="74"
+            text-anchor="middle"
+            font-size="13"
+            fill="#93c5fd"
+            font-weight="bold"
+          >
+            DynamoDB
+          </text>
+          <text
+            x="75"
+            y="92"
+            text-anchor="middle"
+            font-size="12"
+            fill="#94a3b8"
+          >
+            Source of truth
+          </text>
+          <line
+            x1="142"
+            y1="77"
+            x2="218"
+            y2="77"
+            stroke="#94a3b8"
+            stroke-width="1.5"
+            marker-end="url(#arr-os1)"
+          />
+          <text
+            x="180"
+            y="68"
+            text-anchor="middle"
+            font-size="12"
+            fill="#64748b"
+          >
+            1. Streams
+          </text>
+          <rect
+            x="220"
+            y="50"
+            width="130"
+            height="55"
+            rx="6"
+            fill="#1a2744"
+            stroke="#a78bfa"
+            stroke-width="2"
+          />
+          <text
+            x="285"
+            y="74"
+            text-anchor="middle"
+            font-size="13"
+            fill="#c4b5fd"
+            font-weight="bold"
+          >
+            DynamoDB
+          </text>
+          <text
+            x="285"
+            y="92"
+            text-anchor="middle"
+            font-size="13"
+            fill="#c4b5fd"
+          >
+            Streams
+          </text>
+          <line
+            x1="352"
+            y1="77"
+            x2="428"
+            y2="77"
+            stroke="#94a3b8"
+            stroke-width="1.5"
+            marker-end="url(#arr-os1)"
+          />
+          <text
+            x="390"
+            y="68"
+            text-anchor="middle"
+            font-size="12"
+            fill="#64748b"
+          >
+            2. picks up
+          </text>
+          <rect
+            x="430"
+            y="50"
+            width="130"
+            height="55"
+            rx="6"
+            fill="#1a2744"
+            stroke="#f87171"
+            stroke-width="2"
+          />
+          <text
+            x="495"
+            y="74"
+            text-anchor="middle"
+            font-size="13"
+            fill="#fca5a5"
+            font-weight="bold"
+          >
+            Lambda
+          </text>
+          <text
+            x="495"
+            y="92"
+            text-anchor="middle"
+            font-size="12"
+            fill="#94a3b8"
+          >
+            real time
+          </text>
+          <line
+            x1="562"
+            y1="77"
+            x2="638"
+            y2="77"
+            stroke="#94a3b8"
+            stroke-width="1.5"
+            marker-end="url(#arr-os1)"
+          />
+          <text
+            x="600"
+            y="68"
+            text-anchor="middle"
+            font-size="12"
+            fill="#64748b"
+          >
+            3. inserts
+          </text>
+          <rect
+            x="640"
+            y="50"
+            width="140"
+            height="55"
+            rx="6"
+            fill="#1a2744"
+            stroke="#34d399"
+            stroke-width="2"
+          />
+          <text
+            x="710"
+            y="74"
+            text-anchor="middle"
+            font-size="13"
+            fill="#6ee7b7"
+            font-weight="bold"
+          >
+            OpenSearch
+          </text>
+          <text
+            x="710"
+            y="92"
+            text-anchor="middle"
+            font-size="12"
+            fill="#94a3b8"
+          >
+            search index
+          </text>
+          <text
+            x="710"
+            y="128"
+            text-anchor="middle"
+            font-size="12"
+            fill="#f59e0b"
+          >
+            4. App searches, gets item ID
+          </text>
+          <text
+            x="710"
+            y="148"
+            text-anchor="middle"
+            font-size="12"
+            fill="#f59e0b"
+          >
+            5. App calls DynamoDB with ID
+          </text>
+        </svg>
+        <h3>
+          <span class="lang-en">Pattern 2: CloudWatch Logs</span
+          ><span class="lang-es">Patron 2: CloudWatch Logs</span>
+        </h3>
+        <p>
+          <span class="lang-en"
+            >Two options via a Subscription Filter: Lambda (real time) or
+            Kinesis Data Firehose (near real time).</span
+          ><span class="lang-es"
+            >Dos opciones via Subscription Filter: Lambda (tiempo real) o
+            Kinesis Data Firehose (casi tiempo real).</span
+          >
+        </p>
+        <svg
+          viewBox="0 0 640 170"
+          xmlns="http://www.w3.org/2000/svg"
+          style="
+            width: 100%;
+            max-width: 640px;
+            display: block;
+            margin: 0.75rem auto;
+          "
+        >
+          <defs>
+            <marker
+              id="arr-os2"
+              markerWidth="8"
+              markerHeight="8"
+              refX="6"
+              refY="3"
+              orient="auto"
+            >
+              <path d="M0,0 L0,6 L8,3 z" fill="#94a3b8" />
+            </marker>
+          </defs>
+          <rect
+            x="10"
+            y="65"
+            width="120"
+            height="50"
+            rx="6"
+            fill="#1a2744"
+            stroke="#60a5fa"
+            stroke-width="2"
+          />
+          <text
+            x="70"
+            y="87"
+            text-anchor="middle"
+            font-size="13"
+            fill="#93c5fd"
+            font-weight="bold"
+          >
+            CloudWatch
+          </text>
+          <text
+            x="70"
+            y="104"
+            text-anchor="middle"
+            font-size="12"
+            fill="#94a3b8"
+          >
+            Logs
+          </text>
+          <line
+            x1="132"
+            y1="90"
+            x2="178"
+            y2="90"
+            stroke="#94a3b8"
+            stroke-width="1.5"
+            marker-end="url(#arr-os2)"
+          />
+          <rect
+            x="180"
+            y="65"
+            width="110"
+            height="50"
+            rx="6"
+            fill="#1a2744"
+            stroke="#a78bfa"
+            stroke-width="2"
+          />
+          <text
+            x="235"
+            y="87"
+            text-anchor="middle"
+            font-size="12"
+            fill="#c4b5fd"
+            font-weight="bold"
+          >
+            Subscription
+          </text>
+          <text
+            x="235"
+            y="104"
+            text-anchor="middle"
+            font-size="12"
+            fill="#c4b5fd"
+          >
+            Filter
+          </text>
+          <line
+            x1="292"
+            y1="78"
+            x2="348"
+            y2="45"
+            stroke="#94a3b8"
+            stroke-width="1.5"
+            marker-end="url(#arr-os2)"
+          />
+          <text
+            x="300"
+            y="44"
+            text-anchor="middle"
+            font-size="12"
+            fill="#f59e0b"
+          >
+            A: real time
+          </text>
+          <rect
+            x="350"
+            y="20"
+            width="90"
+            height="40"
+            rx="6"
+            fill="#1a2744"
+            stroke="#f87171"
+            stroke-width="2"
+          />
+          <text
+            x="395"
+            y="45"
+            text-anchor="middle"
+            font-size="13"
+            fill="#fca5a5"
+            font-weight="bold"
+          >
+            Lambda
+          </text>
+          <line
+            x1="442"
+            y1="40"
+            x2="498"
+            y2="40"
+            stroke="#94a3b8"
+            stroke-width="1.5"
+            marker-end="url(#arr-os2)"
+          />
+          <rect
+            x="500"
+            y="20"
+            width="110"
+            height="40"
+            rx="6"
+            fill="#1a2744"
+            stroke="#34d399"
+            stroke-width="2"
+          />
+          <text
+            x="555"
+            y="45"
+            text-anchor="middle"
+            font-size="13"
+            fill="#6ee7b7"
+            font-weight="bold"
+          >
+            OpenSearch
+          </text>
+          <line
+            x1="292"
+            y1="102"
+            x2="348"
+            y2="125"
+            stroke="#94a3b8"
+            stroke-width="1.5"
+            marker-end="url(#arr-os2)"
+          />
+          <text
+            x="300"
+            y="140"
+            text-anchor="middle"
+            font-size="12"
+            fill="#f59e0b"
+          >
+            B: near real time
+          </text>
+          <rect
+            x="350"
+            y="115"
+            width="90"
+            height="40"
+            rx="6"
+            fill="#1a2744"
+            stroke="#fbbf24"
+            stroke-width="2"
+          />
+          <text
+            x="395"
+            y="132"
+            text-anchor="middle"
+            font-size="12"
+            fill="#fde68a"
+            font-weight="bold"
+          >
+            Kinesis
+          </text>
+          <text
+            x="395"
+            y="149"
+            text-anchor="middle"
+            font-size="12"
+            fill="#fde68a"
+          >
+            Firehose
+          </text>
+          <line
+            x1="442"
+            y1="135"
+            x2="498"
+            y2="135"
+            stroke="#94a3b8"
+            stroke-width="1.5"
+            marker-end="url(#arr-os2)"
+          />
+          <rect
+            x="500"
+            y="115"
+            width="110"
+            height="40"
+            rx="6"
+            fill="#1a2744"
+            stroke="#34d399"
+            stroke-width="2"
+          />
+          <text
+            x="555"
+            y="140"
+            text-anchor="middle"
+            font-size="13"
+            fill="#6ee7b7"
+            font-weight="bold"
+          >
+            OpenSearch
+          </text>
+        </svg>
+        <h3>
+          <span class="lang-en">Pattern 3: Kinesis Data Streams</span
+          ><span class="lang-es">Patron 3: Kinesis Data Streams</span>
+        </h3>
+        <p>
+          <span class="lang-en"
+            >Option A: via Firehose (near real time) with optional Lambda
+            transform (bidirectional arrow). Option B: custom Lambda (real
+            time).</span
+          ><span class="lang-es"
+            >Opcion A: via Firehose (casi tiempo real) con transform Lambda
+            opcional (flecha bidireccional). Opcion B: Lambda propio (tiempo
+            real).</span
+          >
+        </p>
+        <svg
+          viewBox="0 0 640 220"
+          xmlns="http://www.w3.org/2000/svg"
+          style="
+            width: 100%;
+            max-width: 640px;
+            display: block;
+            margin: 0.75rem auto;
+          "
+        >
+          <defs>
+            <marker
+              id="arr-os3"
+              markerWidth="8"
+              markerHeight="8"
+              refX="6"
+              refY="3"
+              orient="auto"
+            >
+              <path d="M0,0 L0,6 L8,3 z" fill="#94a3b8" />
+            </marker>
+            <marker
+              id="arr-os3-rev"
+              markerWidth="8"
+              markerHeight="8"
+              refX="2"
+              refY="3"
+              orient="auto"
+            >
+              <path d="M8,0 L8,6 L0,3 z" fill="#94a3b8" />
+            </marker>
+          </defs>
+          <text
+            x="150"
+            y="18"
+            text-anchor="middle"
+            font-size="13"
+            fill="#94a3b8"
+            font-style="italic"
+          >
+            Option A - near real time
+          </text>
+          <rect
+            x="10"
+            y="30"
+            width="110"
+            height="50"
+            rx="6"
+            fill="#1a2744"
+            stroke="#a78bfa"
+            stroke-width="2"
+          />
+          <text
+            x="65"
+            y="52"
+            text-anchor="middle"
+            font-size="12"
+            fill="#c4b5fd"
+            font-weight="bold"
+          >
+            Kinesis Data
+          </text>
+          <text
+            x="65"
+            y="68"
+            text-anchor="middle"
+            font-size="12"
+            fill="#c4b5fd"
+          >
+            Streams
+          </text>
+          <line
+            x1="122"
+            y1="55"
+            x2="158"
+            y2="55"
+            stroke="#94a3b8"
+            stroke-width="1.5"
+            marker-end="url(#arr-os3)"
+          />
+          <rect
+            x="160"
+            y="30"
+            width="110"
+            height="50"
+            rx="6"
+            fill="#1a2744"
+            stroke="#a78bfa"
+            stroke-width="2"
+          />
+          <text
+            x="215"
+            y="52"
+            text-anchor="middle"
+            font-size="12"
+            fill="#c4b5fd"
+            font-weight="bold"
+          >
+            Kinesis Data
+          </text>
+          <text
+            x="215"
+            y="68"
+            text-anchor="middle"
+            font-size="12"
+            fill="#c4b5fd"
+          >
+            Firehose
+          </text>
+          <rect
+            x="175"
+            y="105"
+            width="90"
+            height="40"
+            rx="6"
+            fill="#1a2744"
+            stroke="#f87171"
+            stroke-width="1.5"
+            stroke-dasharray="4,3"
+          />
+          <text
+            x="220"
+            y="122"
+            text-anchor="middle"
+            font-size="12"
+            fill="#fca5a5"
+          >
+            Lambda
+          </text>
+          <text
+            x="220"
+            y="138"
+            text-anchor="middle"
+            font-size="12"
+            fill="#94a3b8"
+          >
+            (transform)
+          </text>
+          <line
+            x1="215"
+            y1="80"
+            x2="215"
+            y2="103"
+            stroke="#94a3b8"
+            stroke-width="1.2"
+            stroke-dasharray="3,3"
+            marker-start="url(#arr-os3-rev)"
+            marker-end="url(#arr-os3)"
+          />
+          <line
+            x1="272"
+            y1="55"
+            x2="308"
+            y2="55"
+            stroke="#94a3b8"
+            stroke-width="1.5"
+            marker-end="url(#arr-os3)"
+          />
+          <rect
+            x="310"
+            y="30"
+            width="110"
+            height="50"
+            rx="6"
+            fill="#1a2744"
+            stroke="#34d399"
+            stroke-width="2"
+          />
+          <text
+            x="365"
+            y="52"
+            text-anchor="middle"
+            font-size="13"
+            fill="#6ee7b7"
+            font-weight="bold"
+          >
+            Amazon
+          </text>
+          <text
+            x="365"
+            y="68"
+            text-anchor="middle"
+            font-size="13"
+            fill="#6ee7b7"
+          >
+            OpenSearch
+          </text>
+          <line
+            x1="450"
+            y1="10"
+            x2="450"
+            y2="210"
+            stroke="#334155"
+            stroke-width="1"
+            stroke-dasharray="5,4"
+          />
+          <text
+            x="555"
+            y="18"
+            text-anchor="middle"
+            font-size="13"
+            fill="#94a3b8"
+            font-style="italic"
+          >
+            Option B - real time
+          </text>
+          <rect
+            x="460"
+            y="30"
+            width="110"
+            height="50"
+            rx="6"
+            fill="#1a2744"
+            stroke="#a78bfa"
+            stroke-width="2"
+          />
+          <text
+            x="515"
+            y="52"
+            text-anchor="middle"
+            font-size="12"
+            fill="#c4b5fd"
+            font-weight="bold"
+          >
+            Kinesis Data
+          </text>
+          <text
+            x="515"
+            y="68"
+            text-anchor="middle"
+            font-size="12"
+            fill="#c4b5fd"
+          >
+            Streams
+          </text>
+          <line
+            x1="515"
+            y1="82"
+            x2="515"
+            y2="108"
+            stroke="#94a3b8"
+            stroke-width="1.5"
+            marker-end="url(#arr-os3)"
+          />
+          <rect
+            x="465"
+            y="110"
+            width="100"
+            height="45"
+            rx="6"
+            fill="#1a2744"
+            stroke="#f87171"
+            stroke-width="2"
+          />
+          <text
+            x="515"
+            y="130"
+            text-anchor="middle"
+            font-size="13"
+            fill="#fca5a5"
+            font-weight="bold"
+          >
+            Lambda
+          </text>
+          <text
+            x="515"
+            y="147"
+            text-anchor="middle"
+            font-size="12"
+            fill="#94a3b8"
+          >
+            real time
+          </text>
+          <line
+            x1="515"
+            y1="157"
+            x2="515"
+            y2="173"
+            stroke="#94a3b8"
+            stroke-width="1.5"
+            marker-end="url(#arr-os3)"
+          />
+          <rect
+            x="460"
+            y="175"
+            width="110"
+            height="40"
+            rx="6"
+            fill="#1a2744"
+            stroke="#34d399"
+            stroke-width="2"
+          />
+          <text
+            x="515"
+            y="200"
+            text-anchor="middle"
+            font-size="13"
+            fill="#6ee7b7"
+            font-weight="bold"
+          >
+            OpenSearch
+          </text>
+        </svg>
+        <p>
+          &#11088;
+          <strong>Firehose = near real time | Lambda = real time.</strong>
+          <span class="lang-en"
+            >No native SQL - plugin required. OpenSearch is always a complement,
+            never a main DB.</span
+          ><span class="lang-es"
+            >No SQL nativo - requiere plugin. OpenSearch siempre es un
+            complemento, nunca una DB principal.</span
+          >
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">3</span>
+          <h2>
+            <span class="lang-en">Amazon Athena</span>
+            <span class="lang-es">Amazon Athena</span>
+          </h2>
+        </div>
+        <p>
+          <span class="lang-en"
+            >Athena is a <strong>serverless SQL query engine</strong> that
+            analyzes data directly in S3 - no database to provision, no data to
+            move. Built on <strong>Presto</strong>, uses standard SQL, charges
+            per TB scanned. Exam trigger: "serverless SQL on S3" - Athena.</span
+          >
+          <span class="lang-es"
+            >Athena es un <strong>motor SQL serverless</strong> que analiza
+            datos directamente en S3. Construido sobre <strong>Presto</strong>,
+            usa SQL estandar, cobra por TB escaneado. Trigger del examen: "SQL
+            serverless sobre S3" - Athena.</span
+          >
+        </p>
+        <h3>
+          <span class="lang-en">Key Facts</span
+          ><span class="lang-es">Datos Clave</span>
+        </h3>
+        <p>
+          <span class="lang-en"
+            >Everything you need to know about Athena at a glance.</span
+          ><span class="lang-es"
+            >Todo lo que necesitas saber de Athena de un vistazo.</span
+          >
+        </p>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>
+                <span class="lang-en">Feature</span
+                ><span class="lang-es">Caracteristica</span>
+              </th>
+              <th>
+                <span class="lang-en">Detail</span
+                ><span class="lang-es">Detalle</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <span class="lang-en">Type</span
+                ><span class="lang-es">Tipo</span>
+              </td>
+              <td>
+                <span class="lang-en">Serverless query service</span
+                ><span class="lang-es">Servicio de consultas serverless</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span class="lang-en">Data source</span
+                ><span class="lang-es">Fuente</span>
+              </td>
+              <td>Amazon S3</td>
+            </tr>
+            <tr>
+              <td>
+                <span class="lang-en">Query language</span
+                ><span class="lang-es">Lenguaje</span>
+              </td>
+              <td>
+                <span class="lang-en">Standard SQL (Presto engine)</span
+                ><span class="lang-es">SQL estandar (motor Presto)</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span class="lang-en">Pricing</span
+                ><span class="lang-es">Precio</span>
+              </td>
+              <td>
+                <span class="lang-en">Per TB of data scanned</span
+                ><span class="lang-es">Por TB de datos escaneados</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span class="lang-en">Supported formats</span
+                ><span class="lang-es">Formatos</span>
+              </td>
+              <td>CSV, JSON, ORC, Avro, <strong>Parquet</strong></td>
+            </tr>
+            <tr>
+              <td>
+                <span class="lang-en">Common integration</span
+                ><span class="lang-es">Integracion comun</span>
+              </td>
+              <td>
+                <span class="lang-en">Amazon QuickSight (BI dashboards)</span
+                ><span class="lang-es">Amazon QuickSight (dashboards)</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <h3>
+          <span class="lang-en">Performance Improvements (Exam Focus)</span
+          ><span class="lang-es">Mejoras de Performance (Foco del Examen)</span>
+        </h3>
+        <p>
+          <span class="lang-en"
+            >Since you pay per TB scanned, the goal is always to scan less data.
+            Four techniques - all can appear in exam questions.</span
+          ><span class="lang-es"
+            >Como se paga por TB escaneado, el objetivo es escanear menos datos.
+            Cuatro tecnicas - todas pueden aparecer en el examen.</span
+          >
+        </p>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>
+                <span class="lang-en">Technique</span
+                ><span class="lang-es">Tecnica</span>
+              </th>
+              <th>
+                <span class="lang-en">How</span
+                ><span class="lang-es">Como</span>
+              </th>
+              <th>
+                <span class="lang-en">Why it helps</span
+                ><span class="lang-es">Por que ayuda</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <strong
+                  ><span class="lang-en">Columnar format</span
+                  ><span class="lang-es">Formato columnar</span></strong
+                >
+              </td>
+              <td>
+                <span class="lang-en">Use Parquet or ORC</span
+                ><span class="lang-es">Usar Parquet u ORC</span>
+              </td>
+              <td>
+                <span class="lang-en"
+                  >Scan only needed columns - less data - lower cost</span
+                ><span class="lang-es"
+                  >Solo escanea columnas necesarias - menos datos - menor
+                  costo</span
+                >
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <strong
+                  ><span class="lang-en">Compression</span
+                  ><span class="lang-es">Compresion</span></strong
+                >
+              </td>
+              <td>GZIP, Snappy, etc.</td>
+              <td>
+                <span class="lang-en">Smaller files - faster retrieval</span
+                ><span class="lang-es">Archivos mas chicos - mas rapido</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <strong
+                  ><span class="lang-en">Partitioning</span
+                  ><span class="lang-es">Particionado</span></strong
+                >
+              </td>
+              <td><code>/year=1991/month=01/day=01/</code></td>
+              <td>
+                <span class="lang-en"
+                  >Athena goes directly to the right S3 folder</span
+                ><span class="lang-es"
+                  >Athena va directo a la carpeta correcta en S3</span
+                >
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <strong
+                  ><span class="lang-en">Large files</span
+                  ><span class="lang-es">Archivos grandes</span></strong
+                >
+              </td>
+              <td>&ge; 128 MB</td>
+              <td>
+                <span class="lang-en">Fewer files = less overhead</span
+                ><span class="lang-es">Menos archivos = menos overhead</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <p>
+          &#11088;
+          <strong
+            ><span class="lang-en">To convert CSV to Parquet/ORC:</span
+            ><span class="lang-es"
+              >Para convertir CSV a Parquet/ORC:</span
+            ></strong
+          >
+          <span class="lang-en"
+            >use <strong>AWS Glue</strong> as an ETL job.</span
+          ><span class="lang-es"
+            >usa <strong>AWS Glue</strong> como ETL job.</span
+          >
+        </p>
+        <h3>
+          <span class="lang-en">Federated Query</span
+          ><span class="lang-es">Federated Query</span>
+        </h3>
+        <p>
+          <span class="lang-en"
+            >Athena can query data outside S3 - RDS, DynamoDB, ElastiCache,
+            Redshift, Aurora, on-premises DBs - using a
+            <strong>Data Source Connector</strong> (a Lambda function, one per
+            source). Results stored back to S3.</span
+          ><span class="lang-es"
+            >Athena puede consultar datos fuera de S3 - RDS, DynamoDB,
+            ElastiCache, Redshift, Aurora, DBs on-premises - usando un
+            <strong>Data Source Connector</strong> (Lambda function, una por
+            fuente). Resultados guardados en S3.</span
+          >
+        </p>
+        <svg
+          viewBox="0 0 680 200"
+          xmlns="http://www.w3.org/2000/svg"
+          style="
+            width: 100%;
+            max-width: 680px;
+            display: block;
+            margin: 0.75rem auto;
+          "
+        >
+          <defs>
+            <marker
+              id="arr-ath"
+              markerWidth="8"
+              markerHeight="8"
+              refX="6"
+              refY="3"
+              orient="auto"
+            >
+              <path d="M0,0 L0,6 L8,3 z" fill="#94a3b8" />
+            </marker>
+          </defs>
+          <rect
+            x="10"
+            y="75"
+            width="120"
+            height="50"
+            rx="6"
+            fill="#1a2744"
+            stroke="#60a5fa"
+            stroke-width="2"
+          />
+          <text
+            x="70"
+            y="97"
+            text-anchor="middle"
+            font-size="13"
+            fill="#93c5fd"
+            font-weight="bold"
+          >
+            Amazon
+          </text>
+          <text
+            x="70"
+            y="114"
+            text-anchor="middle"
+            font-size="13"
+            fill="#93c5fd"
+            font-weight="bold"
+          >
+            Athena
+          </text>
+          <line
+            x1="132"
+            y1="100"
+            x2="188"
+            y2="100"
+            stroke="#94a3b8"
+            stroke-width="1.5"
+            marker-end="url(#arr-ath)"
+          />
+          <rect
+            x="190"
+            y="65"
+            width="130"
+            height="70"
+            rx="6"
+            fill="#1a2744"
+            stroke="#f87171"
+            stroke-width="2"
+          />
+          <text
+            x="255"
+            y="92"
+            text-anchor="middle"
+            font-size="13"
+            fill="#fca5a5"
+            font-weight="bold"
+          >
+            Lambda
+          </text>
+          <text
+            x="255"
+            y="109"
+            text-anchor="middle"
+            font-size="12"
+            fill="#94a3b8"
+          >
+            Data Source
+          </text>
+          <text
+            x="255"
+            y="125"
+            text-anchor="middle"
+            font-size="12"
+            fill="#94a3b8"
+          >
+            Connector
+          </text>
+          <line
+            x1="322"
+            y1="100"
+            x2="368"
+            y2="100"
+            stroke="#94a3b8"
+            stroke-width="1.5"
+            marker-end="url(#arr-ath)"
+          />
+          <rect
+            x="370"
+            y="20"
+            width="140"
+            height="160"
+            rx="6"
+            fill="#0f172a"
+            stroke="#475569"
+            stroke-width="1.5"
+          />
+          <text
+            x="440"
+            y="42"
+            text-anchor="middle"
+            font-size="12"
+            fill="#94a3b8"
+          >
+            RDS / Aurora
+          </text>
+          <text
+            x="440"
+            y="62"
+            text-anchor="middle"
+            font-size="12"
+            fill="#94a3b8"
+          >
+            DynamoDB
+          </text>
+          <text
+            x="440"
+            y="82"
+            text-anchor="middle"
+            font-size="12"
+            fill="#94a3b8"
+          >
+            ElastiCache
+          </text>
+          <text
+            x="440"
+            y="102"
+            text-anchor="middle"
+            font-size="12"
+            fill="#94a3b8"
+          >
+            Redshift
+          </text>
+          <text
+            x="440"
+            y="122"
+            text-anchor="middle"
+            font-size="12"
+            fill="#94a3b8"
+          >
+            CloudWatch Logs
+          </text>
+          <text
+            x="440"
+            y="142"
+            text-anchor="middle"
+            font-size="12"
+            fill="#94a3b8"
+          >
+            On-premises DBs
+          </text>
+          <text
+            x="440"
+            y="162"
+            text-anchor="middle"
+            font-size="12"
+            fill="#64748b"
+          >
+            + more...
+          </text>
+          <line
+            x1="255"
+            y1="137"
+            x2="255"
+            y2="163"
+            stroke="#94a3b8"
+            stroke-width="1.5"
+            marker-end="url(#arr-ath)"
+          />
+          <rect
+            x="190"
+            y="165"
+            width="130"
+            height="30"
+            rx="6"
+            fill="#1a2744"
+            stroke="#34d399"
+            stroke-width="2"
+          />
+          <text
+            x="255"
+            y="185"
+            text-anchor="middle"
+            font-size="12"
+            fill="#6ee7b7"
+            font-weight="bold"
+          >
+            S3 (results)
+          </text>
+        </svg>
+        <p>
+          &#11088;
+          <strong
+            ><span class="lang-en"
+              >One Lambda per data source connector. Results stored in S3.</span
+            ><span class="lang-es"
+              >Una Lambda por conector. Resultados guardados en S3.</span
+            ></strong
+          >
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">4</span>
+          <h2>
+            <span class="lang-en"
+              >Amazon MSK - Managed Streaming for Apache Kafka</span
+            >
+            <span class="lang-es"
+              >Amazon MSK - Managed Streaming for Apache Kafka</span
+            >
+          </h2>
+        </div>
+        <p>
+          <span class="lang-en"
+            >MSK is a fully managed Apache Kafka service on AWS. Kafka is an
+            <strong>alternative to Amazon Kinesis</strong> for streaming data.
+            MSK handles broker nodes, Zookeeper nodes, failure recovery, and
+            deploys across multiple AZs in your VPC. Data is stored on EBS
+            volumes and can be retained <strong>as long as you want</strong>.
+            MSK Serverless removes the need to provision or manage capacity
+            entirely.</span
+          >
+          <span class="lang-es"
+            >MSK es un servicio Kafka completamente administrado en AWS. Kafka
+            es una <strong>alternativa a Amazon Kinesis</strong> para streaming
+            de datos. MSK maneja broker nodes, Zookeeper nodes, recuperacion de
+            fallos y se despliega en multiples AZs en tu VPC. Los datos se
+            guardan en EBS y se pueden retener
+            <strong>todo el tiempo que quieras</strong>. MSK Serverless elimina
+            la necesidad de provisionar capacidad.</span
+          >
+        </p>
+
+        <h3>
+          <span class="lang-en">Kinesis Data Streams vs Amazon MSK</span
+          ><span class="lang-es">Kinesis Data Streams vs Amazon MSK</span>
+        </h3>
+        <p>
+          <span class="lang-en"
+            >The exam tests you on the key differences between these two
+            streaming services.</span
+          ><span class="lang-es"
+            >El examen evalua las diferencias clave entre estos dos servicios de
+            streaming.</span
+          >
+        </p>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>
+                <span class="lang-en">Feature</span
+                ><span class="lang-es">Caracteristica</span>
+              </th>
+              <th>Kinesis Data Streams</th>
+              <th>Amazon MSK</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <span class="lang-en">Message size</span
+                ><span class="lang-es">Tamano de mensaje</span>
+              </td>
+              <td>1 MB max</td>
+              <td>
+                <span class="lang-en"
+                  >1 MB default, <strong>configurable higher</strong> (e.g. 10
+                  MB)</span
+                ><span class="lang-es"
+                  >1 MB por defecto, <strong>configurable mas alto</strong> (ej.
+                  10 MB)</span
+                >
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span class="lang-en">Scaling unit</span
+                ><span class="lang-es">Unidad de escala</span>
+              </td>
+              <td>Shards</td>
+              <td>Kafka Topics with Partitions</td>
+            </tr>
+            <tr>
+              <td>
+                <span class="lang-en">Scale up</span
+                ><span class="lang-es">Escalar hacia arriba</span>
+              </td>
+              <td>Shard Splitting</td>
+              <td>
+                <span class="lang-en">Add partitions</span
+                ><span class="lang-es">Agregar particiones</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span class="lang-en">Scale down</span
+                ><span class="lang-es">Escalar hacia abajo</span>
+              </td>
+              <td>Shard Merging</td>
+              <td>
+                <strong
+                  ><span class="lang-en">Cannot remove partitions</span
+                  ><span class="lang-es"
+                    >No se pueden eliminar particiones</span
+                  ></strong
+                >
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span class="lang-en">In-flight encryption</span
+                ><span class="lang-es">Cifrado en transito</span>
+              </td>
+              <td>Yes</td>
+              <td>Plaintext or TLS</td>
+            </tr>
+            <tr>
+              <td>
+                <span class="lang-en">Data retention</span
+                ><span class="lang-es">Retencion de datos</span>
+              </td>
+              <td>
+                <span class="lang-en">Limited</span
+                ><span class="lang-es">Limitada</span>
+              </td>
+              <td>
+                <strong
+                  ><span class="lang-en">Unlimited (pay for EBS)</span
+                  ><span class="lang-es">Ilimitada (pagas EBS)</span></strong
+                >
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>
+          <span class="lang-en">MSK Consumers</span
+          ><span class="lang-es">Consumidores de MSK</span>
+        </h3>
+        <p>
+          <span class="lang-en"
+            >The following services can consume data directly from an MSK
+            cluster.</span
+          ><span class="lang-es"
+            >Los siguientes servicios pueden consumir datos directamente de un
+            cluster MSK.</span
+          >
+        </p>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>
+                <span class="lang-en">Consumer</span
+                ><span class="lang-es">Consumidor</span>
+              </th>
+              <th>
+                <span class="lang-en">Notes</span
+                ><span class="lang-es">Notas</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Kinesis Data Analytics for Apache Flink</strong></td>
+              <td>
+                <span class="lang-en"
+                  >Flink application reading directly from MSK</span
+                ><span class="lang-es"
+                  >Aplicacion Flink leyendo directamente de MSK</span
+                >
+              </td>
+            </tr>
+            <tr>
+              <td><strong>AWS Glue</strong></td>
+              <td>
+                <span class="lang-en"
+                  >Streaming ETL powered by Apache Spark Streaming</span
+                ><span class="lang-es"
+                  >ETL en streaming con Apache Spark Streaming</span
+                >
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Lambda</strong></td>
+              <td>
+                <span class="lang-en">MSK as an event source</span
+                ><span class="lang-es">MSK como event source</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <strong
+                  ><span class="lang-en">Custom consumer</span
+                  ><span class="lang-es">Consumidor propio</span></strong
+                >
+              </td>
+              <td>EC2, ECS, EKS</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p>
+          &#11088;
+          <strong
+            ><span class="lang-en">Exam rule:</span
+            ><span class="lang-es">Regla del examen:</span></strong
+          >
+          <span class="lang-en"
+            >MSK = managed Kafka = alternative to Kinesis. Key differentiators:
+            configurable message size above 1 MB, unlimited retention, cannot
+            remove partitions.</span
+          ><span class="lang-es"
+            >MSK = Kafka administrado = alternativa a Kinesis. Diferenciadores
+            clave: tamano de mensaje configurable sobre 1 MB, retencion
+            ilimitada, no se pueden eliminar particiones.</span
+          >
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">5</span>
+          <h2>
+            <span class="lang-en">Amazon Certificate Manager (ACM)</span>
+            <span class="lang-es">Amazon Certificate Manager (ACM)</span>
+          </h2>
+        </div>
+        <p>
+          <span class="lang-en"
+            >ACM provisions, manages, and deploys
+            <strong>SSL/TLS certificates</strong> to provide in-flight
+            encryption via HTTPS endpoints. Public TLS certificates are
+            <strong>free</strong> and renew <strong>automatically</strong>. ACM
+            integrates directly with ELB, CloudFront, and API Gateway — you
+            never need to handle the certificate manually.</span
+          >
+          <span class="lang-es"
+            >ACM provisiona, administra y despliega
+            <strong>certificados SSL/TLS</strong> para proveer cifrado en
+            transito via HTTPS. Los certificados TLS publicos son
+            <strong>gratuitos</strong> y se renuevan
+            <strong>automaticamente</strong>. Se integra directamente con ELB,
+            CloudFront y API Gateway.</span
+          >
+        </p>
+        <h3>
+          <span class="lang-en">Key Facts</span
+          ><span class="lang-es">Datos Clave</span>
+        </h3>
+        <p>
+          <span class="lang-en"
+            >Everything you need to know about ACM for the exam.</span
+          ><span class="lang-es"
+            >Todo lo que necesitas saber de ACM para el examen.</span
+          >
+        </p>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>
+                <span class="lang-en">Feature</span
+                ><span class="lang-es">Caracteristica</span>
+              </th>
+              <th>
+                <span class="lang-en">Detail</span
+                ><span class="lang-es">Detalle</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <span class="lang-en">Purpose</span
+                ><span class="lang-es">Proposito</span>
+              </td>
+              <td>
+                <span class="lang-en"
+                  >Provision and deploy TLS certificates</span
+                ><span class="lang-es"
+                  >Provisionar y desplegar certificados TLS</span
+                >
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span class="lang-en">Certificate types</span
+                ><span class="lang-es">Tipos de certificado</span>
+              </td>
+              <td>
+                <span class="lang-en">Public and Private TLS</span
+                ><span class="lang-es">TLS publico y privado</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span class="lang-en">Cost (public)</span
+                ><span class="lang-es">Costo (publico)</span>
+              </td>
+              <td>
+                <strong
+                  ><span class="lang-en">Free</span
+                  ><span class="lang-es">Gratuito</span></strong
+                >
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span class="lang-en">Renewal</span
+                ><span class="lang-es">Renovacion</span>
+              </td>
+              <td>
+                <strong
+                  ><span class="lang-en">Automatic</span
+                  ><span class="lang-es">Automatica</span></strong
+                >
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span class="lang-en">Integrations</span
+                ><span class="lang-es">Integraciones</span>
+              </td>
+              <td>ELB, CloudFront, API Gateway</td>
+            </tr>
+          </tbody>
+        </table>
+        <h3>
+          <span class="lang-en">Typical Architecture</span
+          ><span class="lang-es">Arquitectura Tipica</span>
+        </h3>
+        <p>
+          <span class="lang-en"
+            >ACM loads the TLS certificate onto the load balancer. The client
+            gets HTTPS; the backend can use plain HTTP internally.</span
+          ><span class="lang-es"
+            >ACM carga el certificado TLS en el load balancer. El cliente recibe
+            HTTPS; el backend puede usar HTTP plano internamente.</span
+          >
+        </p>
+        <svg
+          viewBox="0 0 680 90"
+          xmlns="http://www.w3.org/2000/svg"
+          style="
+            width: 100%;
+            max-width: 680px;
+            display: block;
+            margin: 0.75rem auto;
+          "
+        >
+          <defs>
+            <marker
+              id="arr-acm"
+              markerWidth="8"
+              markerHeight="8"
+              refX="6"
+              refY="3"
+              orient="auto"
+            >
+              <path d="M0,0 L0,6 L8,3 z" fill="#94a3b8" />
+            </marker>
+          </defs>
+          <rect
+            x="10"
+            y="25"
+            width="90"
+            height="40"
+            rx="6"
+            fill="#1a2744"
+            stroke="#60a5fa"
+            stroke-width="2"
+          />
+          <text
+            x="55"
+            y="50"
+            text-anchor="middle"
+            font-size="13"
+            fill="#93c5fd"
+            font-weight="bold"
+          >
+            Client
+          </text>
+          <line
+            x1="102"
+            y1="45"
+            x2="148"
+            y2="45"
+            stroke="#94a3b8"
+            stroke-width="1.5"
+            marker-end="url(#arr-acm)"
+          />
+          <text
+            x="125"
+            y="37"
+            text-anchor="middle"
+            font-size="12"
+            fill="#34d399"
+            font-weight="bold"
+          >
+            HTTPS
+          </text>
+          <rect
+            x="150"
+            y="15"
+            width="150"
+            height="60"
+            rx="6"
+            fill="#1a2744"
+            stroke="#a78bfa"
+            stroke-width="2"
+          />
+          <text
+            x="225"
+            y="40"
+            text-anchor="middle"
+            font-size="13"
+            fill="#c4b5fd"
+            font-weight="bold"
+          >
+            ALB
+          </text>
+          <text
+            x="225"
+            y="57"
+            text-anchor="middle"
+            font-size="11"
+            fill="#94a3b8"
+          >
+            TLS cert from ACM
+          </text>
+          <line
+            x1="302"
+            y1="45"
+            x2="348"
+            y2="45"
+            stroke="#94a3b8"
+            stroke-width="1.5"
+            marker-end="url(#arr-acm)"
+          />
+          <text
+            x="325"
+            y="37"
+            text-anchor="middle"
+            font-size="12"
+            fill="#64748b"
+          >
+            HTTP
+          </text>
+          <rect
+            x="350"
+            y="15"
+            width="130"
+            height="60"
+            rx="6"
+            fill="#1a2744"
+            stroke="#f87171"
+            stroke-width="2"
+          />
+          <text
+            x="415"
+            y="40"
+            text-anchor="middle"
+            font-size="13"
+            fill="#fca5a5"
+            font-weight="bold"
+          >
+            EC2 instances
+          </text>
+          <text
+            x="415"
+            y="57"
+            text-anchor="middle"
+            font-size="11"
+            fill="#94a3b8"
+          >
+            Auto Scaling Group
+          </text>
+          <rect
+            x="500"
+            y="25"
+            width="80"
+            height="40"
+            rx="6"
+            fill="#1a2744"
+            stroke="#fbbf24"
+            stroke-width="1.5"
+            stroke-dasharray="4,3"
+          />
+          <text
+            x="540"
+            y="43"
+            text-anchor="middle"
+            font-size="12"
+            fill="#fde68a"
+            font-weight="bold"
+          >
+            ACM
+          </text>
+          <text
+            x="540"
+            y="58"
+            text-anchor="middle"
+            font-size="11"
+            fill="#94a3b8"
+          >
+            cert loaded
+          </text>
+          <line
+            x1="498"
+            y1="38"
+            x2="482"
+            y2="38"
+            stroke="#fbbf24"
+            stroke-width="1.2"
+            stroke-dasharray="3,3"
+            marker-end="url(#arr-acm)"
+          />
+        </svg>
+        <p>
+          &#11088;
+          <strong
+            ><span class="lang-en">Exam trigger:</span
+            ><span class="lang-es">Trigger del examen:</span></strong
+          >
+          <span class="lang-en"
+            >"in-flight encryption", "HTTPS endpoint", "SSL/TLS certificate" on
+            ELB/CloudFront/API Gateway</span
+          ><span class="lang-es"
+            >"cifrado en transito", "endpoint HTTPS", "certificado SSL/TLS" en
+            ELB/CloudFront/API Gateway</span
+          >
+          &#8594; <strong>ACM</strong><br /><small style="color: #64748b"
+            ><span class="lang-en"
+              >&#9432; You may see Elastic Beanstalk used with ACM in demos, but
+              Beanstalk is not a direct ACM integration. What actually happens
+              is that Beanstalk provisions an ALB, and ACM loads the certificate
+              onto that ALB.</span
+            ><span class="lang-es"
+              >&#9432; Puede verse Elastic Beanstalk usado con ACM en demos,
+              pero Beanstalk no es una integracion directa. Lo que ocurre es que
+              Beanstalk provisiona un ALB, y ACM carga el certificado en ese
+              ALB.</span
+            ></small
+          >
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">6</span>
+          <h2>
+            <span class="lang-en">ACM Private CA</span>
+            <span class="lang-es">ACM Private CA</span>
+          </h2>
+        </div>
+        <p>
+          <span class="lang-en"
+            >ACM Private CA is a managed service to create a
+            <strong>private Certificate Authority</strong> (root or
+            subordinate). It issues end-entity X.509 certificates trusted only
+            within your organization — not on the public internet. Same
+            integrations as ACM: ALB, CloudFront, and API Gateway.</span
+          >
+          <span class="lang-es"
+            >ACM Private CA es un servicio administrado para crear una
+            <strong>Autoridad de Certificacion privada</strong> (root o
+            subordinada). Emite certificados X.509 de entidad final, confiables
+            solo dentro de tu organizacion — no en internet publico. Mismas
+            integraciones que ACM: ALB, CloudFront y API Gateway.</span
+          >
+        </p>
+        <h3>
+          <span class="lang-en">ACM Public vs ACM Private CA</span
+          ><span class="lang-es">ACM Publico vs ACM Private CA</span>
+        </h3>
+        <p>
+          <span class="lang-en"
+            >The key exam differentiator: scope of trust and intended use.</span
+          ><span class="lang-es"
+            >El diferenciador clave para el examen: alcance de confianza y uso
+            previsto.</span
+          >
+        </p>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th></th>
+              <th>
+                <span class="lang-en">ACM (public cert)</span
+                ><span class="lang-es">ACM (cert publico)</span>
+              </th>
+              <th>ACM Private CA</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <span class="lang-en">Trusted by</span
+                ><span class="lang-es">Confiado por</span>
+              </td>
+              <td>
+                <span class="lang-en">Everyone (public internet)</span
+                ><span class="lang-es">Todos (internet publico)</span>
+              </td>
+              <td>
+                <strong
+                  ><span class="lang-en">Your organization only</span
+                  ><span class="lang-es">Solo tu organizacion</span></strong
+                >
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span class="lang-en">Public internet</span
+                ><span class="lang-es">Internet publico</span>
+              </td>
+              <td>Yes</td>
+              <td><strong>No</strong></td>
+            </tr>
+            <tr>
+              <td>
+                <span class="lang-en">Internal services</span
+                ><span class="lang-es">Servicios internos</span>
+              </td>
+              <td>Yes</td>
+              <td>Yes</td>
+            </tr>
+            <tr>
+              <td>
+                <span class="lang-en">Use cases</span
+                ><span class="lang-es">Casos de uso</span>
+              </td>
+              <td>
+                <span class="lang-en">Public HTTPS endpoints</span
+                ><span class="lang-es">Endpoints HTTPS publicos</span>
+              </td>
+              <td>
+                <span class="lang-en"
+                  >Internal TLS, code signing, PKI, IoT auth</span
+                ><span class="lang-es"
+                  >TLS interno, firma de codigo, PKI, auth IoT</span
+                >
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <p>
+          &#11088;
+          <strong
+            ><span class="lang-en">Exam trigger:</span
+            ><span class="lang-es">Trigger del examen:</span></strong
+          >
+          <span class="lang-en"
+            >"private certificates", "internal TLS", "enterprise PKI",
+            "authenticate internal services/IoT devices"</span
+          ><span class="lang-es"
+            >"certificados privados", "TLS interno", "PKI empresarial",
+            "autenticar servicios internos/dispositivos IoT"</span
+          >
+          &#8594; <strong>ACM Private CA</strong>
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">7</span>
+          <h2>
+            <span class="lang-en">Amazon Macie</span>
+            <span class="lang-es">Amazon Macie</span>
+          </h2>
+        </div>
+        <p>
+          <span class="lang-en"
+            >Macie is a fully managed data security service that uses
+            <strong>machine learning</strong> to discover and protect sensitive
+            data — specifically
+            <strong>PII (Personally Identifiable Information)</strong> — in your
+            S3 buckets. It notifies via EventBridge, which can trigger SNS,
+            Lambda, and more. One click to enable.</span
+          >
+          <span class="lang-es"
+            >Macie es un servicio de seguridad de datos que usa
+            <strong>machine learning</strong> para descubrir y proteger datos
+            sensibles — especificamente
+            <strong>PII (informacion de identificacion personal)</strong> — en
+            tus buckets S3. Notifica via EventBridge, que puede disparar SNS,
+            Lambda, etc. Un clic para activar.</span
+          >
+        </p>
+        <h3>
+          <span class="lang-en">How it works</span
+          ><span class="lang-es">Como funciona</span>
+        </h3>
+        <p>
+          <span class="lang-en"
+            >Macie scans S3 buckets, identifies PII using ML pattern matching,
+            and sends findings to EventBridge for downstream processing.</span
+          ><span class="lang-es"
+            >Macie escanea buckets S3, identifica PII con ML y envia los
+            hallazgos a EventBridge para procesamiento posterior.</span
+          >
+        </p>
+        <svg
+          viewBox="0 0 680 80"
+          xmlns="http://www.w3.org/2000/svg"
+          style="
+            width: 100%;
+            max-width: 680px;
+            display: block;
+            margin: 0.75rem auto;
+          "
+        >
+          <defs>
+            <marker
+              id="arr-mac"
+              markerWidth="8"
+              markerHeight="8"
+              refX="6"
+              refY="3"
+              orient="auto"
+            >
+              <path d="M0,0 L0,6 L8,3 z" fill="#94a3b8" />
+            </marker>
+          </defs>
+          <rect
+            x="10"
+            y="20"
+            width="100"
+            height="40"
+            rx="6"
+            fill="#1a2744"
+            stroke="#34d399"
+            stroke-width="2"
+          />
+          <text
+            x="60"
+            y="45"
+            text-anchor="middle"
+            font-size="13"
+            fill="#6ee7b7"
+            font-weight="bold"
+          >
+            S3 Buckets
+          </text>
+          <line
+            x1="112"
+            y1="40"
+            x2="148"
+            y2="40"
+            stroke="#94a3b8"
+            stroke-width="1.5"
+            marker-end="url(#arr-mac)"
+          />
+          <rect
+            x="150"
+            y="20"
+            width="110"
+            height="40"
+            rx="6"
+            fill="#1a2744"
+            stroke="#a78bfa"
+            stroke-width="2"
+          />
+          <text
+            x="205"
+            y="37"
+            text-anchor="middle"
+            font-size="13"
+            fill="#c4b5fd"
+            font-weight="bold"
+          >
+            Macie
+          </text>
+          <text
+            x="205"
+            y="53"
+            text-anchor="middle"
+            font-size="11"
+            fill="#94a3b8"
+          >
+            ML / PII detection
+          </text>
+          <line
+            x1="262"
+            y1="40"
+            x2="298"
+            y2="40"
+            stroke="#94a3b8"
+            stroke-width="1.5"
+            marker-end="url(#arr-mac)"
+          />
+          <rect
+            x="300"
+            y="20"
+            width="120"
+            height="40"
+            rx="6"
+            fill="#1a2744"
+            stroke="#60a5fa"
+            stroke-width="2"
+          />
+          <text
+            x="360"
+            y="37"
+            text-anchor="middle"
+            font-size="13"
+            fill="#93c5fd"
+            font-weight="bold"
+          >
+            EventBridge
+          </text>
+          <text
+            x="360"
+            y="53"
+            text-anchor="middle"
+            font-size="11"
+            fill="#94a3b8"
+          >
+            findings
+          </text>
+          <line
+            x1="422"
+            y1="40"
+            x2="458"
+            y2="40"
+            stroke="#94a3b8"
+            stroke-width="1.5"
+            marker-end="url(#arr-mac)"
+          />
+          <rect
+            x="460"
+            y="20"
+            width="100"
+            height="40"
+            rx="6"
+            fill="#1a2744"
+            stroke="#fbbf24"
+            stroke-width="2"
+          />
+          <text
+            x="510"
+            y="37"
+            text-anchor="middle"
+            font-size="13"
+            fill="#fde68a"
+            font-weight="bold"
+          >
+            SNS
+          </text>
+          <text
+            x="510"
+            y="53"
+            text-anchor="middle"
+            font-size="11"
+            fill="#94a3b8"
+          >
+            / Lambda / etc.
+          </text>
+        </svg>
+        <p>
+          &#11088;
+          <strong
+            ><span class="lang-en">Exam trigger:</span
+            ><span class="lang-es">Trigger del examen:</span></strong
+          >
+          <span class="lang-en">"discover PII / sensitive data in S3"</span
+          ><span class="lang-es">"descubrir PII / datos sensibles en S3"</span>
+          &#8594; <strong>Macie</strong>
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">8</span>
+          <h2>
+            <span class="lang-en">AWS AppConfig</span>
+            <span class="lang-es">AWS AppConfig</span>
+          </h2>
+        </div>
+        <p>
+          <span class="lang-en"
+            >AppConfig lets you deploy <strong>dynamic configuration</strong> to
+            your applications without deploying new code or restarting the app.
+            Your app polls AppConfig for changes and picks them up
+            automatically. Classic use case: <strong>feature flags</strong> —
+            ship a feature disabled, then enable it via AppConfig when ready,
+            with no redeploy.</span
+          >
+          <span class="lang-es"
+            >AppConfig permite desplegar
+            <strong>configuracion dinamica</strong> a tus apps sin desplegar
+            nuevo codigo ni reiniciar la app. Tu app consulta AppConfig
+            periodicamente y toma los cambios automaticamente. Caso tipico:
+            <strong>feature flags</strong> — desplegás una feature desactivada y
+            la activás desde AppConfig cuando estás listo, sin redeploy.</span
+          >
+        </p>
+
+        <h3>
+          <span class="lang-en">Key Facts</span
+          ><span class="lang-es">Datos Clave</span>
+        </h3>
+        <p>
+          <span class="lang-en"
+            >Everything you need to know about AppConfig for the exam.</span
+          ><span class="lang-es"
+            >Todo lo que necesitas saber de AppConfig para el examen.</span
+          >
+        </p>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>
+                <span class="lang-en">Feature</span
+                ><span class="lang-es">Caracteristica</span>
+              </th>
+              <th>
+                <span class="lang-en">Detail</span
+                ><span class="lang-es">Detalle</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <span class="lang-en">Config sources</span
+                ><span class="lang-es">Fuentes de config</span>
+              </td>
+              <td>SSM Parameter Store, SSM Documents, S3</td>
+            </tr>
+            <tr>
+              <td>
+                <span class="lang-en">Targets</span
+                ><span class="lang-es">Destinos</span>
+              </td>
+              <td>EC2, Lambda, ECS, EKS</td>
+            </tr>
+            <tr>
+              <td>
+                <span class="lang-en">Deployment</span
+                ><span class="lang-es">Despliegue</span>
+              </td>
+              <td>
+                <span class="lang-en">Gradual rollout supported</span
+                ><span class="lang-es">Rollout gradual soportado</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span class="lang-en">Rollback</span
+                ><span class="lang-es">Rollback</span>
+              </td>
+              <td>
+                <span class="lang-en">Automatic via CloudWatch alarm</span
+                ><span class="lang-es"
+                  >Automatico via alarma de CloudWatch</span
+                >
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span class="lang-en">Validation</span
+                ><span class="lang-es">Validacion</span>
+              </td>
+              <td>
+                <span class="lang-en"
+                  >JSON Schema (types/format) or Lambda (complex logic)</span
+                ><span class="lang-es"
+                  >JSON Schema (tipos/formato) o Lambda (logica compleja)</span
+                >
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>
+          <span class="lang-en">How it works</span
+          ><span class="lang-es">Como funciona</span>
+        </h3>
+        <p>
+          <span class="lang-en"
+            >Apps poll AppConfig for config changes. During a gradual rollout,
+            CloudWatch monitors for issues — an alarm triggers an automatic
+            rollback.</span
+          ><span class="lang-es"
+            >Las apps consultan AppConfig periodicamente. Durante un rollout
+            gradual, CloudWatch monitorea por problemas — una alarma dispara un
+            rollback automatico.</span
+          >
+        </p>
+        <svg
+          viewBox="0 0 480 300"
+          xmlns="http://www.w3.org/2000/svg"
+          style="
+            width: 100%;
+            max-width: 480px;
+            display: block;
+            margin: 0.75rem auto;
+          "
+        >
+          <defs>
+            <marker
+              id="arr-apc"
+              markerWidth="8"
+              markerHeight="8"
+              refX="6"
+              refY="3"
+              orient="auto"
+            >
+              <path d="M0,0 L0,6 L8,3 z" fill="#94a3b8" />
+            </marker>
+            <marker
+              id="arr-rb"
+              markerWidth="8"
+              markerHeight="8"
+              refX="6"
+              refY="3"
+              orient="auto"
+            >
+              <path d="M0,0 L0,6 L8,3 z" fill="#f87171" />
+            </marker>
+          </defs>
+
+          <\!-- AppConfig outer container -->
+          <rect
+            x="20"
+            y="10"
+            width="440"
+            height="195"
+            rx="8"
+            fill="#1a1a3a"
+            stroke="#a78bfa"
+            stroke-width="2"
+            stroke-dasharray="6,4"
+          />
+          <text
+            x="240"
+            y="32"
+            text-anchor="middle"
+            font-size="14"
+            fill="#c4b5fd"
+            font-weight="bold"
+          >
+            AppConfig
+          </text>
+
+          <\!-- Config Sources inner box -->
+          <rect
+            x="40"
+            y="42"
+            width="400"
+            height="65"
+            rx="6"
+            fill="#0f172a"
+            stroke="#fbbf24"
+            stroke-width="1.5"
+            stroke-dasharray="4,3"
+          />
+          <text
+            x="240"
+            y="60"
+            text-anchor="middle"
+            font-size="12"
+            fill="#fde68a"
+            font-weight="bold"
+          >
+            Config Sources
+          </text>
+          <text
+            x="105"
+            y="95"
+            text-anchor="middle"
+            font-size="12"
+            fill="#94a3b8"
+          >
+            Parameter Store
+          </text>
+          <text
+            x="240"
+            y="95"
+            text-anchor="middle"
+            font-size="12"
+            fill="#94a3b8"
+          >
+            SSM Documents
+          </text>
+          <text
+            x="375"
+            y="95"
+            text-anchor="middle"
+            font-size="12"
+            fill="#94a3b8"
+          >
+            S3 Bucket
+          </text>
+
+          <\!-- Validation inner box -->
+          <rect
+            x="40"
+            y="120"
+            width="400"
+            height="70"
+            rx="6"
+            fill="#0f172a"
+            stroke="#34d399"
+            stroke-width="1.5"
+            stroke-dasharray="4,3"
+          />
+          <text
+            x="240"
+            y="140"
+            text-anchor="middle"
+            font-size="12"
+            fill="#6ee7b7"
+            font-weight="bold"
+          >
+            Validation
+          </text>
+          <text
+            x="120"
+            y="168"
+            text-anchor="middle"
+            font-size="12"
+            fill="#94a3b8"
+          >
+            JSON Schema
+          </text>
+          <text
+            x="240"
+            y="168"
+            text-anchor="middle"
+            font-size="13"
+            fill="#64748b"
+            font-weight="bold"
+          >
+            OR
+          </text>
+          <text
+            x="360"
+            y="168"
+            text-anchor="middle"
+            font-size="12"
+            fill="#94a3b8"
+          >
+            Lambda function
+          </text>
+
+          <\!-- CloudWatch (bottom left) -->
+          <rect
+            x="20"
+            y="235"
+            width="140"
+            height="50"
+            rx="6"
+            fill="#1a2744"
+            stroke="#60a5fa"
+            stroke-width="2"
+          />
+          <text
+            x="90"
+            y="257"
+            text-anchor="middle"
+            font-size="12"
+            fill="#93c5fd"
+            font-weight="bold"
+          >
+            CloudWatch
+          </text>
+          <text
+            x="90"
+            y="274"
+            text-anchor="middle"
+            font-size="12"
+            fill="#94a3b8"
+          >
+            Alarm
+          </text>
+
+          <\!-- EC2 Instances (bottom right) -->
+          <rect
+            x="310"
+            y="235"
+            width="150"
+            height="50"
+            rx="6"
+            fill="#1a2744"
+            stroke="#f87171"
+            stroke-width="2"
+          />
+          <text
+            x="385"
+            y="257"
+            text-anchor="middle"
+            font-size="12"
+            fill="#fca5a5"
+            font-weight="bold"
+          >
+            EC2 Instances
+          </text>
+          <text
+            x="385"
+            y="274"
+            text-anchor="middle"
+            font-size="12"
+            fill="#94a3b8"
+          >
+            (app)
+          </text>
+
+          <\!-- EC2 → AppConfig: poll for config changes (upward) -->
+          <line
+            x1="385"
+            y1="233"
+            x2="385"
+            y2="208"
+            stroke="#94a3b8"
+            stroke-width="1.5"
+            marker-end="url(#arr-apc)"
+          />
+          <text
+            x="420"
+            y="218"
+            text-anchor="middle"
+            font-size="11"
+            fill="#64748b"
+          >
+            poll for
+          </text>
+          <text
+            x="430"
+            y="230"
+            text-anchor="middle"
+            font-size="11"
+            fill="#64748b"
+          >
+            config changes
+          </text>
+
+          <\!-- EC2 → CloudWatch: trigger (horizontal) -->
+          <line
+            x1="308"
+            y1="260"
+            x2="162"
+            y2="260"
+            stroke="#94a3b8"
+            stroke-width="1.5"
+            marker-end="url(#arr-apc)"
+          />
+          <text
+            x="235"
+            y="252"
+            text-anchor="middle"
+            font-size="12"
+            fill="#64748b"
+          >
+            trigger
+          </text>
+
+          <\!-- CloudWatch → AppConfig: rollback (upward) -->
+          <line
+            x1="90"
+            y1="233"
+            x2="90"
+            y2="208"
+            stroke="#f87171"
+            stroke-width="1.5"
+            stroke-dasharray="4,3"
+            marker-end="url(#arr-rb)"
+          />
+          <text
+            x="55"
+            y="224"
+            text-anchor="middle"
+            font-size="12"
+            fill="#f87171"
+          >
+            rollback
+          </text>
+        </svg>
+
+        <p>
+          &#11088;
+          <strong
+            ><span class="lang-en">Exam triggers:</span
+            ><span class="lang-es">Triggers del examen:</span></strong
+          >
+          <span class="lang-en"
+            >"dynamic config without redeploying" or "feature flags"</span
+          ><span class="lang-es"
+            >"configuracion dinamica sin redeploy" o "feature flags"</span
+          >
+          &#8594; <strong>AppConfig</strong>.
+          <span class="lang-en"
+            >Validation: JSON Schema (simple) or Lambda (complex).</span
+          ><span class="lang-es"
+            >Validacion: JSON Schema (simple) o Lambda (compleja).</span
+          >
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <span class="badge" style="background: #f59e0b">💡</span>
+          <h2>
+            <span class="lang-en">Exam Tips - Section 31</span>
+            <span class="lang-es">Tips del Examen - Seccion 31</span>
+          </h2>
+        </div>
+        <p>
+          <span class="lang-en"
+            >Each service covers one or two exam questions. Know the trigger
+            keyword and the right answer.</span
+          ><span class="lang-es"
+            >Cada servicio cubre una o dos preguntas del examen. Conoce el
+            keyword disparador y la respuesta correcta.</span
+          >
+        </p>
+        <div class="tips-grid">
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en"
+                >Question mentions email (send or receive)</span
+              ><span class="lang-es">La pregunta menciona email</span></span
+            >
+            <span class="arr">&#8594;</span>
+            <span class="answer">AWS SES</span>
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en">SES in a non-email scenario</span
+              ><span class="lang-es">SES en un escenario sin email</span></span
+            >
+            <span class="arr">&#8594;</span>
+            <span class="answer"
+              ><span class="lang-en">Distractor - eliminate it</span
+              ><span class="lang-es">Distractor - eliminalo</span></span
+            >
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en">Search any field / partial match</span
+              ><span class="lang-es"
+                >Buscar cualquier campo / coincidencia parcial</span
+              ></span
+            >
+            <span class="arr">&#8594;</span>
+            <span class="answer">Amazon OpenSearch</span>
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en">Successor to ElasticSearch</span
+              ><span class="lang-es">Sucesor de ElasticSearch</span></span
+            >
+            <span class="arr">&#8594;</span>
+            <span class="answer"
+              >OpenSearch <span class="lang-en">(same thing, new name)</span
+              ><span class="lang-es">(mismo servicio, nuevo nombre)</span></span
+            >
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en">OpenSearch ingestion - near real time</span
+              ><span class="lang-es"
+                >Ingesta a OpenSearch - casi tiempo real</span
+              ></span
+            >
+            <span class="arr">&#8594;</span>
+            <span class="answer">Kinesis Data Firehose</span>
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en">OpenSearch ingestion - real time</span
+              ><span class="lang-es"
+                >Ingesta a OpenSearch - tiempo real</span
+              ></span
+            >
+            <span class="arr">&#8594;</span>
+            <span class="answer">Lambda Function</span>
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en">Serverless SQL queries on S3</span
+              ><span class="lang-es"
+                >Consultas SQL serverless sobre S3</span
+              ></span
+            >
+            <span class="arr">&#8594;</span>
+            <span class="answer">Amazon Athena</span>
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en"
+                >Best Athena format for performance/cost</span
+              ><span class="lang-es">Mejor formato para Athena</span></span
+            >
+            <span class="arr">&#8594;</span>
+            <span class="answer">Apache Parquet or ORC</span>
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en">Convert CSV to Parquet for Athena</span
+              ><span class="lang-es"
+                >Convertir CSV a Parquet para Athena</span
+              ></span
+            >
+            <span class="arr">&#8594;</span>
+            <span class="answer">AWS Glue ETL job</span>
+          </div>
+          <div class="tip">
+            <span class="trigger"
+              ><span class="lang-en"
+                >Athena querying RDS / DynamoDB / on-premises</span
+              ><span class="lang-es"
+                >Athena consultando RDS / DynamoDB / on-premises</span
+              ></span
+            >
+            <span class="arr">&#8594;</span>
+            <span class="answer"
+              ><span class="lang-en"
+                >Federated Query (Lambda Data Source Connector)</span
+              ><span class="lang-es"
+                >Federated Query (Lambda Data Source Connector)</span
+              ></span
+            >
+          </div>
+
+        <div class="tip">
+          <span class="trigger"
+            ><span class="lang-en">Managed Kafka on AWS</span
+            ><span class="lang-es">Kafka administrado en AWS</span></span
+          >
+          <span class="arr">&#8594;</span>
+          <span class="answer">Amazon MSK</span>
+        </div>
+        <div class="tip">
+          <span class="trigger"
+            ><span class="lang-en">Streaming messages larger than 1 MB</span
+            ><span class="lang-es"
+              >Mensajes de streaming mayores a 1 MB</span
+            ></span
+          >
+          <span class="arr">&#8594;</span>
+          <span class="answer"
+            ><span class="lang-en">MSK (configurable), not Kinesis</span
+            ><span class="lang-es">MSK (configurable), no Kinesis</span></span
+          >
+        </div>
+        <div class="tip">
+          <span class="trigger"
+            ><span class="lang-en"
+              >Stream data retention beyond Kinesis limits</span
+            ><span class="lang-es"
+              >Retencion de datos mas alla de los limites de Kinesis</span
+            ></span
+          >
+          <span class="arr">&#8594;</span>
+          <span class="answer"
+            ><span class="lang-en">MSK (unlimited, pay for EBS)</span
+            ><span class="lang-es">MSK (ilimitada, pagas EBS)</span></span
+          >
+        </div>
+
+        <div class="tip">
+          <span class="trigger"
+            ><span class="lang-en"
+              >Provision SSL/TLS certificates for HTTPS on ELB / CloudFront /
+              API Gateway</span
+            ><span class="lang-es"
+              >Provisionar certificados SSL/TLS para HTTPS en ELB / CloudFront /
+              API Gateway</span
+            ></span
+          >
+          <span class="arr">&#8594;</span>
+          <span class="answer">ACM (Amazon Certificate Manager)</span>
+        </div>
+
+        <div class="tip">
+          <span class="trigger"
+            ><span class="lang-en"
+              >Private certificates for internal TLS / enterprise PKI / IoT
+              auth</span
+            ><span class="lang-es"
+              >Certificados privados para TLS interno / PKI empresarial / auth
+              IoT</span
+            ></span
+          >
+          <span class="arr">&#8594;</span>
+          <span class="answer">ACM Private CA</span>
+        </div>
+
+        <div class="tip">
+          <span class="trigger"
+            ><span class="lang-en"
+              >Discover PII / sensitive data in S3 buckets</span
+            ><span class="lang-es"
+              >Descubrir PII / datos sensibles en buckets S3</span
+            ></span
+          >
+          <span class="arr">&#8594;</span>
+          <span class="answer">Amazon Macie</span>
+        </div>
+
+        <div class="tip">
+          <span class="trigger"
+            ><span class="lang-en"
+              >Dynamic config / feature flags without redeploying app code</span
+            ><span class="lang-es"
+              >Config dinamica / feature flags sin redeploy</span
+            ></span
+          >
+          <span class="arr">&#8594;</span>
+          <span class="answer">AWS AppConfig</span>
+        </div>
+        <div class="tip">
+          <span class="trigger"
+            ><span class="lang-en">Validate AppConfig with complex logic</span
+            ><span class="lang-es"
+              >Validar AppConfig con logica compleja</span
+            ></span
+          >
+          <span class="arr">&#8594;</span>
+          <span class="answer"
+            ><span class="lang-en"
+              >Lambda validator (vs JSON Schema for simple type checks)</span
+            ><span class="lang-es"
+              >Validador Lambda (vs JSON Schema para chequeos simples de
+              tipo)</span
+            ></span
+          >
+        </div>        
+        </div>
+      </div>
+
+    </div>
+  </body>
+</html>
+  </body>
+</html>

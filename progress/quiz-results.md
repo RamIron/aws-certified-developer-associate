@@ -4,7 +4,7 @@
 
 | Metric | Value |
 |--------|-------|
-| Total XP | 15000 |
+| Total XP | 15325 |
 | Lessons completed | 223 |
 | Perfect quizzes (100%) | 190 |
 | Lessons to review | 16 |
@@ -884,4 +884,28 @@
 - **Date:** 2026-03-26
 - **Score:** 3/3 (100%)
 - **XP:** +75
+- **Status:** PERFECT
+
+### 31.3 - Amazon OpenSearch Service
+- **Date:** 2026-04-22
+- **Score:** 4/4 (100%)
+- **XP:** +100
+- **Status:** PERFECT
+
+### 31.4 - Amazon Athena
+- **Date:** 2026-04-22
+- **Score:** 4/4 (100%)
+- **XP:** +100
+- **Status:** PERFECT
+
+### 31.6 - Amazon MSK
+- **Date:** 2026-04-22
+- **Score:** 3/3 (100%)
+- **XP:** +75
+- **Status:** PERFECT
+
+### 31.7 - Amazon Certificate Manager (ACM)
+- **Date:** 2026-04-22
+- **Score:** 2/2 (100%)
+- **XP:** +50
 - **Status:** PERFECT
