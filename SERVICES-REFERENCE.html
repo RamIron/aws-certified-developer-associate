@@ -1,0 +1,876 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AWS DVA-C02 - Services Reference</title>
+    <link rel="stylesheet" href="transcripts/shared/summary.css" />
+    <script src="transcripts/shared/summary.js"></script>
+    <style>
+      .svc-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 2.5rem;
+      }
+      .svc-table th {
+        text-align: left;
+        padding: 0.55rem 1rem;
+        background: #1a1f35;
+        color: #94a3b8;
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        border-bottom: 1px solid #334155;
+      }
+      .svc-table td {
+        padding: 0.65rem 1rem;
+        border-bottom: 1px solid #1a2030;
+        vertical-align: middle;
+        font-size: 0.85rem;
+      }
+      .svc-table tr:hover td {
+        background: #1a2030;
+      }
+      .svc-name {
+        font-weight: 600;
+        color: #60a5fa;
+      }
+      .svc-cat {
+        font-size: 0.7rem;
+        color: #64748b;
+        margin-top: 2px;
+      }
+      .svc-trigger {
+        font-size: 0.78rem;
+        color: #34d399;
+      }
+      .btn-view {
+        background: #1e293b;
+        border: 1px solid #a78bfa;
+        color: #a78bfa;
+        padding: 4px 14px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 0.78rem;
+        white-space: nowrap;
+        font-family: inherit;
+        transition: all 0.15s;
+      }
+      .btn-view:hover {
+        background: #a78bfa;
+        color: #fff;
+      }
+      .section-h2 {
+        font-size: 0.78rem;
+        color: #a78bfa;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        margin: 2rem 0 1rem;
+        font-weight: 700;
+      }
+      .search-bar {
+        width: 100%;
+        padding: 0.55rem 1rem;
+        background: #1e293b;
+        border: 1px solid #334155;
+        border-radius: 8px;
+        color: #e2e8f0;
+        font-size: 14px;
+        margin-bottom: 1rem;
+        outline: none;
+        font-family: inherit;
+      }
+      .search-bar:focus {
+        border-color: #60a5fa;
+      }
+      .acr-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+        gap: 0.45rem;
+      }
+      .acr-card {
+        background: #1e293b;
+        border: 1px solid #334155;
+        border-radius: 7px;
+        padding: 0.55rem 0.85rem;
+        display: flex;
+        gap: 0.7rem;
+        align-items: baseline;
+      }
+      .acr-card.hidden {
+        display: none;
+      }
+      .acr-key {
+        font-weight: 700;
+        color: #fbbf24;
+        min-width: 62px;
+        font-size: 0.82rem;
+        flex-shrink: 0;
+      }
+      .acr-body {
+        color: #94a3b8;
+        font-size: 0.76rem;
+        line-height: 1.4;
+      }
+      .acr-note {
+        color: #64748b;
+        font-size: 0.71rem;
+        margin-top: 2px;
+      }
+    </style>
+  </head>
+  <body>
+    <script>
+      initHeader("Services Reference - DVA-C02");
+    </script>
+    <div class="container">
+      <table class="svc-table" id="svcTable">
+        <thead>
+          <tr>
+            <th>Service</th>
+            <th>
+              <span class="lang-en">What it does</span
+              ><span class="lang-es">Para que sirve</span>
+            </th>
+            <th>
+              <span class="lang-en">Exam trigger</span
+              ><span class="lang-es">Trigger del examen</span>
+            </th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="svcBody"></tbody>
+      </table>
+      <p class="section-h2">Acronym Dictionary</p>
+      <input
+        class="search-bar"
+        id="acrSearch"
+        placeholder="Search acronyms..."
+      />
+      <div class="acr-grid" id="acrGrid"></div>
+    </div>
+    <script>
+      var rows = [
+        {
+          n: "IAM",
+          c: "Security",
+          ce: "Seguridad",
+          d: "Users, groups, roles, policies. Controls who can do what in AWS.",
+          de: "Usuarios, grupos, roles, politicas. Controla quien puede hacer que en AWS.",
+          t: "Permissions, roles, cross-account access",
+          te: "Permisos, roles, acceso cross-account",
+          u: "transcripts/04-IAM-and-AWS-CLI/section-04-review.html",
+        },
+        {
+          n: "EC2",
+          c: "Compute",
+          ce: "Computo",
+          d: "Virtual servers. Instance types, On-Demand/Reserved/Spot, AMIs, user data.",
+          de: "Servidores virtuales. Tipos de instancia, On-Demand/Reserved/Spot, AMIs, user data.",
+          t: "Virtual machines, instance types, AMIs",
+          te: "Maquinas virtuales, tipos de instancia, AMIs",
+          u: "transcripts/05-EC2-Fundamentals/section-05-review.html",
+        },
+        {
+          n: "EBS",
+          c: "Storage",
+          ce: "Almacenamiento",
+          d: "Persistent block storage for EC2. gp2/gp3, io1/io2, sc1/st1. Snapshots to S3.",
+          de: "Almacenamiento en bloque persistente para EC2. gp2/gp3, io1/io2, sc1/st1. Snapshots a S3.",
+          t: "Block storage, persistent disk, EC2 volume",
+          te: "Almacenamiento en bloque, disco persistente",
+          u: "transcripts/06-EC2-Instance-Storage/section-06-review.html",
+        },
+        {
+          n: "EFS",
+          c: "Storage",
+          ce: "Almacenamiento",
+          d: "Managed NFS shared file system across multiple EC2 and AZs. Auto-scales.",
+          de: "Sistema de archivos NFS compartido entre multiples EC2 y AZs. Escala automaticamente.",
+          t: "Shared file system, NFS, multi-AZ",
+          te: "Sistema de archivos compartido, NFS, multi-AZ",
+          u: "transcripts/06-EC2-Instance-Storage/section-06-review.html",
+        },
+        {
+          n: "ELB / ALB / NLB",
+          c: "Networking",
+          ce: "Redes",
+          d: "ALB: HTTP/HTTPS Layer 7. NLB: TCP/UDP Layer 4, ultra-low latency. GWLB: 3rd-party appliances.",
+          de: "ALB: HTTP/HTTPS Capa 7. NLB: TCP/UDP Capa 4, latencia ultra baja. GWLB: appliances de terceros.",
+          t: "Load balancing, HTTP routing, SSL termination",
+          te: "Balanceo de carga, enrutamiento HTTP, SSL",
+          u: "transcripts/07-ELB-ASG/section-07-review.html",
+        },
+        {
+          n: "ASG",
+          c: "Compute",
+          ce: "Computo",
+          d: "Auto Scaling Group. Adds/removes EC2 instances based on demand. Works with ELB.",
+          de: "Grupo de auto escalado. Agrega/elimina instancias EC2 segun la demanda. Trabaja con ELB.",
+          t: "Auto scaling, dynamic capacity, scale in/out",
+          te: "Auto escalado, capacidad dinamica",
+          u: "transcripts/07-ELB-ASG/section-07-review.html",
+        },
+        {
+          n: "RDS",
+          c: "Database",
+          ce: "Base de datos",
+          d: "Managed relational DB (MySQL, PostgreSQL, Oracle, SQL Server). Multi-AZ, Read Replicas, backups.",
+          de: "BD relacional administrada (MySQL, PostgreSQL, Oracle, SQL Server). Multi-AZ, Read Replicas, backups.",
+          t: "Relational DB, SQL, managed database",
+          te: "BD relacional, SQL, base de datos administrada",
+          u: "transcripts/08-RDS-Aurora-ElastiCache/section-08-review.html",
+        },
+        {
+          n: "Aurora",
+          c: "Database",
+          ce: "Base de datos",
+          d: "AWS-proprietary relational DB. MySQL/PostgreSQL compatible. 5x faster. Serverless option.",
+          de: "BD relacional propia de AWS. Compatible MySQL/PostgreSQL. 5x mas rapida. Opcion serverless.",
+          t: "High-performance relational DB, Aurora Serverless",
+          te: "BD relacional de alto rendimiento, Aurora Serverless",
+          u: "transcripts/08-RDS-Aurora-ElastiCache/section-08-review.html",
+        },
+        {
+          n: "ElastiCache",
+          c: "Database",
+          ce: "Base de datos",
+          d: "Managed in-memory cache. Redis (persistence, pub/sub, Sorted Sets) or Memcached (simple).",
+          de: "Cache en memoria administrado. Redis (persistencia, pub/sub) o Memcached (simple).",
+          t: "In-memory cache, reduce DB load, session store",
+          te: "Cache en memoria, reducir carga de BD, sesiones",
+          u: "transcripts/08-RDS-Aurora-ElastiCache/section-08-review.html",
+        },
+        {
+          n: "Route 53",
+          c: "Networking",
+          ce: "Redes",
+          d: "Managed DNS. Routing: Simple, Weighted, Latency, Failover, Geolocation, Geoproximity, Multi-Value.",
+          de: "DNS administrado. Enrutamiento: Simple, Ponderado, Latencia, Failover, Geolocalizacion, Multi-Valor.",
+          t: "DNS routing, health checks, domain management",
+          te: "Enrutamiento DNS, health checks, dominios",
+          u: "transcripts/09-Route-53/section-09-review.html",
+        },
+        {
+          n: "VPC",
+          c: "Networking",
+          ce: "Redes",
+          d: "Virtual Private Cloud. Subnets, route tables, IGW, NAT Gateway, Security Groups, NACLs, VPC Peering.",
+          de: "Nube privada virtual. Subredes, tablas de rutas, IGW, NAT Gateway, Security Groups, NACLs.",
+          t: "Network isolation, subnets, VPC peering",
+          te: "Aislamiento de red, subredes, VPC peering",
+          u: "transcripts/10-VPC/section-10-review.html",
+        },
+        {
+          n: "S3",
+          c: "Storage",
+          ce: "Almacenamiento",
+          d: "Object storage. Buckets, versioning, lifecycle, storage classes. Events, presigned URLs, CORS.",
+          de: "Almacenamiento de objetos. Buckets, versionado, ciclo de vida, clases de almacenamiento. Eventos, URLs pre-firmadas.",
+          t: "Object storage, static hosting, backups",
+          te: "Almacenamiento de objetos, hosting estatico, backups",
+          u: "transcripts/11-S3/section-11-review.html",
+        },
+        {
+          n: "CloudFront",
+          c: "Networking",
+          ce: "Redes",
+          d: "CDN with 400+ edge locations. Caches globally. OAC for S3 security. Lambda@Edge.",
+          de: "CDN con 400+ ubicaciones. Cache global. OAC para seguridad S3. Lambda@Edge.",
+          t: "CDN, edge caching, global distribution, DDoS",
+          te: "CDN, cache en edge, distribucion global, DDoS",
+          u: "transcripts/15-CloudFront/section-15-review.html",
+        },
+        {
+          n: "ECS / Fargate",
+          c: "Containers",
+          ce: "Contenedores",
+          d: "Container orchestration. ECS on EC2: you manage servers. Fargate: serverless containers.",
+          de: "Orquestacion de contenedores. ECS en EC2: manejas servidores. Fargate: contenedores serverless.",
+          t: "Docker containers, serverless containers, task definitions",
+          te: "Contenedores Docker, contenedores serverless",
+          u: "transcripts/16-ECS-ECR-Fargate/section-16-review.html",
+        },
+        {
+          n: "ECR",
+          c: "Containers",
+          ce: "Contenedores",
+          d: "Elastic Container Registry. Private Docker image registry. Integrated with ECS and CodeBuild.",
+          de: "Registro privado de imagenes Docker. Integrado con ECS y CodeBuild.",
+          t: "Docker registry, container images",
+          te: "Registro Docker, imagenes de contenedores",
+          u: "transcripts/16-ECS-ECR-Fargate/section-16-review.html",
+        },
+        {
+          n: "Elastic Beanstalk",
+          c: "Compute",
+          ce: "Computo",
+          d: "PaaS. Manages EC2, ELB, ASG automatically. Multiple deploy modes (rolling, blue/green, immutable).",
+          de: "PaaS. Administra EC2, ELB, ASG automaticamente. Multiples modos de deploy.",
+          t: "PaaS, deploy app without managing infra",
+          te: "PaaS, deployar app sin gestionar infraestructura",
+          u: "transcripts/17-Elastic-Beanstalk/section-17-review.html",
+        },
+        {
+          n: "CloudFormation",
+          c: "IaC",
+          ce: "IaC",
+          d: "IaC with JSON/YAML templates. Stacks, drift detection, nested stacks, StackSets.",
+          de: "IaC con plantillas JSON/YAML. Stacks, deteccion de drift, stacks anidados, StackSets.",
+          t: "IaC, templates, stacks, infra automation",
+          te: "IaC, plantillas, stacks, automatizacion de infra",
+          u: "transcripts/18-CloudFormation/section-18-review.html",
+        },
+        {
+          n: "SQS",
+          c: "Messaging",
+          ce: "Mensajeria",
+          d: "Message queues. Standard (at-least-once) or FIFO (exactly-once, ordered). Visibility timeout, DLQ.",
+          de: "Colas de mensajes. Standard (al menos una vez) o FIFO (exactamente una vez, ordenado). DLQ.",
+          t: "Queue, decouple services, async processing",
+          te: "Cola, desacoplar servicios, procesamiento asincrono",
+          u: "transcripts/19-SQS-SNS-Kinesis/section-19-review.html",
+        },
+        {
+          n: "SNS",
+          c: "Messaging",
+          ce: "Mensajeria",
+          d: "Pub/Sub. Fan-out to SQS, Lambda, email, HTTP. FIFO SNS available.",
+          de: "Pub/Sub. Fan-out a SQS, Lambda, email, HTTP. SNS FIFO disponible.",
+          t: "Pub/sub, fan-out, notifications",
+          te: "Pub/sub, fan-out, notificaciones",
+          u: "transcripts/19-SQS-SNS-Kinesis/section-19-review.html",
+        },
+        {
+          n: "Kinesis Data Streams",
+          c: "Streaming",
+          ce: "Streaming",
+          d: "Real-time streaming. Shards, 1 MB limit. Retention 1-365 days. Producers and consumers.",
+          de: "Streaming en tiempo real. Shards, limite 1 MB. Retencion 1-365 dias. Productores y consumidores.",
+          t: "Real-time streaming, shards, clickstreams",
+          te: "Streaming en tiempo real, shards, clickstreams",
+          u: "transcripts/19-SQS-SNS-Kinesis/section-19-review.html",
+        },
+        {
+          n: "Kinesis Data Firehose",
+          c: "Streaming",
+          ce: "Streaming",
+          d: "Near real-time delivery to S3, Redshift, OpenSearch, Splunk. No shards. Optional Lambda transform.",
+          de: "Entrega casi en tiempo real a S3, Redshift, OpenSearch, Splunk. Sin shards. Transform Lambda opcional.",
+          t: "Near real-time, load data to S3/Redshift",
+          te: "Casi tiempo real, cargar datos a S3/Redshift",
+          u: "transcripts/19-SQS-SNS-Kinesis/section-19-review.html",
+        },
+        {
+          n: "CloudWatch",
+          c: "Monitoring",
+          ce: "Monitoreo",
+          d: "Metrics, logs, alarms, dashboards. Log Groups, Metric Filters, EventBridge.",
+          de: "Metricas, logs, alarmas, dashboards. Log Groups, Metric Filters, EventBridge.",
+          t: "Metrics, alarms, logs, monitoring",
+          te: "Metricas, alarmas, logs, monitoreo",
+          u: "transcripts/20-CloudWatch-XRay-CloudTrail/section-20-review.html",
+        },
+        {
+          n: "X-Ray",
+          c: "Monitoring",
+          ce: "Monitoreo",
+          d: "Distributed tracing. Traces requests across services. Segments, subsegments, annotations.",
+          de: "Trazado distribuido. Rastrea requests entre servicios. Segmentos, subsegmentos, anotaciones.",
+          t: "Distributed tracing, debug microservices",
+          te: "Trazado distribuido, debug de microservicios",
+          u: "transcripts/20-CloudWatch-XRay-CloudTrail/section-20-review.html",
+        },
+        {
+          n: "CloudTrail",
+          c: "Monitoring",
+          ce: "Monitoreo",
+          d: "Audit log of all AWS API calls. Who did what, when. Management + data events.",
+          de: "Log de auditoria de todas las llamadas a la API de AWS. Quien hizo que, cuando.",
+          t: "Audit, API call history, compliance",
+          te: "Auditoria, historial de llamadas API, compliance",
+          u: "transcripts/20-CloudWatch-XRay-CloudTrail/section-20-review.html",
+        },
+        {
+          n: "Lambda",
+          c: "Serverless",
+          ce: "Serverless",
+          d: "Serverless functions. Event-driven, auto-scaling. 15 min max, 10 GB RAM. Layers, destinations, VPC.",
+          de: "Funciones serverless. Orientado a eventos, auto escalado. 15 min max, 10 GB RAM. Layers, destinos, VPC.",
+          t: "Serverless compute, event-driven, FaaS",
+          te: "Computo serverless, orientado a eventos, FaaS",
+          u: "transcripts/21-Lambda/section-21-review.html",
+        },
+        {
+          n: "DynamoDB",
+          c: "Database",
+          ce: "Base de datos",
+          d: "Managed NoSQL key-value. Single-digit ms latency. GSI, LSI, Streams, DAX, TTL, Transactions.",
+          de: "NoSQL key-value administrado. Latencia de un digito ms. GSI, LSI, Streams, DAX, TTL, Transacciones.",
+          t: "NoSQL, key-value, serverless DB",
+          te: "NoSQL, key-value, BD serverless",
+          u: "transcripts/22-DynamoDB/SECTION-22-SUMMARY.html",
+        },
+        {
+          n: "API Gateway",
+          c: "Serverless",
+          ce: "Serverless",
+          d: "Managed API layer. REST, HTTP, WebSocket. Stages, throttling, caching, Lambda/Cognito authorizers.",
+          de: "Capa de API administrada. REST, HTTP, WebSocket. Stages, throttling, cache, autorizadores Lambda/Cognito.",
+          t: "REST API, WebSocket, frontend for Lambda",
+          te: "REST API, WebSocket, frontend para Lambda",
+          u: "transcripts/23-API-Gateway/SECTION-23-SUMMARY.html",
+        },
+        {
+          n: "CodeCommit",
+          c: "CI/CD",
+          ce: "CI/CD",
+          d: "Managed Git repo. Private repos, IAM-based auth. Being retired.",
+          de: "Repositorio Git administrado. Repos privados, autenticacion IAM. En proceso de retiro.",
+          t: "Private Git repo, source control",
+          te: "Repositorio Git privado, control de fuente",
+          u: "transcripts/24-CICD/SECTION-24-SUMMARY.html",
+        },
+        {
+          n: "CodeBuild",
+          c: "CI/CD",
+          ce: "CI/CD",
+          d: "Managed build service. Compiles, tests, artifacts. Defined via buildspec.yml.",
+          de: "Servicio de build administrado. Compila, testea, produce artefactos. Definido via buildspec.yml.",
+          t: "Build and test code, CI, buildspec.yml",
+          te: "Compilar y testear codigo, CI, buildspec.yml",
+          u: "transcripts/24-CICD/SECTION-24-SUMMARY.html",
+        },
+        {
+          n: "CodeDeploy",
+          c: "CI/CD",
+          ce: "CI/CD",
+          d: "Automated deployments to EC2, Lambda, ECS. In-Place, Blue/Green, Canary, Linear. appspec.yml.",
+          de: "Deploys automatizados a EC2, Lambda, ECS. In-Place, Blue/Green, Canary, Linear. appspec.yml.",
+          t: "Deploy to EC2/Lambda/ECS, blue/green",
+          te: "Deploy a EC2/Lambda/ECS, blue/green",
+          u: "transcripts/24-CICD/SECTION-24-SUMMARY.html",
+        },
+        {
+          n: "CodePipeline",
+          c: "CI/CD",
+          ce: "CI/CD",
+          d: "CI/CD pipeline orchestration. Source to Build to Test to Deploy.",
+          de: "Orquestacion de pipelines CI/CD. Desde Source hasta Deploy.",
+          t: "Full CI/CD pipeline orchestration",
+          te: "Orquestacion completa de pipeline CI/CD",
+          u: "transcripts/24-CICD/SECTION-24-SUMMARY.html",
+        },
+        {
+          n: "SAM",
+          c: "Serverless / IaC",
+          ce: "Serverless / IaC",
+          d: "CloudFormation extension for Lambda, API Gateway, DynamoDB. Local testing via sam local.",
+          de: "Extension de CloudFormation para Lambda, API Gateway, DynamoDB. Testing local via sam local.",
+          t: "Serverless IaC, sam build/deploy, local testing",
+          te: "IaC serverless, sam build/deploy, testing local",
+          u: "transcripts/25-SAM/SECTION-25-SUMMARY.html",
+        },
+        {
+          n: "CDK",
+          c: "IaC",
+          ce: "IaC",
+          d: "Define infra in TypeScript/Python/Java. Compiles to CloudFormation. L1/L2/L3 constructs.",
+          de: "Define infra en TypeScript/Python/Java. Compila a CloudFormation. Constructs L1/L2/L3.",
+          t: "IaC in real code, cdk synth/deploy",
+          te: "IaC en codigo real, cdk synth/deploy",
+          u: "transcripts/26-CDK/SECTION-26-SUMMARY.html",
+        },
+        {
+          n: "Cognito User Pools",
+          c: "Auth",
+          ce: "Autenticacion",
+          d: "User directory. Sign-up/in, JWT tokens, social login, MFA, hosted UI.",
+          de: "Directorio de usuarios. Registro/login, JWT, login social, MFA, UI hospedada.",
+          t: "User authentication, login, JWT",
+          te: "Autenticacion de usuarios, login, JWT",
+          u: "transcripts/27-Cognito/SECTION-27-SUMMARY.html",
+        },
+        {
+          n: "Cognito Identity Pools",
+          c: "Auth",
+          ce: "Autenticacion",
+          d: "Temporary AWS credentials for users. Federated identity for direct AWS service access.",
+          de: "Credenciales temporales de AWS para usuarios. Identidad federada para acceso directo a servicios AWS.",
+          t: "Temporary AWS credentials, federated identity",
+          te: "Credenciales temporales, identidad federada",
+          u: "transcripts/27-Cognito/SECTION-27-SUMMARY.html",
+        },
+        {
+          n: "Step Functions",
+          c: "Serverless",
+          ce: "Serverless",
+          d: "Visual workflow orchestration. State machines: Task, Choice, Wait, Parallel, Map.",
+          de: "Orquestacion visual de workflows. Maquinas de estado: Task, Choice, Wait, Parallel, Map.",
+          t: "Workflow orchestration, coordinate Lambda",
+          te: "Orquestacion de workflows, coordinar Lambdas",
+          u: "transcripts/28-StepFunctions-AppSync/SECTION-28-SUMMARY.html",
+        },
+        {
+          n: "AppSync",
+          c: "Serverless",
+          ce: "Serverless",
+          d: "Managed GraphQL API. Real-time subscriptions, offline sync. Resolvers: DynamoDB, Lambda, HTTP.",
+          de: "API GraphQL administrada. Suscripciones en tiempo real, sync offline. Resolvers: DynamoDB, Lambda, HTTP.",
+          t: "GraphQL API, real-time data, offline sync",
+          te: "API GraphQL, datos en tiempo real, sync offline",
+          u: "transcripts/28-StepFunctions-AppSync/SECTION-28-SUMMARY.html",
+        },
+        {
+          n: "STS",
+          c: "Security",
+          ce: "Seguridad",
+          d: "Temporary credentials. AssumeRole, AssumeRoleWithWebIdentity. Cross-account access.",
+          de: "Credenciales temporales. AssumeRole, AssumeRoleWithWebIdentity. Acceso cross-account.",
+          t: "Temporary credentials, AssumeRole, cross-account",
+          te: "Credenciales temporales, AssumeRole, cross-account",
+          u: "transcripts/29-Advanced-Identity/SECTION-29-SUMMARY.html",
+        },
+        {
+          n: "KMS",
+          c: "Security",
+          ce: "Seguridad",
+          d: "Encryption keys. Symmetric/asymmetric. Envelope encryption for >4KB. Key policies, rotation.",
+          de: "Claves de cifrado. Simetrico/asimetrico. Envelope encryption para >4KB. Politicas de clave, rotacion.",
+          t: "Encryption keys, encrypt/decrypt, envelope encryption",
+          te: "Claves de cifrado, cifrar/descifrar, envelope encryption",
+          u: "transcripts/30-Security-Encryption/SECTION-30-SUMMARY.html",
+        },
+        {
+          n: "SSM Parameter Store",
+          c: "Security",
+          ce: "Seguridad",
+          d: "Config and secrets. /path hierarchy. Standard (free) vs Advanced. No auto-rotation.",
+          de: "Config y secretos. Jerarquia /path. Standard (gratis) vs Advanced. Sin rotacion automatica.",
+          t: "Config/secrets storage, no auto-rotation",
+          te: "Almacenamiento de config/secretos, sin rotacion",
+          u: "transcripts/30-Security-Encryption/SECTION-30-SUMMARY.html",
+        },
+        {
+          n: "Secrets Manager",
+          c: "Security",
+          ce: "Seguridad",
+          d: "Secrets with automatic rotation. Native RDS integration.",
+          de: "Secretos con rotacion automatica. Integracion nativa con RDS.",
+          t: "Secrets with auto-rotation, RDS credentials",
+          te: "Secretos con rotacion automatica, credenciales RDS",
+          u: "transcripts/30-Security-Encryption/SECTION-30-SUMMARY.html",
+        },
+        {
+          n: "CloudHSM",
+          c: "Security",
+          ce: "Seguridad",
+          d: "Single-tenant HSM. FIPS 140-2 Level 3. You fully manage keys, AWS has zero access.",
+          de: "HSM de un solo tenant. FIPS 140-2 Level 3. Vos manejas las claves completamente, AWS no tiene acceso.",
+          t: "Dedicated HSM, FIPS 140-2 Level 3, full key control",
+          te: "HSM dedicado, FIPS 140-2 Level 3, control total de claves",
+          u: "transcripts/30-Security-Encryption/SECTION-30-SUMMARY.html",
+        },
+        {
+          n: "SES",
+          c: "Other",
+          ce: "Otros",
+          d: "Send/receive emails via SMTP or SDK. Inbound triggers S3, SNS, Lambda.",
+          de: "Enviar/recibir emails via SMTP o SDK. Los entrantes disparan S3, SNS, Lambda.",
+          t: "Email send or receive = SES",
+          te: "Email enviar o recibir = SES",
+          u: "transcripts/31-Other-Services/SECTION-31-SUMMARY.html",
+        },
+        {
+          n: "OpenSearch",
+          c: "Analytics",
+          ce: "Analitica",
+          d: "Search any field with partial matches. Successor to ElasticSearch. Complement to DynamoDB.",
+          de: "Buscar cualquier campo con coincidencias parciales. Sucesor de ElasticSearch. Complemento de DynamoDB.",
+          t: "Search any field / partial match",
+          te: "Buscar cualquier campo / coincidencia parcial",
+          u: "transcripts/31-Other-Services/SECTION-31-SUMMARY.html",
+        },
+        {
+          n: "Athena",
+          c: "Analytics",
+          ce: "Analitica",
+          d: "Serverless SQL on S3. Presto engine. Pay per TB scanned. Use Parquet/ORC + partitioning.",
+          de: "SQL serverless sobre S3. Motor Presto. Se paga por TB escaneado. Usar Parquet/ORC + particionado.",
+          t: "Serverless SQL on S3, Parquet, Glue ETL",
+          te: "SQL serverless sobre S3, Parquet, Glue ETL",
+          u: "transcripts/31-Other-Services/SECTION-31-SUMMARY.html",
+        },
+        {
+          n: "MSK",
+          c: "Streaming",
+          ce: "Streaming",
+          d: "Managed Kafka. Alternative to Kinesis. Message size configurable above 1 MB. Unlimited retention.",
+          de: "Kafka administrado. Alternativa a Kinesis. Tamano de mensaje configurable >1 MB. Retencion ilimitada.",
+          t: "Managed Kafka, >1MB messages, unlimited retention",
+          te: "Kafka administrado, mensajes >1MB, retencion ilimitada",
+          u: "transcripts/31-Other-Services/SECTION-31-SUMMARY.html",
+        },
+        {
+          n: "ACM",
+          c: "Security",
+          ce: "Seguridad",
+          d: "Free public TLS/SSL certs, auto-renewal. Loads onto ELB, CloudFront, API Gateway.",
+          de: "Certificados TLS/SSL publicos gratis, renovacion automatica. Se carga en ELB, CloudFront, API Gateway.",
+          t: "TLS/SSL certs, HTTPS, ELB/CloudFront/API GW",
+          te: "Certificados TLS/SSL, HTTPS, ELB/CloudFront/API GW",
+          u: "transcripts/31-Other-Services/SECTION-31-SUMMARY.html",
+        },
+        {
+          n: "ACM Private CA",
+          c: "Security",
+          ce: "Seguridad",
+          d: "Private CA for internal X.509 certs. Internal TLS, PKI, IoT device auth.",
+          de: "CA privada para certificados X.509 internos. TLS interno, PKI, autenticacion de dispositivos IoT.",
+          t: "Private certs, internal TLS, enterprise PKI",
+          te: "Certificados privados, TLS interno, PKI empresarial",
+          u: "transcripts/31-Other-Services/SECTION-31-SUMMARY.html",
+        },
+        {
+          n: "Macie",
+          c: "Security",
+          ce: "Seguridad",
+          d: "ML-based PII discovery in S3. Findings go to EventBridge.",
+          de: "Descubrimiento de PII en S3 via ML. Los hallazgos van a EventBridge.",
+          t: "Discover PII / sensitive data in S3",
+          te: "Descubrir PII / datos sensibles en S3",
+          u: "transcripts/31-Other-Services/SECTION-31-SUMMARY.html",
+        },
+        {
+          n: "AppConfig",
+          c: "Dev Tools",
+          ce: "Herramientas Dev",
+          d: "Dynamic config without redeploying. Feature flags, gradual rollout, CloudWatch rollback.",
+          de: "Config dinamica sin redeploy. Feature flags, rollout gradual, rollback via CloudWatch.",
+          t: "Feature flags, dynamic config without redeploy",
+          te: "Feature flags, config dinamica sin redeploy",
+          u: "transcripts/31-Other-Services/SECTION-31-SUMMARY.html",
+        },
+      ];
+      var acronyms = [
+        ["ACM", "AWS Certificate Manager", ""],
+        ["AOF", "Append-Only File", ""],
+        ["ACL", "Access Control List", ""],
+        ["ALB", "Application Load Balancer", ""],
+        ["AMI", "Amazon Machine Image", ""],
+        ["API", "Application Programming Interface", ""],
+        ["ARN", "Amazon Resource Name", ""],
+        ["ASG", "Auto Scaling Group", ""],
+        ["AZ", "Availability Zone", ""],
+        ["BI", "Business Intelligence", ""],
+        ["BYOL", "Bring Your Own License", ""],
+        [
+          "CA",
+          "Certificate Authority",
+          "Entidad que emite y firma certificados digitales",
+        ],
+        ["CIDR", "Classless Inter-Domain Routing", ""],
+        ["CLI", "Command Line Interface", ""],
+        [
+          "CMK",
+          "Customer Managed Key",
+          "KMS key propia — $1/mes, control total",
+        ],
+        ["CDN", "Content Delivery Network", ""],
+        ["CORS", "Cross-Origin Resource Sharing", ""],
+        ["CPU", "Central Processing Unit", ""],
+        ["CRR", "Cross-Region Replication", ""],
+        ["CSV", "Comma-Separated Values", ""],
+        ["DAX", "DynamoDB Accelerator", "Cache en memoria para DynamoDB"],
+        ["DDoS", "Distributed Denial of Service", ""],
+        [
+          "DEK",
+          "Data Encryption Key",
+          "En envelope encryption cifra los datos; la KMS key cifra el DEK",
+        ],
+        ["DLQ", "Dead Letter Queue", "Cola de mensajes fallidos"],
+        ["DNS", "Domain Name System", ""],
+        ["EBS", "Elastic Block Store", ""],
+        ["EC2", "Elastic Compute Cloud", ""],
+        ["ECS", "Elastic Container Service", ""],
+        ["ECR", "Elastic Container Registry", ""],
+        ["EKS", "Elastic Kubernetes Service", ""],
+        ["EFS", "Elastic File System", ""],
+        ["ETL", "Extract, Transform, Load", ""],
+        ["ELB", "Elastic Load Balancer", ""],
+        ["ENI", "Elastic Network Interface", ""],
+        ["FIFO", "First In, First Out", ""],
+        [
+          "FIPS",
+          "Federal Information Processing Standards",
+          "CloudHSM es FIPS 140-2 Level 3",
+        ],
+        ["FTP", "File Transfer Protocol", ""],
+        ["FQDN", "Fully Qualified Domain Name", ""],
+        ["GSI", "Global Secondary Index", "DynamoDB"],
+        ["GWLB", "Gateway Load Balancer", ""],
+        ["HA", "High Availability", ""],
+        ["HDD", "Hard Disk Drive", ""],
+        [
+          "HSM",
+          "Hardware Security Module",
+          "Dispositivo fisico para operaciones criptograficas",
+        ],
+        ["HTTP", "HyperText Transfer Protocol", ""],
+        ["HTTPS", "HyperText Transfer Protocol Secure", ""],
+        ["IaaS", "Infrastructure as a Service", ""],
+        ["IAM", "Identity and Access Management", ""],
+        ["IGW", "Internet Gateway", ""],
+        ["IMDS", "Instance Metadata Service", ""],
+        ["IOPS", "Input/Output Operations Per Second", ""],
+        ["IoT", "Internet of Things", ""],
+        ["JSON", "JavaScript Object Notation", ""],
+        ["KCL", "Kinesis Client Library", ""],
+        ["KDF", "Kinesis Data Firehose", ""],
+        ["KDS", "Kinesis Data Streams", ""],
+        ["KMS", "Key Management Service", ""],
+        ["KPL", "Kinesis Producer Library", ""],
+        ["LSI", "Local Secondary Index", "DynamoDB"],
+        ["IP", "Internet Protocol", ""],
+        ["MFA", "Multi-Factor Authentication", ""],
+        ["ML", "Machine Learning", ""],
+        [
+          "MSK",
+          "Managed Streaming for Apache Kafka",
+          "Alternativa a Kinesis — configurable >1MB, retencion ilimitada",
+        ],
+        ["NAT", "Network Address Translation", ""],
+        ["NLB", "Network Load Balancer", ""],
+        ["NoSQL", "Not Only SQL", ""],
+        ["OAC", "Origin Access Control", ""],
+        ["OLTP", "Online Transaction Processing", ""],
+        [
+          "ORC",
+          "Optimized Row Columnar",
+          "Formato columnar para Athena — menos datos = menor costo",
+        ],
+        ["OSI", "Open Systems Interconnection", ""],
+        [
+          "PII",
+          "Personally Identifiable Information",
+          "Informacion de identificacion personal",
+        ],
+        [
+          "PKI",
+          "Public Key Infrastructure",
+          "Sistema de CAs y certificados. ACM Private CA crea PKI en AWS.",
+        ],
+        ["RAID", "Redundant Array of Independent Disks", ""],
+        ["RAM", "Random Access Memory", ""],
+        ["RCU", "Read Capacity Unit", "DynamoDB"],
+        ["RDS", "Relational Database Service", ""],
+        ["RDP", "Remote Desktop Protocol", ""],
+        ["RRU", "Read Request Unit", "DynamoDB On-Demand"],
+        ["SDK", "Software Development Kit", ""],
+        ["SES", "Simple Email Service", "Envia y recibe emails — Email = SES"],
+        ["SFTP", "Secure File Transfer Protocol", ""],
+        ["SHA", "Secure Hash Algorithm", ""],
+        [
+          "SMTP",
+          "Simple Mail Transfer Protocol",
+          "Protocolo estandar para envio de emails",
+        ],
+        ["SNI", "Server Name Indication", ""],
+        ["SNS", "Simple Notification Service", ""],
+        ["SQS", "Simple Queue Service", ""],
+        ["SLA", "Service Level Agreement", ""],
+        ["SOA", "Start of Authority", "Registro administrativo DNS"],
+        ["SLD", "Second Level Domain", ""],
+        ["SQL", "Structured Query Language", ""],
+        ["SSD", "Solid State Drive", ""],
+        ["SSH", "Secure Shell", ""],
+        ["SRR", "Same-Region Replication", ""],
+        ["SSE", "Server-Side Encryption", ""],
+        [
+          "SSE-C",
+          "SSE with Customer-Provided Keys",
+          "S3: vos provees la clave por request",
+        ],
+        ["SSE-KMS", "SSE with KMS Keys", "S3: cifrado con KMS key, auditable"],
+        [
+          "SSE-S3",
+          "SSE with S3-Managed Keys",
+          "S3: claves propias de AWS, transparente",
+        ],
+        ["SSRF", "Server-Side Request Forgery", ""],
+        ["SSM", "Systems Manager", ""],
+        ["STS", "Security Token Service", ""],
+        ["SSL", "Secure Sockets Layer", ""],
+        ["TCP", "Transmission Control Protocol", ""],
+        ["TLD", "Top Level Domain", ""],
+        ["TLS", "Transport Layer Security", ""],
+        ["TTL", "Time to Live", ""],
+        ["U2F", "Universal 2nd Factor", ""],
+        ["UDP", "User Datagram Protocol", ""],
+        ["vCPU", "Virtual CPU", ""],
+        ["VPC", "Virtual Private Cloud", ""],
+        ["VPN", "Virtual Private Network", ""],
+        ["WCU", "Write Capacity Unit", "DynamoDB"],
+        ["WRU", "Write Request Unit", "DynamoDB On-Demand"],
+      ];
+
+      var tbody = document.getElementById("svcBody");
+      rows.forEach(function (r) {
+        var tr = document.createElement("tr");
+        tr.innerHTML =
+          '<td><div class="svc-name">' +
+          r.n +
+          '</div><div class="svc-cat"><span class="lang-en">' +
+          r.c +
+          '</span><span class="lang-es">' +
+          r.ce +
+          "</span></div></td>" +
+          '<td><span class="lang-en">' +
+          r.d +
+          '</span><span class="lang-es">' +
+          r.de +
+          "</span></td>" +
+          '<td class="svc-trigger"><span class="lang-en">' +
+          r.t +
+          '</span><span class="lang-es">' +
+          r.te +
+          "</span></td>" +
+          '<td><button class="btn-view" data-url="' +
+          r.u +
+          '">View</button></td>';
+        tbody.appendChild(tr);
+      });
+      document
+        .getElementById("svcBody")
+        .addEventListener("click", function (e) {
+          if (e.target && e.target.classList.contains("btn-view")) {
+            window.open(e.target.getAttribute("data-url"), "_blank");
+          }
+        });
+      var grid = document.getElementById("acrGrid");
+      acronyms.forEach(function (a) {
+        var card = document.createElement("div");
+        card.className = "acr-card";
+        card.innerHTML =
+          '<span class="acr-key">' +
+          a[0] +
+          '</span><div><div class="acr-body">' +
+          a[1] +
+          "</div>" +
+          (a[2] ? '<div class="acr-note">' + a[2] + "</div>" : "") +
+          "</div>";
+        grid.appendChild(card);
+      });
+      document
+        .getElementById("acrSearch")
+        .addEventListener("input", function () {
+          var q = this.value.toLowerCase();
+          document.querySelectorAll("#acrGrid .acr-card").forEach(function (c) {
+            c.classList.toggle(
+              "hidden",
+              c.textContent.toLowerCase().indexOf(q) === -1,
+            );
+          });
+        });
+    </script>
+  </body>
+</html>
