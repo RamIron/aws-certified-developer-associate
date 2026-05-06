@@ -3,10 +3,10 @@
 ## Overall Progress
 
 ```
-[███████████████████████░] 30/33 sections | 471/483 lessons (97.5%)
+[████████████████████████░] 31/33 sections | 473/483 lessons (97.9%)
 Total XP: 15,325
 
-Videos: 437/446 | Quizzes: 28/29 | ⏱ 31h 25min done · 33min left
+Videos: 438/446 | Quizzes: 28/29 | ⏱ 31h 28min done · 30min left
 ```
 
 > **Note:** The exact number of lessons per section will be filled in as the course progresses.
@@ -577,8 +577,8 @@ Videos: 437/446 | Quizzes: 28/29 | ⏱ 31h 25min done · 33min left
 
 ## Section 32: AWS Final Cleanup
 
-- [ ] 32.1 - AWS Final Cleanup
-- [ ] 32.2 - Cleanup Checklist (article)
+- [x] 32.1 - AWS Final Cleanup (skipped - cleanup walkthrough)
+- [x] 32.2 - Cleanup Checklist (article)
 
 ## Section 33: Preparing for the Exam - AWS Certified Developer Associate
 

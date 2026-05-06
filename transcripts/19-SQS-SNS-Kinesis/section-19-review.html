@@ -415,14 +415,18 @@
         </div>
         <p>
           <span class="lang-en"
-            >Producer sends messages to a queue. Consumers poll, process, and
-            delete them. Unlimited throughput, at-least-once delivery,
-            best-effort ordering.</span
+            >SQS is a fully managed message queuing service that decouples producers from consumers — the producer doesn't need to know who will process the message or when. A producer sends messages to a queue; consumers <strong>poll</strong> the queue, process each message, and then explicitly <strong>delete</strong> it to confirm processing. The queue acts as a buffer: if the consumer is slow or temporarily down, messages wait safely in the queue.</span
           >
           <span class="lang-es"
-            >El productor envia mensajes a una cola. Los consumidores los
-            recogen, procesan y eliminan. Throughput ilimitado, entrega
-            al-menos-una-vez, orden de mejor esfuerzo.</span
+            >SQS es un servicio de colas de mensajes totalmente gestionado que desacopla productores de consumidores. Un productor envia mensajes a la cola; los consumidores hacen <strong>poll</strong>, procesan cada mensaje y luego lo <strong>eliminan</strong> explicitamente para confirmar el procesamiento. La cola actua como buffer: si el consumidor es lento o no esta disponible, los mensajes esperan de forma segura.</span
+          >
+        </p>
+        <p>
+          <span class="lang-en"
+            >Standard queues offer <strong>unlimited throughput</strong> (no cap on how many messages per second you can send or receive) and <strong>at-least-once delivery</strong> — meaning the same message <em>can</em> arrive more than once (your consumer must handle duplicates). Ordering is best-effort, not guaranteed.</span
+          >
+          <span class="lang-es"
+            >Las colas Standard ofrecen <strong>throughput ilimitado</strong> (sin limite de mensajes por segundo que podés enviar o recibir) y entrega <strong>al-menos-una-vez</strong> — el mismo mensaje <em>puede</em> llegar mas de una vez (el consumidor debe manejar duplicados). El orden es de mejor esfuerzo, no garantizado.</span
           >
         </p>
 
@@ -432,7 +436,7 @@
               <span class="lang-en">Max Message Size</span
               ><span class="lang-es">Tamano Max Mensaje</span>
             </h4>
-            <p><strong>1,024 KB</strong></p>
+            <p><strong>1 MiB</strong> <span style="font-size:12px;color:#94a3b8;">(≈ 1,024 KB — increased from 256 KB in Aug 2025)</span></p>
           </div>
           <div class="concept-card">
             <h4>
@@ -460,6 +464,10 @@
               <strong>30s</strong> <span class="lang-en">default (max 12h)</span
               ><span class="lang-es">por defecto (max 12h)</span>
             </p>
+            <p style="margin-top:0.4rem;">
+              <span class="lang-en" style="font-size:12px;color:#94a3b8;">When a consumer polls a message, SQS hides it from other consumers for this duration. If the consumer deletes it in time → success. If it doesn't (crash, timeout) → message becomes visible again for retry.</span>
+              <span class="lang-es" style="font-size:12px;color:#94a3b8;">Cuando un consumidor recibe un mensaje, SQS lo oculta de otros consumidores por este tiempo. Si el consumidor lo elimina a tiempo → exito. Si no (crash, timeout) → el mensaje vuelve a ser visible para reintento.</span>
+            </p>
           </div>
         </div>
 
@@ -484,11 +492,19 @@
             ><span class="lang-es">Seguridad y Politicas de Acceso SQS</span>
           </h2>
         </div>
+        <p>
+          <span class="lang-en">SQS has two independent layers of security: <strong>encryption</strong> (protecting the data itself) and <strong>access control</strong> (who can send or receive). Understanding which tool handles each scenario is a common exam topic.</span>
+          <span class="lang-es">SQS tiene dos capas independientes de seguridad: <strong>encriptacion</strong> (proteger los datos) y <strong>control de acceso</strong> (quien puede enviar o recibir). Saber que herramienta aplica a cada escenario es un tema comun en el examen.</span>
+        </p>
 
         <h3>
           <span class="lang-en">Encryption</span
           ><span class="lang-es">Encriptacion</span>
         </h3>
+        <p>
+          <span class="lang-en">SQS supports three encryption approaches depending on where and who protects the data: <strong>in-flight</strong> (data moving over the network), <strong>at-rest via AWS</strong> (data stored on disk, managed by KMS), and <strong>client-side</strong> (data encrypted by your own application before it even reaches SQS — AWS never sees the plaintext).</span>
+          <span class="lang-es">SQS soporta tres enfoques de encriptacion segun donde y quien protege los datos: <strong>en transito</strong> (datos viajando por la red), <strong>en reposo via AWS</strong> (datos en disco, gestionados por KMS), y <strong>del lado del cliente</strong> (datos encriptados por tu propia aplicacion antes de llegar a SQS — AWS nunca ve el texto plano).</span>
+        </p>
         <div class="concept-grid">
           <div class="concept-card">
             <h4>
@@ -524,11 +540,9 @@
           ><span class="lang-es">Control de Acceso</span>
         </h3>
         <p>
-          <span class="lang-en"
-            ><strong>IAM policies</strong> for API access.
-            <strong>SQS Access Policies</strong> (resource-based) for
-            cross-account access and allowing AWS services (like S3) to write to
-            the queue.</span
+          <span class="lang-en">There are two ways to control <em>who</em> can access a queue. <strong>IAM policies</strong> are attached to users/roles within the same account and govern API-level access. <strong>SQS Access Policies</strong> (resource-based) are attached directly to the queue and are required when the caller is in a <em>different account</em> or when an AWS service (like S3) needs to push directly into the queue — because IAM policies alone cannot grant cross-account or service-to-queue permissions.</span
+          >
+          <span class="lang-es">Hay dos formas de controlar <em>quien</em> puede acceder a una cola. Las <strong>IAM policies</strong> se adjuntan a usuarios/roles dentro de la misma cuenta. Las <strong>SQS Access Policies</strong> (basadas en recurso) se adjuntan directamente a la cola y son necesarias cuando el llamante esta en una <em>cuenta diferente</em> o cuando un servicio AWS (como S3) necesita escribir directamente — porque las IAM policies solas no permiten permisos cross-account ni de servicio a cola.</span
           >
           <span class="lang-es"
             ><strong>IAM policies</strong> para acceso API.
@@ -572,11 +586,19 @@
             ><span class="lang-es">Conceptos Avanzados SQS</span>
           </h2>
         </div>
+        <p>
+          <span class="lang-en">Beyond the basics, SQS provides several mechanisms to handle failure, large payloads, and high-volume polling efficiently. These are key exam topics because they represent real-world operational decisions.</span>
+          <span class="lang-es">Mas alla de lo basico, SQS ofrece mecanismos para manejar fallos, payloads grandes y polling de alto volumen de forma eficiente. Son temas clave del examen porque representan decisiones operacionales del mundo real.</span>
+        </p>
 
         <h3>
           <span class="lang-en">Dead Letter Queue (DLQ)</span
           ><span class="lang-es">Cola de Mensajes Fallidos (DLQ)</span>
         </h3>
+        <p>
+          <span class="lang-en">A DLQ is a safety net for poison-pill messages — messages that consistently fail processing (e.g., malformed data that always crashes the consumer). Instead of blocking the queue forever, SQS moves them to a separate queue after a configurable number of failures, where they can be inspected without impacting the main flow.</span>
+          <span class="lang-es">Una DLQ es una red de seguridad para mensajes "poison-pill" — mensajes que fallan consistentemente (ej. datos malformados que siempre crashean el consumidor). En lugar de bloquear la cola indefinidamente, SQS los mueve a una cola separada tras un numero configurable de fallos, donde pueden inspeccionarse sin impactar el flujo principal.</span>
+        </p>
         <p>
           <span class="lang-en"
             >After <strong>MaximumReceives</strong> threshold is exceeded,
@@ -613,13 +635,10 @@
         </h3>
         <p>
           <span class="lang-en"
-            >Hide messages before first poll. Max <strong>15 minutes</strong>.
-            Default: 0s. Per-message override: <code>DelaySeconds</code>.</span
+            >A Delay Queue makes messages invisible to consumers for a configurable time after they're sent. This is useful when the consumer needs to wait for a related operation to complete first — for example, delaying an order confirmation email to give the payment system time to settle. The delay can be set at the queue level (applies to all messages) or overridden per message using <code>DelaySeconds</code>. Max delay is <strong>15 minutes</strong>; default is 0s.</span
           >
           <span class="lang-es"
-            >Ocultar mensajes antes del primer poll. Max
-            <strong>15 minutos</strong>. Por defecto: 0s. Override por mensaje:
-            <code>DelaySeconds</code>.</span
+            >Una Delay Queue hace que los mensajes sean invisibles para los consumidores durante un tiempo configurable tras ser enviados. Es util cuando el consumidor necesita esperar a que una operacion relacionada termine primero — por ejemplo, retrasar un email de confirmacion de pedido para dar tiempo al sistema de pagos. El retraso puede configurarse a nivel de cola (aplica a todos) o sobreescribirse por mensaje con <code>DelaySeconds</code>. Max: <strong>15 minutos</strong>; por defecto: 0s.</span
           >
         </p>
 
@@ -648,12 +667,10 @@
         </h3>
         <p>
           <span class="lang-en"
-            >For messages &gt; 1,024 KB: upload large payload to
-            <strong>S3</strong>, send metadata pointer through SQS.</span
+            >SQS has a hard 1 MiB limit per message. For larger payloads (e.g., images, documents), the <strong>SQS Extended Client Library</strong> (Java) transparently uploads the full payload to <strong>S3</strong> and sends only a small metadata pointer (the S3 reference) through SQS. The consumer uses the same library to automatically retrieve the full payload from S3.</span
           >
           <span class="lang-es"
-            >Para mensajes &gt; 1,024 KB: subir el payload grande a
-            <strong>S3</strong>, enviar puntero de metadata por SQS.</span
+            >SQS tiene un limite estricto de 1 MiB por mensaje. Para payloads mas grandes (ej. imagenes, documentos), la <strong>SQS Extended Client Library</strong> (Java) sube el payload completo a <strong>S3</strong> y envia solo un puntero de metadata (la referencia S3) por SQS. El consumidor usa la misma libreria para recuperar automaticamente el payload desde S3.</span
           >
         </p>
       </div>
@@ -667,6 +684,10 @@
             ><span class="lang-es">APIs Importantes de SQS</span>
           </h2>
         </div>
+        <p>
+          <span class="lang-en">These are the SQS API calls most likely to appear on the exam — either to identify which call does what, or to recognize which parameter controls a specific behavior. Pay special attention to the difference between <code>DeleteQueue</code> (removes everything) and <code>PurgeQueue</code> (clears messages but keeps the queue).</span>
+          <span class="lang-es">Estas son las llamadas API de SQS mas probables en el examen — ya sea para identificar que hace cada una, o para reconocer que parametro controla un comportamiento especifico. Presta especial atencion a la diferencia entre <code>DeleteQueue</code> (elimina todo) y <code>PurgeQueue</code> (limpia mensajes pero conserva la cola).</span>
+        </p>
         <table class="data-table">
           <thead>
             <tr>
@@ -765,12 +786,10 @@
         </div>
         <p>
           <span class="lang-en"
-            >Strict ordering guarantee. Queue name must end with
-            <code>.fifo</code>.</span
+            >FIFO (First-In-First-Out) queues guarantee that messages are <strong>processed in the exact order they were sent</strong> and that each message is processed <strong>exactly once</strong> — solving both problems of Standard queues (no guaranteed order, possible duplicates). Use FIFO when order matters: financial transactions, event sequencing, or any workflow where step B must happen after step A. The trade-off is lower throughput. The queue name must end with <code>.fifo</code>.</span
           >
           <span class="lang-es"
-            >Garantia de orden estricto. El nombre de la cola debe terminar con
-            <code>.fifo</code>.</span
+            >Las colas FIFO garantizan que los mensajes se <strong>procesen en el orden exacto en que fueron enviados</strong> y que cada mensaje se procese <strong>exactamente una vez</strong> — resolviendo ambos problemas de las colas Standard (sin orden garantizado, posibles duplicados). Usar FIFO cuando el orden importa: transacciones financieras, secuenciacion de eventos, o cualquier flujo donde B debe ocurrir despues de A. El trade-off es menor throughput. El nombre debe terminar en <code>.fifo</code>.</span
           >
         </p>
         <div class="concept-grid">
@@ -802,18 +821,16 @@
           </div>
           <div class="concept-card">
             <span class="lang-en">
-              <h4>Message Group ID</h4>
+              <h4>Message Group ID <code style="font-size:11px;background:#1e293b;padding:0.1rem 0.3rem;border-radius:3px;color:#fb923c;">MessageGroupId</code></h4>
             </span>
             <span class="lang-es">
               <h4>ID de grupo de mensajes</h4>
             </span>
             <p>
               <span class="lang-en"
-                >Required. Ordering within group. Different groups = parallel
-                consumers</span
+                >Required field. Messages with the <strong>same Group ID</strong> are processed in order by <strong>one consumer at a time</strong>. Messages with <strong>different Group IDs</strong> can be processed in parallel by different consumers — enabling horizontal scaling while preserving per-group ordering.</span
               ><span class="lang-es"
-                >Requerido. Orden dentro del grupo. Grupos diferentes =
-                consumidores paralelos</span
+                >Campo requerido. Los mensajes con el <strong>mismo Group ID</strong> son procesados en orden por <strong>un solo consumidor a la vez</strong>. Mensajes con <strong>distintos Group IDs</strong> pueden procesarse en paralelo por distintos consumidores — permitiendo escalar horizontalmente mientras se preserva el orden por grupo.</span
               >
             </p>
           </div>
@@ -846,15 +863,15 @@
         </div>
         <p>
           <span class="lang-en"
-            >Producer publishes to a <strong>topic</strong>. All
-            <strong>subscribers</strong> receive the message. Data is
-            <strong>not persisted</strong> — if not delivered, it's lost.</span
+            >SNS follows the <strong>Publish/Subscribe</strong> model: one producer publishes to a <strong>topic</strong> and SNS immediately <strong>pushes</strong> a copy of the message to every subscriber — no polling required on the consumer's side. This is the key difference from SQS: SNS actively fans out to many targets at once, while SQS passively holds messages for one consumer to pull.</span
           >
           <span class="lang-es"
-            >El productor publica a un <strong>topic</strong>. Todos los
-            <strong>suscriptores</strong> reciben el mensaje. Los datos
-            <strong>no persisten</strong> — si no se entregan, se pierden.</span
+            >SNS sigue el modelo <strong>Publish/Subscribe</strong>: un productor publica a un <strong>topic</strong> y SNS inmediatamente hace <strong>push</strong> de una copia del mensaje a cada suscriptor — sin polling del lado del consumidor. Esta es la diferencia clave con SQS: SNS distribuye activamente a muchos destinos, mientras que SQS retiene pasivamente mensajes para que un consumidor los jale.</span
           >
+        </p>
+        <p>
+          <span class="lang-en">Critical: SNS data is <strong>not persisted</strong>. If a subscriber is down or no subscriber is configured when the message arrives, that message is <strong>lost forever</strong>. For durability, combine with SQS (fan-out pattern).</span>
+          <span class="lang-es">Critico: los datos de SNS <strong>no persisten</strong>. Si un suscriptor esta caido o no hay suscriptor configurado cuando llega el mensaje, ese mensaje se <strong>pierde para siempre</strong>. Para durabilidad, combinar con SQS (patron fan-out).</span>
         </p>
 
         <h3>
@@ -862,10 +879,14 @@
           ><span class="lang-es">Suscriptores</span>
         </h3>
         <p>
+          <span class="lang-en">A topic can have up to 12,500,000 subscribers of different types. Each subscriber receives a full copy of the message independently:</span>
+          <span class="lang-es">Un topic puede tener hasta 12,500,000 suscriptores de distintos tipos. Cada suscriptor recibe una copia completa del mensaje de forma independiente:</span>
+        </p>
+        <p>
           <span class="lang-en"
-            >SQS, Lambda, KDF, Email, Email-JSON, HTTP/HTTPS, SMS</span
+            >SQS, Lambda, Kinesis Data <strong>Firehose (KDF)</strong>, Email, Email-JSON, HTTP/HTTPS, SMS — <span style="color:#fca5a5;">⚠️ Kinesis Data <strong>Streams (KDS) is NOT supported</strong></span></span
           ><span class="lang-es"
-            >SQS, Lambda, KDF, Email, Email-JSON, HTTP/HTTPS, SMS</span
+            >SQS, Lambda, Kinesis Data <strong>Firehose (KDF)</strong>, Email, Email-JSON, HTTP/HTTPS, SMS — <span style="color:#fca5a5;">⚠️ Kinesis Data <strong>Streams (KDS) NO está soportado</strong></span></span
           >
         </p>
 
@@ -875,9 +896,7 @@
         </h3>
         <p>
           <span class="lang-en"
-            >Ordering + dedup. Subscribers:
-            <strong>only SQS queues</strong> (Standard and FIFO). No Lambda,
-            Email, HTTP.</span
+            >SNS FIFO topics add ordering and deduplication guarantees to the pub/sub model — messages are delivered to subscribers in the order they were published. However, because ordered delivery requires synchronous coordination, the only supported subscribers are <strong>SQS queues</strong> (Standard or FIFO). Lambda, Email, HTTP/S, and SMS are <strong>not supported</strong> as subscribers to FIFO topics.</span
           >
           <span class="lang-es"
             >Orden + dedup. Suscriptores:
@@ -892,8 +911,7 @@
         </h3>
         <p>
           <span class="lang-en"
-            >JSON filter policy on the <strong>subscription</strong> (not the
-            topic). No filter = receives <strong>all messages</strong>.</span
+            >By default, every subscriber to a topic receives every message. Message filtering lets each subscription define a <strong>JSON filter policy</strong> so it only receives messages that match certain attributes — for example, an SQS queue for "orders" only receiving messages where <code>type = "order"</code>. The filter is applied at the <strong>subscription level</strong>, not the topic level. A subscription with no filter policy receives <strong>all messages</strong>.</span
           >
           <span class="lang-es"
             >Politica de filtro JSON en la <strong>suscripcion</strong> (no en
@@ -914,12 +932,10 @@
         </div>
         <p>
           <span class="lang-en"
-            >Push once to SNS topic, multiple SQS queues subscribe. Decoupled,
-            no data loss, cross-region supported.</span
+            >The fan-out pattern solves a fundamental problem: how to send the same event to multiple independent consumers without any of them depending on each other. Instead of sending one message directly to one queue, the producer publishes <strong>once</strong> to an SNS topic. Each downstream team/service subscribes with its own <strong>SQS queue</strong> — giving each one an independent, durable copy to process at its own pace. This is fully decoupled: adding a new consumer means just adding a new SQS subscription, with no change to the producer.</span
           >
           <span class="lang-es"
-            >Publicar una vez al topic SNS, multiples colas SQS suscritas.
-            Desacoplado, sin perdida de datos, soporte cross-region.</span
+            >El patron fan-out resuelve un problema fundamental: como enviar el mismo evento a multiples consumidores independientes sin que ninguno dependa de otro. En lugar de enviar un mensaje directamente a una cola, el productor publica <strong>una sola vez</strong> a un topic SNS. Cada equipo/servicio suscribe con su propia <strong>cola SQS</strong> — dando a cada uno una copia independiente y duradera para procesar a su ritmo. Es completamente desacoplado: agregar un nuevo consumidor solo requiere agregar una nueva suscripcion SQS, sin cambios en el productor.</span
           >
         </p>
         <div class="callout warning">
@@ -957,17 +973,17 @@
         </div>
         <p>
           <span class="lang-en"
-            >Collect and store streaming data in <strong>real-time</strong>.
-            Data is <strong>immutable</strong> and can be
-            <strong>replayed</strong>. Ordering via
-            <strong>partition ID</strong>.</span
+            >Kinesis Data Streams (KDS) is designed for ingesting and storing high-volume streaming data in real time — think clickstreams, IoT sensor readings, application logs, or financial transactions arriving continuously. Unlike SQS, data is <strong>immutable</strong> (not deleted after consumption) and can be <strong>replayed</strong> by rewinding to any point within the retention window. Multiple independent consumers can read the same stream simultaneously, each at their own position.</span
           >
           <span class="lang-es"
-            >Recolectar y almacenar datos de streaming en
-            <strong>tiempo real</strong>. Los datos son
-            <strong>inmutables</strong> y se pueden <strong>reprocesar</strong>.
-            Orden via <strong>partition ID</strong>.</span
+            >Kinesis Data Streams (KDS) esta disenado para ingestar y almacenar datos de streaming de alto volumen en tiempo real — clickstreams, sensores IoT, logs de aplicaciones o transacciones financieras llegando continuamente. A diferencia de SQS, los datos son <strong>inmutables</strong> (no se eliminan tras el consumo) y pueden <strong>reprocessarse</strong> volviendo a cualquier punto dentro de la ventana de retencion. Multiples consumidores independientes pueden leer el mismo stream simultaneamente, cada uno en su propia posicion.</span
           >
+        </p>
+
+        <h3><span class="lang-en">What is a Shard?</span><span class="lang-es">¿Que es un Shard?</span></h3>
+        <p>
+          <span class="lang-en">A stream is divided into <strong>shards</strong> — the basic unit of capacity. Each shard handles 1 MB/s write and 2 MB/s read independently. You provision the number of shards you need; more shards = more throughput. Records are assigned to shards using a <strong>partition key</strong>: all records with the same partition key always go to the same shard, which is how ordering is preserved (records within a shard are strictly ordered).</span>
+          <span class="lang-es">Un stream se divide en <strong>shards</strong> — la unidad basica de capacidad. Cada shard maneja 1 MB/s de escritura y 2 MB/s de lectura de forma independiente. Se provisiona el numero de shards necesarios; mas shards = mas throughput. Los registros se asignan a shards usando una <strong>partition key</strong>: todos los registros con la misma partition key siempre van al mismo shard, que es como se preserva el orden (los registros dentro de un shard estan estrictamente ordenados).</span>
         </p>
 
         <div class="concept-grid">
@@ -1005,6 +1021,10 @@
           <span class="lang-en">Standard vs Enhanced Fan-Out</span
           ><span class="lang-es">Standard vs Enhanced Fan-Out</span>
         </h3>
+        <p>
+          <span class="lang-en">When multiple consumers read the same stream, they compete for the same 2 MB/s per shard in Standard mode. Enhanced Fan-Out solves this by giving each registered consumer its <em>own</em> dedicated 2 MB/s pipe per shard — Kinesis <strong>pushes</strong> data to each consumer via HTTP/2 instead of having consumers poll.</span>
+          <span class="lang-es">Cuando multiples consumidores leen el mismo stream, compiten por los mismos 2 MB/s por shard en modo Standard. Enhanced Fan-Out resuelve esto dando a cada consumidor registrado su <em>propio</em> canal dedicado de 2 MB/s por shard — Kinesis <strong>hace push</strong> de datos a cada consumidor via HTTP/2 en lugar de que los consumidores hagan poll.</span>
+        </p>
         <table class="data-table">
           <thead>
             <tr>
@@ -1045,18 +1065,40 @@
           </tbody>
         </table>
 
+        <h3>
+          <span class="lang-en">Capacity Modes & Scaling</span>
+          <span class="lang-es">Modos de Capacidad y Escalado</span>
+        </h3>
+        <p>
+          <span class="lang-en">KDS offers two capacity modes that determine how throughput is provisioned and how you scale when traffic grows. The example 1 → 2 → 4 → 8 illustrates the rule starting from 1 shard, but the rule applies to any starting number: if you have 6 shards, you can go to 12, then 24, etc. — you just can't more than double in a single operation.</span>
+          <span class="lang-es">KDS ofrece dos modos de capacidad que determinan como se provisiona el throughput y como se escala cuando crece el trafico. El ejemplo 1 → 2 → 4 → 8 ilustra la regla arrancando de 1 shard, pero aplica a cualquier punto de partida: si tenes 6 shards, podes ir a 12, luego a 24, etc. — simplemente no podes mas que duplicar en una sola operacion.</span>
+        </p>
         <div class="callout info">
           <span class="lang-en"
-            ><strong>Shard scaling:</strong> Can only
-            <strong>double</strong> shards per operation (1 → 2 → 4 → 8).
-            <strong>KPL</strong> = optimized producer, <strong>KCL</strong> =
-            optimized consumer.</span
+            ><strong>Provisioned mode:</strong> You manually set the number of shards upfront and pay per shard per hour. There are two resharding operations:<br>• <strong>Shard Splitting</strong> — divides one shard into two, increasing capacity. Each split operation can at most double the total count (1 → 2 → 4 → 8…).<br>• <strong>Shard Merging</strong> — combines two adjacent shards into one, decreasing capacity and cost when traffic drops.<br>There's no shortcut to jump to any arbitrary number in one step.<br><br>
+            <strong>On-Demand mode:</strong> No upfront capacity decisions. KDS monitors your throughput and auto-scales based on peak usage from the <strong>past 30 days</strong>. Default capacity: 4 MB/s in. You pay per GB of data processed instead of per shard — simpler for unpredictable workloads.</span
           >
           <span class="lang-es"
-            ><strong>Escalado de shards:</strong> Solo se puede
-            <strong>duplicar</strong> shards por operacion (1 → 2 → 4 → 8).
-            <strong>KPL</strong> = productor optimizado, <strong>KCL</strong> =
-            consumidor optimizado.</span
+            ><strong>Modo Provisioned:</strong> Vos definís la cantidad de shards de antemano y pagás por shard por hora. Hay dos operaciones de resharding:<br>• <strong>Shard Splitting</strong> — divide un shard en dos, aumentando la capacidad. Cada operacion puede como máximo duplicar el total (1 → 2 → 4 → 8…).<br>• <strong>Shard Merging</strong> — combina dos shards adyacentes en uno, reduciendo capacidad y costo cuando baja el tráfico.<br>No hay forma de saltar directamente a cualquier número en un solo paso.<br><br>
+            <strong>Modo On-Demand:</strong> Sin decisiones de capacidad de antemano. KDS monitorea tu throughput y escala automaticamente basandose en el pico de uso de los <strong>ultimos 30 dias</strong>. Capacidad por defecto: 4 MB/s entrada. Se paga por GB de datos procesados en lugar de por shard — mas simple para cargas de trabajo impredecibles.</span
+          >
+        </div>
+        <h3>
+          <span class="lang-en">KPL & KCL — Producer &amp; Consumer Libraries</span>
+          <span class="lang-es">KPL & KCL — Librerias de Producer y Consumer</span>
+        </h3>
+        <p>
+          <span class="lang-en">AWS provides two official libraries that abstract the low-level Kinesis API for common producer and consumer patterns.</span>
+          <span class="lang-es">AWS provee dos librerias oficiales que abstraen la API de bajo nivel de Kinesis para patrones comunes de producer y consumer.</span>
+        </p>
+        <div class="callout info">
+          <span class="lang-en"
+            ><strong>KPL (Kinesis Producer Library):</strong> A Java library that optimizes writes by <strong>batching</strong> multiple records into a single API call (aggregation), maximizing shard throughput and reducing cost. Use it when you control the producer code.<br><br>
+            <strong>KCL (Kinesis Client Library):</strong> A library that simplifies building consumers — it handles shard enumeration, checkpointing (tracking which records were already processed), and load balancing across multiple consumer instances automatically.</span
+          >
+          <span class="lang-es"
+            ><strong>KPL (Kinesis Producer Library):</strong> Libreria Java que optimiza escrituras agrupando (<strong>batching</strong>) multiples registros en una sola llamada API (agregacion), maximizando el throughput del shard y reduciendo costos. Usarla cuando controlas el codigo del productor.<br><br>
+            <strong>KCL (Kinesis Client Library):</strong> Libreria que simplifica la construccion de consumidores — maneja automaticamente la enumeracion de shards, el checkpointing (rastrear cuales registros ya fueron procesados) y el balanceo de carga entre multiples instancias consumidoras.</span
           >
         </div>
 
@@ -1064,6 +1106,10 @@
           <span class="lang-en">Key CLI/APIs</span
           ><span class="lang-es">CLI/APIs Clave</span>
         </h3>
+        <p>
+          <span class="lang-en">The typical CLI flow for reading from a stream is: get shard IDs → get a shard iterator → pull records. Note that <code>get-records</code> returns data as <strong>base64-encoded</strong> strings — you must decode them to get the original content.</span>
+          <span class="lang-es">El flujo tipico de CLI para leer de un stream es: obtener IDs de shards → obtener un shard iterator → obtener registros. Nota que <code>get-records</code> devuelve datos como strings <strong>base64</strong> — debes decodificarlos para obtener el contenido original.</span>
+        </p>
         <table class="data-table">
           <thead>
             <tr>
@@ -1130,10 +1176,7 @@
         </div>
         <p>
           <span class="lang-en"
-            >Fully managed delivery service. Formerly called
-            <strong>Kinesis Data Firehose</strong>. Works
-            <strong>with or without</strong> Kinesis Data Streams as
-            source.</span
+            >Firehose (formerly Kinesis Data Firehose) is a fully managed <strong>delivery service</strong> — you don't write consumer code; you just configure a source and a destination, and Firehose handles the rest. It's designed for the common use case of continuously loading streaming data into a data store like S3 or Redshift for analysis. The key distinction from KDS: Firehose is <strong>serverless and zero-code</strong>, while KDS requires you to build and manage producers and consumers.</span
           >
           <span class="lang-es"
             >Servicio de entrega totalmente gestionado. Anteriormente llamado
@@ -1198,18 +1241,15 @@
         </h3>
         <p>
           <span class="lang-en"
-            ><strong>Near real-time</strong> — buffer flushes by size or time
-            (min <strong>60 seconds</strong>). No data storage, no replay.
-            Optional <strong>Lambda</strong> for transformation (CSV → JSON).
-            Built-in conversion to Parquet/ORC. Compression: GZIP, Snappy.</span
+            >Firehose is <strong>near real-time</strong>, not real-time — instead of forwarding each record immediately, it accumulates incoming data in an internal buffer and delivers it to the destination in batches. The buffer has two independent triggers running in parallel: it flushes when the accumulated data reaches a certain <strong>size</strong>, or when a <strong>time limit</strong> expires — whichever comes first. For example: configured at "5 MB or 60 seconds", a slow stream that never reaches 5 MB will still be delivered every 60 seconds. The minimum time interval is <strong>60 seconds</strong>, which is why there's always at least a one-minute delay — that's what makes it "near" real-time and not real-time.</span
           >
           <span class="lang-es"
-            ><strong>Casi tiempo real</strong> — buffer descarga por tamano o
-            tiempo (min <strong>60 segundos</strong>). Sin almacenamiento, sin
-            replay. <strong>Lambda</strong> opcional para transformacion (CSV →
-            JSON). Conversion nativa a Parquet/ORC. Compresion: GZIP,
-            Snappy.</span
+            >Firehose es <strong>casi tiempo real</strong>, no tiempo real — en lugar de reenviar cada registro inmediatamente, acumula los datos entrantes en un buffer interno y los entrega al destino en lotes. El buffer tiene dos disparadores independientes que corren en paralelo: descarga cuando los datos acumulados alcanzan cierto <strong>tamano</strong>, o cuando expira un <strong>limite de tiempo</strong> — lo que ocurra primero. Por ejemplo: configurado a "5 MB o 60 segundos", un stream lento que nunca llega a 5 MB igual se entregara cada 60 segundos. El intervalo de tiempo minimo es <strong>60 segundos</strong>, por eso siempre hay al menos un minuto de delay — eso es lo que lo hace "casi" tiempo real y no tiempo real.</span
           >
+        </p>
+        <p>
+          <span class="lang-en">There is <strong>no data storage</strong> and <strong>no replay</strong>: once data is delivered to the destination, it's gone from Firehose. Optionally, a <strong>Lambda function</strong> can transform records in-flight (e.g., CSV → JSON) before delivery. Built-in conversion to columnar formats (Parquet, ORC) and compression (GZIP, Snappy) are also supported.</span>
+          <span class="lang-es">No hay <strong>almacenamiento de datos</strong> ni <strong>replay</strong>: una vez entregados al destino, desaparecen de Firehose. Opcionalmente, una funcion <strong>Lambda</strong> puede transformar registros en vuelo (ej. CSV → JSON) antes de la entrega. Tambien se soporta conversion nativa a formatos columnares (Parquet, ORC) y compresion (GZIP, Snappy).</span>
         </p>
       </div>
 
@@ -1222,6 +1262,10 @@
             ><span class="lang-es">Kinesis Data Streams vs Data Firehose</span>
           </h2>
         </div>
+        <p>
+          <span class="lang-en">KDS and Firehose are often confused because they're both Kinesis services that handle streaming data. The mental model: <strong>KDS is the pipe</strong> (you build what goes in and out), <strong>Firehose is the loader</strong> (it automatically loads data to a destination for you). They complement each other — KDS is frequently used as a Firehose source to combine custom processing with automated delivery.</span>
+          <span class="lang-es">KDS y Firehose suelen confundirse porque ambos son servicios Kinesis para datos en streaming. El modelo mental: <strong>KDS es el tubo</strong> (tu construyes lo que entra y sale), <strong>Firehose es el cargador</strong> (carga automaticamente datos a un destino). Se complementan — KDS suele usarse como fuente de Firehose para combinar procesamiento propio con entrega automatizada.</span>
+        </p>
         <table class="data-table">
           <thead>
             <tr>
@@ -1310,21 +1354,21 @@
         <div class="card-header">
           <span class="badge">11</span>
           <h2>
-            <span class="lang-en">Managed Service for Apache Flink</span
-            ><span class="lang-es">Servicio Gestionado para Apache Flink</span>
+            <span class="lang-en">Managed Service for Apache Flink <span style="font-size:0.8rem;color:#94a3b8;font-weight:400;">(formerly Kinesis Data Analytics)</span></span>
+            <span class="lang-es">Managed Service for Apache Flink <span style="font-size:0.8rem;color:#94a3b8;font-weight:400;">(antes: Kinesis Data Analytics)</span></span>
           </h2>
         </div>
         <p>
           <span class="lang-en"
-            >Real-time stream processing/transformation. Reads from
-            <strong>KDS</strong> and <strong>MSK</strong> (Managed Kafka). Uses
-            Java, SQL, or Scala.</span
+            >Apache Flink is an open-source framework for stateful real-time stream processing. AWS manages the infrastructure so you can focus on writing Flink applications in <strong>Java, SQL, or Scala</strong>. Use it when you need advanced operations <em>on the stream itself</em> — like windowed aggregations (sum of events in the last 5 minutes), joins between two streams, anomaly detection, or real-time enrichment — before results are stored or acted on.</span
           >
           <span class="lang-es"
-            >Procesamiento/transformacion de streams en tiempo real. Lee de
-            <strong>KDS</strong> y <strong>MSK</strong> (Kafka gestionado). Usa
-            Java, SQL o Scala.</span
+            >Apache Flink es un framework open-source para procesamiento de streams con estado en tiempo real. AWS gestiona la infraestructura para que puedas concentrarte en escribir aplicaciones Flink en <strong>Java, SQL o Scala</strong>. Usalo cuando necesites operaciones avanzadas <em>sobre el stream</em> — como agregaciones por ventana de tiempo (suma de eventos en los ultimos 5 minutos), joins entre dos streams, deteccion de anomalias o enriquecimiento en tiempo real — antes de almacenar o actuar sobre los resultados.</span
           >
+        </p>
+        <p>
+          <span class="lang-en">Sources: reads from <strong>KDS</strong> and <strong>MSK</strong> (Amazon Managed Streaming for Apache Kafka). It does <strong>NOT</strong> read from Firehose — a classic exam trap.</span>
+          <span class="lang-es">Fuentes: lee de <strong>KDS</strong> y <strong>MSK</strong> (Amazon Managed Streaming for Apache Kafka). <strong>NO</strong> lee de Firehose — trampa clasica del examen.</span>
         </p>
         <div class="callout danger">
           <span class="lang-en"
@@ -1347,6 +1391,10 @@
             ><span class="lang-es">SQS vs SNS vs Kinesis</span>
           </h2>
         </div>
+        <p>
+          <span class="lang-en">These three services are often presented as alternatives in exam scenarios, but they solve different problems. Think of them as: <strong>SQS = work queue</strong> (decouple one producer from one pool of workers), <strong>SNS = notification broadcast</strong> (one event to many systems simultaneously), <strong>Kinesis = streaming data pipeline</strong> (continuous high-volume data with replay and ordering).</span>
+          <span class="lang-es">Estos tres servicios suelen presentarse como alternativas en escenarios del examen, pero resuelven problemas distintos. Pensalos como: <strong>SQS = cola de trabajo</strong> (desacoplar un productor de un pool de workers), <strong>SNS = broadcast de notificaciones</strong> (un evento a muchos sistemas simultaneamente), <strong>Kinesis = pipeline de datos en streaming</strong> (datos continuos de alto volumen con replay y orden).</span>
+        </p>
         <div class="compare">
           <div class="compare-card">
             <h4 class="blue">SQS</h4>
@@ -1468,7 +1516,7 @@
                 <span class="lang-en">SQS max message size</span
                 ><span class="lang-es">Tamano max mensaje SQS</span>
               </td>
-              <td><strong>1,024 KB</strong></td>
+              <td><strong>1 MiB</strong></td>
             </tr>
             <tr>
               <td>
@@ -1589,11 +1637,11 @@
         </div>
         <div class="callout danger">
           <span class="lang-en"
-            ><strong>Large messages &gt; 1,024 KB</strong> →
+            ><strong>Large messages &gt; 1 MiB</strong> →
             <strong>SQS Extended Client + S3</strong></span
           >
           <span class="lang-es"
-            ><strong>Mensajes grandes &gt; 1,024 KB</strong> →
+            ><strong>Mensajes grandes &gt; 1 MiB</strong> →
             <strong>SQS Extended Client + S3</strong></span
           >
         </div>
@@ -1691,7 +1739,7 @@
             ><span class="arr">→</span><span class="answer">Long Polling</span>
           </div>
           <div class="tip">
-            <span class="trigger">"message &gt; 1,024 KB"</span
+            <span class="trigger">"message &gt; 1 MiB"</span
             ><span class="arr">→</span
             ><span class="answer">Extended Client + S3</span>
           </div>
@@ -1720,5 +1768,221 @@
       </div>
     </div>
     <!-- /container -->
+
+    <!-- ═══════════════════ WEAK POINTS ═══════════════════ -->
+    <div class="container">
+      <div class="card" style="border-color:#7c3aed; background:#13102a;">
+        <div class="card-header">
+          <span class="badge" style="background:#7c3aed;">🧩</span>
+          <h2 style="color:#c4b5fd;">
+            <span class="lang-en">Tricky Quiz Questions</span>
+            <span class="lang-es">Preguntas Tricky del Quiz</span>
+          </h2>
+        </div>
+        <p style="color:#64748b;font-style:italic;font-size:0.85rem;">
+          <span class="lang-en">Questions from the Udemy quiz that were tricky or had a non-obvious answer.</span>
+          <span class="lang-es">Preguntas del quiz de Udemy que resultaron tricky o cuya respuesta no era obvia.</span>
+        </p>
+
+        <div style="border:1px solid #4c1d95;border-radius:8px;padding:0.85rem;margin-bottom:0.75rem;background:#0f172a">
+          <p style="color:#c4b5fd;font-weight:bold;margin:0 0 0.4rem 0;">
+            <span class="lang-en">Quiz 19 — Black Friday traffic 100x increase. What should you do to prepare your SQS Standard Queue?</span>
+            <span class="lang-es">Quiz 19 — El trafico crece 100x por Black Friday. ¿Qué hacés para preparar tu SQS Standard Queue?</span>
+          </p>
+          <p style="color:#4ade80;margin:0 0 0.4rem 0;">
+            <span class="lang-en">✅ Do nothing — SQS scales automatically</span>
+            <span class="lang-es">✅ No hacer nada — SQS escala automaticamente</span>
+          </p>
+          <p style="color:#94a3b8;margin:0">
+            <span class="lang-en">SQS Standard queues have <strong>unlimited throughput</strong> (you can send and receive as many messages per second as you need, with no cap) by design — there's no capacity to configure, no pre-warming, and no Auto Scaling to enable. The distractors borrow concepts from other services: pre-warming applies to ALB or ElastiCache, Auto Scaling applies to EC2 consumers (not the queue itself), and "increasing capacity" is not a concept in SQS. The queue side is always ready; if anything needs scaling, it's the consumers processing the messages.</span>
+            <span class="lang-es">Las colas SQS Standard tienen <strong>throughput ilimitado</strong> (podés enviar y recibir tantos mensajes por segundo como necesites, sin limite) por diseño — no hay capacidad que configurar, ni pre-warming, ni Auto Scaling que habilitar en la cola. Los distractores usan conceptos de otros servicios: pre-warming aplica a ALB o ElastiCache, Auto Scaling aplica a los consumidores EC2 (no a la cola), y "aumentar capacidad" no es un concepto de SQS. La cola siempre esta lista; si algo necesita escalar, son los consumidores que procesan los mensajes.</span>
+          </p>
+        </div>
+
+        <div style="border:1px solid #4c1d95;border-radius:8px;padding:0.85rem;margin-bottom:0.75rem;background:#0f172a">
+          <p style="color:#c4b5fd;font-weight:bold;margin:0 0 0.4rem 0;">
+            <span class="lang-en">Quiz 19 — How would you configure SQS messages to be processed only after 5 minutes of being published?</span>
+            <span class="lang-es">Quiz 19 — ¿Cómo configurás para que los mensajes SQS solo sean procesados 5 minutos después de ser publicados?</span>
+          </p>
+          <p style="color:#4ade80;margin:0 0 0.4rem 0;">
+            <span class="lang-en">✅ Increase the DelaySeconds parameter</span>
+            <span class="lang-es">✅ Aumentar el parámetro DelaySeconds</span>
+          </p>
+          <p style="color:#94a3b8;margin:0">
+            <span class="lang-en">The four options each act at a different point in the message lifecycle — that's the key to telling them apart:<br><br>
+            • <strong>DelaySeconds</strong>: hides the message <em>before</em> any consumer sees it for the first time. Exactly what the question asks.<br>
+            • <strong>Visibility Timeout</strong>: hides the message <em>after</em> a consumer already received it (during processing). Prevents other consumers from grabbing it while it's being worked on.<br>
+            • <strong>Long Polling</strong>: makes the consumer wait up to 20s for a message to arrive instead of returning immediately empty. Reduces API calls — has nothing to do with delaying delivery.<br>
+            • <strong>Extended Client</strong>: for messages larger than 1 MiB. Stores the payload in S3 and sends a pointer. Completely unrelated to timing.</span>
+            <span class="lang-es">Las cuatro opciones actuan en distintos momentos del ciclo de vida del mensaje — esa es la clave para distinguirlas:<br><br>
+            • <strong>DelaySeconds</strong>: oculta el mensaje <em>antes</em> de que cualquier consumidor lo vea por primera vez. Exactamente lo que pide la pregunta.<br>
+            • <strong>Visibility Timeout</strong>: oculta el mensaje <em>despues</em> de que un consumidor ya lo recibio (durante el procesamiento). Evita que otros consumidores lo agarren mientras se esta trabajando.<br>
+            • <strong>Long Polling</strong>: hace que el consumidor espere hasta 20s a que llegue un mensaje en lugar de retornar vacio inmediatamente. Reduce llamadas API — no tiene nada que ver con retrasar la entrega.<br>
+            • <strong>Extended Client</strong>: para mensajes de mas de 1 MiB. Guarda el payload en S3 y envia un puntero. No tiene relacion con tiempos.</span>
+          </p>
+        </div>
+
+        <div style="border:1px solid #4c1d95;border-radius:8px;padding:0.85rem;margin-bottom:0.75rem;background:#0f172a">
+          <p style="color:#c4b5fd;font-weight:bold;margin:0 0 0.4rem 0;">
+            <span class="lang-en">Quiz 19 — Kinesis stream with 6 shards, receiving 5 MB/s. Spikes to 2x cause ProvisionedThroughputExceededException. Fix?</span>
+            <span class="lang-es">Quiz 19 — Stream Kinesis con 6 shards, recibiendo 5 MB/s. Picos de 2x causan ProvisionedThroughputExceededException. ¿Solución?</span>
+          </p>
+          <p style="color:#4ade80;margin:0 0 0.4rem 0;">
+            <span class="lang-en">✅ Add more Shards</span>
+            <span class="lang-es">✅ Agregar más Shards</span>
+          </p>
+          <p style="color:#94a3b8;margin:0">
+            <span class="lang-en">The math makes it clear: 6 shards × 1 MB/s = 6 MB/s max capacity. Normal traffic (5 MB/s) fits, but a 2x spike (10 MB/s) exceeds it → exception. Fix: double the shards (6 → 12) for 12 MB/s capacity, which handles the spike.<br><br>
+            The trap is <strong>"Use SQS as a buffer"</strong> — this is a real architectural pattern (SQS absorbs bursts and feeds Kinesis at a controlled rate), but it's a workaround that adds complexity. The direct fix to a throughput exception is simply to increase shard capacity.<br><br>
+            "Enable Kinesis Replication" doesn't exist as a feature.</span>
+            <span class="lang-es">Los numeros lo dejan claro: 6 shards × 1 MB/s = 6 MB/s de capacidad maxima. El trafico normal (5 MB/s) entra justo, pero un pico 2x (10 MB/s) lo supera → exception. Solucion: duplicar los shards (6 → 12) para tener 12 MB/s de capacidad.<br><br>
+            La trampa es <strong>"Use SQS as a buffer"</strong> — es un patron arquitectural real (SQS absorbe los picos y alimenta Kinesis a un ritmo controlado), pero es un workaround que agrega complejidad. La solucion directa a un error de throughput es simplemente aumentar la capacidad de shards.<br><br>
+            "Enable Kinesis Replication" no existe como feature.</span>
+          </p>
+        </div>
+
+        <div style="border:1px solid #4c1d95;border-radius:8px;padding:0.85rem;margin-bottom:0.75rem;background:#0f172a">
+          <p style="color:#c4b5fd;font-weight:bold;margin:0 0 0.4rem 0;">
+            <span class="lang-en">Quiz 19 — Clickstream data in Kinesis is unordered and one user's data is spread across many shards. How do you fix it?</span>
+            <span class="lang-es">Quiz 19 — Los datos de clickstream en Kinesis no tienen orden y los datos de un mismo usuario estan distribuidos en muchos shards. ¿Cómo lo arreglás?</span>
+          </p>
+          <p style="color:#4ade80;margin:0 0 0.4rem 0;">
+            <span class="lang-en">✅ Add a partition key that represents the identity of the user</span>
+            <span class="lang-es">✅ Agregar una partition key que represente la identidad del usuario</span>
+          </p>
+          <p style="color:#94a3b8;margin:0">
+            <span class="lang-en">The partition key determines which shard a record goes to — all records with the <strong>same partition key always land on the same shard</strong>, in order. So using the user ID as the partition key ensures every event for that user goes to the same shard → data stays grouped and ordered per user.<br><br>
+            The other options are wrong because: reducing to 1 shard kills throughput and doesn't scale; making a single consumer re-order data is a workaround that defeats the purpose of Kinesis ordering — the root cause is that records for the same user are being sent to different shards, which is a producer-side problem solved by the partition key.</span>
+            <span class="lang-es">La partition key determina a qué shard va cada registro — todos los registros con la <strong>misma partition key siempre van al mismo shard</strong>, en orden. Entonces usar el user ID como partition key garantiza que todos los eventos de ese usuario vayan al mismo shard → los datos quedan agrupados y ordenados por usuario.<br><br>
+            Las otras opciones son incorrectas porque: reducir a 1 shard mata el throughput y no escala; hacer que un solo consumidor reordene los datos es un workaround que evita el problema en lugar de resolverlo — la causa raiz es que los registros del mismo usuario se estan enviando a shards distintos, que es un problema del lado del productor que se resuelve con la partition key.</span>
+          </p>
+        </div>
+
+        <div style="border:1px solid #4c1d95;border-radius:8px;padding:0.85rem;margin-bottom:0.75rem;background:#0f172a">
+          <p style="color:#c4b5fd;font-weight:bold;margin:0 0 0.4rem 0;">
+            <span class="lang-en">Quiz 19 — Which AWS service is most appropriate for real-time analytics on streams of data?</span>
+            <span class="lang-es">Quiz 19 — ¿Qué servicio AWS es más apropiado para hacer analytics en tiempo real sobre streams de datos?</span>
+          </p>
+          <p style="color:#4ade80;margin:0 0 0.4rem 0;">
+            <span class="lang-en">✅ Amazon Kinesis Data Analytics (= Managed Service for Apache Flink)</span>
+            <span class="lang-es">✅ Amazon Kinesis Data Analytics (= Managed Service for Apache Flink)</span>
+          </p>
+          <p style="color:#94a3b8;margin:0">
+            <span class="lang-en"><strong>Kinesis Data Analytics</strong> is the old name for what AWS now calls <strong>Managed Service for Apache Flink</strong> — the exam may use either name. It's designed specifically for running real-time analytics and transformations <em>on top of</em> a stream, using KDS or MSK as the data source.<br><br>
+            The distractors are wrong because: <strong>KDS</strong> collects and stores the stream but doesn't perform analytics on it; <strong>Firehose</strong> delivers data to destinations (near real-time, no analytics); <strong>SQS/SNS</strong> are messaging services, not stream analytics.</span>
+            <span class="lang-es"><strong>Kinesis Data Analytics</strong> es el nombre viejo de lo que AWS ahora llama <strong>Managed Service for Apache Flink</strong> — el examen puede usar cualquiera de los dos nombres. Está diseñado específicamente para correr analytics y transformaciones en tiempo real <em>sobre</em> un stream, usando KDS o MSK como fuente de datos.<br><br>
+            Los distractores son incorrectos porque: <strong>KDS</strong> recolecta y almacena el stream pero no hace analytics; <strong>Firehose</strong> entrega datos a destinos (casi tiempo real, sin analytics); <strong>SQS/SNS</strong> son servicios de mensajería, no de analytics de streams.</span>
+          </p>
+        </div>
+
+        <div style="border:1px solid #4c1d95;border-radius:8px;padding:0.85rem;margin-bottom:0.75rem;background:#0f172a">
+          <p style="color:#c4b5fd;font-weight:bold;margin:0 0 0.4rem 0;">
+            <span class="lang-en">Quiz 19 — Which of the following is NOT a supported subscriber for AWS SNS?</span>
+            <span class="lang-es">Quiz 19 — ¿Cuál de los siguientes NO es un subscriber soportado por AWS SNS?</span>
+          </p>
+          <p style="color:#4ade80;margin:0 0 0.4rem 0;">
+            <span class="lang-en">✅ Amazon Kinesis Data Streams (KDS)</span>
+            <span class="lang-es">✅ Amazon Kinesis Data Streams (KDS)</span>
+          </p>
+          <p style="color:#94a3b8;margin:0">
+            <span class="lang-en">The supported SNS subscribers are: <strong>SQS, Lambda, HTTP/HTTPS, Email, Email-JSON, SMS, and Kinesis Data Firehose (KDF)</strong>. The critical trap: <strong>KDF is supported, KDS is not</strong>. SNS can push directly to Firehose (which then loads data to S3/Redshift/etc.), but it cannot push directly to a Kinesis Data Stream — KDS works the other way around, with producers writing into it directly.</span>
+            <span class="lang-es">Los subscribers soportados por SNS son: <strong>SQS, Lambda, HTTP/HTTPS, Email, Email-JSON, SMS y Kinesis Data Firehose (KDF)</strong>. La trampa critica: <strong>KDF está soportado, KDS no</strong>. SNS puede hacer push directamente a Firehose (que luego carga datos a S3/Redshift/etc.), pero no puede hacer push directamente a un Kinesis Data Stream — KDS funciona al reves, con productores escribiendo directamente en él.</span>
+          </p>
+        </div>
+
+        <div style="border:1px solid #4c1d95;border-radius:8px;padding:0.85rem;margin-bottom:0.75rem;background:#0f172a">
+          <p style="color:#c4b5fd;font-weight:bold;margin:0 0 0.4rem 0;">
+            <span class="lang-en">Quiz 19 — Black Friday traffic spike, consumers fail multiple times within the Visibility Timeout due to DB constraints. What else should you do to handle failed messages?</span>
+            <span class="lang-es">Quiz 19 — Pico de trafico Black Friday, consumidores fallan multiples veces dentro del Visibility Timeout por restricciones de DB. ¿Qué más hacés para manejar mensajes fallidos?</span>
+          </p>
+          <p style="color:#4ade80;margin:0 0 0.4rem 0;">
+            <span class="lang-en">✅ Implement a Dead Letter Queue (DLQ) with a redrive policy</span>
+            <span class="lang-es">✅ Implementar una Dead Letter Queue (DLQ) con redrive policy</span>
+          </p>
+          <p style="color:#94a3b8;margin:0">
+            <span class="lang-en">The question says consumers fail <em>within</em> the Visibility Timeout — so increasing it doesn't help (the problem is the DB constraint, not that the timeout is too short). A DLQ with a <strong>redrive policy</strong> (MaximumReceives threshold) catches messages that keep failing and moves them aside so they don't block the queue, and can be reprocessed later once the DB issue is resolved via "Redrive to Source".</span>
+            <span class="lang-es">La pregunta dice que los consumidores fallan <em>dentro</em> del Visibility Timeout — aumentarlo no ayuda (el problema es la restriccion de DB, no que el timeout sea corto). Una DLQ con <strong>redrive policy</strong> (umbral MaximumReceives) captura los mensajes que siguen fallando y los aparta para no bloquear la cola, pudiendo reprocesarlos cuando se resuelva el problema de DB via "Redrive to Source".</span>
+          </p>
+        </div>
+
+        <div style="border:1px solid #4c1d95;border-radius:8px;padding:0.85rem;margin-bottom:0.75rem;background:#0f172a">
+          <p style="color:#c4b5fd;font-weight:bold;margin:0 0 0.4rem 0;">
+            <span class="lang-en">Quiz 19 — SQS message size limit is 256 KB (Udemy quiz, pre-Aug 2025), but you want to send messages of 1 MB. You should...</span>
+            <span class="lang-es">Quiz 19 — El limite de mensaje SQS es 256 KB (quiz de Udemy, pre-agosto 2025), pero querés enviar mensajes de 1 MB. Deberías...</span>
+          </p>
+          <p style="color:#4ade80;margin:0 0 0.4rem 0;">
+            <span class="lang-en">✅ Use the SQS Extended Client Library</span>
+            <span class="lang-es">✅ Usar la SQS Extended Client Library</span>
+          </p>
+          <p style="color:#94a3b8;margin:0">
+            <span class="lang-en">⚠️ <strong>This question is outdated.</strong> The Udemy quiz used the old limit of 256 KB. In August 2025, AWS raised the SQS message size limit to <strong>1 MiB (≈ 1,024 KB)</strong> — the value the course transcript had all along was correct.<br><br>
+            Still relevant: for messages exceeding the current limit, the <strong>SQS Extended Client Library</strong> is the solution — it stores the payload in S3 and sends a pointer through SQS. The trap "modify queue config to set a higher limit" doesn't exist — the limit cannot be overridden by configuration.</span>
+            <span class="lang-es">⚠️ <strong>Esta pregunta está desactualizada.</strong> El quiz de Udemy usaba el limite viejo de 256 KB. En agosto de 2025, AWS aumentó el limite de mensajes SQS a <strong>1 MiB (≈ 1,024 KB)</strong> — el valor que el transcript del curso tenia siempre fue correcto.<br><br>
+            Sigue siendo relevante: para mensajes que superen el limite actual, la <strong>SQS Extended Client Library</strong> es la solucion — almacena el payload en S3 y envia un puntero por SQS. La trampa "modificar la config de la cola para un limite mayor" no existe — el limite no se puede cambiar por configuracion.</span>
+          </p>
+        </div>
+
+        <div style="border:1px solid #4c1d95;border-radius:8px;padding:0.85rem;margin-bottom:0.75rem;background:#0f172a">
+          <p style="color:#c4b5fd;font-weight:bold;margin:0 0 0.4rem 0;">
+            <span class="lang-en">Quiz 19 — KDS with 6 shards split to 10. KCL app on EC2. What's the maximum number of EC2 instances that can process the shards?</span>
+            <span class="lang-es">Quiz 19 — KDS con 6 shards divididos a 10. App KCL en EC2. ¿Cuál es el máximo de instancias EC2 que pueden procesar los shards?</span>
+          </p>
+          <p style="color:#4ade80;margin:0 0 0.4rem 0;">
+            <span class="lang-en">✅ 10</span>
+            <span class="lang-es">✅ 10</span>
+          </p>
+          <p style="color:#94a3b8;margin:0">
+            <span class="lang-en">KCL enforces a strict rule: <strong>one KCL worker (EC2 instance) per shard, maximum</strong>. A shard can only be processed by one instance at a time — adding more instances than shards leaves the extras idle with no work to do. After the split results in 10 shards, the ceiling is 10 EC2 instances. The starting count (6) is irrelevant — what matters is the final shard count.</span>
+            <span class="lang-es">KCL impone una regla estricta: <strong>un worker KCL (instancia EC2) por shard, como máximo</strong>. Un shard solo puede ser procesado por una instancia a la vez — agregar más instancias que shards deja las extras ociosas sin trabajo. Después de que el split resulte en 10 shards, el techo es 10 instancias EC2. El conteo inicial (6) es irrelevante — lo que importa es la cantidad final de shards.</span>
+          </p>
+        </div>
+
+        <div style="border:1px solid #4c1d95;border-radius:8px;padding:0.85rem;margin-bottom:0.75rem;background:#0f172a">
+          <p style="color:#c4b5fd;font-weight:bold;margin:0 0 0.4rem 0;">
+            <span class="lang-en">Quiz 19 — ProvisionedThroughputExceededException in producers. The following can resolve it, EXCEPT...</span>
+            <span class="lang-es">Quiz 19 — ProvisionedThroughputExceededException en productores. Lo siguiente puede resolverlo, EXCEPTO...</span>
+          </p>
+          <p style="color:#4ade80;margin:0 0 0.4rem 0;">
+            <span class="lang-en">✅ Contact AWS Support to increase your Kinesis Data Stream's capacity</span>
+            <span class="lang-es">✅ Contactar a AWS Support para aumentar la capacidad del Kinesis Data Stream</span>
+          </p>
+          <p style="color:#94a3b8;margin:0">
+            <span class="lang-en">Kinesis Data Streams is <strong>fully self-service</strong> — you add or split shards yourself via the console or API, no AWS Support required. The other three options are all valid fixes:<br><br>
+            • <strong>Add more shards</strong>: increases total capacity (1 MB/s per shard)<br>
+            • <strong>Use a highly distributed partition key</strong>: avoids "hot shards" where one shard gets all the traffic while others sit idle<br>
+            • <strong>Retry with exponential backoff</strong>: handles intermittent spikes gracefully without dropping records<br><br>
+            The trap: the previous quiz question had the same exception and "Add more shards" was the answer. Here the question is inverted (EXCEPT), so the invalid option is the one that simply doesn't exist as a mechanism — contacting Support.</span>
+            <span class="lang-es">Kinesis Data Streams es <strong>completamente self-service</strong> — vos mismo agregás o dividís shards via consola o API, sin necesitar a AWS Support. Las otras tres opciones son soluciones válidas:<br><br>
+            • <strong>Agregar más shards</strong>: aumenta la capacidad total (1 MB/s por shard)<br>
+            • <strong>Usar una partition key altamente distribuida</strong>: evita "hot shards" donde un shard recibe todo el tráfico mientras otros están ociosos<br>
+            • <strong>Retry con exponential backoff</strong>: maneja picos intermitentes sin perder registros<br><br>
+            La trampa: la pregunta anterior del quiz tenía la misma excepción y "Add more shards" era la respuesta. Acá la pregunta está invertida (EXCEPT), entonces la opción inválida es la que simplemente no existe como mecanismo — contactar a Support.</span>
+          </p>
+        </div>
+
+        <div style="border:1px solid #4c1d95;border-radius:8px;padding:0.85rem;margin-bottom:0.75rem;background:#0f172a">
+          <p style="color:#c4b5fd;font-weight:bold;margin:0 0 0.4rem 0;">
+            <span class="lang-en">Quiz 19 — Hot shard causing ProvisionedThroughputExceededException. What operation increases the number of shards?</span>
+            <span class="lang-es">Quiz 19 — Hot shard causando ProvisionedThroughputExceededException. ¿Qué operación aumenta la cantidad de shards?</span>
+          </p>
+          <p style="color:#4ade80;margin:0 0 0.4rem 0;">
+            <span class="lang-en">✅ Shard Splitting</span>
+            <span class="lang-es">✅ Shard Splitting</span>
+          </p>
+          <p style="color:#94a3b8;margin:0">
+            <span class="lang-en">There are two official resharding operations in KDS:<br><br>
+            • <strong>Shard Splitting</strong>: divides one shard into two → <em>increases</em> capacity. This is what you do when a hot shard is saturated.<br>
+            • <strong>Shard Merging</strong>: combines two adjacent shards into one → <em>decreases</em> capacity and cost, used when traffic drops and you want to save money.<br><br>
+            "Nothing, KDS scales automatically" is wrong for Provisioned mode — only On-Demand mode auto-scales.</span>
+            <span class="lang-es">Hay dos operaciones oficiales de resharding en KDS:<br><br>
+            • <strong>Shard Splitting</strong>: divide un shard en dos → <em>aumenta</em> la capacidad. Esto es lo que hacés cuando un hot shard está saturado.<br>
+            • <strong>Shard Merging</strong>: combina dos shards adyacentes en uno → <em>reduce</em> capacidad y costo, se usa cuando baja el tráfico y querés ahorrar.<br><br>
+            "No hacer nada, KDS escala automáticamente" es incorrecto para el modo Provisioned — solo el modo On-Demand escala automáticamente.</span>
+          </p>
+        </div>
+
+      </div>
+    </div>
+
   </body>
 </html>

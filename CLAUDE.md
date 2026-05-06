@@ -143,4 +143,4 @@ Every card must follow this pattern — no exceptions:
 
 - **Current section:** Section 31
 - **Total XP:** 15,325
-- **Lessons completed:** 471
+- **Lessons completed:** 473

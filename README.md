@@ -7,10 +7,10 @@ Study notes for AWS DVA-C02, assisted by Claude.
 ## 📊 Progress
 
 ```
-██████████████████████████████ 97.5% (471/483 lessons)
+██████████████████████████████ 97.9% (473/483 lessons)
 ```
 
-📹 Videos: 437/446 · 📄 Articles: 6/8 · ❓ Quizzes: 28/29
+📹 Videos: 438/446 · 📄 Articles: 7/8 · ❓ Quizzes: 28/29
 
 **Current section:** 31 - AWS Other Services
 
@@ -51,11 +51,11 @@ Study notes for AWS DVA-C02, assisted by Claude.
 | 29: Advanced Identity | 23 min | ✅ |
 | 30: AWS Security & Encryption: KMS, Encryption SDK, SSM Parameter Store, IAM & STS | 1h 29 min | ✅ |
 | 31: AWS Other Services | 34 min | ✅ |
-| 32: AWS Final Cleanup | 3 min | |
+| 32: AWS Final Cleanup | 3 min | ✅ |
 | 33: Preparing for the Exam | 21 min | |
 | 34: Congratulations | 9 min | |
-| **Completed (1–31)** | **~31h 25min** | |
-| **Remaining (32–34)** | **~33min** | |
+| **Completed (1–32)** | **~31h 28min** | |
+| **Remaining (33–34)** | **~30min** | |
 
 ---
 
