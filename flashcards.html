@@ -1,0 +1,1187 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AWS DVA-C02 — Flashcards</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #0f172a; color: #e2e8f0; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; min-height: 100vh; }
+
+    /* ── HEADER ── */
+    .header { background: #1e293b; border-bottom: 1px solid #334155; padding: 0.9rem 1.5rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    .logo { font-size: 1rem; font-weight: 700; color: #c4b5fd; letter-spacing: -0.01em; }
+    .logo small { color: #64748b; font-weight: 400; font-size: 0.78rem; margin-left: 0.5rem; }
+    .stats-bar { display: flex; gap: 1.25rem; font-size: 0.8rem; }
+    .stat { color: #94a3b8; }
+    .stat strong { color: #e2e8f0; }
+    .stat .hi { color: #c4b5fd; }
+
+    /* ── PROGRESS ── */
+    .progress-wrap { height: 3px; background: #1e293b; }
+    .progress-fill { height: 3px; background: linear-gradient(90deg, #7c3aed, #a855f7); transition: width 0.4s ease; width: 0%; }
+
+    /* ── FILTERS ── */
+    .filters { padding: 0.75rem 1.5rem; display: flex; gap: 0.4rem; flex-wrap: wrap; align-items: center; border-bottom: 1px solid #1e293b; }
+    .filter-lbl { font-size: 0.7rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.07em; margin-right: 0.3rem; }
+    .fbtn { padding: 0.28rem 0.7rem; border-radius: 999px; border: 1px solid #475569; background: transparent; color: #cbd5e1; font-size: 0.73rem; cursor: pointer; transition: all 0.15s; white-space: nowrap; }
+    .fbtn:hover { border-color: #a78bfa; color: #e2e8f0; }
+    .fbtn.active { background: #7c3aed33; border-color: #a78bfa; color: #e9d5ff; }
+
+    /* ── MAIN ── */
+    .main { display: flex; flex-direction: column; align-items: center; padding: 1.75rem 1rem 3rem; }
+
+    /* ── QUEUE INFO ── */
+    .queue-info { font-size: 0.85rem; color: #94a3b8; margin-bottom: 1rem; text-align: center; }
+    .queue-info strong { color: #e2e8f0; }
+
+    /* ── CARD ── */
+    .card-wrap { width: 100%; max-width: 660px; margin-bottom: 1.25rem; }
+    .flashcard-scene { perspective: 1400px; width: 100%; cursor: pointer; }
+    .flashcard { position: relative; width: 100%; border-radius: 18px; }
+    .face { position: relative; border-radius: 18px; padding: 2.5rem 2rem 1.75rem; display: flex; flex-direction: column; justify-content: center; min-height: 185px; }
+    .face-front { background: #1e293b; border: 1px solid #334155; }
+
+    .card-cat  { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.09em; color: #a78bfa; position: absolute; top: 1rem; left: 1.5rem; border: 1px solid #4c1d95; border-radius: 999px; padding: 0.18rem 0.65rem; background: #1e1040; }
+    .card-q    { font-size: 1.05rem; color: #e2e8f0; line-height: 1.65; text-align: center; }
+    .card-q code { font-size: 0.85em; background: #0f172a; padding: 0.1em 0.4em; border-radius: 4px; color: #a5f3fc; font-family: 'Fira Code', 'Courier New', monospace; }
+
+    /* ── MC OPTIONS ── */
+    .mc-options { display: flex; flex-direction: column; gap: 0.5rem; width: 100%; max-width: 660px; margin-bottom: 0.75rem; }
+    .mc-btn { text-align: left; padding: 0.7rem 1rem 0.7rem 0.85rem; border-radius: 10px; border: 1px solid #334155; background: #1e293b; color: #cbd5e1; font-size: 0.88rem; cursor: pointer; transition: all 0.15s; line-height: 1.5; display: flex; align-items: flex-start; gap: 0.65rem; }
+    .mc-btn:hover:not(:disabled) { border-color: #7c3aed; color: #e2e8f0; background: #1e2040; }
+    .mc-btn:disabled { cursor: default; }
+    .mc-btn.correct { border-color: #4ade80 !important; background: #052e16 !important; color: #86efac !important; }
+    .mc-btn.wrong   { border-color: #ef4444 !important; background: #2d0a0a !important; color: #fca5a5 !important; opacity: 0.8; text-decoration: line-through; }
+    .mc-label { font-size: 0.72rem; font-weight: 700; min-width: 1.4rem; height: 1.4rem; display: flex; align-items: center; justify-content: center; background: #334155; border-radius: 5px; color: #94a3b8; flex-shrink: 0; margin-top: 0.05rem; }
+    .mc-btn.correct .mc-label { background: #166534; color: #86efac; }
+    .mc-btn.wrong   .mc-label { background: #7f1d1d; color: #fca5a5; }
+
+    /* ── FEEDBACK ── */
+    .mc-feedback { width: 100%; max-width: 660px; border-radius: 12px; padding: 0.9rem 1.1rem; margin-bottom: 0.75rem; }
+    .mc-feedback.hidden { display: none; }
+    .mc-feedback.correct-fb { background: #052e1680; border: 1px solid #4ade80; }
+    .mc-feedback.wrong-fb   { background: #2d0a0a80; border: 1px solid #ef4444; }
+    .mc-feedback.peek-fb    { background: #1e1040; border: 1px solid #7c3aed; }
+    .feedback-title { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.4rem; }
+    .correct-fb .feedback-title { color: #4ade80; }
+    .wrong-fb   .feedback-title { color: #ef4444; }
+    .peek-fb    .feedback-title { color: #c4b5fd; }
+    .answer-reveal { font-size: 0.88rem; color: #e2e8f0; line-height: 1.65; }
+    .answer-reveal code { font-size: 0.85em; background: #0f172a; padding: 0.1em 0.4em; border-radius: 4px; color: #a5f3fc; font-family: 'Fira Code', 'Courier New', monospace; }
+
+    /* ── RATING BUTTONS ── */
+    .rating-section { width: 100%; max-width: 660px; }
+    .rating-section.hidden { display: none; }
+    .rating-label { font-size: 0.72rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.06em; text-align: center; margin-bottom: 0.55rem; }
+    .rating-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.65rem; }
+    .abtn { padding: 0.75rem 0.5rem; border-radius: 12px; border: 1px solid; background: transparent; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.18s; display: flex; flex-direction: column; align-items: center; gap: 0.15rem; line-height: 1.3; }
+    .abtn .sub { font-size: 0.67rem; font-weight: 400; opacity: 0.75; }
+    .abtn-no   { border-color: #ef4444; color: #fca5a5; }
+    .abtn-no:hover   { background: #ef4444; color: #fff; }
+    .abtn-hard { border-color: #f59e0b; color: #fcd34d; }
+    .abtn-hard:hover { background: #f59e0b; color: #000; }
+    .abtn-easy { border-color: #4ade80; color: #86efac; }
+    .abtn-easy:hover { background: #22c55e; color: #000; }
+
+    /* ── SKIP LINK ── */
+    .skip-wrap { text-align: center; margin-bottom: 0.25rem; }
+    .skip-btn { background: none; border: none; color: #475569; font-size: 0.75rem; cursor: pointer; text-decoration: underline; padding: 0; }
+    .skip-btn:hover { color: #94a3b8; }
+
+    /* ── SESSION DONE ── */
+    .session-done { display: none; flex-direction: column; align-items: center; text-align: center; max-width: 480px; padding: 2rem 1rem; }
+    .session-done.visible { display: flex; }
+    .done-emoji { font-size: 3rem; margin-bottom: 0.75rem; }
+    .done-title { font-size: 1.6rem; font-weight: 700; color: #c4b5fd; margin-bottom: 0.4rem; }
+    .done-sub   { font-size: 0.88rem; color: #64748b; margin-bottom: 1.75rem; }
+    .score-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem; width: 100%; margin-bottom: 1.75rem; }
+    .score-box  { background: #1e293b; border-radius: 12px; padding: 1rem 0.5rem; border: 1px solid #334155; }
+    .score-num  { font-size: 2rem; font-weight: 700; line-height: 1; }
+    .score-lbl  { font-size: 0.67rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.06em; margin-top: 0.3rem; }
+    .s-no   .score-num { color: #fca5a5; }
+    .s-hard .score-num { color: #fcd34d; }
+    .s-easy .score-num { color: #86efac; }
+    .done-btns { display: flex; gap: 0.75rem; flex-wrap: wrap; justify-content: center; }
+    .done-btn { padding: 0.75rem 1.6rem; border-radius: 10px; border: none; font-size: 0.88rem; font-weight: 600; cursor: pointer; transition: all 0.15s; }
+    .done-btn-primary { background: #7c3aed; color: #fff; }
+    .done-btn-primary:hover { background: #6d28d9; }
+    .done-btn-secondary { background: #1e293b; color: #94a3b8; border: 1px solid #334155; }
+    .done-btn-secondary:hover { border-color: #7c3aed; color: #c4b5fd; }
+
+    /* ── EMPTY STATE ── */
+    .empty-state { display: none; flex-direction: column; align-items: center; text-align: center; padding: 3rem 1rem; max-width: 400px; }
+    .empty-state.visible { display: flex; }
+    .empty-emoji { font-size: 2.5rem; margin-bottom: 0.75rem; }
+    .empty-title { font-size: 1.2rem; color: #c4b5fd; font-weight: 600; margin-bottom: 0.4rem; }
+    .empty-sub   { font-size: 0.84rem; color: #64748b; margin-bottom: 1.5rem; line-height: 1.6; }
+
+    /* ── CARD PANEL ── */
+    #card-panel { display: flex; flex-direction: column; align-items: center; width: 100%; }
+    #card-panel.hidden { display: none; }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo">AWS DVA-C02 <small>Flashcards</small></div>
+  <div class="stats-bar">
+    <div class="stat">Sesión: <strong id="stat-session">—</strong></div>
+    <div class="stat">En cola: <strong id="stat-queue">—</strong></div>
+    <div class="stat">Aprendidas: <strong class="hi" id="stat-learned">—</strong></div>
+    <div class="stat">Total: <strong id="stat-total">—</strong></div>
+  </div>
+</div>
+<div class="progress-wrap"><div class="progress-fill" id="progress-fill"></div></div>
+
+<div class="filters">
+  <span class="filter-lbl">Tema</span>
+  <button class="fbtn active" onclick="setFilter('all')">Todas</button>
+  <button class="fbtn" onclick="setFilter('IAM')">IAM</button>
+  <button class="fbtn" onclick="setFilter('EC2/EBS')">EC2/EBS</button>
+  <button class="fbtn" onclick="setFilter('S3')">S3</button>
+  <button class="fbtn" onclick="setFilter('DynamoDB')">DynamoDB</button>
+  <button class="fbtn" onclick="setFilter('Lambda')">Lambda</button>
+  <button class="fbtn" onclick="setFilter('API Gateway')">API Gateway</button>
+  <button class="fbtn" onclick="setFilter('SQS/SNS')">SQS/SNS</button>
+  <button class="fbtn" onclick="setFilter('Kinesis')">Kinesis</button>
+  <button class="fbtn" onclick="setFilter('CloudWatch')">CloudWatch</button>
+  <button class="fbtn" onclick="setFilter('X-Ray')">X-Ray</button>
+  <button class="fbtn" onclick="setFilter('CloudTrail')">CloudTrail</button>
+  <button class="fbtn" onclick="setFilter('ECS/ECR')">ECS/ECR</button>
+  <button class="fbtn" onclick="setFilter('Beanstalk')">Beanstalk</button>
+  <button class="fbtn" onclick="setFilter('CodeDeploy')">CI/CD</button>
+  <button class="fbtn" onclick="setFilter('CloudFormation')">CloudFormation</button>
+  <button class="fbtn" onclick="setFilter('Cognito')">Cognito</button>
+  <button class="fbtn" onclick="setFilter('KMS/Secrets')">KMS/Secrets</button>
+  <button class="fbtn" onclick="setFilter('RDS')">RDS</button>
+  <button class="fbtn" onclick="setFilter('VPC')">VPC</button>
+  <button class="fbtn" onclick="setFilter('ELB/ASG')">ELB/ASG</button>
+  <button class="fbtn" onclick="setFilter('SAM')">SAM</button>
+  <button class="fbtn" onclick="setFilter('CDK')">CDK</button>
+  <button class="fbtn" onclick="setFilter('Step Functions')">Step Functions</button>
+  <button class="fbtn" onclick="setFilter('Advanced Identity')">Advanced Identity</button>
+</div>
+
+<div class="main">
+
+  <!-- Card panel -->
+  <div id="card-panel">
+    <div class="queue-info">
+      Tarjeta <strong id="card-num">—</strong> de <strong id="card-total-q">—</strong>
+    </div>
+    <div class="card-wrap">
+      <div class="flashcard-scene">
+        <div class="flashcard" id="flashcard">
+          <div class="face face-front">
+            <div class="card-cat" id="card-cat">—</div>
+            <div class="card-q" id="card-q">—</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- MC Options -->
+    <div class="mc-options" id="mc-options"></div>
+    <!-- Skip link -->
+    <div class="skip-wrap">
+      <button class="skip-btn" onclick="skipToAnswer()">Ver respuesta sin adivinar</button>
+    </div>
+    <!-- Feedback -->
+    <div class="mc-feedback hidden" id="mc-feedback">
+      <div class="feedback-title" id="feedback-title">—</div>
+      <div class="answer-reveal" id="answer-reveal"></div>
+    </div>
+    <!-- Rating buttons -->
+    <div class="rating-section hidden" id="rating-section">
+      <div class="rating-label">¿Cuánto lo sabías realmente?</div>
+      <div class="rating-row">
+        <button class="abtn abtn-no"   onclick="answer('no')">❌ No lo sabía<span class="sub">ver de nuevo pronto</span></button>
+        <button class="abtn abtn-hard" onclick="answer('hard')">😅 Dudé<span class="sub">repasar más seguido</span></button>
+        <button class="abtn abtn-easy" onclick="answer('easy')">✅ Lo tenía claro<span class="sub">espaciar más</span></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Session done -->
+  <div class="session-done" id="session-done">
+    <div class="done-emoji" id="done-emoji">🎉</div>
+    <div class="done-title">Sesión completada</div>
+    <div class="done-sub" id="done-sub">Las tarjetas marcadas como Fácil volverán en próximas sesiones.</div>
+    <div class="score-grid">
+      <div class="score-box s-no">  <div class="score-num" id="done-no">0</div>  <div class="score-lbl">No sé</div></div>
+      <div class="score-box s-hard"><div class="score-num" id="done-hard">0</div><div class="score-lbl">Difícil</div></div>
+      <div class="score-box s-easy"><div class="score-num" id="done-easy">0</div><div class="score-lbl">Fácil</div></div>
+    </div>
+    <div class="done-btns">
+      <button class="done-btn done-btn-primary" onclick="restartSession()">Repasar las que fallé</button>
+      <button class="done-btn done-btn-secondary" onclick="restartAll()">Repasar todas</button>
+    </div>
+  </div>
+
+  <!-- Empty state -->
+  <div class="empty-state" id="empty-state">
+    <div class="empty-emoji">🏆</div>
+    <div class="empty-title">No hay tarjetas pendientes</div>
+    <div class="empty-sub">Todas las tarjetas de este filtro están al día. Volvé más tarde o cambiá el filtro.</div>
+    <div class="done-btns">
+      <button class="done-btn done-btn-primary" onclick="restartAll()">Repasar todas de todas formas</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ─────────────────────────────────────────────
+// CARD DATA
+// ─────────────────────────────────────────────
+const CARDS = [
+  // ── IAM ──
+  { id:'iam-01', cat:'IAM', q:'¿Qué es una IAM Policy?', a:'Documento JSON que define permisos: <code>Allow</code> o <code>Deny</code> sobre <code>Actions</code> en <code>Resources</code>. Se adjunta a usuarios, grupos o roles.' },
+  { id:'iam-02', cat:'IAM', q:'¿Cuándo usar IAM Role en vez de IAM User?', a:'Role: para servicios AWS (EC2, Lambda) o acceso temporal/federado. User: para personas con acceso permanente y credenciales propias.' },
+  { id:'iam-03', cat:'IAM', q:'¿Qué es <code>STS AssumeRole</code>?', a:'Obtiene credenciales temporales asumiendo un Role. Es la base del acceso cross-account y de servicios que necesitan permisos elevados temporalmente.' },
+  { id:'iam-04', cat:'IAM', q:'Orden de evaluación de permisos en IAM', a:'<code>Deny explícito</code> → <code>Allow explícito</code> → <code>Deny implícito</code> (default). Si no hay ningún Allow = denegado.' },
+  { id:'iam-05', cat:'IAM', q:'¿Qué es una Resource-Based Policy?', a:'Política adjunta al recurso en sí (ej: S3 bucket policy, SQS queue policy). Define quién puede acceder, incluso desde otras cuentas.' },
+  { id:'iam-06', cat:'IAM', q:'¿Qué son los SCPs (Service Control Policies)?', a:'Límites máximos de permisos para cuentas en AWS Organizations. Ni el root de la cuenta los puede saltear.' },
+  { id:'iam-07', cat:'IAM', q:'¿Qué es un IAM Permissions Boundary?', a:'Define el techo de permisos que puede tener un usuario o role. No otorga permisos — solo los limita.' },
+  { id:'iam-08', cat:'IAM', q:'¿Cuántos MFA puede tener un usuario IAM?', a:'Hasta 8 dispositivos MFA por usuario. Tipos: Virtual MFA (Google Authenticator), hardware TOTP, FIDO2 key.' },
+
+  // ── EC2/EBS ──
+  { id:'ec2-01', cat:'EC2/EBS', q:'Tipos de volúmenes EBS y sus IOPS máximos', a:'<code>gp2</code>: 3 IOPS/GB, máx 16,000. <code>gp3</code>: 3,000 IOPS base, máx 16,000 (independiente del size). <code>io1/io2</code>: hasta 64,000 IOPS. <code>io2 Block Express</code>: hasta 256,000 IOPS. <code>st1/sc1</code> (HDD): no booteable, para throughput.' },
+  { id:'ec2-01b', cat:'EC2/EBS', q:'¿Qué es io2 Block Express y cuántos IOPS soporta?', a:'La generación top de EBS. Hasta 256,000 IOPS y 4,000 MB/s de throughput. Latencia submilisegundo. Solo disponible en instancias Nitro de última generación. Es io2 pero con esteroides.' },
+  { id:'ec2-02', cat:'EC2/EBS', q:'gp2 de 1,000 GB: ¿cuántos IOPS?', a:'3,000 IOPS (3 IOPS/GB × 1,000 GB). Máximo alcanzable: 16,000 IOPS (con 5,334 GB o más).' },
+  { id:'ec2-03', cat:'EC2/EBS', q:'¿Diferencia clave entre gp2 y gp3?', a:'<code>gp3</code>: los IOPS son independientes del tamaño del disco — podés provisionar 10,000 IOPS en un volumen de 10 GB. En <code>gp2</code> los IOPS están atados al GB.' },
+  { id:'ec2-04', cat:'EC2/EBS', q:'¿Para qué usar io1/io2?', a:'Cuando necesitás más de 16,000 IOPS o necesitás garantizar IOPS exactos. Típico: bases de datos críticas (Oracle, MySQL en producción).' },
+  { id:'ec2-05', cat:'EC2/EBS', q:'¿Qué es un Instance Store?', a:'Storage efímero físicamente adjunto a la instancia. Altísimo rendimiento, pero se pierde si la instancia se detiene o termina. No es EBS.' },
+  { id:'ec2-06', cat:'EC2/EBS', q:'¿Qué es un Security Group en EC2?', a:'Firewall a nivel de instancia/ENI — stateful (las respuestas se permiten automáticamente). Solo reglas Allow. Las reglas de entrada y salida son independientes.' },
+  { id:'ec2-07', cat:'EC2/EBS', q:'¿Qué son las EC2 User Data?', a:'Script que se ejecuta una sola vez al lanzar la instancia (como root). Sirve para instalar software, configurar el sistema, etc.' },
+  { id:'ec2-08', cat:'EC2/EBS', q:'¿Qué son los EC2 Instance Metadata?', a:'Información sobre la instancia accesible desde dentro: <code>http://169.254.169.254/latest/meta-data/</code>. IP, tipo de instancia, IAM role credentials, etc.' },
+  { id:'ec2-09', cat:'EC2/EBS', q:'¿Cuándo usar st1 vs sc1?', a:'<code>st1</code>: throughput intensivo, acceso frecuente (big data, log processing). <code>sc1</code>: acceso infrecuente, más barato (cold storage). Ninguno es booteable.' },
+  { id:'ec2-10', cat:'EC2/EBS', q:'¿Qué es un EBS Snapshot?', a:'Backup incremental de un volumen EBS guardado en S3. Se puede copiar cross-region y usar para crear nuevos volúmenes.' },
+
+  // ── S3 ──
+  { id:'s3-01', cat:'S3', q:'Clases de almacenamiento S3 de más a menos cara (aproximado)', a:'Standard → Intelligent-Tiering → Standard-IA → One Zone-IA → Glacier Instant → Glacier Flexible → Glacier Deep Archive' },
+  { id:'s3-02', cat:'S3', q:'Tiempo mínimo de almacenamiento: Standard-IA vs Glacier Deep Archive', a:'Standard-IA: <code>30 días</code>. Glacier Flexible: <code>90 días</code>. Glacier Deep Archive: <code>180 días</code>. Si borrás antes, igual pagás el mínimo.' },
+  { id:'s3-03', cat:'S3', q:'Tipos de encriptación en S3', a:'<code>SSE-S3</code>: clave AWS (default). <code>SSE-KMS</code>: clave KMS, auditable. <code>SSE-C</code>: vos proveés la clave (AWS no la guarda). <code>Client-Side</code>: encriptás antes de subir.' },
+  { id:'s3-04', cat:'S3', q:'¿Qué requiere S3 Replication (CRR/SRR)?', a:'Versioning activado en source y destination. CRR = Cross-Region Replication. SRR = Same-Region. No replica objetos existentes automáticamente.' },
+  { id:'s3-05', cat:'S3', q:'¿Qué es un S3 Pre-signed URL?', a:'URL temporal firmada con las credenciales del creador. Permite acceso a un objeto sin que el receptor tenga cuenta AWS. Expira en el tiempo configurado.' },
+  { id:'s3-06', cat:'S3', q:'¿Qué es S3 Transfer Acceleration?', a:'Sube al edge de CloudFront más cercano → transfiere por la red interna de AWS → más rápido para uploads desde todo el mundo.' },
+  { id:'s3-07', cat:'S3', q:'¿Cuándo usar Multipart Upload?', a:'Recomendado para archivos >100 MB. Obligatorio para archivos >5 GB. Sube partes en paralelo, mejora velocidad y permite reanudar si falla.' },
+  { id:'s3-08', cat:'S3', q:'¿Qué es S3 Object Lock?', a:'WORM (Write Once Read Many). Bloquea borrado/modificación por un período. Modos: Governance (bypass con permiso especial) y Compliance (nadie puede borrar, ni root).' },
+  { id:'s3-09', cat:'S3', q:'¿Qué es S3 Select?', a:'Ejecuta SQL directamente sobre el contenido de un objeto en S3 (CSV, JSON, Parquet) sin descargar todo el archivo. Ahorra tiempo y costo.' },
+  { id:'s3-10', cat:'S3', q:'¿Qué es una S3 Lifecycle Policy?', a:'Reglas automáticas para transicionar objetos entre clases (ej: mover a Glacier después de 90 días) o expirarlos (borrarlos después de X días).' },
+  { id:'s3-11', cat:'S3', q:'¿Qué hace S3 Versioning?', a:'Guarda todas las versiones de un objeto. Al borrar un objeto versionado se crea un "delete marker" (no borra el objeto). Requiere activarse explícitamente.' },
+  { id:'s3-12', cat:'S3', q:'¿Qué es CORS en S3?', a:'Permite a browsers de otros dominios hacer requests a objetos del bucket. Sin configurarlo, el browser bloquea el request por política de same-origin.' },
+  { id:'s3-13', cat:'S3', q:'¿S3 Standard-IA para qué casos de uso?', a:'Datos accedidos con poca frecuencia pero que necesitás recuperar rápido cuando los pedís. Más barato que Standard, pero cobran por retrieval.' },
+  { id:'s3-14', cat:'S3', q:'¿Qué es S3 Event Notification?', a:'Dispara eventos cuando pasan cosas en el bucket (PUT, DELETE, etc.). Puede notificar a SQS, SNS o Lambda.' },
+
+  // ── DYNAMODB ──
+  { id:'ddb-01', cat:'DynamoDB', q:'¿Qué es una RCU (Read Capacity Unit)?', a:'1 lectura strongly consistent de hasta 4 KB/s. O 2 lecturas eventually consistent de 4 KB/s. Lecturas de más de 4 KB consumen múltiples RCUs.' },
+  { id:'ddb-02', cat:'DynamoDB', q:'¿Qué es una WCU (Write Capacity Unit)?', a:'1 escritura de hasta 1 KB/s. Ítems más grandes consumen más WCUs. Una escritura de 2.5 KB consume 3 WCUs.' },
+  { id:'ddb-03', cat:'DynamoDB', q:'Partition Key vs Sort Key en DynamoDB', a:'Partition Key: determina en qué partición se guarda el ítem. Sort Key: ordena ítems dentro de la misma partición. Juntos forman la Primary Key compuesta.' },
+  { id:'ddb-04', cat:'DynamoDB', q:'GSI vs LSI: diferencias clave', a:'<code>LSI</code>: misma Partition Key, diferente Sort Key — solo se crea al crear la tabla. <code>GSI</code>: diferente Partition Key y Sort Key opcional — se puede crear después.' },
+  { id:'ddb-05', cat:'DynamoDB', q:'¿Qué es DAX?', a:'DynamoDB Accelerator — cache in-memory con microsegundos de latencia. Ideal para reads muy frecuentes. Transparente para la app.' },
+  { id:'ddb-06', cat:'DynamoDB', q:'On-Demand vs Provisioned Capacity', a:'<code>On-Demand</code>: pagás por request, ideal para tráfico impredecible. <code>Provisioned</code>: definís RCU/WCU, más barato si el tráfico es predecible.' },
+  { id:'ddb-07', cat:'DynamoDB', q:'¿Qué es DynamoDB Streams?', a:'Captura cada cambio (INSERT, MODIFY, REMOVE) en orden cronológico. Retención: 24 horas. Puede disparar una Lambda como trigger.' },
+  { id:'ddb-08', cat:'DynamoDB', q:'¿Tamaño máximo de un ítem en DynamoDB?', a:'400 KB por ítem. Para guardar ítems más grandes: guardar en S3 y guardar la referencia en DynamoDB.' },
+  { id:'ddb-09', cat:'DynamoDB', q:'Strongly Consistent vs Eventually Consistent reads', a:'<code>Strongly</code>: siempre el dato más reciente, consume el doble de RCUs. <code>Eventually</code>: puede leer datos con milisegundos de retraso, consume la mitad. Default es eventually.' },
+  { id:'ddb-10', cat:'DynamoDB', q:'¿Qué es el TTL en DynamoDB?', a:'Atributo de expiración — DynamoDB borra el ítem automáticamente cuando vence. No consume WCUs. El borrado no es instantáneo (puede tardar 48hs).' },
+  { id:'ddb-11', cat:'DynamoDB', q:'¿Qué es <code>TransactWriteItems</code>?', a:'Escribe en múltiples ítems o tablas de forma atómica (todo o nada). Máximo 25 ítems. Ideal para operaciones tipo bancarias.' },
+  { id:'ddb-12', cat:'DynamoDB', q:'¿Qué hace <code>BatchGetItem</code>?', a:'Lee hasta 100 ítems de una o varias tablas en una sola llamada API. Hasta 16 MB de datos. Más eficiente que N llamadas <code>GetItem</code>.' },
+  { id:'ddb-13', cat:'DynamoDB', q:'¿Qué es una Conditional Write en DynamoDB?', a:'Escritura que solo se ejecuta si se cumple una condición (ej: solo actualizar si el atributo X = Y). Evita sobrescribir datos sin querer.' },
+  { id:'ddb-14', cat:'DynamoDB', q:'¿Qué es el WCU consumido por una escritura de 3.5 KB?', a:'4 WCUs. Se redondea hacia arriba al KB más cercano: ceil(3.5) = 4 KB = 4 WCUs.' },
+  { id:'ddb-15', cat:'DynamoDB', q:'¿Qué es Global Tables en DynamoDB?', a:'Replicación multi-región activo-activo. Los writes se replican automáticamente entre regiones. Ideal para apps globales con baja latencia.' },
+  { id:'ddb-16', cat:'DynamoDB', q:'¿DynamoDB necesita una EC2 para funcionar?', a:'No. DynamoDB es completamente serverless — AWS gestiona toda la infraestructura. Vos solo creás la tabla y la usás, igual que S3.' },
+  { id:'ddb-17', cat:'DynamoDB', q:'¿Qué es Auto Scaling en DynamoDB Provisioned?', a:'Opción que ajusta automáticamente los RCU/WCU dentro de un rango (min/max) que vos definís, según el tráfico real. Más barato que On-Demand, sin ajuste manual. Best practice para producción con algo de variabilidad.' },
+  { id:'ddb-18', cat:'DynamoDB', q:'¿Qué es ProjectionExpression en DynamoDB?', a:'Parámetro en GetItem, Query y Scan que especifica qué atributos incluir en la respuesta (como SELECT col1, col2 en SQL). NO reduce RCU — el ítem completo siempre se lee internamente.' },
+  { id:'ddb-19', cat:'DynamoDB', q:'¿Cómo se acelera un Scan en DynamoDB?', a:'Con <strong>Parallel Scans</strong>: dividís la tabla en segmentos y escaneás cada uno en paralelo con workers separados. Dramáticamente más rápido para tablas grandes.' },
+  { id:'ddb-20', cat:'DynamoDB', q:'¿Cuándo usar LSI vs GSI para hacer Query eficiente?', a:'<strong>LSI</strong>: mismo Partition Key, nuevo Sort Key — para filtrar por otro atributo manteniendo el PK. Debe crearse al crear la tabla. <strong>GSI</strong>: PK completamente diferente — para queries por un atributo sin relación con el PK original.' },
+  { id:'ddb-21', cat:'DynamoDB', q:'¿Para qué sirve DynamoDB Streams además de registro?', a:'Es una <strong>fuente de eventos</strong>. Cada INSERT/UPDATE/DELETE dispara un evento que puede invocar Lambda (via Event Source Mapping), enviar a Kinesis, o procesar con KCL. Ejemplo: enviar email de bienvenida al registrar un usuario nuevo.' },
+  { id:'ddb-22', cat:'DynamoDB', q:'¿Qué diferencia hay entre Hot Key y Hot Partition?', a:'<strong>Hot key</strong>: un ítem específico recibe demasiados requests (ej: producto trending). <strong>Hot partition</strong>: una partición física interna se satura porque muchos ítems distintos hashean al mismo rango — ningún ítem individual es el culpable.' },
+  { id:'ddb-23', cat:'DynamoDB', q:'¿Se pueden modificar RCU y WCU por separado en DynamoDB Provisioned?', a:'Sí. RCU y WCU son completamente independientes (decoupled). Podés aumentar RCU sin tocar WCU y viceversa, en cualquier momento.' },
+
+  // ── LAMBDA ──
+  { id:'lmb-01', cat:'Lambda', q:'Timeout máximo de Lambda', a:'15 minutos (900 segundos). Default: 3 segundos. Ajustable entre 1s y 900s.' },
+  { id:'lmb-02', cat:'Lambda', q:'Rango de memoria de Lambda', a:'128 MB a 10,240 MB (10 GB). El CPU se escala proporcionalmente con la memoria.' },
+  { id:'lmb-03', cat:'Lambda', q:'¿Cuánto /tmp storage tiene Lambda?', a:'512 MB por defecto. Configurable hasta 10,240 MB. Persistente dentro de una ejecución, pero no entre invocaciones distintas.' },
+  { id:'lmb-04', cat:'Lambda', q:'¿Qué es el cold start en Lambda?', a:'Latencia extra al crear un nuevo execution environment. Incluye inicializar el runtime y el código. Puede ser decenas a cientos de ms.' },
+  { id:'lmb-05', cat:'Lambda', q:'¿Cómo se evitan cold starts en Lambda?', a:'<code>Provisioned Concurrency</code>: mantiene N instancias "calientes" y listas. Ideal para APIs con SLA estricto.' },
+  { id:'lmb-06', cat:'Lambda', q:'¿Qué es la Concurrencia Reservada en Lambda?', a:'Límite máximo de instancias concurrentes para esa función. También garantiza ese mínimo (otras funciones no lo pueden usar). Puede ser 0 para bloquear la función.' },
+  { id:'lmb-07', cat:'Lambda', q:'Lambda en VPC: ¿qué pierde?', a:'Acceso a internet público. Para recuperarlo necesitás un NAT Gateway en una subnet pública. El acceso a servicios AWS puede hacerse con VPC Endpoints.' },
+  { id:'lmb-08', cat:'Lambda', q:'¿Qué es un Lambda Layer?', a:'Paquete ZIP con dependencias compartidas (libs, runtimes, configs). Se monta en <code>/opt</code>. Evita repetir dependencias en cada deployment. Máximo 5 layers por función.' },
+  { id:'lmb-09', cat:'Lambda', q:'Límite de deployment package de Lambda', a:'50 MB comprimido / 250 MB descomprimido para uploads directos. Via S3: hasta 10 GB (container image).' },
+  { id:'lmb-10', cat:'Lambda', q:'¿Cuántas veces reintenta Lambda un evento asincrónico fallido?', a:'2 reintentos adicionales (3 intentos en total). Entre intentos: espera 1 min (1er retry) y 2 min (2do retry). Luego se descarta o va a DLQ.' },
+  { id:'lmb-11', cat:'Lambda', q:'Destinos soportados por Lambda (asynchronous destinations)', a:'En éxito o fallo: SQS, SNS, otra Lambda, EventBridge. Más flexible que DLQ (que solo maneja fallos).' },
+  { id:'lmb-12', cat:'Lambda', q:'¿Qué es Lambda@Edge?', a:'Lambda que corre en los edge locations de CloudFront — más cerca del usuario. Para personalizar requests/responses HTTP globalmente sin latencia regional.' },
+  { id:'lmb-13', cat:'Lambda', q:'¿Qué servicios de AWS requieren un Lambda Event Source Mapping para invocar Lambda?', a:'<strong>Kinesis Data Streams, DynamoDB Streams y SQS</strong> — Lambda hace <em>polling</em> de estas fuentes. SNS, S3, API Gateway y EventBridge invocan Lambda directamente (modelo push, sin ESM).' },
+  { id:'lmb-14', cat:'Lambda', q:'S3 Event Notification invoca Lambda. La función falla. ¿Qué pasa y cómo lo detectás en CloudWatch?', a:'Lambda reintenta automáticamente 2 veces más (invocación asíncrona). Cada reintento reutiliza el <strong>mismo request ID</strong> del intento original — por eso aparecen logs duplicados con el mismo ID. IDs distintos = invocaciones independientes.' },
+  { id:'lmb-15', cat:'Lambda', q:'Código FUERA del handler (ej: conexión a DB). ¿Qué le pasa entre invocaciones?', a:'<strong>Persiste y se reutiliza</strong> en invocaciones dentro del mismo execution environment (warm). La conexión se abre una vez y se comparte entre llamadas. Poner lógica pesada fuera del handler = patrón correcto para optimizar.' },
+  { id:'lmb-16', cat:'Lambda', q:'Lambda tiene DLQ apuntando a SNS. Los mensajes fallidos no llegan. ¿Qué falta?', a:'El <strong>execution role</strong> de Lambda necesita el permiso <code>sns:Publish</code>. Lambda es quien publica en SNS — necesita ese permiso explícito. Sin él, el DLQ silenciosamente no funciona.' },
+  { id:'lmb-17', cat:'Lambda', q:'CloudFront Functions vs Lambda@Edge: ¿en qué stages puede actuar cada uno?', a:'<strong>CloudFront Functions</strong>: solo ① Viewer Request y ④ Viewer Response. <strong>Lambda@Edge</strong>: los 4 stages (① Viewer Request, ② Origin Request, ③ Origin Response, ④ Viewer Response). Solo Lambda@Edge puede modificar Origin requests/responses.' },
+  { id:'lmb-18', cat:'Lambda', q:'¿Cuál es el límite de variables de entorno en Lambda?', a:'<strong>4 KB en total</strong> — es la suma combinada de todos los pares clave-valor, no por variable individual. Para datos más grandes hay que usar SSM Parameter Store o Secrets Manager.' },
+
+  // ── API GATEWAY ──
+  { id:'apig-01', cat:'API Gateway', q:'Tipos de API que soporta API Gateway', a:'<code>REST API</code>: completo, más features. <code>HTTP API</code>: más simple y barata, mejor para Lambda/HTTP backends. <code>WebSocket API</code>: conexiones bidireccionales.' },
+  { id:'apig-02', cat:'API Gateway', q:'¿Qué es un Stage en API Gateway?', a:'Un ambiente de deployment (dev, staging, prod). Cada Stage tiene su propia URL y configuración independiente (variables, caching, throttling).' },
+  { id:'apig-03', cat:'API Gateway', q:'¿Qué son Stage Variables en API Gateway?', a:'Variables de entorno por Stage. Permiten apuntar a diferentes Lambdas o endpoints según el ambiente sin cambiar el código.' },
+  { id:'apig-04', cat:'API Gateway', q:'¿Qué es Canary Deployment en API Gateway?', a:'Desvía un % del tráfico a una nueva configuración del Stage mientras el resto sigue en la versión estable. Permite testear antes del rollout.' },
+  { id:'apig-05', cat:'API Gateway', q:'¿Qué es el caching en API Gateway?', a:'Cachea respuestas del backend. TTL default: 300s (0-3600s). Reduce llamadas al backend y mejora latencia. Se habilita por Stage.' },
+  { id:'apig-06', cat:'API Gateway', q:'¿Timeout máximo de integración en API Gateway?', a:'29 segundos. Si el backend demora más, API Gateway devuelve 504 Gateway Timeout.' },
+  { id:'apig-07', cat:'API Gateway', q:'¿Qué es un Usage Plan + API Key?', a:'Controla throttling y cuotas por cliente. El cliente incluye la API Key en el header <code>x-api-key</code>. Útil para monetizar APIs.' },
+  { id:'apig-08', cat:'API Gateway', q:'¿Qué hace un Lambda Authorizer?', a:'Lambda que valida el token del request antes de pasarlo al backend. Devuelve una IAM Policy que API Gateway cachea (TTL configurable).' },
+
+  // ── SQS/SNS ──
+  { id:'sqs-01', cat:'SQS/SNS', q:'Visibility Timeout en SQS: ¿qué es y cuál es el default?', a:'Tiempo que el mensaje queda invisible para otros consumers mientras uno lo procesa. Default: 30s. Rango: 0 a 12 horas. Si no se borra antes: vuelve a ser visible.' },
+  { id:'sqs-02', cat:'SQS/SNS', q:'SQS Standard vs FIFO', a:'<code>Standard</code>: at-least-once delivery, sin orden garantizado, throughput ilimitado. <code>FIFO</code>: exactly-once, orden garantizado, 300 TPS (3,000 con batching).' },
+  { id:'sqs-03', cat:'SQS/SNS', q:'¿Qué es Long Polling en SQS?', a:'El consumer espera hasta 20s por un mensaje en vez de responder vacío. Reduce llamadas vacías, costos y CPU. Siempre preferido sobre Short Polling.' },
+  { id:'sqs-04', cat:'SQS/SNS', q:'Tamaño máximo de mensaje en SQS', a:'256 KB. Para mensajes más grandes: guardar el payload en S3 y enviar la referencia. Usar SQS Extended Client Library para hacerlo transparente.' },
+  { id:'sqs-05', cat:'SQS/SNS', q:'¿Cuánto tiempo puede quedar un mensaje en SQS?', a:'Hasta 14 días (default 4 días). Configurable con <code>MessageRetentionPeriod</code>.' },
+  { id:'sqs-06', cat:'SQS/SNS', q:'¿Qué es una Dead Letter Queue (DLQ)?', a:'Recibe mensajes que fallaron N veces (configurable). Sirve para diagnosticar problemas sin bloquear la queue principal.' },
+  { id:'sqs-07', cat:'SQS/SNS', q:'¿Qué es el patrón Fan-out con SNS?', a:'Un mensaje publicado a SNS → múltiples subscribers (SQS, Lambda, email, etc.) lo reciben en paralelo. Desacopla el producer de los consumers.' },
+  { id:'sqs-08', cat:'SQS/SNS', q:'¿Qué es SNS Message Filtering?', a:'Política JSON en el subscriber para recibir solo mensajes que cumplan ciertas condiciones. Evita procesar mensajes irrelevantes.' },
+  { id:'sqs-09', cat:'SQS/SNS', q:'¿Qué es SNS FIFO?', a:'Topic con orden garantizado y exactly-once delivery. Solo puede tener SQS FIFO como subscriber. Throughput limitado igual que SQS FIFO.' },
+  { id:'sqs-10', cat:'SQS/SNS', q:'¿Qué es el Delay Queue en SQS?', a:'Retrasa la visibilidad de mensajes nuevos por 0 a 15 minutos. Default: 0. Distinto del Visibility Timeout (que aplica al procesamiento).' },
+
+  // ── KINESIS ──
+  { id:'kin-01', cat:'Kinesis', q:'¿Cuánto retiene datos Kinesis Data Streams?', a:'24 horas por defecto. Configurable hasta 365 días (con costo adicional).' },
+  { id:'kin-02', cat:'Kinesis', q:'Capacidad de un shard en Kinesis Data Streams', a:'Entrada: 1 MB/s o 1,000 records/s. Salida: 2 MB/s (compartido entre consumers). Con Enhanced Fan-Out: 2 MB/s por consumer.' },
+  { id:'kin-03', cat:'Kinesis', q:'Kinesis Data Streams vs Firehose', a:'<code>Streams</code>: tiempo real, consumers custom, retención configurable. <code>Firehose</code>: near real-time (60s), entrega managed a S3/Redshift/OpenSearch, sin consumer custom.' },
+  { id:'kin-04', cat:'Kinesis', q:'¿Qué garantiza el orden en Kinesis?', a:'El orden está garantizado dentro de un shard. Entre shards no hay orden garantizado. Usar el mismo Partition Key para que registros relacionados vayan al mismo shard.' },
+  { id:'kin-05', cat:'Kinesis', q:'¿Qué es Enhanced Fan-Out en Kinesis?', a:'Cada consumer registrado obtiene sus propios 2 MB/s por shard (en vez de compartir). Usa HTTP/2 push en vez de polling. Más costoso.' },
+  { id:'kin-06', cat:'Kinesis', q:'¿Qué es Kinesis Data Analytics?', a:'Procesa streams con SQL o Apache Flink en tiempo real. Ideal para métricas en vivo, detección de anomalías, transformaciones.' },
+  { id:'kin-07', cat:'Kinesis', q:'¿Qué es el Partition Key en Kinesis?', a:'Determina a qué shard va el record (hash del key). Alta cardinalidad = distribución uniforme. Baja cardinalidad = hot shards.' },
+  { id:'kin-08', cat:'Kinesis', q:'Kinesis vs SQS: ¿cuándo usar cada uno?', a:'<code>Kinesis</code>: múltiples consumers, orden dentro de shard, retención, replay, análisis en tiempo real. <code>SQS</code>: desacoplar workloads, un consumer procesa cada mensaje, DLQ.' },
+
+  // ── CLOUDWATCH ──
+  { id:'cw-01', cat:'CloudWatch', q:'Retención de métricas high-res (1s) en CloudWatch', a:'3 horas — luego se colapsan en puntos de 1 minuto (que se retienen 15 días).' },
+  { id:'cw-02', cat:'CloudWatch', q:'Cascada completa de retención de métricas en CloudWatch', a:'1s → 3h. 1min → 15 días. 5min → 63 días. 1hr → 15 meses. Cada etapa agrega los puntos de la anterior.' },
+  { id:'cw-03', cat:'CloudWatch', q:'¿Máximo de dimensiones por métrica?', a:'30 dimensiones por métrica. Una dimensión es un par clave-valor que identifica la fuente del dato (ej: <code>InstanceId=i-001</code>).' },
+  { id:'cw-04', cat:'CloudWatch', q:'¿Máximo de dimensiones por Metric Filter?', a:'3 dimensiones. Mucho menos que las 30 de las métricas personalizadas.' },
+  { id:'cw-05', cat:'CloudWatch', q:'¿Son retroactivos los Metric Filters?', a:'NO. Solo cuentan eventos nuevos desde el momento de creación. Logs anteriores se ignoran aunque coincidan con el patrón.' },
+  { id:'cw-06', cat:'CloudWatch', q:'¿Qué métrica no recolecta CloudWatch por defecto?', a:'RAM/Memory. Requiere instalar el CloudWatch Unified Agent en la instancia para enviarla.' },
+  { id:'cw-07', cat:'CloudWatch', q:'¿Cuáles son los 3 estados de una alarma de CloudWatch?', a:'<code>OK</code>: métrica dentro del umbral. <code>INSUFFICIENT_DATA</code>: no hay suficientes datos (ej: alarma nueva). <code>ALARM</code>: umbral superado.' },
+  { id:'cw-08', cat:'CloudWatch', q:'¿Cada cuánto puede dispararse una alarma high-res?', a:'Cada 10s o 30s. Las alarmas estándar solo permiten múltiplos de 60s.' },
+  { id:'cw-09', cat:'CloudWatch', q:'Log Group vs Log Stream en CloudWatch Logs', a:'<code>Log Group</code>: contenedor por aplicación/servicio — acá se configura la retención. <code>Log Stream</code>: secuencia de una única fuente (una instancia, un container).' },
+  { id:'cw-10', cat:'CloudWatch', q:'Retención de Log Groups: mínimo y máximo', a:'De 1 día a 10 años. También puede ser "Never expire". Se configura a nivel de Log Group.' },
+  { id:'cw-11', cat:'CloudWatch', q:'¿Qué es un Composite Alarm?', a:'Combina múltiples alarmas con AND/OR. Reduce falsos positivos — ej: disparar solo si CPU está alta Y memoria está alta al mismo tiempo.' },
+  { id:'cw-12', cat:'CloudWatch', q:'¿Cómo testear una alarma de CloudWatch sin esperar?', a:'CLI: <code>set-alarm-state</code>. Cambia el estado manualmente a ALARM para probar las acciones configuradas.' },
+  { id:'cw-13', cat:'CloudWatch', q:'X-Ray Reservoir: ¿qué garantiza?', a:'1 request/segundo rastreado con certeza, sin importar el volumen de tráfico. Es el "piso" del sampling.' },
+  { id:'cw-14', cat:'CloudWatch', q:'X-Ray Rate: ¿qué hace?', a:'Del tráfico que supera el Reservoir, se rastrea el 5% adicional. Ej: 100 req/s → 1 (reservoir) + ~5 (5% de los 99 restantes) = ~6 trazas/s.' },
+
+  // ── X-RAY ──
+  { id:'xr-01', cat:'X-Ray', q:'¿Qué es un Trace en X-Ray?', a:'El viaje completo de un request de punta a punta. Agrupa todos los Segments de los servicios que participaron.' },
+  { id:'xr-02', cat:'X-Ray', q:'¿Qué es un Segment en X-Ray?', a:'La contribución de un servicio individual dentro del Trace. Tiene timestamps de inicio y fin.' },
+  { id:'xr-03', cat:'X-Ray', q:'¿Qué es un Sub-segment en X-Ray?', a:'Detalle granular dentro de un Segment. Ej: dentro del Segment de la Lambda, el Sub-segment del <code>GetItem</code> a DynamoDB que tardó 20ms.' },
+  { id:'xr-04', cat:'X-Ray', q:'Annotations vs Metadata en X-Ray', a:'<code>Annotations</code>: indexadas y buscables — para filtrar traces (ej: <code>userId=42</code>). <code>Metadata</code>: NO indexadas — para debug, guardar datos grandes.' },
+  { id:'xr-05', cat:'X-Ray', q:'¿Qué se necesita para X-Ray en EC2?', a:'Instalar el X-Ray Daemon + política IAM <code>AWSXRayDaemonWriteAccess</code> en el role de la instancia.' },
+  { id:'xr-06', cat:'X-Ray', q:'¿Qué se necesita para X-Ray en Lambda?', a:'Activar "Active Tracing" en la configuración + política IAM <code>AWSXRayDaemonWriteAccess</code>. No hay daemon — Lambda lo maneja internamente.' },
+
+  // ── CLOUDTRAIL ──
+  { id:'ct-01', cat:'CloudTrail', q:'¿Cuánto tiempo retiene CloudTrail los eventos?', a:'90 días por defecto. Para retención más larga: exportar a S3, luego consultar con Athena.' },
+  { id:'ct-02', cat:'CloudTrail', q:'¿Qué captura CloudTrail?', a:'Toda llamada a la API de AWS: quién la hizo, desde dónde, cuándo y qué resource afectó. Es el log de auditoría de tu cuenta.' },
+  { id:'ct-03', cat:'CloudTrail', q:'Management Events vs Data Events en CloudTrail', a:'<code>Management</code>: operaciones sobre recursos (crear/borrar instancias, crear buckets) — habilitados por default. <code>Data</code>: operaciones sobre datos (S3 GetObject, Lambda invocations) — deshabilitados por default, costo extra.' },
+  { id:'ct-04', cat:'CloudTrail', q:'Flujo para retener y consultar eventos >90 días', a:'CloudTrail → exportar trail a S3 → consultar con Athena usando SQL. Ej: <code>WHERE eventName=\'DeleteBucket\'</code>.' },
+
+  // ── ECS/ECR ──
+  { id:'ecs-01', cat:'ECS/ECR', q:'¿Qué es una Task Definition en ECS?', a:'El plano del container: imagen Docker, CPU, memoria, variables de entorno, volumes, port mappings, IAM role.' },
+  { id:'ecs-02', cat:'ECS/ECR', q:'ECS EC2 vs Fargate', a:'<code>EC2</code>: vos manejás las instancias (más control, más complejo). <code>Fargate</code>: serverless — AWS maneja la infraestructura, vos solo definís CPU/memoria.' },
+  { id:'ecs-03', cat:'ECS/ECR', q:'¿Cómo pasar secretos a un container ECS de forma segura?', a:'Referenciar SSM Parameter Store o Secrets Manager en la Task Definition. ECS inyecta el valor como variable de entorno al runtime.' },
+  { id:'ecs-04', cat:'ECS/ECR', q:'¿Qué es un ECS Service?', a:'Mantiene N tasks corriendo y las reemplaza si fallan. Puede integrarse con un Load Balancer. Se encarga del deployment y la escalabilidad.' },
+  { id:'ecs-05', cat:'ECS/ECR', q:'¿Qué es ECR?', a:'Elastic Container Registry — registry privado (o público) para imágenes Docker en AWS. Integrado con ECS/EKS, autenticación con IAM.' },
+  { id:'ecs-06', cat:'ECS/ECR', q:'¿Qué es EKS?', a:'Elastic Kubernetes Service — Kubernetes managed por AWS. Para equipos que ya usan K8s y quieren evitar mantener el control plane.' },
+
+  // ── ELASTIC BEANSTALK ──
+  { id:'eb-01', cat:'Beanstalk', q:'¿Qué es Elastic Beanstalk?', a:'PaaS de AWS: subís el código (ZIP, WAR, Docker), EB maneja EC2, Load Balancer, Auto Scaling, deployments y monitoring automáticamente.' },
+  { id:'eb-02', cat:'Beanstalk', q:'Tipos de deployment en Elastic Beanstalk', a:'<code>All at once</code> (downtime). <code>Rolling</code> (batch por batch). <code>Rolling + batch extra</code> (sin reducir capacidad). <code>Immutable</code> (nuevo ASG, rollback rápido). <code>Blue/Green</code> (otro entorno, swap URL).' },
+  { id:'eb-03', cat:'Beanstalk', q:'¿Qué deployment de EB tiene rollback más rápido?', a:'<code>Immutable</code> — crea un nuevo Auto Scaling Group. Si algo falla, el viejo ASG sigue funcionando. Rollback instantáneo.' },
+  { id:'eb-04', cat:'Beanstalk', q:'¿Qué es .ebextensions?', a:'Carpeta en tu proyecto con archivos <code>.config</code> (YAML/JSON) para customizar el entorno EB: instalar paquetes, configurar nginx, crear archivos, ejecutar comandos.' },
+  { id:'eb-05', cat:'Beanstalk', q:'¿Qué es EB Worker Environment?', a:'Procesa tareas largas de una SQS queue en background. Desacopla el trabajo asíncrono del entorno web principal.' },
+  { id:'eb-06', cat:'Beanstalk', q:'¿EB soporta Docker?', a:'Sí — Single Container Docker (una imagen por instancia) y Multi-Container Docker (usa ECS por detrás, definido en <code>Dockerrun.aws.json</code>).' },
+
+  // ── CODEDEPLOY / CI-CD ──
+  { id:'cd-01', cat:'CodeDeploy', q:'¿Qué archivo controla CodeDeploy?', a:'<code>appspec.yml</code> — define los hooks del deployment lifecycle (BeforeInstall, AfterInstall, ApplicationStart, ValidateService) y los archivos a copiar.' },
+  { id:'cd-02', cat:'CodeDeploy', q:'CodeDeploy In-Place vs Blue/Green', a:'<code>In-Place</code>: actualiza instancias existentes — puede haber downtime. <code>Blue/Green</code>: crea un nuevo entorno, cambia el tráfico — rollback rápido y sin downtime.' },
+  { id:'cd-03', cat:'CodeDeploy', q:'¿Puede CodeDeploy hacer rollback automático?', a:'Sí — si el deployment falla o una alarma de CloudWatch se dispara durante el deployment.' },
+  { id:'cd-04', cat:'CodeDeploy', q:'¿Qué archivo controla CodeBuild?', a:'<code>buildspec.yml</code> — define fases: <code>install</code>, <code>pre_build</code>, <code>build</code>, <code>post_build</code>. También define las variables de entorno y los artefactos de salida.' },
+  { id:'cd-05', cat:'CodeDeploy', q:'¿Qué es CodePipeline?', a:'Orquesta el CI/CD end-to-end: Source (CodeCommit/GitHub) → Build (CodeBuild) → Test → Deploy (CodeDeploy/EB/ECS). Falla si algún stage falla.' },
+  { id:'cd-06', cat:'CodeDeploy', q:'Traffic shifting en CodeDeploy para Lambda', a:'<code>Canary</code>: X% por N minutos, luego 100%. <code>Linear</code>: X% cada N minutos. <code>AllAtOnce</code>: 100% de golpe.' },
+  { id:'cd-07', cat:'CodeDeploy', q:'¿Qué es CodeArtifact?', a:'Registry managed de paquetes npm, Maven, PyPI, etc. Actúa como proxy de repos públicos + almacén privado. Integrado con IAM.' },
+  { id:'cd-08', cat:'CodeDeploy', q:'¿Qué es CodeGuru?', a:'Servicio de ML para code reviews automáticos (Reviewer) y detección de hotspots de rendimiento en producción (Profiler).' },
+
+  // ── CLOUDFORMATION ──
+  { id:'cf-01', cat:'CloudFormation', q:'¿Qué es un Stack en CloudFormation?', a:'Colección de recursos AWS creados y gestionados como una unidad desde un template YAML/JSON.' },
+  { id:'cf-02', cat:'CloudFormation', q:'¿Qué es un Change Set en CloudFormation?', a:'Preview de los cambios que hará un update al Stack antes de aplicarlos. Muestra qué recursos se crean, modifican o borran.' },
+  { id:'cf-03', cat:'CloudFormation', q:'¿Qué pasa si un recurso falla durante Stack creation?', a:'Rollback automático — CloudFormation borra todos los recursos creados hasta ese punto. El Stack queda en estado <code>ROLLBACK_COMPLETE</code>.' },
+  { id:'cf-04', cat:'CloudFormation', q:'¿Qué son los Outputs en CloudFormation?', a:'Valores exportados del Stack (ej: ARN de una Lambda) que otros Stacks pueden importar con <code>!ImportValue</code>.' },
+  { id:'cf-05', cat:'CloudFormation', q:'¿Qué es un Nested Stack?', a:'Stack referenciado dentro de otro Stack usando el resource type <code>AWS::CloudFormation::Stack</code>. Permite reutilizar templates.' },
+  { id:'cf-06', cat:'CloudFormation', q:'¿Qué es cfn-init y cfn-signal?', a:'<code>cfn-init</code>: configura la instancia EC2 al arrancar (instala paquetes, crea archivos). <code>cfn-signal</code>: le dice a CloudFormation que la instancia terminó de configurarse exitosamente.' },
+
+  // ── COGNITO ──
+  { id:'cog-01', cat:'Cognito', q:'Cognito User Pools vs Identity Pools', a:'<code>User Pools</code>: autenticación — login/signup, devuelve JWT. <code>Identity Pools</code>: autorización — intercambia tokens por credenciales AWS temporales para acceder a servicios.' },
+  { id:'cog-02', cat:'Cognito', q:'¿Qué tokens devuelve Cognito User Pools al autenticarse?', a:'3 tokens JWT: <code>ID Token</code> (info del usuario), <code>Access Token</code> (permisos de la app), <code>Refresh Token</code> (para renovar los anteriores).' },
+  { id:'cog-03', cat:'Cognito', q:'¿Para qué se usa Cognito Identity Pools?', a:'Para dar acceso a servicios AWS (S3, DynamoDB, etc.) a usuarios autenticados o anónimos sin crear IAM Users. Asume un Role por usuario.' },
+  { id:'cog-04', cat:'Cognito', q:'¿Qué es la Cognito Hosted UI?', a:'UI de login/signup pre-construida que provee Cognito. No necesitás armarla vos. Soporta social login (Google, Facebook, Apple) y SAML.' },
+  { id:'cog-05', cat:'Cognito', q:'¿Cognito User Pools puede integrarse con API Gateway?', a:'Sí — directamente como Authorizer. API Gateway valida el JWT del User Pool sin necesidad de una Lambda Authorizer.' },
+
+  // ── KMS/SECRETS ──
+  { id:'kms-01', cat:'KMS/Secrets', q:'¿Qué tipos de CMK (Customer Master Keys) hay en KMS?', a:'<code>AWS Managed</code>: gratis, rotación automática cada año. <code>Customer Managed</code>: pagás, controlás rotación y políticas. <code>Customer Provided</code> (CloudHSM): vos manejás el hardware.' },
+  { id:'kms-02', cat:'KMS/Secrets', q:'¿Qué es envelope encryption?', a:'Encriptás tus datos con una Data Key. Luego encriptás esa Data Key con la CMK de KMS. KMS nunca ve tus datos — solo encripta/desencripta la Data Key.' },
+  { id:'kms-03', cat:'KMS/Secrets', q:'¿Qué pasa si llamás KMS demasiado seguido?', a:'Throttling — KMS tiene límites de RPS (5,500 a 30,000 según región). Solución: usar <code>GenerateDataKeyWithoutPlaintext</code> + cache de la Data Key.' },
+  { id:'kms-04', cat:'KMS/Secrets', q:'Secrets Manager vs SSM Parameter Store', a:'<code>Secrets Manager</code>: rotación automática nativa, integrado con RDS/Redshift, más caro. <code>Parameter Store</code>: más barato, jerarquía de parámetros, sin rotación automática nativa.' },
+  { id:'kms-05', cat:'KMS/Secrets', q:'¿Qué es SSM Parameter Store SecureString?', a:'Parámetro encriptado con KMS. Para guardar passwords, API keys, connection strings. Se puede referenciar directamente desde ECS Task Definitions o Lambda.' },
+  { id:'kms-06', cat:'KMS/Secrets', q:'¿Cómo rota Secrets Manager los secretos?', a:'Invoca una Lambda que genera el nuevo secreto, lo actualiza en el servicio (ej: RDS) y en Secrets Manager. El intervalo es configurable (ej: cada 30 días).' },
+  { id:'kms-07', cat:'KMS/Secrets', q:'¿KMS puede encriptar datos de más de 4KB?', a:'No directamente. <code>Encrypt</code> solo acepta hasta 4KB. Para más: usar <code>GenerateDataKey</code> → encriptar localmente con la Data Key.' },
+
+  // ── RDS/CACHE ──
+  { id:'rds-01', cat:'RDS', q:'¿Qué es una RDS Read Replica?', a:'Copia asincrónica de solo lectura. Para escalar reads. Las escrituras van al master. Puede promoverse a master si es necesario. Puede estar en otra región.' },
+  { id:'rds-02', cat:'RDS', q:'¿Read Replica da Alta Disponibilidad?', a:'No. Es para escalabilidad de lectura. Para HA usás <code>Multi-AZ</code>: standby síncrono en otra AZ con failover automático.' },
+  { id:'rds-03', cat:'RDS', q:'RDS Multi-AZ: ¿qué garantiza?', a:'Standby síncrono en otra AZ. Failover automático si falla el master (misma connection string, ~1-2 min). No sirve para reads — el standby no es accesible.' },
+  { id:'rds-04', cat:'RDS', q:'Diferencia clave entre Aurora y RDS', a:'Aurora: storage distribuido en 6 copias en 3 AZs, hasta 15 Read Replicas, failover en 30s, 5x performance MySQL. Más performante y disponible, más caro.' },
+  { id:'rds-05', cat:'RDS', q:'Redis vs Memcached en ElastiCache', a:'<code>Redis</code>: persistencia, pub/sub, sorted sets, Multi-AZ, snapshots. <code>Memcached</code>: puro cache, multi-thread, más simple, sin persistencia.' },
+  { id:'rds-06', cat:'RDS', q:'¿Para qué sirve RDS Proxy?', a:'Pool de conexiones managed entre la app y RDS. Reduce el número de conexiones directas. Ideal para Lambda que abre muchas conexiones. Failover más rápido.' },
+  { id:'rds-07', cat:'RDS', q:'Lazy Loading vs Write Through en ElastiCache', a:'<code>Lazy Loading</code>: lee de cache, si miss → lee de DB → guarda en cache. Puede tener datos stale. <code>Write Through</code>: escribe en cache y DB simultáneamente. Siempre actualizado.' },
+  { id:'rds-08', cat:'RDS', q:'¿Qué es Aurora Serverless?', a:'Aurora que escala automáticamente según demanda, incluso a cero. Paga por ACU (Aurora Capacity Units). Ideal para workloads variables o intermitentes.' },
+
+  // ── VPC ──
+  { id:'vpc-01', cat:'VPC', q:'Security Group vs NACL: diferencias clave', a:'<code>Security Group</code>: nivel instancia, stateful, solo Allow. <code>NACL</code>: nivel subnet, stateless (inbound Y outbound independientes), Allow + Deny. NACLs se evalúan por número de regla.' },
+  { id:'vpc-02', cat:'VPC', q:'¿Qué es un VPC Endpoint?', a:'Conexión privada entre tu VPC y un servicio AWS sin pasar por internet ni NAT Gateway. Más seguro y más barato.' },
+  { id:'vpc-03', cat:'VPC', q:'Tipos de VPC Endpoint', a:'<code>Interface Endpoint</code>: crea una ENI en tu subnet, costo por hora — para la mayoría de servicios. <code>Gateway Endpoint</code>: sin ENI, gratis — solo para S3 y DynamoDB.' },
+  { id:'vpc-04', cat:'VPC', q:'¿Qué es un NAT Gateway?', a:'Permite que instancias en subnets privadas salgan a internet sin tener IP pública. Managed por AWS. Se crea en subnet pública.' },
+
+  // ── Route 53 ──
+  { id:'r53-01', cat:'Route 53', q:'Tipos de routing policies en Route 53', a:'Simple, Weighted (% de tráfico), Latency (región más rápida), Failover (activo/pasivo), Geolocation (país/continente), Geoproximity (distancia + bias), Multi-Value (varios IPs con health checks).' },
+  { id:'r53-02', cat:'Route 53', q:'¿Diferencia entre CNAME y Alias en Route 53?', a:'<code>CNAME</code>: apunta a otro hostname, NO funciona en el apex de zona (ej: example.com). <code>Alias</code>: extensión AWS, funciona en apex, gratuito, apunta a recursos AWS (ELB, CloudFront, S3, etc.).' },
+  { id:'r53-03', cat:'Route 53', q:'¿Qué es un Health Check en Route 53?', a:'Monitorea endpoints (HTTP/HTTPS/TCP). Si falla, Route 53 lo excluye del routing. Necesario para Failover routing. Pueden monitorear otros Health Checks (calculated health checks) o alarmas de CloudWatch.' },
+  { id:'r53-04', cat:'Route 53', q:'Failover routing en Route 53: ¿cómo funciona?', a:'Hay un registro <code>Primary</code> y uno <code>Secondary</code>. Si el Health Check del Primary falla, Route 53 responde con el Secondary automáticamente. Útil para Disaster Recovery.' },
+  { id:'r53-05', cat:'Route 53', q:'TTL en Route 53: ¿qué impacto tiene?', a:'TTL alto (ej: 24h): menos queries → más barato, pero cambios tardan en propagarse. TTL bajo (ej: 60s): propagación rápida, más costo. Buena práctica: bajarlo antes de migrar un registro.' },
+  { id:'r53-06', cat:'Route 53', q:'¿Puede Route 53 hacer health check a un recurso privado (dentro de VPC)?', a:'No directamente — los Health Checks son públicos. Para recursos privados, creás un CloudWatch Alarm y asociás el Health Check al estado de ese Alarm.' },
+
+  // ── CloudFront ──
+  { id:'cft-01', cat:'CloudFront', q:'¿Qué es CloudFront y para qué sirve?', a:'CDN de AWS. Cachea contenido en ~450 Edge Locations globales. Reduce latencia al servir desde el Edge más cercano al usuario. Incluye AWS Shield Standard (DDoS) sin costo extra.' },
+  { id:'cft-02', cat:'CloudFront', q:'Origins soportados en CloudFront', a:'S3 Bucket (con OAC para acceso privado), ALB, EC2, o cualquier servidor HTTP custom. El patrón más común en el examen: S3 + OAC para contenido estático privado.' },
+  { id:'cft-03', cat:'CloudFront', q:'¿Qué es OAC (Origin Access Control) en CloudFront?', a:'Mecanismo para que CloudFront acceda a un S3 bucket privado sin exponer el bucket al público. El bucket bloquea acceso directo — solo CloudFront puede leer. Reemplaza al antiguo OAI.' },
+  { id:'cft-04', cat:'CloudFront', q:'Signed URL vs Signed Cookie en CloudFront', a:'<code>Signed URL</code>: acceso a 1 archivo específico. <code>Signed Cookie</code>: acceso a múltiples archivos con una credencial. Ambos tienen expiración y se generan con clave privada. Útiles para contenido premium.' },
+  { id:'cft-05', cat:'CloudFront', q:'CloudFront vs S3 Cross-Region Replication', a:'<code>CloudFront</code>: caché global con TTL, ideal para contenido estático/dinámico de baja latencia mundial. <code>S3 CRR</code>: réplica de objetos en tiempo real a otra región, sin caché, para alta disponibilidad regional.' },
+  { id:'cft-06', cat:'CloudFront', q:'¿Qué es un Cache Behavior en CloudFront?', a:'Regla que define cómo cachear según el path pattern (ej: /api/* vs /images/*). Cada behavior puede tener diferente origen, TTL, headers y cookies. El <code>*</code> default behavior siempre existe y aplica a lo que no matchea.' },
+
+  // ── ElastiCache ──
+  { id:'ecache-01', cat:'ElastiCache', q:'Redis vs Memcached: ¿cuándo usar cada uno?', a:'<code>Redis</code>: persistencia, replicación Multi-AZ, failover automático, estructuras complejas (sorted sets, pub/sub). <code>Memcached</code>: multi-thread, puro caché sin persistencia, escalado horizontal simple. En la práctica: Redis casi siempre.' },
+  { id:'ecache-02', cat:'ElastiCache', q:'¿Qué es Lazy Loading (cache-aside)?', a:'El app consulta el caché. Si hay <em>miss</em>, lee de la DB y escribe en caché. Ventaja: solo cachea lo que se usa. Desventaja: primer acceso siempre lento (3 operaciones), datos pueden quedar stale.' },
+  { id:'ecache-03', cat:'ElastiCache', q:'¿Qué es Write Through en ElastiCache?', a:'Cada escritura en la DB también actualiza el caché. Datos siempre frescos. Desventaja: escrituras más lentas (doble operación) y cachea datos que quizás nunca se leen. Se suele combinar con Lazy Loading.' },
+  { id:'ecache-04', cat:'ElastiCache', q:'¿Para qué sirven los Redis Sorted Sets?', a:'Estructura que guarda elementos con un score numérico, ordenados automáticamente. Caso de uso clásico del examen: leaderboards de juegos — obtener el top 10 de jugadores en tiempo real es O(log N).' },
+  { id:'ecache-05', cat:'ElastiCache', q:'Session Store con ElastiCache: ¿por qué?', a:'En apps con múltiples EC2 detrás de un ALB, la sesión no puede vivir en memoria local de cada instancia. ElastiCache centraliza la sesión — cualquier instancia la puede leer. Patrón muy frecuente en el examen.' },
+
+  // ── DynamoDB Cálculos ──
+  { id:'ddb-calc-01', cat:'DynamoDB', q:'Fórmula para calcular RCU (Strongly Consistent Read)', a:'<code>RCU = ⌈tamaño del ítem / 4 KB⌉ × reads por segundo</code>. Ejemplo: 10 reads/seg de ítems de 6KB → ⌈6/4⌉ × 10 = 2 × 10 = 20 RCU.' },
+  { id:'ddb-calc-02', cat:'DynamoDB', q:'Fórmula para calcular RCU (Eventually Consistent Read)', a:'<code>RCU = ⌈tamaño / 4 KB⌉ × reads/seg / 2</code>. La mitad del costo. Ejemplo: 10 reads/seg de 6KB → ⌈6/4⌉ × 10 / 2 = 2 × 10 / 2 = 10 RCU.' },
+  { id:'ddb-calc-03', cat:'DynamoDB', q:'Fórmula para calcular WCU', a:'<code>WCU = ⌈tamaño del ítem / 1 KB⌉ × writes por segundo</code>. Ejemplo: 10 writes/seg de ítems de 2.5KB → ⌈2.5/1⌉ × 10 = 3 × 10 = 30 WCU.' },
+  { id:'ddb-calc-04', cat:'DynamoDB', q:'Ejercicio: 16 strongly consistent reads/seg de ítems de 12KB. ¿Cuántos RCU?', a:'48 RCU. Paso a paso: ⌈12 / 4⌉ = 3 unidades por ítem. 3 × 16 reads = 48 RCU.' },
+  { id:'ddb-calc-05', cat:'DynamoDB', q:'Ejercicio: 16 eventually consistent reads/seg de ítems de 12KB. ¿Cuántos RCU?', a:'24 RCU. ⌈12/4⌉ = 3 unidades. 3 × 16 / 2 = 24 RCU. La mitad que en strongly consistent.' },
+  { id:'ddb-calc-06', cat:'DynamoDB', q:'¿Cómo afectan las Transactional Writes/Reads al costo en DynamoDB?', a:'Cuestan el doble. <code>Transactional Write</code>: 2 WCU por KB. <code>Transactional Read</code>: 2 RCU por 4KB. DynamoDB Transactions garantizan ACID — ese es el precio del 2×.' },
+  { id:'ddb-calc-07', cat:'DynamoDB', q:'Regla mnemotécnica RCU vs WCU', a:'<code>WCU</code>: unidad = 1KB (escribir cuesta más, unidad chica). <code>RCU</code>: unidad = 4KB (leer es más barato, unidad grande). Eventually Consistent = mitad de precio. Siempre redondear hacia arriba: ⌈⌉.' },
+
+  // ── Otros Servicios ──
+  { id:'otros-01', cat:'Otros Servicios', q:'¿Qué es AWS Amplify?', a:'Framework full-stack para desplegar apps web y móviles rápidamente. Orquesta Cognito (auth), AppSync (GraphQL), S3 (storage) y Lambda (backend). Clave del examen: "deploy de SPA con auth" → Amplify.' },
+  { id:'otros-02', cat:'Otros Servicios', q:'¿Qué es AWS Step Functions?', a:'Orquestación de workflows serverless con máquinas de estado visuales. Coordina Lambdas con lógica de retry, parallel, wait y error handling. No programás el flujo — lo definís en JSON/YAML (ASL).' },
+  { id:'otros-03', cat:'Otros Servicios', q:'¿Qué es AWS AppSync?', a:'API GraphQL managed. Clientes hacen queries/mutations a un esquema; AppSync resuelve contra DynamoDB, Lambda, HTTP o RDS. Soporta real-time subscriptions (WebSocket). Regla: si el examen dice "GraphQL" → AppSync.' },
+  { id:'otros-04', cat:'Otros Servicios', q:'¿Qué es SSM Parameter Store?', a:'Almacén jerárquico de configuración y secretos (ej: /app/prod/db-password). Gratis para tier Standard (4KB). Integra con IAM y KMS. Diferencia vs Secrets Manager: no tiene rotación automática de contraseñas.' },
+  { id:'otros-05', cat:'Otros Servicios', q:'¿Qué es AWS SES (Simple Email Service)?', a:'Servicio de envío de emails transaccionales y marketing a escala. Casos en el examen: confirmaciones, notificaciones, newsletters. Importante: no confundir con SNS (push/suscripción) — SES es específicamente email.' },
+  { id:'otros-06', cat:'Otros Servicios', q:'¿Qué es AWS CodeGuru?', a:'Revisión de código con ML. <code>CodeGuru Reviewer</code>: analiza PRs y detecta bugs/vulnerabilidades. <code>CodeGuru Profiler</code>: analiza performance en producción para encontrar cuellos de botella. No requiere cambios en el código.' },
+  { id:'otros-07', cat:'Otros Servicios', q:'¿Qué es AWS SAM (Serverless Application Model)?', a:'Framework sobre CloudFormation para definir apps serverless con menos boilerplate. Con <code>sam build</code> y <code>sam deploy</code> generás y desplegás stacks. El template usa <code>Transform: AWS::Serverless-2016-10-31</code>.' },
+  { id:'otros-08', cat:'Otros Servicios', q:'¿Qué es AWS CDK (Cloud Development Kit)?', a:'IaC con lenguajes reales (Python, TypeScript, Java). El código se "sintetiza" en un CloudFormation template. Ventaja sobre SAM/CF raw: reutilización con loops, tests unitarios, abstracciones de alto nivel (Constructs).' },
+  { id:'otros-09', cat:'Otros Servicios', q:'¿Qué es AWS AppConfig?', a:'Parte de SSM. Gestiona configuración dinámica de apps con deployments controlados: validación, rollback automático si la app reporta errores, y rollout gradual. Patrón: feature flags sin reiniciar la app.' },
+  { id:'otros-10', cat:'Otros Servicios', q:'¿Qué es Amazon Pinpoint?', a:'Comunicaciones multicanal con usuarios: email, SMS, push notifications, voz, in-app messaging. Para campañas de marketing y notificaciones transaccionales a escala. Clave: "multichannel marketing" → Pinpoint.' },
+  { id:'otros-11', cat:'Otros Servicios', q:'X-Ray vs CloudWatch vs CloudTrail — ¿cuál es cuál?', a:'<code>X-Ray</code>: trazas distribuidas (performance, flujo de requests entre servicios). <code>CloudWatch</code>: métricas, logs y alarmas (salud operacional). <code>CloudTrail</code>: auditoría de API calls (quién hizo qué y cuándo).' },
+  { id:'otros-12', cat:'Otros Servicios', q:'¿Qué es Amazon OpenSearch Service?', a:'Búsqueda y análisis sobre datos no estructurados (logs, texto). Sucesor de ElasticSearch. Casos en el examen: "full-text search" o "buscar en logs de CloudWatch" → OpenSearch. Complementa DynamoDB para búsquedas complejas.' },
+
+  // ── ELB / ASG ──
+  { id:'elb-01', cat:'ELB/ASG', q:'Trigger words → tipo de Load Balancer correcto', a:'<code>"Static IP / whitelist de firewall"</code> → NLB (Elastic IP por AZ). <code>"HTTP routing / microservices / path-based"</code> → ALB. <code>"Network inspection / GENEVE / port 6081"</code> → GWLB. Nunca Classic LB en el examen moderno.' },
+  { id:'elb-02', cat:'ELB/ASG', q:'Multiple SSL certs en un listener → ¿qué feature usar?', a:'<code>SNI (Server Name Indication)</code> — disponible en ALB y NLB. El LB elige el cert correcto según el hostname del cliente. Classic LB NO soporta SNI.' },
+  { id:'elb-03', cat:'ELB/ASG', q:'EC2 detrás de un ALB: ¿qué IP ve la instancia? ¿Cómo obtengo la IP real del cliente?', a:'EC2 ve la IP privada del ALB, no la del cliente. La IP real del cliente viene en el header HTTP <code>X-Forwarded-For</code>. También: <code>X-Forwarded-Port</code> y <code>X-Forwarded-Proto</code>.' },
+  { id:'elb-04', cat:'ELB/ASG', q:'Cross-Zone Load Balancing: ¿cuál tiene ON por defecto y cuál cobra por ello?', a:'<code>ALB</code>: ON por defecto, gratis. <code>NLB y GWLB</code>: OFF por defecto; si se activa, cobra por tráfico entre AZs. Trampa del examen: no asumir que todos tienen el mismo default.' },
+  { id:'elb-05', cat:'ELB/ASG', q:'Sticky sessions en ALB vs NLB: ¿cómo funciona cada uno?', a:'<code>ALB</code>: usa cookies (application-based o duration-based) para pegar al cliente a la misma instancia. <code>NLB</code>: usa source IP hash — no hay cookie, la IP del cliente determina el destino.' },
+  { id:'elb-06', cat:'ELB/ASG', q:'Connection Draining: ¿qué es y cuál es el default?', a:'Tiempo que el LB espera para terminar in-flight requests antes de sacar una instancia (deregistering). Default: <code>300 segundos</code>. Rango: 1–3,600 s. Valor 0 = deshabilitado (instancia se saca inmediatamente).' },
+  { id:'elb-07', cat:'ELB/ASG', q:'¿Cómo hace self-healing un ASG?', a:'El ASG monitorea la salud de las instancias. Si detecta una unhealthy (según EC2 health check o ELB health check), la <strong>termina y lanza una nueva</strong> automáticamente. No requiere intervención humana.' },
+  { id:'elb-08', cat:'ELB/ASG', q:'"Predictive Scaling" en ASG: ¿qué usa para predecir?', a:'Un modelo de ML entrenado con datos históricos de CloudWatch. Genera un forecast para las próximas 48h y provisiona capacidad antes de que el pico llegue. Ideal para cargas cíclicas predecibles (ej: rush de horario laboral).' },
+
+  // ── Beanstalk (adicionales) ──
+  { id:'eb-07', cat:'Beanstalk', q:'Deployment modes de EB: ¿cuál es el único con downtime? ¿Cuál tiene rollback más rápido?', a:'<code>All at Once</code>: único con downtime total. <code>Immutable</code>: rollback más rápido (ASG temporal; si falla, terminás las nuevas instancias). Rolling = sin extra cost. Rolling+additional batches = siempre at capacity. Traffic Splitting = canary.' },
+  { id:'eb-08', cat:'Beanstalk', q:'Blue/Green en EB vs Traffic Splitting: ¿cuál cambia el DNS? ¿Cuál usa el ALB?', a:'<code>Blue/Green</code>: requiere cambio de DNS (Route 53 weighted) — manual, sin rollback automático. <code>Traffic Splitting</code>: usa el ALB para dividir tráfico — rollback automático si hay errores.' },
+  { id:'eb-09', cat:'Beanstalk', q:'¿Qué servicio usa Elastic Beanstalk "bajo el capó"?', a:'<code>CloudFormation</code>. Cada entorno de Beanstalk es un CloudFormation Stack. Tip: si ves "DELETE_FAILED" al terminar un env de EB con RDS, es porque la deletion protection de CF funcionó — borrá el stack de CF manualmente.' },
+  { id:'eb-10', cat:'Beanstalk', q:'¿Qué pasa cuando llegás al límite de 1,000 versiones en Beanstalk?', a:'No podés crear nuevas versiones hasta borrar las viejas. Solución: configurar una <code>Lifecycle Policy</code> (por count o por tiempo). Importante: la Lifecycle Policy <strong>nunca borra una versión actualmente deployada</strong>.' },
+  { id:'eb-11', cat:'Beanstalk', q:'Querés cambiar el tipo de Load Balancer en un env de Beanstalk existente. ¿Cómo?', a:'No podés modificar el LB type in-place. Debés crear un <strong>nuevo environment</strong> con el LB deseado y hacer swap de URLs. No se puede usar clone porque el clone hereda el mismo tipo de LB.' },
+
+  // ── CloudFormation (adicionales) ──
+  { id:'cf-07', cat:'CloudFormation', q:'¿Cuál es la única sección obligatoria en un template de CloudFormation?', a:'<code>Resources</code>. Todas las demás (Parameters, Mappings, Outputs, Conditions, etc.) son opcionales. Sin Resources, el template es inválido.' },
+  { id:'cf-08', cat:'CloudFormation', q:'Un servicio de AWS no está soportado por CloudFormation. ¿Qué usás?', a:'<code>Custom Resources</code> — invocás un Lambda (o SNS) que hace la operación. El Lambda recibe Create/Update/Delete events y reporta éxito/fallo. ServiceToken = Lambda ARN o SNS ARN (mismo region que el stack).' },
+  { id:'cf-09', cat:'CloudFormation', q:'<code>NoEcho: true</code> en CloudFormation: ¿para qué sirve?', a:'Oculta el valor de un Parameter en los logs y la consola — el valor se muestra como <code>****</code>. Uso típico: passwords, API keys, secrets. El valor sigue funcionando internamente pero nunca se expone en output.' },
+  { id:'cf-10', cat:'CloudFormation', q:'¿Qué diferencia hay entre <code>!Ref</code> y <code>!GetAtt</code> en CloudFormation?', a:'<code>!Ref recurso</code>: retorna el ID físico (ej: bucket name, SG ID). <code>!Ref parámetro</code>: retorna el valor del parámetro. <code>!GetAtt</code>: retorna un atributo específico (ej: ARN, DNS, AZ). Verificar en "Return values" de la doc.' },
+  { id:'cf-11', cat:'CloudFormation', q:'<code>InsufficientCapabilitiesException</code>: ¿qué significa y cómo se resuelve?', a:'El template crea recursos IAM y no declaraste las capabilities necesarias. Soluciones: <code>CAPABILITY_IAM</code> (roles sin nombre explícito), <code>CAPABILITY_NAMED_IAM</code> (roles con nombre), <code>CAPABILITY_AUTO_EXPAND</code> (macros/transforms como SAM).' },
+  { id:'cf-12', cat:'CloudFormation', q:'<code>DeletionPolicy: Snapshot</code>: ¿para qué recursos sirve?', a:'Solo para recursos stateful: <code>EBS, RDS, ElastiCache, Redshift, Neptune, DocumentDB</code>. Toma un snapshot antes de borrar. S3 no soporta Snapshot — con Delete fallará si el bucket no está vacío.' },
+  { id:'cf-13', cat:'CloudFormation', q:'Stack Policy vs Termination Protection: ¿cuál hace qué?', a:'<code>Stack Policy</code>: protege recursos individuales dentro del stack de ser modificados accidentalmente durante un update. <code>Termination Protection</code>: evita que el stack entero sea eliminado. Son independientes y se pueden combinar.' },
+  { id:'cf-14', cat:'CloudFormation', q:'¿Qué es CloudFormation StackSets?', a:'Despliega el mismo stack en múltiples cuentas y regiones con un solo comando desde una cuenta administradora. Usa roles IAM para asumir permisos en cuentas destino. Ideal para baseline de seguridad o config organizacional.' },
+
+  // ── Lambda (adicionales) ──
+  { id:'lmb-19', cat:'Lambda', q:'Lambda está lenta en operaciones CPU-intensivas. ¿Cuál es la solución correcta?', a:'Aumentar la <code>RAM</code>. En Lambda, más RAM = más vCPU asignado proporcionalmente. No hay forma de aumentar CPU directamente. Doblar RAM puede reducir el tiempo a la mitad y el costo total puede ser igual o menor.' },
+  { id:'lmb-20', cat:'Lambda', q:'Una tarea necesita más de 15 minutos. ¿Se puede usar Lambda?', a:'No. El timeout máximo de Lambda es 15 minutos. Para tareas más largas usar <code>Fargate, ECS, EC2</code> o Step Functions con tareas de larga duración. Trampa del examen: nunca elegir Lambda si el tiempo excede 15 min.' },
+  { id:'lmb-21', cat:'Lambda', q:'¿Cuándo usar EFS con Lambda? ¿Qué restricción tiene?', a:'Cuando múltiples Lambdas necesitan un <code>sistema de archivos compartido y mutable</code> (ej: modelos ML). Restricción: Lambda debe estar dentro de una <code>VPC</code> (porque EFS es un recurso VPC). /tmp no se comparte entre instancias.' },
+  { id:'lmb-22', cat:'Lambda', q:'Una Lambda devuelve errores 429 y 502 de forma intermitente. ¿Causa probable?', a:'<strong>Throttling</strong> — se alcanzó el límite de concurrencia. 429 = "Too Many Requests". 502 = "Bad Gateway" cuando API GW recibe el throttle de Lambda. Solución: revisar Reserved/Provisioned Concurrency o pedir aumento de cuota.' },
+  { id:'lmb-23', cat:'Lambda', q:'SQS + Lambda: ¿dónde se configura la DLQ para mensajes fallidos?', a:'En la <code>queue de SQS</code>, no en Lambda. Si configurás DLQ en la Lambda (invocación asíncrona), no aplica para Event Source Mapping con SQS. El mensaje fallido se queda en SQS hasta agotar los intentos, y luego SQS lo manda a su propia DLQ.' },
+  { id:'lmb-24', cat:'Lambda', q:'¿Qué es Lambda Function URL y cuándo usarla?', a:'Un endpoint HTTPS dedicado para una Lambda, sin necesitar API Gateway. Ideal cuando solo necesitás exponer una Lambda por HTTP de forma simple. Soporta IAM auth o NONE (público). Trigger: "HTTPS sin API GW" → Function URL.' },
+  { id:'lmb-25', cat:'Lambda', q:'Lambda Function URL con IAM auth: same-account vs cross-account', a:'<code>Same account</code>: lógica OR — alcanza con que IAM policy O resource policy permita. <code>Cross account</code>: lógica AND — ambas (IAM del caller Y resource policy de la URL) deben permitir.' },
+  { id:'lmb-26', cat:'Lambda', q:'¿Puede un Alias de Lambda apuntar a otro Alias?', a:'<strong>No</strong>. Un Alias solo puede apuntar a Versions (números concretos o $LATEST). No puede apuntar a otro Alias. Trampa del examen — cualquier opción con "alias apuntando a alias" es incorrecta.' },
+
+  // ── DynamoDB (adicionales) ──
+  { id:'ddb-24', cat:'DynamoDB', q:'<code>FilterExpression</code> en DynamoDB: ¿reduce las RCU consumidas?', a:'<strong>No</strong>. Las lecturas ocurren primero (y consumen RCU completas), luego se aplica el filtro en el resultado. El filtro solo reduce los datos retornados al cliente, no el costo. Para reducir RCU, usar un índice o ajustar la Query.' },
+  { id:'ddb-25', cat:'DynamoDB', q:'<code>PutItem</code> vs <code>UpdateItem</code>: diferencia clave', a:'<code>PutItem</code>: reemplaza el ítem completo (overwrite silencioso si existe). <code>UpdateItem</code>: modifica solo los atributos especificados, el resto queda intacto. Para upserts parciales, siempre usar UpdateItem.' },
+  { id:'ddb-26', cat:'DynamoDB', q:'<code>BatchWriteItem</code> no soporta una operación. ¿Cuál?', a:'<code>UpdateItem</code>. BatchWriteItem solo soporta PutItem y DeleteItem en batch. Si necesitás actualizar ítems en batch, usá UpdateItem individualmente o TransactWriteItems (hasta 100 ítems transaccionales).' },
+  { id:'ddb-27', cat:'DynamoDB', q:'Necesitás borrar todos los ítems de una tabla DynamoDB gigante. ¿Cuál es el approach correcto?', a:'<code>DeleteTable + recrear</code> la tabla — instantáneo y gratuito. Hacer Scan + DeleteItem en loop consumiría RCU+WCU por cada ítem y tardaría horas. En el examen, "Scan and delete" siempre es la incorrecta para un wipe masivo.' },
+  { id:'ddb-28', cat:'DynamoDB', q:'Un GSI en DynamoDB tiene throttling. ¿Afecta a la tabla principal?', a:'<strong>Sí</strong>. Un GSI throttled también throttlea la tabla principal, aunque la tabla tenga WCU de sobra. El GSI tiene su propio capacity separado — si se satura, las escrituras en la tabla entera se bloquean.' },
+  { id:'ddb-29', cat:'DynamoDB', q:'¿Qué se necesita para que DynamoDB Global Tables funcione?', a:'<code>DynamoDB Streams debe estar habilitado</code>. Global Tables usa Streams para replicar cambios entre regiones en multi-master. Si Streams está deshabilitado, Global Tables falla al configurarse.' },
+  { id:'ddb-30', cat:'DynamoDB', q:'DAX vs ElastiCache: ¿cuándo usar cada uno junto a DynamoDB?', a:'<code>DAX</code>: cachea ítems crudos de DynamoDB — para lecturas repetitivas del mismo ítem. <code>ElastiCache</code>: cachea resultados computados (agregaciones, joins). "aggregate results" → ElastiCache. "same item read many times" → DAX.' },
+  { id:'ddb-31', cat:'DynamoDB', q:'<code>LeadingKeys</code> en DynamoDB IAM Condition: ¿qué logra?', a:'<strong>Row-level security</strong> — el usuario solo accede a ítems donde el PK coincide con su identidad. <code>Attributes</code> condition = column-level security (solo ciertos atributos). Ambos se combinan para granularidad fina de acceso.' },
+
+  // ── API Gateway (adicionales) ──
+  { id:'apig-09', cat:'API Gateway', q:'Hiciste cambios en API Gateway pero el comportamiento no cambió. ¿Por qué?', a:'Porque <strong>olvidaste deployar a un Stage</strong>. Los cambios en API GW no son live hasta hacer un Deploy. Es la causa #1 de "mis cambios no tienen efecto". Solución: Actions → Deploy API → seleccionar stage.' },
+  { id:'apig-10', cat:'API Gateway', q:'Stage Variable dentro de un ARN de Lambda: ¿cuál es la sintaxis correcta?', a:'Dentro de un ARN se usan llaves: <code>${stageVariables.varName}</code>. Fuera de un ARN (otros campos): <code>$stageVariables.varName</code>. Trampa del examen: la diferencia entre las dos sintaxis.' },
+  { id:'apig-11', cat:'API Gateway', q:'Cliente habla JSON, backend es SOAP (XML). ¿Qué integración usar en API GW?', a:'<code>HTTP non-proxy</code> con <code>Mapping Templates (VTL)</code>. El template convierte JSON→XML (request) y XML→JSON (response). No se puede usar proxy porque bloquea las transformaciones. El cliente nunca ve el SOAP.' },
+  { id:'apig-12', cat:'API Gateway', q:'Certificado TLS para un API Gateway Edge-Optimized: ¿en qué región debe estar el cert ACM?', a:'Siempre en <code>us-east-1</code> — porque Edge-Optimized usa CloudFront, y CloudFront requiere certs en us-east-1. Regional y Private APIs: el cert puede estar en la misma región que el API.' },
+  { id:'apig-13', cat:'API Gateway', q:'¿Cómo invalida un cliente el caché de API Gateway?', a:'Enviando el header <code>Cache-Control: max-age=0</code>. Requiere permiso IAM <code>execute-api:InvalidateCache</code>. Sin ese permiso, la solicitud puede ser rechazada o ignorada según la configuración del stage.' },
+  { id:'apig-14', cat:'API Gateway', q:'¿Cuál es el límite de throttling a nivel de cuenta en API GW y qué error genera?', a:'<code>10,000 req/s</code> por región (soft limit, compartido entre todos los APIs). Al superarlo: error <code>429 Too Many Requests</code>. Solución cliente: exponential backoff. Solución server: usage plans por API/stage o pedir aumento de cuota.' },
+  { id:'apig-15', cat:'API Gateway', q:'¿Qué tipo de API de API Gateway es el más barato?', a:'<code>HTTP API</code> — hasta 70% más barato que REST API. Soporta Lambda, HTTP backends y Cognito/JWT auth. No tiene: mapping templates, usage plans, resource policies, API keys. Trigger: "cheapest" o "simplest" → HTTP API.' },
+  { id:'apig-16', cat:'API Gateway', q:'WebSocket API en API GW: ¿cómo el servidor envía datos al cliente (server push)?', a:'El servidor hace un <code>POST a la URL de gestión</code>: <code>wss-endpoint/@connections/{connectionId}</code>. Si ninguna route coincide con la acción del cliente, se usa la route <code>$default</code>.' },
+
+  // ── SQS/SNS (adicionales) ──
+  { id:'sqs-11', cat:'SQS/SNS', q:'Un mensaje en SQS pesa 5 MiB. SQS tiene límite de 256 KB. ¿Cuál es la solución?', a:'<code>SQS Extended Client Library + S3</code>. El productor sube el payload a S3 y pone en SQS solo un puntero al objeto S3. El consumidor usa el Extended Client para descargar el mensaje real de S3.' },
+  { id:'sqs-12', cat:'SQS/SNS', q:'Un mensaje de SNS no fue entregado a ningún subscriber. ¿Está perdido?', a:'<strong>Sí</strong>. SNS no persiste mensajes — si no hay subscribers disponibles, el mensaje se pierde. Para durabilidad usar SNS → SQS (fan-out pattern). Trampa: no confundir con SQS que sí retiene mensajes.' },
+  { id:'sqs-13', cat:'SQS/SNS', q:'¿Qué servicio transforma streams en tiempo real? ¿Puede leer de Kinesis Firehose?', a:'<code>Apache Flink (Kinesis Data Analytics)</code> para transformaciones en tiempo real. <strong>Trampa</strong>: Flink puede leer de Kinesis Data Streams, pero <strong>NO de Firehose</strong>. "Flink + Firehose como fuente" → siempre incorrecto.' },
+
+  // ── CloudWatch / X-Ray (adicionales) ──
+  { id:'cw-14', cat:'CloudWatch', q:'Subscription Filter vs CreateExportTask en CloudWatch Logs: ¿cuál es real-time?', a:'<code>Subscription Filter</code>: exporta en <strong>tiempo real</strong> (a Lambda, Kinesis Streams, Firehose). <code>CreateExportTask</code>: exporta a S3 con hasta <strong>12 horas de delay</strong>. Trampa del examen: "real-time log export" → Subscription Filter, no CreateExportTask.' },
+  { id:'xr-07', cat:'X-Ray', q:'¿Cómo se configura X-Ray en Fargate? ¿Se puede usar el Daemon como en EC2?', a:'En Fargate no hay acceso al host. El X-Ray Daemon debe correr como <code>sidecar container</code> en la misma Task Definition. No hay opción de instalar el Daemon en el host. Regla: "X-Ray en Fargate = sidecar ONLY".' },
+  { id:'cw-15', cat:'CloudWatch', q:'"Necesito un cron job serverless en AWS". ¿Qué servicio uso?', a:'<code>Amazon EventBridge Schedule</code> (antes CloudWatch Events). Creás una regla con expresión cron o rate que dispara un target (Lambda, ECS task, Step Functions, etc.). Es el equivalente serverless de crontab.' },
+  { id:'cw-16', cat:'CloudWatch', q:'¿Qué es AWS Distro for OpenTelemetry (ADOT)?', a:'Distribución de AWS del estándar open-source OpenTelemetry. Recopila métricas y trazas y los envía a <em>múltiples destinos</em> (CloudWatch, X-Ray, Prometheus, Grafana, etc.). Trigger: "open-source tracing" + "múltiples destinos de observabilidad" → ADOT.' },
+
+  // ── CI/CD (adicionales) ──
+  { id:'cd-09', cat:'CodeDeploy', q:'CodeCommit: ¿cómo se autentican y autorizan los usuarios?', a:'<strong>Autenticación</strong>: SSH keys o HTTPS Git credentials (desde IAM). No soporta usuario/password estándar. <strong>Autorización</strong>: IAM policies. Acceso cross-account: IAM Role + STS:AssumeRole — nunca compartir SSH keys entre cuentas.' },
+  { id:'cd-10', cat:'CodeDeploy', q:'¿Cómo pasan los artifacts entre stages de un CodePipeline?', a:'Siempre <strong>a través de S3</strong>. Cada stage escribe su output a S3 y el siguiente lo lee desde S3. Los servicios no se comunican directamente. Si CodePipeline no puede ejecutar una acción: revisar el IAM service role del pipeline.' },
+  { id:'cd-11', cat:'CodeDeploy', q:'<code>buildspec.yml</code>: ¿dónde debe estar? ¿Cómo se pasan secretos de forma segura?', a:'Debe estar en la <strong>raíz del repositorio</strong>. Para secretos: referenciarlos desde <code>SSM Parameter Store</code> o <code>Secrets Manager</code> — nunca en texto plano en el buildspec o en env vars en claro.' },
+  { id:'cd-12', cat:'CodeDeploy', q:'¿Qué pasa con el container de CodeBuild después del build?', a:'Se <strong>destruye</strong>. CodeBuild es efímero — cada build empieza desde cero en un container limpio. Solo persiste lo que se sube a S3 (artifacts, cache). Para acceder a recursos VPC (RDS, ElastiCache): configurar CodeBuild para correr dentro de la VPC.' },
+  { id:'cd-13', cat:'CodeDeploy', q:'¿Qué prerequisito es obligatorio para CodeDeploy en EC2 o On-Premises?', a:'El <code>CodeDeploy Agent</code> debe estar instalado y corriendo en cada instancia. El agente descarga el revision desde S3 (la EC2 role necesita permiso de lectura en S3). Sin el agente, el deploy falla.' },
+  { id:'cd-14', cat:'CodeDeploy', q:'ECS con CodeDeploy: ¿qué tipo de deployment strategy soporta?', a:'Solo <code>Blue/Green</code>. CodeDeploy crea una nueva task set (Green) mientras la vieja (Blue) sigue corriendo. No hay in-place para ECS. El ALB/NLB desplaza el tráfico gradualmente (Canary, Linear o AllAtOnce).' },
+  { id:'cd-15', cat:'CodeDeploy', q:'Un rollback de CodeDeploy: ¿qué hace exactamente?', a:'<strong>NO restaura</strong> el estado anterior. Hace un <em>nuevo deployment</em> de la última revisión conocida como buena. El historial se preserva. Puede dispararse automáticamente en fallo o por una CloudWatch Alarm.' },
+  { id:'cd-16', cat:'CodeDeploy', q:'CodeArtifact: cuando un dev hace <code>npm install</code>, ¿qué rol cumple?', a:'Actúa como <strong>proxy y caché</strong>. Si el paquete no está localmente, lo descarga del registro público (npm, PyPI, etc.), lo almacena y lo sirve. Las próximas instalaciones vienen del caché interno. Auth token: válido por <code>12 horas</code>.' },
+  { id:'cd-17', cat:'CodeDeploy', q:'CodeGuru Reviewer: ¿qué lenguajes soporta? ¿Qué repos puede revisar?', a:'Lenguajes: solo <code>Java y Python</code>. Repositorios: <code>GitHub, Bitbucket y CodeCommit</code>. Analiza PRs automáticamente al crearse. Nota: CodeGuru está siendo decommissioned — conocerlo a alto nivel es suficiente para el examen.' },
+
+  // ── SAM ──
+  { id:'sam-01', cat:'SAM', q:'¿SAM es independiente o está construido sobre otro servicio?', a:'SAM está construido sobre <code>CloudFormation</code>. Un template SAM se transforma a CloudFormation mediante el macro <code>Transform: \'AWS::Serverless-2016-10-31\'</code>. Esta línea es obligatoria en todo template SAM.' },
+  { id:'sam-02', cat:'SAM', q:'¿Cuál es la forma más rápida de pushear cambios de código Lambda en desarrollo con SAM?', a:'<code>sam sync --code</code> — bypasa CloudFormation completamente y actualiza el código directamente en AWS. Mucho más rápido que <code>sam deploy</code>. <code>sam sync --watch</code> detecta el tipo de cambio: solo código → --code automáticamente; config → sync normal.' },
+  { id:'sam-03', cat:'SAM', q:'SAM Policy Templates: ¿qué son?', a:'Atajos predefinidos para permisos comunes serverless. Reemplazan definiciones de IAM Role completas. Ejemplos: <code>SQSPollerPolicy</code> (Lambda lee SQS), <code>DynamoDBCrudPolicy</code> (CRUD en tabla), <code>S3ReadPolicy</code> (lectura S3). Se declaran directamente en la función SAM.' },
+  { id:'sam-04', cat:'SAM', q:'¿Qué propiedad SAM habilita el traffic shifting con CodeDeploy?', a:'<code>AutoPublishAlias</code>. Al agregarlo, SAM crea automáticamente una nueva Version con cada deploy y configura CodeDeploy para el traffic shift en el Alias especificado. Sin AutoPublishAlias, no hay traffic shifting.' },
+  { id:'sam-05', cat:'SAM', q:'SAM + CodeDeploy hooks: ¿qué hacen PreTraffic y PostTraffic?', a:'<code>PreTraffic</code>: Lambda que valida la nueva versión ANTES de que el tráfico empiece a cambiar. <code>PostTraffic</code>: Lambda que corre tests de integración DESPUÉS de que el 100% migró. Si CloudWatch Alarm dispara durante el proceso → rollback automático.' },
+  { id:'sam-06', cat:'SAM', q:'¿Cuáles son los cuatro comandos de <code>sam local</code>?', a:'<code>sam local start-lambda</code>: endpoint persistente para tests automatizados. <code>sam local invoke</code>: invocación one-shot con payload. <code>sam local start-api</code>: API GW local con hot reload. <code>sam local generate-event</code>: genera payloads de ejemplo (S3, SQS, SNS, etc.).' },
+  { id:'sam-07', cat:'SAM', q:'¿Cómo manejás múltiples environments en SAM?', a:'Con <code>samconfig.toml</code>: define parámetros de deploy por environment. Cada bloque: <code>[env.command.parameters]</code>. Al deployar: <code>sam deploy --config-env prod</code>. Funciona también para <code>sam sync</code>.' },
+
+  // ── CDK ──
+  { id:'cdk-01', cat:'CDK', q:'¿Qué genera CDK bajo el capó? ¿Qué lenguajes soporta?', a:'CDK genera <code>CloudFormation templates</code>. Lenguajes: <code>TypeScript, JavaScript, Python, Java, .NET</code>. Ventaja clave sobre CF/YAML: tipado fuerte — código con errores no compila, evitando templates rotos.' },
+  { id:'cdk-02', cat:'CDK', q:'Comandos esenciales de CDK y qué hace cada uno', a:'<code>cdk init</code>: nuevo proyecto. <code>cdk synth</code>: genera el CF template. <code>cdk bootstrap</code>: setup one-time por account/región. <code>cdk deploy</code>: despliega. <code>cdk diff</code>: muestra cambios vs deployed. <code>cdk destroy</code>: elimina el stack.' },
+  { id:'cdk-03', cat:'CDK', q:'Constructs de CDK: ¿qué son L1, L2 y L3?', a:'<code>L1 (Cfn*)</code>: 1:1 con CF, sin defaults, nombre empieza con "Cfn" (ej: CfnBucket). <code>L2</code>: abstracciones con defaults + helpers (ej: <code>grantRead()</code>). <code>L3 (Patterns)</code>: múltiples recursos pre-cableados (ej: ApplicationLoadBalancedFargateService).' },
+  { id:'cdk-04', cat:'CDK', q:'CDK vs SAM: ¿cuándo usar cada uno?', a:'<code>SAM</code>: serverless-first, deploy rápido de Lambdas, local testing. <code>CDK</code>: todos los servicios AWS, apps complejas, reutilización con código real. Se pueden combinar: <code>cdk synth</code> + <code>sam local invoke -t cdk.out/MyStack.template.json</code>.' },
+  { id:'cdk-05', cat:'CDK', q:'¿Qué es <code>cdk bootstrap</code> y cuándo es necesario?', a:'Setup one-time que crea el stack <code>CDKToolkit</code> con un S3 bucket y roles IAM para el deploy. Se ejecuta <strong>una vez por cuenta + región</strong>. Error sin bootstrap: "Policy contains a statement with one or more invalid principals".' },
+  { id:'cdk-06', cat:'CDK', q:'Testing en CDK: Fine-grained assertions vs Snapshot tests', a:'Frameworks: <code>Jest</code> (TS/JS) y <code>Pytest</code> (Python). <code>Fine-grained</code>: verifican propiedades específicas (<code>hasResourceProperties()</code>, <code>resourceCountIs()</code>). <code>Snapshot</code>: comparan el template completo contra un baseline — detectan cualquier cambio inesperado.' },
+
+  // ── Cognito (adicionales) ──
+  { id:'cog-06', cat:'Cognito', q:'Para que ALB autentique con Cognito, ¿qué requisito debe cumplir el listener?', a:'El listener debe usar <code>HTTPS</code> (no HTTP). ALB redirige al usuario a la hosted UI si no está autenticado. Para páginas públicas (/login), configurar el comportamiento unauthenticated en <code>allow</code>.' },
+  { id:'cog-07', cat:'Cognito', q:'¿Qué API de STS llama internamente Cognito Identity Pool?', a:'<code>AssumeRoleForWebIdentity</code>. El Identity Pool intercambia el JWT del proveedor (CUP, Google, Facebook, etc.) por credenciales AWS temporales (access key + secret + session token).' },
+  { id:'cog-08', cat:'Cognito', q:'¿Cómo implementar seguridad por usuario en S3 o DynamoDB con Cognito Identity Pool?', a:'Usar la variable IAM <code>${cognito-identity.amazonaws.com:sub}</code> en el Resource del rol. Ejemplo S3: limitar acceso al prefijo <code>s3://bucket/private/${cognito-identity.amazonaws.com:sub}/</code>. Cada usuario solo accede a su carpeta/fila.' },
+  { id:'cog-09', cat:'Cognito', q:'¿Cómo dar acceso AWS temporal a usuarios no autenticados (guest)?', a:'Con <code>Cognito Identity Pool</code> habilitando identidades no autenticadas (Guest role). El Pool asigna un rol IAM con permisos limitados a usuarios sin token. Trigger: "acceso temporal a AWS sin login" → Identity Pool con guest role.' },
+
+  // ── Step Functions ──
+  { id:'sfn-01', cat:'Step Functions', q:'Standard vs Express Workflows: diferencias clave para el examen', a:'<code>Standard</code>: hasta 1 año, exactly-once, precio por state transition, historial completo en consola. <code>Express</code>: hasta 5 min, 100K+ exec/seg, precio por duración+memoria, historial solo en CloudWatch Logs. Async Express = at-least-once; Sync Express = at-most-once.' },
+  { id:'sfn-02', cat:'Step Functions', q:'¿Cuándo usar Standard vs Express Workflows?', a:'<code>Standard</code>: pagos, pedidos, flujos críticos (exactly-once garantizado). <code>Express Async</code>: alta tasa de eventos, IoT, streaming (at-least-once acceptable). <code>Express Sync</code>: invocado desde API GW o Lambda esperando resultado.' },
+  { id:'sfn-03', cat:'Step Functions', q:'Un flujo de Step Functions necesita esperar aprobación humana. ¿Qué mecanismo usar?', a:'Suffix <code>.waitForTaskToken</code> en el Resource del estado. El flujo se pausa hasta que se llame <code>SendTaskSuccess(token, output)</code> o <code>SendTaskFailure()</code>. El token se inyecta con <code>"TaskToken.$": "$$.Task.Token"</code>.' },
+  { id:'sfn-04', cat:'Step Functions', q:'En Step Functions Catch: ¿cómo preservar el input original al capturar un error?', a:'<code>ResultPath: "$.error"</code> — agrega el error al input original sin sobrescribirlo. <code>ResultPath: null</code>: el error se descarta y solo pasa el input original. Sin ResultPath, el output del Catch reemplaza todo el input.' },
+  { id:'sfn-05', cat:'Step Functions', q:'Error handling: ¿qué hace <code>States.ALL</code>? ¿Dónde va?', a:'Es el comodín que captura <strong>cualquier error</strong>. Siempre debe ir al <strong>final</strong> de la lista de Catchers/Retriers — los matchers se evalúan en orden y States.ALL consumiría todo si va primero. Default MaxAttempts en Retry: <code>3</code>.' },
+  { id:'sfn-06', cat:'Step Functions', q:'Activity Tasks vs .waitForTaskToken: ¿cuál es pull y cuál push?', a:'<code>Activity Task</code>: <strong>pull</strong> — el worker externo llama <code>GetActivityTask</code> para obtener trabajo y envía heartbeats con <code>SendTaskHeartbeat</code>. <code>.waitForTaskToken</code>: <strong>push</strong> — Step Functions pushea el evento (ej: a SQS) y espera la señal de vuelta.' },
+  { id:'sfn-07', cat:'Step Functions', q:'AppSync: ¿qué modos de auth soporta y cuándo usar cada uno?', a:'4 modos: <code>API_KEY</code> (dev/testing), <code>AWS_IAM</code> (acceso interno con Sig v4), <code>OPENID_CONNECT</code> (JWT externo, ej: Auth0), <code>AMAZON_COGNITO_USER_POOLS</code> (usuarios app). Para mobile/web: Cognito UP. Para backend: IAM.' },
+
+  // ── Advanced Identity ──
+  { id:'adv-01', cat:'Advanced Identity', q:'STS credentials: ¿cuánto duran? ¿Qué API usar para MFA?', a:'STS credentials temporales duran <strong>hasta 1 hora</strong>. Con MFA: <code>GetSessionToken</code> — requiere el código MFA y devuelve access key + secret + session token + expiry. Para saber "quién soy": <code>GetCallerIdentity</code>.' },
+  { id:'adv-02', cat:'Advanced Identity', q:'Recibís un mensaje de error de AWS API encodado. ¿Cómo lo decodificás?', a:'Con <code>DecodeAuthorizationMessage</code> de STS. Convierte el error encriptado en texto legible que describe por qué fue denegada la acción. Requiere permiso <code>sts:DecodeAuthorizationMessage</code>.' },
+  { id:'adv-03', cat:'Advanced Identity', q:'¿Cómo crear una IAM policy que dé acceso a cada usuario solo a su carpeta en S3?', a:'Usar la variable dinámica <code>${aws:username}</code> en el Resource: <code>arn:aws:s3:::bucket/${aws:username}/*</code>. IAM sustituye la variable en runtime por el username del caller. Una sola policy para todos los usuarios.' },
+  { id:'adv-04', cat:'Advanced Identity', q:'¿Qué permiso se necesita para asignar un IAM Role a un servicio (EC2, Lambda, CodePipeline)?', a:'<code>iam:PassRole</code> (más <code>iam:GetRole</code> para verificar que existe). Sin iam:PassRole, la operación falla con AccessDenied aunque tengas todos los permisos sobre el servicio destino.' },
+  { id:'adv-05', cat:'Advanced Identity', q:'¿Qué controla qué servicios o entidades pueden asumir un IAM Role?', a:'La <code>Trust Policy</code> del role. Define los Principal permitidos (servicios como lambda.amazonaws.com, otras cuentas, usuarios). Es diferente a la Permission Policy que define qué puede hacer el role una vez asumido.' },
+  { id:'adv-06', cat:'Advanced Identity', q:'AWS Directory Service: AD Connector vs Managed Microsoft AD vs Simple AD', a:'<code>AD Connector</code>: proxy a on-prem AD (sin almacenar usuarios en AWS). <code>Managed Microsoft AD</code>: AD completo en AWS con trust opcional a on-prem. <code>Simple AD</code>: AD standalone en AWS, sin trusts, basado en Samba, bajo costo.' },
+  { id:'adv-07', cat:'Advanced Identity', q:'Login con Google/Facebook + credenciales AWS: ¿usar AssumeRoleWithWebIdentity directo o Cognito?', a:'<code>Cognito Identity Pools</code> — AWS deprecó el patrón directo con AssumeRoleWithWebIdentity. Cognito actúa como broker: intercambia el token del proveedor social por credenciales AWS temporales de forma más segura y escalable.' },
+
+  // ── KMS/Secrets (adicionales) ──
+  { id:'kms-08', cat:'KMS/Secrets', q:'<code>GenerateDataKey</code> vs <code>GenerateDataKeyWithoutPlaintext</code>: ¿cuándo usar cada uno?', a:'<code>GenerateDataKey</code>: retorna DEK en plaintext + cifrado. Usar cuando necesitás cifrar datos <strong>ahora mismo</strong>. <code>GenerateDataKeyWithoutPlaintext</code>: solo retorna el DEK cifrado. Usar para generar la clave para <strong>uso futuro</strong> — no necesitás cifrar ahora.' },
+  { id:'kms-09', cat:'KMS/Secrets', q:'S3 con SSE-KMS genera demasiadas llamadas a KMS y throttlea. ¿Solución?', a:'Habilitar <code>S3 Bucket Key</code>. Con Bucket Key, S3 genera una DEK temporal por bucket (en vez de llamar KMS por objeto), reduciendo las llamadas a KMS en hasta un <strong>99%</strong>. Sin costo adicional.' },
+  { id:'kms-10', cat:'KMS/Secrets', q:'Acceso cross-account a una KMS Key: ¿alcanza con la IAM policy de la cuenta destino?', a:'No. Se necesita una <code>KMS Key Policy personalizada</code> que incluya el principal de la otra cuenta. La key policy default solo permite acceso a la cuenta dueña. Sin modificarla, el acceso falla.' },
+  { id:'kms-11', cat:'KMS/Secrets', q:'¿Qué es CloudHSM y qué lo diferencia de KMS?', a:'Hardware Security Module <strong>dedicado dentro de tu VPC</strong>. Vos controlás las claves — AWS no tiene acceso. FIPS 140-2 Level 3 (KMS = Level 2). Casos de uso: compliance estricto, SSE-C en S3 con gestión propia de claves. Compartible entre VPCs via VPC Peering.' },
+  { id:'kms-12', cat:'KMS/Secrets', q:'Secrets Manager vs SSM Parameter Store: diferencia en KMS y rotación', a:'<code>Secrets Manager</code>: KMS es <strong>obligatorio</strong>, rotación automática nativa (Lambda built-in para RDS, Redshift, DocumentDB). <code>SSM Parameter Store</code>: KMS <strong>opcional</strong> (SecureString), sin rotación nativa — implementar con EventBridge + Lambda custom.' },
+  { id:'kms-13', cat:'KMS/Secrets', q:'CloudFormation: ¿cómo referenciar valores de SSM y Secrets Manager en un template?', a:'SSM plaintext: <code>{{resolve:ssm:/ruta:version}}</code>. SSM SecureString: <code>{{resolve:ssm-secure:/ruta:version}}</code>. Secrets Manager: <code>{{resolve:secretsmanager:secret-id:SecretString:json-key}}</code>. Para RDS: <code>ManageMasterUserPassword: true</code> → RDS crea el secret automáticamente.' },
+  { id:'kms-14', cat:'KMS/Secrets', q:'CloudWatch Logs necesita KMS encryption. ¿Cómo se configura? ¿Qué error común aparece?', a:'Solo por CLI: <code>associate-kms-key</code> (log group existente) o <code>create-log-group --kms-key-id</code>. No disponible en consola. Si da AccessDeniedException: agregar <code>logs.{region}.amazonaws.com</code> como Principal en la key policy de KMS.' },
+  { id:'kms-15', cat:'KMS/Secrets', q:'¿Qué son Nitro Enclaves y qué restricciones tienen?', a:'Ambientes aislados dentro de una EC2 Nitro para datos ultra-sensibles. Restricciones: <strong>sin SSH, sin red, sin storage persistente</strong>. Solo comunicación vsock con el host + Cryptographic Attestation. Trigger: "isolated compute for sensitive data on EC2".' },
+
+  // ── Otros Servicios (adicionales) ──
+  { id:'otros-13', cat:'Otros Servicios', q:'¿Qué es Amazon Athena? ¿Cuál es el formato óptimo para las queries?', a:'Servicio de <strong>SQL serverless sobre S3</strong> — no requiere infraestructura, pagas por datos escaneados. Formato óptimo: <code>Apache Parquet o ORC</code> (columnar, comprimido). Convertir CSV a Parquet: usar <code>AWS Glue ETL</code>.' },
+  { id:'otros-14', cat:'Otros Servicios', q:'Athena necesita consultar datos en RDS, DynamoDB o on-premises. ¿Cómo?', a:'<code>Athena Federated Query</code> con un Lambda Data Source Connector. El Lambda traduce entre Athena y la fuente de datos externa. Permite JOINs entre S3 y RDS en una sola query SQL.' },
+  { id:'otros-15', cat:'Otros Servicios', q:'¿Qué es Amazon MSK y cuándo elegirlo sobre Kinesis?', a:'<code>Managed Streaming for Apache Kafka</code>. Elegir MSK cuando: mensajes >1 MB (Kinesis tiene límite de 1 MB por record), necesitás retención ilimitada (Kinesis máx 365 días, MSK = ilimitada según EBS), o el equipo ya conoce Kafka.' },
+  { id:'otros-16', cat:'Otros Servicios', q:'¿Qué servicio provisiona certificados TLS para ELB, CloudFront y API GW? ¿Y para certs privados internos?', a:'<code>AWS Certificate Manager (ACM)</code>: gratis para servicios integrados. <code>ACM Private CA</code>: para certificados privados internos (PKI empresarial, mTLS, IoT). Trigger: "SSL/TLS cert para ELB" → ACM. "private/enterprise PKI" → ACM Private CA.' },
+  { id:'otros-17', cat:'Otros Servicios', q:'¿Qué servicio detecta PII y datos sensibles en S3?', a:'<code>Amazon Macie</code>. Usa ML para identificar datos sensibles (SSN, tarjetas, credenciales, etc.) en objetos S3. Genera findings en Security Hub o EventBridge. Trigger del examen: "discover PII in S3" → Macie.' },
+  { id:'otros-18', cat:'Otros Servicios', q:'AWS Amplify: ¿qué servicios usa internamente para auth, DataStore y Hosting?', a:'<code>Auth</code>: Cognito. <code>DataStore</code>: AppSync + DynamoDB (offline-first, sync en tiempo real via WebSocket). <code>Hosting</code>: CloudFront con CI/CD desde Git (GitHub, GitLab, Bitbucket, CodeCommit). E2E testing: <code>Cypress</code>. Mental model: "Elastic Beanstalk para mobile/web".' },
+];
+
+// ─────────────────────────────────────────────
+// SPACED REPETITION ENGINE
+// ─────────────────────────────────────────────
+const SR = {
+  key: 'sr_cards_v1',
+  sessionKey: 'sr_session_v1',
+  timeKey: 'sr_time_v1',
+
+  getSession() {
+    const now = Date.now();
+    const last = parseInt(localStorage.getItem(this.timeKey) || '0');
+    let s = parseInt(localStorage.getItem(this.sessionKey) || '0');
+    if (now - last > 3600000) { s++; localStorage.setItem(this.sessionKey, s); }
+    localStorage.setItem(this.timeKey, now);
+    return s;
+  },
+
+  getData() { return JSON.parse(localStorage.getItem(this.key) || '{}'); },
+  saveData(d) { localStorage.setItem(this.key, JSON.stringify(d)); },
+
+  getCard(id) {
+    const d = this.getData();
+    return d[id] || { interval: 0, lastSession: -999, correct: 0, wrong: 0 };
+  },
+
+  update(id, rating) {
+    const d = this.getData();
+    const c = d[id] || { interval: 0, lastSession: -999, correct: 0, wrong: 0 };
+    const s = this.getSession();
+    c.lastSession = s;
+    if (rating === 'no') { c.interval = 1; c.wrong++; }
+    else if (rating === 'hard') { c.interval = Math.max(1, Math.floor((c.interval || 1) * 1.5)); c.correct++; }
+    else { c.interval = Math.max(3, Math.floor((c.interval || 1) * 2.5)); c.correct++; }
+    d[id] = c;
+    this.saveData(d);
+  },
+
+  isDue(id) {
+    const c = this.getCard(id);
+    const s = this.getSession();
+    return s >= c.lastSession + c.interval;
+  },
+
+  learnedCount() {
+    const d = this.getData();
+    return Object.values(d).filter(c => c.interval >= 8).length;
+  },
+
+  reset(ids) {
+    const d = this.getData();
+    ids.forEach(id => { if (d[id]) d[id].lastSession = -999; });
+    this.saveData(d);
+  }
+};
+
+// ─────────────────────────────────────────────
+// WRONG ANSWERS — distractors específicos por tarjeta
+// ─────────────────────────────────────────────
+const WRONG = {
+  // IAM
+  'iam-01': ['Token temporal que un servicio asume para ejecutar acciones con permisos elevados','Configuración de red que filtra el tráfico entrante y saliente de una subnet','Credencial permanente de acceso programático compuesta por Access Key y Secret Key'],
+  'iam-02': ['Role: para usuarios humanos con MFA habilitado. User: para servicios y aplicaciones automáticas','Role: solo para cuentas root de AWS Organizations. User: para todos los accesos directos','Role: cuando se necesitan permisos permanentes fijos. User: para accesos temporales y federados'],
+  'iam-03': ['Genera credenciales permanentes para un IAM User con permisos heredados de un Role existente','Valida tokens JWT de Cognito User Pools contra una política IAM antes de ejecutar la acción','Crea un nuevo IAM User temporal con los mismos permisos que el solicitante actual'],
+  'iam-04': ['Allow explícito → Deny explícito → Deny implícito. Un Allow siempre puede sobrescribir un Deny','Deny implícito → Deny explícito → Allow explícito. El orden varía según el tipo de política','Allow explícito → Deny implícito → Deny explícito. Por defecto todo está permitido'],
+  'iam-05': ['Política que define el techo máximo de permisos que puede tener un usuario o role en la cuenta','Política gestionada por AWS que otorga acceso predefinido a servicios específicos (ej: AdministratorAccess)','Política que se adjunta a un grupo de usuarios para simplificar la gestión de permisos comunes'],
+  'iam-06': ['Políticas de seguridad aplicadas a nivel de VPC para filtrar tráfico entre subnets de una cuenta','Reglas de compliance que detectan y reportan configuraciones incorrectas en recursos de la cuenta','Límites de cuota de servicio que restringen cuántos recursos puede crear una cuenta de AWS'],
+  'iam-07': ['Política que otorga permisos adicionales automáticamente cuando el usuario pasa una verificación MFA','Límite del número de roles simultáneos que un usuario puede asumir en una sesión','Restricción de red que impide acceso desde IPs fuera de rangos permitidos por la organización'],
+  'iam-08': ['Solo 1 dispositivo MFA por usuario. Registrar un segundo reemplaza automáticamente al primero','Hasta 3 dispositivos: 1 virtual (TOTP) + 1 hardware + 1 FIDO2','Hasta 5 dispositivos. Más de 5 requiere aprobación explícita del soporte de AWS'],
+
+  // EC2/EBS
+  'ec2-01': ['gp2: 5 IOPS/GB, máx 32,000. gp3: 5,000 IOPS base, máx 32,000. io1/io2: hasta 128,000 IOPS','gp2: 1 IOPS/GB, máx 10,000. gp3: 1,000 IOPS base independiente del tamaño. io1/io2: hasta 32,000','gp2 y gp3 son idénticos en IOPS; la única diferencia es que gp3 soporta snapshots incrementales'],
+  'ec2-01b': ['io2 Block Express es simplemente io2 en modo Multi-Attach — soporta hasta 64,000 IOPS igual que io2 estándar','io2 Block Express es una capa de caché en RAM sobre io2; los datos no persisten si la instancia se detiene','io2 Block Express llega a 128,000 IOPS y está disponible en cualquier instancia EC2 con EBS habilitado'],
+  'ec2-02': ['1,000 IOPS — gp2 asigna 1 IOPS por GB de almacenamiento provisionado','5,000 IOPS — gp2 tiene una baseline fija de 5,000 IOPS sin importar el tamaño del volumen','16,000 IOPS — gp2 entrega el máximo automáticamente cuando el volumen supera los 500 GB'],
+  'ec2-03': ['gp3 solo está disponible en us-east-1 y eu-west-1 actualmente. gp2 es global','gp2 es el sucesor de gp3 y tiene mejor rendimiento en burst a largo plazo','gp3 no soporta Multi-Attach mientras que gp2 puede adjuntarse a múltiples instancias a la vez'],
+  'ec2-04': ['Cuando necesitás el almacenamiento más económico con alta capacidad de throughput secuencial','Cuando el volumen debe ser booteable y tener snapshots automáticos con retención configurable','Cuando necesitás compartir un volumen entre múltiples instancias EC2 en la misma AZ'],
+  'ec2-05': ['Volumen EBS de alta velocidad NVMe que persiste independientemente del ciclo de vida de la instancia','Bucket S3 dedicado que se monta automáticamente como volumen en la instancia al iniciarse','Disco managed por AWS con snapshots automáticos y replicación sincrónica cross-AZ incluida'],
+  'ec2-06': ['Firewall a nivel de subnet — stateless (inbound y outbound independientes), soporta Allow y Deny','Política IAM adjunta a la instancia que controla qué servicios AWS puede invocar la aplicación','ACL de red que se evalúa antes del routing y afecta todo el tráfico que entra a la VPC'],
+  'ec2-07': ['Variables de entorno persistentes que se inyectan en cada proceso que corre en la instancia','Metadatos de la instancia accesibles via HTTP para obtener IP, región y credenciales del role','Script que se ejecuta en cada reinicio de la instancia para resincronizar la configuración del SO'],
+  'ec2-08': ['Tags y etiquetas de la instancia visibles desde la consola de AWS y exportables por la CLI','Logs del sistema operativo enviados automáticamente a CloudWatch Logs al iniciar la instancia','Variables definidas en el User Data que las aplicaciones pueden leer como variables de entorno'],
+  'ec2-09': ['st1: ideal para bases de datos OLTP con miles de IOPS. sc1: para backups. Ambos son bootheables','st1 y sc1 tienen el mismo rendimiento; la única diferencia es el precio por GB provisionado','st1: para instancias spot con workloads variables. sc1: para instancias reservadas con carga predecible'],
+  'ec2-10': ['Copia completa (no incremental) del volumen que se guarda en un bucket S3 privado de la misma región','Imagen AMI del sistema operativo que incluye todos los volúmenes adjuntos a la instancia en ese momento','Réplica sincrónica del volumen en otra AZ para failover automático sin pérdida de datos'],
+
+  // S3
+  's3-01': ['Standard → Standard-IA → Intelligent-Tiering → Glacier Instant → One Zone-IA → Glacier Flexible → Deep Archive','Standard → One Zone-IA → Standard-IA → Intelligent-Tiering → Glacier Flexible → Glacier Instant → Deep Archive','Intelligent-Tiering → Standard → Standard-IA → One Zone-IA → Glacier Instant → Glacier Flexible → Deep Archive'],
+  's3-02': ['Standard-IA: 7 días. Glacier Flexible: 30 días. Glacier Deep Archive: 90 días','Standard-IA: 60 días. Glacier Flexible: 90 días. Glacier Deep Archive: 365 días','Standard-IA: 30 días. Glacier Flexible: 60 días. Glacier Deep Archive: 90 días'],
+  's3-03': ['AES-256 (default), RSA-2048, SSE-KMS y Client-Side. Cada uno para tipos de objetos distintos','SSE-KMS es el default. SSE-S3 requiere activación manual. SSE-C solo desde la CLI, no la consola','SSE-S3 y SSE-KMS son equivalentes en seguridad; la diferencia es solo el costo por operación'],
+  's3-04': ['Requiere que ambos buckets estén en la misma región y bajo la misma cuenta de AWS','Requiere habilitar S3 Transfer Acceleration en el bucket origen para la transferencia entre regiones','Requiere una Lambda que copie los objetos al detectar cambios mediante S3 Event Notifications'],
+  's3-05': ['URL permanente para objetos públicos generada automáticamente al hacer el objeto accesible','Endpoint de CloudFront con geo-restriction que solo permite acceso desde países configurados','Token de corta duración generado por Cognito Identity Pools para acceder a objetos privados en S3'],
+  's3-06': ['Aumenta el throughput usando múltiples conexiones paralelas directamente al bucket S3 regional','Habilita compresión automática de objetos antes de subirlos para reducir el tiempo de transferencia','Replica el bucket en múltiples regiones automáticamente para reducir la latencia de lectura global'],
+  's3-07': ['Recomendado para archivos >1 GB. Obligatorio para >10 GB. Cada parte tiene un mínimo de 10 MB','Solo disponible para objetos en Glacier. Para clases Standard se usa el upload convencional','Recomendado para archivos >500 MB. Obligatorio para >2 GB. Cada parte tiene un mínimo de 100 MB'],
+  's3-08': ['Encriptación automática del objeto con clave del cliente que expira según el período configurado','Política de lifecycle que archiva el objeto en Glacier después del período de retención definido','Versioning forzado con MFA Delete que requiere autenticación multifactor para borrar cualquier versión'],
+  's3-09': ['Motor que indexa automáticamente los objetos de un bucket para búsquedas rápidas por contenido','API que lista objetos filtrados por metadatos como tags, tamaño o fecha de última modificación','Función serverless que procesa objetos al subirlos y guarda los resultados transformados en otro bucket'],
+  's3-10': ['Política de replicación que copia objetos a otro bucket cuando superan un tamaño determinado','Reglas de acceso que modifican los permisos de objetos según cuánto tiempo llevan sin ser accedidos','Configuración de versionado que elimina versiones antiguas automáticamente al crear una nueva'],
+  's3-11': ['Genera un snapshot diario completo del bucket para recuperación ante desastres. Se activa por default','Crea automáticamente una réplica del objeto en otra región al subirlo por primera vez','Guarda solo la versión actual y la anterior para ahorrar costos de almacenamiento automáticamente'],
+  's3-12': ['Encriptación de cabeceras HTTP en requests a S3 para prevenir ataques man-in-the-middle','Política que restringe el acceso al bucket a rangos de IP específicos definidos por región geográfica','Configuración que requiere un token Bearer en cada request para autenticar al cliente del bucket'],
+  's3-13': ['Datos que se acceden diariamente pero que no requieren alta disponibilidad multi-AZ','Objetos temporales generados por procesos batch que se borran automáticamente después de 24 horas','Datos históricos de compliance que nunca se acceden y deben archivarse por al menos 7 años'],
+  's3-14': ['Monitoreo automático de costos que envía alertas cuando el bucket supera un umbral de gasto mensual','Logs de acceso al bucket guardados en otro bucket S3 para propósitos de auditoría y análisis','Webhook que llama a una URL externa cada vez que se modifica la configuración del bucket'],
+
+  // DynamoDB
+  'ddb-01': ['1 lectura de hasta 1 KB/s, independientemente del modo de consistencia configurado','1 lectura de hasta 4 KB/s solo para eventually consistent. Strongly consistent consume 2 RCUs por lectura','1 lectura de hasta 8 KB/s para cualquier modo de consistencia. El tamaño del ítem no importa'],
+  'ddb-02': ['1 escritura de hasta 4 KB/s, igual que las RCU para mantener simetría en la capacidad provisionada','1 escritura de hasta 1 KB/s solo en modo Provisioned. On-Demand no tiene límite de WCU por operación','1 escritura de hasta 400 KB/s que representa el tamaño máximo de un ítem en DynamoDB'],
+  'ddb-03': ['Partition Key: clave única global de cada ítem. Sort Key: índice secundario para ordenar resultados','Partition Key: solo acepta tipos String. Sort Key: acepta String, Number o Binary como tipos válidos','Partition Key y Sort Key son equivalentes en funcionalidad; Sort Key es simplemente opcional en la tabla'],
+  'ddb-04': ['LSI: diferente Partition Key y Sort Key — se puede crear en cualquier momento. GSI: misma Partition Key, solo al crear la tabla','LSI y GSI son equivalentes; la diferencia es que LSI tiene límite de 5 por tabla y GSI de 20','LSI: para queries de solo lectura con consistencia fuerte. GSI: soporta lecturas y escrituras directas'],
+  'ddb-05': ['Servicio de análisis que procesa datos de DynamoDB con SQL para reportes en tiempo real','Modo de compresión automática de ítems que superan los 400 KB para almacenarlos en S3','Función que agrupa múltiples GetItem en un solo BatchGetItem automáticamente para reducir costos'],
+  'ddb-06': ['On-Demand es siempre más barato sin importar el patrón de tráfico. Provisioned tiene mayor throughput máximo','On-Demand: solo disponible para tablas con menos de 10 GB de datos almacenados actualmente','On-Demand: para tablas Global Tables multi-región. Provisioned: exclusivo para tablas de una sola región'],
+  'ddb-07': ['Exportación programada de la tabla completa a S3 para análisis con Athena. Retención: 7 días','Réplica sincrónica en tiempo real de la tabla a otra región para lecturas de baja latencia global','Log de todas las queries ejecutadas sobre la tabla para auditoría y optimización de índices'],
+  'ddb-08': ['64 KB por ítem. Para más hay que usar DynamoDB Large Object Store con referencia en la tabla','1 MB por ítem, igual al límite de SQS para mantener compatibilidad entre ambos servicios','No hay límite por ítem individual; el límite es de 10 GB por partición lógica de la tabla'],
+  'ddb-09': ['Strongly Consistent es el default en DynamoDB. Eventually Consistent se activa por query manualmente','Ambos modos consumen las mismas RCUs; la diferencia es solo la garantía temporal del dato leído','Eventually Consistent no está disponible para tablas que tienen Global Secondary Indexes habilitados'],
+  'ddb-10': ['Tiempo máximo que un ítem puede estar cacheado en DAX antes de ser invalidado y releído de la tabla','Período de retención de los registros de DynamoDB Streams antes de archivarse automáticamente en S3','Límite de duración de una transacción TransactWriteItems antes de hacer rollback automático'],
+  'ddb-11': ['Escribe en múltiples ítems en paralelo para maximizar el throughput disponible. Máximo 100 ítems','Escritura condicional que solo se ejecuta si todos los ítems ya existen y cumplen una condición previa','Batch de escrituras que se ejecutan en orden garantizado dentro de una misma partición lógica'],
+  'ddb-12': ['Lee todos los ítems de una tabla que cumplan un filtro de atributos. Sin límite máximo de resultados','Ejecuta una Query en paralelo sobre múltiples índices para reducir la latencia total de la operación','Lee los últimos 100 cambios registrados en DynamoDB Streams de una tabla en orden cronológico'],
+  'ddb-13': ['Escritura que se ejecuta solo durante ventanas de mantenimiento definidas por el administrador de la tabla','Operación que inserta el ítem solo si no existe previamente — equivalente a un INSERT OR IGNORE de SQL','Escritura asíncrona encolada que se ejecuta cuando la tabla tiene capacidad WCU disponible'],
+  'ddb-14': ['3 WCUs — DynamoDB redondea hacia abajo: floor(3.5) = 3 KB = 3 WCUs','7 WCUs — DynamoDB cobra en bloques de 512 bytes, redondeando hacia arriba en cada bloque','3.5 WCUs — DynamoDB soporta fracciones de WCU para mayor precisión en el cobro por uso'],
+  'ddb-15': ['Tabla compartida entre múltiples cuentas de AWS dentro de una misma organización de AWS Organizations','Índice global que agrega datos de múltiples tablas en una vista unificada para queries complejas','Backup automático diario de la tabla que se replica en 3 regiones distintas para disaster recovery'],
+  'ddb-16': ['Sí, necesitás lanzar una EC2 en la misma VPC que la tabla para que DynamoDB funcione correctamente','Sí, pero solo en modo Provisioned — On-Demand no requiere EC2 porque escala automáticamente','Sí, DynamoDB corre en una EC2 administrada por AWS que vos elegís al crear la tabla (t3, m5, etc.)'],
+  'ddb-17': ['Modo que convierte Provisioned en On-Demand automáticamente cuando el tráfico supera el límite configurado','Feature que duplica los RCU/WCU automáticamente cada vez que hay throttling, hasta un máximo de 10×','Proceso que migra la tabla de Provisioned a On-Demand una vez por mes para optimizar costos automáticamente'],
+  'ddb-18': ['Parámetro que filtra ítems después de la lectura para devolver solo los que cumplen una condición dada','Parámetro que define qué atributos usar como índice secundario al hacer GetItem sobre una tabla con GSI','Parámetro que reduce los RCU consumidos al indicar solo los atributos que necesitás, evitando leer el ítem completo'],
+  'ddb-19': ['Aumentando el parámetro Limit en cada llamada Scan para traer más ítems por página y reducir llamadas','Usando FilterExpression con múltiples condiciones para reducir la cantidad de ítems procesados por el Scan','Aumentando los RCU provisionados de la tabla para que el Scan no sufra throttling durante la operación'],
+  'ddb-20': ['LSI cuando el Partition Key cambia; GSI cuando el Sort Key cambia pero el Partition Key se mantiene igual','LSI para queries en tablas On-Demand; GSI para queries en tablas Provisioned con Auto Scaling habilitado','Ambos son equivalentes — la única diferencia es que LSI se crea después de crear la tabla y GSI al crearla'],
+  'ddb-21': ['Solo sirve como registro de auditoría — no puede integrarse con otros servicios AWS directamente','Puede enviar eventos a SNS directamente sin necesitar Lambda ni Kinesis como intermediario','Solo funciona con Lambda — Kinesis y KCL no pueden consumir DynamoDB Streams directamente'],
+  'ddb-22': ['Hot key es un problema de particiones; hot partition es un problema de un ítem específico muy accedido','Son sinónimos — ambos describen el mismo problema de distribución desigual de tráfico en DynamoDB','Hot key ocurre solo en modo On-Demand; hot partition ocurre solo en modo Provisioned sin Auto Scaling'],
+  'ddb-23': ['No, RCU y WCU están acoplados — si aumentás uno, el otro se ajusta proporcionalmente de forma automática','Solo podés modificarlos juntos una vez por día; cambios separados requieren recrear la tabla','Podés modificarlos por separado pero solo en modo On-Demand; en Provisioned siempre van juntos'],
+
+  // Lambda
+  'lmb-01': ['5 minutos (300 segundos). Default: 3 segundos. Pasado ese límite Lambda retorna error 429','30 minutos (1,800 segundos). Default: 10 segundos. Aplica por invocación individual','1 hora (3,600 segundos). Default: 30 segundos. Configurable solo en funciones con VPC habilitada'],
+  'lmb-02': ['64 MB a 3,008 MB (3 GB). El CPU es fijo independientemente de la memoria asignada a la función','256 MB a 10,240 MB. Por debajo de 256 MB Lambda no puede ejecutarse y retorna un error de configuración','128 MB a 3,008 MB (3 GB). Para más memoria hay que usar Fargate en lugar de Lambda'],
+  'lmb-03': ['256 MB fijo. No es configurable. Se borra completamente al finalizar cada invocación individual','1 GB por defecto. Configurable hasta 5 GB. Persiste mientras el execution environment esté activo','128 MB fijo, igual que la memoria mínima. Para más almacenamiento hay que montar un EFS en la función'],
+  'lmb-04': ['Error que ocurre cuando Lambda intenta ejecutarse sin tener los permisos IAM necesarios para funcionar','Tiempo de throttling cuando Lambda alcanza el límite de concurrencia y los requests se encolan en espera','Reinicio forzado del execution environment cuando Lambda detecta un memory leak en la función'],
+  'lmb-05': ['Aumentar el timeout al máximo (15 min) para que el cliente espere sin recibir error de timeout','Habilitar Enhanced Monitoring en CloudWatch para detectar y reiniciar entornos lentos automáticamente','Usar Reserved Concurrency con valor 0 para forzar que Lambda siempre reutilice entornos existentes'],
+  'lmb-06': ['Cantidad de instancias precalentadas que Lambda mantiene activas para eliminar cold starts en todo momento','Cuota de invocaciones por segundo que AWS asigna a la función según la región y el plan de soporte','Máximo de requests simultáneos que API Gateway puede redirigir a la función Lambda en un segundo'],
+  'lmb-07': ['Acceso a DynamoDB y S3, que en VPC requieren VPC Endpoints adicionales para ser alcanzados','Capacidad de usar Layers y variables de entorno, que no son compatibles cuando Lambda está en VPC','Acceso a CloudWatch Logs, que requiere un VPC Endpoint específico o una ruta hacia internet'],
+  'lmb-08': ['Versión publicada e inmutable de la función que puede referenciarse por ARN para deployments controlados','Copia de seguridad de la función que se activa automáticamente si la versión actual falla en producción','Extensión de Lambda que permite integrar herramientas de observabilidad de terceros como Datadog'],
+  'lmb-09': ['10 MB comprimido / 50 MB descomprimido para uploads directos. Via S3: hasta 1 GB máximo','250 MB comprimido / 500 MB descomprimido. No hay límite adicional al usar S3 como fuente','100 MB comprimido / 250 MB descomprimido para uploads. Via S3 o container image: hasta 5 GB'],
+  'lmb-10': ['1 reintento adicional (2 intentos total) con espera fija de 5 segundos entre cada intento','3 reintentos adicionales (4 intentos total) con backoff exponencial hasta un máximo de 5 minutos','No hay reintentos automáticos. Se debe configurar explícitamente una DLQ para capturar fallos'],
+  'lmb-11': ['Solo SQS y S3. DynamoDB y EventBridge no son destinos válidos en el modelo asincrónico de Lambda','Únicamente DLQ (SQS o SNS). Los destinos de éxito no están disponibles en invocaciones asincrónicas','CloudWatch Logs y S3 únicamente. Lambda escribe los eventos fallidos automáticamente en ambos destinos'],
+  'lmb-12': ['Lambda que corre dentro de una VPC privada sin acceso a internet para mayor aislamiento de seguridad','Función Lambda optimizada para procesamiento de imágenes con acceso directo a buckets S3 regionales','Lambda que se ejecuta en múltiples regiones simultáneamente para escrituras en DynamoDB Global Tables'],
+  'lmb-13': ['Kinesis Data Streams, DynamoDB Streams y SNS — SNS necesita ESM porque Lambda no puede suscribirse directamente a topics sin un componente de polling intermedio','SQS, SNS y S3 — estos tres usan polling porque son servicios de almacenamiento/mensajería que acumulan datos para ser leídos','DynamoDB Streams, Kinesis Data Streams y EventBridge — EventBridge usa ESM para las reglas scheduled (cron) que disparan Lambda periódicamente'],
+  'lmb-14': ['Lambda retorna error 429 al S3 inmediatamente. S3 no reintenta — guarda el evento fallido en CloudWatch Logs automáticamente','La función se reintenta 3 veces más con backoff exponencial. Cada reintento genera un nuevo request ID único en CloudWatch','S3 reintenta el upload del objeto. Lambda no hace reintentos propios — es responsabilidad del servicio que origina el evento'],
+  'lmb-15': ['Se destruyen al finalizar la invocación. Lambda garantiza aislamiento total entre ejecuciones para evitar state compartido','Solo persisten si se guardan en /tmp. Las variables en memoria se limpian entre cada invocación sin excepción','Persisten solo si se usa Provisioned Concurrency. En invocaciones normales, Lambda recrea el entorno entre cada llamada'],
+  'lmb-16': ['Falta una Resource Policy en el topic SNS que permita al bucket S3 publicar mensajes cuando Lambda falla','Hay que habilitar Lambda Destinations en la función. La DLQ sola no puede enviar a SNS sin Destinations configurado','Falta el permiso <code>lambda:InvokeFunction</code> en el execution role — Lambda no puede auto-invocarse para el retry del DLQ'],
+  'lmb-17': ['CloudFront Functions: ② Origin Request y ③ Origin Response únicamente. Lambda@Edge: ① y ④ (viewer). Son complementarios','Son equivalentes en stages disponibles. La diferencia es solo el runtime: JS vs Node.js/Python y el tiempo de ejecución','CloudFront Functions: los 4 stages. Lambda@Edge: solo ① Viewer Request. CloudFront Functions es más completo pero más lento'],
+  'lmb-18': ['256 KB en total — el mismo límite que un mensaje SQS. Permite almacenar configuraciones completas de la función','Sin límite oficial documentado. AWS recomienda no superar 64 KB por buenas prácticas de performance','4 MB en total — el mismo límite que un item de DynamoDB para uniformidad entre servicios serverless'],
+
+  // API Gateway
+  'apig-01': ['Solo REST API (v1 y v2). HTTP API fue deprecado y reemplazado por REST API v2','REST API y WebSocket API únicamente. HTTP API es una versión beta no disponible en producción','REST API, HTTP API y gRPC API. WebSocket no es un tipo de API sino un protocolo de integración'],
+  'apig-02': ['Versión publicada e inmutable de la API. Cada Stage apunta a una Version específica del API','Entorno de ejecución de la Lambda integrada. Cambiar el Stage cambia qué función Lambda se invoca','Instancia de caché asociada a la API. Cada Stage tiene su propio caché independiente con TTL configurable'],
+  'apig-03': ['Tokens de autenticación por ambiente que se incluyen automáticamente en el header de cada request','Variables de entorno del sistema operativo inyectadas en el container de la función Lambda integrada','Configuración de throttling específica por Stage que limita el número de requests por segundo'],
+  'apig-04': ['Versionado automático de la API que mantiene la versión anterior activa hasta que el rollout es completo','Feature flag que activa nuevas funcionalidades del API solo para un subconjunto de clientes definidos','Backup automático de la configuración del Stage antes de cada deployment para facilitar el rollback'],
+  'apig-05': ['Compresión automática de responses cuando superan un tamaño mínimo configurable (ej: 1 KB)','Autenticación de requests repetidos para evitar que el mismo payload sea procesado dos veces','Warm-up automático de las Lambdas integradas para reducir cold starts en el primer request del día'],
+  'apig-06': ['60 segundos. Si el backend demora más, API Gateway encola el request hasta que haya respuesta','5 minutos. El mismo timeout máximo que una función Lambda para mantener compatibilidad directa','Sin límite de timeout. El cliente espera indefinidamente hasta recibir respuesta del backend'],
+  'apig-07': ['Autenticación automática con IAM para que solo usuarios de la misma cuenta puedan llamar al API','Límite de tamaño de payload por request para proteger al backend de ataques de carga excesiva','Rate limiting global del API que aplica igualmente a todos los clientes sin distinción por identidad'],
+  'apig-08': ['Función que comprime los datos del request antes de enviarlo al backend para reducir latencia','Lambda que transforma el formato del request (XML a JSON) antes de pasarlo a la integración destino','Mecanismo que cachea los tokens IAM para evitar validar permisos en cada request individual'],
+
+  // SQS/SNS
+  'sqs-01': ['Tiempo máximo que un mensaje puede permanecer en la queue antes de ser eliminado automáticamente','Intervalo entre intentos de reentrega cuando el consumer no puede procesar el mensaje correctamente','Tiempo de espera del consumer antes de considerar que la queue está vacía y cerrar la conexión'],
+  'sqs-02': ['Standard: exactly-once delivery con orden parcial (best-effort). FIFO: at-least-once sin orden','Standard y FIFO son equivalentes; la única diferencia es el costo por millón de mensajes procesados','Standard: máximo 1,000 TPS. FIFO: throughput ilimitado con particionado por Message Group ID'],
+  'sqs-03': ['El consumer hace polling cada 1 segundo hasta recibir un mensaje o que expire el timeout de 30s','SQS mantiene la conexión WebSocket abierta con el consumer para push inmediato al llegar mensajes','El consumer recibe notificaciones push via SNS cuando hay mensajes disponibles en la queue'],
+  'sqs-04': ['64 KB. Para mensajes más grandes hay que dividirlos en múltiples mensajes y reensamblarlos','1 MB, igual que el límite de un ítem en DynamoDB para facilitar la integración entre ambos servicios','Sin límite de tamaño. SQS cobra por bytes transmitidos independientemente del tamaño del mensaje'],
+  'sqs-05': ['Hasta 7 días (default 1 día). Configurable con el parámetro MessageRetentionPeriod de la queue','Hasta 24 horas sin posibilidad de configuración. Los mensajes más viejos se eliminan automáticamente','Hasta 30 días. El límite se puede extender a 90 días con SQS Extended Message Retention'],
+  'sqs-06': ['Standard: exactly-once delivery garantizado. FIFO: at-least-once con orden parcial por grupo','Standard: máximo 10,000 mensajes en la queue simultáneamente. FIFO: sin límite de mensajes en cola','Standard y FIFO: misma garantía de entrega. La diferencia es solo el orden de procesamiento'],
+  'sqs-07': ['Copia de seguridad de la queue que se activa cuando la queue principal supera su capacidad máxima','Queue de prioridad alta que procesa mensajes urgentes antes que la queue estándar del mismo servicio','Réplica de la queue en otra región para garantizar disponibilidad ante fallos regionales de AWS'],
+  'sqs-08': ['Tiempo mínimo entre el envío del mensaje y la aparición del mismo en la queue para procesarse','TTL del mensaje que define cuánto tiempo puede estar en la queue antes de ser eliminado automáticamente','Retraso en la propagación del mensaje entre regiones cuando se usa SQS con replicación cross-region'],
+  'sqs-09': ['Identificador único del mensaje que garantiza que no haya duplicados en una queue FIFO','Tag asociado al mensaje que permite filtrar qué consumers reciben mensajes de una categoría específica','Clave de partición que determina en qué shard físico se almacena el mensaje dentro de la queue'],
+  'sqs-10': ['Biblioteca que divide automáticamente mensajes grandes en partes más pequeñas compatibles con SQS','Cliente que hace polling paralelo a múltiples queues simultáneamente para maximizar el throughput','Integración nativa entre SQS y SNS para enrutar mensajes grandes directamente sin intermediarios'],
+
+  // Kinesis
+  'kin-01': ['7 días por defecto sin posibilidad de cambio. Para más retención hay que exportar a S3 manualmente','1 hora por defecto. La retención extendida requiere activar Enhanced Fan-Out en el stream','48 horas por defecto. Configurable hasta 30 días con el parámetro Extended Data Retention'],
+  'kin-02': ['5 MB/s o 5,000 records/s de entrada. 10 MB/s de salida compartida entre todos los consumers','500 KB/s o 500 records/s de entrada. 1 MB/s de salida. Escala automáticamente según la demanda','Ilimitado de entrada. 2 MB/s de salida por consumer con Enhanced Fan-Out activado por defecto'],
+  'kin-03': ['Streams y Firehose son equivalentes; Firehose tiene más latencia pero soporta consumers custom también','Firehose procesa en tiempo real igual que Streams; la diferencia es que Firehose escala automáticamente','Streams: entrega managed a S3 y Redshift. Firehose: para consumers custom que procesan en tiempo real'],
+  'kin-04': ['El orden está garantizado en todo el stream independientemente del número de shards configurados','No hay garantía de orden en Kinesis. Para orden garantizado hay que usar SQS FIFO en su lugar','El orden se garantiza entre shards cuando todos los records usan el mismo tipo de Partition Key'],
+  'kin-05': ['Modo de escritura donde múltiples producers escriben al mismo shard simultáneamente sin coordinación','Función que replica automáticamente los records de un shard a otro cuando detecta desbalanceo','Capacidad de un shard de procesar tanto reads como writes simultáneamente sin límite de throughput'],
+  'kin-06': ['Motor de análisis que usa ML para detectar anomalías en el stream sin necesidad de escribir código','Función de archivo que guarda automáticamente el stream completo en S3 con compresión Parquet','Modo de operación donde Kinesis procesa los records en lotes para reducir costos de invocación'],
+  'kin-07': ['Identificador único asignado por Kinesis a cada record para garantizar la deduplicación del stream','Clave de cifrado KMS que protege los records en tránsito y en reposo dentro del shard','Nombre del consumer que está leyendo el record, usado para tracking del progreso de lectura'],
+  'kin-08': ['Kinesis: para mensajes transaccionales con entrega exactly-once. SQS: para streams de datos en tiempo real','Kinesis y SQS son intercambiables; elegir según el costo, no las características de entrega','Kinesis: para workloads con un único consumer. SQS: cuando múltiples consumers necesitan el mismo dato'],
+
+  // CloudWatch
+  'cw-01': ['24 horas. Luego se colapsan en puntos de 1 minuto que se retienen durante 7 días','1 hora. Pasado ese tiempo se eliminan permanentemente sin posibilidad de recuperación','7 días. Luego se colapsan en puntos de 5 minutos con retención de 15 días adicionales'],
+  'cw-02': ['1s → 1h. 1min → 7 días. 5min → 15 días. 1hr → 90 días. Sin más agregación posterior','1s → 24h. 1min → 7 días. 5min → 30 días. 1hr → 13 meses. Retención uniforme en todas las etapas','1s → 6h. 1min → 30 días. 5min → 90 días. 1hr → 3 años. La retención es fija y no configurable'],
+  'cw-03': ['10 dimensiones por métrica. Una dimensión representa el tipo de métrica (CPU, Red, Disco)','5 dimensiones por métrica. Límite reducido para métricas custom comparado con métricas de servicio','50 dimensiones por métrica. Las primeras 10 son gratuitas y las adicionales tienen costo extra'],
+  'cw-04': ['10 dimensiones por Metric Filter, igual que el límite máximo para métricas personalizadas','5 dimensiones. Límite intermedio entre métricas estándar (3) y métricas personalizadas (30)','Sin límite de dimensiones en Metric Filters. El límite de 30 aplica solo a métricas personalizadas'],
+  'cw-05': ['Sí, los Metric Filters procesan retroactivamente los últimos 14 días de logs al crearse','Sí, se pueden configurar para procesar retroactivamente hasta 7 días de logs históricos','Los Metric Filters procesan todos los logs históricos del Log Group al activarse por primera vez'],
+  'cw-06': ['Uso de CPU. CloudWatch no recolecta CPU por defecto; la instancia debe reportarla activamente','Uso de disco. El espacio en disco no se recolecta automáticamente sin un agente instalado','Latencia de red. CloudWatch solo mide throughput, no latencia, sin configuración adicional'],
+  'cw-07': ['OK, PENDING y TRIGGERED. PENDING es el estado mientras la alarma evalúa si debe dispararse','OK, WARNING y CRITICAL. WARNING se activa al 75% del umbral y CRITICAL al 100%','HEALTHY, UNHEALTHY y UNKNOWN. UNKNOWN equivale al estado intermedio durante la inicialización'],
+  'cw-08': ['Cada 1s. Las alarmas high-res pueden evaluar cada segundo al igual que las métricas que monitorean','Cada 5s o 15s. El límite mínimo está condicionado por el período de retención de las métricas','Igual que las alarmas estándar. No hay diferencia en la frecuencia de evaluación entre ambos tipos'],
+  'cw-09': ['Log Group es una instancia individual de aplicación. Log Stream es el grupo de todas las instancias','Log Group y Log Stream son sinónimos. La diferencia es solo de naming convention por equipo','Log Group es el stream individual por proceso. Log Stream agrupa todos los grupos de la aplicación'],
+  'cw-10': ['De 1 hora a 1 año. La retención de un día es demasiado corta para compliance en producción','De 7 días a 2 años. No se puede configurar menos de una semana por requisitos de auditoría','Solo opciones predefinidas: 1d, 7d, 30d, 90d, 1y. No se pueden configurar valores intermedios'],
+  'cw-11': ['Alarma que evalúa la métrica en múltiples períodos históricos para detectar tendencias graduales','Alarma que notifica a múltiples destinos (SNS, SQS, Lambda) simultáneamente cuando se dispara','Alarma con umbral dinámico que se ajusta automáticamente según el comportamiento histórico'],
+  'cw-12': ['Eliminando y recreando la alarma con los mismos parámetros para forzar el estado inicial OK','Enviando manualmente un dato por encima del umbral a la métrica asociada para disparar la alarma','Editando el umbral temporalmente a 0 para que la próxima evaluación garantice el estado ALARM'],
+  'cw-13': ['1 request/minuto garantizado como mínimo en cualquier escenario de tráfico en el servicio','1% del tráfico total como mínimo absoluto, independientemente del volumen de requests por segundo','El primer request de cada nueva conexión TCP, garantizando al menos 1 traza por cliente único'],
+  'cw-14': ['Del tráfico total, el 5% se rastrea siempre sin contar el Reservoir como parte del porcentaje','Los primeros 5 requests por segundo después del Reservoir se rastrean siempre (tasa fija, no porcentual)','El 5% del Reservoir se rastrea con alta resolución; el resto del Reservoir usa muestreo estándar'],
+
+  // X-Ray
+  'xr-01': ['El log completo de todos los requests procesados por un servicio en un período de tiempo','La representación visual del service map mostrando todas las dependencias del sistema','El identificador único de correlación que une los logs de CloudWatch con los eventos de X-Ray'],
+  'xr-02': ['La llamada individual a una API externa (ej: una query a DynamoDB) dentro de una función','El error o excepción capturado durante el procesamiento de un request en cualquier servicio','La anotación de negocio (ej: userId, orderId) que se adjunta al request para búsquedas posteriores'],
+  'xr-03': ['La contribución de un servicio completo al Trace, incluyendo su tiempo total de procesamiento','El error capturado dentro de un servicio que causó un tiempo de respuesta superior al esperado','La métrica de latencia agregada de todas las llamadas del mismo tipo dentro de un Segment'],
+  'xr-04': ['Annotations: datos de contexto de gran tamaño. Metadata: pares clave-valor indexados para búsqueda','Annotations y Metadata son equivalentes. La diferencia es solo la sintaxis del SDK utilizado','Annotations: solo para datos numéricos como latencias. Metadata: para strings y objetos complejos'],
+  'xr-05': ['Agregar la variable de entorno AWS_XRAY_DAEMON_ADDRESS en el user data de la instancia EC2','Instalar el X-Ray SDK en la aplicación y configurar el endpoint del servicio X-Ray en la región','Habilitar "Active Tracing" en la configuración de la instancia desde la consola de EC2'],
+  'xr-06': ['Instalar el X-Ray Daemon como Lambda Layer y adjuntar la política AWSXRayWriteOnlyAccess','Configurar las variables de entorno _X_AMZN_TRACE_ID y AWS_XRAY_CONTEXT_MISSING manualmente','Habilitar X-Ray en el API Gateway que invoca la Lambda; el tracing se propaga automáticamente'],
+
+  // CloudTrail
+  'ct-01': ['7 días por defecto. Para más retención hay que habilitar Log File Validation en el trail','30 días por defecto. Se puede extender a 1 año habilitando el modo de retención extendida','365 días (1 año) por defecto. CloudTrail conserva el historial completo del año en curso'],
+  'ct-02': ['Solo errores y acciones denegadas de la API de AWS. Las acciones exitosas no se registran','Métricas de rendimiento de los servicios AWS como latencia, throughput y tasa de errores','Cambios en la configuración de recursos detectados por AWS Config, incluyendo drift de IaC'],
+  'ct-03': ['Management Events: acceso a datos en S3 y Lambda. Data Events: cambios en configuración de recursos','Management Events y Data Events son sinónimos. CloudTrail no distingue entre tipos de eventos','Management Events: solo eventos de la consola web. Data Events: solo eventos de la API y CLI'],
+  'ct-04': ['CloudTrail → DynamoDB → Athena. DynamoDB indexa los eventos para queries más rápidas con SQL','CloudTrail → CloudWatch Logs → CloudWatch Metrics → Alertas. Para análisis histórico de eventos','CloudTrail → EventBridge → Lambda → S3. Lambda transforma y filtra los eventos antes de archivar'],
+
+  // ECS/ECR
+  'ecs-01': ['El código fuente de la aplicación y las instrucciones de build del container en formato YAML','El Service que define cuántas réplicas del container deben correr y la estrategia de deployment','El cluster de ECS que agrupa las instancias EC2 o capacidad Fargate donde corren los containers'],
+  'ecs-02': ['EC2: AWS gestiona las instancias. Fargate: vos gestionás el sistema operativo y los patches','EC2: para containers sin estado (stateless). Fargate: para containers con estado (stateful) con EFS','EC2: facturación por segundo de instancia. Fargate: facturación por request procesado por el container'],
+  'ecs-03': ['Hardcodear los secretos en las variables de entorno del Dockerfile y cifrar la imagen con ECR','Usar AWS Secrets Manager SDK dentro del código de la aplicación para obtener secretos en runtime','Montar un volumen EFS cifrado con los secretos y acceder a ellos como archivos desde el container'],
+  'ecs-04': ['Componente que balancea el tráfico entre múltiples containers de la misma Task Definition activos','Configuración del Auto Scaling Group que determina cuántas instancias EC2 forman el cluster','Política de deployment que define si los updates son rolling, blue/green o all-at-once'],
+  'ecs-05': ['Servicio de build de imágenes Docker managed que compila y publica imágenes automáticamente','Herramienta de escaneo de vulnerabilidades en imágenes Docker integrada con CodePipeline','CDN de distribución de imágenes Docker que reduce la latencia de pull desde cualquier región'],
+  'ecs-06': ['Servicio managed de Docker Swarm que orquesta containers sin necesidad de configurar nodos','Plataforma para correr containers Windows en AWS sin necesidad de EC2 ni Fargate subyacentes','Herramienta de GitOps que sincroniza automáticamente el estado deseado con el estado real del cluster'],
+
+  // Beanstalk
+  'eb-01': ['IaaS de AWS donde subís el código y AWS aprovisiona solo el servidor pero vos manejás el resto','Servicio serverless donde cada request se ejecuta en un container efímero sin gestionar infraestructura','Plataforma de containers que convierte automáticamente cualquier aplicación a formato Docker sin Dockerfile'],
+  'eb-02': ['All at once, Canary, Linear, Blue/Green. Rolling no está disponible en Elastic Beanstalk','Rolling, Blue/Green y Canary únicamente. All at once fue deprecado en 2023 por riesgo de downtime','All at once, Rolling y Blue/Green. Immutable fue reemplazado por Canary en versiones recientes de EB'],
+  'eb-03': ['Blue/Green — crea un entorno completamente nuevo con URL diferente para testear antes del swap','Rolling — actualiza de a un servidor por vez, asegurando que el resto siga activo durante el update','All at once — el rollback es casi instantáneo porque nunca modifica los servidores existentes'],
+  'eb-04': ['Archivo YAML raíz del proyecto que define el runtime, las variables de entorno y el puerto de la app','Configuración de la AMI base usada por EB para lanzar nuevas instancias durante el autoscaling','Scripts de post-deployment que EB ejecuta después de cada deploy para verificar que la app responde'],
+  'eb-05': ['Entorno de alta disponibilidad con múltiples instancias balanceadas para workloads de producción críticos','Modo de debugging que registra todos los requests y errores en un bucket S3 para análisis posterior','Configuración especial de EB que permite deployments sin downtime usando instancias de reemplazo'],
+  'eb-06': ['Solo Single Container Docker. Multi-container requiere migrar a ECS directamente sin pasar por EB','Multi-container únicamente usando ECS. Single container fue deprecado en favor de Fargate','EB no soporta Docker. Para containers en AWS hay que usar ECS, EKS o App Runner directamente'],
+
+  // CI/CD
+  'cd-01': ['buildspec.yml — define las fases de build y los artefactos de salida del proceso de compilación','pipeline.json — define las etapas del pipeline y las acciones de cada stage en CodePipeline','taskdef.json — define la Task Definition de ECS que se desplegará durante el deployment'],
+  'cd-02': ['In-Place: crea un nuevo entorno paralelo y cambia el DNS. Blue/Green: actualiza instancias existentes','Ambos son equivalentes; la diferencia es que Blue/Green es más rápido pero más costoso por los recursos','In-Place: solo para deployments en Lambda. Blue/Green: solo para deployments en instancias EC2'],
+  'cd-03': ['No. CodeDeploy requiere configurar manualmente el rollback ejecutando el deployment anterior de nuevo','Solo si se usa Blue/Green. In-Place no soporta rollback automático bajo ninguna configuración','Solo si el deployment falla antes del 50% de completion. Después de ese punto no puede hacer rollback'],
+  'cd-04': ['appspec.yml — el mismo archivo que usa CodeDeploy para gestionar el ciclo de deployment completo','Dockerfile — CodeBuild usa el Dockerfile del repo para construir la imagen con las instrucciones de build','template.yaml — CodeBuild lee el template de SAM/CloudFormation para saber qué recursos compilar'],
+  'cd-05': ['Herramienta de build que compila el código y corre tests, pero no gestiona el deployment del artefacto','Servicio de versionado de código fuente que almacena el repositorio Git con branches y pull requests','Plataforma de monitoreo que rastrea el estado de cada etapa del pipeline con métricas en tiempo real'],
+  'cd-06': ['Canary, Blue/Green, Rolling. Linear no está disponible para deployments de Lambda en CodeDeploy','Solo AllAtOnce y Blue/Green. Canary y Linear requieren usar SAM en lugar de CodeDeploy directamente','Canary: X% por N requests (no tiempo). Linear: X% cada N requests. AllAtOnce: 100% sin validación'],
+  'cd-07': ['Servicio de build de imágenes Docker que compila y publica imágenes en ECR automáticamente','Plataforma de revisión de código que integra comentarios de seguridad directamente en pull requests','Repositorio Git managed por AWS con branches protegidos y aprobaciones de pull requests integradas'],
+  'cd-08': ['Herramienta de IaC que genera templates de CloudFormation usando lenguajes de programación familiares','Servicio de delivery continuo que orquesta el pipeline completo desde el commit hasta el deployment','Plataforma de testing automático que ejecuta pruebas de carga y estrés sobre el código en cada commit'],
+
+  // CloudFormation
+  'cf-01': ['Template YAML o JSON que define recursos AWS pero sin el estado del deployment actual','Script de CloudFormation que se ejecuta localmente para validar la sintaxis antes del deployment','Conjunto de parámetros y outputs que se pasan entre templates anidados en un deployment complejo'],
+  'cf-02': ['Lista de recursos que fallaron en el último deployment y las acciones de rollback realizadas','Validación sintáctica del template que verifica referencias y tipos antes de crear el Stack','Comparación entre el estado actual del Stack y el estado deseado definido en el template local'],
+  'cf-03': ['El Stack queda en estado UPDATE_FAILED y mantiene los recursos creados para diagnóstico manual','CloudFormation pausa el deployment y espera confirmación manual antes de intentar el rollback','Solo hace rollback de los últimos 3 recursos creados. Los anteriores se mantienen para evitar pérdida de datos'],
+  'cf-04': ['Parámetros de entrada que se pasan al Stack al momento del deployment para personalizar recursos','Dependencias externas que el Stack necesita para funcionar, declaradas como referencias a ARNs externos','Logs de deployment exportados automáticamente a CloudWatch Logs para auditoría y diagnóstico'],
+  'cf-05': ['Template que incluye macros de transformación para generar recursos dinámicamente en tiempo de deploy','Stack de solo lectura que se usa como referencia para clonar configuraciones en otras regiones','Conjunto de recursos que se despliegan en paralelo e independientemente del Stack principal'],
+  'cf-06': ['Scripts de bash que se ejecutan en la instancia EC2 como parte del User Data al lanzarse','Funciones Lambda que CloudFormation invoca para crear recursos customizados no soportados nativamente','Hooks de lifecycle que se ejecutan antes y después de cada operación Create, Update o Delete del Stack'],
+
+  // Cognito
+  'cog-01': ['User Pools: autorización mediante roles IAM temporales. Identity Pools: autenticación con usuario y contraseña','User Pools y Identity Pools son sinónimos. La diferencia es solo la región de deployment configurada','User Pools: para aplicaciones móviles. Identity Pools: para aplicaciones web con usuarios empresariales'],
+  'cog-02': ['Un token de sesión permanente (Session Token) que no expira hasta que el usuario cierra sesión manualmente','Solo el Access Token. ID Token y Refresh Token se obtienen en requests separados por seguridad','Un código de autorización de un solo uso que se intercambia por credenciales permanentes de AWS'],
+  'cog-03': ['Para crear y gestionar usuarios de la aplicación con nombre de usuario y contraseña propios','Para habilitar login con proveedores externos (Google, Facebook) sin construir el flujo OAuth manualmente','Para gestionar los permisos de acceso a la consola de AWS para usuarios del equipo de desarrollo'],
+  'cog-04': ['Página de perfil de usuario autogenerada donde los usuarios pueden actualizar sus datos personales','Panel de administración para que los admins gestionen usuarios, grupos y atributos del User Pool','Flujo de verificación de email y teléfono que Cognito ejecuta automáticamente al registrar un usuario'],
+  'cog-05': ['No. Cognito requiere una Lambda Authorizer intermedia para validar tokens en API Gateway','Solo con REST API. HTTP API de API Gateway no soporta Cognito User Pools como Authorizer directamente','Solo si se usa Cognito Identity Pools. User Pools solo pueden integrarse con ALB, no con API Gateway'],
+
+  // KMS/Secrets
+  'kms-01': ['Solo AWS Managed Key (gratuita). Para claves propias hay que usar CloudHSM como alternativa','Solo Customer Managed Key. AWS no ofrece claves propias porque representan un riesgo de seguridad','AWS Managed Key (rotación cada 3 años) y Customer Managed Key (rotación cada 90 días por defecto)'],
+  'kms-02': ['Encriptás directamente tus datos con la CMK de KMS, que puede manejar objetos de hasta 4 TB','Dividís los datos en chunks de 4 KB y encriptás cada chunk individualmente con la misma CMK','Usás KMS solo para generar números aleatorios criptográficos; la encriptación la hace tu aplicación'],
+  'kms-03': ['Rate limiting de la aplicación porque KMS rechaza requests sin una política de acceso válida','Error de encriptación porque la CMK fue rotada y las Data Keys anteriores ya no son válidas','Incremento de latencia de hasta 500ms por llamada porque KMS agrega overhead de autenticación'],
+  'kms-04': ['Ambos servicios son equivalentes. La diferencia es que Parameter Store no tiene límite de tamaño','Secrets Manager es deprecated. AWS recomienda migrar todo a Parameter Store con tipo SecureString','Parameter Store: para secretos de aplicación. Secrets Manager: para credenciales de base de datos exclusivamente'],
+  'kms-05': ['Variable de entorno estándar del sistema operativo que la aplicación lee directamente sin SDK de AWS','Configuración de KMS que define qué servicios pueden usar la clave CMK para encriptar datos','Archivo de configuración en S3 encriptado con SSE-KMS al que la instancia accede en el arranque'],
+  'kms-06': ['Ejecuta un CloudFormation template que actualiza la configuración del servicio con las nuevas credenciales','Cambia la contraseña directamente en el servicio y luego notifica a las aplicaciones via SNS','Genera un token temporal de rotación que caduca en 24 horas y fuerza a las apps a obtener credenciales nuevas'],
+  'kms-07': ['Sí, KMS puede encriptar objetos de hasta 64 MB directamente usando la API Encrypt estándar','Sí, usando el parámetro EncryptionContext para indicar que el payload supera el límite estándar','No hay límite de tamaño. La restricción de 4 KB aplica solo a la API de KMS de la región us-east-1'],
+
+  // RDS
+  'rds-01': ['Copia sincrónica de la DB en la misma AZ que el master para reducir la latencia de lecturas locales','Backup automático diario de la DB que se puede usar para crear una instancia nueva en cualquier AZ','Instancia standby que puede recibir lecturas y escrituras simultáneamente para balanceo de carga total'],
+  'rds-02': ['Sí, una Read Replica tiene su propio endpoint de failover y puede promoverte automáticamente si el master falla','Sí, la Read Replica está en otra AZ por defecto, lo que garantiza disponibilidad ante fallo de AZ','Depende de la región. En algunas regiones la Read Replica puede configurarse para failover automático'],
+  'rds-03': ['Backup sincrónico en la misma AZ con snapshots cada 5 minutos. Failover manual requiere intervención del admin','Réplica de lectura en otra AZ que se promueve automáticamente a master cuando detecta latencia elevada','Snapshot diario automático que se restaura automáticamente si el motor de base de datos se cae'],
+  'rds-04': ['Aurora es igual a RDS MySQL/PostgreSQL pero con 6x el costo. No ofrece ventajas técnicas reales','Aurora escala automáticamente el storage pero tiene el mismo motor de replicación que RDS estándar','Aurora solo soporta MySQL. Para PostgreSQL hay que usar RDS estándar con Multi-AZ habilitado'],
+  'rds-05': ['Redis y Memcached son equivalentes en funcionalidad; elegir según el lenguaje de la aplicación','Redis: para objetos simples como strings y números. Memcached: para estructuras complejas como hashes','Memcached soporta clustering y replicación. Redis es single-node sin soporte de alta disponibilidad'],
+  'rds-06': ['Balanceador de carga que distribuye las queries entre múltiples Read Replicas automáticamente','Cache de queries que guarda los resultados más frecuentes para evitar que lleguen a RDS directamente','Servicio de monitoreo que detecta queries lentas y sugiere índices para optimizar el rendimiento'],
+  'rds-07': ['Lazy Loading: escribe en cache y DB simultáneamente. Write Through: lee de cache; si miss, lee de DB','Lazy Loading y Write Through son lo mismo. La diferencia es solo cuándo se invalida el caché','Write Through: actualiza el cache solo cuando expira el TTL. Lazy Loading: actualiza en cada write'],
+  'rds-08': ['Aurora que usa instancias reservadas de EC2 para garantizar capacidad en picos de demanda elevada','Aurora con Read Replicas que escalan automáticamente según la latencia de lectura de la tabla','Aurora que replica datos en tiempo real entre regiones sin necesidad de configurar endpoints separados'],
+
+  // Route 53
+  'r53-01': ['Simple, Weighted, Latency, Failover y Geolocation únicamente. Multi-Value fue deprecado en favor de targets weighted en ALB','Simple (un destino), Weighted (por tags EC2), Latency (por CPU de instancia), Failover (activo/activo)','Simple, Weighted, Latency, Failover, Geolocation. Geoproximity requiere contratar Route 53 Resolver por separado'],
+  'r53-02': ['CNAME funciona en el apex de zona pero tiene un costo adicional por query. Alias solo para subdominios','CNAME y Alias son equivalentes. La diferencia es que Alias soporta IPv6 y CNAME solo IPv4','CNAME: para recursos AWS. Alias: para hostnames externos. Ambos funcionan en el apex de zona sin restricción'],
+  'r53-03': ['Monitorea métricas de CloudWatch de cada recurso. El Health Check falla si la métrica supera el threshold','Solo monitorea recursos dentro de la misma cuenta AWS. Para endpoints externos hay que usar Route 53 Resolver','Los Health Checks son pasivos — no hacen requests activos, solo procesan los access logs del recurso'],
+  'r53-04': ['Primary y Secondary reciben tráfico simultáneamente. Secondary recibe el 20% del tráfico siempre de base','Failover usa latencia como criterio: envía al Primary si responde en < 100ms, al Secondary si no responde','Primary y Secondary se llaman Active y Passive en la consola. El routing es por región, no por health check'],
+  'r53-05': ['TTL alto reduce latencia porque Route 53 responde más rápido al tener la respuesta en caché propio','El TTL lo define siempre el cliente (browser) y Route 53 solo sugiere un valor que el cliente puede ignorar','TTL bajo es siempre recomendable porque reduce el costo de Route 53 al minimizar el tiempo de caché local'],
+  'r53-06': ['Sí. Los Health Checks tienen acceso directo a recursos privados mediante VPC Peering automático con Route 53','No es posible monitorear recursos privados con Route 53. Hay que exponer un endpoint público alternativo','Los recursos privados son monitoreados automáticamente por Route 53 si están en la misma región AWS'],
+
+  // CloudFront
+  'cft-01': ['CDN solo para contenido estático. Para contenido dinámico hay que usar API Gateway con caché habilitada','CDN regional de AWS. Cachea contenido en una región adicional para mejorar latencia doméstica','CDN que solo funciona con S3 como origin. Para ALB o servidores propios hay que usar un proxy dedicado'],
+  'cft-02': ['Solo EC2 y ALB como origins. S3 requiere replicación cross-region previa para usarse como CloudFront origin','S3 Bucket (acceso siempre público), API Gateway y Lambda@Edge. ALB no puede ser origin de CloudFront','S3 Bucket (solo si está en us-east-1), ALB público, y servidores on-premise con IP fija en Route 53'],
+  'cft-03': ['OAC es un certificado SSL para que CloudFront y S3 se comuniquen con HTTPS sin certificado de ACM','OAC es el mecanismo de auth para CloudFront Functions. Reemplaza las Lambda@Edge basic authorizers','OAC es una regla de CORS que permite que CloudFront agregue headers de origen al request hacia S3'],
+  'cft-04': ['Signed URL: acceso a todos los archivos de una distribución. Signed Cookie: acceso a un archivo específico','Signed URL y Signed Cookie son equivalentes. La diferencia es que Cookie solo funciona con HTTPS','Signed URL: para aplicaciones móviles. Signed Cookie: para web. Ambos duran exactamente 1 hora'],
+  'cft-05': ['CloudFront y S3 CRR son equivalentes para contenido estático. CRR es más barato que CloudFront','S3 CRR es superior para contenido dinámico porque no tiene TTL ni problemas de caché stale','CloudFront sirve contenido solo de us-east-1 por defecto. S3 CRR distribuye a todas las regiones'],
+  'cft-06': ['Regla que define cuántos objetos puede cachear CloudFront por distribución antes de hacer eviction','Configuración del dominio custom (CNAME) que se asocia a la distribución para servir desde tu dominio','Política de invalidación automática que limpia el caché de todos los edge locations cada cierto tiempo'],
+
+  // ElastiCache
+  'ecache-01': ['Redis: multi-thread, puro caché sin persistencia. Memcached: persistencia, replicación Multi-AZ y sorted sets','Son equivalentes en performance. Elegir Redis si tu app está en Python y Memcached si está en Java','Redis: para producción. Memcached: para desarrollo y testing. En producción Memcached no tiene soporte SLA'],
+  'ecache-02': ['El app escribe en caché y DB simultáneamente. Si hay miss, solo lee de caché sin ir a la DB','Estrategia donde el caché precarga datos de la DB antes de que el usuario haga el primer request','Solo lee de caché. Si hay miss, retorna null y deja que el app pida datos a la DB directamente sin cachear'],
+  'ecache-03': ['El caché se actualiza solo cuando expira el TTL del objeto, no en cada escritura de la aplicación','El app escribe en caché primero. La DB se actualiza en background de forma asíncrona con posible lag','Cada lectura de la DB actualiza el caché con el valor más reciente. Escrituras no tocan el caché'],
+  'ecache-04': ['Lista de Redis donde se encolan requests por orden de llegada para procesamiento FIFO garantizado','Estructura de Redis que almacena time series de métricas ordenadas por timestamp para análisis posterior','Tabla hash de Redis que guarda pares clave-valor indexados por un campo secundario para búsquedas rápidas'],
+  'ecache-05': ['Para evitar que dos instancias EC2 modifiquen el mismo objeto de sesión simultáneamente con locking','Para cifrar la sesión del usuario con KMS antes de guardarla cumpliendo requisitos de compliance','Para que ALB redirija al usuario siempre a la misma instancia EC2 (sticky sessions) sin código extra'],
+
+  // DynamoDB Cálculos
+  'ddb-calc-01': ['RCU = ⌈tamaño / 8KB⌉ × reads/seg. Cada RCU cubre 8KB para strongly consistent','RCU = tamaño en KB × reads/seg (sin redondeo). Strongly consistent no redondea al límite de 4KB','RCU = ⌈tamaño / 4KB⌉ × reads/seg × 2. Strongly consistent cuesta el doble de eventually consistent'],
+  'ddb-calc-02': ['RCU = ⌈tamaño / 4KB⌉ × reads/seg. Eventually consistent cuesta igual que strongly consistent','RCU = ⌈tamaño / 8KB⌉ × reads/seg. La unidad de eventually consistent es 8KB no 4KB','RCU = ⌈tamaño / 4KB⌉ × reads/seg × 2. Eventually consistent cobra un recargo del 2× por menor latencia'],
+  'ddb-calc-03': ['WCU = ⌈tamaño / 4KB⌉ × writes/seg. La unidad de escritura es 4KB igual que para lectura','WCU = ⌈tamaño / 2KB⌉ × writes/seg. La unidad de escritura en DynamoDB es 2KB','WCU = tamaño en KB × writes/seg sin redondear. DynamoDB cobra por fracción exacta de KB usado'],
+  'ddb-calc-04': ['64 RCU — ítems > 8KB tienen cargo doble en strongly consistent: ⌈12/4⌉ × 16 × 2 = 96... no, 64','32 RCU — se toma ⌈12/4⌉ = 3 pero strongly consistent cuesta 2× de eventually: 3×16/2 = 32','24 RCU — 12KB equivale exactamente a 3 unidades de 4KB: 3 × 8 = 24 (se usa un multiplicador 8)'],
+  'ddb-calc-05': ['12 RCU — eventually consistent de ítems > 8KB tiene un descuento adicional del 50%: 48/4 = 12','48 RCU — eventually consistent y strongly consistent cuestan igual. La división entre 2 es un mito','16 RCU — se redondea 12KB a 16KB (potencia de 2 más cercana) y se divide: 16/4 × reads/2 = 16'],
+  'ddb-calc-06': ['Cuestan la mitad. DynamoDB optimiza transacciones agrupando writes en batches internamente','Cuestan igual. Las transacciones no cambian el costo; solo cambian las garantías de consistencia','El costo depende del tamaño total de la transacción, no del número de ítems individuales'],
+  'ddb-calc-07': ['WCU unidad = 4KB (igual que RCU). La diferencia es que WCU cobra por milisegundo de latencia','RCU unidad = 1KB; WCU unidad = 4KB. Strongly consistent cuesta el doble de eventually consistent','WCU unidad = 2KB. RCU unidad = 4KB para strongly consistent y 8KB para eventually consistent'],
+
+  // Otros Servicios
+  'otros-01': ['Framework de ML para desplegar modelos de SageMaker en apps móviles con datos almacenados en S3','CLI de AWS que reemplaza a SAM para deployments serverless multi-region con soporte nativo de GraphQL','Servicio de CI/CD que conecta GitHub con AWS para deployments automáticos de apps Node.js y React'],
+  'otros-02': ['Servicio de mensajería async que coordina microservicios pasando mensajes entre Lambdas sin estado central','Scheduler que ejecuta Lambdas en paralelo basándose en reglas de tiempo definidas en EventBridge','Capa de abstracción sobre SQS que crea workflows con visibilidad del estado de cada mensaje individual'],
+  'otros-03': ['API REST managed que genera endpoints automáticamente desde un schema de base de datos DynamoDB','Proxy de API que traduce requests REST a GraphQL para conectar aplicaciones legadas con DynamoDB','Servicio de WebSocket managed que mantiene conexiones abiertas entre clients y servidores EC2'],
+  'otros-04': ['Almacén cifrado exclusivamente para secretos de base de datos con rotación automática cada 30 días','Servicio de configuración que reemplaza variables de entorno en Lambda con actualizaciones en tiempo real','Repositorio Git privado de AWS para almacenar archivos de configuración con versionado automático'],
+  'otros-05': ['Servicio de push notifications para móviles (iOS y Android). No envía emails — para eso usá SNS','Servicio de SMS y mensajería WhatsApp Business. Los emails transaccionales van por SNS protocolo email','Relay SMTP que configura tu servidor de correo existente para enviar a través de AWS sin cambiar código'],
+  'otros-06': ['Servicio que analiza logs con ML para detectar anomalías y predecir outages antes de que ocurran','Linter de código que verifica estilo y formato según las guías de buenas prácticas de AWS en tiempo real','Sistema de A/B testing de código que despliega dos versiones en producción y mide cuál tiene menos bugs'],
+  'otros-07': ['CLI que convierte templates de CloudFormation a código Python o TypeScript para mayor legibilidad','Framework que extiende Terraform para soportar recursos serverless con sintaxis simplificada en YAML','Herramienta de testing local de Lambdas que simula el entorno de AWS sin necesidad de hacer deploy'],
+  'otros-08': ['CLI que convierte código Python o TypeScript a Terraform automáticamente para portabilidad multi-cloud','Extensión de CloudFormation que soporta lógica condicional avanzada (loops, funciones) en los templates','SDK de AWS que genera código de cliente en múltiples lenguajes a partir de un template de CloudFormation'],
+  'otros-09': ['Servicio de feature flags de terceros integrado con AWS que usa DynamoDB como backend de config','Herramienta de A/B testing que despliega cambios de configuración a un porcentaje de instancias Lambda','Dashboard centralizado de EC2 que actualiza configuración de instancias vía SSM Run Command en batch'],
+  'otros-10': ['Servicio de notificaciones push para apps iOS y Android. No soporta emails ni SMS por diseño','Plataforma de email marketing que reemplaza a SES para campañas con templates visuales drag-and-drop','Servicio de chat en vivo para apps web y móviles que usa WebSocket sobre AppSync como transporte'],
+  'otros-11': ['X-Ray: métricas y alarmas operacionales. CloudWatch: trazas distribuidas entre servicios. CloudTrail: profiling','X-Ray y CloudTrail son equivalentes; CloudTrail además registra las trazas de las Lambdas invocadas','CloudWatch y CloudTrail son equivalentes para logs. X-Ray es el único relevante para auditoría de seguridad'],
+  'otros-12': ['Motor de búsqueda que indexa objetos S3 y permite buscar por metadata y etiquetas de los buckets','Alternativa managed a RDS para queries SQL de texto libre. Compatible con PostgreSQL y MySQL nativamente','Servicio de búsqueda facial en imágenes y videos. No debe confundirse con Rekognition que es para texto'],
+
+  // VPC
+  'vpc-01': ['Security Group: nivel subnet, stateless, Allow y Deny. NACL: nivel instancia, stateful, solo Allow','Security Group y NACL son equivalentes. La diferencia es que NACL tiene menor latencia de evaluación','Security Group: solo tráfico de entrada. NACL: solo tráfico de salida. Juntos cubren ambas direcciones'],
+  'vpc-02': ['Conexión privada entre dos VPCs de la misma cuenta para compartir recursos sin tráfico por internet','Túnel VPN entre tu datacenter on-premise y una VPC de AWS a través de internet cifrado','Gateway managed que permite a recursos de la VPC acceder a internet con IP pública automática'],
+  'vpc-03': ['Transit Gateway (para múltiples VPCs) y PrivateLink (para servicios SaaS). Ambos tienen costo por hora','NAT Gateway (para tráfico de salida) y Internet Gateway (para tráfico de entrada). Ambos son gratuitos','Direct Connect Endpoint (para conexiones dedicadas) y VPN Endpoint (para conexiones cifradas por internet)'],
+  'vpc-04': ['Permite que instancias en subnets públicas accedan a internet desde una IP privada sin IP pública propia','Componente que enruta el tráfico entre subnets privadas y públicas dentro de la misma VPC','Proxy managed que filtra el tráfico de salida según reglas de dominio para cumplir políticas de seguridad'],
+};
+
+// ─────────────────────────────────────────────
+// APP STATE
+// ─────────────────────────────────────────────
+let queue = [];
+let current = null;
+let answered = false;
+let currentOptions = null;
+let sessionNo = 0, sessionHard = 0, sessionEasy = 0;
+let activeFilter = 'all';
+let sessionStartQueue = 0;
+
+const LABELS = ['A', 'B', 'C', 'D', 'E', 'F'];
+
+function stripHtml(html) {
+  return html.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+}
+function truncate(text) {
+  return text;
+}
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+// Generate distractors: use explicit WRONG table first (hand-crafted plausible distractors),
+// fall back to same-category random pool only when no explicit distractors exist.
+function generateOptions(card, count = 4) {
+  const explicit = WRONG[card.id];
+  if (explicit && explicit.length >= count - 1) {
+    const opts = shuffle([...explicit.slice(0, count - 1), card.a]);
+    return { options: opts, correctIndex: opts.indexOf(card.a) };
+  }
+  // Fallback: same-category pool
+  const samecat = CARDS.filter(c => c.cat === card.cat && c.id !== card.id);
+  const others  = CARDS.filter(c => c.cat !== card.cat);
+  const pool = [...shuffle(samecat), ...shuffle(others)];
+  const distractors = pool.slice(0, count - 1).map(c => c.a);
+  const allOptions = shuffle([...distractors, card.a]);
+  const correctIndex = allOptions.indexOf(card.a);
+  return { options: allOptions, correctIndex };
+}
+
+function renderOptions(optData) {
+  const container = document.getElementById('mc-options');
+  container.innerHTML = '';
+  optData.options.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'mc-btn';
+    btn.innerHTML = `<span class="mc-label">${LABELS[i]}</span><span>${truncate(stripHtml(opt))}</span>`;
+    btn.onclick = () => selectOption(i);
+    container.appendChild(btn);
+  });
+}
+
+function selectOption(selectedIndex) {
+  if (answered) return;
+  answered = true;
+
+  const correct = currentOptions.correctIndex;
+  const isCorrect = selectedIndex === correct;
+
+  // Style buttons
+  document.querySelectorAll('.mc-btn').forEach((btn, i) => {
+    btn.disabled = true;
+    if (i === correct) btn.classList.add('correct');
+    if (i === selectedIndex && !isCorrect) btn.classList.add('wrong');
+  });
+
+  // Feedback
+  const fb = document.getElementById('mc-feedback');
+  fb.className = `mc-feedback ${isCorrect ? 'correct-fb' : 'wrong-fb'}`;
+  document.getElementById('feedback-title').textContent = isCorrect ? '✅ ¡Correcto!' : '❌ Incorrecto';
+  document.getElementById('answer-reveal').innerHTML = isCorrect
+    ? ''
+    : `<strong style="color:#fca5a5">Respuesta correcta:</strong><br>${current.a}`;
+
+  document.getElementById('rating-section').classList.remove('hidden');
+  document.querySelector('.skip-wrap').style.display = 'none';
+}
+
+function skipToAnswer() {
+  if (answered) return;
+  answered = true;
+
+  document.querySelectorAll('.mc-btn').forEach((btn, i) => {
+    btn.disabled = true;
+    if (i === currentOptions.correctIndex) btn.classList.add('correct');
+  });
+
+  const fb = document.getElementById('mc-feedback');
+  fb.className = 'mc-feedback peek-fb';
+  document.getElementById('feedback-title').textContent = '👁 Respuesta:';
+  document.getElementById('answer-reveal').innerHTML = current.a;
+
+  document.getElementById('rating-section').classList.remove('hidden');
+  document.querySelector('.skip-wrap').style.display = 'none';
+}
+
+function filteredCards() {
+  if (activeFilter === 'all') return CARDS;
+  return CARDS.filter(c => c.cat === activeFilter);
+}
+
+function buildQueue() {
+  return filteredCards().filter(c => SR.isDue(c.id));
+}
+
+function setFilter(f) {
+  activeFilter = f;
+  document.querySelectorAll('.fbtn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  startSession();
+}
+
+function startSession() {
+  sessionNo = sessionHard = sessionEasy = 0;
+  queue = buildQueue();
+  sessionStartQueue = queue.length;
+  hideAll();
+  updateStats();
+  if (queue.length === 0) {
+    document.getElementById('empty-state').classList.add('visible');
+    return;
+  }
+  document.getElementById('card-panel').classList.remove('hidden');
+  showNext();
+}
+
+function showNext() {
+  if (queue.length === 0) { showDone(); return; }
+  current = queue.shift();
+  answered = false;
+
+  document.getElementById('card-cat').textContent = current.cat;
+  document.getElementById('card-q').innerHTML = current.q;
+  document.getElementById('mc-feedback').className = 'mc-feedback hidden';
+  document.getElementById('answer-reveal').innerHTML = '';
+  document.getElementById('rating-section').classList.add('hidden');
+  document.querySelector('.skip-wrap').style.display = '';
+
+  currentOptions = generateOptions(current, 4);
+  renderOptions(currentOptions);
+
+  updateCardNum();
+  updateProgress();
+}
+
+function answer(rating) {
+  if (!answered) return;
+  SR.update(current.id, rating);
+  if (rating === 'no') { sessionNo++; queue.splice(Math.min(4, queue.length), 0, current); }
+  else if (rating === 'hard') { sessionHard++; queue.splice(Math.min(10, queue.length), 0, current); }
+  else { sessionEasy++; }
+  updateStats();
+  showNext();
+}
+
+function showDone() {
+  hideAll();
+  const total = sessionNo + sessionHard + sessionEasy;
+  document.getElementById('done-no').textContent = sessionNo;
+  document.getElementById('done-hard').textContent = sessionHard;
+  document.getElementById('done-easy').textContent = sessionEasy;
+  const emoji = sessionEasy >= total * 0.8 ? '🎉' : sessionEasy >= total * 0.5 ? '💪' : '📚';
+  document.getElementById('done-emoji').textContent = emoji;
+  document.getElementById('session-done').classList.add('visible');
+}
+
+function restartSession() {
+  // Restart only wrong cards
+  const wrongIds = filteredCards().map(c => c.id).filter(id => {
+    const d = SR.getData()[id];
+    return d && d.interval <= 2;
+  });
+  SR.reset(wrongIds);
+  startSession();
+}
+
+function restartAll() {
+  SR.reset(filteredCards().map(c => c.id));
+  startSession();
+}
+
+function hideAll() {
+  document.getElementById('card-panel').classList.add('hidden');
+  document.getElementById('session-done').classList.remove('visible');
+  document.getElementById('empty-state').classList.remove('visible');
+}
+
+function updateCardNum() {
+  const done = sessionStartQueue - queue.length;
+  document.getElementById('card-num').textContent = done;
+  document.getElementById('card-total-q').textContent = sessionStartQueue;
+}
+
+function updateProgress() {
+  const done = sessionStartQueue - queue.length;
+  const pct = sessionStartQueue > 0 ? (done / sessionStartQueue) * 100 : 0;
+  document.getElementById('progress-fill').style.width = pct + '%';
+}
+
+function updateStats() {
+  const s = SR.getSession();
+  document.getElementById('stat-session').textContent = s;
+  document.getElementById('stat-queue').textContent = queue.length;
+  document.getElementById('stat-learned').textContent = SR.learnedCount();
+  document.getElementById('stat-total').textContent = CARDS.length;
+}
+
+// ─────────────────────────────────────────────
+// KEYBOARD SHORTCUTS
+// ─────────────────────────────────────────────
+document.addEventListener('keydown', e => {
+  if ((e.key === ' ' || e.key === 'Enter') && !answered) { e.preventDefault(); skipToAnswer(); }
+  if (e.key === '1' && answered) answer('no');
+  if (e.key === '2' && answered) answer('hard');
+  if (e.key === '3' && answered) answer('easy');
+  if (e.key === 'a' && !answered) { e.preventDefault(); selectOption(0); }
+  if (e.key === 'b' && !answered) { e.preventDefault(); selectOption(1); }
+  if (e.key === 'c' && !answered) { e.preventDefault(); selectOption(2); }
+  if (e.key === 'd' && !answered) { e.preventDefault(); selectOption(3); }
+});
+
+// ─────────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────────
+startSession();
+</script>
+</body>
+</html>

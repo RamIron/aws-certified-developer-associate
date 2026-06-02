@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AWS DVA-C02 — Study Hub</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #0f172a; color: #e2e8f0; font-family: 'Segoe UI', system-ui, sans-serif; min-height: 100vh; padding-bottom: 3rem; }
+
+    .header { background: #1e293b; border-bottom: 1px solid #334155; padding: 1.25rem 1.5rem; }
+    .header h1 { font-size: 1.15rem; font-weight: 700; color: #c4b5fd; }
+    .header p  { font-size: 0.8rem; color: #64748b; margin-top: 0.2rem; }
+
+    .main { max-width: 700px; margin: 0 auto; padding: 1.5rem 1rem; }
+
+    /* Flashcard CTA */
+    .fc-card { background: linear-gradient(135deg, #1e1040, #2e1065); border: 1px solid #7c3aed; border-radius: 16px; padding: 1.25rem 1.5rem; margin-bottom: 1.75rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; text-decoration: none; transition: border-color 0.15s; }
+    .fc-card:hover { border-color: #a855f7; }
+    .fc-title { font-size: 1rem; font-weight: 700; color: #c4b5fd; }
+    .fc-sub   { font-size: 0.78rem; color: #7c3aed; margin-top: 0.15rem; }
+    .fc-arrow { font-size: 1.4rem; color: #7c3aed; flex-shrink: 0; }
+
+    /* Section list */
+    .section-group { margin-bottom: 1.5rem; }
+    .group-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.08em; color: #475569; margin-bottom: 0.6rem; padding-left: 0.25rem; }
+
+    .section-link { display: flex; align-items: center; gap: 0.85rem; padding: 0.75rem 1rem; border-radius: 12px; background: #1e293b; border: 1px solid #1e293b; text-decoration: none; margin-bottom: 0.45rem; transition: all 0.15s; }
+    .section-link:hover { border-color: #334155; background: #243047; }
+    .section-link:active { background: #1e293b; }
+    .sec-num  { font-size: 0.7rem; font-weight: 700; color: #475569; min-width: 2rem; flex-shrink: 0; }
+    .sec-name { font-size: 0.88rem; color: #cbd5e1; flex: 1; line-height: 1.35; }
+    .sec-arr  { color: #334155; font-size: 0.9rem; flex-shrink: 0; }
+    .section-link:hover .sec-arr { color: #7c3aed; }
+    .section-link:hover .sec-name { color: #e2e8f0; }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <h1>AWS DVA-C02 — Study Hub</h1>
+  <p>Stephane Maarek · Ultimate AWS Certified Developer Associate 2026</p>
+</div>
+
+<div class="main">
+
+  <!-- Flashcards -->
+  <a class="fc-card" href="flashcards.html">
+    <div>
+      <div class="fc-title">🃏 Flashcards</div>
+      <div class="fc-sub">180 tarjetas · Spaced repetition · Multiple choice</div>
+    </div>
+    <div class="fc-arrow">→</div>
+  </a>
+
+  <!-- Sections 3–10 -->
+  <div class="section-group">
+    <div class="group-label">Fundamentos</div>
+    <a class="section-link" href="transcripts/03-Getting-Started-with-AWS/section-03-review.html">
+      <span class="sec-num">03</span><span class="sec-name">Getting Started with AWS</span><span class="sec-arr">›</span>
+    </a>
+    <a class="section-link" href="transcripts/04-IAM-and-AWS-CLI/section-04-review.html">
+      <span class="sec-num">04</span><span class="sec-name">IAM &amp; AWS CLI</span><span class="sec-arr">›</span>
+    </a>
+    <a class="section-link" href="transcripts/05-EC2-Fundamentals/section-05-review.html">
+      <span class="sec-num">05</span><span class="sec-name">EC2 Fundamentals</span><span class="sec-arr">›</span>
+    </a>
+    <a class="section-link" href="transcripts/06-EC2-Instance-Storage/section-06-review.html">
+      <span class="sec-num">06</span><span class="sec-name">EC2 Instance Storage</span><span class="sec-arr">›</span>
+    </a>
+    <a class="section-link" href="transcripts/07-ELB-ASG/section-07-review.html">
+      <span class="sec-num">07</span><span class="sec-name">ELB &amp; Auto Scaling</span><span class="sec-arr">›</span>
+    </a>
+    <a class="section-link" href="transcripts/08-RDS-Aurora-ElastiCache/section-08-review.html">
+      <span class="sec-num">08</span><span class="sec-name">RDS, Aurora &amp; ElastiCache</span><span class="sec-arr">›</span>
+    </a>
+    <a class="section-link" href="transcripts/09-Route-53/section-09-review.html">
+      <span class="sec-num">09</span><span class="sec-name">Route 53</span><span class="sec-arr">›</span>
+    </a>
+    <a class="section-link" href="transcripts/10-VPC/section-10-review.html">
+      <span class="sec-num">10</span><span class="sec-name">VPC</span><span class="sec-arr">›</span>
+    </a>
+  </div>
+
+  <!-- Sections 11–15 -->
+  <div class="section-group">
+    <div class="group-label">S3 &amp; Distribución</div>
+    <a class="section-link" href="transcripts/11-S3/section-11-review.html">
+      <span class="sec-num">11</span><span class="sec-name">S3 — Introducción</span><span class="sec-arr">›</span>
+    </a>
+    <a class="section-link" href="transcripts/12-AWS-CLI-SDK-IAM-Roles-Policies/section-12-review.html">
+      <span class="sec-num">12</span><span class="sec-name">AWS CLI, SDK, IAM Roles &amp; Policies</span><span class="sec-arr">›</span>
+    </a>
+    <a class="section-link" href="transcripts/13-Advanced-S3/section-13-review.html">
+      <span class="sec-num">13</span><span class="sec-name">S3 Avanzado</span><span class="sec-arr">›</span>
+    </a>
+    <a class="section-link" href="transcripts/14-S3-Security/section-14-review.html">
+      <span class="sec-num">14</span><span class="sec-name">S3 Security</span><span class="sec-arr">›</span>
+    </a>
+    <a class="section-link" href="transcripts/15-CloudFront/section-15-review.html">
+      <span class="sec-num">15</span><span class="sec-name">CloudFront</span><span class="sec-arr">›</span>
+    </a>
+  </div>
+
+  <!-- Sections 16–21 -->
+  <div class="section-group">
+    <div class="group-label">Compute &amp; Deploy</div>
+    <a class="section-link" href="transcripts/16-ECS-ECR-Fargate/section-16-review.html">
+      <span class="sec-num">16</span><span class="sec-name">ECS, ECR &amp; Fargate</span><span class="sec-arr">›</span>
+    </a>
+    <a class="section-link" href="transcripts/17-Elastic-Beanstalk/section-17-review.html">
+      <span class="sec-num">17</span><span class="sec-name">Elastic Beanstalk</span><span class="sec-arr">›</span>
+    </a>
+    <a class="section-link" href="transcripts/18-CloudFormation/section-18-review.html">
+      <span class="sec-num">18</span><span class="sec-name">CloudFormation</span><span class="sec-arr">›</span>
+    </a>
+    <a class="section-link" href="transcripts/19-SQS-SNS-Kinesis/section-19-review.html">
+      <span class="sec-num">19</span><span class="sec-name">SQS, SNS &amp; Kinesis</span><span class="sec-arr">›</span>
+    </a>
+    <a class="section-link" href="transcripts/20-CloudWatch-XRay-CloudTrail/section-20-review.html">
+      <span class="sec-num">20</span><span class="sec-name">CloudWatch, X-Ray &amp; CloudTrail</span><span class="sec-arr">›</span>
+    </a>
+    <a class="section-link" href="transcripts/21-Lambda/section-21-review.html">
+      <span class="sec-num">21</span><span class="sec-name">Lambda</span><span class="sec-arr">›</span>
+    </a>
+  </div>
+
+  <!-- Sections 22–28 -->
+  <div class="section-group">
+    <div class="group-label">Servicios Avanzados</div>
+    <a class="section-link" href="transcripts/22-DynamoDB/SECTION-22-SUMMARY.html">
+      <span class="sec-num">22</span><span class="sec-name">DynamoDB</span><span class="sec-arr">›</span>
+    </a>
+    <a class="section-link" href="transcripts/23-API-Gateway/SECTION-23-SUMMARY.html">
+      <span class="sec-num">23</span><span class="sec-name">API Gateway</span><span class="sec-arr">›</span>
+    </a>
+    <a class="section-link" href="transcripts/24-CICD/SECTION-24-SUMMARY.html">
+      <span class="sec-num">24</span><span class="sec-name">CI/CD — CodeCommit, CodeBuild, CodeDeploy, CodePipeline</span><span class="sec-arr">›</span>
+    </a>
+    <a class="section-link" href="transcripts/25-SAM/SECTION-25-SUMMARY.html">
+      <span class="sec-num">25</span><span class="sec-name">SAM — Serverless Application Model</span><span class="sec-arr">›</span>
+    </a>
+    <a class="section-link" href="transcripts/26-CDK/SECTION-26-SUMMARY.html">
+      <span class="sec-num">26</span><span class="sec-name">CDK — Cloud Development Kit</span><span class="sec-arr">›</span>
+    </a>
+    <a class="section-link" href="transcripts/27-Cognito/SECTION-27-SUMMARY.html">
+      <span class="sec-num">27</span><span class="sec-name">Cognito</span><span class="sec-arr">›</span>
+    </a>
+    <a class="section-link" href="transcripts/28-StepFunctions-AppSync/SECTION-28-SUMMARY.html">
+      <span class="sec-num">28</span><span class="sec-name">Step Functions &amp; AppSync</span><span class="sec-arr">›</span>
+    </a>
+  </div>
+
+  <!-- Sections 29–31 -->
+  <div class="section-group">
+    <div class="group-label">Seguridad &amp; Cierre</div>
+    <a class="section-link" href="transcripts/29-Advanced-Identity/SECTION-29-SUMMARY.html">
+      <span class="sec-num">29</span><span class="sec-name">Advanced Identity</span><span class="sec-arr">›</span>
+    </a>
+    <a class="section-link" href="transcripts/30-Security-Encryption/SECTION-30-SUMMARY.html">
+      <span class="sec-num">30</span><span class="sec-name">Security &amp; Encryption</span><span class="sec-arr">›</span>
+    </a>
+    <a class="section-link" href="transcripts/31-Other-Services/SECTION-31-SUMMARY.html">
+      <span class="sec-num">31</span><span class="sec-name">Other Services</span><span class="sec-arr">›</span>
+    </a>
+  </div>
+
+</div>
+</body>
+</html>

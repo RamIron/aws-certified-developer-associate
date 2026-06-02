@@ -119,6 +119,108 @@
 <main class="page-body">
 
   <!-- ═══════════════════════════════════════════════════════════════
+       0. DNS ANATOMY
+  ═══════════════════════════════════════════════════════════════ -->
+  <section>
+    <div class="section-label"><span class="lang-en">0 · DNS Anatomy</span><span class="lang-es">0 · Anatomía de un URL</span></div>
+    <div class="card">
+      <div class="card-title"><span class="lang-en">Parts of a Domain Name</span><span class="lang-es">Partes de un Nombre de Dominio</span></div>
+
+      <p style="color:#94a3b8;font-size:14px;margin-bottom:20px;">
+        <span class="lang-en">Every domain name has a defined structure. Reading from right to left, each part has a specific name and role in DNS resolution.</span>
+        <span class="lang-es">Todo nombre de dominio tiene una estructura definida. Leyendo de derecha a izquierda, cada parte tiene un nombre específico y un rol en la resolución DNS.</span>
+      </p>
+
+      <!-- Visual breakdown -->
+      <div style="background:#0f172a;border-radius:12px;padding:20px 24px;margin-bottom:20px;overflow-x:auto;">
+        <div style="display:flex;align-items:stretch;gap:0;font-family:'Fira Code',monospace;font-size:15px;font-weight:700;min-width:420px;">
+          <div style="text-align:center;padding:0 4px;">
+            <div style="color:#64748b;padding:10px 8px;border-radius:6px 0 0 6px;border:1px solid #334155;background:#1e293b;">api</div>
+            <div style="font-size:11px;color:#64748b;margin-top:6px;font-family:'Inter',sans-serif;font-weight:600;">subdomain</div>
+          </div>
+          <div style="display:flex;align-items:center;color:#334155;font-size:18px;padding:0 2px;padding-bottom:26px;">.</div>
+          <div style="text-align:center;padding:0 4px;">
+            <div style="color:#fb923c;padding:10px 8px;border:1px solid #f97316;background:rgba(249,115,22,0.1);border-radius:0;">example</div>
+            <div style="font-size:11px;color:#fb923c;margin-top:6px;font-family:'Inter',sans-serif;font-weight:600;">SLD</div>
+          </div>
+          <div style="display:flex;align-items:center;color:#334155;font-size:18px;padding:0 2px;padding-bottom:26px;">.</div>
+          <div style="text-align:center;padding:0 4px;">
+            <div style="color:#60a5fa;padding:10px 8px;border:1px solid #3b82f6;background:rgba(59,130,246,0.1);border-radius:0;">com</div>
+            <div style="font-size:11px;color:#60a5fa;margin-top:6px;font-family:'Inter',sans-serif;font-weight:600;">TLD</div>
+          </div>
+          <div style="display:flex;align-items:center;color:#334155;font-size:18px;padding:0 2px;padding-bottom:26px;">.</div>
+          <div style="text-align:center;padding:0 4px;">
+            <div style="color:#a78bfa;padding:10px 8px;border:1px solid #7c3aed;background:rgba(124,58,237,0.1);border-radius:0 6px 6px 0;">&nbsp;</div>
+            <div style="font-size:11px;color:#a78bfa;margin-top:6px;font-family:'Inter',sans-serif;font-weight:600;">Root</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="table-wrapper" style="margin-bottom:16px;">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th><span class="lang-en">Part</span><span class="lang-es">Parte</span></th>
+              <th><span class="lang-en">Full name</span><span class="lang-es">Nombre completo</span></th>
+              <th><span class="lang-en">Example</span><span class="lang-es">Ejemplo</span></th>
+              <th><span class="lang-en">Who controls it</span><span class="lang-es">Quién lo controla</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span style="color:#a78bfa;font-weight:700;font-family:'Fira Code',monospace;">.</span></td>
+              <td><strong><span class="lang-en">Root</span><span class="lang-es">Raíz</span></strong></td>
+              <td><span style="color:#94a3b8;font-family:'Fira Code',monospace;font-size:13px;"><span class="lang-en">(invisible trailing dot)</span><span class="lang-es">(punto final invisible)</span></span></td>
+              <td><span class="lang-en">IANA — the root of the entire DNS tree</span><span class="lang-es">IANA — la raíz de todo el árbol DNS</span></td>
+            </tr>
+            <tr>
+              <td><code style="color:#60a5fa;">.com</code></td>
+              <td><strong><span class="lang-en">TLD — Top Level Domain</span><span class="lang-es">TLD — Dominio de Nivel Superior</span></strong></td>
+              <td><code>.com</code>, <code>.org</code>, <code>.io</code>, <code>.gov</code>, <code>.co.uk</code></td>
+              <td><span class="lang-en">Managed by IANA registries (e.g. Verisign for .com)</span><span class="lang-es">Gestionado por registros de IANA (p. ej. Verisign para .com)</span></td>
+            </tr>
+            <tr>
+              <td><code style="color:#fb923c;">example</code></td>
+              <td><strong><span class="lang-en">SLD — Second Level Domain</span><span class="lang-es">SLD — Dominio de Segundo Nivel</span></strong></td>
+              <td><code>google</code>, <code>amazon</code>, <code>netflix</code></td>
+              <td><span class="lang-en">Registered by you via a domain registrar (Route 53, GoDaddy…)</span><span class="lang-es">Registrado por ti a través de un registrador de dominios (Route 53, GoDaddy…)</span></td>
+            </tr>
+            <tr>
+              <td><code style="color:#94a3b8;">api</code></td>
+              <td><strong><span class="lang-en">Subdomain</span><span class="lang-es">Subdominio</span></strong></td>
+              <td><code>www</code>, <code>api</code>, <code>mail</code>, <code>app</code></td>
+              <td><span class="lang-en">Defined by you in your hosted zone (DNS records)</span><span class="lang-es">Definido por ti en tu hosted zone (registros DNS)</span></td>
+            </tr>
+            <tr>
+              <td><code style="color:#f8fafc;">example.com</code></td>
+              <td><strong><span class="lang-en">Zone Apex / Root Domain</span><span class="lang-es">Zone Apex / Dominio Raíz</span></strong></td>
+              <td><code>example.com</code> <span class="lang-en">(no subdomain)</span><span class="lang-es">(sin subdominio)</span></td>
+              <td><span class="lang-en">The SLD + TLD together. Important: CNAME cannot be used here — must use <strong>Alias</strong></span><span class="lang-es">El SLD + TLD juntos. Importante: CNAME no puede usarse aquí — se debe usar <strong>Alias</strong></span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout info">
+        <span class="lang-en">
+          <strong>Quick context before the exam tip:</strong><br><br>
+          A <strong>DNS record</strong> is basically a phone-book entry: "when someone types this name, send them to this address." Different types of records exist for different jobs.<br><br>
+          A <strong>CNAME</strong> (Canonical Name) is a DNS record that says <em>"this name is just a nickname for another name — go look that other name up."</em> Example: <code>app.example.com</code> → <code>myapp.elb.amazonaws.com</code>. Standard DNS, works everywhere — <em>except</em> on the root domain.<br><br>
+          An <strong>Alias record</strong> is AWS's own invention. It looks similar to a CNAME, but instead of pointing to another name, it points directly to an AWS resource (like a Load Balancer or CloudFront). AWS resolves it internally — no extra lookup. It's free, faster, and works anywhere including the root domain.<br><br>
+          <strong>Why Zone Apex matters for the exam:</strong> When a question asks you to create a DNS record for the root domain (<code>example.com</code> with no prefix), you cannot use a CNAME — it is forbidden at the zone apex by the DNS standard. You must use an <strong>Alias record</strong> instead.
+        </span>
+        <span class="lang-es">
+          <strong>Contexto rápido antes del tip de examen:</strong><br><br>
+          Un <strong>registro DNS</strong> es básicamente una entrada de guía telefónica: "cuando alguien escribe este nombre, mandalo a esta dirección." Existen distintos tipos de registros para distintos propósitos.<br><br>
+          Un <strong>CNAME</strong> (Canonical Name) es un registro DNS que dice <em>"este nombre es simplemente un apodo de otro nombre — ve a buscar ese otro nombre."</em> Ejemplo: <code>app.example.com</code> → <code>myapp.elb.amazonaws.com</code>. Es DNS estándar, funciona en todos lados — <em>excepto</em> en el dominio raíz.<br><br>
+          Un <strong>registro Alias</strong> es un invento propio de AWS. Se parece al CNAME, pero en lugar de apuntar a otro nombre, apunta directamente a un recurso de AWS (como un Load Balancer o CloudFront). AWS lo resuelve internamente — sin búsqueda extra. Es gratuito, más rápido, y funciona en cualquier lugar incluyendo el dominio raíz.<br><br>
+          <strong>Por qué Zone Apex importa en el examen:</strong> Cuando una pregunta pide crear un registro DNS para el dominio raíz (<code>example.com</code> sin prefijo), no puedes usar CNAME — está prohibido en el zone apex por el estándar DNS. Debes usar un <strong>registro Alias</strong> en su lugar.
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════
        1. ROUTE 53 OVERVIEW
   ═══════════════════════════════════════════════════════════════ -->
   <section>
@@ -158,16 +260,25 @@
         </div>
         <div class="record-chip">
           <span class="record-type"><span class="lang-en">CNAME</span><span class="lang-es">CNAME</span></span>
-          <span class="record-desc"><span class="lang-en">Hostname → Hostname (not zone apex)</span><span class="lang-es">Nombre de host → Nombre de host (no es ápex de zona)</span></span>
+          <span class="record-desc"><span class="lang-en">Alias one hostname to another (e.g. app.example.com → lb.aws.com). Only valid on subdomains — cannot be used on the root domain (example.com)</span><span class="lang-es">Alias de un hostname a otro (ej. app.example.com → lb.aws.com). Solo válido en subdominios — no se puede usar en el dominio raíz (example.com)</span></span>
         </div>
         <div class="record-chip">
           <span class="record-type">NS</span>
-          <span class="record-desc"><span class="lang-en">Name servers for hosted zone</span><span class="lang-es">Servidores de nombres para zona alojada</span></span>
+          <span class="record-desc">
+            <span class="lang-en">Name Servers — tells the internet <em>which servers are in charge of your domain.</em> Example: when someone looks up <code>example.com</code>, the global DNS system first asks "who manages this domain?" The NS record answers: "Route 53's servers do." From then on, all DNS questions about <code>example.com</code> go to those Route 53 servers.</span>
+            <span class="lang-es">Servidores de Nombres — le dice a internet <em>qué servidores están a cargo de tu dominio.</em> Ejemplo: cuando alguien busca <code>example.com</code>, el sistema DNS global pregunta primero "¿quién administra este dominio?" El registro NS responde: "los servidores de Route 53." A partir de ahí, todas las consultas DNS sobre <code>example.com</code> van a esos servidores de Route 53.</span>
+          </span>
         </div>
       </div>
 
       <!-- <span class="lang-en">Hosted Zones</span><span class="lang-es">Zonas Alojadas</span> -->
       <div class="section-label" style="margin-bottom:12px;"><span class="lang-en">Hosted Zones</span><span class="lang-es">Zonas Alojadas</span></div>
+
+      <p style="color:#cbd5e1;margin-bottom:14px;line-height:1.7;">
+        <span class="lang-en">A <strong>Hosted Zone</strong> is a container in Route 53 that holds all the DNS records for a specific domain. Think of it as a folder: you create one hosted zone for <code>example.com</code>, and inside it you put all the records — which IP to use, where to send email, what the subdomains point to, etc. Route 53 creates one automatically when you register a domain. There are two types depending on whether the domain is public (internet-facing) or private (internal to your AWS network).</span>
+        <span class="lang-es">Una <strong>Hosted Zone</strong> (Zona Alojada) es un contenedor en Route 53 que guarda todos los registros DNS de un dominio específico. Pensalo como una carpeta: creás una hosted zone para <code>example.com</code>, y adentro ponés todos los registros — qué IP usar, adónde va el email, a qué apuntan los subdominios, etc. Route 53 crea una automáticamente cuando registrás un dominio. Hay dos tipos según si el dominio es público (accesible desde internet) o privado (interno a tu red de AWS).</span>
+      </p>
+
       <div class="grid-2">
         <div class="compare-col">
           <div class="compare-col-title" style="color:#10b981;"><span class="lang-en">Public Hosted Zone</span><span class="lang-es">Zona Alojada Pública</span></div>
@@ -232,6 +343,12 @@
     <div class="section-label"><span class="lang-en">3 · <span class="lang-en">CNAME</span><span class="lang-es">CNAME</span> vs <span class="lang-en">Alias</span><span class="lang-es">Alias</span></span><span class="lang-es">3 · <span class="lang-en">CNAME</span><span class="lang-es">CNAME</span> vs <span class="lang-en">Alias</span><span class="lang-es">Alias</span></span></div>
     <div class="card">
       <div class="card-title"><span class="lang-en">Two Ways to Map a Hostname</span><span class="lang-es">Dos Formas de Mapear un Nombre de Host</span></div>
+
+      <p style="color:#cbd5e1;margin-bottom:16px;line-height:1.7;">
+        <span class="lang-en">Both CNAME and Alias solve the same problem: you don't want to type a raw IP in your DNS — you want to point your domain name at something that already has its own name (like an AWS Load Balancer). The difference is <em>how</em> they work under the hood and <em>where</em> you can use them. CNAME is the standard DNS solution — it just says "go look up that other name instead." Alias is AWS's smarter version — it resolves the target directly, works at the root domain, and costs nothing.</span>
+        <span class="lang-es">Tanto CNAME como Alias resuelven el mismo problema: no querés escribir una IP cruda en tu DNS — querés apuntar tu dominio a algo que ya tiene su propio nombre (como un Load Balancer de AWS). La diferencia está en <em>cómo</em> funcionan internamente y <em>dónde</em> los podés usar. CNAME es la solución DNS estándar — simplemente dice "ve a buscar ese otro nombre." Alias es la versión más inteligente de AWS — resuelve el destino directamente, funciona en el dominio raíz, y no tiene costo.</span>
+      </p>
+
       <div class="table-wrapper" style="margin-bottom:16px;">
         <table class="data-table">
           <thead>
@@ -579,7 +696,7 @@ var DEMOS = {
           + '</div>'
           + '<div class="step-title"><span class="lang-en">Route based on the client\'s IP address using CIDR blocks</span><span class="lang-es">Enrutar según la dirección IP del cliente usando bloques CIDR</span></div>'
           + '<div class="step-desc"><span class="lang-en">You define a mapping of CIDR blocks (IP ranges) to specific endpoints. Route 53 checks the client\'s source IP against your defined CIDR list.</span><span class="lang-es">Usted define un mapeo de bloques CIDR (rangos de IP) a puntos finales específicos. Route 53 verifica la IP de origen del cliente contra su lista CIDR definida.</span></div>'
-          + '<div class="callout info" style="margin-bottom:12px;"><strong><span class="lang-en">You define the CIDRs yourself</span><span class="lang-es">Usted define los CIDR usted mismo</span></strong> — <span class="lang-en">unlike Geolocation, Route 53 doesn't auto-resolve IPs to countries. You explicitly specify which IP ranges go where.</span><span class="lang-es">a diferencia de Geolocalización, Route 53 no resuelve automáticamente direcciones IP a países. Usted especifica explícitamente qué rangos de IP van donde.</span></div>'
+          + '<div class="callout info" style="margin-bottom:12px;"><strong><span class="lang-en">You define the CIDRs yourself</span><span class="lang-es">Usted define los CIDR usted mismo</span></strong> — <span class="lang-en">unlike Geolocation, Route 53 doesn\'t auto-resolve IPs to countries. You explicitly specify which IP ranges go where.</span><span class="lang-es">a diferencia de Geolocalización, Route 53 no resuelve automáticamente direcciones IP a países. Usted especifica explícitamente qué rangos de IP van donde.</span></div>'
           + '<div class="callout success"><strong><span class="lang-en">Use cases:</span><span class="lang-es">Casos de uso:</span></strong> <span class="lang-en">You know the IP ranges of a specific ISP and want to route their users to a particular endpoint. Compliance routing for known corporate IP ranges. Optimizing performance for known traffic sources.</span><span class="lang-es">Conoce los rangos de IP de un ISP específico y desea enrutar sus usuarios a un punto final particular. Enrutamiento de cumplimiento para rangos de IP corporativos conocidos. Optimización del rendimiento para fuentes de tráfico conocidas.</span></div>'
       },
       {
@@ -615,14 +732,23 @@ function prev(id) { if (states[id] > 0) renderStep(id, states[id] - 1); }
 function next(id) { if (states[id] < DEMOS[id].steps.length - 1) renderStep(id, states[id] + 1); }
 function restart(id) { renderStep(id, 0); }
 
-Object.keys(DEMOS).forEach(function(id) {
-  states[id] = 0;
-  var dotsEl = document.getElementById(id + '-dots');
-  dotsEl.innerHTML = DEMOS[id].steps.map(function(_, i) {
-    return '<div class="dot" id="' + id + '-dot-' + i + '"></div>';
-  }).join('');
-  renderStep(id, 0);
-});
+function initDemos() {
+  Object.keys(DEMOS).forEach(function(id) {
+    states[id] = 0;
+    var dotsEl = document.getElementById(id + '-dots');
+    if (!dotsEl) return;
+    dotsEl.innerHTML = DEMOS[id].steps.map(function(_, i) {
+      return '<div class="dot" id="' + id + '-dot-' + i + '"></div>';
+    }).join('');
+    renderStep(id, 0);
+  });
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initDemos);
+} else {
+  initDemos();
+}
 </script>
 
 </body>

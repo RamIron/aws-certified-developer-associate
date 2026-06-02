@@ -1133,23 +1133,16 @@
             antemano (ej: IDs de AMI por región).</span
           >
         </p>
-        <div class="code-block">
-          <span class="ck">Mappings:</span><br />
-          &nbsp;&nbsp;<span class="ck">RegionMap:</span><br />
-          &nbsp;&nbsp;&nbsp;&nbsp;<span class="cv">us-east-1:</span><br />
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cs">HVM64:</span>
-          ami-0ff8a91507f77f867<br />
-          &nbsp;&nbsp;&nbsp;&nbsp;<span class="cv">eu-west-1:</span><br />
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cs">HVM64:</span>
-          ami-047bb4163c506cd98<br />
-          <br />
-          <span class="cc"># Access with !FindInMap</span><br />
-          <span class="cc"># [MapName, TopLevelKey, SecondLevelKey]</span><br />
-          <span class="ck">ImageId:</span>
-          <span class="cs"
-            >!FindInMap [RegionMap, !Ref "AWS::Region", HVM64]</span
-          >
-        </div>
+        <div class="code-block"><span class="ck">Mappings:</span>
+  <span class="ck">RegionMap:</span>
+    <span class="cv">us-east-1:</span>
+      <span class="cs">HVM64:</span> ami-0ff8a91507f77f867
+    <span class="cv">eu-west-1:</span>
+      <span class="cs">HVM64:</span> ami-047bb4163c506cd98
+
+<span class="cc"># Access with !FindInMap</span>
+<span class="cc"># [MapName, TopLevelKey, SecondLevelKey]</span>
+<span class="ck">ImageId:</span> <span class="cs">!FindInMap [RegionMap, !Ref "AWS::Region", HVM64]</span></div>
 
         <div class="compare">
           <div class="compare-card">
@@ -1212,22 +1205,16 @@
             <strong>exportar para que otros stacks los importen</strong>.</span
           >
         </p>
-        <div class="code-block">
-          <span class="ck">Outputs:</span><br />
-          &nbsp;&nbsp;<span class="cv">SSHSecurityGroup:</span><br />
-          &nbsp;&nbsp;&nbsp;&nbsp;<span class="cs">Description:</span> The SSH
-          SG for our company<br />
-          &nbsp;&nbsp;&nbsp;&nbsp;<span class="cs">Value:</span> !Ref
-          MySSHSecurityGroup<br />
-          &nbsp;&nbsp;&nbsp;&nbsp;<span class="cs">Export:</span><br />
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cs">Name:</span>
-          SSHSecurityGroup <span class="cc"># must be unique per region</span
-          ><br />
-          <br />
-          <span class="cc"># Import in another stack:</span><br />
-          <span class="cs">SecurityGroups:</span><br />
-          &nbsp;&nbsp;- <span class="ck">!ImportValue</span> SSHSecurityGroup
-        </div>
+        <div class="code-block"><span class="ck">Outputs:</span>
+  <span class="cv">SSHSecurityGroup:</span>
+    <span class="cs">Description:</span> The SSH SG for our company
+    <span class="cs">Value:</span> !Ref MySSHSecurityGroup
+    <span class="cs">Export:</span>
+      <span class="cs">Name:</span> SSHSecurityGroup <span class="cc"># must be unique per region</span>
+
+<span class="cc"># Import in another stack:</span>
+<span class="cs">SecurityGroups:</span>
+  - <span class="ck">!ImportValue</span> SSHSecurityGroup</div>
         <div class="callout danger">
           ❌
           <span class="lang-en"
@@ -1252,20 +1239,15 @@
             / prod).</span
           >
         </p>
-        <div class="code-block">
-          <span class="cc"># Define the condition</span><br />
-          <span class="ck">Conditions:</span><br />
-          &nbsp;&nbsp;<span class="cv">CreateProdResources:</span> !Equals [!Ref
-          EnvType, prod]<br />
-          <br />
-          <span class="cc"># Apply it to a resource</span><br />
-          <span class="ck">Resources:</span><br />
-          &nbsp;&nbsp;<span class="cv">MountPoint:</span><br />
-          &nbsp;&nbsp;&nbsp;&nbsp;<span class="cs">Type:</span>
-          AWS::EC2::VolumeAttachment<br />
-          &nbsp;&nbsp;&nbsp;&nbsp;<span class="cs">Condition:</span>
-          CreateProdResources <span class="cc"># skipped if false</span>
-        </div>
+        <div class="code-block"><span class="cc"># Define the condition</span>
+<span class="ck">Conditions:</span>
+  <span class="cv">CreateProdResources:</span> !Equals [!Ref EnvType, prod]
+
+<span class="cc"># Apply it to a resource</span>
+<span class="ck">Resources:</span>
+  <span class="cv">MountPoint:</span>
+    <span class="cs">Type:</span> AWS::EC2::VolumeAttachment
+    <span class="cs">Condition:</span> CreateProdResources <span class="cc"># skipped if false</span></div>
 
         <table class="data-table">
           <thead>
@@ -1524,19 +1506,50 @@
           </div>
         </div>
 
-        <div class="callout info">
-          💡 <strong>!Base64</strong>:
-          <span class="lang-en"
-            >almost exclusively used to pass shell scripts as
-            <strong>EC2 UserData</strong>. The EC2 service decodes it at
-            launch.</span
-          >
-          <span class="lang-es"
-            >se usa casi exclusivamente para pasar scripts de shell como
-            <strong>EC2 UserData</strong>. El servicio EC2 lo decodifica al
-            iniciar.</span
-          >
+        <h3 style="margin-top:1.25rem">
+          <span class="lang-en">!GetAtt — code example</span
+          ><span class="lang-es">!GetAtt — ejemplo de código</span>
+        </h3>
+        <p>
+          <span class="lang-en">Use <code>!GetAtt ResourceName.AttributeName</code> to read a specific attribute of any resource. The attributes available for each type are listed in the <strong>"Return values"</strong> section of the CloudFormation docs.</span>
+          <span class="lang-es">Usá <code>!GetAtt ResourceName.AttributeName</code> para leer un atributo específico de cualquier recurso. Los atributos disponibles para cada tipo están listados en la sección <strong>"Return values"</strong> de la documentación de CloudFormation.</span>
+        </p>
+        <div class="code-block"><span class="cc"># Place an EBS volume in the same AZ as an EC2 instance</span>
+<span class="cv">MyVolume:</span>
+  <span class="cs">Type:</span> AWS::EC2::Volume
+  <span class="cs">Properties:</span>
+    <span class="cs">AvailabilityZone:</span> <span class="ck">!GetAtt</span> EC2Instance.AvailabilityZone
+    <span class="cs">Size:</span> 100</div>
+        <div class="callout info" style="margin-top:0.5rem">
+          💡 <span class="lang-en"><strong>Common EC2 attributes via !GetAtt:</strong></span><span class="lang-es"><strong>Atributos comunes de EC2 via !GetAtt:</strong></span>
+          <code>AvailabilityZone</code> · <code>PrivateIp</code> · <code>PublicIp</code> · <code>PrivateDnsName</code> · <code>PublicDnsName</code>
         </div>
+
+        <h3 style="margin-top:1.25rem">
+          <span class="lang-en">!Base64 &amp; !Sub — code examples</span
+          ><span class="lang-es">!Base64 y !Sub — ejemplos de código</span>
+        </h3>
+        <p>
+          <span class="lang-en"><strong>!Base64</strong> is almost exclusively used to pass shell scripts as <strong>EC2 UserData</strong>. The EC2 service decodes it automatically at launch.</span>
+          <span class="lang-es"><strong>!Base64</strong> se usa casi exclusivamente para pasar scripts de shell como <strong>EC2 UserData</strong>. El servicio EC2 lo decodifica automáticamente al iniciar.</span>
+        </p>
+        <div class="code-block"><span class="cv">MyInstance:</span>
+  <span class="cs">Type:</span> AWS::EC2::Instance
+  <span class="cs">Properties:</span>
+    <span class="cs">UserData:</span>
+      <span class="ck">!Base64</span> |
+        #!/bin/bash
+        yum update -y
+        yum install -y httpd</div>
+        <p style="margin-top:0.75rem">
+          <span class="lang-en"><strong>!Sub</strong> substitutes variables inside a string — useful for building ARNs and resource names dynamically.</span>
+          <span class="lang-es"><strong>!Sub</strong> sustituye variables dentro de una cadena — útil para construir ARNs y nombres de recursos de forma dinámica.</span>
+        </p>
+        <div class="code-block"><span class="cc"># ${BucketName} is replaced at deploy time with the actual parameter/resource value</span>
+<span class="cs">BucketArn:</span> <span class="ck">!Sub</span> <span class="cv">"arn:aws:s3:::${BucketName}"</span>
+
+<span class="cc"># Can also combine multiple values:</span>
+<span class="cs">RoleName:</span> <span class="ck">!Sub</span> <span class="cv">"${AWS::StackName}-ExecutionRole"</span></div>
       </div>
 
       <!-- ═══════════════ 5. ROLLBACKS & SERVICE ROLE ═══════════════ -->
@@ -1726,16 +1739,35 @@
             <h4>iam:PassRole</h4>
             <p>
               <span class="lang-en"
-                >Required to assign a role to CloudFormation. Without it, the
-                user cannot attach a service role to any stack.</span
+                ><code>iam:PassRole</code> is a standard AWS permission that
+                controls <strong>who can hand a role to an AWS service</strong>.
+                It must be added to the <strong>user's own IAM policy</strong>
+                — without it, CloudFormation rejects the
+                <code>--role-arn</code> parameter and the stack creation
+                fails.</span
               ><span class="lang-es"
-                >Requerido para asignar un rol a CloudFormation. Sin esto, el
-                usuario no puede adjuntar un rol de servicio a ningún
-                stack.</span
+                ><code>iam:PassRole</code> es un permiso estándar de AWS que
+                controla <strong>quién puede pasarle un rol a un servicio de AWS</strong>.
+                Debe agregarse en la <strong>política IAM del usuario</strong>
+                — sin él, CloudFormation rechaza el parámetro
+                <code>--role-arn</code> y la creación del stack falla.</span
               >
             </p>
           </div>
         </div>
+
+        <div class="code-block"><span class="cc"># User's IAM policy — grants the right to pass a specific role to CloudFormation</span>
+{
+  <span class="cs">"Effect"</span>: <span class="cv">"Allow"</span>,
+  <span class="cs">"Action"</span>: <span class="cv">"iam:PassRole"</span>,
+  <span class="cs">"Resource"</span>: <span class="cv">"arn:aws:iam::123456789012:role/MyCFNServiceRole"</span>
+}
+
+<span class="cc"># CLI: attach the role when creating a stack</span>
+aws cloudformation create-stack \
+  --stack-name MyStack \
+  --template-body file://template.yaml \
+  --role-arn arn:aws:iam::123456789012:role/MyCFNServiceRole</div>
 
         <div class="callout success">
           ✅
@@ -1744,15 +1776,14 @@
             ><span class="lang-es">Patrón de mínimo privilegio:</span></strong
           >
           <span class="lang-en">
-            Users get <code>cloudformation:*</code> + <code>iam:PassRole</code>.
-            The service role gets the actual resource permissions (S3, EC2,
-            RDS…). Users never need those resource permissions directly.</span
+            Users need <code>cloudformation:*</code> + <code>iam:PassRole</code> on the service role.
+            The service role holds the actual resource permissions (S3, EC2, RDS…).
+            That way users can deploy stacks <strong>without having direct S3/EC2/RDS permissions on their own IAM policy</strong> — CloudFormation's role covers those.</span
           >
           <span class="lang-es">
-            Los usuarios obtienen <code>cloudformation:*</code> +
-            <code>iam:PassRole</code>. El rol de servicio obtiene los permisos
-            reales de recursos (S3, EC2, RDS…). Los usuarios nunca necesitan
-            esos permisos directamente.</span
+            Los usuarios necesitan <code>cloudformation:*</code> + <code>iam:PassRole</code> sobre el rol de servicio.
+            El rol de servicio tiene los permisos reales de recursos (S3, EC2, RDS…).
+            Así los usuarios pueden deployar stacks <strong>sin tener permisos de S3/EC2/RDS directamente en su propia política IAM</strong> — el rol de CloudFormation los cubre.</span
           >
         </div>
       </div>
@@ -1770,27 +1801,52 @@
         <h3>Capabilities</h3>
         <p>
           <span class="lang-en"
-            >Explicit acknowledgements required when a template performs
-            sensitive operations. Without them, CloudFormation throws
-            <code>InsufficientCapabilitiesException</code>.</span
+            >A forced <strong>"are you sure?"</strong> that AWS requires before
+            deploying a template that touches <strong>IAM resources</strong>
+            (roles, users, groups, policies). Not a permission — just a mandatory
+            acknowledgement. Without it, CloudFormation throws
+            <code>InsufficientCapabilitiesException</code> and refuses to deploy.</span
           >
           <span class="lang-es"
-            >Confirmaciones explícitas requeridas cuando una plantilla realiza
-            operaciones sensibles. Sin ellas, CloudFormation lanza
-            <code>InsufficientCapabilitiesException</code>.</span
+            >Un <strong>"¿estás seguro?"</strong> obligatorio que AWS exige antes
+            de deployar una plantilla que toca <strong>recursos IAM</strong>
+            (roles, usuarios, grupos, políticas). No es un permiso — es solo una
+            confirmación obligatoria. Sin ella, CloudFormation lanza
+            <code>InsufficientCapabilitiesException</code> y se niega a deployar.</span
           >
         </p>
+        <div class="callout warning">
+          ⚠
+          <span class="lang-en"
+            ><strong>Why does this exist?</strong> Many people deployed
+            CloudFormation templates from the internet without reading them.
+            Those templates silently created IAM roles with admin permissions
+            and the user never noticed. AWS added this checkpoint to force you
+            to acknowledge "yes, I know this template creates IAM resources."</span
+          >
+          <span class="lang-es"
+            ><strong>¿Por qué existe?</strong> Mucha gente deployaba templates
+            de CloudFormation de internet sin leerlos. Esos templates creaban
+            roles IAM con permisos de admin en silencio y el usuario nunca se
+            daba cuenta. AWS agregó este checkpoint para obligarte a reconocer
+            "sí, sé que esta plantilla crea recursos IAM."</span
+          >
+        </div>
 
         <div class="cap-grid">
           <div class="cap-card">
             <span class="cap-name">CAPABILITY_IAM</span>
             <p>
               <span class="lang-en"
-                >Template creates/updates <strong>unnamed</strong> IAM resources
-                (users, roles, groups, policies).</span
+                >Template creates/updates IAM resources where
+                <strong>you did not set an explicit name</strong> — CloudFormation
+                auto-generates a random name like
+                <code>mystack-MyRole-X7KP2Q</code>.</span
               ><span class="lang-es"
-                >La plantilla crea/actualiza recursos IAM
-                <strong>sin nombre explícito</strong>.</span
+                >La plantilla crea/actualiza recursos IAM donde
+                <strong>no definiste un nombre explícito</strong> — CloudFormation
+                genera uno random como
+                <code>mystack-MyRole-X7KP2Q</code>.</span
               >
             </p>
           </div>
@@ -1798,40 +1854,102 @@
             <span class="cap-name">CAPABILITY_NAMED_IAM</span>
             <p>
               <span class="lang-en"
-                >Template creates/updates IAM resources
-                <strong>with an explicit name</strong>. Use this instead of IAM
-                when names are set.</span
+                >Template creates/updates IAM resources where
+                <strong>you set an explicit name</strong> in the template
+                (e.g. <code>RoleName: AdminRole</code>). More sensitive because
+                the name is predictable. <strong>When in doubt, use this — it covers both cases.</strong></span
               ><span class="lang-es"
-                >La plantilla crea/actualiza recursos IAM
-                <strong>con un nombre explícito</strong>. Usá este en lugar de
-                IAM cuando los nombres están definidos.</span
+                >La plantilla crea/actualiza recursos IAM donde
+                <strong>definiste un nombre explícito</strong> en la plantilla
+                (ej. <code>RoleName: AdminRole</code>). Más sensible porque el nombre es predecible.
+                <strong>Ante la duda, usá este — cubre ambos casos.</strong></span
               >
             </p>
           </div>
-          <div class="cap-card">
-            <span class="cap-name">CAPABILITY_AUTO_EXPAND</span>
+          <div class="cap-card" style="border-color:#6366f1">
+            <span class="cap-name" style="background:#312e81;color:#a5b4fc">CAPABILITY_AUTO_EXPAND</span>
             <p>
               <span class="lang-en"
-                >Template uses <strong>macros or nested stacks</strong> that
-                expand before deployment.</span
+                >Completely different from the IAM ones. Required when your
+                template uses <strong>macros or nested stacks</strong> — meaning
+                CloudFormation will <strong>transform the template before
+                deploying it</strong>. What you wrote is not exactly what gets
+                executed. AWS forces you to acknowledge that.</span
               ><span class="lang-es"
-                >La plantilla usa <strong>macros o stacks anidados</strong> que
-                se expanden antes del despliegue.</span
+                >Completamente distinta a las de IAM. Requerida cuando tu
+                plantilla usa <strong>macros o nested stacks</strong> — lo que
+                significa que CloudFormation va a
+                <strong>transformar la plantilla antes de deployarla</strong>.
+                Lo que escribiste no es exactamente lo que se ejecuta. AWS te
+                obliga a reconocer eso.</span
               >
             </p>
           </div>
         </div>
+
+        <div class="code-block"><span class="cc"># CAPABILITY_IAM — no RoleName set, CloudFormation picks the name</span>
+<span class="cv">MyRole:</span>
+  <span class="cs">Type:</span> AWS::IAM::Role
+  <span class="cs">Properties:</span>
+    <span class="cs">AssumeRolePolicyDocument:</span> ...   <span class="cc"># no RoleName → auto-generated</span>
+
+<span class="cc"># CAPABILITY_NAMED_IAM — explicit name defined in the template</span>
+<span class="cv">MyRole:</span>
+  <span class="cs">Type:</span> AWS::IAM::Role
+  <span class="cs">Properties:</span>
+    <span class="cs">RoleName:</span> <span class="cv">AdminRole</span>   <span class="cc"># explicit name → CAPABILITY_NAMED_IAM required</span>
+    <span class="cs">AssumeRolePolicyDocument:</span> ...</div>
+
+        <h3 style="margin-top:1.25rem">
+          <span class="lang-en">CAPABILITY_AUTO_EXPAND — what does "expand" mean?</span
+          ><span class="lang-es">CAPABILITY_AUTO_EXPAND — ¿qué significa "expandir"?</span>
+        </h3>
+        <p>
+          <span class="lang-en">A <strong>macro</strong> is a Lambda function that runs on your template
+          before CloudFormation deploys it. It rewrites or expands the template
+          — what CloudFormation actually deploys can look very different from
+          what you wrote. The most common real-world example is
+          <strong>SAM (Serverless Application Model)</strong>: you write
+          simplified syntax and the <code>AWS::Serverless-2016-10-31</code>
+          macro expands it into full CloudFormation resources automatically.</span>
+          <span class="lang-es">Un <strong>macro</strong> es una función Lambda que corre sobre tu
+          plantilla antes de que CloudFormation la deployé. La reescribe o
+          expande — lo que CloudFormation realmente deploya puede verse muy
+          distinto a lo que vos escribiste. El ejemplo más común en la práctica
+          es <strong>SAM (Serverless Application Model)</strong>: escribís
+          sintaxis simplificada y el macro
+          <code>AWS::Serverless-2016-10-31</code> lo expande automáticamente en
+          recursos completos de CloudFormation.</span>
+        </p>
+        <div class="code-block"><span class="cc"># What YOU write (SAM syntax — simplified)</span>
+<span class="ck">Transform:</span> <span class="cv">AWS::Serverless-2016-10-31</span>  <span class="cc"># ← this macro triggers CAPABILITY_AUTO_EXPAND</span>
+<span class="ck">Resources:</span>
+  <span class="cv">MyFunction:</span>
+    <span class="cs">Type:</span> AWS::Serverless::Function
+    <span class="cs">Properties:</span>
+      <span class="cs">Handler:</span> index.handler
+      <span class="cs">Runtime:</span> nodejs18.x
+
+<span class="cc"># What CloudFormation ACTUALLY deploys (expanded by the macro)</span>
+<span class="ck">Resources:</span>
+  <span class="cv">MyFunction:</span>
+    <span class="cs">Type:</span> AWS::Lambda::Function      <span class="cc"># full resource</span>
+    <span class="cs">Properties:</span> ...
+  <span class="cv">MyFunctionRole:</span>
+    <span class="cs">Type:</span> AWS::IAM::Role             <span class="cc"># auto-created execution role</span>
+    <span class="cs">Properties:</span> ...</div>
+
         <div class="callout info" style="margin-top: 0.75rem">
           💡
           <span class="lang-en"
-            >Capabilities are just an <strong>acknowledgement</strong> — they
-            don't grant extra permissions. Provide them via console checkbox,
-            CLI <code>--capabilities</code>, or API.</span
+            >Provide capabilities via console checkbox or
+            CLI: <code>--capabilities CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND</code>
+            (you can pass multiple).</span
           >
           <span class="lang-es"
-            >Las capabilities son solo una <strong>confirmación</strong> — no
-            otorgan permisos extra. Proporcionálas via checkbox en la consola,
-            <code>--capabilities</code> en CLI, o en la API.</span
+            >Proporcionálas via checkbox en la consola o
+            CLI: <code>--capabilities CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND</code>
+            (podés pasar varias a la vez).</span
           >
         </div>
 
@@ -1939,11 +2057,11 @@
             </div>
             <div class="policy-row">
               <span class="lbl"
-                ><span class="lang-en">Stateful only?</span
-                ><span class="lang-es">¿Solo recursos stateful?</span></span
+                ><span class="lang-en">Native snapshot API?</span
+                ><span class="lang-es">¿API de snapshot nativa?</span></span
               ><span class="chip blue"
-                ><span class="lang-en">Yes</span
-                ><span class="lang-es">Sí</span></span
+                ><span class="lang-en">Required</span
+                ><span class="lang-es">Requerida</span></span
               >
             </div>
           </div>
@@ -1958,6 +2076,21 @@
           >
           EBS Volumes · ElastiCache · RDS (DBInstance / DB Cluster) · Redshift ·
           Neptune · DocumentDB
+          <br/><br/>
+          <span style="color:#94a3b8;font-size:12px">
+            <span class="lang-en">⚠ Not every stateful resource qualifies — only those with a
+            <strong>native snapshot mechanism</strong>. For example,
+            <strong>EFS is stateful but doesn't support Snapshot here</strong>
+            because it uses AWS Backup instead of snapshots.
+            If you try to set <code>DeletionPolicy: Snapshot</code> on an
+            unsupported resource, CloudFormation will throw a validation error.</span>
+            <span class="lang-es">⚠ No todo recurso stateful califica — solo los que tienen un
+            <strong>mecanismo de snapshot nativo</strong>. Por ejemplo,
+            <strong>EFS es stateful pero no soporta Snapshot acá</strong>
+            porque usa AWS Backup en lugar de snapshots.
+            Si intentás poner <code>DeletionPolicy: Snapshot</code> en un
+            recurso no soportado, CloudFormation lanza un error de validación.</span>
+          </span>
         </div>
       </div>
 
@@ -1992,36 +2125,21 @@
           >
         </p>
 
-        <div class="code-block">
-          <span class="ck">{</span><br />
-          &nbsp;&nbsp;<span class="cs">"Statement"</span>: [<br />
-          &nbsp;&nbsp;&nbsp;&nbsp;<span class="ck">{</span><br />
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cs">"Effect"</span>:
-          <span class="cv">"Allow"</span>,&nbsp;&nbsp;<span class="cc"
-            >// allow updates on everything…</span
-          ><br />
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cs">"Action"</span>:
-          <span class="cv">"Update:*"</span>,<br />
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cs">"Principal"</span
-          >: <span class="cv">"*"</span>, <span class="cs">"Resource"</span>:
-          <span class="cv">"*"</span><br />
-          &nbsp;&nbsp;&nbsp;&nbsp;<span class="ck">}</span>,<br />
-          &nbsp;&nbsp;&nbsp;&nbsp;<span class="ck">{</span><br />
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cs">"Effect"</span>:
-          <span class="cv">"Deny"</span>,&nbsp;&nbsp;&nbsp;<span class="cc"
-            >// …except the production DB</span
-          ><br />
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cs">"Action"</span>:
-          <span class="cv">"Update:*"</span>,<br />
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cs">"Principal"</span
-          >: <span class="cv">"*"</span>,<br />
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cs">"Resource"</span
-          >: <span class="cv">"LogicalResourceId/ProductionDatabase"</span
-          ><br />
-          &nbsp;&nbsp;&nbsp;&nbsp;<span class="ck">}</span><br />
-          &nbsp;&nbsp;]<br />
-          <span class="ck">}</span>
-        </div>
+        <div class="code-block">{
+  <span class="cs">"Statement"</span>: [
+    {
+      <span class="cs">"Effect"</span>: <span class="cv">"Allow"</span>,  <span class="cc">// allow updates on everything…</span>
+      <span class="cs">"Action"</span>: <span class="cv">"Update:*"</span>,
+      <span class="cs">"Principal"</span>: <span class="cv">"*"</span>, <span class="cs">"Resource"</span>: <span class="cv">"*"</span>
+    },
+    {
+      <span class="cs">"Effect"</span>: <span class="cv">"Deny"</span>,   <span class="cc">// …except the production DB</span>
+      <span class="cs">"Action"</span>: <span class="cv">"Update:*"</span>,
+      <span class="cs">"Principal"</span>: <span class="cv">"*"</span>,
+      <span class="cs">"Resource"</span>: <span class="cv">"LogicalResourceId/ProductionDatabase"</span>
+    }
+  ]
+}</div>
 
         <div class="concept-grid" style="margin-bottom: 1rem">
           <div class="concept-card">
@@ -2242,24 +2360,13 @@
           </div>
         </div>
 
-        <div class="code-block">
-          <span class="ck">Resources:</span><br />
-          &nbsp;&nbsp;<span class="cv">MyCustomResource:</span><br />
-          &nbsp;&nbsp;&nbsp;&nbsp;<span class="cs">Type:</span>
-          Custom::EmptyS3BucketOnDelete<br />
-          &nbsp;&nbsp;&nbsp;&nbsp;<span class="cs">Properties:</span><br />
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cs"
-            >ServiceToken:</span
-          >
-          arn:aws:lambda:us-east-1:123:function:EmptyBucket<br />
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cc"
-            ># ServiceToken = Lambda ARN or SNS ARN (must be same region)</span
-          ><br />
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cs"
-            >BucketName:</span
-          >
-          !Ref MyS3Bucket
-        </div>
+        <div class="code-block"><span class="ck">Resources:</span>
+  <span class="cv">MyCustomResource:</span>
+    <span class="cs">Type:</span> Custom::EmptyS3BucketOnDelete
+    <span class="cs">Properties:</span>
+      <span class="cs">ServiceToken:</span> arn:aws:lambda:us-east-1:123:function:EmptyBucket
+      <span class="cc"># ServiceToken = Lambda ARN or SNS ARN (must be same region)</span>
+      <span class="cs">BucketName:</span> !Ref MyS3Bucket</div>
 
         <div class="callout info">
           💡

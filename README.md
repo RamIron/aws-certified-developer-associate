@@ -7,10 +7,10 @@ Study notes for AWS DVA-C02, assisted by Claude.
 ## 📊 Progress
 
 ```
-██████████████████████████████ 99.4% (480/483 lessons)
+██████████████████████████████ 100% (483/483 lessons)
 ```
 
-📹 Videos: 446/446 · 📄 Articles: 8/8 · ❓ Quizzes: 26/29
+📹 Videos: 446/446 · 📄 Articles: 8/8 · ❓ Quizzes: 29/29
 
 **Current section:** Course complete — 3 quizzes pending
 

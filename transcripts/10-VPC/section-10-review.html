@@ -258,7 +258,13 @@
     <div class="section-label"><span class="lang-en">4 &mdash; VPC Flow Logs</span><span class="lang-es">4 &mdash; Registros de flujo de VPC</span></div>
     <div class="card">
       <div class="card-title"><span class="lang-en">Capturing IP Traffic for Visibility &amp; Troubleshooting</span><span class="lang-es">Captura de tráfico IP para visibilidad y resolución de problemas</span></div>
-      <p style="font-size:14px;color:#94a3b8;margin-bottom:20px;"><span class="lang-en">VPC Flow Logs capture metadata about all IP traffic going to and from network interfaces. They are the primary tool for diagnosing connectivity issues.</span><span class="lang-es">Los registros de flujo de VPC capturan metadatos sobre todo el tráfico IP que va hacia y desde interfaces de red. Son la herramienta principal para diagnosticar problemas de conectividad.</span></p>
+      <p style="font-size:14px;color:#94a3b8;margin-bottom:16px;"><span class="lang-en">VPC Flow Logs capture metadata about all IP traffic going to and from network interfaces. They are the primary tool for diagnosing connectivity issues.</span><span class="lang-es">Los registros de flujo de VPC capturan metadatos sobre todo el tráfico IP que va hacia y desde interfaces de red. Son la herramienta principal para diagnosticar problemas de conectividad.</span></p>
+
+      <div class="callout info" style="margin-bottom:20px;">
+        <strong><span class="lang-en">What is an ENI?</span><span class="lang-es">¿Qué es un ENI?</span></strong><br>
+        <span class="lang-en">An <strong>ENI (Elastic Network Interface)</strong> is simply the virtual network card that AWS attaches to an EC2 instance (or other resource). Every EC2 has at least one — it's what gives the instance its private IP address, its MAC address, and its connection to the VPC network. You can think of it as the "plug" between the instance and the network. When Flow Logs say they capture traffic "at the ENI level", they mean: at the exact point where data enters or leaves that specific instance's network card.</span>
+        <span class="lang-es">Un <strong>ENI (Elastic Network Interface)</strong> es simplemente la tarjeta de red virtual que AWS le conecta a una instancia EC2 (u otro recurso). Cada EC2 tiene al menos uno — es lo que le da a la instancia su IP privada, su dirección MAC y su conexión a la red de la VPC. Podés pensarlo como el "enchufe" entre la instancia y la red. Cuando Flow Logs dicen que capturan tráfico "a nivel ENI", significa: en el punto exacto donde los datos entran o salen de la tarjeta de red de esa instancia.</span>
+      </div>
 
       <div class="grid-3" style="margin-bottom:20px;">
         <div class="service-card">
@@ -437,8 +443,8 @@
             </tr>
             <tr>
               <td><strong style="color:#f8fafc;"><span class="lang-en">Use case</span><span class="lang-es">Caso de uso</span></strong></td>
-              <td><span class="lang-en">Quick setup, backup connectivity, low-throughput</span><span class="lang-es">Configuración rápida, conectividad de respaldo, bajo rendimiento</span></td>
-              <td><span class="lang-en">High-throughput, consistent latency, compliance</span><span class="lang-es">Alto rendimiento, latencia consistente, cumplimiento</span></td>
+              <td><span class="lang-en">Quick setup, backup connectivity, low-throughput</span><span class="lang-es">Configuración rápida, conectividad de respaldo, baja velocidad de transferencia</span></td>
+              <td><span class="lang-en">High-throughput, consistent latency, compliance</span><span class="lang-es">Alta velocidad de transferencia, latencia consistente, cumplimiento</span></td>
             </tr>
           </tbody>
         </table>
@@ -650,7 +656,7 @@ var DEMOS = {
                 <li><span class="lang-en">Automatically scales bandwidth (up to 45 Gbps)</span><span class="lang-es">Escala automáticamente el ancho de banda (hasta 45 Gbps)</span></li>
                 <li><span class="lang-en">High availability within AZ (deploy in each AZ for full HA)</span><span class="lang-es">Alta disponibilidad dentro de AZ (implementar en cada AZ para HA completa)</span></li>
                 <li><span class="lang-en">Cannot be used as Bastion host</span><span class="lang-es">No puede ser utilizado como host bastión</span></li>
-                <li>No <span class="lang-en">Security Group</span><span class="lang-es">Grupo de seguridad</span>s to manage</li>
+                <li><span class="lang-en">No Security Groups to manage</span><span class="lang-es">Sin Grupos de seguridad que administrar</span></li>
               </ul>
             </div>
             <div class="compare-col">
@@ -660,9 +666,14 @@ var DEMOS = {
                 <li><span class="lang-en">Must disable source/dest check manually</span><span class="lang-es">Debe deshabilitar la verificación de origen/destino manualmente</span></li>
                 <li><span class="lang-en">Bandwidth limited by instance type</span><span class="lang-es">Ancho de banda limitado por tipo de instancia</span></li>
                 <li><span class="lang-en">Can be used as a Bastion host</span><span class="lang-es">Puede ser utilizado como host bastión</span></li>
-                <li>Must manage <span class="lang-en">Security Group</span><span class="lang-es">Grupo de seguridad</span>s yourself</li>
+                <li><span class="lang-en">Must manage Security Groups yourself</span><span class="lang-es">Debés administrar los Grupos de seguridad vos mismo</span></li>
               </ul>
             </div>
+          </div>
+          <div class="callout info" style="margin-top:14px;">
+            <strong><span class="lang-en">💡 What is a Bastion Host?</span><span class="lang-es">💡 ¿Qué es un Bastion Host?</span></strong><br>
+            <span class="lang-en">A <strong>Bastion Host</strong> (also called a Jump Box) is a special EC2 instance sitting in a <em>public</em> subnet whose only job is to let you SSH into servers in <em>private</em> subnets. Without it, you can't reach private instances at all — they have no public IP. You connect to the bastion first, then from there you SSH into the private EC2. It acts as a secure "stepping stone." A NAT Gateway is fully managed by AWS and cannot be SSH'd into, so it can't serve this role — only a NAT Instance (a plain EC2 you control) can double as a bastion.</span>
+            <span class="lang-es">Un <strong>Bastion Host</strong> (también llamado Jump Box) es una instancia EC2 especial que vive en una subred <em>pública</em> y cuyo único trabajo es permitirte hacer SSH a servidores en subredes <em>privadas</em>. Sin él, no podés llegar a las instancias privadas — no tienen IP pública. Te conectás primero al bastion y desde ahí hacés SSH a la EC2 privada. Funciona como una "piedra de apoyo" segura. Un NAT Gateway es administrado por AWS y no se puede acceder por SSH, por eso no puede cumplir este rol — solo una NAT Instance (una EC2 normal que vos controlás) puede funcionar también como bastion.</span>
           </div>
         `
       }

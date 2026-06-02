@@ -625,6 +625,23 @@
           >
         </p>
 
+        <p>
+          <span class="lang-en">
+            DynamoDB is a <strong>hybrid NoSQL database</strong> — AWS officially classifies it as both a
+            <strong>key-value store</strong> (every item is addressed by a primary key) and a
+            <strong>document store</strong> (attribute values can be nested JSON-like documents).
+            In practice you get the speed and simplicity of key-value lookups with the flexibility of
+            storing rich, schema-less documents inside each item.
+          </span>
+          <span class="lang-es">
+            DynamoDB es una <strong>base de datos NoSQL híbrida</strong> — AWS la clasifica oficialmente como
+            <strong>clave-valor</strong> (cada ítem se accede por su clave primaria) y también como
+            <strong>documental</strong> (los atributos pueden ser documentos JSON anidados).
+            En la práctica combinás la velocidad del modelo clave-valor con la flexibilidad de guardar
+            documentos ricos y sin esquema fijo dentro de cada ítem.
+          </span>
+        </p>
+
         <table class="data-table">
           <tr>
             <th></th>
@@ -808,7 +825,7 @@
           <span class="badge">2</span>
           <h2>
             <span class="lang-en">Capacity Modes &amp; Throughput</span
-            ><span class="lang-es">Modos de Capacidad y Throughput</span>
+            ><span class="lang-es">Modos de Capacidad y Velocidad de transferencia</span>
           </h2>
         </div>
         <p class="card-subtitle">
@@ -834,8 +851,8 @@
               >
             </td>
             <td>
-              <span class="lang-en">Set RCU + WCU upfront</span
-              ><span class="lang-es">Definir RCU + WCU de antemano</span>
+              <span class="lang-en">Set RCU + WCU upfront — <strong>decoupled</strong>, can be changed independently at any time</span
+              ><span class="lang-es">Definir RCU + WCU de antemano — son <strong>independientes</strong>, se pueden modificar por separado en cualquier momento</span>
             </td>
             <td>
               <span class="lang-en">None — auto</span
@@ -870,10 +887,30 @@
                 ><span class="lang-es">Nombres de unidades</span></strong
               >
             </td>
-            <td><span class="lang-en">RCU / WCU</span><span class="lang-es">RCU / WCU</span></td>
+            <td>
+              <span class="lang-en">RCU / WCU</span><span class="lang-es">RCU / WCU</span>
+              <br><small style="color:#94a3b8;">RCU = Read Capacity Unit · WCU = Write Capacity Unit</small>
+            </td>
             <td>
               RRU / WRU <span class="lang-en">(same calculation)</span
               ><span class="lang-es">(mismo cálculo)</span>
+              <br><small style="color:#94a3b8;">RRU = Read Request Unit · WRU = Write Request Unit</small>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <strong
+                ><span class="lang-en">Auto Scaling</span
+                ><span class="lang-es">Auto Scaling</span></strong
+              >
+            </td>
+            <td>
+              <span class="lang-en"><span class="chip green">Optional</span> — set a min/max RCU+WCU range, DynamoDB adjusts automatically based on actual traffic. Best of both worlds: cheaper than On-Demand, no manual tuning.</span
+              ><span class="lang-es"><span class="chip green">Opcional</span> — definís un rango min/max de RCU+WCU, DynamoDB ajusta automáticamente según el tráfico real. Lo mejor de ambos mundos: más barato que On-Demand, sin ajuste manual.</span>
+            </td>
+            <td>
+              <span class="lang-en">Built-in (always automatic)</span
+              ><span class="lang-es">Incluido (siempre automático)</span>
             </td>
           </tr>
           <tr>
@@ -884,12 +921,12 @@
               >
             </td>
             <td>
-              <span class="lang-en">Predictable, steady traffic</span
-              ><span class="lang-es">Tráfico predecible y constante</span>
+              <span class="lang-en">Predictable, steady traffic (+ Auto Scaling for some variability)</span
+              ><span class="lang-es">Tráfico predecible y constante (+ Auto Scaling si hay algo de variabilidad)</span>
             </td>
             <td>
-              <span class="lang-en">Unknown or unpredictable workloads</span
-              ><span class="lang-es">Carga desconocida o impredecible</span>
+              <span class="lang-en">Unknown or unpredictable workloads, dev/test environments</span
+              ><span class="lang-es">Carga desconocida o impredecible, entornos de dev/test</span>
             </td>
           </tr>
         </table>
@@ -899,12 +936,14 @@
             ><strong>Throttling causes:</strong> hot key · hot partition · very
             large items. <strong>Solutions:</strong> exponential backoff (SDK
             built-in), better partition key distribution, DAX for read-heavy hot
-            keys.</span
+            keys.
+            <br><small style="color:#94a3b8;"><em>Hot key</em> = one specific item gets too many requests (e.g. a trending product). <em>Hot partition</em> = DynamoDB splits the table into internal physical partitions by key hash; if many different items hash to the same range, that partition saturates — even if no single item is to blame.</small></span
           ><span class="lang-es"
             ><strong>Causas de throttling:</strong> hot key · hot partition ·
             ítems muy grandes. <strong>Soluciones:</strong> exponential backoff
             (SDK nativo), mejor distribución de partition key, DAX para hot keys
-            de lectura.</span
+            de lectura.
+            <br><small style="color:#94a3b8;"><em>Hot key</em> = un ítem específico recibe demasiados requests (ej: un producto trending). <em>Hot partition</em> = DynamoDB divide la tabla en particiones físicas internas por hash; si muchos ítems distintos caen en el mismo rango, esa partición se satura — aunque ningún ítem individual sea el culpable.</small></span
           >
         </div>
       </div>
@@ -938,9 +977,15 @@
             redondear hacia ARRIBA al KB más cercano</span
           >
         </p>
-        <div class="formula-block">
-          <div class="f-label">WCU</div>
-          <div class="f-expr">WCU = (writes/sec) × ceil(item_KB / 1)</div>
+        <div class="vd-grid-2">
+          <div class="formula-block">
+            <div class="f-label">Standard</div>
+            <div class="f-expr">WCU = (writes/sec) × ceil(item_KB / 1)</div>
+          </div>
+          <div class="formula-block">
+            <div class="f-label">Transactional (2× — prepare + commit phases)</div>
+            <div class="f-expr">WCU = (writes × 2) × ceil(item_KB / 1)</div>
+          </div>
         </div>
         <table class="data-table">
           <tr>
@@ -984,6 +1029,37 @@
             <td>(120/60) × 2 = 2 × 2</td>
             <td><strong>4 WCU</strong></td>
           </tr>
+          <tr><td colspan="3" style="background:#1e293b;color:#94a3b8;font-size:12px;padding:6px 12px;">
+            <span class="lang-en">Transactional (2×) — when you use <strong>TransactWriteItems</strong>: all-or-nothing writes across multiple items. DynamoDB does the operation twice internally to guarantee atomicity, hence double the cost.</span>
+            <span class="lang-es">Transaccional (2×) — cuando usás <strong>TransactWriteItems</strong>: escrituras todo-o-nada en múltiples ítems. DynamoDB ejecuta la operación dos veces internamente para garantizar atomicidad, por eso cuesta el doble.</span>
+          </td></tr>
+          <tr>
+            <td>
+              <span class="lang-en">10 writes/sec, 2 KB each</span
+              ><span class="lang-es">10 escrituras/seg, 2 KB</span>
+            </td>
+            <td>10 × 2 × 2</td>
+            <td><strong>40 WCU</strong></td>
+          </tr>
+          <tr>
+            <td>
+              <span class="lang-en">6 writes/sec, 4.5 KB each</span
+              ><span class="lang-es">6 escrituras/seg, 4.5 KB</span>
+            </td>
+            <td>
+              6 × 2 × 5 <span class="lang-en">(4.5 → rounds up to 5)</span
+              ><span class="lang-es">(4.5 → sube a 5)</span>
+            </td>
+            <td><strong>60 WCU</strong></td>
+          </tr>
+          <tr>
+            <td>
+              <span class="lang-en">120 writes/min, 2 KB each</span
+              ><span class="lang-es">120 escrituras/min, 2 KB</span>
+            </td>
+            <td>(120/60) × 2 × 2 = 2 × 2 × 2</td>
+            <td><strong>8 WCU</strong></td>
+          </tr>
         </table>
 
         <h3><span class="lang-en">RCU — Read Capacity Unit</span><span class="lang-es">RCU — Unidad de capacidad de lectura</span></h3>
@@ -1014,9 +1090,6 @@
             Transactional (2× — prepare + commit phases)
           </div>
           <div class="f-expr">RCU = (reads × 2) × ceil(KB / 4)</div>
-          <div class="f-note">
-            Transactional WCU: WCU = (writes × 2) × ceil(KB / 1)
-          </div>
         </div>
 
         <div class="callout info">
@@ -1059,6 +1132,25 @@
             <td><span class="lang-en">Transactional</span><span class="lang-es">Transaccional</span></td>
             <td>(8 × 2) × (8/4) = 16 × 2</td>
             <td><strong>32 RCU</strong></td>
+          </tr>
+          <tr><td colspan="3" style="background:#1e293b;color:#64748b;font-size:12px;padding:6px 12px;">
+            <span class="lang-en">Examples with rounding (ceil): item sizes that are not multiples of 4</span>
+            <span class="lang-es">Ejemplos con redondeo (ceil): tamaños que no son múltiplo de 4</span>
+          </td></tr>
+          <tr>
+            <td><span class="lang-en">Strongly Consistent</span><span class="lang-es">Fuertemente consistente</span></td>
+            <td><span class="lang-en">5 reads × ceil(10/4) = 5 × 3</span><span class="lang-es">5 lecturas × ceil(10/4) = 5 × 3</span></td>
+            <td><strong>15 RCU</strong></td>
+          </tr>
+          <tr>
+            <td><span class="lang-en">Eventually Consistent</span><span class="lang-es">Eventualmente consistente</span></td>
+            <td><span class="lang-en">6 reads / 2 × ceil(15/4) = 3 × 4</span><span class="lang-es">6 lecturas / 2 × ceil(15/4) = 3 × 4</span></td>
+            <td><strong>12 RCU</strong></td>
+          </tr>
+          <tr>
+            <td><span class="lang-en">Transactional</span><span class="lang-es">Transaccional</span></td>
+            <td><span class="lang-en">3 reads × 2 × ceil(7/4) = 6 × 2</span><span class="lang-es">3 lecturas × 2 × ceil(7/4) = 6 × 2</span></td>
+            <td><strong>12 RCU</strong></td>
           </tr>
         </table>
       </div>
@@ -1199,11 +1291,9 @@
             </td>
             <td>
               <span class="lang-en"
-                >Returns 0 or 1 item only. <code>ConsistentRead = True</code> →
-                strongly consistent</span
+                >Returns 0 or 1 item only. <code>ConsistentRead = True</code> → strongly consistent. Use <code>ProjectionExpression</code> to fetch only specific attributes (like SQL <code>SELECT col1, col2</code>) — does NOT reduce RCU, full item is always read.</span
               ><span class="lang-es"
-                >Retorna 0 o 1 ítem. <code>ConsistentRead = True</code> →
-                strongly consistent</span
+                >Retorna 0 o 1 ítem. <code>ConsistentRead = True</code> → strongly consistent. Usá <code>ProjectionExpression</code> para traer solo ciertos atributos (como <code>SELECT col1, col2</code> en SQL) — NO reduce RCU, el ítem completo se lee igual.</span
               >
             </td>
           </tr>
@@ -1214,12 +1304,8 @@
               ><span class="lang-es">Ítems de un PK específico</span>
             </td>
             <td>
-              <span class="lang-en"
-                >Optional SK filter. FilterExpression after keys. Up to 1
-                MB.</span
-              ><span class="lang-es"
-                >Filtro opcional por SK. FilterExpression después de lectura.
-                Hasta 1 MB.</span
+              <span class="lang-en">Optional SK filter via <code>KeyConditionExpression</code> (reduces RCU). <code>FilterExpression</code> applied after, on non-key attributes only. Up to 1 MB.</span
+              ><span class="lang-es">Filtro opcional por SK via <code>KeyConditionExpression</code> (reduce RCU). <code>FilterExpression</code> se aplica después, solo sobre atributos no clave. Hasta 1 MB.</span
               >
             </td>
           </tr>
@@ -1234,9 +1320,9 @@
                 ><span class="lang-en">Very inefficient</span
                 ><span class="lang-es">Muy ineficiente</span></span
               >
-              <span class="lang-en">— use only for export/analytics</span
+              <span class="lang-en">— use only for export/analytics. To speed it up: use <strong>Parallel Scans</strong> — split the table into segments and scan each in parallel with separate workers. <strong>Query on a non-key attribute = Scan internally → always inefficient. Use a GSI instead.</strong></span
               ><span class="lang-es"
-                >— usar solo para exportación/analítica</span
+                >— usar solo para exportación/analítica. Para acelerarlo: usá <strong>Parallel Scans</strong> — dividís la tabla en segmentos y escaneás cada uno en paralelo con workers separados. <strong>Query por un atributo no-clave = Scan internamente → siempre ineficiente. Usá un GSI en su lugar.</strong></span
               >
             </td>
           </tr>
@@ -1255,15 +1341,9 @@
 
         <div class="callout danger">
           <span class="lang-en"
-            ><strong>FilterExpression does NOT reduce RCU.</strong> Items are
-            read first, then filtered before sending the response. You pay for
-            all reads regardless. Cannot filter on key attributes (PK or
-            SK).</span
+            ><strong>FilterExpression</strong> filters on <em>non-key attributes</em> (e.g. <code>age > 30</code>) after the read. <strong>Does NOT reduce RCU</strong> — you pay for all items read. To filter by PK/SK use <code>KeyConditionExpression</code> instead — that one does reduce RCU.</span
           ><span class="lang-es"
-            ><strong>FilterExpression NO reduce los RCU.</strong> Los ítems se
-            leen primero, luego se filtran antes de enviar la respuesta. Pagás
-            por todas las lecturas igual. No se puede filtrar por atributos
-            clave (PK o SK).</span
+            ><strong>FilterExpression</strong> filtra por <em>atributos no clave</em> (ej: <code>age > 30</code>) después de la lectura. <strong>NO reduce los RCU</strong> — pagás por todos los ítems leídos. Para filtrar por PK/SK usá <code>KeyConditionExpression</code> — ese sí reduce RCU.</span
           >
         </div>
       </div>
@@ -1443,22 +1523,24 @@
             reintentar.</span
           >
         </p>
-        <div class="diagram">
-          <span class="hlg">Item:</span> { user_id: "u1", name: "Bob",
-          <span class="hl">version: 1</span> } Client 1: SET name = "John" IF
-          version = 1
-          <span class="hlg">✅ wins → version becomes 2</span> Client 2: SET
-          name = "Lisa" IF version = 1
-          <span class="hlr">❌ ConditionalCheckFailedException</span>
-          <span class="cc">→ must re-read (version=2) and retry</span>
+        <div class="diagram" style="white-space:normal;display:flex;flex-direction:column;gap:8px;padding:12px;">
+          <div style="background:transparent;border:1px solid #334155;border-radius:8px;padding:10px 14px;">
+            <div style="color:#94a3b8;font-size:11px;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px;">Step 1 — Initial state</div>
+            <div>{ user_id: <span class="hlg">"u1"</span>, name: <span class="hlg">"Bob"</span>, <span class="hl">version: 1</span> }</div>
+          </div>
+          <div style="background:transparent;border:1px solid #334155;border-radius:8px;padding:10px 14px;">
+            <div style="color:#94a3b8;font-size:11px;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px;">Step 2 — Client 1 writes first</div>
+            <div>SET name = "John" IF version = 1 → <span class="hlg">✅ wins → version becomes 2</span></div>
+          </div>
+          <div style="background:transparent;border:1px solid #334155;border-radius:8px;padding:10px 14px;">
+            <div style="color:#94a3b8;font-size:11px;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px;">Step 3 — Client 2 arrives late</div>
+            <div>SET name = "Lisa" IF version = 1 → <span class="hlr">❌ ConditionalCheckFailedException</span></div>
+            <div><span class="cc">→ must re-read (version=2) and retry</span></div>
+          </div>
         </div>
         <div class="callout info">
-          <span class="lang-en"
-            >DynamoDB supports <strong>optimistic locking only</strong> — no
-            pessimistic locking (no blocking locks).</span
-          ><span class="lang-es"
-            >DynamoDB solo soporta <strong>bloqueo optimista</strong> — no hay
-            bloqueo pesimista.</span
+          <span class="lang-en">DynamoDB only supports <strong>optimistic locking</strong>. Optimistic: don't lock anything — just check at write time that nobody else changed the item (via version). Pessimistic: block the record while you work so nobody else can touch it (like SQL <code>SELECT FOR UPDATE</code>) — not supported.</span
+          ><span class="lang-es">DynamoDB solo soporta <strong>optimistic locking</strong>. Optimistic: no bloqueás nada — verificás al escribir que nadie modificó el ítem mientras tanto (via version). Pessimistic: bloqueás el registro mientras trabajás para que nadie más pueda tocarlo (como <code>SELECT FOR UPDATE</code> en SQL) — no soportado.</span
           >
         </div>
       </div>
@@ -1480,6 +1562,11 @@
             >LSI comparte capacidad, GSI la tiene propia — y el throttling de
             GSI puede matar silenciosamente tu tabla principal</span
           >
+        </p>
+
+        <p>
+          <span class="lang-en">By default you can only query DynamoDB by PK (+ optional SK). <strong>Secondary indexes</strong> let you query by other attributes. An <strong>LSI</strong> keeps the same partition key but adds an alternate sort key. A <strong>GSI</strong> defines a completely new PK+SK, effectively creating a different view of the table.</span>
+          <span class="lang-es">Por defecto solo podés consultar DynamoDB por PK (+ SK opcional). Los <strong>índices secundarios</strong> te permiten consultar por otros atributos. Un <strong>LSI</strong> mantiene el mismo partition key pero agrega un sort key alternativo. Un <strong>GSI</strong> define un PK+SK completamente nuevo, creando una vista distinta de la tabla.</span>
         </p>
 
         <table class="data-table">
@@ -1770,11 +1857,9 @@
         </div>
         <p class="card-subtitle">
           <span class="lang-en"
-            >Ordered stream of item-level changes — 24h retention, auto-sharded,
-            three consumer options</span
+            >Every write (insert/update/delete) on the table is recorded as an event in an ordered log. Consumers read that log to react to changes — 24h retention, automatically split into shards (parallel partitions) to scale with throughput, three consumer options</span
           ><span class="lang-es"
-            >Stream ordenado de cambios a nivel de ítem — retención 24h,
-            auto-shardado, tres opciones de consumidor</span
+            >Cada escritura (inserción/actualización/eliminación) en la tabla se registra como un evento en un log ordenado. Los consumidores leen ese log para reaccionar a los cambios — retención de 24h, dividido automáticamente en fragmentos (shards) para escalar con el throughput, tres opciones de consumidor</span
           >
         </p>
 
@@ -1835,6 +1920,7 @@
           <span class="lang-en">Architecture — Consumers</span
           ><span class="lang-es">Arquitectura — Consumidores</span>
         </h3>
+        <p><span class="lang-en">Streams is not just a log — it's an <strong>event source</strong>. Three types of consumers can react to changes in real time:</span><span class="lang-es">Streams no es solo un log — es una <strong>fuente de eventos</strong>. Tres tipos de consumidores pueden reaccionar a cambios en tiempo real:</span></p>
         <div class="vd">
           <div class="vd-label">DynamoDB Streams</div>
           <div class="vd-row">
@@ -1846,9 +1932,9 @@
             <div class="vd-arrow">→</div>
             <div class="vd-node purple">
               DynamoDB Stream<br /><small style="font-size: 10px; opacity: 0.7"
-                ><span class="lang-en">24h retention · auto-sharded</span
+                ><span class="lang-en">24h retention · auto-fragmented</span
                 ><span class="lang-es"
-                  >Retención 24h · auto-shardado</span
+                  >Retención 24h · fragmentación automática</span
                 ></small
               >
             </div>
@@ -1938,6 +2024,7 @@
         </p>
 
         <h3><span class="lang-en">TTL — Time To Live</span><span class="lang-es">TTL — Tiempo de vida</span></h3>
+        <p><span class="lang-en">A mechanism to automatically expire and delete items without writing any delete code. You add a Number attribute with a Unix timestamp — when that time passes, DynamoDB deletes the item for free.</span><span class="lang-es">Mecanismo para expirar y eliminar ítems automáticamente sin escribir código de borrado. Agregás un atributo Number con un Unix timestamp — cuando ese tiempo pasa, DynamoDB elimina el ítem sin costo.</span></p>
         <div class="concept-grid">
           <div class="concept-card">
             <h4><span class="lang-en">Setup</span><span class="lang-es">Configuración</span></h4>
@@ -1997,6 +2084,7 @@
         </div>
 
         <h3><span class="lang-en">CLI Pagination</span><span class="lang-es">Paginación de CLI</span></h3>
+        <p><span class="lang-en">DynamoDB returns results in pages (max 1 MB per call). The CLI has two parameters to control how many results you get per page and how many in total — useful to avoid fetching massive result sets at once.</span><span class="lang-es">DynamoDB devuelve resultados paginados (máx 1 MB por llamada). La CLI tiene dos parámetros para controlar cuántos resultados recibís por página y en total — útil para evitar traer sets de resultados enormes de una sola vez.</span></p>
         <table class="data-table">
           <tr>
             <th><span class="lang-en">Parameter</span><span class="lang-es">Parámetro</span></th>
@@ -2043,7 +2131,7 @@
           </tr>
         </table>
 
-        <h3><span class="lang-en">Transactions — ACID</span><span class="lang-es">Transacciones — ACID</span></h3>
+        <h3><span class="lang-en">Transactions — ACID (Atomicity, Consistency, Isolation, Durability)</span><span class="lang-es">Transacciones — ACID (Atomicidad, Consistencia, Aislamiento, Durabilidad)</span></h3>
         <p>
           <span class="lang-en"
             >All-or-nothing operations across one or more items/tables. Two
@@ -2095,12 +2183,13 @@
             >Estado de Sesión — Comparación de Servicios</span
           >
         </h3>
+        <p><span class="lang-en">Session state is the data tied to a user's active session (e.g. login status, cart, preferences). In distributed apps with multiple servers, this state must live somewhere shared — not on the server itself — so any instance can serve the user.</span><span class="lang-es">El estado de sesión es la información asociada a la sesión activa de un usuario (ej: si está logueado, su carrito, preferencias). En apps distribuidas con múltiples servidores, ese estado debe vivir en un lugar compartido — no en el servidor — para que cualquier instancia pueda atender al usuario.</span></p>
         <table class="data-table">
           <tr>
             <th><span class="lang-en">Service</span><span class="lang-es">Servicio</span></th>
             <th>
-              <span class="lang-en">Shared?</span
-              ><span class="lang-es">¿Compartido?</span>
+              <span class="lang-en">Shared across instances?</span
+              ><span class="lang-es">¿Compartido entre instancias?</span>
             </th>
             <th>
               <span class="lang-en">Best for</span
@@ -2252,13 +2341,13 @@
         </h3>
         <p>
           <span class="lang-en"
-            ><strong>Problem:</strong> Low-cardinality PKs (e.g. only
+            ><strong>Problem:</strong> Low-cardinality PKs (i.e. few unique values relative to total items — e.g. only
             <code>candidate_a</code> / <code>candidate_b</code>) → hot
             partitions. <strong>Solution:</strong> Append a random or
             hash-calculated suffix to the PK to spread writes. Trade-off: reads
             must query all shards and aggregate in app code.</span
           ><span class="lang-es"
-            ><strong>Problema:</strong> PKs de baja cardinalidad (ej: solo
+            ><strong>Problema:</strong> PKs de baja cardinalidad (pocos valores únicos en relación al total de ítems — ej: solo
             <code>candidate_a</code> / <code>candidate_b</code>) → hot
             partitions. <strong>Solución:</strong> Agregar un sufijo aleatorio o
             calculado por hash al PK para distribuir escrituras. Trade-off: las
@@ -2439,6 +2528,11 @@
             >LeadingKeys = seguridad a nivel de fila · Condición de Attributes =
             nivel de columna · Tablas Globales requieren Streams</span
           >
+        </p>
+
+        <p>
+          <span class="lang-en"><strong>Fine-Grained Access Control</strong> lets you restrict what rows or columns a user can access via IAM conditions — useful when different users should only see their own data. <strong>Global Tables</strong> are multi-region, active-active replicas of the same table — any region can read and write, and DynamoDB syncs changes automatically.</span>
+          <span class="lang-es"><strong>Fine-Grained Access Control</strong> permite restringir qué filas o columnas puede acceder un usuario mediante condiciones IAM — útil cuando cada usuario solo debe ver sus propios datos. <strong>Global Tables</strong> son réplicas activo-activo de la misma tabla en múltiples regiones — cualquier región puede leer y escribir, y DynamoDB sincroniza los cambios automáticamente.</span>
         </p>
 
         <div class="compare">
@@ -2823,5 +2917,114 @@
       Section 22 — DynamoDB · DVA-C02 · <span class="lang-en">Generated</span
       ><span class="lang-es">Generado</span> April 2026
     </p>
+
+      <!-- WEAK POINTS -->
+      <div class="card" style="border-color:#7c3aed; background:#13102a;">
+        <div class="card-header">
+          <span class="badge" style="background:#7c3aed;">🧩</span>
+          <h2 style="color:#c4b5fd;"><span class="lang-en">Tricky Quiz Questions</span><span class="lang-es">Preguntas Tricky del Quiz</span></h2>
+        </div>
+        <p style="color:#94a3b8;font-size:0.85rem;margin-bottom:0.75rem">
+          <span class="lang-en">Questions from the Udemy section quiz that were tricky or required extra thought.</span>
+          <span class="lang-es">Preguntas del quiz de Udemy que fueron tricky o requirieron más análisis.</span>
+        </p>
+        <!-- Q1 -->
+        <div style="border:1px solid #4c1d95;border-radius:8px;padding:0.85rem;margin-bottom:0.75rem;background:#0f172a">
+          <p style="color:#fcd34d;font-weight:600;margin:0 0 0.4rem">
+            <span class="lang-en">Q: Before you create a DynamoDB table, you need to provision the EC2 instance the DynamoDB table will be running on. True or False?</span>
+            <span class="lang-es">Q: ¿Necesitás levantar una EC2 para poder usar DynamoDB?</span>
+          </p>
+          <p style="color:#f87171;margin:0 0 0.2rem">✗ True</p>
+          <p style="color:#4ade80;margin:0 0 0.4rem">✅ <strong>False</strong></p>
+          <p style="color:#94a3b8;font-size:0.85rem;margin:0">
+            <span class="lang-en">DynamoDB is fully serverless — AWS manages all underlying infrastructure. You just create the table and use it. No EC2 involved, just like S3.</span>
+            <span class="lang-es">DynamoDB es completamente serverless — AWS maneja toda la infraestructura por abajo. Vos solo creás la tabla y la usás. Ninguna EC2 de por medio, igual que S3.</span>
+          </p>
+        </div>
+        <!-- Q2 -->
+        <div style="border:1px solid #4c1d95;border-radius:8px;padding:0.85rem;margin-bottom:0.75rem;background:#0f172a">
+          <p style="color:#fcd34d;font-weight:600;margin:0 0 0.4rem">
+            <span class="lang-en">Q: You want to automatically send a welcome email when a new user signs up via a mobile app that uses DynamoDB. Most efficient way?</span>
+            <span class="lang-es">Q: Querés enviar un email de bienvenida automáticamente cuando un usuario nuevo se registra en una app que usa DynamoDB. ¿Forma más eficiente?</span>
+          </p>
+          <p style="color:#f87171;margin:0 0 0.2rem">✗ <span class="lang-en">Schedule a Lambda every minute to Scan the table for new users</span><span class="lang-es">Schedulear un Lambda cada minuto para hacer Scan buscando nuevos usuarios</span></p>
+          <p style="color:#f87171;margin:0 0 0.2rem">✗ <span class="lang-en">Enable SNS and DynamoDB integration</span><span class="lang-es">Habilitar integración SNS y DynamoDB</span></p>
+          <p style="color:#4ade80;margin:0 0 0.4rem">✅ <strong><span class="lang-en">Enable DynamoDB Streams and configure it to invoke a Lambda function to send emails</span><span class="lang-es">Habilitar DynamoDB Streams y configurarlo para invocar un Lambda que envíe los emails</span></strong></p>
+          <p style="color:#94a3b8;font-size:0.85rem;margin:0">
+            <span class="lang-en">Streams is not just a log — it's an event source. Every insert/update/delete fires an event that Lambda can consume in real time via Event Source Mapping. The Scan approach is wasteful and slow. DynamoDB has no native SNS integration.</span>
+            <span class="lang-es">Streams no es solo un log — es una fuente de eventos. Cada inserción/modificación/borrado dispara un evento que Lambda puede consumir en tiempo real via Event Source Mapping. El Scan periódico es costoso e ineficiente. DynamoDB no tiene integración nativa con SNS.</span>
+          </p>
+        </div>
+        <!-- Q3 -->
+        <div style="border:1px solid #4c1d95;border-radius:8px;padding:0.85rem;margin-bottom:0.75rem;background:#0f172a">
+          <p style="color:#fcd34d;font-weight:600;margin:0 0 0.4rem">
+            <span class="lang-en">Q: Production has smooth sustained traffic. Development will have unpredictable volume. Most cost-effective capacity setup?</span>
+            <span class="lang-es">Q: Producción tiene tráfico sostenido y predecible. Desarrollo tendrá volumen impredecible. ¿Setup más económico?</span>
+          </p>
+          <p style="color:#f87171;margin:0 0 0.2rem">✗ <span class="lang-en">Provisioned + Auto Scaling for both</span><span class="lang-es">Provisioned + Auto Scaling para ambos</span></p>
+          <p style="color:#f87171;margin:0 0 0.2rem">✗ <span class="lang-en">On-Demand for both</span><span class="lang-es">On-Demand para ambos</span></p>
+          <p style="color:#4ade80;margin:0 0 0.4rem">✅ <strong><span class="lang-en">Provisioned + Auto Scaling for production, On-Demand for development</span><span class="lang-es">Provisioned + Auto Scaling para producción, On-Demand para desarrollo</span></strong></p>
+          <p style="color:#94a3b8;font-size:0.85rem;margin:0">
+            <span class="lang-en">Provisioned is cheaper when traffic is predictable. Auto Scaling lets it flex within a defined RCU/WCU range without manual intervention. On-Demand is ideal for dev where traffic is sporadic and unpredictable — you pay only per request, no wasted provisioned capacity. <strong>Note: Auto Scaling is not mentioned in the course but appears in the exam.</strong></span>
+            <span class="lang-es">Provisioned es más barato cuando el tráfico es predecible. Auto Scaling permite que se ajuste dentro de un rango de RCU/WCU sin intervención manual. On-Demand es ideal para dev donde el tráfico es esporádico — pagás solo por request, sin capacidad provisionada desperdiciada. <strong>Nota: Auto Scaling no se menciona en el curso pero aparece en el examen.</strong></span>
+          </p>
+        </div>
+        <!-- Q4 -->
+        <div style="border:1px solid #4c1d95;border-radius:8px;padding:0.85rem;margin-bottom:0.75rem;background:#0f172a">
+          <p style="color:#fcd34d;font-weight:600;margin:0 0 0.4rem">
+            <span class="lang-en">Q: You're using GetItem to retrieve a DynamoDB item. Which parameter lets you fetch only certain attributes?</span>
+            <span class="lang-es">Q: Usás GetItem para traer un ítem de DynamoDB. ¿Qué parámetro te permite traer solo ciertos atributos?</span>
+          </p>
+          <p style="color:#f87171;margin:0 0 0.2rem">✗ <code>FilterExpression</code> — <span class="lang-en">filters items after read, not attributes. Only works on Query/Scan.</span><span class="lang-es">filtra ítems después de la lectura, no atributos. Solo funciona en Query/Scan.</span></p>
+          <p style="color:#4ade80;margin:0 0 0.4rem">✅ <strong><code>ProjectionExpression</code></strong></p>
+          <p style="color:#94a3b8;font-size:0.85rem;margin:0">
+            <span class="lang-en">Like <code>SELECT col1, col2</code> in SQL — specifies which attributes to include in the response. Works on GetItem, Query, and Scan. Does NOT reduce RCU — the full item is always read internally.</span>
+            <span class="lang-es">Como <code>SELECT col1, col2</code> en SQL — especifica qué atributos incluir en la respuesta. Funciona en GetItem, Query y Scan. NO reduce RCU — el ítem completo se lee internamente igual.</span>
+          </p>
+        </div>
+        <!-- Q5 -->
+        <div style="border:1px solid #4c1d95;border-radius:8px;padding:0.85rem;margin-bottom:0.75rem;background:#0f172a">
+          <p style="color:#fcd34d;font-weight:600;margin:0 0 0.4rem">
+            <span class="lang-en">Q: You want to perform a Scan on a DynamoDB table to retrieve all items. What should you do to increase performance?</span>
+            <span class="lang-es">Q: Querés hacer un Scan en una tabla de DynamoDB para traer todos los ítems. ¿Qué hacés para mejorar la performance?</span>
+          </p>
+          <p style="color:#f87171;margin:0 0 0.2rem">✗ <span class="lang-en">Increase the Limit parameter</span><span class="lang-es">Aumentar el parámetro Limit</span> — <span style="font-size:0.85rem"><span class="lang-en">only controls page size, not speed</span><span class="lang-es">solo controla el tamaño de página, no la velocidad</span></span></p>
+          <p style="color:#f87171;margin:0 0 0.2rem">✗ <span class="lang-en">Increase RCU</span><span class="lang-es">Aumentar RCU</span> — <span style="font-size:0.85rem"><span class="lang-en">helps with throttling but doesn't parallelize the scan</span><span class="lang-es">ayuda con el throttling pero no paraleliza el scan</span></span></p>
+          <p style="color:#4ade80;margin:0 0 0.4rem">✅ <strong><span class="lang-en">Use Parallel Scans</span><span class="lang-es">Usar Parallel Scans</span></strong></p>
+          <p style="color:#94a3b8;font-size:0.85rem;margin:0">
+            <span class="lang-en">Split the table into multiple segments and scan each in parallel with separate workers. Dramatically faster for large tables. Not mentioned in the course but tested in the exam.</span>
+            <span class="lang-es">Dividís la tabla en múltiples segmentos y escaneás cada uno en paralelo con workers separados. Mucho más rápido para tablas grandes. No se menciona en el curso pero aparece en el examen.</span>
+          </p>
+        </div>
+        <!-- Q6 -->
+        <div style="border:1px solid #4c1d95;border-radius:8px;padding:0.85rem;margin-bottom:0.75rem;background:#0f172a">
+          <p style="color:#fcd34d;font-weight:600;margin:0 0 0.4rem">
+            <span class="lang-en">Q: You want to Query a DynamoDB table by an attribute that is NOT part of the Primary Key. What should you do to make this efficient?</span>
+            <span class="lang-es">Q: Querés hacer Query en una tabla de DynamoDB usando un atributo que NO es parte de la Primary Key. ¿Qué hacés para que sea eficiente?</span>
+          </p>
+          <p style="color:#f87171;margin:0 0 0.2rem">✗ <span class="lang-en">Nothing, Query supports non-key attributes</span><span class="lang-es">Nada, Query soporta atributos no-clave</span> — <span style="font-size:0.85rem"><span class="lang-en">Query without an index on that attribute does a Scan internally</span><span class="lang-es">Query sin un índice en ese atributo hace un Scan internamente</span></span></p>
+          <p style="color:#f87171;margin:0 0 0.2rem">✗ <span class="lang-en">Create a Local Secondary Index</span><span class="lang-es">Crear un Local Secondary Index</span> — <span style="font-size:0.85rem"><span class="lang-en">LSI keeps the same PK, only changes the sort key — doesn't help for a completely different attribute</span><span class="lang-es">LSI mantiene el mismo PK, solo cambia el sort key — no sirve para un atributo completamente distinto</span></span></p>
+          <p style="color:#4ade80;margin:0 0 0.4rem">✅ <strong><span class="lang-en">Create a Global Secondary Index</span><span class="lang-es">Crear un Global Secondary Index</span></strong></p>
+          <p style="color:#94a3b8;font-size:0.85rem;margin:0">
+            <span class="lang-en">GSI lets you define a completely new PK (any attribute) so DynamoDB can Query efficiently on it. Without a GSI, querying by a non-key attribute requires a full Scan — always inefficient.</span>
+            <span class="lang-es">GSI te permite definir un PK completamente nuevo (cualquier atributo) para que DynamoDB pueda hacer Query eficiente sobre él. Sin un GSI, consultar por un atributo no-clave requiere un Scan completo — siempre ineficiente.</span>
+          </p>
+        </div>
+        <!-- Q7 -->
+        <div style="border:1px solid #4c1d95;border-radius:8px;padding:0.85rem;margin-bottom:0.75rem;background:#0f172a">
+          <p style="color:#fcd34d;font-weight:600;margin:0 0 0.4rem">
+            <span class="lang-en">Q: You want to Query by an attribute that's NOT the PK, using a range predicate (>=), while keeping the same Partition Key. What should you do?</span>
+            <span class="lang-es">Q: Querés hacer Query por un atributo que NO es el PK, usando un predicado de rango (>=), manteniendo el mismo Partition Key. ¿Qué hacés?</span>
+          </p>
+          <p style="color:#f87171;margin:0 0 0.2rem">✗ <span class="lang-en">Create a GSI</span><span class="lang-es">Crear un GSI</span> — <span style="font-size:0.85rem"><span class="lang-en">GSI changes the Partition Key too, not needed here</span><span class="lang-es">GSI cambia también el Partition Key, no es necesario acá</span></span></p>
+          <p style="color:#4ade80;margin:0 0 0.4rem">✅ <strong><span class="lang-en">Create a Local Secondary Index (LSI)</span><span class="lang-es">Crear un Local Secondary Index (LSI)</span></strong></p>
+          <p style="color:#94a3b8;font-size:0.85rem;margin:0">
+            <span class="lang-en">LSI = same Partition Key, alternate Sort Key. Ideal when you want to keep your existing PK but query efficiently on a different attribute with range operators. Must be created at table creation time. Rule: same PK + new filter attribute → LSI. Different PK → GSI.</span>
+            <span class="lang-es">LSI = mismo Partition Key, Sort Key alternativo. Ideal cuando querés mantener tu PK existente pero hacer queries eficientes por otro atributo con operadores de rango. Debe crearse al crear la tabla. Regla: mismo PK + nuevo atributo de filtro → LSI. PK distinto → GSI.</span>
+          </p>
+        </div>
+        <!-- questions go here -->
+      </div>
+
   </body>
 </html>

@@ -183,7 +183,7 @@
                 <td><span class="lang-en">You (per-request)</span><span class="lang-es">Tú (por solicitud)</span></td>
                 <td><span class="lang-en">Your key in headers</span><span class="lang-es">Tu clave en encabezados</span></td>
                 <td><span class="badge badge-red"><span class="lang-en">MANDATORY</span><span class="lang-es">OBLIGATORIO</span></span></td>
-                <td><span class="badge badge-red"><span class="lang-en">No (CLI/SDK)</span><span class="lang-es">No (CLI/SDK)</span><span class="lang-en">No (CLI/SDK)</span><span class="lang-es">No (CLI/SDK)</span></span></span></span></td>
+                <td><span class="badge badge-red"><span class="lang-en">No (CLI/SDK)</span><span class="lang-es">No (CLI/SDK)</span></span></td>
                 <td><span class="badge badge-red"><span class="lang-en">No</span><span class="lang-es">No</span></span></span></td>
               </tr>
               <tr>
@@ -200,7 +200,7 @@
 
         <div style="margin-top: 16px;">
           <div class="callout danger">
-            <strong><span class="lang-en">KMS Throttling Trap:</span><span class="lang-es">Trampa de Limitación de KMS:</span></strong> <span class="lang-en">SSE-KMS calls KMS on every upload AND download. KMS quota is 5,000–30,000 requests/second per region. High-throughput S3 buckets can hit this limit. Consider S3 Bucket Keys (reduces KMS API calls by ~99%) to mitigate throttling.</span><span class="lang-es">SSE-KMS llama a KMS en cada carga Y descarga. La cuota de KMS es 5,000–30,000 solicitudes/segundo por región. Los buckets de S3 de alto rendimiento pueden alcanzar este límite. Considera S3 Bucket Keys (reduce las llamadas a KMS API en ~99%) para mitigar la limitación.</span>
+            <strong><span class="lang-en">KMS Throttling Trap:</span><span class="lang-es">Trampa de Limitación de KMS:</span></strong> <span class="lang-en">SSE-KMS calls KMS on every upload AND download. KMS quota is 5,000–30,000 requests/second per region. High-throughput S3 buckets can hit this limit. Consider S3 Bucket Keys (reduces KMS API calls by ~99%) to mitigate throttling.</span><span class="lang-es">SSE-KMS llama a KMS en cada carga Y descarga. La cuota de KMS es 5,000–30,000 solicitudes/segundo por región. Los buckets de S3 de alta velocidad de transferencia pueden alcanzar este límite. Considera S3 Bucket Keys (reduce las llamadas a KMS API en ~99%) para mitigar la limitación.</span>
           </div>
         </div>
       </div>
@@ -619,13 +619,13 @@
                 '<div class="enc-arrow">&#8594;</div>' +
                 '<div class="enc-node disk">Stored Encrypted<br/><span style="font-size: 13px; font-weight: 400;">AES-256</span></div>' +
               '</div>' +
-              '<div class="callout success" style="margin-top: 12px;">Key owner: <strong>AWS (S3)</strong> &bull; Audit trail: <span class="lang-en">No</span><span class="lang-es">No</span><span class="lang-en">No</span><span class="lang-es">No</span></span></span> &bull; Performance: <span class="lang-en">No</span><span class="lang-es">No</span><span class="lang-en">No</span><span class="lang-es">No</span></span></span> overhead &bull; Best for: most general workloads</div>' +
+              '<div class="callout success" style="margin-top: 12px;">Key owner: <strong>AWS (S3)</strong> &bull; Audit trail: <span class="lang-en">No</span><span class="lang-es">No</span> &bull; Performance: <span class="lang-en">No</span><span class="lang-es">No</span> overhead &bull; Best for: most general workloads</div>' +
             '</div>'
           },
           {
             body: '<div>' +
               '<div class="step-title"><span class="lang-en">SSE-KMS — Server-Side Encryption with AWS KMS Keys</span><span class="lang-es">SSE-KMS — Cifrado del Lado del Servidor con Claves de AWS KMS</span></div>' +
-              '<div class="step-desc">You control and manage the key via AWS Key Management Service. <span class="lang-en">CloudTrail</span><span class="lang-es">CloudTrail</span><span class="lang-en">CloudTrail</span><span class="lang-es">CloudTrail</span></span></span> logs every use of the key — full audit trail. High-throughput buckets may hit KMS throttle limits!</div>' +
+              '<div class="step-desc">You control and manage the key via AWS Key Management Service. <span class="lang-en">CloudTrail</span><span class="lang-es">CloudTrail</span> logs every use of the key — full audit trail. High-throughput buckets may hit KMS throttle limits!</div>' +
               '<div style="margin-bottom: 12px;">' +
                 '<span style="font-size: 13px; color: #64748b; text-transform: uppercase; letter-spacing: 0.08em;"><span class="lang-en">Required Header</span><span class="lang-es">Encabezado Requerido</span></span><br/>' +
                 '<div class="header-pill" style="margin-top: 6px;">x-amz-server-side-encryption: aws:kms</div>' +
@@ -637,10 +637,10 @@
                 '<div class="enc-arrow">&#8594;</div>' +
                 '<div class="enc-node kms">KMS<br/><span style="font-size: 13px; font-weight: 400;">returns data key</span></div>' +
                 '<div class="enc-arrow">&#8594;</div>' +
-                '<div class="enc-node disk">Stored Encrypted<br/><span style="font-size: 13px; font-weight: 400;">+ <span class="lang-en">CloudTrail</span><span class="lang-es">CloudTrail</span><span class="lang-en">CloudTrail</span><span class="lang-es">CloudTrail</span></span></span> logged</span></div>' +
+                '<div class="enc-node disk">Stored Encrypted<br/><span style="font-size: 13px; font-weight: 400;">+ <span class="lang-en">CloudTrail</span><span class="lang-es">CloudTrail</span> logged</span></div>' +
               '</div>' +
               '<div class="warning-pill" style="margin-top: 12px;">&#9888; KMS quota: 5,000–30,000 API calls/sec per region. High-throughput S3 = potential throttle. Use S3 Bucket Keys to reduce calls by ~99%.</div>' +
-              '<div class="callout info" style="margin-top: 8px;">Key owner: <strong>You (KMS CMK)</strong> &bull; Audit trail: <strong><span class="lang-en">CloudTrail</span><span class="lang-es">CloudTrail</span><span class="lang-en">CloudTrail</span><span class="lang-es">CloudTrail</span></span></span></strong> &bull; Best for: compliance, auditability requirements</div>' +
+              '<div class="callout info" style="margin-top: 8px;">Key owner: <strong>You (KMS CMK)</strong> &bull; Audit trail: <strong><span class="lang-en">CloudTrail</span><span class="lang-es">CloudTrail</span></strong> &bull; Best for: compliance, auditability requirements</div>' +
             '</div>'
           },
           {
@@ -724,7 +724,7 @@
                 '</div>' +
                 '<div style="font-size: 13px; color: #64748b; margin-top: 10px;"><span class="lang-en">Each team has their own Object Lambda Access Point with a different Lambda function. All read from the same underlying S3 bucket.</span><span class="lang-es">Cada equipo tiene su propio Punto de Acceso de Lambda de Objetos con una función Lambda diferente. Todos leen del mismo bucket de S3 subyacente.</span></div>' +
               '</div>' +
-              '<div class="callout success">ONE S3 bucket — multiple Lambda-powered views. <span class="lang-en">No</span><span class="lang-es">No</span><span class="lang-en">No</span><span class="lang-es">No</span></span></span> data duplication. <span class="lang-en">No</span><span class="lang-es">No</span><span class="lang-en">No</span><span class="lang-es">No</span></span></span> sync overhead.</div>' +
+              '<div class="callout success">ONE S3 bucket — multiple Lambda-powered views. <span class="lang-en">No</span><span class="lang-es">No</span> data duplication. <span class="lang-en">No</span><span class="lang-es">No</span> sync overhead.</div>' +
             '</div>'
           },
           {

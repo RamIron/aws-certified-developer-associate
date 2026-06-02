@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title><span class="lang-en">Section 11 — Amazon S3</span><span class="lang-es">Sección 11 — Amazon S3</span></title>
+  <title>Section 11 — Amazon S3</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet" />
@@ -376,6 +376,119 @@
         <span class="step-counter" id="storage-classes-counter"></span>
         <button class="restart-btn" onclick="restart('storage-classes')">&#x21BA; Restart</button>
       </div>
+
+      <!-- ── FULL COMPARISON TABLE ── -->
+      <div style="margin-top:28px;">
+        <h3 style="font-size:15px;font-weight:700;color:#f8fafc;margin-bottom:8px;">
+          <span class="lang-en">📊 Full Storage Class Comparison</span>
+          <span class="lang-es">📊 Comparativa Completa de Clases de Almacenamiento</span>
+        </h3>
+        <p style="font-size:13px;color:#94a3b8;margin-bottom:14px;line-height:1.6;">
+          <span class="lang-en">All classes share <strong style="color:#f8fafc;">11 nines of durability (99.999999999%)</strong>. The tradeoff is always: cheaper storage → slower retrieval + retrieval fees. Use this table to quickly find the right class for any exam scenario.</span>
+          <span class="lang-es">Todas las clases comparten <strong style="color:#f8fafc;">11 nueves de durabilidad (99.999999999%)</strong>. El intercambio siempre es: almacenamiento más barato → recuperación más lenta + cargos de recuperación. Usá esta tabla para encontrar rápidamente la clase correcta en cualquier escenario de examen.</span>
+        </p>
+        <div class="table-wrapper">
+          <table class="data-table" style="font-size:13px;">
+            <thead>
+              <tr>
+                <th><span class="lang-en">Class</span><span class="lang-es">Clase</span></th>
+                <th><span class="lang-en">Availability</span><span class="lang-es">Disponibilidad</span></th>
+                <th><span class="lang-en">AZs</span><span class="lang-es">AZs</span></th>
+                <th><span class="lang-en">Retrieval Speed</span><span class="lang-es">Velocidad de Recuperación</span></th>
+                <th><span class="lang-en">Min. Storage</span><span class="lang-es">Almacenamiento Mín.</span></th>
+                <th><span class="lang-en">Retrieval Fee</span><span class="lang-es">Cargo de Recuperación</span></th>
+                <th><span class="lang-en">Storage Cost</span><span class="lang-es">Costo de Almacenamiento</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong style="color:#ef4444;">S3 Standard</strong></td>
+                <td>99.99%</td>
+                <td>≥ 3</td>
+                <td><span class="badge badge-green"><span class="lang-en">Milliseconds</span><span class="lang-es">Milisegundos</span></span></td>
+                <td><span class="lang-en">None</span><span class="lang-es">Ninguno</span></td>
+                <td><span class="badge badge-green"><span class="lang-en">No</span><span class="lang-es">No</span></span></td>
+                <td style="color:#ef4444;">$$$$$</td>
+              </tr>
+              <tr>
+                <td><strong style="color:#f97316;">S3 Standard-IA</strong></td>
+                <td>99.9%</td>
+                <td>≥ 3</td>
+                <td><span class="badge badge-green"><span class="lang-en">Milliseconds</span><span class="lang-es">Milisegundos</span></span></td>
+                <td style="color:#fb923c;">30 <span class="lang-en">days</span><span class="lang-es">días</span></td>
+                <td><span class="badge badge-red"><span class="lang-en">Yes / GB</span><span class="lang-es">Sí / GB</span></span></td>
+                <td style="color:#f97316;">$$$</td>
+              </tr>
+              <tr>
+                <td><strong style="color:#eab308;">S3 One Zone-IA</strong></td>
+                <td style="color:#fca5a5;">99.5%</td>
+                <td style="color:#fca5a5;">1 ⚠️</td>
+                <td><span class="badge badge-green"><span class="lang-en">Milliseconds</span><span class="lang-es">Milisegundos</span></span></td>
+                <td style="color:#fb923c;">30 <span class="lang-en">days</span><span class="lang-es">días</span></td>
+                <td><span class="badge badge-red"><span class="lang-en">Yes / GB</span><span class="lang-es">Sí / GB</span></span></td>
+                <td style="color:#eab308;">$$</td>
+              </tr>
+              <tr>
+                <td><strong style="color:#6366f1;">Glacier Instant</strong></td>
+                <td>99.9%</td>
+                <td>≥ 3</td>
+                <td><span class="badge badge-green"><span class="lang-en">Milliseconds</span><span class="lang-es">Milisegundos</span></span></td>
+                <td style="color:#fb923c;">90 <span class="lang-en">days</span><span class="lang-es">días</span></td>
+                <td><span class="badge badge-red"><span class="lang-en">Yes (higher)</span><span class="lang-es">Sí (más alto)</span></span></td>
+                <td style="color:#6366f1;">$$</td>
+              </tr>
+              <tr>
+                <td><strong style="color:#3b82f6;">Glacier Flexible</strong></td>
+                <td>99.99% <span style="color:#94a3b8;font-size:11px;"><span class="lang-en">(after restore)</span><span class="lang-es">(tras restaurar)</span></span></td>
+                <td>≥ 3</td>
+                <td>
+                  <span class="lang-en">Expedited: <strong>1–5 min</strong><br>Standard: <strong>3–5 hrs</strong><br>Bulk: <strong>5–12 hrs</strong> (free)</span>
+                  <span class="lang-es">Expedito: <strong>1–5 min</strong><br>Estándar: <strong>3–5 hs</strong><br>Masivo: <strong>5–12 hs</strong> (gratis)</span>
+                </td>
+                <td style="color:#fb923c;">90 <span class="lang-en">days</span><span class="lang-es">días</span></td>
+                <td><span class="badge badge-red"><span class="lang-en">Yes (Bulk free)</span><span class="lang-es">Sí (Masivo gratis)</span></span></td>
+                <td style="color:#3b82f6;">$</td>
+              </tr>
+              <tr>
+                <td><strong style="color:#10b981;">Glacier Deep Archive</strong></td>
+                <td>99.99% <span style="color:#94a3b8;font-size:11px;"><span class="lang-en">(after restore)</span><span class="lang-es">(tras restaurar)</span></span></td>
+                <td>≥ 3</td>
+                <td>
+                  <span class="lang-en">Standard: <strong>~12 hrs</strong><br>Bulk: <strong>~48 hrs</strong></span>
+                  <span class="lang-es">Estándar: <strong>~12 hs</strong><br>Masivo: <strong>~48 hs</strong></span>
+                </td>
+                <td style="color:#fb923c;">180 <span class="lang-en">days</span><span class="lang-es">días</span></td>
+                <td><span class="badge badge-red"><span class="lang-en">Yes</span><span class="lang-es">Sí</span></span></td>
+                <td style="color:#10b981;">¢ <span class="lang-en">(cheapest)</span><span class="lang-es">(más barato)</span></td>
+              </tr>
+              <tr>
+                <td><strong style="color:#8b5cf6;">Intelligent-Tiering</strong></td>
+                <td>99.9%</td>
+                <td>≥ 3</td>
+                <td>
+                  <span class="lang-en">ms (frequent/infrequent/archive instant)<br>hrs (archive access ≥90d — opt-in)<br>hrs (deep archive ≥180d — opt-in)</span>
+                  <span class="lang-es">ms (frecuente/infrecuente/archivo instant)<br>hs (archive access ≥90d — opt-in)<br>hs (deep archive ≥180d — opt-in)</span>
+                </td>
+                <td><span class="lang-en">None</span><span class="lang-es">Ninguno</span></td>
+                <td><span class="badge badge-green"><span class="lang-en">No (monitoring fee)</span><span class="lang-es">No (cargo monitoreo)</span></span></td>
+                <td style="color:#8b5cf6;"><span class="lang-en">Variable</span><span class="lang-es">Variable</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout warning" style="margin-top:14px;">
+          <strong><span class="lang-en">Exam shortcut — when to pick each:</span><span class="lang-es">Atajo para el examen — cuándo elegir cada una:</span></strong>
+          <ul style="margin:8px 0 0 0;padding-left:18px;line-height:1.8;font-size:13px;">
+            <li><span class="lang-en"><strong style="color:#ef4444;">Standard</strong> → accessed all the time, latency matters.</span><span class="lang-es"><strong style="color:#ef4444;">Standard</strong> → se accede todo el tiempo, la latencia importa.</span></li>
+            <li><span class="lang-en"><strong style="color:#f97316;">Standard-IA</strong> → rare but fast access, multi-AZ resilience, DR backups.</span><span class="lang-es"><strong style="color:#f97316;">Standard-IA</strong> → acceso raro pero rápido, resiliencia multi-AZ, backups de DR.</span></li>
+            <li><span class="lang-en"><strong style="color:#eab308;">One Zone-IA</strong> → recreatable data, secondary copies, cost savings over Standard-IA.</span><span class="lang-es"><strong style="color:#eab308;">One Zone-IA</strong> → datos recreables, copias secundarias, ahorro sobre Standard-IA.</span></li>
+            <li><span class="lang-en"><strong style="color:#6366f1;">Glacier Instant</strong> → archive pricing + still need millisecond access (quarterly access).</span><span class="lang-es"><strong style="color:#6366f1;">Glacier Instant</strong> → precio de archivo + acceso en milisegundos (acceso trimestral).</span></li>
+            <li><span class="lang-en"><strong style="color:#3b82f6;">Glacier Flexible</strong> → can wait minutes/hours, want free bulk option.</span><span class="lang-es"><strong style="color:#3b82f6;">Glacier Flexible</strong> → puede esperar minutos/horas, quiere opción masiva gratis.</span></li>
+            <li><span class="lang-en"><strong style="color:#10b981;">Deep Archive</strong> → almost never retrieved, 7–10 year retention, absolute cheapest.</span><span class="lang-es"><strong style="color:#10b981;">Deep Archive</strong> → casi nunca se recupera, retención 7–10 años, lo más barato.</span></li>
+            <li><span class="lang-en"><strong style="color:#8b5cf6;">Intelligent-Tiering</strong> → unknown or unpredictable access pattern, no retrieval fees.</span><span class="lang-es"><strong style="color:#8b5cf6;">Intelligent-Tiering</strong> → patrón de acceso desconocido o impredecible, sin cargos de recuperación.</span></li>
+          </ul>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -743,8 +856,8 @@ var DEMOS = {
                   <tr><td><span class="lang-en">Frequent Access</span><span class="lang-es">Acceso Frecuente</span></td><td><span class="lang-en">Default (accessed recently)</span><span class="lang-es">Predeterminado (accedido recientemente)</span></td><td><span class="lang-en">Milliseconds</span><span class="lang-es">Milisegundos</span></td></tr>
                   <tr><td><span class="lang-en">Infrequent Access</span><span class="lang-es">Acceso Infrequente</span></td><td><span class="lang-en">Not accessed for 30 days</span><span class="lang-es">No accedido en 30 días</span></td><td><span class="lang-en">Milliseconds</span><span class="lang-es">Milisegundos</span></td></tr>
                   <tr><td><span class="lang-en">Archive Instant</span><span class="lang-es">Archivo Instantáneo</span></td><td><span class="lang-en">Not accessed for 90 days</span><span class="lang-es">No accedido en 90 días</span></td><td><span class="lang-en">Milliseconds</span><span class="lang-es">Milisegundos</span></td></tr>
-                  <tr><td><span class="lang-en">Archive</span><span class="lang-es">Archivo</span></td><td><span class="lang-en">90–180 days (opt-in)</span><span class="lang-es">90–180 días (opt-in)</span></td><td><span class="lang-en">Hours</span><span class="lang-es">Horas</span></td></tr>
-                  <tr><td><span class="lang-en">Deep Archive</span><span class="lang-es">Archivo Profundo</span></td><td><span class="lang-en">180+ days (opt-in)</span><span class="lang-es">180+ días (opt-in)</span></td><td><span class="lang-en">Hours</span><span class="lang-es">Horas</span></td></tr>
+                  <tr><td><span class="lang-en">Archive Access</span><span class="lang-es">Archivo Access</span></td><td><span class="lang-en">90–730 days (opt-in)</span><span class="lang-es">90–730 días (opt-in)</span></td><td><span class="lang-en">Hours</span><span class="lang-es">Horas</span></td></tr>
+                  <tr><td><span class="lang-en">Deep Archive Access</span><span class="lang-es">Deep Archive Access</span></td><td><span class="lang-en">180–730 days (opt-in)</span><span class="lang-es">180–730 días (opt-in)</span></td><td><span class="lang-en">Hours</span><span class="lang-es">Horas</span></td></tr>
                 </tbody>
               </table>
             </div>

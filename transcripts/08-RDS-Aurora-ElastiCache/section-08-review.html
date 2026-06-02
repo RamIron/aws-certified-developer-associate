@@ -1,688 +1,2030 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Section 8 — RDS, Aurora & ElastiCache</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="../shared/summary.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Section 8 — RDS, Aurora & ElastiCache</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../shared/summary.css" />
     <script src="../shared/summary.js"></script>
 
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: #0f172a; color: #f8fafc; font-family: 'Inter', sans-serif; font-size: 14px; line-height: 1.6; min-height: 100vh; }
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        background: #0f172a;
+        color: #f8fafc;
+        font-family: "Inter", sans-serif;
+        font-size: 14px;
+        line-height: 1.6;
+        min-height: 100vh;
+      }
 
-    /* HERO */
-    .hero { background: linear-gradient(135deg, #1e293b 0%, #0f172a 60%, #1a1a2e 100%); border-bottom: 1px solid #334155; padding: 48px 32px 40px; text-align: center; }
-    .hero-eyebrow { font-size: 13px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #f97316; margin-bottom: 12px; }
-    h1 { font-size: clamp(26px, 4vw, 40px); font-weight: 800; color: #f8fafc; margin-bottom: 8px; letter-spacing: -0.02em; }
-    .hero-subtitle { font-size: 15px; color: #94a3b8; margin-bottom: 20px; }
-    .xp-badge { display: inline-flex; align-items: center; gap: 6px; background: linear-gradient(135deg, #f97316, #ea580c); color: #fff; font-size: 13px; font-weight: 700; padding: 8px 18px; border-radius: 999px; }
+      /* HERO */
+      .hero {
+        background: linear-gradient(
+          135deg,
+          #1e293b 0%,
+          #0f172a 60%,
+          #1a1a2e 100%
+        );
+        border-bottom: 1px solid #334155;
+        padding: 48px 32px 40px;
+        text-align: center;
+      }
+      .hero-eyebrow {
+        font-size: 13px;
+        font-weight: 600;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: #f97316;
+        margin-bottom: 12px;
+      }
+      h1 {
+        font-size: clamp(26px, 4vw, 40px);
+        font-weight: 800;
+        color: #f8fafc;
+        margin-bottom: 8px;
+        letter-spacing: -0.02em;
+      }
+      .hero-subtitle {
+        font-size: 15px;
+        color: #94a3b8;
+        margin-bottom: 20px;
+      }
+      .xp-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: linear-gradient(135deg, #f97316, #ea580c);
+        color: #fff;
+        font-size: 13px;
+        font-weight: 700;
+        padding: 8px 18px;
+        border-radius: 999px;
+      }
 
-    /* LAYOUT */
-    .page-body { max-width: 1100px; margin: 0 auto; padding: 48px 24px; display: flex; flex-direction: column; gap: 40px; }
-    .section-label { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: #f97316; margin-bottom: 16px; }
+      /* LAYOUT */
+      .page-body {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 48px 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 40px;
+      }
+      .section-label {
+        font-size: 13px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: #f97316;
+        margin-bottom: 16px;
+      }
 
-    /* CARDS */
-    .card { background: #1e293b; border-radius: 12px; border: 1px solid #334155; padding: 24px; }
-    .card-title { font-size: 18px; font-weight: 700; color: #f8fafc; margin-bottom: 16px; }
+      /* CARDS */
+      .card {
+        background: #1e293b;
+        border-radius: 12px;
+        border: 1px solid #334155;
+        padding: 24px;
+      }
+      .card-title {
+        font-size: 18px;
+        font-weight: 700;
+        color: #f8fafc;
+        margin-bottom: 16px;
+      }
 
-    /* CALLOUTS */
-    .callout { border-radius: 10px; padding: 16px 20px; font-size: 14px; line-height: 1.65; border-left: 4px solid; }
-    .callout.warning { background: rgba(249,115,22,0.08); border-color: #f97316; color: #fed7aa; }
-    .callout.warning strong { color: #fb923c; }
-    .callout.info { background: rgba(99,102,241,0.08); border-color: #6366f1; color: #c7d2fe; }
-    .callout.success { background: rgba(16,185,129,0.08); border-color: #10b981; color: #6ee7b7; }
-    .callout.danger { background: rgba(239,68,68,0.08); border-color: #ef4444; color: #fca5a5; }
+      /* CALLOUTS */
+      .callout {
+        border-radius: 10px;
+        padding: 16px 20px;
+        font-size: 14px;
+        line-height: 1.65;
+        border-left: 4px solid;
+      }
+      .callout.warning {
+        background: rgba(249, 115, 22, 0.08);
+        border-color: #f97316;
+        color: #fed7aa;
+      }
+      .callout.warning strong {
+        color: #fb923c;
+      }
+      .callout.info {
+        background: rgba(99, 102, 241, 0.08);
+        border-color: #6366f1;
+        color: #c7d2fe;
+      }
+      .callout.success {
+        background: rgba(16, 185, 129, 0.08);
+        border-color: #10b981;
+        color: #6ee7b7;
+      }
+      .callout.danger {
+        background: rgba(239, 68, 68, 0.08);
+        border-color: #ef4444;
+        color: #fca5a5;
+      }
 
-    /* TABLES */
-    .data-table { width: 100%; border-collapse: collapse; font-size: 14px; }
-    .data-table th { background: #1e2d4a; color: #94a3b8; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; padding: 10px 14px; text-align: left; }
-    .data-table td { padding: 10px 14px; border-bottom: 1px solid #1e293b; color: #cbd5e1; }
-    .data-table tr:last-child td { border-bottom: none; }
-    .data-table tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
-    .table-wrapper { overflow-x: auto; border-radius: 10px; border: 1px solid #334155; }
+      /* TABLES */
+      .data-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 14px;
+      }
+      .data-table th {
+        background: #1e2d4a;
+        color: #94a3b8;
+        font-size: 13px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        padding: 10px 14px;
+        text-align: left;
+      }
+      .data-table td {
+        padding: 10px 14px;
+        border-bottom: 1px solid #1e293b;
+        color: #cbd5e1;
+      }
+      .data-table tr:last-child td {
+        border-bottom: none;
+      }
+      .data-table tr:nth-child(even) td {
+        background: rgba(255, 255, 255, 0.02);
+      }
+      .table-wrapper {
+        overflow-x: auto;
+        border-radius: 10px;
+        border: 1px solid #334155;
+      }
 
-    /* TIP CARDS */
-    .tip-card { background: #0f172a; border-left: 3px solid #f97316; border-radius: 0 8px 8px 0; padding: 12px 16px; font-size: 14px; }
-    .tip-trigger { color: #64748b; }
-    .tip-answer { color: #f8fafc; font-weight: 700; }
+      /* TIP CARDS */
+      .tip-card {
+        background: #0f172a;
+        border-left: 3px solid #f97316;
+        border-radius: 0 8px 8px 0;
+        padding: 12px 16px;
+        font-size: 14px;
+      }
+      .tip-trigger {
+        color: #64748b;
+      }
+      .tip-answer {
+        color: #f8fafc;
+        font-weight: 700;
+      }
 
-    /* ANIMATION DEMO */
-    .anim-demo { background: #0f172a; border-radius: 12px; padding: 20px; min-height: 120px; }
-    .anim-controls { display: flex; align-items: center; gap: 12px; margin-top: 16px; flex-wrap: wrap; }
-    .nav-btn { background: transparent; border: 2px solid #f97316; color: #f97316; padding: 8px 18px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px; transition: all 0.2s; font-family: 'Inter', sans-serif; }
-    .nav-btn:hover:not(:disabled) { background: #f97316; color: #0f172a; }
-    .nav-btn:disabled { opacity: 0.3; cursor: default; }
-    .restart-btn { background: transparent; border: 1px solid #475569; color: #94a3b8; padding: 6px 14px; border-radius: 8px; cursor: pointer; font-size: 13px; margin-left: auto; transition: all 0.2s; font-family: 'Inter', sans-serif; }
-    .restart-btn:hover { border-color: #94a3b8; color: #e2e8f0; }
-    .step-dots { display: flex; gap: 6px; }
-    .dot { width: 8px; height: 8px; border-radius: 50%; background: #334155; transition: background 0.3s; }
-    .dot.active { background: #f97316; }
-    .step-counter { color: #94a3b8; font-size: 13px; }
-    @keyframes fadeScale { from { opacity: 0; transform: scale(0.97); } to { opacity: 1; transform: scale(1); } }
-    .anim-demo > * { animation: fadeScale 0.25s ease; }
+      /* ANIMATION DEMO */
+      .anim-demo {
+        background: #0f172a;
+        border-radius: 12px;
+        padding: 20px;
+        min-height: 120px;
+      }
+      .anim-controls {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-top: 16px;
+        flex-wrap: wrap;
+      }
+      .nav-btn {
+        background: transparent;
+        border: 2px solid #f97316;
+        color: #f97316;
+        padding: 8px 18px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 13px;
+        transition: all 0.2s;
+        font-family: "Inter", sans-serif;
+      }
+      .nav-btn:hover:not(:disabled) {
+        background: #f97316;
+        color: #0f172a;
+      }
+      .nav-btn:disabled {
+        opacity: 0.3;
+        cursor: default;
+      }
+      .restart-btn {
+        background: transparent;
+        border: 1px solid #475569;
+        color: #94a3b8;
+        padding: 6px 14px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 13px;
+        margin-left: auto;
+        transition: all 0.2s;
+        font-family: "Inter", sans-serif;
+      }
+      .restart-btn:hover {
+        border-color: #94a3b8;
+        color: #e2e8f0;
+      }
+      .step-dots {
+        display: flex;
+        gap: 6px;
+      }
+      .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #334155;
+        transition: background 0.3s;
+      }
+      .dot.active {
+        background: #f97316;
+      }
+      .step-counter {
+        color: #94a3b8;
+        font-size: 13px;
+      }
+      @keyframes fadeScale {
+        from {
+          opacity: 0;
+          transform: scale(0.97);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+      .anim-demo > * {
+        animation: fadeScale 0.25s ease;
+      }
 
-    /* TYPOGRAPHY & UTILITIES */
-    .mono { font-family: 'Fira Code', monospace; }
-    code { font-family: 'Fira Code', monospace; font-size: 13px; background: rgba(248,114,22,0.1); color: #fb923c; padding: 2px 6px; border-radius: 4px; }
-    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
-    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
-    .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
-    .service-card { background: #0f172a; border: 1px solid #334155; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 8px; }
-    .service-icon { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; flex-shrink: 0; }
-    .service-name { font-size: 16px; font-weight: 700; color: #f8fafc; }
-    .service-desc { font-size: 13px; color: #94a3b8; line-height: 1.5; }
-    .compare-col { background: #0f172a; border: 1px solid #334155; border-radius: 10px; padding: 18px; }
-    .compare-col-title { font-size: 15px; font-weight: 700; margin-bottom: 12px; }
-    .compare-col ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
-    .compare-col ul li { font-size: 13px; color: #94a3b8; padding-left: 14px; position: relative; }
-    .compare-col ul li::before { content: '›'; position: absolute; left: 0; color: #f97316; }
-    .arch-flow { display: flex; align-items: center; flex-wrap: wrap; gap: 0; margin-bottom: 8px; }
-    .arch-node { padding: 10px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; text-align: center; }
-    .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 13px; font-weight: 600; }
-    .badge-green { background: rgba(16,185,129,0.15); color: #6ee7b7; }
-    .badge-red { background: rgba(239,68,68,0.12); color: #fca5a5; }
-    .badge-blue { background: rgba(59,130,246,0.15); color: #93c5fd; }
-    .tips-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 12px; }
-    .step-title { font-size: 15px; font-weight: 700; color: #f8fafc; margin-bottom: 4px; }
-    .step-desc { font-size: 13px; color: #94a3b8; margin-bottom: 12px; }
-    .divider { border: none; border-top: 1px solid #1e293b; margin: 4px 0; }
+      /* TYPOGRAPHY & UTILITIES */
+      .mono {
+        font-family: "Fira Code", monospace;
+      }
+      code {
+        font-family: "Fira Code", monospace;
+        font-size: 13px;
+        background: rgba(248, 114, 22, 0.1);
+        color: #fb923c;
+        padding: 2px 6px;
+        border-radius: 4px;
+      }
+      .grid-2 {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 16px;
+      }
+      .grid-3 {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 16px;
+      }
+      .grid-4 {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 16px;
+      }
+      .service-card {
+        background: #0f172a;
+        border: 1px solid #334155;
+        border-radius: 12px;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .service-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        font-weight: 700;
+        flex-shrink: 0;
+      }
+      .service-name {
+        font-size: 16px;
+        font-weight: 700;
+        color: #f8fafc;
+      }
+      .service-desc {
+        font-size: 13px;
+        color: #94a3b8;
+        line-height: 1.5;
+      }
+      .compare-col {
+        background: #0f172a;
+        border: 1px solid #334155;
+        border-radius: 10px;
+        padding: 18px;
+      }
+      .compare-col-title {
+        font-size: 15px;
+        font-weight: 700;
+        margin-bottom: 12px;
+      }
+      .compare-col ul {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .compare-col ul li {
+        font-size: 13px;
+        color: #94a3b8;
+        padding-left: 14px;
+        position: relative;
+      }
+      .compare-col ul li::before {
+        content: "›";
+        position: absolute;
+        left: 0;
+        color: #f97316;
+      }
+      .arch-flow {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0;
+        margin-bottom: 8px;
+      }
+      .arch-node {
+        padding: 10px 16px;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 600;
+        text-align: center;
+      }
+      .badge {
+        display: inline-block;
+        padding: 2px 8px;
+        border-radius: 4px;
+        font-size: 13px;
+        font-weight: 600;
+      }
+      .badge-green {
+        background: rgba(16, 185, 129, 0.15);
+        color: #6ee7b7;
+      }
+      .badge-red {
+        background: rgba(239, 68, 68, 0.12);
+        color: #fca5a5;
+      }
+      .badge-blue {
+        background: rgba(59, 130, 246, 0.15);
+        color: #93c5fd;
+      }
+      .tips-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 12px;
+      }
+      .step-title {
+        font-size: 15px;
+        font-weight: 700;
+        color: #f8fafc;
+        margin-bottom: 4px;
+      }
+      .step-desc {
+        font-size: 13px;
+        color: #94a3b8;
+        margin-bottom: 12px;
+      }
+      .divider {
+        border: none;
+        border-top: 1px solid #1e293b;
+        margin: 4px 0;
+      }
 
-    /* SECTION-SPECIFIC */
-    .engine-chip { display: inline-flex; align-items: center; gap: 6px; background: #1e293b; border: 1px solid #334155; border-radius: 6px; padding: 6px 12px; font-size: 13px; font-weight: 500; color: #cbd5e1; }
-    .engines-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
-    .aurora-stat { background: #0f172a; border: 1px solid #334155; border-radius: 10px; padding: 16px; text-align: center; }
-    .aurora-stat-num { font-size: 28px; font-weight: 800; color: #f97316; line-height: 1.1; }
-    .aurora-stat-label { font-size: 13px; color: #94a3b8; margin-top: 4px; }
-  </style>
-</head>
+      /* SECTION-SPECIFIC */
+      .engine-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: #1e293b;
+        border: 1px solid #334155;
+        border-radius: 6px;
+        padding: 6px 12px;
+        font-size: 13px;
+        font-weight: 500;
+        color: #cbd5e1;
+      }
+      .engines-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 12px;
+      }
+      .aurora-stat {
+        background: #0f172a;
+        border: 1px solid #334155;
+        border-radius: 10px;
+        padding: 16px;
+        text-align: center;
+      }
+      .aurora-stat-num {
+        font-size: 28px;
+        font-weight: 800;
+        color: #f97316;
+        line-height: 1.1;
+      }
+      .aurora-stat-label {
+        font-size: 13px;
+        color: #94a3b8;
+        margin-top: 4px;
+      }
+    </style>
+  </head>
 
-<body>
-
-<!-- ═══════════════════════════════════════════════════════════════
+  <body>
+    <!-- ═══════════════════════════════════════════════════════════════
      HERO
 ═══════════════════════════════════════════════════════════════ -->
-<script>initHeader("<span class='lang-en'>Section 8 — RDS, Aurora & ElastiCache</span><span class='lang-es'>Sección 8 — RDS, Aurora y ElastiCache</span>")</script>
+    <script>
+      initHeader(
+        "<span class='lang-en'>Section 8 — RDS, Aurora & ElastiCache</span><span class='lang-es'>Sección 8 — RDS, Aurora y ElastiCache</span>",
+      );
+    </script>
 
-<main class="page-body">
-
-  <!-- ═══════════════════════════════════════════════════════════════
+    <main class="page-body">
+      <!-- ═══════════════════════════════════════════════════════════════
        1. RDS OVERVIEW
   ═══════════════════════════════════════════════════════════════ -->
-  <section>
-    <div class="section-label"><span class="lang-en">1 · RDS Overview</span><span class="lang-es">1 · Descripción General de RDS</span></div>
-    <div class="card">
-      <div class="card-title"><span class="lang-en">Amazon RDS — Relational Database Service</span><span class="lang-es">Amazon RDS — Servicio de Base de Datos Relacional</span></div>
-      <p style="color:#94a3b8; font-size:14px; margin-bottom:16px;">
-        <span class="lang-en">Fully managed relational DB service. AWS handles OS patching, backups, monitoring, and scaling.
-        You cannot SSH into the underlying EC2 instance (except RDS Custom).
-        Storage is EBS-backed with <strong style="color:#f8fafc;">Storage Auto Scaling</strong>.</span>
-        <span class="lang-es">Servicio de base de datos relacional completamente administrado. AWS maneja parches del SO, copias de seguridad, monitoreo y escalado.
-        No puede SSH en la instancia EC2 subyacente (excepto RDS Custom).
-        El almacenamiento está respaldado por EBS con <strong style="color:#f8fafc;">Escalado Automático de Almacenamiento</strong>.</span>
-      </p>
-
-      <div class="section-label" style="margin-bottom:10px;"><span class="lang-en">7 Supported Engines</span><span class="lang-es">7 Motores Soportados</span></div>
-      <div class="engines-row">
-        <span class="engine-chip">PostgreSQL</span>
-        <span class="engine-chip">MySQL</span>
-        <span class="engine-chip">MariaDB</span>
-        <span class="engine-chip">Oracle</span>
-        <span class="engine-chip">SQL Server</span>
-        <span class="engine-chip">IBM DB2</span>
-        <span class="engine-chip" style="border-color:#f97316; color:#fb923c;">Aurora ★</span>
-      </div>
-
-      <hr class="divider" style="margin: 20px 0;" />
-
-      <div class="section-label" style="margin-bottom:10px;"><span class="lang-en">Storage Auto Scaling — Trigger Conditions</span><span class="lang-es">Escalado Automático de Almacenamiento — Condiciones de Activación</span></div>
-      <div class="grid-3" style="margin-top:0;">
-        <div class="callout info">
-          <strong><span class="lang-en">Free storage &lt; 10%</span><span class="lang-es">Almacenamiento libre &lt; 10%</span></strong><br/>
-          <span class="lang-en">Threshold that triggers expansion</span><span class="lang-es">Umbral que activa la expansión</span>
+      <section>
+        <div class="section-label">
+          <span class="lang-en">1 · RDS Overview</span
+          ><span class="lang-es">1 · Descripción General de RDS</span>
         </div>
-        <div class="callout info">
-          <strong><span class="lang-en">Low storage &gt; 5 min</span><span class="lang-es">Almacenamiento bajo &gt; 5 min</span></strong><br/>
-          <span class="lang-en">Condition must persist 5+ minutes</span><span class="lang-es">La condición debe persistir 5+ minutos</span>
-        </div>
-        <div class="callout info">
-          <strong><span class="lang-en">6-hour cooldown</span><span class="lang-es">Enfriamiento de 6 horas</span></strong><br/>
-          <span class="lang-en">Minimum time between auto-scale events</span><span class="lang-es">Tiempo mínimo entre eventos de auto-escalado</span>
-        </div>
-      </div>
-    </div>
-  </section>
+        <div class="card">
+          <div class="card-title">
+            <span class="lang-en">Amazon RDS — Relational Database Service</span
+            ><span class="lang-es"
+              >Amazon RDS — Servicio de Base de Datos Relacional</span
+            >
+          </div>
+          <p style="color: #94a3b8; font-size: 14px; margin-bottom: 16px">
+            <span class="lang-en"
+              >Fully managed relational DB service. AWS handles OS patching,
+              backups, monitoring, and scaling. You cannot SSH into the
+              underlying EC2 instance (except RDS Custom). Storage is EBS-backed
+              with
+              <strong style="color: #f8fafc">Storage Auto Scaling</strong
+              >.</span
+            >
+            <span class="lang-es"
+              >Servicio de base de datos relacional completamente administrado.
+              AWS maneja parches del SO, copias de seguridad, monitoreo y
+              escalado. No puede SSH en la instancia EC2 subyacente (excepto RDS
+              Custom). El almacenamiento está respaldado por EBS con
+              <strong style="color: #f8fafc"
+                >Escalado Automático de Almacenamiento</strong
+              >.</span
+            >
+          </p>
 
-  <!-- ═══════════════════════════════════════════════════════════════
+          <div class="section-label" style="margin-bottom: 10px">
+            <span class="lang-en">7 Supported Engines</span
+            ><span class="lang-es">7 Motores Soportados</span>
+          </div>
+          <div class="engines-row">
+            <span class="engine-chip">PostgreSQL</span>
+            <span class="engine-chip">MySQL</span>
+            <span class="engine-chip">MariaDB</span>
+            <span class="engine-chip">Oracle</span>
+            <span class="engine-chip">SQL Server</span>
+            <span class="engine-chip">IBM DB2</span>
+            <span
+              class="engine-chip"
+              style="border-color: #f97316; color: #fb923c"
+              >Aurora ★</span
+            >
+          </div>
+
+          <hr class="divider" style="margin: 20px 0" />
+
+          <div class="section-label" style="margin-bottom: 10px">
+            <span class="lang-en"
+              >Storage Auto Scaling — Trigger Conditions</span
+            ><span class="lang-es"
+              >Escalado Automático de Almacenamiento — Condiciones de
+              Activación</span
+            >
+          </div>
+          <div class="grid-3" style="margin-top: 0">
+            <div class="callout info">
+              <strong
+                ><span class="lang-en">Free storage &lt; 10%</span
+                ><span class="lang-es"
+                  >Almacenamiento libre &lt; 10%</span
+                ></strong
+              ><br />
+              <span class="lang-en">Threshold that triggers expansion</span
+              ><span class="lang-es">Umbral que activa la expansión</span>
+            </div>
+            <div class="callout info">
+              <strong
+                ><span class="lang-en">Low storage &gt; 5 min</span
+                ><span class="lang-es"
+                  >Almacenamiento bajo &gt; 5 min</span
+                ></strong
+              ><br />
+              <span class="lang-en">Condition must persist 5+ minutes</span
+              ><span class="lang-es"
+                >La condición debe persistir 5+ minutos</span
+              >
+            </div>
+            <div class="callout info">
+              <strong
+                ><span class="lang-en">6-hour cooldown</span
+                ><span class="lang-es">Enfriamiento de 6 horas</span></strong
+              ><br />
+              <span class="lang-en">Minimum time between auto-scale events</span
+              ><span class="lang-es"
+                >Tiempo mínimo entre eventos de auto-escalado</span
+              >
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════════════
        2. READ REPLICAS vs MULTI-AZ
   ═══════════════════════════════════════════════════════════════ -->
-  <section>
-    <div class="section-label"><span class="lang-en">2 · Read Replicas vs Multi-AZ</span><span class="lang-es">2 · Réplicas de Lectura vs Multi-AZ</span></div>
-    <div class="card">
-      <div class="card-title"><span class="lang-en">Feature Comparison</span><span class="lang-es">Comparación de Características</span></div>
-      <div class="table-wrapper">
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th><span class="lang-en">Feature</span><span class="lang-es">Característica</span></th>
-              <th><span class="lang-en">Read Replicas</span><span class="lang-es">Réplicas de Lectura</span></th>
-              <th><span class="lang-en">Multi-AZ</span><span class="lang-es">Multi-AZ</span></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong><span class="lang-en">Primary Purpose</span><span class="lang-es">Propósito Principal</span></strong></td>
-              <td><span class="lang-en">Scale reads (performance)</span><span class="lang-es">Escalar lecturas (rendimiento)</span></td>
-              <td><span class="lang-en">Disaster recovery (HA)</span><span class="lang-es">Recuperación ante desastres (HA)</span></td>
-            </tr>
-            <tr>
-              <td><strong><span class="lang-en">Replication</span><span class="lang-es">Replicación</span></strong></td>
-              <td><span class="badge badge-blue"><span class="lang-en">Asynchronous</span><span class="lang-es">Asíncrona</span></span></td>
-              <td><span class="badge badge-green"><span class="lang-en">Synchronous</span><span class="lang-es">Síncrona</span></span></td>
-            </tr>
-            <tr>
-              <td><strong><span class="lang-en">Consistency</span><span class="lang-es">Consistencia</span></strong></td>
-              <td><span class="lang-en">Eventually consistent</span><span class="lang-es">Eventualmente consistente</span></td>
-              <td><span class="lang-en">Fully consistent</span><span class="lang-es">Totalmente consistente</span></td>
-            </tr>
-            <tr>
-              <td><strong><span class="lang-en">Max Count</span><span class="lang-es">Cantidad Máxima</span></strong></td>
-              <td><span class="lang-en">15 replicas</span><span class="lang-es">15 réplicas</span></td>
-              <td><span class="lang-en">1 standby</span><span class="lang-es">1 en espera</span></td>
-            </tr>
-            <tr>
-              <td><strong><span class="lang-en">Readable?</span><span class="lang-es">¿Legible?</span></strong></td>
-              <td><span class="badge badge-green"><span class="lang-en">Yes</span><span class="lang-es">Sí</span></span> <span class="lang-en">(SELECT only)</span><span class="lang-es">(solo SELECT)</span></td>
-              <td><span class="badge badge-red"><span class="lang-en">No</span><span class="lang-es">No</span></span> <span class="lang-en">(standby only)</span><span class="lang-es">(solo en espera)</span></td>
-            </tr>
-            <tr>
-              <td><strong><span class="lang-en">Cross-Region?</span><span class="lang-es">¿Entre Regiones?</span></strong></td>
-              <td><span class="badge badge-green"><span class="lang-en">Yes</span><span class="lang-es">Sí</span></span></td>
-              <td><span class="badge badge-red"><span class="lang-en">No</span><span class="lang-es">No</span></span></td>
-            </tr>
-            <tr>
-              <td><strong><span class="lang-en">Network Cost</span><span class="lang-es">Costo de Red</span></strong></td>
-              <td><span class="lang-en">Free same-region · Paid cross-region</span><span class="lang-es">Gratis misma región · Pagado entre regiones</span></td>
-              <td><span class="lang-en">N/A</span><span class="lang-es">N/A</span></td>
-            </tr>
-            <tr>
-              <td><strong><span class="lang-en">Failover Target?</span><span class="lang-es">¿Objetivo de Conmutación?</span></strong></td>
-              <td><span class="lang-en">Can be promoted manually</span><span class="lang-es">Puede ser promovida manualmente</span></td>
-              <td><span class="lang-en">Automatic failover to standby</span><span class="lang-es">Conmutación automática a en espera</span></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <section>
+        <div class="section-label">
+          <span class="lang-en">2 · Read Replicas vs Multi-AZ</span
+          ><span class="lang-es">2 · Réplicas de Lectura vs Multi-AZ</span>
+        </div>
+        <div class="card">
+          <div class="card-title">
+            <span class="lang-en">Feature Comparison</span
+            ><span class="lang-es">Comparación de Características</span>
+          </div>
+          <div class="table-wrapper">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>
+                    <span class="lang-en">Feature</span
+                    ><span class="lang-es">Característica</span>
+                  </th>
+                  <th>
+                    <span class="lang-en">Read Replicas</span
+                    ><span class="lang-es">Réplicas de Lectura</span>
+                  </th>
+                  <th>
+                    <span class="lang-en">Multi-AZ</span
+                    ><span class="lang-es">Multi-AZ</span>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <strong
+                      ><span class="lang-en">Primary Purpose</span
+                      ><span class="lang-es">Propósito Principal</span></strong
+                    >
+                  </td>
+                  <td>
+                    <span class="lang-en">Scale reads (performance)</span
+                    ><span class="lang-es">Escalar lecturas (rendimiento)</span>
+                  </td>
+                  <td>
+                    <span class="lang-en">Disaster recovery (HA)</span
+                    ><span class="lang-es"
+                      >Recuperación ante desastres (HA)</span
+                    >
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <strong
+                      ><span class="lang-en">Replication</span
+                      ><span class="lang-es">Replicación</span></strong
+                    >
+                  </td>
+                  <td>
+                    <span class="badge badge-blue"
+                      ><span class="lang-en">Asynchronous</span
+                      ><span class="lang-es">Asíncrona</span></span
+                    >
+                  </td>
+                  <td>
+                    <span class="badge badge-green"
+                      ><span class="lang-en">Synchronous</span
+                      ><span class="lang-es">Síncrona</span></span
+                    >
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <strong
+                      ><span class="lang-en">Consistency</span
+                      ><span class="lang-es">Consistencia</span></strong
+                    >
+                  </td>
+                  <td>
+                    <span class="lang-en">Eventually consistent</span
+                    ><span class="lang-es">Eventualmente consistente</span>
+                  </td>
+                  <td>
+                    <span class="lang-en">Fully consistent</span
+                    ><span class="lang-es">Totalmente consistente</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <strong
+                      ><span class="lang-en">Max Count</span
+                      ><span class="lang-es">Cantidad Máxima</span></strong
+                    >
+                  </td>
+                  <td>
+                    <span class="lang-en">15 replicas</span
+                    ><span class="lang-es">15 réplicas</span>
+                  </td>
+                  <td>
+                    <span class="lang-en">1 standby</span
+                    ><span class="lang-es">1 en espera</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <strong
+                      ><span class="lang-en">Readable?</span
+                      ><span class="lang-es">¿Legible?</span></strong
+                    >
+                  </td>
+                  <td>
+                    <span class="badge badge-green"
+                      ><span class="lang-en">Yes</span
+                      ><span class="lang-es">Sí</span></span
+                    >
+                    <span class="lang-en">(SELECT only)</span
+                    ><span class="lang-es">(solo SELECT)</span>
+                  </td>
+                  <td>
+                    <span class="badge badge-red"
+                      ><span class="lang-en">No</span
+                      ><span class="lang-es">No</span></span
+                    >
+                    <span class="lang-en">(standby only)</span
+                    ><span class="lang-es">(solo en espera)</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <strong
+                      ><span class="lang-en">Cross-Region?</span
+                      ><span class="lang-es">¿Entre Regiones?</span></strong
+                    >
+                  </td>
+                  <td>
+                    <span class="badge badge-green"
+                      ><span class="lang-en">Yes</span
+                      ><span class="lang-es">Sí</span></span
+                    >
+                  </td>
+                  <td>
+                    <span class="badge badge-red"
+                      ><span class="lang-en">No</span
+                      ><span class="lang-es">No</span></span
+                    >
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <strong
+                      ><span class="lang-en">Network Cost</span
+                      ><span class="lang-es">Costo de Red</span></strong
+                    >
+                  </td>
+                  <td>
+                    <span class="lang-en"
+                      >Free same-region · Paid cross-region</span
+                    ><span class="lang-es"
+                      >Gratis misma región · Pagado entre regiones</span
+                    >
+                  </td>
+                  <td>
+                    <span class="lang-en">N/A</span
+                    ><span class="lang-es">N/A</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <strong
+                      ><span class="lang-en">Failover Target?</span
+                      ><span class="lang-es"
+                        >¿Objetivo de Conmutación?</span
+                      ></strong
+                    >
+                  </td>
+                  <td>
+                    <span class="lang-en">Can be promoted manually</span
+                    ><span class="lang-es"
+                      >Puede ser promovida manualmente</span
+                    >
+                  </td>
+                  <td>
+                    <span class="lang-en">Automatic failover to standby</span
+                    ><span class="lang-es"
+                      >Conmutación automática a en espera</span
+                    >
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
 
-      <div class="callout success" style="margin-top:16px;">
-        <strong><span class="lang-en">Zero-Downtime Migration:</span><span class="lang-es">Migración sin Tiempo de Inactividad:</span></strong> <span class="lang-en">Converting Single-AZ to Multi-AZ takes a snapshot of the primary, restores it as a new standby, then establishes synchronous replication — all with no downtime.</span><span class="lang-es">Convertir Single-AZ a Multi-AZ toma una snapshot de la principal, la restaura como un nuevo en espera, luego establece replicación síncrona — todo sin tiempo de inactividad.</span>
-      </div>
-    </div>
-  </section>
+          <div class="callout success" style="margin-top: 16px">
+            <strong
+              ><span class="lang-en">Zero-Downtime Migration:</span
+              ><span class="lang-es"
+                >Migración sin Tiempo de Inactividad:</span
+              ></strong
+            >
+            <span class="lang-en"
+              >Converting Single-AZ to Multi-AZ takes a snapshot of the primary,
+              restores it as a new standby, then establishes synchronous
+              replication — all with no downtime.</span
+            ><span class="lang-es"
+              >Convertir Single-AZ a Multi-AZ toma una snapshot de la principal,
+              la restaura como un nuevo en espera, luego establece replicación
+              síncrona — todo sin tiempo de inactividad.</span
+            >
+          </div>
+        </div>
+      </section>
 
-  <!-- ═══════════════════════════════════════════════════════════════
+      <!-- ═══════════════════════════════════════════════════════════════
        3. AMAZON AURORA
   ═══════════════════════════════════════════════════════════════ -->
-  <section>
-    <div class="section-label"><span class="lang-en">3 · Amazon Aurora</span><span class="lang-es">3 · Amazon Aurora</span></div>
-    <div class="card">
-      <div class="card-title"><span class="lang-en">AWS Proprietary — MySQL &amp; PostgreSQL Compatible</span><span class="lang-es">Propiedad de AWS — Compatible con MySQL &amp; PostgreSQL</span></div>
+      <section>
+        <div class="section-label">
+          <span class="lang-en">3 · Amazon Aurora</span
+          ><span class="lang-es">3 · Amazon Aurora</span>
+        </div>
+        <div class="card">
+          <div class="card-title">
+            <span class="lang-en"
+              >AWS Proprietary — MySQL &amp; PostgreSQL Compatible</span
+            ><span class="lang-es"
+              >Propiedad de AWS — Compatible con MySQL &amp; PostgreSQL</span
+            >
+          </div>
 
-      <div class="grid-4" style="margin-bottom:20px;">
-        <div class="aurora-stat">
-          <div class="aurora-stat-num">5x</div>
-          <div class="aurora-stat-label"><span class="lang-en">faster than MySQL</span><span class="lang-es">más rápido que MySQL</span></div>
-        </div>
-        <div class="aurora-stat">
-          <div class="aurora-stat-num">3x</div>
-          <div class="aurora-stat-label"><span class="lang-en">faster than PostgreSQL</span><span class="lang-es">más rápido que PostgreSQL</span></div>
-        </div>
-        <div class="aurora-stat">
-          <div class="aurora-stat-num">256 TB</div>
-          <div class="aurora-stat-label"><span class="lang-en">max storage (auto-grows from 10 GB)</span><span class="lang-es">almacenamiento máximo (crece automáticamente desde 10 GB)</span></div>
-        </div>
-        <div class="aurora-stat">
-          <div class="aurora-stat-num">&lt;30s</div>
-          <div class="aurora-stat-label"><span class="lang-en">failover time</span><span class="lang-es">tiempo de conmutación por error</span></div>
-        </div>
-      </div>
+          <div class="grid-4" style="margin-bottom: 20px">
+            <div class="aurora-stat">
+              <div class="aurora-stat-num">5x</div>
+              <div class="aurora-stat-label">
+                <span class="lang-en">faster than MySQL</span
+                ><span class="lang-es">más rápido que MySQL</span>
+              </div>
+            </div>
+            <div class="aurora-stat">
+              <div class="aurora-stat-num">3x</div>
+              <div class="aurora-stat-label">
+                <span class="lang-en">faster than PostgreSQL</span
+                ><span class="lang-es">más rápido que PostgreSQL</span>
+              </div>
+            </div>
+            <div class="aurora-stat">
+              <div class="aurora-stat-num">256 TB</div>
+              <div class="aurora-stat-label">
+                <span class="lang-en">max storage (auto-grows from 10 GB)</span
+                ><span class="lang-es"
+                  >almacenamiento máximo (crece automáticamente desde 10
+                  GB)</span
+                >
+              </div>
+            </div>
+            <div class="aurora-stat">
+              <div class="aurora-stat-num">&lt;30s</div>
+              <div class="aurora-stat-label">
+                <span class="lang-en">failover time</span
+                ><span class="lang-es">tiempo de conmutación por error</span>
+              </div>
+            </div>
+          </div>
 
-      <div class="grid-2" style="margin-bottom:16px;">
-        <div class="compare-col">
-          <div class="compare-col-title" style="color:#f97316;"><span class="lang-en">Storage Architecture</span><span class="lang-es">Arquitectura de Almacenamiento</span></div>
-          <ul>
-            <li><span class="lang-en">6 copies across 3 Availability Zones</span><span class="lang-es">6 copias en 3 Zonas de Disponibilidad</span></li>
-            <li><span class="lang-en">4 out of 6 copies needed for writes</span><span class="lang-es">4 de 6 copias necesarias para escrituras</span></li>
-            <li><span class="lang-en">3 out of 6 copies needed for reads</span><span class="lang-es">3 de 6 copias necesarias para lecturas</span></li>
-            <li><span class="lang-en">Self-healing peer-to-peer replication</span><span class="lang-es">Replicación peer-to-peer autorreparable</span></li>
-            <li><span class="lang-en">Storage is striped across 100s of volumes</span><span class="lang-es">El almacenamiento está distribuido en cientos de volúmenes</span></li>
-          </ul>
-        </div>
-        <div class="compare-col">
-          <div class="compare-col-title" style="color:#6366f1;"><span class="lang-en">Endpoints</span><span class="lang-es">Endpoints</span></div>
-          <ul>
-            <li><strong style="color:#f8fafc;"><span class="lang-en">Writer Endpoint</span><span class="lang-es">Endpoint de Escritura</span></strong> — <span class="lang-en">always points to master</span><span class="lang-es">siempre apunta a la principal</span></li>
-            <li><strong style="color:#f8fafc;"><span class="lang-en">Reader Endpoint</span><span class="lang-es">Endpoint de Lectura</span></strong> — <span class="lang-en">load-balanced across all read replicas</span><span class="lang-es">equilibrado en carga en todas las réplicas de lectura</span></li>
-            <li><span class="lang-en">Up to 15 read replicas</span><span class="lang-es">Hasta 15 réplicas de lectura</span></li>
-            <li><span class="lang-en">Replica lag under 10ms</span><span class="lang-es">Retraso de réplica menos de 10ms</span></li>
-            <li><span class="lang-en">~20% more expensive than standard RDS</span><span class="lang-es">~20% más caro que RDS estándar</span></li>
-          </ul>
-        </div>
-      </div>
+          <div class="grid-2" style="margin-bottom: 16px">
+            <div class="compare-col">
+              <div class="compare-col-title" style="color: #f97316">
+                <span class="lang-en">Storage Architecture</span
+                ><span class="lang-es">Arquitectura de Almacenamiento</span>
+              </div>
+              <ul>
+                <li>
+                  <span class="lang-en"
+                    >6 copies across 3 Availability Zones</span
+                  ><span class="lang-es"
+                    >6 copias en 3 Zonas de Disponibilidad</span
+                  >
+                </li>
+                <li>
+                  <span class="lang-en"
+                    >4 out of 6 copies needed for writes</span
+                  ><span class="lang-es"
+                    >4 de 6 copias necesarias para escrituras</span
+                  >
+                </li>
+                <li>
+                  <span class="lang-en">3 out of 6 copies needed for reads</span
+                  ><span class="lang-es"
+                    >3 de 6 copias necesarias para lecturas</span
+                  >
+                </li>
+                <li>
+                  <span class="lang-en"
+                    >Self-healing peer-to-peer replication</span
+                  ><span class="lang-es"
+                    >Replicación peer-to-peer autorreparable</span
+                  >
+                </li>
+                <li>
+                  <span class="lang-en"
+                    >Storage is striped across 100s of volumes</span
+                  ><span class="lang-es"
+                    >El almacenamiento está distribuido en cientos de
+                    volúmenes</span
+                  >
+                </li>
+              </ul>
+            </div>
+            <div class="compare-col">
+              <div class="compare-col-title" style="color: #6366f1">
+                <span class="lang-en">Endpoints</span
+                ><span class="lang-es">Endpoints</span>
+              </div>
+              <ul>
+                <li>
+                  <strong style="color: #f8fafc"
+                    ><span class="lang-en">Writer Endpoint</span
+                    ><span class="lang-es">Endpoint de Escritura</span></strong
+                  >
+                  — <span class="lang-en">always points to master</span
+                  ><span class="lang-es">siempre apunta a la principal</span>
+                </li>
+                <li>
+                  <strong style="color: #f8fafc"
+                    ><span class="lang-en">Reader Endpoint</span
+                    ><span class="lang-es">Endpoint de Lectura</span></strong
+                  >
+                  —
+                  <span class="lang-en"
+                    >load-balanced across all read replicas</span
+                  ><span class="lang-es"
+                    >equilibrado en carga en todas las réplicas de lectura</span
+                  >
+                </li>
+                <li>
+                  <span class="lang-en">Up to 15 read replicas</span
+                  ><span class="lang-es">Hasta 15 réplicas de lectura</span>
+                </li>
+                <li>
+                  <span class="lang-en">Replica lag under 10ms</span
+                  ><span class="lang-es">Retraso de réplica menos de 10ms</span>
+                </li>
+                <li>
+                  <span class="lang-en"
+                    >~20% more expensive than standard RDS</span
+                  ><span class="lang-es">~20% más caro que RDS estándar</span>
+                </li>
+              </ul>
+            </div>
+          </div>
 
-      <div class="callout warning">
-        <strong><span class="lang-en">Backtrack:</span><span class="lang-es">Backtrack:</span></strong> <span class="lang-en">Restore the Aurora DB to any point in time without relying on backups. Rewind the database in-place — no need to create a new cluster. Configured at cluster creation time.</span><span class="lang-es">Restaurar la base de datos Aurora a cualquier punto en el tiempo sin depender de copias de seguridad. Retroceder la base de datos en su lugar — sin necesidad de crear un nuevo clúster. Configurado en el momento de creación del clúster.</span>
-      </div>
-    </div>
-  </section>
+          <div class="callout warning">
+            <strong
+              ><span class="lang-en">Backtrack:</span
+              ><span class="lang-es">Backtrack:</span></strong
+            >
+            <span class="lang-en"
+              >Restore the Aurora DB to any point in time without relying on
+              backups. Rewind the database in-place — no need to create a new
+              cluster. Configured at cluster creation time.</span
+            ><span class="lang-es"
+              >Restaurar la base de datos Aurora a cualquier punto en el tiempo
+              sin depender de copias de seguridad. Retroceder la base de datos
+              en su lugar — sin necesidad de crear un nuevo clúster. Configurado
+              en el momento de creación del clúster.</span
+            >
+          </div>
+        </div>
+      </section>
 
-  <!-- ═══════════════════════════════════════════════════════════════
+      <!-- ═══════════════════════════════════════════════════════════════
        4. RDS & AURORA SECURITY
   ═══════════════════════════════════════════════════════════════ -->
-  <section>
-    <div class="section-label"><span class="lang-en">4 · RDS &amp; Aurora Security</span><span class="lang-es">4 · Seguridad de RDS &amp; Aurora</span></div>
-    <div class="card">
-      <div class="card-title"><span class="lang-en">Security Layers</span><span class="lang-es">Capas de Seguridad</span></div>
-      <div class="table-wrapper">
-        <table class="data-table">
-          <thead>
-            <tr><th><span class="lang-en">Layer</span><span class="lang-es">Capa</span></th><th><span class="lang-en">Detail</span><span class="lang-es">Detalle</span></th></tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong><span class="lang-en">At-Rest Encryption</span><span class="lang-es">Cifrado en Reposo</span></strong></td>
-              <td><span class="lang-en">KMS-AES-256. Must be defined at launch. Unencrypted master = unencrypted replicas.</span><span class="lang-es">KMS-AES-256. Debe definirse en el lanzamiento. Principal sin cifrar = réplicas sin cifrar.</span></td>
-            </tr>
-            <tr>
-              <td><strong><span class="lang-en">In-Flight Encryption</span><span class="lang-es">Cifrado en Tránsito</span></strong></td>
-              <td><span class="lang-en">TLS enabled by default for all connections</span><span class="lang-es">TLS habilitado por defecto para todas las conexiones</span></td>
-            </tr>
-            <tr>
-              <td><strong><span class="lang-en">Authentication</span><span class="lang-es">Autenticación</span></strong></td>
-              <td><span class="lang-en">Username/password <em>or</em> IAM roles (for MySQL &amp; PostgreSQL)</span><span class="lang-es">Nombre de usuario/contraseña <em>o</em> roles de IAM (para MySQL &amp; PostgreSQL)</span></td>
-            </tr>
-            <tr>
-              <td><strong><span class="lang-en">Network</span><span class="lang-es">Red</span></strong></td>
-              <td><span class="lang-en">Security Groups control inbound/outbound traffic</span><span class="lang-es">Los Grupos de Seguridad controlan el tráfico de entrada/salida</span></td>
-            </tr>
-            <tr>
-              <td><strong><span class="lang-en">SSH Access</span><span class="lang-es">Acceso SSH</span></strong></td>
-              <td><span class="badge badge-red"><span class="lang-en">Not available</span><span class="lang-es">No disponible</span></span> — <span class="lang-en">except RDS Custom</span><span class="lang-es">excepto RDS Custom</span></td>
-            </tr>
-            <tr>
-              <td><strong><span class="lang-en">Audit Logs</span><span class="lang-es">Registros de Auditoría</span></strong></td>
-              <td><span class="lang-en">Can be enabled → forwarded to CloudWatch Logs for long-term retention</span><span class="lang-es">Puede habilitarse → reenviado a CloudWatch Logs para retención a largo plazo</span></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <section>
+        <div class="section-label">
+          <span class="lang-en">4 · RDS &amp; Aurora Security</span
+          ><span class="lang-es">4 · Seguridad de RDS &amp; Aurora</span>
+        </div>
+        <div class="card">
+          <div class="card-title">
+            <span class="lang-en">Security Layers</span
+            ><span class="lang-es">Capas de Seguridad</span>
+          </div>
+          <div class="table-wrapper">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>
+                    <span class="lang-en">Layer</span
+                    ><span class="lang-es">Capa</span>
+                  </th>
+                  <th>
+                    <span class="lang-en">Detail</span
+                    ><span class="lang-es">Detalle</span>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <strong
+                      ><span class="lang-en">At-Rest Encryption</span
+                      ><span class="lang-es">Cifrado en Reposo</span></strong
+                    >
+                  </td>
+                  <td>
+                    <span class="lang-en"
+                      >KMS-AES-256. Must be defined at launch. Unencrypted
+                      master = unencrypted replicas.</span
+                    ><span class="lang-es"
+                      >KMS-AES-256. Debe definirse en el lanzamiento. Principal
+                      sin cifrar = réplicas sin cifrar.</span
+                    >
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <strong
+                      ><span class="lang-en">In-Flight Encryption</span
+                      ><span class="lang-es">Cifrado en Tránsito</span></strong
+                    >
+                  </td>
+                  <td>
+                    <span class="lang-en"
+                      >TLS enabled by default for all connections</span
+                    ><span class="lang-es"
+                      >TLS habilitado por defecto para todas las
+                      conexiones</span
+                    >
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <strong
+                      ><span class="lang-en">Authentication</span
+                      ><span class="lang-es">Autenticación</span></strong
+                    >
+                  </td>
+                  <td>
+                    <span class="lang-en"
+                      >Username/password <em>or</em> IAM roles (for MySQL &amp;
+                      PostgreSQL)</span
+                    ><span class="lang-es"
+                      >Nombre de usuario/contraseña <em>o</em> roles de IAM
+                      (para MySQL &amp; PostgreSQL)</span
+                    >
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <strong
+                      ><span class="lang-en">Network</span
+                      ><span class="lang-es">Red</span></strong
+                    >
+                  </td>
+                  <td>
+                    <span class="lang-en"
+                      >Security Groups control inbound/outbound traffic</span
+                    ><span class="lang-es"
+                      >Los Grupos de Seguridad controlan el tráfico de
+                      entrada/salida</span
+                    >
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <strong
+                      ><span class="lang-en">SSH Access</span
+                      ><span class="lang-es">Acceso SSH</span></strong
+                    >
+                  </td>
+                  <td>
+                    <span class="badge badge-red"
+                      ><span class="lang-en">Not available</span
+                      ><span class="lang-es">No disponible</span></span
+                    >
+                    — <span class="lang-en">except RDS Custom</span
+                    ><span class="lang-es">excepto RDS Custom</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <strong
+                      ><span class="lang-en">Audit Logs</span
+                      ><span class="lang-es"
+                        >Registros de Auditoría</span
+                      ></strong
+                    >
+                  </td>
+                  <td>
+                    <span class="lang-en"
+                      >Can be enabled → forwarded to CloudWatch Logs for
+                      long-term retention</span
+                    ><span class="lang-es"
+                      >Puede habilitarse → reenviado a CloudWatch Logs para
+                      retención a largo plazo</span
+                    >
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
 
-      <div class="callout danger" style="margin-top:16px;">
-        <strong><span class="lang-en">Encrypting an existing unencrypted DB:</span><span class="lang-es">Cifrar una base de datos existente sin cifrar:</span></strong> <span class="lang-en">You cannot enable encryption on a running instance.
-        The process is: take a snapshot of the unencrypted DB → restore the snapshot as a new <em>encrypted</em> DB → update connection strings.</span><span class="lang-es">No puede habilitar el cifrado en una instancia en ejecución.
-        El proceso es: tomar una snapshot de la BD sin cifrar → restaurar la snapshot como una nueva BD <em>cifrada</em> → actualizar cadenas de conexión.</span>
-      </div>
-    </div>
-  </section>
+          <div class="callout danger" style="margin-top: 16px">
+            <strong
+              ><span class="lang-en"
+                >Encrypting an existing unencrypted DB:</span
+              ><span class="lang-es"
+                >Cifrar una base de datos existente sin cifrar:</span
+              ></strong
+            >
+            <span class="lang-en"
+              >You cannot enable encryption on a running instance. The process
+              is: take a snapshot of the unencrypted DB → restore the snapshot
+              as a new <em>encrypted</em> DB → update connection strings.</span
+            ><span class="lang-es"
+              >No puede habilitar el cifrado en una instancia en ejecución. El
+              proceso es: tomar una snapshot de la BD sin cifrar → restaurar la
+              snapshot como una nueva BD <em>cifrada</em> → actualizar cadenas
+              de conexión.</span
+            >
+          </div>
+        </div>
+      </section>
 
-  <!-- ═══════════════════════════════════════════════════════════════
+      <!-- ═══════════════════════════════════════════════════════════════
        5. RDS PROXY
   ═══════════════════════════════════════════════════════════════ -->
-  <section>
-    <div class="section-label"><span class="lang-en">5 · RDS Proxy</span><span class="lang-es">5 · RDS Proxy</span></div>
-    <div class="card">
-      <div class="card-title"><span class="lang-en">Connection Pooling for RDS &amp; Aurora</span><span class="lang-es">Agrupamiento de Conexiones para RDS &amp; Aurora</span></div>
-
-      <div class="grid-2" style="margin-bottom:16px;">
-        <div class="compare-col">
-          <div class="compare-col-title" style="color:#10b981;"><span class="lang-en">Key Benefits</span><span class="lang-es">Beneficios Clave</span></div>
-          <ul>
-            <li><span class="lang-en">Pools &amp; shares DB connections</span><span class="lang-es">Agrupa y comparte conexiones de BD</span></li>
-            <li><span class="lang-en">Reduces DB stress from too many open connections</span><span class="lang-es">Reduce el estrés de BD por demasiadas conexiones abiertas</span></li>
-            <li><span class="lang-en">66% faster failover time</span><span class="lang-es">66% más rápido tiempo de conmutación por error</span></li>
-            <li><span class="lang-en">Serverless — scales automatically</span><span class="lang-es">Sin servidor — se escala automáticamente</span></li>
-            <li><span class="lang-en">IAM Authentication + Secrets Manager integration</span><span class="lang-es">Autenticación IAM + integración de Secrets Manager</span></li>
-            <li><span class="lang-en">VPC only — never publicly accessible</span><span class="lang-es">Solo VPC — nunca accesible públicamente</span></li>
-          </ul>
+      <section>
+        <div class="section-label">
+          <span class="lang-en">5 · RDS Proxy</span
+          ><span class="lang-es">5 · RDS Proxy</span>
         </div>
-        <div class="compare-col">
-          <div class="compare-col-title" style="color:#f97316;"><span class="lang-en">Supported Engines</span><span class="lang-es">Motores Soportados</span></div>
-          <ul>
-            <li><span class="badge badge-green">MySQL</span></li>
-            <li><span class="badge badge-green">PostgreSQL</span></li>
-            <li><span class="badge badge-green">MariaDB</span></li>
-            <li><span class="badge badge-green">SQL Server</span></li>
-            <li><span class="badge badge-green"><span class="lang-en">Aurora MySQL &amp; PostgreSQL</span><span class="lang-es">Aurora MySQL &amp; PostgreSQL</span></span></li>
-            <li><span class="badge badge-red"><span class="lang-en">NOT Oracle</span><span class="lang-es">NO Oracle</span></span> &nbsp; <span class="badge badge-red"><span class="lang-en">NOT IBM DB2</span><span class="lang-es">NO IBM DB2</span></span></li>
-          </ul>
+        <div class="card">
+          <div class="card-title">
+            <span class="lang-en">Connection Pooling for RDS &amp; Aurora</span
+            ><span class="lang-es"
+              >Agrupamiento de Conexiones para RDS &amp; Aurora</span
+            >
+          </div>
+
+          <p style="margin-bottom: 14px">
+            <span class="lang-en"
+              >RDS and Aurora have a hard limit on simultaneous connections —
+              determined by instance size (a <code>db.t3.micro</code> allows ~60
+              connections). Every app instance, Lambda function, or container
+              that talks to the DB opens its own connection. Under high
+              concurrency — hundreds of Lambdas firing at once — the DB gets
+              overwhelmed with connection requests before processing a single
+              query. <strong>RDS Proxy</strong> sits between your application
+              and the database, maintaining a pool of long-lived connections to
+              RDS. Your app connects to the Proxy, not the DB directly, and the
+              Proxy multiplexes those requests over a much smaller set of actual
+              DB connections.</span
+            >
+            <span class="lang-es"
+              >RDS y Aurora tienen un límite fijo de conexiones simultáneas —
+              determinado por el tamaño de instancia (una
+              <code>db.t3.micro</code> permite ~60 conexiones). Cada instancia
+              de app, función Lambda o contenedor que habla con la BD abre su
+              propia conexión. Con alta concurrencia — cientos de Lambdas
+              ejecutándose a la vez — la BD se desborda con solicitudes de
+              conexión antes de procesar una sola consulta.
+              <strong>RDS Proxy</strong> se ubica entre tu aplicación y la base
+              de datos, manteniendo un grupo de conexiones de larga duración
+              hacia RDS. Tu app se conecta al Proxy, no directamente a la BD, y
+              el Proxy multiplexa esas solicitudes sobre un conjunto mucho menor
+              de conexiones reales.</span
+            >
+          </p>
+
+          <div class="grid-2" style="margin-bottom: 16px">
+            <div class="compare-col">
+              <div class="compare-col-title" style="color: #10b981">
+                <span class="lang-en">Key Benefits</span
+                ><span class="lang-es">Beneficios Clave</span>
+              </div>
+              <ul>
+                <li>
+                  <span class="lang-en">Pools &amp; shares DB connections</span
+                  ><span class="lang-es"
+                    >Agrupa y comparte conexiones de BD</span
+                  >
+                </li>
+                <li>
+                  <span class="lang-en"
+                    >Reduces DB stress from too many open connections</span
+                  ><span class="lang-es"
+                    >Reduce el estrés de BD por demasiadas conexiones
+                    abiertas</span
+                  >
+                </li>
+                <li>
+                  <span class="lang-en">66% faster failover time</span
+                  ><span class="lang-es"
+                    >66% más rápido tiempo de conmutación por error</span
+                  >
+                </li>
+                <li>
+                  <span class="lang-en">Serverless — scales automatically</span
+                  ><span class="lang-es"
+                    >Sin servidor — se escala automáticamente</span
+                  >
+                </li>
+                <li>
+                  <span class="lang-en"
+                    >IAM Authentication + Secrets Manager integration</span
+                  ><span class="lang-es"
+                    >Autenticación IAM + integración de Secrets Manager</span
+                  >
+                </li>
+                <li>
+                  <span class="lang-en"
+                    >VPC only — never publicly accessible</span
+                  ><span class="lang-es"
+                    >Solo VPC — nunca accesible públicamente</span
+                  >
+                </li>
+              </ul>
+            </div>
+            <div class="compare-col">
+              <div class="compare-col-title" style="color: #f97316">
+                <span class="lang-en">Supported Engines</span
+                ><span class="lang-es">Motores Soportados</span>
+              </div>
+              <ul>
+                <li><span class="badge badge-green">MySQL</span></li>
+                <li><span class="badge badge-green">PostgreSQL</span></li>
+                <li><span class="badge badge-green">MariaDB</span></li>
+                <li><span class="badge badge-green">SQL Server</span></li>
+                <li>
+                  <span class="badge badge-green"
+                    ><span class="lang-en">Aurora MySQL &amp; PostgreSQL</span
+                    ><span class="lang-es"
+                      >Aurora MySQL &amp; PostgreSQL</span
+                    ></span
+                  >
+                </li>
+                <li>
+                  <span class="badge badge-red"
+                    ><span class="lang-en">NOT Oracle</span
+                    ><span class="lang-es">NO Oracle</span></span
+                  >
+                  &nbsp;
+                  <span class="badge badge-red"
+                    ><span class="lang-en">NOT IBM DB2</span
+                    ><span class="lang-es">NO IBM DB2</span></span
+                  >
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Lambda + RDS Proxy flow -->
+          <div class="section-label" style="margin-bottom: 10px">
+            <span class="lang-en"
+              >The Lambda + RDS Problem → Proxy Solution</span
+            ><span class="lang-es"
+              >El Problema de Lambda + RDS → Solución de Proxy</span
+            >
+          </div>
+          <div
+            style="
+              display: flex;
+              align-items: center;
+              flex-wrap: wrap;
+              gap: 6px;
+              margin-bottom: 12px;
+            "
+          >
+            <div
+              class="flow-box"
+              style="
+                background: rgba(99, 102, 241, 0.15);
+                border-color: #6366f1;
+              "
+            >
+              <span class="lang-en"
+                >Lambda Functions<br /><span
+                  style="color: #94a3b8; font-size: 13px"
+                  >(1000s of concurrent)</span
+                ></span
+              ><span class="lang-es"
+                >Funciones Lambda<br /><span
+                  style="color: #94a3b8; font-size: 13px"
+                  >(1000s de concurrentes)</span
+                ></span
+              >
+            </div>
+            <div class="flow-connector">→</div>
+            <div
+              class="flow-box"
+              style="
+                background: rgba(16, 185, 129, 0.12);
+                border-color: #10b981;
+              "
+            >
+              <span class="lang-en"
+                >RDS Proxy<br /><span style="color: #94a3b8; font-size: 13px"
+                  >(connection pool)</span
+                ></span
+              ><span class="lang-es"
+                >RDS Proxy<br /><span style="color: #94a3b8; font-size: 13px"
+                  >(grupo de conexiones)</span
+                ></span
+              >
+            </div>
+            <div class="flow-connector">→</div>
+            <div
+              class="flow-box"
+              style="
+                background: rgba(249, 115, 22, 0.12);
+                border-color: #f97316;
+              "
+            >
+              <span class="lang-en"
+                >RDS / Aurora<br /><span style="color: #94a3b8; font-size: 13px"
+                  >(limited connections)</span
+                ></span
+              ><span class="lang-es"
+                >RDS / Aurora<br /><span style="color: #94a3b8; font-size: 13px"
+                  >(conexiones limitadas)</span
+                ></span
+              >
+            </div>
+          </div>
+          <div class="callout warning">
+            <strong
+              ><span class="lang-en">Exam pattern:</span
+              ><span class="lang-es">Patrón del examen:</span></strong
+            >
+            <span class="lang-en"
+              >Whenever you see <em>Lambda + RDS</em>, the answer is
+              <strong>RDS Proxy</strong>. Lambda can open thousands of
+              concurrent connections — without a proxy, this overwhelms the
+              DB.</span
+            ><span class="lang-es"
+              >Siempre que vea <em>Lambda + RDS</em>, la respuesta es
+              <strong>RDS Proxy</strong>. Lambda puede abrir miles de conexiones
+              concurrentes — sin un proxy, esto sobrecarga la BD.</span
+            >
+          </div>
         </div>
-      </div>
+      </section>
 
-      <!-- Lambda + RDS Proxy flow -->
-      <div class="section-label" style="margin-bottom:10px;"><span class="lang-en">The Lambda + RDS Problem → Proxy Solution</span><span class="lang-es">El Problema de Lambda + RDS → Solución de Proxy</span></div>
-      <div style="display:flex; align-items:center; flex-wrap:wrap; gap:6px; margin-bottom:12px;">
-        <div class="flow-box" style="background:rgba(99,102,241,0.15); border-color:#6366f1;"><span class="lang-en">Lambda Functions<br/><span style="color:#94a3b8; font-size:13px;">(1000s of concurrent)</span></span><span class="lang-es">Funciones Lambda<br/><span style="color:#94a3b8; font-size:13px;">(1000s de concurrentes)</span></span></div>
-        <div class="flow-connector">→</div>
-        <div class="flow-box" style="background:rgba(16,185,129,0.12); border-color:#10b981;"><span class="lang-en">RDS Proxy<br/><span style="color:#94a3b8; font-size:13px;">(connection pool)</span></span><span class="lang-es">RDS Proxy<br/><span style="color:#94a3b8; font-size:13px;">(grupo de conexiones)</span></span></div>
-        <div class="flow-connector">→</div>
-        <div class="flow-box" style="background:rgba(249,115,22,0.12); border-color:#f97316;"><span class="lang-en">RDS / Aurora<br/><span style="color:#94a3b8; font-size:13px;">(limited connections)</span></span><span class="lang-es">RDS / Aurora<br/><span style="color:#94a3b8; font-size:13px;">(conexiones limitadas)</span></span></div>
-      </div>
-      <div class="callout warning">
-        <strong><span class="lang-en">Exam pattern:</span><span class="lang-es">Patrón del examen:</span></strong> <span class="lang-en">Whenever you see <em>Lambda + RDS</em>, the answer is <strong>RDS Proxy</strong>.
-        Lambda can open thousands of concurrent connections — without a proxy, this overwhelms the DB.</span><span class="lang-es">Siempre que vea <em>Lambda + RDS</em>, la respuesta es <strong>RDS Proxy</strong>.
-        Lambda puede abrir miles de conexiones concurrentes — sin un proxy, esto sobrecarga la BD.</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- ═══════════════════════════════════════════════════════════════
+      <!-- ═══════════════════════════════════════════════════════════════
        6. ELASTICACHE — REDIS vs MEMCACHED
   ═══════════════════════════════════════════════════════════════ -->
-  <section>
-    <div class="section-label"><span class="lang-en">6 · ElastiCache — Redis vs Memcached</span><span class="lang-es">6 · ElastiCache — Redis vs Memcached</span></div>
-    <div class="card">
-      <div class="card-title"><span class="lang-en">Managed In-Memory Caching</span><span class="lang-es">Almacenamiento en Caché en Memoria Administrado</span></div>
-      <div class="table-wrapper">
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th><span class="lang-en">Feature</span><span class="lang-es">Característica</span></th>
-              <th><span class="lang-en">Redis</span><span class="lang-es">Redis</span></th>
-              <th><span class="lang-en">Memcached</span><span class="lang-es">Memcached</span></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong><span class="lang-en">High Availability</span><span class="lang-es">Alta Disponibilidad</span></strong></td>
-              <td><span class="badge badge-green"><span class="lang-en">Multi-AZ auto-failover</span><span class="lang-es">Conmutación automática Multi-AZ</span></span></td>
-              <td><span class="badge badge-red"><span class="lang-en">No HA</span><span class="lang-es">Sin HA</span></span></td>
-            </tr>
-            <tr>
-              <td><strong><span class="lang-en">Read Scaling</span><span class="lang-es">Escalado de Lectura</span></strong></td>
-              <td><span class="badge badge-green"><span class="lang-en">Read replicas</span><span class="lang-es">Réplicas de lectura</span></span></td>
-              <td><span class="badge badge-red"><span class="lang-en">No replicas</span><span class="lang-es">Sin réplicas</span></span></td>
-            </tr>
-            <tr>
-              <td><strong><span class="lang-en">Data Durability</span><span class="lang-es">Durabilidad de Datos</span></strong></td>
-              <td><span class="badge badge-green"><span class="lang-en">AOF persistence</span><span class="lang-es">Persistencia AOF</span></span></td>
-              <td><span class="badge badge-red"><span class="lang-en">No persistence</span><span class="lang-es">Sin persistencia</span></span></td>
-            </tr>
-            <tr>
-              <td><strong><span class="lang-en">Backup &amp; Restore</span><span class="lang-es">Copia de Seguridad &amp; Restauración</span></strong></td>
-              <td><span class="badge badge-green"><span class="lang-en">Yes</span><span class="lang-es">Sí</span></span></td>
-              <td><span class="lang-en">Serverless version only</span><span class="lang-es">Solo versión sin servidor</span></td>
-            </tr>
-            <tr>
-              <td><strong><span class="lang-en">Data Structures</span><span class="lang-es">Estructuras de Datos</span></strong></td>
-              <td><span class="lang-en">Sets, sorted sets, hashes, lists, streams</span><span class="lang-es">Conjuntos, conjuntos ordenados, hashes, listas, streams</span></td>
-              <td><span class="lang-en">Simple key-value only</span><span class="lang-es">Solo clave-valor simple</span></td>
-            </tr>
-            <tr>
-              <td><strong><span class="lang-en">Architecture</span><span class="lang-es">Arquitectura</span></strong></td>
-              <td><span class="lang-en">Replication (primary + replicas)</span><span class="lang-es">Replicación (principal + réplicas)</span></td>
-              <td><span class="lang-en">Sharding (horizontal partitioning)</span><span class="lang-es">Particionamiento (partición horizontal)</span></td>
-            </tr>
-            <tr>
-              <td><strong><span class="lang-en">Multi-threaded</span><span class="lang-es">Multi-hilo</span></strong></td>
-              <td><span class="badge badge-red"><span class="lang-en">No</span><span class="lang-es">No</span></span></td>
-              <td><span class="badge badge-green"><span class="lang-en">Yes</span><span class="lang-es">Sí</span></span></td>
-            </tr>
-            <tr>
-              <td><strong><span class="lang-en">Best For</span><span class="lang-es">Mejor Para</span></strong></td>
-              <td><span class="lang-en">Leaderboards, sessions, pub/sub, durable cache</span><span class="lang-es">Tablas de posiciones, sesiones, pub/sub, caché duradero</span></td>
-              <td><span class="lang-en">Simple caching, high throughput, multi-thread</span><span class="lang-es">Almacenamiento en caché simple, alto rendimiento, multi-hilo</span></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <section>
+        <div class="section-label">
+          <span class="lang-en">6 · ElastiCache — Redis vs Memcached</span
+          ><span class="lang-es">6 · ElastiCache — Redis vs Memcached</span>
+        </div>
+        <div class="card">
+          <div class="card-title">
+            <span class="lang-en">Managed In-Memory Caching</span
+            ><span class="lang-es"
+              >Almacenamiento en Caché en Memoria Administrado</span
+            >
+          </div>
+          <div class="table-wrapper">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>
+                    <span class="lang-en">Feature</span
+                    ><span class="lang-es">Característica</span>
+                  </th>
+                  <th>
+                    <span class="lang-en">Redis</span
+                    ><span class="lang-es">Redis</span>
+                  </th>
+                  <th>
+                    <span class="lang-en">Memcached</span
+                    ><span class="lang-es">Memcached</span>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <strong
+                      ><span class="lang-en">High Availability</span
+                      ><span class="lang-es">Alta Disponibilidad</span></strong
+                    >
+                  </td>
+                  <td>
+                    <span class="badge badge-green"
+                      ><span class="lang-en">Multi-AZ auto-failover</span
+                      ><span class="lang-es"
+                        >Conmutación automática Multi-AZ</span
+                      ></span
+                    >
+                  </td>
+                  <td>
+                    <span class="badge badge-red"
+                      ><span class="lang-en">No HA (High Availability)</span
+                      ><span class="lang-es"
+                        >Sin HA (Alta Disponibilidad)</span
+                      ></span
+                    >
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <strong
+                      ><span class="lang-en">Read Scaling</span
+                      ><span class="lang-es">Escalado de Lectura</span></strong
+                    >
+                  </td>
+                  <td>
+                    <span class="badge badge-green"
+                      ><span class="lang-en">Read replicas</span
+                      ><span class="lang-es">Réplicas de lectura</span></span
+                    >
+                  </td>
+                  <td>
+                    <span class="badge badge-red"
+                      ><span class="lang-en">No replicas</span
+                      ><span class="lang-es">Sin réplicas</span></span
+                    >
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <strong
+                      ><span class="lang-en">Data Durability</span
+                      ><span class="lang-es">Durabilidad de Datos</span></strong
+                    >
+                  </td>
+                  <td>
+                    <span class="badge badge-green"
+                      ><span class="lang-en">AOF persistence</span
+                      ><span class="lang-es">Persistencia AOF</span></span
+                    >
+                  </td>
+                  <td>
+                    <span class="badge badge-red"
+                      ><span class="lang-en">No persistence</span
+                      ><span class="lang-es">Sin persistencia</span></span
+                    >
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <strong
+                      ><span class="lang-en">Backup &amp; Restore</span
+                      ><span class="lang-es"
+                        >Copia de Seguridad &amp; Restauración</span
+                      ></strong
+                    >
+                  </td>
+                  <td>
+                    <span class="badge badge-green"
+                      ><span class="lang-en">Yes</span
+                      ><span class="lang-es">Sí</span></span
+                    >
+                  </td>
+                  <td>
+                    <span class="lang-en">Serverless version only</span
+                    ><span class="lang-es">Solo versión sin servidor</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <strong
+                      ><span class="lang-en">Data Structures</span
+                      ><span class="lang-es">Estructuras de Datos</span></strong
+                    >
+                  </td>
+                  <td>
+                    <span class="lang-en"
+                      >Sets, sorted sets, hashes, lists, streams</span
+                    ><span class="lang-es"
+                      >Conjuntos, conjuntos ordenados, hashes, listas,
+                      streams</span
+                    >
+                  </td>
+                  <td>
+                    <span class="lang-en">Simple key-value only</span
+                    ><span class="lang-es">Solo clave-valor simple</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <strong
+                      ><span class="lang-en">Architecture</span
+                      ><span class="lang-es">Arquitectura</span></strong
+                    >
+                  </td>
+                  <td>
+                    <span class="lang-en">Replication (primary + replicas)</span
+                    ><span class="lang-es"
+                      >Replicación (principal + réplicas)</span
+                    >
+                  </td>
+                  <td>
+                    <span class="lang-en"
+                      >Sharding (horizontal partitioning)</span
+                    ><span class="lang-es"
+                      >Particionamiento (partición horizontal)</span
+                    >
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <strong
+                      ><span class="lang-en">Multi-threaded</span
+                      ><span class="lang-es">Multi-hilo</span></strong
+                    >
+                  </td>
+                  <td>
+                    <span class="badge badge-red"
+                      ><span class="lang-en">No</span
+                      ><span class="lang-es">No</span></span
+                    >
+                  </td>
+                  <td>
+                    <span class="badge badge-green"
+                      ><span class="lang-en">Yes</span
+                      ><span class="lang-es">Sí</span></span
+                    >
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <strong
+                      ><span class="lang-en">Best For</span
+                      ><span class="lang-es">Mejor Para</span></strong
+                    >
+                  </td>
+                  <td>
+                    <span class="lang-en"
+                      >Leaderboards, sessions, pub/sub, durable cache</span
+                    ><span class="lang-es"
+                      >Tablas de posiciones, sesiones, pub/sub, caché
+                      duradero</span
+                    >
+                  </td>
+                  <td>
+                    <span class="lang-en"
+                      >Simple caching, high throughput, multi-thread</span
+                    ><span class="lang-es"
+                      >Almacenamiento en caché simple, alta velocidad de transferencia,
+                      multi-hilo</span
+                    >
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
 
-      <div class="callout info" style="margin-top:16px;">
-        <strong><span class="lang-en">Key Reminder:</span><span class="lang-es">Recordatorio Clave:</span></strong> <span class="lang-en">ElastiCache requires application code changes to work. The application must be programmed to check the cache before hitting the DB.
-        IAM auth is NOT supported in ElastiCache — use Redis AUTH or Memcached SASL.</span><span class="lang-es">ElastiCache requiere cambios en el código de la aplicación para funcionar. La aplicación debe estar programada para verificar el caché antes de acceder a la BD.
-        La autenticación IAM NO es compatible en ElastiCache — use Redis AUTH o Memcached SASL.</span>
-      </div>
-    </div>
-  </section>
+          <div class="callout info" style="margin-top: 16px">
+            <strong
+              ><span class="lang-en">Key Reminder:</span
+              ><span class="lang-es">Recordatorio Clave:</span></strong
+            >
+            <span class="lang-en"
+              >ElastiCache requires application code changes to work. The
+              application must be programmed to check the cache before hitting
+              the DB. IAM auth is NOT supported in ElastiCache — use Redis AUTH
+              or Memcached SASL.</span
+            ><span class="lang-es"
+              >ElastiCache requiere cambios en el código de la aplicación para
+              funcionar. La aplicación debe estar programada para verificar el
+              caché antes de acceder a la BD. La autenticación IAM NO es
+              compatible en ElastiCache — use Redis AUTH o Memcached SASL.</span
+            >
+          </div>
+        </div>
+      </section>
 
-  <!-- ═══════════════════════════════════════════════════════════════
+      <!-- ═══════════════════════════════════════════════════════════════
        7. CACHING STRATEGIES (ANIMATED DEMO)
   ═══════════════════════════════════════════════════════════════ -->
-  <section>
-    <div class="section-label"><span class="lang-en">7 · ElastiCache Caching Strategies</span><span class="lang-es">7 · Estrategias de Almacenamiento en Caché de ElastiCache</span></div>
-    <div class="card">
-      <div class="card-title"><span class="lang-en">Caching Strategies — Step-by-Step</span><span class="lang-es">Estrategias de Almacenamiento en Caché — Paso a Paso</span></div>
+      <section>
+        <div class="section-label">
+          <span class="lang-en">7 · ElastiCache Caching Strategies</span
+          ><span class="lang-es"
+            >7 · Estrategias de Almacenamiento en Caché de ElastiCache</span
+          >
+        </div>
+        <div class="card">
+          <div class="card-title">
+            <span class="lang-en">Caching Strategies — Step-by-Step</span
+            ><span class="lang-es"
+              >Estrategias de Almacenamiento en Caché — Paso a Paso</span
+            >
+          </div>
 
-      <div class="anim-demo" id="demo-cache"></div>
-      <div class="anim-controls">
-        <button class="nav-btn" id="demo-cache-prev" onclick="prev('demo-cache')">&#9664; <span class="lang-en">Prev</span><span class="lang-es">Anterior</span></button>
-        <button class="nav-btn" id="demo-cache-next" onclick="next('demo-cache')"><span class="lang-en">Next</span><span class="lang-es">Siguiente</span> &#9654;</button>
-        <div class="step-dots" id="demo-cache-dots"></div>
-        <span class="step-counter" id="demo-cache-counter"></span>
-        <button class="restart-btn" onclick="restart('demo-cache')">&#8635; <span class="lang-en">Restart</span><span class="lang-es">Reiniciar</span></button>
-      </div>
-    </div>
-  </section>
+          <div class="anim-demo" id="demo-cache"></div>
+          <div class="anim-controls">
+            <button
+              class="nav-btn"
+              id="demo-cache-prev"
+              onclick="prev('demo-cache')"
+            >
+              &#9664; <span class="lang-en">Prev</span
+              ><span class="lang-es">Anterior</span>
+            </button>
+            <button
+              class="nav-btn"
+              id="demo-cache-next"
+              onclick="next('demo-cache')"
+            >
+              <span class="lang-en">Next</span
+              ><span class="lang-es">Siguiente</span> &#9654;
+            </button>
+            <div class="step-dots" id="demo-cache-dots"></div>
+            <span class="step-counter" id="demo-cache-counter"></span>
+            <button class="restart-btn" onclick="restart('demo-cache')">
+              &#8635; <span class="lang-en">Restart</span
+              ><span class="lang-es">Reiniciar</span>
+            </button>
+          </div>
+        </div>
+      </section>
 
-  <!-- ═══════════════════════════════════════════════════════════════
+      <!-- ═══════════════════════════════════════════════════════════════
        8. MEMORYDB FOR REDIS
   ═══════════════════════════════════════════════════════════════ -->
-  <section>
-    <div class="section-label"><span class="lang-en">8 · MemoryDB for Redis</span><span class="lang-es">8 · MemoryDB para Redis</span></div>
-    <div class="card">
-      <div class="card-title"><span class="lang-en">Durable In-Memory Database (Not a Cache)</span><span class="lang-es">Base de Datos Durable en Memoria (No es Caché)</span></div>
+      <section>
+        <div class="section-label">
+          <span class="lang-en">8 · MemoryDB for Redis</span
+          ><span class="lang-es">8 · MemoryDB para Redis</span>
+        </div>
+        <div class="card">
+          <div class="card-title">
+            <span class="lang-en">Durable In-Memory Database (Not a Cache)</span
+            ><span class="lang-es"
+              >Base de Datos Durable en Memoria (No es Caché)</span
+            >
+          </div>
 
-      <div class="grid-4" style="margin-bottom:16px;">
-        <div class="aurora-stat">
-          <div class="aurora-stat-num">160M+</div>
-          <div class="aurora-stat-label"><span class="lang-en">requests/sec throughput</span><span class="lang-es">rendimiento solicitudes/seg</span></div>
-        </div>
-        <div class="aurora-stat">
-          <div class="aurora-stat-num">100 TB+</div>
-          <div class="aurora-stat-label"><span class="lang-en">data storage capacity</span><span class="lang-es">capacidad de almacenamiento de datos</span></div>
-        </div>
-        <div class="aurora-stat">
-          <div class="aurora-stat-num"><span class="lang-en">Multi-AZ</span><span class="lang-es">Multi-AZ</span></div>
-          <div class="aurora-stat-label"><span class="lang-en">transaction log durability</span><span class="lang-es">durabilidad del registro de transacciones</span></div>
-        </div>
-        <div class="aurora-stat">
-          <div class="aurora-stat-num">Redis</div>
-          <div class="aurora-stat-label"><span class="lang-en">compatible API</span><span class="lang-es">API compatible</span></div>
-        </div>
-      </div>
+          <div class="grid-4" style="margin-bottom: 16px">
+            <div class="aurora-stat">
+              <div class="aurora-stat-num">160M+</div>
+              <div class="aurora-stat-label">
+                <span class="lang-en">requests/sec throughput</span
+                ><span class="lang-es">velocidad de transferencia solicitudes/seg</span>
+              </div>
+            </div>
+            <div class="aurora-stat">
+              <div class="aurora-stat-num">100 TB+</div>
+              <div class="aurora-stat-label">
+                <span class="lang-en">data storage capacity</span
+                ><span class="lang-es"
+                  >capacidad de almacenamiento de datos</span
+                >
+              </div>
+            </div>
+            <div class="aurora-stat">
+              <div class="aurora-stat-num">
+                <span class="lang-en">Multi-AZ</span
+                ><span class="lang-es">Multi-AZ</span>
+              </div>
+              <div class="aurora-stat-label">
+                <span class="lang-en">transaction log durability</span
+                ><span class="lang-es"
+                  >durabilidad del registro de transacciones</span
+                >
+              </div>
+            </div>
+            <div class="aurora-stat">
+              <div class="aurora-stat-num">Redis</div>
+              <div class="aurora-stat-label">
+                <span class="lang-en">compatible API</span
+                ><span class="lang-es">API compatible</span>
+              </div>
+            </div>
+          </div>
 
-      <div class="grid-2">
-        <div class="callout success">
-          <strong><span class="lang-en">Use MemoryDB when:</span><span class="lang-es">Use MemoryDB cuando:</span></strong> <span class="lang-en">You need a <em>durable</em>, Redis-compatible <em>primary database</em> (not just a cache) with ultra-fast performance. It stores the entire dataset in memory AND persists using a Multi-AZ transaction log.</span><span class="lang-es">Necesita una <em>durable</em>, <em>base de datos principal</em> compatible con Redis (no solo una caché) con rendimiento ultrarrápido. Almacena todo el conjunto de datos en memoria Y persiste usando un registro de transacciones Multi-AZ.</span>
+          <div class="grid-2">
+            <div class="callout success">
+              <strong
+                ><span class="lang-en">Use MemoryDB when:</span
+                ><span class="lang-es">Use MemoryDB cuando:</span></strong
+              >
+              <span class="lang-en"
+                >You need a <em>durable</em>, Redis-compatible
+                <em>primary database</em> (not just a cache) with ultra-fast
+                performance. It stores the entire dataset in memory AND persists
+                using a Multi-AZ transaction log.</span
+              ><span class="lang-es"
+                >Necesita una <em>durable</em>,
+                <em>base de datos principal</em> compatible con Redis (no solo
+                una caché) con rendimiento ultrarrápido. Almacena todo el
+                conjunto de datos en memoria Y persiste usando un registro de
+                transacciones Multi-AZ.</span
+              >
+            </div>
+            <div class="callout warning">
+              <strong
+                ><span class="lang-en">ElastiCache vs MemoryDB:</span
+                ><span class="lang-es">ElastiCache vs MemoryDB:</span></strong
+              >
+              <span class="lang-en"
+                >ElastiCache is a cache in front of a DB. MemoryDB
+                <em>replaces</em> the DB entirely. If the question says "durable
+                in-memory database," the answer is MemoryDB.</span
+              ><span class="lang-es"
+                >ElastiCache es una caché frente a una BD. MemoryDB
+                <em>reemplaza</em> la BD completamente. Si la pregunta dice
+                "base de datos durable en memoria", la respuesta es
+                MemoryDB.</span
+              >
+            </div>
+          </div>
         </div>
-        <div class="callout warning">
-          <strong><span class="lang-en">ElastiCache vs MemoryDB:</span><span class="lang-es">ElastiCache vs MemoryDB:</span></strong> <span class="lang-en">ElastiCache is a cache in front of a DB. MemoryDB <em>replaces</em> the DB entirely. If the question says "durable in-memory database," the answer is MemoryDB.</span><span class="lang-es">ElastiCache es una caché frente a una BD. MemoryDB <em>reemplaza</em> la BD completamente. Si la pregunta dice "base de datos durable en memoria", la respuesta es MemoryDB.</span>
-        </div>
-      </div>
-    </div>
-  </section>
+      </section>
 
-  <!-- ═══════════════════════════════════════════════════════════════
+      <!-- ═══════════════════════════════════════════════════════════════
        EXAM TIPS
   ═══════════════════════════════════════════════════════════════ -->
-  <section>
-    <div class="section-label"><span class="lang-en">Exam Tips — See X, Think Y</span><span class="lang-es">Consejos para el Examen — Ver X, Pensar Y</span></div>
-    <div class="tips-grid">
-      <div class="tip-card">
-        <div class="tip-trigger"><span class="lang-en">See: "leaderboard"</span><span class="lang-es">Ver: "tabla de posiciones"</span></div>
-        <div class="tip-answer">→ <span class="lang-en">Redis sorted sets</span><span class="lang-es">Conjuntos ordenados de Redis</span></div>
-      </div>
-      <div class="tip-card">
-        <div class="tip-trigger"><span class="lang-en">See: "Lambda + RDS"</span><span class="lang-es">Ver: "Lambda + RDS"</span></div>
-        <div class="tip-answer">→ <span class="lang-en">RDS Proxy (connection pooling)</span><span class="lang-es">RDS Proxy (agrupamiento de conexiones)</span></div>
-      </div>
-      <div class="tip-card">
-        <div class="tip-trigger"><span class="lang-en">See: "reduce read load on DB"</span><span class="lang-es">Ver: "reducir carga de lectura en BD"</span></div>
-        <div class="tip-answer">→ <span class="lang-en">ElastiCache</span><span class="lang-es">ElastiCache</span></div>
-      </div>
-      <div class="tip-card">
-        <div class="tip-trigger"><span class="lang-en">See: "durable in-memory database"</span><span class="lang-es">Ver: "base de datos durable en memoria"</span></div>
-        <div class="tip-answer">→ <span class="lang-en">MemoryDB for Redis</span><span class="lang-es">MemoryDB para Redis</span></div>
-      </div>
-      <div class="tip-card">
-        <div class="tip-trigger"><span class="lang-en">See: "connection pooling"</span><span class="lang-es">Ver: "agrupamiento de conexiones"</span></div>
-        <div class="tip-answer">→ <span class="lang-en">RDS Proxy</span><span class="lang-es">RDS Proxy</span></div>
-      </div>
-      <div class="tip-card">
-        <div class="tip-trigger"><span class="lang-en">See: "stateless app / session store"</span><span class="lang-es">Ver: "app sin estado / almacén de sesiones"</span></div>
-        <div class="tip-answer">→ <span class="lang-en">ElastiCache</span><span class="lang-es">ElastiCache</span></div>
-      </div>
-      <div class="tip-card">
-        <div class="tip-trigger"><span class="lang-en">Read Replicas vs Multi-AZ replication</span><span class="lang-es">Réplicas de Lectura vs replicación Multi-AZ</span></div>
-        <div class="tip-answer"><span class="lang-en">Replicas = async &nbsp;|&nbsp; Multi-AZ = sync</span><span class="lang-es">Réplicas = asínc &nbsp;|&nbsp; Multi-AZ = sinc</span></div>
-      </div>
-      <div class="tip-card">
-        <div class="tip-trigger"><span class="lang-en">See: "Single AZ → Multi AZ conversion"</span><span class="lang-es">Ver: "conversión de AZ único a Multi AZ"</span></div>
-        <div class="tip-answer">→ <span class="lang-en">Zero downtime (snapshot → restore → sync)</span><span class="lang-es">Sin tiempo de inactividad (snapshot → restaurar → sincronizar)</span></div>
-      </div>
-      <div class="tip-card">
-        <div class="tip-trigger"><span class="lang-en">Aurora: storage architecture</span><span class="lang-es">Aurora: arquitectura de almacenamiento</span></div>
-        <div class="tip-answer">→ <span class="lang-en">6 copies / 3 AZs · 4/6 writes · 3/6 reads</span><span class="lang-es">6 copias / 3 AZs · 4/6 escrituras · 3/6 lecturas</span></div>
-      </div>
-      <div class="tip-card">
-        <div class="tip-trigger"><span class="lang-en">Aurora: endpoints</span><span class="lang-es">Aurora: endpoints</span></div>
-        <div class="tip-answer">→ <span class="lang-en">Writer (master) + Reader (load-balanced replicas)</span><span class="lang-es">Escritura (principal) + Lectura (réplicas equilibradas)</span></div>
-      </div>
-      <div class="tip-card">
-        <div class="tip-trigger"><span class="lang-en">Aurora: failover time</span><span class="lang-es">Aurora: tiempo de conmutación por error</span></div>
-        <div class="tip-answer">→ <span class="lang-en">Under 30 seconds · Backtrack for point-in-time</span><span class="lang-es">Menos de 30 segundos · Backtrack para punto en el tiempo</span></div>
-      </div>
-      <div class="tip-card">
-        <div class="tip-trigger"><span class="lang-en">RDS Proxy: not supported engines</span><span class="lang-es">RDS Proxy: motores no soportados</span></div>
-        <div class="tip-answer">→ <span class="lang-en">NOT Oracle, NOT IBM DB2. VPC only (never public)</span><span class="lang-es">NO Oracle, NO IBM DB2. Solo VPC (nunca público)</span></div>
-      </div>
-      <div class="tip-card">
-        <div class="tip-trigger"><span class="lang-en">See: "encrypt existing unencrypted RDS"</span><span class="lang-es">Ver: "cifrar RDS existente sin cifrar"</span></div>
-        <div class="tip-answer">→ <span class="lang-en">Snapshot → restore as encrypted</span><span class="lang-es">Snapshot → restaurar como cifrado</span></div>
-      </div>
-      <div class="tip-card">
-        <div class="tip-trigger"><span class="lang-en">Lazy Loading cache miss cost</span><span class="lang-es">Costo de falta de caché de Carga Perezosa</span></div>
-        <div class="tip-answer">→ <span class="lang-en">3 round trips (cache read + DB read + cache write)</span><span class="lang-es">3 viajes de ida y vuelta (lectura de caché + lectura de BD + escritura de caché)</span></div>
-      </div>
-      <div class="tip-card">
-        <div class="tip-trigger"><span class="lang-en">Write Through vs Lazy Loading</span><span class="lang-es">Escritura Directa vs Carga Perezosa</span></div>
-        <div class="tip-answer"><span class="lang-en">Write-through: never stale, 2 calls on write · Lazy: possible stale, 3 calls on miss</span><span class="lang-es">Escritura directa: nunca obsoleto, 2 llamadas en escritura · Perezoso: posible obsoleto, 3 llamadas en falta</span></div>
-      </div>
-    </div>
-  </section>
+      <section>
+        <div class="section-label">
+          <span class="lang-en">Exam Tips — See X, Think Y</span
+          ><span class="lang-es"
+            >Consejos para el Examen — Ver X, Pensar Y</span
+          >
+        </div>
+        <div class="tips-grid">
+          <div class="tip-card">
+            <div class="tip-trigger">
+              <span class="lang-en">See: "leaderboard"</span
+              ><span class="lang-es">Ver: "tabla de posiciones"</span>
+            </div>
+            <div class="tip-answer">
+              → <span class="lang-en">Redis sorted sets</span
+              ><span class="lang-es">Conjuntos ordenados de Redis</span>
+            </div>
+          </div>
+          <div class="tip-card">
+            <div class="tip-trigger">
+              <span class="lang-en">See: "Lambda + RDS"</span
+              ><span class="lang-es">Ver: "Lambda + RDS"</span>
+            </div>
+            <div class="tip-answer">
+              → <span class="lang-en">RDS Proxy (connection pooling)</span
+              ><span class="lang-es"
+                >RDS Proxy (agrupamiento de conexiones)</span
+              >
+            </div>
+          </div>
+          <div class="tip-card">
+            <div class="tip-trigger">
+              <span class="lang-en">See: "reduce read load on DB"</span
+              ><span class="lang-es"
+                >Ver: "reducir carga de lectura en BD"</span
+              >
+            </div>
+            <div class="tip-answer">
+              → <span class="lang-en">ElastiCache</span
+              ><span class="lang-es">ElastiCache</span>
+            </div>
+          </div>
+          <div class="tip-card">
+            <div class="tip-trigger">
+              <span class="lang-en">See: "durable in-memory database"</span
+              ><span class="lang-es"
+                >Ver: "base de datos durable en memoria"</span
+              >
+            </div>
+            <div class="tip-answer">
+              → <span class="lang-en">MemoryDB for Redis</span
+              ><span class="lang-es">MemoryDB para Redis</span>
+            </div>
+          </div>
+          <div class="tip-card">
+            <div class="tip-trigger">
+              <span class="lang-en">See: "connection pooling"</span
+              ><span class="lang-es">Ver: "agrupamiento de conexiones"</span>
+            </div>
+            <div class="tip-answer">
+              → <span class="lang-en">RDS Proxy</span
+              ><span class="lang-es">RDS Proxy</span>
+            </div>
+          </div>
+          <div class="tip-card">
+            <div class="tip-trigger">
+              <span class="lang-en">See: "stateless app / session store"</span
+              ><span class="lang-es"
+                >Ver: "app sin estado / almacén de sesiones"</span
+              >
+            </div>
+            <div class="tip-answer">
+              → <span class="lang-en">ElastiCache</span
+              ><span class="lang-es">ElastiCache</span>
+            </div>
+          </div>
+          <div class="tip-card">
+            <div class="tip-trigger">
+              <span class="lang-en">Read Replicas vs Multi-AZ replication</span
+              ><span class="lang-es"
+                >Réplicas de Lectura vs replicación Multi-AZ</span
+              >
+            </div>
+            <div class="tip-answer">
+              <span class="lang-en"
+                >Replicas = async &nbsp;|&nbsp; Multi-AZ = sync</span
+              ><span class="lang-es"
+                >Réplicas = asínc &nbsp;|&nbsp; Multi-AZ = sinc</span
+              >
+            </div>
+          </div>
+          <div class="tip-card">
+            <div class="tip-trigger">
+              <span class="lang-en">See: "Single AZ → Multi AZ conversion"</span
+              ><span class="lang-es"
+                >Ver: "conversión de AZ único a Multi AZ"</span
+              >
+            </div>
+            <div class="tip-answer">
+              →
+              <span class="lang-en"
+                >Zero downtime (snapshot → restore → sync)</span
+              ><span class="lang-es"
+                >Sin tiempo de inactividad (snapshot → restaurar →
+                sincronizar)</span
+              >
+            </div>
+          </div>
+          <div class="tip-card">
+            <div class="tip-trigger">
+              <span class="lang-en">Aurora: storage architecture</span
+              ><span class="lang-es"
+                >Aurora: arquitectura de almacenamiento</span
+              >
+            </div>
+            <div class="tip-answer">
+              →
+              <span class="lang-en"
+                >6 copies / 3 AZs · 4/6 writes · 3/6 reads</span
+              ><span class="lang-es"
+                >6 copias / 3 AZs · 4/6 escrituras · 3/6 lecturas</span
+              >
+            </div>
+          </div>
+          <div class="tip-card">
+            <div class="tip-trigger">
+              <span class="lang-en">Aurora: endpoints</span
+              ><span class="lang-es">Aurora: endpoints</span>
+            </div>
+            <div class="tip-answer">
+              →
+              <span class="lang-en"
+                >Writer (master) + Reader (load-balanced replicas)</span
+              ><span class="lang-es"
+                >Escritura (principal) + Lectura (réplicas equilibradas)</span
+              >
+            </div>
+          </div>
+          <div class="tip-card">
+            <div class="tip-trigger">
+              <span class="lang-en">Aurora: failover time</span
+              ><span class="lang-es"
+                >Aurora: tiempo de conmutación por error</span
+              >
+            </div>
+            <div class="tip-answer">
+              →
+              <span class="lang-en"
+                >Under 30 seconds · Backtrack for point-in-time</span
+              ><span class="lang-es"
+                >Menos de 30 segundos · Backtrack para punto en el tiempo</span
+              >
+            </div>
+          </div>
+          <div class="tip-card">
+            <div class="tip-trigger">
+              <span class="lang-en">RDS Proxy: not supported engines</span
+              ><span class="lang-es">RDS Proxy: motores no soportados</span>
+            </div>
+            <div class="tip-answer">
+              →
+              <span class="lang-en"
+                >NOT Oracle, NOT IBM DB2. VPC only (never public)</span
+              ><span class="lang-es"
+                >NO Oracle, NO IBM DB2. Solo VPC (nunca público)</span
+              >
+            </div>
+          </div>
+          <div class="tip-card">
+            <div class="tip-trigger">
+              <span class="lang-en"
+                >See: "encrypt existing unencrypted RDS"</span
+              ><span class="lang-es"
+                >Ver: "cifrar RDS existente sin cifrar"</span
+              >
+            </div>
+            <div class="tip-answer">
+              → <span class="lang-en">Snapshot → restore as encrypted</span
+              ><span class="lang-es">Snapshot → restaurar como cifrado</span>
+            </div>
+          </div>
+          <div class="tip-card">
+            <div class="tip-trigger">
+              <span class="lang-en">Lazy Loading cache miss cost</span
+              ><span class="lang-es"
+                >Costo de falta de caché de Carga Perezosa</span
+              >
+            </div>
+            <div class="tip-answer">
+              →
+              <span class="lang-en"
+                >3 round trips (cache read + DB read + cache write)</span
+              ><span class="lang-es"
+                >3 viajes de ida y vuelta (lectura de caché + lectura de BD +
+                escritura de caché)</span
+              >
+            </div>
+          </div>
+          <div class="tip-card">
+            <div class="tip-trigger">
+              <span class="lang-en">Write Through vs Lazy Loading</span
+              ><span class="lang-es">Escritura Directa vs Carga Perezosa</span>
+            </div>
+            <div class="tip-answer">
+              <span class="lang-en"
+                >Write-through: never stale, 2 calls on write · Lazy: possible
+                stale, 3 calls on miss</span
+              ><span class="lang-es"
+                >Escritura directa: nunca obsoleto, 2 llamadas en escritura ·
+                Perezoso: posible obsoleto, 3 llamadas en falta</span
+              >
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
 
-</main>
-
-<!-- ═══════════════════════════════════════════════════════════════
+    <!-- ═══════════════════════════════════════════════════════════════
      JAVASCRIPT — ANIMATION DEMOS
 ═══════════════════════════════════════════════════════════════ -->
-<script>
-var DEMOS = {
-  'demo-cache': {
-    steps: [
-      {
-        body: '<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;"><span class="strategy-tag" style="background:rgba(99,102,241,0.2);color:#a5b4fc;"><span class="lang-en">Strategy 1 of 2</span><span class="lang-es">Estrategia 1 de 2</span></span><span style="font-size:13px;color:#64748b;"><span class="lang-en">Lazy Loading (Cache-Aside)</span><span class="lang-es">Carga Perezosa (Cache-Aside)</span></span></div>'
-          + '<div class="step-title"><span class="lang-en">Step 1 — Cache Miss</span><span class="lang-es">Paso 1 — Falta de Caché</span></div>'
-          + '<div class="step-desc"><span class="lang-en">Application checks ElastiCache first. The key does not exist. Cache returns null (miss).</span><span class="lang-es">La aplicación verifica primero ElastiCache. La clave no existe. El caché devuelve nulo (falta).</span></div>'
-          + '<div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px;">'
-          + '<div class="flow-box" style="background:rgba(99,102,241,0.15);border-color:#6366f1;"><span class="lang-en">App</span><span class="lang-es">App</span></div>'
-          + '<div class="flow-connector">→ <span class="lang-en">read</span><span class="lang-es">lectura</span> →</div>'
-          + '<div class="flow-box" style="background:rgba(239,68,68,0.1);border-color:#ef4444;">ElastiCache<br/><span style="color:#f87171;font-size:13px;"><span class="lang-en">MISS ✗</span><span class="lang-es">FALTA ✗</span></span></div>'
-          + '</div>'
-          + '<div class="callout danger" style="margin-top:14px;"><strong><span class="lang-en">Cache MISS:</span><span class="lang-es">FALTA de Caché:</span></strong> <span class="lang-en">Data not in cache. App must go to the database next. This is a 3-call round trip.</span><span class="lang-es">Datos no en caché. La app debe ir a la base de datos después. Este es un viaje de ida y vuelta de 3 llamadas.</span></div>'
-      },
-      {
-        body: '<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;"><span class="strategy-tag" style="background:rgba(99,102,241,0.2);color:#a5b4fc;"><span class="lang-en">Strategy 1 of 2</span><span class="lang-es">Estrategia 1 de 2</span></span><span style="font-size:13px;color:#64748b;"><span class="lang-en">Lazy Loading (Cache-Aside)</span><span class="lang-es">Carga Perezosa (Cache-Aside)</span></span></div>'
-          + '<div class="step-title"><span class="lang-en">Step 2 — Read from Database</span><span class="lang-es">Paso 2 — Lectura desde Base de Datos</span></div>'
-          + '<div class="step-desc"><span class="lang-en">On a miss, the application fetches data from the primary database (RDS). This is the slow path.</span><span class="lang-es">En una falta, la aplicación obtiene datos de la base de datos principal (RDS). Este es el camino lento.</span></div>'
-          + '<div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px;">'
-          + '<div class="flow-box" style="background:rgba(99,102,241,0.15);border-color:#6366f1;"><span class="lang-en">App</span><span class="lang-es">App</span></div>'
-          + '<div class="flow-connector">→ <span class="lang-en">query</span><span class="lang-es">consulta</span> →</div>'
-          + '<div class="flow-box" style="background:rgba(249,115,22,0.12);border-color:#f97316;">RDS<br/><span style="color:#fdba74;font-size:13px;"><span class="lang-en">returns data</span><span class="lang-es">devuelve datos</span></span></div>'
-          + '</div>'
-          + '<div class="callout warning" style="margin-top:14px;"><strong><span class="lang-en">Downside:</span><span class="lang-es">Desventaja:</span></strong> <span class="lang-en">Stale data is possible — if the DB is updated, the cache still holds the old value until it expires (TTL-based invalidation).</span><span class="lang-es">Es posible que haya datos obsoletos — si la BD se actualiza, el caché aún mantiene el valor antiguo hasta que caduca (invalidación basada en TTL).</span></div>'
-      },
-      {
-        body: '<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;"><span class="strategy-tag" style="background:rgba(99,102,241,0.2);color:#a5b4fc;"><span class="lang-en">Strategy 1 of 2</span><span class="lang-es">Estrategia 1 de 2</span></span><span style="font-size:13px;color:#64748b;"><span class="lang-en">Lazy Loading (Cache-Aside)</span><span class="lang-es">Carga Perezosa (Cache-Aside)</span></span></div>'
-          + '<div class="step-title"><span class="lang-en">Step 3 — Populate Cache &amp; Return</span><span class="lang-es">Paso 3 — Completar Caché &amp; Devolver</span></div>'
-          + '<div class="step-desc"><span class="lang-en">App writes the DB result to ElastiCache. Future reads for this key are fast (cache HIT).</span><span class="lang-es">La app escribe el resultado de BD a ElastiCache. Las lecturas futuras para esta clave son rápidas (HIT de caché).</span></div>'
-          + '<div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px;">'
-          + '<div class="flow-box" style="background:rgba(99,102,241,0.15);border-color:#6366f1;"><span class="lang-en">App</span><span class="lang-es">App</span></div>'
-          + '<div class="flow-connector">→ <span class="lang-en">write</span><span class="lang-es">escritura</span> →</div>'
-          + '<div class="flow-box" style="background:rgba(16,185,129,0.12);border-color:#10b981;">ElastiCache<br/><span style="color:#6ee7b7;font-size:13px;"><span class="lang-en">HIT next time ✓</span><span class="lang-es">HIT la próxima vez ✓</span></span></div>'
-          + '</div>'
-          + '<div class="callout success" style="margin-top:14px;"><strong><span class="lang-en">Summary:</span><span class="lang-es">Resumen:</span></strong> <span class="lang-en">Lazy Loading — 3 calls on first miss, 1 call on subsequent hits. Only requested data is cached. Possible stale data. Good for read-heavy workloads.</span><span class="lang-es">Carga Perezosa — 3 llamadas en la primera falta, 1 llamada en los aciertos posteriores. Solo se almacenan en caché los datos solicitados. Posibles datos obsoletos. Bueno para cargas de trabajo con muchas lecturas.</span></div>'
-      },
-      {
-        body: '<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;"><span class="strategy-tag" style="background:rgba(16,185,129,0.2);color:#6ee7b7;"><span class="lang-en">Strategy 2 of 2</span><span class="lang-es">Estrategia 2 de 2</span></span><span style="font-size:13px;color:#64748b;"><span class="lang-en">Write Through</span><span class="lang-es">Escritura Directa</span></span></div>'
-          + '<div class="step-title"><span class="lang-en">Step 1 — Application Writes to Database</span><span class="lang-es">Paso 1 — Aplicación Escribe en Base de Datos</span></div>'
-          + '<div class="step-desc"><span class="lang-en">When data is written/updated, the app writes to the primary database first as normal.</span><span class="lang-es">Cuando se escriben/actualizan datos, la app escribe primero en la base de datos principal como normal.</span></div>'
-          + '<div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px;">'
-          + '<div class="flow-box" style="background:rgba(99,102,241,0.15);border-color:#6366f1;"><span class="lang-en">App</span><span class="lang-es">App</span></div>'
-          + '<div class="flow-connector">→ <span class="lang-en">write</span><span class="lang-es">escritura</span> →</div>'
-          + '<div class="flow-box" style="background:rgba(249,115,22,0.12);border-color:#f97316;">RDS<br/><span style="color:#fdba74;font-size:13px;"><span class="lang-en">persisted</span><span class="lang-es">persistido</span></span></div>'
-          + '</div>'
-          + '<div class="callout info" style="margin-top:14px;"><strong><span class="lang-en">Same write operation:</span><span class="lang-es">Misma operación de escritura:</span></strong> <span class="lang-en">In Write Through, every write to the DB is also immediately written to the cache in the same operation.</span><span class="lang-es">En Escritura Directa, cada escritura en la BD también se escribe inmediatamente en el caché en la misma operación.</span></div>'
-      },
-      {
-        body: '<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;"><span class="strategy-tag" style="background:rgba(16,185,129,0.2);color:#6ee7b7;"><span class="lang-en">Strategy 2 of 2</span><span class="lang-es">Estrategia 2 de 2</span></span><span style="font-size:13px;color:#64748b;"><span class="lang-en">Write Through</span><span class="lang-es">Escritura Directa</span></span></div>'
-          + '<div class="step-title"><span class="lang-en">Step 2 — Also Write to ElastiCache</span><span class="lang-es">Paso 2 — También Escribir en ElastiCache</span></div>'
-          + '<div class="step-desc"><span class="lang-en">Immediately after writing to DB, the same data is written into ElastiCache. Cache always reflects the latest DB state.</span><span class="lang-es">Inmediatamente después de escribir en la BD, los mismos datos se escriben en ElastiCache. El caché siempre refleja el estado más reciente de BD.</span></div>'
-          + '<div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px;">'
-          + '<div class="flow-box" style="background:rgba(99,102,241,0.15);border-color:#6366f1;"><span class="lang-en">App</span><span class="lang-es">App</span></div>'
-          + '<div class="flow-connector">→ <span class="lang-en">write</span><span class="lang-es">escritura</span> →</div>'
-          + '<div class="flow-box" style="background:rgba(16,185,129,0.12);border-color:#10b981;">ElastiCache<br/><span style="color:#6ee7b7;font-size:13px;"><span class="lang-en">updated</span><span class="lang-es">actualizado</span></span></div>'
-          + '</div>'
-          + '<div class="callout warning" style="margin-top:14px;"><strong><span class="lang-en">Downside:</span><span class="lang-es">Desventaja:</span></strong> <span class="lang-en">Write penalty — every write is 2 operations instead of 1. Cache may hold lots of data that is never actually read (cache churn).</span><span class="lang-es">Penalización de escritura — cada escritura es 2 operaciones en lugar de 1. El caché puede contener muchos datos que nunca se leen realmente (pérdida de caché).</span></div>'
-      },
-      {
-        body: '<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;"><span class="strategy-tag" style="background:rgba(16,185,129,0.2);color:#6ee7b7;"><span class="lang-en">Strategy 2 of 2</span><span class="lang-es">Estrategia 2 de 2</span></span><span style="font-size:13px;color:#64748b;"><span class="lang-en">Write Through</span><span class="lang-es">Escritura Directa</span></span></div>'
-          + '<div class="step-title"><span class="lang-en">Step 3 — Cache HIT on Every Read</span><span class="lang-es">Paso 3 — HIT de Caché en Cada Lectura</span></div>'
-          + '<div class="step-desc"><span class="lang-en">Reads always hit the cache. Data is never stale because it was updated the moment the DB was updated.</span><span class="lang-es">Las lecturas siempre alcanzan el caché. Los datos nunca están obsoletos porque se actualizaron en el momento en que se actualizó la BD.</span></div>'
-          + '<div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px;">'
-          + '<div class="flow-box" style="background:rgba(99,102,241,0.15);border-color:#6366f1;"><span class="lang-en">App</span><span class="lang-es">App</span></div>'
-          + '<div class="flow-connector">→ <span class="lang-en">read</span><span class="lang-es">lectura</span> →</div>'
-          + '<div class="flow-box" style="background:rgba(16,185,129,0.12);border-color:#10b981;">ElastiCache<br/><span style="color:#6ee7b7;font-size:13px;"><span class="lang-en">HIT always ✓</span><span class="lang-es">HIT siempre ✓</span></span></div>'
-          + '</div>'
-          + '<div class="callout success" style="margin-top:14px;"><strong><span class="lang-en">Summary:</span><span class="lang-es">Resumen:</span></strong> <span class="lang-en">Write Through — 2 calls on every write, reads are always fast and never stale. Best for write-then-read patterns. Combine with Lazy Loading for best results.</span><span class="lang-es">Escritura Directa — 2 llamadas en cada escritura, las lecturas son siempre rápidas y nunca obsoletas. Mejor para patrones de escritura y lectura. Combine con Carga Perezosa para obtener los mejores resultados.</span></div>'
+    <script>
+      var DEMOS = {
+        "demo-cache": {
+          steps: [
+            {
+              body:
+                '<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;"><span class="strategy-tag" style="background:rgba(99,102,241,0.2);color:#a5b4fc;"><span class="lang-en">Strategy 1 of 2</span><span class="lang-es">Estrategia 1 de 2</span></span><span style="font-size:13px;color:#64748b;"><span class="lang-en">Lazy Loading (Cache-Aside)</span><span class="lang-es">Carga Perezosa (Cache-Aside)</span></span></div>' +
+                '<div class="step-title"><span class="lang-en">Step 1 — Cache Miss</span><span class="lang-es">Paso 1 — Falta de Caché</span></div>' +
+                '<div class="step-desc"><span class="lang-en">Application checks ElastiCache first. The key does not exist. Cache returns null (miss).</span><span class="lang-es">La aplicación verifica primero ElastiCache. La clave no existe. El caché devuelve nulo (falta).</span></div>' +
+                '<div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px;">' +
+                '<div class="flow-box" style="background:rgba(99,102,241,0.15);border-color:#6366f1;"><span class="lang-en">App</span><span class="lang-es">App</span></div>' +
+                '<div class="flow-connector">→ <span class="lang-en">read</span><span class="lang-es">lectura</span> →</div>' +
+                '<div class="flow-box" style="background:rgba(239,68,68,0.1);border-color:#ef4444;">ElastiCache<br/><span style="color:#f87171;font-size:13px;"><span class="lang-en">MISS ✗</span><span class="lang-es">FALTA ✗</span></span></div>' +
+                "</div>" +
+                '<div class="callout danger" style="margin-top:14px;"><strong><span class="lang-en">Cache MISS:</span><span class="lang-es">FALTA de Caché:</span></strong> <span class="lang-en">Data not in cache. App must go to the database next. This is a 3-call round trip.</span><span class="lang-es">Datos no en caché. La app debe ir a la base de datos después. Este es un viaje de ida y vuelta de 3 llamadas.</span></div>',
+            },
+            {
+              body:
+                '<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;"><span class="strategy-tag" style="background:rgba(99,102,241,0.2);color:#a5b4fc;"><span class="lang-en">Strategy 1 of 2</span><span class="lang-es">Estrategia 1 de 2</span></span><span style="font-size:13px;color:#64748b;"><span class="lang-en">Lazy Loading (Cache-Aside)</span><span class="lang-es">Carga Perezosa (Cache-Aside)</span></span></div>' +
+                '<div class="step-title"><span class="lang-en">Step 2 — Read from Database</span><span class="lang-es">Paso 2 — Lectura desde Base de Datos</span></div>' +
+                '<div class="step-desc"><span class="lang-en">On a miss, the application fetches data from the primary database (RDS). This is the slow path.</span><span class="lang-es">En una falta, la aplicación obtiene datos de la base de datos principal (RDS). Este es el camino lento.</span></div>' +
+                '<div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px;">' +
+                '<div class="flow-box" style="background:rgba(99,102,241,0.15);border-color:#6366f1;"><span class="lang-en">App</span><span class="lang-es">App</span></div>' +
+                '<div class="flow-connector">→ <span class="lang-en">query</span><span class="lang-es">consulta</span> →</div>' +
+                '<div class="flow-box" style="background:rgba(249,115,22,0.12);border-color:#f97316;">RDS<br/><span style="color:#fdba74;font-size:13px;"><span class="lang-en">returns data</span><span class="lang-es">devuelve datos</span></span></div>' +
+                "</div>" +
+                '<div class="callout warning" style="margin-top:14px;"><strong><span class="lang-en">Downside:</span><span class="lang-es">Desventaja:</span></strong> <span class="lang-en">Stale data is possible — if the DB is updated, the cache still holds the old value until it expires (TTL-based invalidation).</span><span class="lang-es">Es posible que haya datos obsoletos — si la BD se actualiza, el caché aún mantiene el valor antiguo hasta que caduca (invalidación basada en TTL).</span></div>',
+            },
+            {
+              body:
+                '<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;"><span class="strategy-tag" style="background:rgba(99,102,241,0.2);color:#a5b4fc;"><span class="lang-en">Strategy 1 of 2</span><span class="lang-es">Estrategia 1 de 2</span></span><span style="font-size:13px;color:#64748b;"><span class="lang-en">Lazy Loading (Cache-Aside)</span><span class="lang-es">Carga Perezosa (Cache-Aside)</span></span></div>' +
+                '<div class="step-title"><span class="lang-en">Step 3 — Populate Cache &amp; Return</span><span class="lang-es">Paso 3 — Completar Caché &amp; Devolver</span></div>' +
+                '<div class="step-desc"><span class="lang-en">App writes the DB result to ElastiCache. Future reads for this key are fast (cache HIT).</span><span class="lang-es">La app escribe el resultado de BD a ElastiCache. Las lecturas futuras para esta clave son rápidas (HIT de caché).</span></div>' +
+                '<div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px;">' +
+                '<div class="flow-box" style="background:rgba(99,102,241,0.15);border-color:#6366f1;"><span class="lang-en">App</span><span class="lang-es">App</span></div>' +
+                '<div class="flow-connector">→ <span class="lang-en">write</span><span class="lang-es">escritura</span> →</div>' +
+                '<div class="flow-box" style="background:rgba(16,185,129,0.12);border-color:#10b981;">ElastiCache<br/><span style="color:#6ee7b7;font-size:13px;"><span class="lang-en">HIT next time ✓</span><span class="lang-es">HIT la próxima vez ✓</span></span></div>' +
+                "</div>" +
+                '<div class="callout success" style="margin-top:14px;"><strong><span class="lang-en">Summary:</span><span class="lang-es">Resumen:</span></strong> <span class="lang-en">Lazy Loading — 3 calls on first miss, 1 call on subsequent hits. Only requested data is cached. Possible stale data. Good for read-heavy workloads.</span><span class="lang-es">Carga Perezosa — 3 llamadas en la primera falta, 1 llamada en los aciertos posteriores. Solo se almacenan en caché los datos solicitados. Posibles datos obsoletos. Bueno para cargas de trabajo con muchas lecturas.</span></div>',
+            },
+            {
+              body:
+                '<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;"><span class="strategy-tag" style="background:rgba(16,185,129,0.2);color:#6ee7b7;"><span class="lang-en">Strategy 2 of 2</span><span class="lang-es">Estrategia 2 de 2</span></span><span style="font-size:13px;color:#64748b;"><span class="lang-en">Write Through</span><span class="lang-es">Escritura Directa</span></span></div>' +
+                '<div class="step-title"><span class="lang-en">Step 1 — Application Writes to Database</span><span class="lang-es">Paso 1 — Aplicación Escribe en Base de Datos</span></div>' +
+                '<div class="step-desc"><span class="lang-en">When data is written/updated, the app writes to the primary database first as normal.</span><span class="lang-es">Cuando se escriben/actualizan datos, la app escribe primero en la base de datos principal como normal.</span></div>' +
+                '<div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px;">' +
+                '<div class="flow-box" style="background:rgba(99,102,241,0.15);border-color:#6366f1;"><span class="lang-en">App</span><span class="lang-es">App</span></div>' +
+                '<div class="flow-connector">→ <span class="lang-en">write</span><span class="lang-es">escritura</span> →</div>' +
+                '<div class="flow-box" style="background:rgba(249,115,22,0.12);border-color:#f97316;">RDS<br/><span style="color:#fdba74;font-size:13px;"><span class="lang-en">persisted</span><span class="lang-es">persistido</span></span></div>' +
+                "</div>" +
+                '<div class="callout info" style="margin-top:14px;"><strong><span class="lang-en">Same write operation:</span><span class="lang-es">Misma operación de escritura:</span></strong> <span class="lang-en">In Write Through, every write to the DB is also immediately written to the cache in the same operation.</span><span class="lang-es">En Escritura Directa, cada escritura en la BD también se escribe inmediatamente en el caché en la misma operación.</span></div>',
+            },
+            {
+              body:
+                '<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;"><span class="strategy-tag" style="background:rgba(16,185,129,0.2);color:#6ee7b7;"><span class="lang-en">Strategy 2 of 2</span><span class="lang-es">Estrategia 2 de 2</span></span><span style="font-size:13px;color:#64748b;"><span class="lang-en">Write Through</span><span class="lang-es">Escritura Directa</span></span></div>' +
+                '<div class="step-title"><span class="lang-en">Step 2 — Also Write to ElastiCache</span><span class="lang-es">Paso 2 — También Escribir en ElastiCache</span></div>' +
+                '<div class="step-desc"><span class="lang-en">Immediately after writing to DB, the same data is written into ElastiCache. Cache always reflects the latest DB state.</span><span class="lang-es">Inmediatamente después de escribir en la BD, los mismos datos se escriben en ElastiCache. El caché siempre refleja el estado más reciente de BD.</span></div>' +
+                '<div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px;">' +
+                '<div class="flow-box" style="background:rgba(99,102,241,0.15);border-color:#6366f1;"><span class="lang-en">App</span><span class="lang-es">App</span></div>' +
+                '<div class="flow-connector">→ <span class="lang-en">write</span><span class="lang-es">escritura</span> →</div>' +
+                '<div class="flow-box" style="background:rgba(16,185,129,0.12);border-color:#10b981;">ElastiCache<br/><span style="color:#6ee7b7;font-size:13px;"><span class="lang-en">updated</span><span class="lang-es">actualizado</span></span></div>' +
+                "</div>" +
+                '<div class="callout warning" style="margin-top:14px;"><strong><span class="lang-en">Downside:</span><span class="lang-es">Desventaja:</span></strong> <span class="lang-en">Write penalty — every write is 2 operations instead of 1. Cache may hold lots of data that is never actually read (cache churn).</span><span class="lang-es">Penalización de escritura — cada escritura es 2 operaciones en lugar de 1. El caché puede contener muchos datos que nunca se leen realmente (pérdida de caché).</span></div>',
+            },
+            {
+              body:
+                '<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;"><span class="strategy-tag" style="background:rgba(16,185,129,0.2);color:#6ee7b7;"><span class="lang-en">Strategy 2 of 2</span><span class="lang-es">Estrategia 2 de 2</span></span><span style="font-size:13px;color:#64748b;"><span class="lang-en">Write Through</span><span class="lang-es">Escritura Directa</span></span></div>' +
+                '<div class="step-title"><span class="lang-en">Step 3 — Cache HIT on Every Read</span><span class="lang-es">Paso 3 — HIT de Caché en Cada Lectura</span></div>' +
+                '<div class="step-desc"><span class="lang-en">Reads always hit the cache. Data is never stale because it was updated the moment the DB was updated.</span><span class="lang-es">Las lecturas siempre alcanzan el caché. Los datos nunca están obsoletos porque se actualizaron en el momento en que se actualizó la BD.</span></div>' +
+                '<div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px;">' +
+                '<div class="flow-box" style="background:rgba(99,102,241,0.15);border-color:#6366f1;"><span class="lang-en">App</span><span class="lang-es">App</span></div>' +
+                '<div class="flow-connector">→ <span class="lang-en">read</span><span class="lang-es">lectura</span> →</div>' +
+                '<div class="flow-box" style="background:rgba(16,185,129,0.12);border-color:#10b981;">ElastiCache<br/><span style="color:#6ee7b7;font-size:13px;"><span class="lang-en">HIT always ✓</span><span class="lang-es">HIT siempre ✓</span></span></div>' +
+                "</div>" +
+                '<div class="callout success" style="margin-top:14px;"><strong><span class="lang-en">Summary:</span><span class="lang-es">Resumen:</span></strong> <span class="lang-en">Write Through — 2 calls on every write, reads are always fast and never stale. Best for write-then-read patterns. Combine with Lazy Loading for best results.</span><span class="lang-es">Escritura Directa — 2 llamadas en cada escritura, las lecturas son siempre rápidas y nunca obsoletas. Mejor para patrones de escritura y lectura. Combine con Carga Perezosa para obtener los mejores resultados.</span></div>',
+            },
+          ],
+        },
+      };
+
+      var states = {};
+
+      function renderStep(id, step) {
+        var demo = DEMOS[id];
+        var total = demo.steps.length;
+        document.getElementById(id).innerHTML = demo.steps[step].body;
+        var isSpanish = document.body.classList.contains("es");
+        var stepText = isSpanish ? "Paso" : "Step";
+        var ofText = isSpanish ? "de" : "/";
+        document.getElementById(id + "-counter").innerHTML =
+          '<span class="lang-en">Step ' +
+          (step + 1) +
+          " / " +
+          total +
+          '</span><span class="lang-es">Paso ' +
+          (step + 1) +
+          " " +
+          ofText +
+          " " +
+          total +
+          "</span>";
+        document
+          .querySelectorAll('[id^="' + id + '-dot-"]')
+          .forEach(function (d, i) {
+            d.classList.toggle("active", i === step);
+          });
+        document.getElementById(id + "-prev").disabled = step === 0;
+        document.getElementById(id + "-next").disabled = step === total - 1;
+        states[id] = step;
       }
-    ]
-  }
-};
 
-var states = {};
+      function prev(id) {
+        if (states[id] > 0) renderStep(id, states[id] - 1);
+      }
+      function next(id) {
+        if (states[id] < DEMOS[id].steps.length - 1)
+          renderStep(id, states[id] + 1);
+      }
+      function restart(id) {
+        renderStep(id, 0);
+      }
 
-function renderStep(id, step) {
-  var demo = DEMOS[id];
-  var total = demo.steps.length;
-  document.getElementById(id).innerHTML = demo.steps[step].body;
-  var isSpanish = document.body.classList.contains('es');
-  var stepText = isSpanish ? 'Paso' : 'Step';
-  var ofText = isSpanish ? 'de' : '/';
-  document.getElementById(id + '-counter').innerHTML = '<span class="lang-en">Step ' + (step + 1) + ' / ' + total + '</span><span class="lang-es">Paso ' + (step + 1) + ' ' + ofText + ' ' + total + '</span>';
-  document.querySelectorAll('[id^="' + id + '-dot-"]').forEach(function(d, i) {
-    d.classList.toggle('active', i === step);
-  });
-  document.getElementById(id + '-prev').disabled = step === 0;
-  document.getElementById(id + '-next').disabled = step === total - 1;
-  states[id] = step;
-}
-
-function prev(id) { if (states[id] > 0) renderStep(id, states[id] - 1); }
-function next(id) { if (states[id] < DEMOS[id].steps.length - 1) renderStep(id, states[id] + 1); }
-function restart(id) { renderStep(id, 0); }
-
-Object.keys(DEMOS).forEach(function(id) {
-  states[id] = 0;
-  var dotsEl = document.getElementById(id + '-dots');
-  dotsEl.innerHTML = DEMOS[id].steps.map(function(_, i) {
-    return '<div class="dot" id="' + id + '-dot-' + i + '"></div>';
-  }).join('');
-  renderStep(id, 0);
-});
-</script>
-
-</body>
+      Object.keys(DEMOS).forEach(function (id) {
+        states[id] = 0;
+        var dotsEl = document.getElementById(id + "-dots");
+        dotsEl.innerHTML = DEMOS[id].steps
+          .map(function (_, i) {
+            return '<div class="dot" id="' + id + "-dot-" + i + '"></div>';
+          })
+          .join("");
+        renderStep(id, 0);
+      });
+    </script>
+  </body>
 </html>

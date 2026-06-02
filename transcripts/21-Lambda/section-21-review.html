@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Section 21 — AWS Serverless: Lambda</title>
+    <script src="../shared/summary.js"></script>
     <style>
       @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap");
 
@@ -43,7 +44,7 @@
         display: none;
       }
       .lang-toggle {
-        position: absolute;
+        position: fixed;
         top: 0;
         right: 16px;
         align-items: center;
@@ -782,6 +783,10 @@
                   ><span class="lang-en">Must be idempotent!</span
                   ><span class="lang-es">¡Debe ser idempotente!</span></span
                 >
+                <div style="font-size:12px;color:#94a3b8;margin-top:4px;">
+                  <span class="lang-en">Lambda may retry on failure — same event, multiple executions. Your function must produce the same result no matter how many times it runs (e.g. check if a record already exists before inserting).</span>
+                  <span class="lang-es">Lambda puede reintentar ante fallos — mismo evento, múltiples ejecuciones. La función debe producir el mismo resultado sin importar cuántas veces corra (ej: verificar si el registro ya existe antes de insertar).</span>
+                </div>
               </li>
             </ul>
           </div>
@@ -868,6 +873,10 @@
           <span class="lang-en">Destinations vs DLQ</span
           ><span class="lang-es">Destinations vs DLQ</span>
         </h3>
+        <p>
+          <span class="lang-en"><strong>Destinations</strong> let you route the result of an async Lambda invocation — success <em>or</em> failure — to another service automatically. Instead of only catching failures in a DLQ, you can send the full event result (with metadata) to SQS, SNS, another Lambda, or EventBridge, both on success and on failure.</span>
+          <span class="lang-es"><strong>Destinations</strong> te permite enrutar el resultado de una invocación asíncrona de Lambda — éxito <em>o</em> fallo — a otro servicio automáticamente. En lugar de solo capturar fallos en una DLQ, podés enviar el resultado completo del evento (con metadata) a SQS, SNS, otra Lambda o EventBridge, tanto en éxito como en fallo.</span>
+        </p>
         <table class="data-table">
           <tr>
             <th></th>
@@ -933,6 +942,10 @@
             >Streams vs Colas — diferente escalado, orden y manejo de
             errores</span
           >
+        </p>
+        <p>
+          <span class="lang-en">Event Source Mapping is a Lambda internal component that <strong>polls</strong> a source on your behalf — you don't invoke Lambda directly. It reads batches of records from Kinesis, DynamoDB Streams, or SQS and invokes your function synchronously with those batches. The key distinction: with <strong>streams</strong> (Kinesis/DynamoDB) ordering is preserved per shard and a stuck record blocks the shard; with <strong>queues</strong> (SQS) records are independent and can be processed in parallel.</span>
+          <span class="lang-es">Event Source Mapping es un componente interno de Lambda que <strong>hace polling</strong> a la fuente en tu nombre — no invocás Lambda directamente. Lee lotes de registros de Kinesis, DynamoDB Streams o SQS e invoca tu función sincrónicamente con esos lotes. La diferencia clave: con <strong>streams</strong> (Kinesis/DynamoDB) el orden se preserva por shard y un registro bloqueado traba el shard; con <strong>colas</strong> (SQS) los registros son independientes y se pueden procesar en paralelo.</span>
         </p>
 
         <h3>
@@ -1198,13 +1211,8 @@
               ><span class="lang-es">Vars de Entorno</span>
             </h4>
             <p>
-              <span class="lang-en"
-                >Key-value <strong>strings</strong>, max
-                <strong>4 KB</strong> total</span
-              ><span class="lang-es"
-                >Pares clave-valor <strong>strings</strong>, max
-                <strong>4 KB</strong> total</span
-              >
+              <span class="lang-en">Key-value <strong>strings</strong>, max <strong>4 KB</strong> total. Set at deploy time, available to code at runtime via <code>process.env</code> / <code>os.environ</code>. Use them to change behavior (e.g. DB URL, feature flags) without touching code.</span>
+              <span class="lang-es">Pares clave-valor <strong>strings</strong>, max <strong>4 KB</strong> total. Se definen al deployar y el código las lee en runtime via <code>process.env</code> / <code>os.environ</code>. Permiten cambiar comportamiento (ej: URL de DB, feature flags) sin tocar el código.</span>
             </p>
           </div>
           <div class="concept-card">
@@ -1213,36 +1221,22 @@
               ><span class="lang-es">Encriptación</span>
             </h4>
             <p>
-              <span class="lang-en"
-                ><strong>KMS</strong> — Lambda service key (free) or your own
-                CMK</span
-              ><span class="lang-es"
-                ><strong>KMS</strong> — Clave de servicio Lambda (gratis) o tu
-                propio CMK</span
-              >
+              <span class="lang-en">Env vars are encrypted <strong>at rest</strong> using <strong>KMS</strong>. Default: Lambda's own service key (free, no extra config). Custom CMK: you control the key, but the Lambda execution role needs <code>kms:Decrypt</code>.</span>
+              <span class="lang-es">Las vars se encriptan <strong>en reposo</strong> con <strong>KMS</strong>. Por defecto usa la clave de servicio de Lambda (gratis, sin config extra). CMK propio: vos controlás la clave, pero el execution role necesita <code>kms:Decrypt</code>.</span>
             </p>
           </div>
           <div class="concept-card">
             <h4><span class="lang-en">CloudWatch Logs</span><span class="lang-es">CloudWatch Logs</span></h4>
             <p>
-              <span class="lang-en"
-                ><span class="chip green">Automatic</span> — needs
-                BasicExecutionRole</span
-              ><span class="lang-es"
-                ><span class="chip green">Automático</span> — necesita
-                BasicExecutionRole</span
-              >
+              <span class="lang-en"><span class="chip green">Automatic</span> — Lambda pushes all <code>stdout</code>/<code>stderr</code> and invocation metadata (duration, billed ms, memory used) to CloudWatch Logs. Requires <strong>AWSLambdaBasicExecutionRole</strong>, a managed policy that grants <code>logs:CreateLogGroup</code>, <code>logs:CreateLogStream</code>, and <code>logs:PutLogEvents</code>.</span>
+              <span class="lang-es"><span class="chip green">Automático</span> — Lambda envía todo <code>stdout</code>/<code>stderr</code> y metadata de invocación (duración, ms facturados, memoria usada) a CloudWatch Logs. Requiere <strong>AWSLambdaBasicExecutionRole</strong>, una managed policy que otorga <code>logs:CreateLogGroup</code>, <code>logs:CreateLogStream</code> y <code>logs:PutLogEvents</code>.</span>
             </p>
           </div>
           <div class="concept-card">
             <h4><span class="lang-en">X-Ray Tracing</span><span class="lang-es">X-Ray Tracing</span></h4>
             <p>
-              <span class="lang-en"
-                >Enable <strong>Active Tracing</strong> + SDK + IAM role</span
-              ><span class="lang-es"
-                >Habilitar <strong>Active Tracing</strong> + SDK + IAM
-                role</span
-              >
+              <span class="lang-en">Enable <strong>Active Tracing</strong> so Lambda automatically creates a segment for each invocation and sends it to the X-Ray daemon (runs alongside your function). Add the X-Ray SDK to instrument downstream calls. Execution role needs <code>AWSXRayDaemonWriteAccess</code>.</span>
+              <span class="lang-es">Habilitá <strong>Active Tracing</strong> para que Lambda cree automáticamente un segmento por invocación y lo envíe al daemon de X-Ray (corre junto a tu función). Agregá el SDK de X-Ray para instrumentar llamadas downstream. El execution role necesita <code>AWSXRayDaemonWriteAccess</code>.</span>
             </p>
           </div>
         </div>
@@ -1267,33 +1261,22 @@
           <tr>
             <td><code>_X_AMZN_TRACE_ID</code></td>
             <td>
-              <span class="lang-en"
-                >Trace header — propagate to downstream services</span
-              ><span class="lang-es"
-                >Header de trace — propagar a servicios downstream</span
-              >
+              <span class="lang-en">The trace ID for the current invocation. The SDK reads it automatically to link your function's segment to the parent trace. If you call downstream services manually, pass this header so X-Ray can stitch the full trace together.</span>
+              <span class="lang-es">El ID de trace de la invocación actual. El SDK lo lee automáticamente para enlazar el segmento de tu función al trace padre. Si llamás servicios downstream manualmente, pasá este header para que X-Ray pueda armar el trace completo.</span>
             </td>
           </tr>
           <tr>
             <td><code>AWS_XRAY_DAEMON_ADDRESS</code></td>
             <td>
-              <span class="lang-en"
-                ><strong>Most important for exam</strong> — IP:PORT of
-                daemon</span
-              ><span class="lang-es"
-                ><strong>Más importante para examen</strong> — IP:PORT del
-                daemon</span
-              >
+              <span class="lang-en"><strong>Most important for exam.</strong> The <code>IP:PORT</code> of the X-Ray daemon running alongside your function. The SDK uses this address to know where to send trace segments — without it, traces never reach X-Ray.</span>
+              <span class="lang-es"><strong>Más importante para el examen.</strong> El <code>IP:PORT</code> del daemon de X-Ray que corre junto a tu función. El SDK usa esta dirección para saber adónde enviar los segmentos — sin ella, los traces nunca llegan a X-Ray.</span>
             </td>
           </tr>
           <tr>
             <td><code>AWS_XRAY_CONTEXT_MISSING</code></td>
             <td>
-              <span class="lang-en"
-                >Default: <code>LOG_ERROR</code> (rarely tested)</span
-              ><span class="lang-es"
-                >Default: <code>LOG_ERROR</code> (raramente preguntado)</span
-              >
+              <span class="lang-en">Controls what happens when the SDK tries to record a subsegment but there's no active trace context (e.g. invoked outside X-Ray). Default: <code>LOG_ERROR</code> — logs a warning but doesn't crash. Rarely tested.</span>
+              <span class="lang-es">Controla qué pasa cuando el SDK intenta registrar un subsegmento pero no hay trace activo (ej: invocado fuera de X-Ray). Default: <code>LOG_ERROR</code> — loggea un warning pero no rompe. Raramente preguntado.</span>
             </td>
           </tr>
         </table>
@@ -1322,77 +1305,78 @@
           <span class="lang-en">The 4 Stages of a CloudFront Request</span
           ><span class="lang-es">Las 4 Etapas de un Request CloudFront</span>
         </h3>
-        <div class="vd">
-          <div class="vd-col" style="gap: 0">
-            <!-- Client -->
-            <span class="vd-node blue" style="align-self: center">Client</span>
-            <div
-              style="
-                display: flex;
-                justify-content: center;
-                gap: 2.5rem;
-                margin: 4px 0;
-              "
-            >
-              <div style="text-align: center">
-                <span class="vd-arrow" style="font-size: 14px">↓</span><br />
-                <span style="font-size: 10px; color: #fb923c; font-weight: 700"
-                  >① Viewer Req</span
-                >
+        <p>
+          <span class="lang-en">Every CloudFront request always goes through the same 4 stages — CloudFront is always in the middle. The difference between CF Functions and Lambda@Edge is <strong>which stages your code can intercept</strong>. CF Functions can only modify the viewer side (①④). Lambda@Edge can intercept all 4, including the origin side (②③) — that's its key extra power. <strong>Origin</strong> is your actual backend: S3, EC2, ALB, or API GW.</span>
+          <span class="lang-es">Todo request de CloudFront siempre pasa por las mismas 4 etapas — CloudFront siempre está en el medio. La diferencia entre CF Functions y Lambda@Edge es <strong>en qué etapas puede interceptar tu código</strong>. CF Functions solo puede modificar el lado del viewer (①④). Lambda@Edge puede interceptar las 4, incluyendo el lado del origin (②③) — ese es su poder extra clave. <strong>Origin</strong> es tu backend real: S3, EC2, ALB o API GW.</span>
+        </p>
+        <!-- Two side-by-side diagrams -->
+        <div class="vd" style="display:flex; gap:3rem; flex-wrap:wrap; justify-content:center;">
+
+          <!-- LEFT: CF Functions -->
+          <div style="display:flex; flex-direction:column; align-items:center; gap:0;">
+            <div style="font-size:12px; font-weight:700; color:#fbbf24; margin-bottom:8px; text-transform:uppercase; letter-spacing:.05em;">⚡ CF Functions</div>
+            <span class="vd-node blue" style="min-width:150px; justify-content:center;">Client</span>
+            <div style="display:flex; gap:2.5rem; margin:4px 0;">
+              <div style="text-align:center;">
+                <span class="vd-arrow">↓</span><br/>
+                <span style="font-size:11px; color:#fb923c; font-weight:700;">① Viewer Req</span><br/>
+                <span style="font-size:11px; color:#fbbf24; font-weight:700;">⚡ hook</span>
               </div>
-              <div style="text-align: center">
-                <span class="vd-arrow" style="font-size: 14px">↑</span><br />
-                <span style="font-size: 10px; color: #fb923c; font-weight: 700"
-                  >④ Viewer Res</span
-                >
+              <div style="text-align:center;">
+                <span class="vd-arrow">↑</span><br/>
+                <span style="font-size:11px; color:#fb923c; font-weight:700;">④ Viewer Res</span><br/>
+                <span style="font-size:11px; color:#fbbf24; font-weight:700;">⚡ hook</span>
               </div>
             </div>
-            <!-- CloudFront -->
-            <span class="vd-node purple" style="align-self: center"
-              >CloudFront</span
-            >
-            <div
-              style="
-                display: flex;
-                justify-content: center;
-                gap: 2.5rem;
-                margin: 4px 0;
-              "
-            >
-              <div style="text-align: center">
-                <span class="vd-arrow" style="font-size: 14px">↓</span><br />
-                <span style="font-size: 10px; color: #34d399; font-weight: 700"
-                  >② Origin Req</span
-                >
+            <span class="vd-node purple" style="min-width:150px; justify-content:center;">CloudFront</span>
+            <div style="display:flex; gap:2.5rem; margin:4px 0;">
+              <div style="text-align:center;">
+                <span class="vd-arrow">↓</span><br/>
+                <span style="font-size:11px; color:#34d399; font-weight:700;">② Origin Req</span>
               </div>
-              <div style="text-align: center">
-                <span class="vd-arrow" style="font-size: 14px">↑</span><br />
-                <span style="font-size: 10px; color: #34d399; font-weight: 700"
-                  >③ Origin Res</span
-                >
+              <div style="text-align:center;">
+                <span class="vd-arrow">↑</span><br/>
+                <span style="font-size:11px; color:#34d399; font-weight:700;">③ Origin Res</span>
               </div>
             </div>
-            <!-- Origin -->
-            <span class="vd-node blue" style="align-self: center">Origin</span>
+            <span class="vd-node blue" style="min-width:150px; justify-content:center; text-align:center;">Origin<br/><span style="font-size:10px; font-weight:400; color:#94a3b8;">S3 / EC2 / ALB</span></span>
           </div>
-          <div class="vd-gap"></div>
-          <div
-            class="vd-row"
-            style="justify-content: center; gap: 2rem; margin-top: 0.75rem"
-          >
-            <div>
-              <span class="vd-node" style="font-size: 11px">CF Functions</span>
-              <span style="font-size: 11px; color: #fb923c; font-weight: 700"
-                >① ④ only</span
-              >
+
+          <!-- Divider -->
+          <div style="width:1px; background:#1e293b; align-self:stretch;"></div>
+
+          <!-- RIGHT: Lambda@Edge -->
+          <div style="display:flex; flex-direction:column; align-items:center; gap:0;">
+            <div style="font-size:12px; font-weight:700; color:#a78bfa; margin-bottom:8px; text-transform:uppercase; letter-spacing:.05em;">λ Lambda@Edge</div>
+            <span class="vd-node blue" style="min-width:150px; justify-content:center;">Client</span>
+            <div style="display:flex; gap:2.5rem; margin:4px 0;">
+              <div style="text-align:center;">
+                <span class="vd-arrow">↓</span><br/>
+                <span style="font-size:11px; color:#fb923c; font-weight:700;">① Viewer Req</span><br/>
+                <span style="font-size:11px; color:#a78bfa; font-weight:700;">λ intercepts</span>
+              </div>
+              <div style="text-align:center;">
+                <span class="vd-arrow">↑</span><br/>
+                <span style="font-size:11px; color:#fb923c; font-weight:700;">④ Viewer Res</span><br/>
+                <span style="font-size:11px; color:#a78bfa; font-weight:700;">λ intercepts</span>
+              </div>
             </div>
-            <div>
-              <span class="vd-node" style="font-size: 11px">Lambda@Edge</span>
-              <span style="font-size: 11px; color: #fb923c; font-weight: 700"
-                >① ② ③ ④</span
-              >
+            <span class="vd-node purple" style="min-width:150px; justify-content:center;">CloudFront</span>
+            <div style="display:flex; gap:2.5rem; margin:4px 0;">
+              <div style="text-align:center;">
+                <span class="vd-arrow">↓</span><br/>
+                <span style="font-size:11px; color:#34d399; font-weight:700;">② Origin Req</span><br/>
+                <span style="font-size:11px; color:#a78bfa; font-weight:700;">λ intercepts</span>
+              </div>
+              <div style="text-align:center;">
+                <span class="vd-arrow">↑</span><br/>
+                <span style="font-size:11px; color:#34d399; font-weight:700;">③ Origin Res</span><br/>
+                <span style="font-size:11px; color:#a78bfa; font-weight:700;">λ intercepts</span>
+              </div>
             </div>
+            <span class="vd-node blue" style="min-width:150px; justify-content:center; text-align:center;">Origin<br/><span style="font-size:10px; font-weight:400; color:#94a3b8;">S3 / EC2 / ALB</span></span>
           </div>
+
         </div>
 
         <h3>
@@ -1498,6 +1482,46 @@
             </td>
             <td><span class="chip orange">us-east-1 only</span></td>
           </tr>
+          <tr>
+            <td>
+              <strong
+                ><span class="lang-en">Use cases</span
+                ><span class="lang-es">Casos de uso</span></strong
+              >
+            </td>
+            <td style="vertical-align:top;">
+              <span class="lang-en">
+                Cache key normalization<br/>
+                Header manipulation (insert/modify/delete)<br/>
+                URL rewrites &amp; redirects<br/>
+                JWT validation (allow/deny requests)
+              </span>
+              <span class="lang-es">
+                Normalización de cache key<br/>
+                Manipulación de headers (insertar/modificar/borrar)<br/>
+                URL rewrites y redirects<br/>
+                Validación JWT (permitir/denegar requests)
+              </span>
+            </td>
+            <td style="vertical-align:top;">
+              <span class="lang-en">
+                Complex logic needing &gt; 1 ms<br/>
+                AWS SDK calls (access other services)<br/>
+                Network access to external APIs<br/>
+                File system access<br/>
+                Access to HTTP request body<br/>
+                Origin-level request/response manipulation
+              </span>
+              <span class="lang-es">
+                Lógica compleja que necesita &gt; 1 ms<br/>
+                Llamadas al AWS SDK (acceder otros servicios)<br/>
+                Acceso a APIs externas<br/>
+                Acceso al sistema de archivos<br/>
+                Acceso al body del request HTTP<br/>
+                Manipulación de request/response a nivel de origin
+              </span>
+            </td>
+          </tr>
         </table>
       </div>
 
@@ -1525,100 +1549,60 @@
           <span class="lang-en">1. Default Lambda (Outside VPC)</span
           ><span class="lang-es">1. Lambda por Defecto (Fuera de VPC)</span>
         </h3>
-        <div
-          class="vd"
-          style="
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-            flex-wrap: wrap;
-            justify-content: center;
-          "
-        >
-          <!-- Internet (outside AWS Cloud) -->
-          <div style="text-align: center">
-            <span class="vd-node green" style="font-size: 13px"
-              >☁ Internet</span
-            >
-          </div>
-          <!-- Arrow + label between Internet and AWS Cloud -->
-          <div
-            style="
-              display: flex;
-              flex-direction: column;
-              align-items: center;
-              gap: 2px;
-            "
-          >
-            <span style="font-size: 11px; color: #6ee7b7; font-weight: 600"
-              ><span class="lang-en">Public www<br />works</span
-              ><span class="lang-es">Internet público<br />funciona</span></span
-            >
-            <span class="vd-arrow" style="font-size: 20px">⇄</span>
-          </div>
-          <!-- AWS Cloud box -->
-          <div
-            class="vd-box"
-            style="
-              border-color: #64748b;
-              border-style: solid;
-              flex: 1;
-              min-width: 280px;
-            "
-          >
-            <span class="vd-box-title" style="color: #94a3b8">AWS Cloud</span>
-            <!-- Lambda + arrow + DynamoDB in one row -->
-            <div
-              style="
-                display: flex;
-                align-items: center;
-                gap: 10px;
-                padding-top: 10px;
-                justify-content: center;
-                flex-wrap: wrap;
-              "
-            >
-              <span
-                class="vd-node orange"
-                style="font-size: 14px; padding: 10px 20px"
-                >λ Lambda</span
-              >
-              <span class="vd-arrow" style="font-size: 16px">→</span>
-              <span class="vd-node blue" style="padding: 8px 16px"
-                >DynamoDB</span
-              >
-              <span style="font-size: 14px; color: #6ee7b7">✅</span>
-            </div>
+        <div class="vd" style="display:flex; justify-content:center;">
+          <svg viewBox="0 0 560 245" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:560px;">
+            <defs>
+              <marker id="arr-green" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+                <path d="M0,0 L8,3 L0,6 Z" fill="#6ee7b7"/>
+              </marker>
+              <marker id="arr-green-r" markerWidth="8" markerHeight="6" refX="1" refY="3" orient="auto-start-reverse">
+                <path d="M0,0 L8,3 L0,6 Z" fill="#6ee7b7"/>
+              </marker>
+              <marker id="arr-slate" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+                <path d="M0,0 L8,3 L0,6 Z" fill="#94a3b8"/>
+              </marker>
+              <marker id="arr-red" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+                <path d="M0,0 L8,3 L0,6 Z" fill="#ef4444"/>
+              </marker>
+            </defs>
+
+            <!-- AWS Cloud box -->
+            <rect x="110" y="10" width="440" height="228" rx="10" fill="none" stroke="#475569" stroke-width="1.5"/>
+            <text x="122" y="26" fill="#94a3b8" font-size="12" font-weight="700" font-family="Inter,sans-serif">AWS CLOUD</text>
+
+            <!-- Internet node -->
+            <rect x="8" y="82" width="90" height="34" rx="8" fill="#1e293b" stroke="#10b98188" stroke-width="1.5"/>
+            <text x="53" y="104" text-anchor="middle" fill="#6ee7b7" font-size="13" font-weight="600" font-family="Inter,sans-serif">☁ Internet</text>
+
+            <!-- ⇄ arrow Internet ↔ Lambda, label above -->
+            <text x="151" y="78" text-anchor="middle" fill="#6ee7b7" font-size="11" font-weight="600" font-family="Inter,sans-serif">Public www works</text>
+            <line x1="99" y1="99" x2="203" y2="99" stroke="#6ee7b7" stroke-width="1.5"
+              marker-end="url(#arr-green)" marker-start="url(#arr-green-r)"/>
+
+            <!-- Lambda node -->
+            <rect x="205" y="82" width="118" height="34" rx="8" fill="#1e293b" stroke="#f9731688" stroke-width="1.5"/>
+            <text x="264" y="104" text-anchor="middle" fill="#fb923c" font-size="14" font-weight="700" font-family="Inter,sans-serif">λ Lambda</text>
+
+            <!-- → arrow Lambda → DynamoDB -->
+            <line x1="324" y1="99" x2="373" y2="99" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arr-slate)"/>
+
+            <!-- DynamoDB node -->
+            <rect x="375" y="82" width="118" height="34" rx="8" fill="#1e293b" stroke="#3b82f688" stroke-width="1.5"/>
+            <text x="434" y="104" text-anchor="middle" fill="#93c5fd" font-size="13" font-weight="600" font-family="Inter,sans-serif">DynamoDB</text>
+            <text x="500" y="104" fill="#6ee7b7" font-size="14" font-family="Inter,sans-serif">✅</text>
+
+            <!-- Red dashed arrow Lambda → Private RDS -->
+            <line x1="264" y1="117" x2="264" y2="155" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="5,4" marker-end="url(#arr-red)"/>
+            <text x="275" y="138" fill="#fca5a5" font-size="12" font-weight="700" font-family="Inter,sans-serif">❌ <tspan class="lang-en">Not working</tspan></text>
+
             <!-- VPC & Private Subnet box -->
-            <div style="margin-top: 14px">
-              <div class="vd-box" style="border-color: #f8717188">
-                <span class="vd-box-title red">VPC &amp; Private Subnet</span>
-                <div
-                  style="
-                    display: flex;
-                    align-items: center;
-                    gap: 10px;
-                    padding-top: 6px;
-                    flex-wrap: wrap;
-                  "
-                >
-                  <span
-                    style="font-size: 13px; color: #fca5a5; font-weight: 700"
-                    >❌ <span class="lang-en">Not working</span
-                    ><span class="lang-es">No funciona</span></span
-                  >
-                  <span
-                    class="vd-arrow"
-                    style="color: #ef4444; font-weight: 700; font-size: 14px"
-                    >✗</span
-                  >
-                  <span class="vd-node blue" style="padding: 8px 16px"
-                    >Private RDS</span
-                  >
-                </div>
-              </div>
-            </div>
-          </div>
+            <rect x="150" y="158" width="228" height="72" rx="8" fill="none" stroke="#ef444488" stroke-width="1.5" stroke-dasharray="5,3"/>
+            <text x="162" y="173" fill="#fca5a5" font-size="11" font-weight="700" font-family="Inter,sans-serif">VPC &amp; PRIVATE SUBNET</text>
+
+            <!-- Private RDS node -->
+            <rect x="205" y="180" width="118" height="34" rx="8" fill="#1e293b" stroke="#3b82f688" stroke-width="1.5"/>
+            <text x="264" y="202" text-anchor="middle" fill="#93c5fd" font-size="13" font-weight="600" font-family="Inter,sans-serif">Private RDS</text>
+          </svg>
         </div>
 
         <!-- ── DIAGRAM 2: Lambda in VPC (ENI → RDS) ── -->
@@ -1916,7 +1900,7 @@
               font-size="12"
               font-weight="600"
             >
-              Endpoint
+              VPC Endpoint
             </text>
 
             <!-- IGW ↑ External API arrow -->
@@ -2068,6 +2052,43 @@
               stroke-width="1.5"
               marker-end="url(#ah-o)"
             />
+            <!-- Label: private access -->
+            <text
+              x="318"
+              y="192"
+              text-anchor="middle"
+              fill="#c4b5fd"
+              font-family="Inter,sans-serif"
+              font-size="11"
+              font-weight="700"
+            >
+              <tspan class="lang-en">private access</tspan>
+              <tspan class="lang-es">acceso privado</tspan>
+            </text>
+
+            <!-- IGW → DynamoDB arrow (public access) -->
+            <line
+              x1="250"
+              y1="124"
+              x2="428"
+              y2="104"
+              stroke="#34d399"
+              stroke-width="1.5"
+              stroke-dasharray="5,3"
+              marker-end="url(#ah-g)"
+            />
+            <text
+              x="338"
+              y="109"
+              text-anchor="middle"
+              fill="#6ee7b7"
+              font-family="Inter,sans-serif"
+              font-size="11"
+              font-weight="700"
+            >
+              <tspan class="lang-en">public access</tspan>
+              <tspan class="lang-es">acceso público</tspan>
+            </text>
 
             <!-- CloudWatch note -->
             <text
@@ -2093,15 +2114,9 @@
 
         <div class="callout danger">
           <span class="lang-en"
-            ><strong>EXAM TRAP:</strong> Lambda in
-            <strong>public subnet ≠ internet access!</strong> This is different
-            from EC2. You ALWAYS need a NAT Gateway for Lambda internet access
-            from VPC.</span
+            ><strong>EXAM TRAP:</strong> When Lambda is deployed <strong>inside a VPC</strong>, putting it in a public subnet does <strong>NOT</strong> give it internet access — unlike EC2. To reach the internet from a VPC Lambda, you <strong>always</strong> need a NAT Gateway in a public subnet. (Diagram 1 is different: that's Lambda running <em>outside</em> any VPC, in AWS-managed infra, which does have direct internet access.)</span
           ><span class="lang-es"
-            ><strong>TRAMPA DEL EXAMEN:</strong> Lambda en
-            <strong>subnet público ≠ acceso a internet!</strong> Esto es
-            diferente de EC2. SIEMPRE necesitás un NAT Gateway para acceso a
-            internet de Lambda desde VPC.</span
+            ><strong>TRAMPA DEL EXAMEN:</strong> Cuando Lambda está desplegada <strong>dentro de un VPC</strong>, ponerla en una subnet pública <strong>NO</strong> le da acceso a internet — a diferencia de EC2. Para que una Lambda en VPC llegue a internet, <strong>siempre</strong> necesitás un NAT Gateway en una subnet pública. (El Diagrama 1 es distinto: Lambda corre <em>fuera</em> de cualquier VPC, en infraestructura manejada por AWS, y sí tiene internet directo.)</span
           >
         </div>
         <div class="callout success">
@@ -2470,19 +2485,16 @@
             <h4 class="green"><span class="lang-en">Reserved Concurrency</span><span class="lang-es">Concurrencia Reservada</span></h4>
             <ul>
               <li>
-                <span class="lang-en">Per-function <strong>cap</strong></span
-                ><span class="lang-es"><strong>Tope</strong> por función</span>
+                <span class="lang-en">Per-function <strong>cap</strong> — sets the maximum number of concurrent executions this function can have. The rest of the account's concurrency pool is unaffected.</span>
+                <span class="lang-es"><strong>Tope</strong> por función — define el máximo de ejecuciones simultáneas que puede tener. El resto del pool de concurrencia de la cuenta no se ve afectado.</span>
               </li>
               <li>
-                <span class="lang-en"
-                  >Prevents one function from stealing all capacity</span
-                ><span class="lang-es"
-                  >Evita que una función robe toda la capacidad</span
-                >
+                <span class="lang-en">Prevents one function from stealing all capacity — without this, a spiky function could consume the account's entire 1000-concurrent limit, throttling every other function.</span>
+                <span class="lang-es">Evita que una función robe toda la capacidad — sin esto, una función con picos podría consumir el límite total de 1000 de la cuenta y throttlear todas las demás.</span>
               </li>
               <li>
-                <span class="lang-en">Set to 0 = always throttled</span
-                ><span class="lang-es">Poner en 0 = siempre throttled</span>
+                <span class="lang-en">Set to <strong>0</strong> = always throttled — every invocation is rejected immediately. Useful to <strong>disable a function</strong> without deleting it (e.g. emergency stop, cost control).</span>
+                <span class="lang-es">Poner en <strong>0</strong> = siempre throttled — toda invocación es rechazada de inmediato. Útil para <strong>deshabilitar una función</strong> sin borrarla (ej: parada de emergencia, control de costos).</span>
               </li>
             </ul>
           </div>
@@ -2490,27 +2502,27 @@
             <h4 class="orange"><span class="lang-en">Provisioned Concurrency</span><span class="lang-es">Concurrencia Aprovisionada</span></h4>
             <ul>
               <li>
-                <span class="lang-en"><strong>Pre-warm</strong> instances</span
-                ><span class="lang-es"
-                  >Instancias <strong>pre-calentadas</strong></span
-                >
+                <span class="lang-en"><strong>Pre-warm</strong> instances — Lambda initializes a set number of execution environments in advance, before any request arrives. You pay for them even when idle.</span>
+                <span class="lang-es">Instancias <strong>pre-calentadas</strong> — Lambda inicializa una cantidad fija de entornos de ejecución de antemano, antes de que llegue cualquier request. Se paga por ellos aunque estén ociosos.</span>
               </li>
               <li>
-                <span class="chip green"
-                  ><span class="lang-en">No cold starts!</span
-                  ><span class="lang-es">¡Sin cold starts!</span></span
-                >
+                <span class="chip green"><span class="lang-en">No cold starts!</span><span class="lang-es">¡Sin cold starts!</span></span>
+                <div style="font-size:12px; color:#94a3b8; margin-top:3px;">
+                  <span class="lang-en">Since the environment is already initialized, the first request is as fast as any subsequent one. Critical for latency-sensitive apps (e.g. APIs, real-time processing).</span>
+                  <span class="lang-es">Como el entorno ya está inicializado, el primer request es tan rápido como cualquier otro. Crítico para apps sensibles a la latencia (ej: APIs, procesamiento en tiempo real).</span>
+                </div>
               </li>
               <li>
-                <span class="lang-en"
-                  >Set on <strong>versions/aliases</strong>, NOT $LATEST</span
-                ><span class="lang-es"
-                  >Configurar en <strong>versiones/aliases</strong>, NO
-                  $LATEST</span
-                >
+                <span class="lang-en">Set on <strong>versions/aliases</strong>, NOT $LATEST — because $LATEST changes with every deploy, AWS can't keep a stable warm pool for it. You must pin to a specific version or alias.</span>
+                <span class="lang-es">Configurar en <strong>versiones/aliases</strong>, NO $LATEST — porque $LATEST cambia con cada deploy, AWS no puede mantener un pool estable para él. Hay que apuntar a una versión o alias específico.</span>
               </li>
             </ul>
           </div>
+        </div>
+
+        <div class="callout info" style="margin-top:0.75rem;">
+          <span class="lang-en"><strong>Why pre-warm?</strong> Normally, the first time Lambda runs (or after a period of inactivity), AWS has to spin up a new execution environment: download your code, start the runtime, run your initialization code. This is the <strong>cold start</strong> — it adds hundreds of milliseconds of latency. With Provisioned Concurrency, AWS keeps N environments already initialized and ready. Example: an API that handles checkout requests can't afford a 500ms delay on the first request after midnight — you'd set Provisioned Concurrency = 5 to guarantee 5 instantly-ready instances at all times.</span>
+          <span class="lang-es"><strong>¿Para qué pre-calentar?</strong> Normalmente, la primera vez que Lambda corre (o tras un período de inactividad), AWS tiene que arrancar un nuevo entorno: descargar el código, iniciar el runtime, ejecutar el código de inicialización. Eso es el <strong>cold start</strong> — agrega cientos de milisegundos de latencia. Con Provisioned Concurrency, AWS mantiene N entornos ya inicializados y listos. Ejemplo: una API que maneja pedidos de checkout no puede permitirse 500ms de delay en el primer request después de medianoche — configurarías Provisioned Concurrency = 5 para garantizar 5 instancias listas al instante en todo momento.</span>
         </div>
 
         <h3>
@@ -3032,6 +3044,10 @@
         </table>
 
         <h3>AppSpec.yml</h3>
+        <p>
+          <span class="lang-en">To use CodeDeploy with Lambda, you need an <code>appspec.yml</code> file — it tells CodeDeploy <em>which</em> function, <em>which alias</em>, and <em>which versions</em> are source and destination. The <strong>deployment strategy</strong> (Linear, Canary, AllAtOnce) is <em>not</em> in this file — it's configured separately in the <strong>CodeDeploy Deployment Group</strong> settings.</span>
+          <span class="lang-es">Para usar CodeDeploy con Lambda necesitás un archivo <code>appspec.yml</code> — le dice a CodeDeploy <em>qué</em> función, <em>en qué alias</em> y <em>entre qué versiones</em> mover el tráfico. La <strong>estrategia de deploy</strong> (Linear, Canary, AllAtOnce) <em>no</em> va en este archivo — se configura aparte en la <strong>configuración del Deployment Group</strong> de CodeDeploy.</span>
+        </p>
         <div class="code-block">
           <span class="ck">version</span>: <span class="cv">0.0</span>
           <span class="ck">Resources</span>: -
@@ -3124,7 +3140,7 @@
                   <strong>OR</strong> resource policy</span
                 ><span class="lang-es"
                   ><strong>Misma cuenta:</strong> identity
-                  <strong>O</strong> resource policy</span
+                  <strong>OR</strong> resource policy</span
                 >
               </li>
               <li>
@@ -3133,7 +3149,7 @@
                   <strong>AND</strong> resource policy</span
                 ><span class="lang-es"
                   ><strong>Entre cuentas:</strong> identity
-                  <strong>Y</strong> resource policy</span
+                  <strong>AND</strong> resource policy</span
                 >
               </li>
             </ul>
@@ -3316,6 +3332,10 @@
           <span class="lang-en">Deployment Limits</span
           ><span class="lang-es">Límites de Deploy</span>
         </h3>
+        <p>
+          <span class="lang-en">These are the size limits for your function's <strong>deployment package</strong> — i.e. how big your code + dependencies can be, depending on how you deploy it. Lambda supports three packaging formats, each with a different ceiling.</span>
+          <span class="lang-es">Estos son los límites de tamaño del <strong>paquete de deploy</strong> — cuánto puede pesar tu código + dependencias, según cómo lo empaquetés. Lambda soporta tres formatos, cada uno con un techo diferente.</span>
+        </p>
         <table class="data-table">
           <tr>
             <th>
@@ -3329,28 +3349,31 @@
           </tr>
           <tr>
             <td>
-              <strong
-                ><span class="lang-en">Compressed zip</span
-                ><span class="lang-es">Zip comprimido</span></strong
-              >
+              <strong><span class="lang-en">Compressed zip</span><span class="lang-es">Zip comprimido</span></strong><br/>
+              <span style="font-size:11px;color:#94a3b8;">
+                <span class="lang-en">What you upload directly to Lambda (console or CLI) — your code + dependencies zipped</span>
+                <span class="lang-es">Lo que subís directamente a Lambda (consola o CLI) — tu código + dependencias zipeados</span>
+              </span>
             </td>
             <td><strong>50 MB</strong></td>
           </tr>
           <tr>
             <td>
-              <strong
-                ><span class="lang-en">Uncompressed</span
-                ><span class="lang-es">Descomprimido</span></strong
-              >
+              <strong><span class="lang-en">Uncompressed</span><span class="lang-es">Descomprimido</span></strong><br/>
+              <span style="font-size:11px;color:#94a3b8;">
+                <span class="lang-en">The total size once Lambda extracts the zip — your code + all layers combined can't exceed this</span>
+                <span class="lang-es">El tamaño total una vez que Lambda descomprime el zip — tu código + todos los layers combinados no pueden superar esto</span>
+              </span>
             </td>
             <td><strong>250 MB</strong></td>
           </tr>
           <tr>
             <td>
-              <strong
-                ><span class="lang-en">Container image</span
-                ><span class="lang-es">Imagen de contenedor</span></strong
-              >
+              <strong><span class="lang-en">Container image</span><span class="lang-es">Imagen de contenedor</span></strong><br/>
+              <span style="font-size:11px;color:#94a3b8;">
+                <span class="lang-en">When you package your function as a Docker image and push it to ECR instead of using a zip</span>
+                <span class="lang-es">Cuando empaquetás tu función como imagen Docker y la subís a ECR en vez de usar un zip</span>
+              </span>
             </td>
             <td><strong>10 GB</strong> (from ECR)</td>
           </tr>
@@ -3738,6 +3761,194 @@
           </div>
         </div>
       </div>
+      <!-- WEAK POINTS -->
+      <div class="card" style="border-color:#7c3aed; background:#13102a;">
+        <div class="card-header">
+          <span class="badge" style="background:#7c3aed;">🧩</span>
+          <h2 style="color:#c4b5fd;">
+            <span class="lang-en">Tricky Quiz Questions</span>
+            <span class="lang-es">Preguntas Tricky del Quiz</span>
+          </h2>
+        </div>
+        <div style="border:1px solid #4c1d95;border-radius:8px;padding:0.85rem;margin-bottom:0.75rem;background:#0f172a">
+          <p style="font-weight:bold;color:#c4b5fd;margin:0 0 0.4rem 0;">
+            <span class="lang-en">DLQ configured to send to SNS, but failed events never arrive — CloudWatch confirms failures exist. Why?</span>
+            <span class="lang-es">DLQ configurada para enviar a SNS, pero los eventos fallidos nunca llegan — CloudWatch confirma que hay fallos. ¿Por qué?</span>
+          </p>
+          <p style="margin:0 0 0.4rem 0;">
+            <span style="color:#4ade80;font-weight:bold;">
+              <span class="lang-en">✅ Lambda's execution role is missing permissions to publish to SNS</span>
+              <span class="lang-es">✅ El execution role de Lambda no tiene permisos para publicar en SNS</span>
+            </span>
+          </p>
+          <p style="margin:0;color:#94a3b8;font-size:0.9rem;">
+            <span class="lang-en">The trap is thinking SNS isn't supported as a DLQ — it is (alongside SQS). The real issue is that Lambda needs explicit IAM permissions in its execution role to publish to the DLQ destination. Without <code>sns:Publish</code> on the topic ARN, Lambda silently fails to deliver the failed event, even though CloudWatch still records the function failure.</span>
+            <span class="lang-es">La trampa es creer que SNS no está soportado como DLQ — sí lo está (junto con SQS). El problema real es que Lambda necesita permisos IAM explícitos en su execution role para publicar en el destino de la DLQ. Sin <code>sns:Publish</code> en el ARN del topic, Lambda falla silenciosamente al entregar el evento fallido, aunque CloudWatch igual registre el fallo de la función.</span>
+          </p>
+        </div>
+        <div style="border:1px solid #4c1d95;border-radius:8px;padding:0.85rem;margin-bottom:0.75rem;background:#0f172a">
+          <p style="font-weight:bold;color:#c4b5fd;margin:0 0 0.4rem 0;">
+            <span class="lang-en">X-Ray integration is enabled on Lambda but it doesn't work. What is a possible cause?</span>
+            <span class="lang-es">X-Ray está habilitado en Lambda pero no funciona. ¿Cuál es una posible causa?</span>
+          </p>
+          <p style="margin:0 0 0.4rem 0;">
+            <span style="color:#4ade80;font-weight:bold;">
+              <span class="lang-en">✅ Check IAM permissions in the Lambda execution role</span>
+              <span class="lang-es">✅ Verificar permisos IAM en el execution role de Lambda</span>
+            </span>
+          </p>
+          <p style="margin:0;color:#94a3b8;font-size:0.9rem;">
+            <span class="lang-en">The trap is thinking you need to bundle the X-Ray daemon in your deployment package — you don't. Lambda runs the daemon automatically when Active Tracing is enabled. What breaks silently is missing <code>AWSXRayDaemonWriteAccess</code> in the execution role: the daemon runs but can't send segments to X-Ray.</span>
+            <span class="lang-es">La trampa es creer que hay que incluir el daemon de X-Ray en el paquete de deploy — no hace falta. Lambda lo corre automáticamente cuando habilitás Active Tracing. Lo que falla silenciosamente es que falte <code>AWSXRayDaemonWriteAccess</code> en el execution role: el daemon corre pero no puede enviar segmentos a X-Ray.</span>
+          </p>
+        </div>
+        <div style="border:1px solid #4c1d95;border-radius:8px;padding:0.85rem;margin-bottom:0.75rem;background:#0f172a">
+          <p style="font-weight:bold;color:#c4b5fd;margin:0 0 0.4rem 0;">
+            <span class="lang-en">Lambda needs to send an 8 KB token to a 3rd party API. Where should you place this token?</span>
+            <span class="lang-es">Lambda necesita enviar un token de 8 KB a una API de terceros. ¿Dónde debería almacenarlo?</span>
+          </p>
+          <p style="margin:0 0 0.4rem 0;">
+            <span style="color:#4ade80;font-weight:bold;">
+              <span class="lang-en">✅ Place it in the deployment package (.zip file)</span>
+              <span class="lang-es">✅ Incluirlo en el deployment package (archivo .zip)</span>
+            </span>
+          </p>
+          <p style="margin:0;color:#94a3b8;font-size:0.9rem;">
+            <span class="lang-en">The trap is environment variables — they seem like the natural place for tokens/secrets, but Lambda env vars have a hard limit of <strong>4 KB total</strong>. An 8 KB token exceeds that, so it can't go there. The answer is to bundle it in the deployment package itself.</span>
+            <span class="lang-es">La trampa son las variables de entorno — parecen el lugar natural para tokens/secretos, pero las env vars de Lambda tienen un límite de <strong>4 KB total</strong>. Un token de 8 KB lo supera, así que no cabe ahí. La respuesta es incluirlo directamente en el deployment package.</span>
+          </p>
+        </div>
+        <div style="border:1px solid #4c1d95;border-radius:8px;padding:0.85rem;margin-bottom:0.75rem;background:#0f172a">
+          <p style="font-weight:bold;color:#c4b5fd;margin:0 0 0.4rem 0;">
+            <span class="lang-en">Lambda opens a new DB connection on every invocation, degrading RDS performance. How do developers fix this with long-lived connections?</span>
+            <span class="lang-es">Lambda abre una nueva conexión a la DB en cada invocación, degradando el rendimiento de RDS. ¿Cómo lo solucionan los developers con conexiones de larga duración?</span>
+          </p>
+          <p style="margin:0 0 0.4rem 0;">
+            <span style="color:#4ade80;font-weight:bold;">
+              <span class="lang-en">✅ Move the database connection object outside of the function handler</span>
+              <span class="lang-es">✅ Mover el objeto de conexión a la DB fuera del function handler</span>
+            </span>
+          </p>
+          <p style="margin:0;color:#94a3b8;font-size:0.9rem;">
+            <span class="lang-en">This is <strong>execution context reuse</strong>: anything initialized outside the handler persists in the execution environment as long as Lambda reuses the same container. The DB connection is opened once and reused across subsequent invocations — instead of opening and closing on every call. The trap is thinking Lambda containers are always destroyed after each call — they're not, AWS reuses them for performance.</span>
+            <span class="lang-es">Esto es <strong>reutilización del contexto de ejecución</strong>: todo lo que se inicializa fuera del handler persiste en el entorno de ejecución mientras Lambda reutilice el mismo contenedor. La conexión a la DB se abre una vez y se reutiliza en invocaciones posteriores — en vez de abrirse y cerrarse en cada llamada. La trampa es creer que los contenedores de Lambda siempre se destruyen tras cada llamada — no es así, AWS los reutiliza por performance.</span>
+          </p>
+        </div>
+        <div style="border:1px solid #4c1d95;border-radius:8px;padding:0.85rem;margin-bottom:0.75rem;background:#0f172a">
+          <p style="font-weight:bold;color:#c4b5fd;margin:0 0 0.4rem 0;">
+            <span class="lang-en">Lambda (Node.js) needs a PostgreSQL driver as a dependency. How do you bundle it?</span>
+            <span class="lang-es">Lambda (Node.js) necesita un driver de PostgreSQL como dependencia. ¿Cómo lo empaquetás?</span>
+          </p>
+          <p style="margin:0 0 0.4rem 0;">
+            <span style="color:#4ade80;font-weight:bold;">
+              <span class="lang-en">✅ Put the function and dependencies in one folder and zip them together</span>
+              <span class="lang-es">✅ Poner la función y las dependencias en una carpeta y zipearlas juntas</span>
+            </span>
+          </p>
+          <p style="margin:0;color:#94a3b8;font-size:0.9rem;">
+            <span class="lang-en">Lambda does <strong>not</strong> resolve dependencies for you — it won't read a <code>package.json</code> and run <code>npm install</code>. You must run <code>npm install</code> locally first, then zip your code together with the resulting <code>node_modules</code> folder and upload that. The trap is the <code>package.json</code> option — it sounds reasonable but Lambda has no build step.</span>
+            <span class="lang-es">Lambda <strong>no</strong> resuelve dependencias por vos — no va a leer un <code>package.json</code> y correr <code>npm install</code>. Tenés que correr <code>npm install</code> localmente primero, luego zipear tu código junto con la carpeta <code>node_modules</code> resultante y subir ese zip. La trampa es la opción del <code>package.json</code> — suena razonable pero Lambda no tiene paso de build.</span>
+          </p>
+        </div>
+        <div style="border:1px solid #4c1d95;border-radius:8px;padding:0.85rem;margin-bottom:0.75rem;background:#0f172a">
+          <p style="font-weight:bold;color:#c4b5fd;margin:0 0 0.4rem 0;">
+            <span class="lang-en">Which AWS service allows you to schedule a Lambda function to be invoked every hour?</span>
+            <span class="lang-es">¿Qué servicio de AWS permite invocar una función Lambda de forma programada cada hora?</span>
+          </p>
+          <p style="margin:0 0 0.4rem 0;">
+            <span style="color:#4ade80;font-weight:bold;">✅ Amazon EventBridge</span>
+          </p>
+          <p style="margin:0;color:#94a3b8;font-size:0.9rem;">
+            <span class="lang-en">EventBridge (formerly CloudWatch Events) supports cron and rate-based schedules to trigger Lambda automatically. SQS triggers Lambda reactively (when messages arrive), not on a schedule. Kinesis and S3 are event-driven by data, not time.</span>
+            <span class="lang-es">EventBridge (antes CloudWatch Events) soporta schedules con cron o rate para disparar Lambda automáticamente. SQS dispara Lambda de forma reactiva (cuando llegan mensajes), no por horario. Kinesis y S3 son event-driven por datos, no por tiempo.</span>
+          </p>
+        </div>
+        <div style="border:1px solid #4c1d95;border-radius:8px;padding:0.85rem;margin-bottom:0.75rem;background:#0f172a">
+          <p style="font-weight:bold;color:#c4b5fd;margin:0 0 0.4rem 0;">
+            <span class="lang-en">Which allows you to deploy Lambda globally so CloudFront requests are filtered at AWS Edge Locations?</span>
+            <span class="lang-es">¿Qué permite desplegar Lambda globalmente para que los requests de CloudFront se filtren en los Edge Locations?</span>
+          </p>
+          <p style="margin:0 0 0.4rem 0;">
+            <span style="color:#4ade80;font-weight:bold;">✅ Lambda@Edge</span>
+          </p>
+          <p style="margin:0;color:#94a3b8;font-size:0.9rem;">
+            <span class="lang-en">Lambda@Edge is the only Lambda deployment model that ties directly into CloudFront and runs at edge locations globally. You author in us-east-1 and CloudFront replicates it. Regular Lambda runs in a single region — it can't intercept CloudFront traffic at the edge.</span>
+            <span class="lang-es">Lambda@Edge es el único modelo de deploy de Lambda que se integra directamente con CloudFront y corre en los edge locations globalmente. Se crea en us-east-1 y CloudFront lo replica. Lambda regular corre en una sola región — no puede interceptar tráfico de CloudFront en el edge.</span>
+          </p>
+        </div>
+        <div style="border:1px solid #4c1d95;border-radius:8px;padding:0.85rem;margin-bottom:0.75rem;background:#0f172a">
+          <p style="font-weight:bold;color:#c4b5fd;margin:0 0 0.4rem 0;">
+            <span class="lang-en">To use Lambda with an ALB, the function must be registered with ........?</span>
+            <span class="lang-es">Para usar Lambda con un ALB, la función debe registrarse en ........?</span>
+          </p>
+          <p style="margin:0 0 0.4rem 0;">
+            <span style="color:#4ade80;font-weight:bold;">✅ A Target Group</span>
+          </p>
+          <p style="margin:0;color:#94a3b8;font-size:0.9rem;">
+            <span class="lang-en">ALB treats Lambda exactly like an EC2 instance — it must be registered in a Target Group, which the ALB listener rule points to. The trap is Event Source Mapping, which is an unrelated concept: it's the internal Lambda component that polls Kinesis, DynamoDB Streams, and SQS. It has nothing to do with ALB.</span>
+            <span class="lang-es">ALB trata a Lambda igual que a una instancia EC2 — debe registrarse en un Target Group al que apunta la regla del listener del ALB. La trampa es Event Source Mapping, que es un concepto distinto: es el componente interno de Lambda que hace polling a Kinesis, DynamoDB Streams y SQS. No tiene nada que ver con ALB.</span>
+          </p>
+        </div>
+        <!-- Q18 -->
+        <div style="border:1px solid #4c1d95;border-radius:8px;padding:0.85rem;margin-bottom:0.75rem;background:#0f172a">
+          <p style="font-weight:bold;color:#c4b5fd;margin:0 0 0.4rem 0;">
+            <span class="lang-en">S3 Event Notification triggers Lambda. You see duplicate CloudWatch logs with the same request ID. Why?</span>
+            <span class="lang-es">S3 Event Notification dispara Lambda. Ves logs duplicados en CloudWatch con el mismo request ID. ¿Por qué?</span>
+          </p>
+          <p style="margin:0 0 0.4rem 0;">
+            <span style="color:#4ade80;font-weight:bold;">✅ <span class="lang-en">The Lambda function failed and retries happened</span><span class="lang-es">La función falló y hubo reintentos</span></span>
+          </p>
+          <p style="margin:0;color:#94a3b8;font-size:0.9rem;">
+            <span class="lang-en">S3 → Lambda is an <strong>asynchronous invocation</strong>. On failure, Lambda automatically retries up to 2 more times. Each retry reuses the <strong>same request ID</strong> as the original attempt — that's why the logs appear duplicated with the same ID. If S3 had invoked Lambda independently twice, the request IDs would be different. The same-ID clue tells you it's a retry, not a duplicate trigger.</span>
+            <span class="lang-es">S3 → Lambda es una <strong>invocación asíncrona</strong>. Ante un fallo, Lambda reintenta automáticamente hasta 2 veces más. Cada reintento reutiliza el <strong>mismo request ID</strong> del intento original — por eso los logs aparecen duplicados con el mismo ID. Si S3 hubiera invocado Lambda dos veces de forma independiente, los request IDs serían distintos. El mismo ID es la clave: es un retry, no un trigger duplicado.</span>
+          </p>
+        </div>
+        <!-- Q19 -->
+        <div style="border:1px solid #4c1d95;border-radius:8px;padding:0.85rem;margin-bottom:0.75rem;background:#0f172a">
+          <p style="font-weight:bold;color:#c4b5fd;margin:0 0 0.4rem 0;">
+            <span class="lang-en">Which service does NOT require a Lambda Event Source Mapping? (Kinesis Data Streams / DynamoDB Streams / SQS / SNS)</span>
+            <span class="lang-es">¿Qué servicio NO requiere un Event Source Mapping de Lambda? (Kinesis / DynamoDB Streams / SQS / SNS)</span>
+          </p>
+          <p style="margin:0 0 0.4rem 0;">
+            <span style="color:#4ade80;font-weight:bold;">✅ SNS</span>
+          </p>
+          <p style="margin:0;color:#94a3b8;font-size:0.9rem;">
+            <span class="lang-en">Event Source Mapping is a <strong>polling</strong> mechanism — Lambda pulls records from the source. It applies to Kinesis Data Streams, DynamoDB Streams, and SQS. SNS uses a <strong>push</strong> model: SNS invokes Lambda directly as a subscriber, no polling needed. The trap is assuming DynamoDB Streams doesn't need it (it does — Lambda polls the stream).</span>
+            <span class="lang-es">Event Source Mapping es un mecanismo de <strong>polling</strong> — Lambda va a buscar registros a la fuente. Se usa con Kinesis Data Streams, DynamoDB Streams y SQS. SNS usa modelo <strong>push</strong>: SNS invoca Lambda directamente como suscriptor, sin polling. La trampa es asumir que DynamoDB Streams no lo necesita (sí lo necesita — Lambda hace polling del stream).</span>
+          </p>
+        </div>
+        <!-- Q22 -->
+        <div style="border:1px solid #4c1d95;border-radius:8px;padding:0.85rem;margin-bottom:0.75rem;background:#0f172a">
+          <p style="font-weight:bold;color:#c4b5fd;margin:0 0 0.4rem 0;">
+            <span class="lang-en">Python Lambda with heavy native dependencies — each deploy takes 15 min to compile them. What do you suggest?</span>
+            <span class="lang-es">Lambda en Python con dependencias nativas pesadas — cada deploy tarda 15 min en compilarlas. ¿Qué sugerís?</span>
+          </p>
+          <p style="margin:0 0 0.4rem 0;">
+            <span style="color:#4ade80;font-weight:bold;">✅ <span class="lang-en">Create a Lambda Layer and include all the dependencies in it</span><span class="lang-es">Crear un Lambda Layer con todas las dependencias</span></span>
+          </p>
+          <p style="margin:0;color:#94a3b8;font-size:0.9rem;">
+            <span class="lang-en">A <strong>Lambda Layer</strong> is a separate, versioned ZIP that gets mounted at <code>/opt</code> in the execution environment. You compile and publish the dependencies once as a layer; your function code stays small and deploys instantly. The layer is reused across invocations and function versions — you only re-publish it when the dependencies themselves change.</span>
+            <span class="lang-es">Un <strong>Lambda Layer</strong> es un ZIP separado y versionado que se monta en <code>/opt</code> del entorno de ejecución. Compilás y publicás las dependencias una sola vez como layer; el código de la función queda liviano y se despliega al instante. El layer se reutiliza entre invocaciones y versiones de la función — solo se re-publica cuando cambian las dependencias.</span>
+          </p>
+        </div>
+        <!-- Q25 -->
+        <div style="border:1px solid #4c1d95;border-radius:8px;padding:0.85rem;margin-bottom:0.75rem;background:#0f172a">
+          <p style="font-weight:bold;color:#c4b5fd;margin:0 0 0.4rem 0;">
+            <span class="lang-en">Which Lambda feature CANNOT be used to create a custom runtime? (Layers / Destinations / Container Images)</span>
+            <span class="lang-es">¿Qué feature de Lambda NO puede usarse para crear un runtime personalizado? (Layers / Destinations / Container Images)</span>
+          </p>
+          <p style="margin:0 0 0.4rem 0;">
+            <span style="color:#4ade80;font-weight:bold;">✅ Lambda Destinations</span>
+          </p>
+          <p style="margin:0;color:#94a3b8;font-size:0.9rem;">
+            <span class="lang-en"><strong>Layers</strong> and <strong>Container Images</strong> both support custom runtimes: a Layer can include a <code>bootstrap</code> executable for any language (Rust, COBOL, etc.) using the <code>provided.al2</code> runtime; a Container Image lets you package any runtime inside a Docker image. <strong>Destinations</strong> is completely unrelated to runtimes — it routes the result of an async invocation (success or failure) to SQS, SNS, EventBridge, or another Lambda function.</span>
+            <span class="lang-es"><strong>Layers</strong> y <strong>Container Images</strong> soportan runtimes personalizados: un Layer puede incluir un ejecutable <code>bootstrap</code> para cualquier lenguaje (Rust, COBOL, etc.) usando el runtime <code>provided.al2</code>; una Container Image permite empaquetar cualquier runtime en Docker. <strong>Destinations</strong> no tiene nada que ver con runtimes — enruta el resultado de una invocación asíncrona (éxito o fallo) hacia SQS, SNS, EventBridge, u otra función Lambda.</span>
+          </p>
+        </div>
+        <!-- entries go here -->
+      </div>
+      <!-- END WEAK POINTS -->
+
     </div>
     <!-- container -->
   </body>

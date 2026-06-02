@@ -669,7 +669,7 @@
         </div>
         <div class="rule-item">
           <div class="rule-dot" style="background:#4ade80;"></div>
-          <div class="rule-text"><span class="lang-en"><strong>FASTEST storage on AWS</strong> — millions of IOPS vs thousands for EBS. Best raw throughput.</span><span class="lang-es"><strong>Almacenamiento MÁS RÁPIDO en AWS</strong> — millones de IOPS vs miles para EBS. Mejor rendimiento bruto.</span></div>
+          <div class="rule-text"><span class="lang-en"><strong>FASTEST storage on AWS</strong> — millions of IOPS vs thousands for EBS. Best raw throughput.</span><span class="lang-es"><strong>Almacenamiento MÁS RÁPIDO en AWS</strong> — millones de IOPS vs miles para EBS. Mejor velocidad de transferencia bruta.</span></div>
         </div>
         <div class="rule-item">
           <div class="rule-dot" style="background:#ef4444;"></div>
@@ -692,18 +692,32 @@
 
       <div class="vol-type-grid">
 
-        <!-- gp3 -->
+        <!-- sc1 -->
         <div class="vol-card">
           <div class="vol-card-header">
-            <div class="vol-name">gp3</div>
-            <div class="chips"><span class="chip ssd">SSD</span></div>
+            <div class="vol-name">sc1</div>
+            <div class="chips"><span class="chip hdd">HDD</span></div>
           </div>
           <div class="vol-stats">
-            <div class="vol-stat-row"><span class="stat-key"><span class="lang-en">Max IOPS</span><span class="lang-es">IOPS Máx</span></span><span class="stat-val"><strong>16,000</strong></span></div>
-            <div class="vol-stat-row"><span class="stat-key"><span class="lang-en">Throughput</span><span class="lang-es">Rendimiento</span></span><span class="stat-val"><strong>1,000 MiB/s</strong></span></div>
-            <div class="vol-stat-row"><span class="stat-key"><span class="lang-en">Boot volume</span><span class="lang-es">Volumen de arranque</span></span><span class="stat-val"><span class="chip green" style="font-size:10px;padding:2px 6px;"><span class="lang-en">Yes</span><span class="lang-es">Sí</span></span></span></div>
+            <div class="vol-stat-row"><span class="stat-key"><span class="lang-en">Max IOPS</span><span class="lang-es">IOPS Máx</span></span><span class="stat-val"><strong>250</strong></span></div>
+            <div class="vol-stat-row"><span class="stat-key"><span class="lang-en">Throughput</span><span class="lang-es">Velocidad de transferencia</span></span><span class="stat-val"><strong>250 MiB/s</strong></span></div>
+            <div class="vol-stat-row"><span class="stat-key"><span class="lang-en">Boot volume</span><span class="lang-es">Volumen de arranque</span></span><span class="stat-val"><span class="chip red" style="font-size:10px;padding:2px 6px;"><span class="lang-en">No</span><span class="lang-es">No</span></span></span></div>
           </div>
-          <div class="vol-best"><span class="lang-en"><strong>Best for:</strong> General purpose workloads. IOPS and throughput are <strong>independent from volume size</strong> — more cost-efficient.</span><span class="lang-es"><strong>Mejor para:</strong> Cargas de trabajo de propósito general. IOPS y rendimiento son <strong>independientes del tamaño del volumen</strong> — más eficiente en costos.</span></div>
+          <div class="vol-best"><span class="lang-en"><strong>Best for:</strong> Cold HDD — lowest cost. <span class="lang-en">Infrequently accessed</span><span class="lang-es">Acceso infrecuente</span> data where cost matters most. <span class="lang-en">Archive</span><span class="lang-es">Archivo</span> workloads.</span><span class="lang-es"><strong>Mejor para:</strong> HDD frío — menor costo. Datos a los que se accede raramente donde el costo es lo más importante. Cargas de archivo.</span></div>
+        </div>
+
+        <!-- st1 -->
+        <div class="vol-card">
+          <div class="vol-card-header">
+            <div class="vol-name">st1</div>
+            <div class="chips"><span class="chip hdd">HDD</span></div>
+          </div>
+          <div class="vol-stats">
+            <div class="vol-stat-row"><span class="stat-key"><span class="lang-en">Max IOPS</span><span class="lang-es">IOPS Máx</span></span><span class="stat-val"><strong>500</strong></span></div>
+            <div class="vol-stat-row"><span class="stat-key"><span class="lang-en">Throughput</span><span class="lang-es">Velocidad de transferencia</span></span><span class="stat-val"><strong>500 MiB/s</strong></span></div>
+            <div class="vol-stat-row"><span class="stat-key"><span class="lang-en">Boot volume</span><span class="lang-es">Volumen de arranque</span></span><span class="stat-val"><span class="chip red" style="font-size:10px;padding:2px 6px;"><span class="lang-en">No</span><span class="lang-es">No</span></span></span></div>
+          </div>
+          <div class="vol-best"><span class="lang-en"><strong>Best for:</strong> Throughput-optimized HDD. Big Data, data warehouses, log processing. High sequential throughput.</span><span class="lang-es"><strong>Mejor para:</strong> HDD optimizado para velocidad de transferencia. Big Data, almacenes de datos, procesamiento de logs. Alta velocidad de transferencia secuencial.</span></div>
         </div>
 
         <!-- gp2 -->
@@ -714,10 +728,24 @@
           </div>
           <div class="vol-stats">
             <div class="vol-stat-row"><span class="stat-key"><span class="lang-en">Max IOPS</span><span class="lang-es">IOPS Máx</span></span><span class="stat-val"><strong>16,000</strong></span></div>
-            <div class="vol-stat-row"><span class="stat-key"><span class="lang-en">Throughput</span><span class="lang-es">Rendimiento</span></span><span class="stat-val"><strong>250 MiB/s</strong></span></div>
+            <div class="vol-stat-row"><span class="stat-key"><span class="lang-en">Throughput</span><span class="lang-es">Velocidad de transferencia</span></span><span class="stat-val"><strong>250 MiB/s</strong></span></div>
             <div class="vol-stat-row"><span class="stat-key"><span class="lang-en">Boot volume</span><span class="lang-es">Volumen de arranque</span></span><span class="stat-val"><span class="chip green" style="font-size:10px;padding:2px 6px;"><span class="lang-en">Yes</span><span class="lang-es">Sí</span></span></span></div>
           </div>
           <div class="vol-best"><span class="lang-en"><strong>Best for:</strong> Legacy general purpose. IOPS <strong>tied to size</strong> (3 IOPS/GiB). Max 16K IOPS at 5,334 GiB.</span><span class="lang-es"><strong>Mejor para:</strong> Propósito general heredado. IOPS <strong>vinculado al tamaño</strong> (3 IOPS/GiB). Máx 16K IOPS en 5,334 GiB.</span></div>
+        </div>
+
+        <!-- gp3 -->
+        <div class="vol-card">
+          <div class="vol-card-header">
+            <div class="vol-name">gp3</div>
+            <div class="chips"><span class="chip ssd">SSD</span></div>
+          </div>
+          <div class="vol-stats">
+            <div class="vol-stat-row"><span class="stat-key"><span class="lang-en">Max IOPS</span><span class="lang-es">IOPS Máx</span></span><span class="stat-val"><strong>16,000</strong></span></div>
+            <div class="vol-stat-row"><span class="stat-key"><span class="lang-en">Throughput</span><span class="lang-es">Velocidad de transferencia</span></span><span class="stat-val"><strong>1,000 MiB/s</strong></span></div>
+            <div class="vol-stat-row"><span class="stat-key"><span class="lang-en">Boot volume</span><span class="lang-es">Volumen de arranque</span></span><span class="stat-val"><span class="chip green" style="font-size:10px;padding:2px 6px;"><span class="lang-en">Yes</span><span class="lang-es">Sí</span></span></span></div>
+          </div>
+          <div class="vol-best"><span class="lang-en"><strong>Best for:</strong> General purpose workloads. IOPS and throughput are <strong>independent from volume size</strong> — more cost-efficient.</span><span class="lang-es"><strong>Mejor para:</strong> Cargas de trabajo de propósito general. IOPS y velocidad de transferencia son <strong>independientes del tamaño del volumen</strong> — más eficiente en costos.</span></div>
         </div>
 
         <!-- io1 -->
@@ -728,7 +756,7 @@
           </div>
           <div class="vol-stats">
             <div class="vol-stat-row"><span class="stat-key"><span class="lang-en">Max IOPS</span><span class="lang-es">IOPS Máx</span></span><span class="stat-val"><strong>64,000</strong></span></div>
-            <div class="vol-stat-row"><span class="stat-key"><span class="lang-en">Throughput</span><span class="lang-es">Rendimiento</span></span><span class="stat-val"><strong>1,000 MiB/s</strong></span></div>
+            <div class="vol-stat-row"><span class="stat-key"><span class="lang-en">Throughput</span><span class="lang-es">Velocidad de transferencia</span></span><span class="stat-val"><strong>1,000 MiB/s</strong></span></div>
             <div class="vol-stat-row"><span class="stat-key"><span class="lang-en">Boot volume</span><span class="lang-es">Volumen de arranque</span></span><span class="stat-val"><span class="chip green" style="font-size:10px;padding:2px 6px;"><span class="lang-en">Yes</span><span class="lang-es">Sí</span></span></span></div>
           </div>
           <div class="vol-best"><span class="lang-en"><strong>Best for:</strong> Critical workloads needing >16K IOPS. Databases (MySQL, Oracle, NoSQL). Supports Multi-Attach.</span><span class="lang-es"><strong>Mejor para:</strong> Cargas de trabajo críticas que necesitan >16K IOPS. Bases de datos (MySQL, Oracle, NoSQL). Soporta Multi-Attach.</span></div>
@@ -742,38 +770,10 @@
           </div>
           <div class="vol-stats">
             <div class="vol-stat-row"><span class="stat-key"><span class="lang-en">Max IOPS</span><span class="lang-es">IOPS Máx</span></span><span class="stat-val"><strong>256,000</strong> (Block Express)</span></div>
-            <div class="vol-stat-row"><span class="stat-key"><span class="lang-en">Throughput</span><span class="lang-es">Rendimiento</span></span><span class="stat-val"><strong>7,500 MiB/s</strong></span></div>
+            <div class="vol-stat-row"><span class="stat-key"><span class="lang-en">Throughput</span><span class="lang-es">Velocidad de transferencia</span></span><span class="stat-val"><strong>7,500 MiB/s</strong></span></div>
             <div class="vol-stat-row"><span class="stat-key"><span class="lang-en">Boot volume</span><span class="lang-es">Volumen de arranque</span></span><span class="stat-val"><span class="chip green" style="font-size:10px;padding:2px 6px;"><span class="lang-en">Yes</span><span class="lang-es">Sí</span></span></span></div>
           </div>
           <div class="vol-best"><span class="lang-en"><strong>Best for:</strong> Same as io1 but higher durability (99.999%). io2 Block Express reaches 256K IOPS. Supports Multi-Attach.</span><span class="lang-es"><strong>Mejor para:</strong> Igual que io1 pero mayor durabilidad (99.999%). io2 Block Express alcanza 256K IOPS. Soporta Multi-Attach.</span></div>
-        </div>
-
-        <!-- st1 -->
-        <div class="vol-card">
-          <div class="vol-card-header">
-            <div class="vol-name">st1</div>
-            <div class="chips"><span class="chip hdd">HDD</span></div>
-          </div>
-          <div class="vol-stats">
-            <div class="vol-stat-row"><span class="stat-key"><span class="lang-en">Max IOPS</span><span class="lang-es">IOPS Máx</span></span><span class="stat-val"><strong>500</strong></span></div>
-            <div class="vol-stat-row"><span class="stat-key"><span class="lang-en">Throughput</span><span class="lang-es">Rendimiento</span></span><span class="stat-val"><strong>500 MiB/s</strong></span></div>
-            <div class="vol-stat-row"><span class="stat-key"><span class="lang-en">Boot volume</span><span class="lang-es">Volumen de arranque</span></span><span class="stat-val"><span class="chip red" style="font-size:10px;padding:2px 6px;"><span class="lang-en">No</span><span class="lang-es">No</span></span></span></div>
-          </div>
-          <div class="vol-best"><span class="lang-en"><strong>Best for:</strong> Throughput-optimized HDD. Big Data, data warehouses, log processing. High sequential throughput.</span><span class="lang-es"><strong>Mejor para:</strong> HDD optimizado para rendimiento. Big Data, almacenes de datos, procesamiento de logs. Alto rendimiento secuencial.</span></div>
-        </div>
-
-        <!-- sc1 -->
-        <div class="vol-card">
-          <div class="vol-card-header">
-            <div class="vol-name">sc1</div>
-            <div class="chips"><span class="chip hdd">HDD</span></div>
-          </div>
-          <div class="vol-stats">
-            <div class="vol-stat-row"><span class="stat-key"><span class="lang-en">Max IOPS</span><span class="lang-es">IOPS Máx</span></span><span class="stat-val"><strong>250</strong></span></div>
-            <div class="vol-stat-row"><span class="stat-key"><span class="lang-en">Throughput</span><span class="lang-es">Rendimiento</span></span><span class="stat-val"><strong>250 MiB/s</strong></span></div>
-            <div class="vol-stat-row"><span class="stat-key"><span class="lang-en">Boot volume</span><span class="lang-es">Volumen de arranque</span></span><span class="stat-val"><span class="chip red" style="font-size:10px;padding:2px 6px;"><span class="lang-en">No</span><span class="lang-es">No</span></span></span></div>
-          </div>
-          <div class="vol-best"><span class="lang-en"><strong>Best for:</strong> Cold HDD — lowest cost. <span class="lang-en">Infrequently accessed</span><span class="lang-es">Acceso infrecuente</span> data where cost matters most. <span class="lang-en">Archive</span><span class="lang-es">Archivo</span> workloads.</span><span class="lang-es"><strong>Mejor para:</strong> HDD frío — menor costo. Datos a los que se accede raramente donde el costo es lo más importante. Cargas de archivo.</span></div>
         </div>
 
       </div>
@@ -845,7 +845,7 @@
               <tr>
                 <th><span class="lang-en">Mode</span><span class="lang-es">Modo</span></th>
                 <th><span class="lang-en">Latency</span><span class="lang-es">Latencia</span></th>
-                <th><span class="lang-en">Throughput</span><span class="lang-es">Rendimiento</span></th>
+                <th><span class="lang-en">Throughput</span><span class="lang-es">Velocidad de transferencia</span></th>
                 <th><span class="lang-en">Best For</span><span class="lang-es">Mejor Para</span></th>
               </tr>
             </thead>
@@ -868,7 +868,7 @@
       </div>
 
       <div style="margin-top: 4px;">
-        <div class="sub-heading"><span class="lang-en">Throughput Modes</span><span class="lang-es">Modos de Rendimiento</span></div>
+        <div class="sub-heading"><span class="lang-en">Throughput Modes</span><span class="lang-es">Modos de velocidad de transferencia</span></div>
         <div class="table-wrapper">
           <table class="data-table">
             <thead>
@@ -887,7 +887,7 @@
               <tr>
                 <td><span class="lang-en">Provisioned</span><span class="lang-es">Provisionado</span></td>
                 <td><span class="lang-en">Set independently of storage size</span><span class="lang-es">Configurado independientemente del tamaño de almacenamiento</span></td>
-                <td><span class="lang-en">Known high-throughput workloads (e.g., 1 GiB/s for 1 TB stored)</span><span class="lang-es">Cargas de trabajo de alto rendimiento conocidas (ej., 1 GiB/s para 1 TB almacenado)</span></td>
+                <td><span class="lang-en">Known high-throughput workloads (e.g., 1 GiB/s for 1 TB stored)</span><span class="lang-es">Cargas de trabajo de alta velocidad de transferencia conocidas (ej., 1 GiB/s para 1 TB almacenado)</span></td>
               </tr>
               <tr>
                 <td><span class="lang-en"><strong>Elastic</strong></span><span class="lang-es"><strong>Elástico</strong></span></td>
@@ -933,10 +933,10 @@
 
       <div class="callout warning">
         <span class="callout-title"><span class="lang-en">Weak Point Trap</span><span class="lang-es">Trampa del Punto Débil</span></span>
-        <span class="lang-en"><strong>Performance Modes vs Throughput Modes — do NOT confuse these:</strong></span><span class="lang-es"><strong>Modos de Rendimiento vs Modos de Rendimiento — NO confundas estos:</strong></span><br><br>
-        <span class="lang-en"><strong>Performance Mode</strong> = about latency + parallelism</span><span class="lang-es"><strong>Modo de Rendimiento</strong> = sobre latencia + paralelismo</span> (<span class="lang-en"><span class="lang-en">General Purpose</span><span class="lang-es">Propósito General</span> = low latency / <span class="lang-en">Max I/O</span><span class="lang-es">Máx E/S</span> = massive throughput but higher latency)</span><span class="lang-es">Propósito General = latencia baja / Máx E/S = rendimiento masivo pero latencia más alta)</span><br>
-        <span class="lang-en"><strong>Throughput Mode</strong> = about how much data can flow</span><span class="lang-es"><strong>Modo de Rendimiento</strong> = sobre cuántos datos pueden fluir</span> (<span class="lang-en"><span class="lang-en">Bursting</span><span class="lang-es">Ráfaga</span> = tied to storage / <span class="lang-en">Provisioned</span><span class="lang-es">Provisionado</span> = fixed / Elastic = auto-scales)</span><span class="lang-es">Ráfaga = vinculado al almacenamiento / Provisionado = fijo / Elástico = escala automáticamente)</span><br><br>
-        <span class="lang-en"><span class="lang-en">General Purpose</span><span class="lang-es">Propósito General</span> does NOT mean low throughput. <span class="lang-en">Max I/O</span><span class="lang-es">Máx E/S</span> does NOT mean "more expensive throughput mode."</span><span class="lang-es">Propósito General NO significa bajo rendimiento. Máx E/S NO significa "modo de rendimiento más caro".</span>
+        <span class="lang-en"><strong>Performance Modes vs Throughput Modes — do NOT confuse these:</strong></span><span class="lang-es"><strong>Modos de Rendimiento vs Modos de velocidad de transferencia — NO confundas estos:</strong></span><br><br>
+        <span class="lang-en"><strong>Performance Mode</strong> = about latency + parallelism</span><span class="lang-es"><strong>Modo de Rendimiento</strong> = sobre latencia + paralelismo</span> (<span class="lang-en"><span class="lang-en">General Purpose</span><span class="lang-es">Propósito General</span> = low latency / <span class="lang-en">Max I/O</span><span class="lang-es">Máx E/S</span> = massive throughput but higher latency)</span><span class="lang-es">Propósito General = latencia baja / Máx E/S = velocidad de transferencia masiva pero latencia más alta)</span><br>
+        <span class="lang-en"><strong>Throughput Mode</strong> = about how much data can flow</span><span class="lang-es"><strong>Modo de velocidad de transferencia</strong> = sobre cuántos datos pueden fluir</span> (<span class="lang-en"><span class="lang-en">Bursting</span><span class="lang-es">Ráfaga</span> = tied to storage / <span class="lang-en">Provisioned</span><span class="lang-es">Provisionado</span> = fixed / Elastic = auto-scales)</span><span class="lang-es">Ráfaga = vinculado al almacenamiento / Provisionado = fijo / Elástico = escala automáticamente)</span><br><br>
+        <span class="lang-en"><span class="lang-en">General Purpose</span><span class="lang-es">Propósito General</span> does NOT mean low throughput. <span class="lang-en">Max I/O</span><span class="lang-es">Máx E/S</span> does NOT mean "more expensive throughput mode."</span><span class="lang-es">Propósito General NO significa baja velocidad de transferencia. Máx E/S NO significa "modo de velocidad de transferencia más caro".</span>
       </div>
     </div>
 
@@ -1064,12 +1064,12 @@
 
         <div class="exam-tip-card">
           <div class="tip-q"><span class="lang-en">EFS performance mode for big data?</span><span class="lang-es">Modo de rendimiento EFS para big data?</span></div>
-          <div class="tip-a"><span class="lang-en">Max I/O</span><span class="lang-es">Máx E/S</span> (not <span class="lang-en">General Purpose</span><span class="lang-es">Propósito General</span>) — <span class="lang-en">higher latency but massive parallel throughput</span><span class="lang-es">latencia más alta pero rendimiento paralelo masivo</span></div>
+          <div class="tip-a"><span class="lang-en">Max I/O</span><span class="lang-es">Máx E/S</span> (not <span class="lang-en">General Purpose</span><span class="lang-es">Propósito General</span>) — <span class="lang-en">higher latency but massive parallel throughput</span><span class="lang-es">latencia más alta pero velocidad de transferencia paralela masiva</span></div>
         </div>
 
         <div class="exam-tip-card">
-          <div class="tip-q"><span class="lang-en">EFS throughput for unpredictable workloads?</span><span class="lang-es">Rendimiento EFS para cargas de trabajo impredecibles?</span></div>
-          <div class="tip-a"><span class="lang-en">Elastic — auto-scales throughput up and down as needed</span><span class="lang-es">Elástico — escala automáticamente el rendimiento arriba y abajo según sea necesario</span></div>
+          <div class="tip-q"><span class="lang-en">EFS throughput for unpredictable workloads?</span><span class="lang-es">Velocidad de transferencia EFS para cargas de trabajo impredecibles?</span></div>
+          <div class="tip-a"><span class="lang-en">Elastic — auto-scales throughput up and down as needed</span><span class="lang-es">Elástico — escala automáticamente la velocidad de transferencia arriba y abajo según sea necesario</span></div>
         </div>
 
       </div>

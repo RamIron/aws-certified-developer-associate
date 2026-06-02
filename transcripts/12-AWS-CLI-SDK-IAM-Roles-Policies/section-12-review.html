@@ -1,578 +1,1690 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title><span class="lang-en">Section 12 — AWS CLI, SDK, IAM Roles &amp; Policies</span><span class="lang-es">Sección 12 — AWS CLI, SDK, Roles de IAM y Políticas</span></title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="../shared/summary.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Section 12 — AWS CLI, SDK, IAM Roles &amp; Policies</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../shared/summary.css" />
     <script src="../shared/summary.js"></script>
 
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: #0f172a; color: #f8fafc; font-family: 'Inter', sans-serif; font-size: 14px; line-height: 1.6; min-height: 100vh; }
-    .hero { background: linear-gradient(135deg, #1e293b 0%, #0f172a 60%, #1a1a2e 100%); border-bottom: 1px solid #334155; padding: 48px 32px 40px; text-align: center; }
-    .hero-eyebrow { font-size: 13px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #f97316; margin-bottom: 12px; }
-    h1 { font-size: clamp(26px, 4vw, 40px); font-weight: 800; color: #f8fafc; margin-bottom: 8px; letter-spacing: -0.02em; }
-    .hero-subtitle { font-size: 15px; color: #94a3b8; margin-bottom: 20px; }
-    .xp-badge { display: inline-flex; align-items: center; gap: 6px; background: linear-gradient(135deg, #f97316, #ea580c); color: #fff; font-size: 13px; font-weight: 700; padding: 8px 18px; border-radius: 999px; }
-    .page-body { max-width: 1100px; margin: 0 auto; padding: 48px 24px; display: flex; flex-direction: column; gap: 40px; }
-    .section-label { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: #f97316; margin-bottom: 16px; }
-    .card { background: #1e293b; border-radius: 12px; border: 1px solid #334155; padding: 24px; }
-    .card-title { font-size: 18px; font-weight: 700; color: #f8fafc; margin-bottom: 16px; }
-    .callout { border-radius: 10px; padding: 16px 20px; font-size: 14px; line-height: 1.65; border-left: 4px solid; }
-    .callout.warning { background: rgba(249,115,22,0.08); border-color: #f97316; color: #fed7aa; }
-    .callout.warning strong { color: #fb923c; }
-    .callout.info { background: rgba(99,102,241,0.08); border-color: #6366f1; color: #c7d2fe; }
-    .callout.success { background: rgba(16,185,129,0.08); border-color: #10b981; color: #6ee7b7; }
-    .callout.danger { background: rgba(239,68,68,0.08); border-color: #ef4444; color: #fca5a5; }
-    .data-table { width: 100%; border-collapse: collapse; font-size: 14px; }
-    .data-table th { background: #1e2d4a; color: #94a3b8; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; padding: 10px 14px; text-align: left; }
-    .data-table td { padding: 10px 14px; border-bottom: 1px solid #1e293b; color: #cbd5e1; }
-    .data-table tr:last-child td { border-bottom: none; }
-    .data-table tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
-    .tip-card { background: #0f172a; border-left: 3px solid #f97316; border-radius: 0 8px 8px 0; padding: 12px 16px; font-size: 14px; }
-    .tip-trigger { color: #64748b; }
-    .tip-answer { color: #f8fafc; font-weight: 700; }
-    .anim-demo { background: #0f172a; border-radius: 12px; padding: 20px; min-height: 120px; }
-    .anim-controls { display: flex; align-items: center; gap: 12px; margin-top: 16px; flex-wrap: wrap; }
-    .nav-btn { background: transparent; border: 2px solid #f97316; color: #f97316; padding: 8px 18px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px; transition: all 0.2s; font-family: 'Inter', sans-serif; }
-    .nav-btn:hover:not(:disabled) { background: #f97316; color: #0f172a; }
-    .nav-btn:disabled { opacity: 0.3; cursor: default; }
-    .restart-btn { background: transparent; border: 1px solid #475569; color: #94a3b8; padding: 6px 14px; border-radius: 8px; cursor: pointer; font-size: 13px; margin-left: auto; transition: all 0.2s; font-family: 'Inter', sans-serif; }
-    .restart-btn:hover { border-color: #94a3b8; color: #e2e8f0; }
-    .step-dots { display: flex; gap: 6px; }
-    .dot { width: 8px; height: 8px; border-radius: 50%; background: #334155; transition: background 0.3s; }
-    .dot.active { background: #f97316; }
-    .step-counter { color: #94a3b8; font-size: 13px; }
-    @keyframes fadeScale { from { opacity: 0; transform: scale(0.97); } to { opacity: 1; transform: scale(1); } }
-    .anim-demo > * { animation: fadeScale 0.25s ease; }
-    .mono { font-family: 'Fira Code', monospace; }
-    code { font-family: 'Fira Code', monospace; font-size: 13px; background: rgba(248,114,22,0.1); color: #fb923c; padding: 2px 6px; border-radius: 4px; }
-    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
-    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
-    .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
-    .service-card { background: #0f172a; border: 1px solid #334155; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 8px; }
-    .service-icon { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; flex-shrink: 0; }
-    .service-name { font-size: 16px; font-weight: 700; color: #f8fafc; }
-    .service-desc { font-size: 13px; color: #94a3b8; line-height: 1.5; }
-    .compare-col { background: #0f172a; border: 1px solid #334155; border-radius: 10px; padding: 18px; }
-    .compare-col-title { font-size: 15px; font-weight: 700; margin-bottom: 12px; }
-    .compare-col ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
-    .compare-col ul li { font-size: 13px; color: #94a3b8; padding-left: 14px; position: relative; }
-    .compare-col ul li::before { content: '›'; position: absolute; left: 0; color: #f97316; }
-    .arch-flow { display: flex; align-items: center; flex-wrap: wrap; gap: 0; margin-bottom: 8px; }
-    .arch-node { padding: 10px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; text-align: center; }
-    .arch-arrow { color: #475569; font-size: 16px; padding: 0 8px; }
-    .table-wrapper { overflow-x: auto; border-radius: 10px; border: 1px solid #334155; }
-    .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 13px; font-weight: 600; }
-    .badge-green { background: rgba(16,185,129,0.15); color: #6ee7b7; }
-    .badge-red { background: rgba(239,68,68,0.12); color: #fca5a5; }
-    .badge-blue { background: rgba(59,130,246,0.15); color: #93c5fd; }
-    .tips-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 12px; }
-    .step-title { font-size: 15px; font-weight: 700; color: #f8fafc; margin-bottom: 4px; }
-    .step-desc { font-size: 13px; color: #94a3b8; margin-bottom: 12px; }
-    .divider { border: none; border-top: 1px solid #1e293b; margin: 4px 0; }
-    .feature-card { background: #0f172a; border: 1px solid #334155; border-radius: 10px; padding: 16px; }
-    .feature-card-title { font-size: 14px; font-weight: 700; color: #f97316; margin-bottom: 8px; }
-    .feature-card p, .feature-card li { font-size: 13px; color: #94a3b8; line-height: 1.5; }
-    .feature-card ul { list-style: none; display: flex; flex-direction: column; gap: 5px; padding-left: 0; }
-    .feature-card ul li { padding-left: 12px; position: relative; }
-    .feature-card ul li::before { content: '–'; position: absolute; left: 0; color: #475569; }
-    /* Local extras */
-    .imds-url { display: inline-block; font-family: 'Fira Code', monospace; font-size: 14px; background: #0f172a; border: 1px solid #f97316; color: #fb923c; padding: 6px 14px; border-radius: 8px; letter-spacing: 0.04em; }
-    .chain-step { display: flex; align-items: flex-start; gap: 16px; padding: 14px 16px; border-radius: 10px; background: #0f172a; border: 1px solid #334155; }
-    .chain-num { min-width: 32px; height: 32px; border-radius: 50%; background: #f97316; color: #0f172a; font-weight: 800; font-size: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .chain-body { display: flex; flex-direction: column; gap: 4px; }
-    .chain-label { font-size: 14px; font-weight: 700; color: #f8fafc; }
-    .chain-detail { font-size: 13px; color: #94a3b8; }
-    .priority-badge { font-size: 13px; font-weight: 600; padding: 2px 10px; border-radius: 999px; }
-    .priority-high { background: rgba(249,115,22,0.15); color: #fb923c; }
-    .priority-low { background: rgba(100,116,139,0.2); color: #94a3b8; }
-    .sigv4-box { background: #0f172a; border: 1px solid #334155; border-radius: 10px; padding: 18px; display: flex; flex-direction: column; gap: 10px; }
-    .sigv4-method { font-size: 14px; font-weight: 700; color: #f8fafc; margin-bottom: 6px; }
-    .sigv4-detail { font-size: 13px; color: #94a3b8; }
-    .mfa-step { display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: #0f172a; border-radius: 8px; border: 1px solid #334155; }
-    .mfa-step-num { min-width: 28px; height: 28px; background: #6366f1; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; color: #fff; flex-shrink: 0; }
-    .mfa-step-text { font-size: 13px; color: #c7d2fe; }
-  </style>
-
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        background: #0f172a;
+        color: #f8fafc;
+        font-family: "Inter", sans-serif;
+        font-size: 14px;
+        line-height: 1.6;
+        min-height: 100vh;
+      }
+      .hero {
+        background: linear-gradient(
+          135deg,
+          #1e293b 0%,
+          #0f172a 60%,
+          #1a1a2e 100%
+        );
+        border-bottom: 1px solid #334155;
+        padding: 48px 32px 40px;
+        text-align: center;
+      }
+      .hero-eyebrow {
+        font-size: 13px;
+        font-weight: 600;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: #f97316;
+        margin-bottom: 12px;
+      }
+      h1 {
+        font-size: clamp(26px, 4vw, 40px);
+        font-weight: 800;
+        color: #f8fafc;
+        margin-bottom: 8px;
+        letter-spacing: -0.02em;
+      }
+      .hero-subtitle {
+        font-size: 15px;
+        color: #94a3b8;
+        margin-bottom: 20px;
+      }
+      .xp-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: linear-gradient(135deg, #f97316, #ea580c);
+        color: #fff;
+        font-size: 13px;
+        font-weight: 700;
+        padding: 8px 18px;
+        border-radius: 999px;
+      }
+      .page-body {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 48px 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 40px;
+      }
+      .section-label {
+        font-size: 13px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: #f97316;
+        margin-bottom: 16px;
+      }
+      .card {
+        background: #1e293b;
+        border-radius: 12px;
+        border: 1px solid #334155;
+        padding: 24px;
+      }
+      .card-title {
+        font-size: 18px;
+        font-weight: 700;
+        color: #f8fafc;
+        margin-bottom: 16px;
+      }
+      .callout {
+        border-radius: 10px;
+        padding: 16px 20px;
+        font-size: 14px;
+        line-height: 1.65;
+        border-left: 4px solid;
+      }
+      .callout.warning {
+        background: rgba(249, 115, 22, 0.08);
+        border-color: #f97316;
+        color: #fed7aa;
+      }
+      .callout.warning strong {
+        color: #fb923c;
+      }
+      .callout.info {
+        background: rgba(99, 102, 241, 0.08);
+        border-color: #6366f1;
+        color: #c7d2fe;
+      }
+      .callout.success {
+        background: rgba(16, 185, 129, 0.08);
+        border-color: #10b981;
+        color: #6ee7b7;
+      }
+      .callout.danger {
+        background: rgba(239, 68, 68, 0.08);
+        border-color: #ef4444;
+        color: #fca5a5;
+      }
+      .data-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 14px;
+      }
+      .data-table th {
+        background: #1e2d4a;
+        color: #94a3b8;
+        font-size: 13px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        padding: 10px 14px;
+        text-align: left;
+      }
+      .data-table td {
+        padding: 10px 14px;
+        border-bottom: 1px solid #1e293b;
+        color: #cbd5e1;
+      }
+      .data-table tr:last-child td {
+        border-bottom: none;
+      }
+      .data-table tr:nth-child(even) td {
+        background: rgba(255, 255, 255, 0.02);
+      }
+      .tip-card {
+        background: #0f172a;
+        border-left: 3px solid #f97316;
+        border-radius: 0 8px 8px 0;
+        padding: 12px 16px;
+        font-size: 14px;
+      }
+      .tip-trigger {
+        color: #64748b;
+      }
+      .tip-answer {
+        color: #f8fafc;
+        font-weight: 700;
+      }
+      .anim-demo {
+        background: #0f172a;
+        border-radius: 12px;
+        padding: 20px;
+        min-height: 120px;
+      }
+      .anim-controls {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-top: 16px;
+        flex-wrap: wrap;
+      }
+      .nav-btn {
+        background: transparent;
+        border: 2px solid #f97316;
+        color: #f97316;
+        padding: 8px 18px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 13px;
+        transition: all 0.2s;
+        font-family: "Inter", sans-serif;
+      }
+      .nav-btn:hover:not(:disabled) {
+        background: #f97316;
+        color: #0f172a;
+      }
+      .nav-btn:disabled {
+        opacity: 0.3;
+        cursor: default;
+      }
+      .restart-btn {
+        background: transparent;
+        border: 1px solid #475569;
+        color: #94a3b8;
+        padding: 6px 14px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 13px;
+        margin-left: auto;
+        transition: all 0.2s;
+        font-family: "Inter", sans-serif;
+      }
+      .restart-btn:hover {
+        border-color: #94a3b8;
+        color: #e2e8f0;
+      }
+      .step-dots {
+        display: flex;
+        gap: 6px;
+      }
+      .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #334155;
+        transition: background 0.3s;
+      }
+      .dot.active {
+        background: #f97316;
+      }
+      .step-counter {
+        color: #94a3b8;
+        font-size: 13px;
+      }
+      @keyframes fadeScale {
+        from {
+          opacity: 0;
+          transform: scale(0.97);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+      .anim-demo > * {
+        animation: fadeScale 0.25s ease;
+      }
+      .mono {
+        font-family: "Fira Code", monospace;
+      }
+      code {
+        font-family: "Fira Code", monospace;
+        font-size: 13px;
+        background: rgba(248, 114, 22, 0.1);
+        color: #fb923c;
+        padding: 2px 6px;
+        border-radius: 4px;
+      }
+      .grid-2 {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 16px;
+      }
+      .grid-3 {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 16px;
+      }
+      .grid-4 {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 16px;
+      }
+      .service-card {
+        background: #0f172a;
+        border: 1px solid #334155;
+        border-radius: 12px;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .service-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        font-weight: 700;
+        flex-shrink: 0;
+      }
+      .service-name {
+        font-size: 16px;
+        font-weight: 700;
+        color: #f8fafc;
+      }
+      .service-desc {
+        font-size: 13px;
+        color: #94a3b8;
+        line-height: 1.5;
+      }
+      .compare-col {
+        background: #0f172a;
+        border: 1px solid #334155;
+        border-radius: 10px;
+        padding: 18px;
+      }
+      .compare-col-title {
+        font-size: 15px;
+        font-weight: 700;
+        margin-bottom: 12px;
+      }
+      .compare-col ul {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .compare-col ul li {
+        font-size: 13px;
+        color: #94a3b8;
+        padding-left: 14px;
+        position: relative;
+      }
+      .compare-col ul li::before {
+        content: "›";
+        position: absolute;
+        left: 0;
+        color: #f97316;
+      }
+      .arch-flow {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0;
+        margin-bottom: 8px;
+      }
+      .arch-node {
+        padding: 10px 16px;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 600;
+        text-align: center;
+      }
+      .arch-arrow {
+        color: #475569;
+        font-size: 16px;
+        padding: 0 8px;
+      }
+      .table-wrapper {
+        overflow-x: auto;
+        border-radius: 10px;
+        border: 1px solid #334155;
+      }
+      .badge {
+        display: inline-block;
+        padding: 2px 8px;
+        border-radius: 4px;
+        font-size: 13px;
+        font-weight: 600;
+      }
+      .badge-green {
+        background: rgba(16, 185, 129, 0.15);
+        color: #6ee7b7;
+      }
+      .badge-red {
+        background: rgba(239, 68, 68, 0.12);
+        color: #fca5a5;
+      }
+      .badge-blue {
+        background: rgba(59, 130, 246, 0.15);
+        color: #93c5fd;
+      }
+      .tips-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 12px;
+      }
+      .step-title {
+        font-size: 15px;
+        font-weight: 700;
+        color: #f8fafc;
+        margin-bottom: 4px;
+      }
+      .step-desc {
+        font-size: 13px;
+        color: #94a3b8;
+        margin-bottom: 12px;
+      }
+      .divider {
+        border: none;
+        border-top: 1px solid #1e293b;
+        margin: 4px 0;
+      }
+      .feature-card {
+        background: #0f172a;
+        border: 1px solid #334155;
+        border-radius: 10px;
+        padding: 16px;
+      }
+      .feature-card-title {
+        font-size: 14px;
+        font-weight: 700;
+        color: #f97316;
+        margin-bottom: 8px;
+      }
+      .feature-card p,
+      .feature-card li {
+        font-size: 13px;
+        color: #94a3b8;
+        line-height: 1.5;
+      }
+      .feature-card ul {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        padding-left: 0;
+      }
+      .feature-card ul li {
+        padding-left: 12px;
+        position: relative;
+      }
+      .feature-card ul li::before {
+        content: "–";
+        position: absolute;
+        left: 0;
+        color: #475569;
+      }
+      /* Local extras */
+      .imds-url {
+        display: inline-block;
+        font-family: "Fira Code", monospace;
+        font-size: 14px;
+        background: #0f172a;
+        border: 1px solid #f97316;
+        color: #fb923c;
+        padding: 6px 14px;
+        border-radius: 8px;
+        letter-spacing: 0.04em;
+      }
+      .chain-step {
+        display: flex;
+        align-items: flex-start;
+        gap: 16px;
+        padding: 14px 16px;
+        border-radius: 10px;
+        background: #0f172a;
+        border: 1px solid #334155;
+      }
+      .chain-num {
+        min-width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: #f97316;
+        color: #0f172a;
+        font-weight: 800;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      .chain-body {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+      .chain-label {
+        font-size: 14px;
+        font-weight: 700;
+        color: #f8fafc;
+      }
+      .chain-detail {
+        font-size: 13px;
+        color: #94a3b8;
+      }
+      .priority-badge {
+        font-size: 13px;
+        font-weight: 600;
+        padding: 2px 10px;
+        border-radius: 999px;
+      }
+      .priority-high {
+        background: rgba(249, 115, 22, 0.15);
+        color: #fb923c;
+      }
+      .priority-low {
+        background: rgba(100, 116, 139, 0.2);
+        color: #94a3b8;
+      }
+      .sigv4-box {
+        background: #0f172a;
+        border: 1px solid #334155;
+        border-radius: 10px;
+        padding: 18px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .sigv4-method {
+        font-size: 14px;
+        font-weight: 700;
+        color: #f8fafc;
+        margin-bottom: 6px;
+      }
+      .sigv4-detail {
+        font-size: 13px;
+        color: #94a3b8;
+      }
+      .mfa-step {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 14px;
+        background: #0f172a;
+        border-radius: 8px;
+        border: 1px solid #334155;
+      }
+      .mfa-step-num {
+        min-width: 28px;
+        height: 28px;
+        background: #6366f1;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 13px;
+        color: #fff;
+        flex-shrink: 0;
+      }
+      .mfa-step-text {
+        font-size: 13px;
+        color: #c7d2fe;
+      }
+    </style>
   </head>
-<body>
+  <body>
+    <script>
+      initHeader(
+        "<span class='lang-en'>Section 12 — AWS CLI, SDK & IAM Roles</span><span class='lang-es'>Sección 12 — AWS CLI, SDK y Roles de IAM</span>",
+      );
+    </script>
 
-<script>initHeader("<span class='lang-en'>Section 12 — AWS CLI, SDK & IAM Roles</span><span class='lang-es'>Sección 12 — AWS CLI, SDK y Roles de IAM</span>")</script>
-
-<main class="page-body">
-
-  <!-- ═══════════════════════════════════════════ 1. IMDS ═══ -->
-  <section>
-    <div class="section-label"><span class="lang-en">Topic 1 — EC2 Instance Metadata (IMDS)</span><span class="lang-es">Tema 1 — Metadatos de instancia EC2 (IMDS)</span></div>
-    <div class="card">
-      <div class="card-title"><span class="lang-en">How Instances Learn About Themselves</span><span class="lang-es">Cómo las instancias se informan sobre sí mismas</span></div>
-
-      <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px;">
-        <div class="callout info">
-          <strong><span class="lang-en">Core concept:</span><span class="lang-es">Concepto clave:</span></strong> <span class="lang-en">IMDS lets an EC2 instance learn about itself <em>without</em> an IAM Role. The data is available at the link-local address <span class="imds-url">http://169.254.169.254</span> — only reachable from inside the instance.</span><span class="lang-es">IMDS permite que una instancia EC2 se informe sobre sí misma <em>sin</em> un Rol de IAM. Los datos están disponibles en la dirección link-local <span class="imds-url">http://169.254.169.254</span> — solo accesible desde dentro de la instancia.</span>
+    <main class="page-body">
+      <!-- ═══════════════════════════════════════════ 1. IMDS ═══ -->
+      <section>
+        <div class="section-label">
+          <span class="lang-en"
+            >Topic 1 — EC2 Instance Metadata Service (IMDS)</span
+          ><span class="lang-es"
+            >Tema 1 — Metadatos de instancia EC2 (IMDS)</span
+          >
         </div>
-
-        <div class="grid-2">
-          <div class="feature-card">
-            <div class="feature-card-title"><span class="lang-en">What you CAN retrieve</span><span class="lang-es">Lo que SÍ puedes recuperar</span></div>
-            <ul>
-              <li><span class="lang-en">Instance ID, type, AMI ID</span><span class="lang-es">ID de instancia, tipo, ID de AMI</span></li>
-              <li><span class="lang-en">Public IP and private IP</span><span class="lang-es">IP pública e IP privada</span></li>
-              <li><span class="lang-en">IAM Role <strong>name</strong></span><span class="lang-es"><strong>Nombre</strong> del Rol de IAM</span></li>
-              <li><span class="lang-en">Temporary credentials for the role</span><span class="lang-es">Credenciales temporales para el rol</span></li>
-              <li><span class="lang-en">User Data (launch script)</span><span class="lang-es">Datos de usuario (script de inicio)</span></li>
-            </ul>
+        <div class="card">
+          <div class="card-title">
+            <span class="lang-en">How Instances Learn About Themselves</span
+            ><span class="lang-es"
+              >Cómo las instancias se informan sobre sí mismas</span
+            >
           </div>
-          <div class="feature-card" style="border-color: #ef4444;">
-            <div class="feature-card-title" style="color: #f87171;"><span class="lang-en">What you CANNOT retrieve</span><span class="lang-es">Lo que NO puedes recuperar</span></div>
-            <ul>
-              <li><span class="lang-en">IAM <strong>Policy</strong> attached to the role</span><span class="lang-es"><strong>Política</strong> de IAM adjunta al rol</span></li>
-              <li><span class="lang-en">Any data from other instances</span><span class="lang-es">Datos de otras instancias</span></li>
-            </ul>
-            <p style="margin-top: 10px; font-size: 13px; color: #fca5a5;"><span class="lang-en">Exam trap: IMDS gives the role <em>name</em>, never the policy document.</span><span class="lang-es">Trampa del examen: IMDS da el <em>nombre</em> del rol, nunca el documento de política.</span></p>
+
+          <div
+            style="
+              display: flex;
+              flex-direction: column;
+              gap: 12px;
+              margin-bottom: 20px;
+            "
+          >
+            <div class="callout info">
+              <strong
+                ><span class="lang-en">Core concept:</span
+                ><span class="lang-es">Concepto clave:</span></strong
+              >
+              <span class="lang-en"
+                >IMDS lets an EC2 instance learn about itself
+                <em>without</em> an IAM Role. The data is available at the
+                link-local address
+                <span class="imds-url">http://169.254.169.254</span> — only
+                reachable from inside the instance.</span
+              ><span class="lang-es"
+                >IMDS permite que una instancia EC2 se informe sobre sí misma
+                <em>sin</em> un Rol de IAM. Los datos están disponibles en la
+                dirección link-local
+                <span class="imds-url">http://169.254.169.254</span> — solo
+                accesible desde dentro de la instancia.</span
+              >
+            </div>
+
+            <div class="grid-2">
+              <div class="feature-card">
+                <div class="feature-card-title">
+                  <span class="lang-en">What you CAN retrieve</span
+                  ><span class="lang-es">Lo que SÍ puedes recuperar</span>
+                </div>
+                <ul>
+                  <li>
+                    <span class="lang-en">Instance ID, type, AMI ID</span
+                    ><span class="lang-es"
+                      >ID de instancia, tipo, ID de AMI</span
+                    >
+                  </li>
+                  <li>
+                    <span class="lang-en">Public IP and private IP</span
+                    ><span class="lang-es">IP pública e IP privada</span>
+                  </li>
+                  <li>
+                    <span class="lang-en">IAM Role <strong>name</strong></span
+                    ><span class="lang-es"
+                      ><strong>Nombre</strong> del Rol de IAM</span
+                    >
+                  </li>
+                  <li>
+                    <span class="lang-en"
+                      >Temporary credentials for the role</span
+                    ><span class="lang-es"
+                      >Credenciales temporales para el rol</span
+                    >
+                  </li>
+                  <li>
+                    <span class="lang-en">User Data (launch script)</span
+                    ><span class="lang-es"
+                      >Datos de usuario (script de inicio)</span
+                    >
+                  </li>
+                </ul>
+              </div>
+              <div class="feature-card" style="border-color: #ef4444">
+                <div class="feature-card-title" style="color: #f87171">
+                  <span class="lang-en">What you CANNOT retrieve</span
+                  ><span class="lang-es">Lo que NO puedes recuperar</span>
+                </div>
+                <ul>
+                  <li>
+                    <span class="lang-en"
+                      >IAM <strong>Policy</strong> attached to the role</span
+                    ><span class="lang-es"
+                      ><strong>Política</strong> de IAM adjunta al rol</span
+                    >
+                  </li>
+                  <li>
+                    <span class="lang-en">Any data from other instances</span
+                    ><span class="lang-es">Datos de otras instancias</span>
+                  </li>
+                </ul>
+                <p style="margin-top: 10px; font-size: 13px; color: #fca5a5">
+                  <span class="lang-en"
+                    >Exam trap: IMDS gives the role <em>name</em>, never the
+                    policy document.</span
+                  ><span class="lang-es"
+                    >Trampa del examen: IMDS da el <em>nombre</em> del rol,
+                    nunca el documento de política.</span
+                  >
+                </p>
+              </div>
+            </div>
+
+            <div class="callout warning">
+              <strong
+                ><span class="lang-en">Metadata vs User Data:</span
+                ><span class="lang-es"
+                  >Metadatos vs Datos de usuario:</span
+                ></strong
+              >
+              <span class="lang-en"
+                >Metadata = information <em>about</em> the instance (IP, role,
+                type). User Data = the bootstrap script that ran at launch. Both
+                accessible via 169.254.169.254 but at different paths.</span
+              ><span class="lang-es"
+                >Metadatos = información <em>acerca de</em> la instancia (IP,
+                rol, tipo). Datos de usuario = el script de bootstrap que se
+                ejecutó al inicio. Ambos accesibles vía 169.254.169.254 pero en
+                rutas diferentes.</span
+              >
+            </div>
+          </div>
+
+          <!-- IMDSv1 vs IMDSv2 table -->
+          <div style="margin-bottom: 20px">
+            <div
+              style="
+                font-size: 14px;
+                font-weight: 700;
+                color: #f8fafc;
+                margin-bottom: 12px;
+              "
+            >
+              <span class="lang-en">IMDSv1 vs IMDSv2</span
+              ><span class="lang-es">IMDSv1 vs IMDSv2</span>
+            </div>
+            <div class="table-wrapper">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>
+                      <span class="lang-en">Version</span
+                      ><span class="lang-es">Versión</span>
+                    </th>
+                    <th>
+                      <span class="lang-en">How It Works</span
+                      ><span class="lang-es">Cómo funciona</span>
+                    </th>
+                    <th>
+                      <span class="lang-en">Security</span
+                      ><span class="lang-es">Seguridad</span>
+                    </th>
+                    <th>
+                      <span class="lang-en">Status</span
+                      ><span class="lang-es">Estado</span>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="badge badge-red">IMDSv1</span></td>
+                    <td>
+                      <span class="lang-en"
+                        >Direct <code>GET</code> to
+                        <code>/latest/meta-data/</code></span
+                      ><span class="lang-es"
+                        ><code>GET</code> directo a
+                        <code>/latest/meta-data/</code></span
+                      >
+                    </td>
+                    <td>
+                      <span class="lang-en"
+                        >Less secure — no session required</span
+                      ><span class="lang-es"
+                        >Menos seguro — sin sesión requerida</span
+                      >
+                    </td>
+                    <td>
+                      <span class="lang-en">Still works but discouraged</span
+                      ><span class="lang-es">Funciona pero no recomendado</span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><span class="badge badge-green">IMDSv2</span></td>
+                    <td>
+                      <span class="lang-en"
+                        ><code>PUT</code> to get token → <code>GET</code> with
+                        token header</span
+                      ><span class="lang-es"
+                        ><code>PUT</code> para obtener token →
+                        <code>GET</code> con encabezado de token</span
+                      >
+                    </td>
+                    <td>
+                      <span class="lang-en"
+                        >Session-oriented, resistant to SSRF</span
+                      ><span class="lang-es"
+                        >Orientado a sesiones, resistente a SSRF</span
+                      >
+                    </td>
+                    <td>
+                      <span class="lang-en"
+                        >Default since 2023 (recommended)</span
+                      ><span class="lang-es"
+                        >Predeterminado desde 2023 (recomendado)</span
+                      >
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- IMDSv2 flow -->
+          <div>
+            <div
+              style="
+                font-size: 14px;
+                font-weight: 700;
+                color: #f8fafc;
+                margin-bottom: 12px;
+              "
+            >
+              <span class="lang-en">IMDSv2 Request Flow</span
+              ><span class="lang-es">Flujo de solicitud IMDSv2</span>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 10px">
+              <div class="arch-flow">
+                <div
+                  class="arch-node"
+                  style="background: #1e2d4a; color: #93c5fd"
+                >
+                  <span class="lang-en">Step 1</span
+                  ><span class="lang-es">Paso 1</span>
+                </div>
+                <div class="arch-arrow">›</div>
+                <div
+                  class="arch-node"
+                  style="
+                    background: #1e293b;
+                    color: #f8fafc;
+                    font-family: &quot;Fira Code&quot;, monospace;
+                    font-size: 13px;
+                  "
+                >
+                  PUT /latest/api/token<br /><span
+                    style="color: #94a3b8; font-size: 13px"
+                    >X-aws-ec2-metadata-token-ttl-seconds: 21600</span
+                  >
+                </div>
+                <div class="arch-arrow">›</div>
+                <div
+                  class="arch-node"
+                  style="background: #0f2a1e; color: #6ee7b7"
+                >
+                  <span class="lang-en">Token returned</span
+                  ><span class="lang-es">Token devuelto</span>
+                </div>
+              </div>
+              <div class="arch-flow">
+                <div
+                  class="arch-node"
+                  style="background: #1e2d4a; color: #93c5fd"
+                >
+                  <span class="lang-en">Step 2</span
+                  ><span class="lang-es">Paso 2</span>
+                </div>
+                <div class="arch-arrow">›</div>
+                <div
+                  class="arch-node"
+                  style="
+                    background: #1e293b;
+                    color: #f8fafc;
+                    font-family: &quot;Fira Code&quot;, monospace;
+                    font-size: 13px;
+                  "
+                >
+                  GET /latest/meta-data/<br /><span
+                    style="color: #94a3b8; font-size: 13px"
+                    >X-aws-ec2-metadata-token: &lt;token&gt;</span
+                  >
+                </div>
+                <div class="arch-arrow">›</div>
+                <div
+                  class="arch-node"
+                  style="background: #0f2a1e; color: #6ee7b7"
+                >
+                  <span class="lang-en">Metadata returned</span
+                  ><span class="lang-es">Metadatos devueltos</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
+      </section>
 
-        <div class="callout warning">
-          <strong><span class="lang-en">Metadata vs User Data:</span><span class="lang-es">Metadatos vs Datos de usuario:</span></strong> <span class="lang-en">Metadata = information <em>about</em> the instance (IP, role, type). User Data = the bootstrap script that ran at launch. Both accessible via 169.254.169.254 but at different paths.</span><span class="lang-es">Metadatos = información <em>acerca de</em> la instancia (IP, rol, tipo). Datos de usuario = el script de bootstrap que se ejecutó al inicio. Ambos accesibles vía 169.254.169.254 pero en rutas diferentes.</span>
+      <!-- ═══════════════════════════════════════ 2. CLI + MFA ═══ -->
+      <section>
+        <div class="section-label">
+          <span class="lang-en">Topic 2 — AWS CLI with MFA</span
+          ><span class="lang-es">Tema 2 — AWS CLI con MFA</span>
         </div>
-      </div>
-
-      <!-- IMDSv1 vs IMDSv2 table -->
-      <div style="margin-bottom: 20px;">
-        <div style="font-size: 14px; font-weight: 700; color: #f8fafc; margin-bottom: 12px;"><span class="lang-en">IMDSv1 vs IMDSv2</span><span class="lang-es">IMDSv1 vs IMDSv2</span></div>
-        <div class="table-wrapper">
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th><span class="lang-en">Version</span><span class="lang-es">Versión</span></th>
-                <th><span class="lang-en">How It Works</span><span class="lang-es">Cómo funciona</span></th>
-                <th><span class="lang-en">Security</span><span class="lang-es">Seguridad</span></th>
-                <th><span class="lang-en">Status</span><span class="lang-es">Estado</span></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><span class="badge badge-red">IMDSv1</span></td>
-                <td><span class="lang-en">Direct <code>GET</code> to <code>/latest/meta-data/</code></span><span class="lang-es"><code>GET</code> directo a <code>/latest/meta-data/</code></span></td>
-                <td><span class="lang-en">Less secure — no session required</span><span class="lang-es">Menos seguro — sin sesión requerida</span></td>
-                <td><span class="lang-en">Still works but discouraged</span><span class="lang-es">Funciona pero no recomendado</span></td>
-              </tr>
-              <tr>
-                <td><span class="badge badge-green">IMDSv2</span></td>
-                <td><span class="lang-en"><code>PUT</code> to get token → <code>GET</code> with token header</span><span class="lang-es"><code>PUT</code> para obtener token → <code>GET</code> con encabezado de token</span></td>
-                <td><span class="lang-en">Session-oriented, resistant to SSRF</span><span class="lang-es">Orientado a sesiones, resistente a SSRF</span></td>
-                <td><span class="lang-en">Default since 2023 (recommended)</span><span class="lang-es">Predeterminado desde 2023 (recomendado)</span></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- IMDSv2 flow -->
-      <div>
-        <div style="font-size: 14px; font-weight: 700; color: #f8fafc; margin-bottom: 12px;"><span class="lang-en">IMDSv2 Request Flow</span><span class="lang-es">Flujo de solicitud IMDSv2</span></div>
-        <div style="display: flex; flex-direction: column; gap: 10px;">
-          <div class="arch-flow">
-            <div class="arch-node" style="background: #1e2d4a; color: #93c5fd;"><span class="lang-en">Step 1</span><span class="lang-es">Paso 1</span></div>
-            <div class="arch-arrow">›</div>
-            <div class="arch-node" style="background: #1e293b; color: #f8fafc; font-family: 'Fira Code', monospace; font-size: 13px;">PUT /latest/api/token<br><span style="color: #94a3b8; font-size: 13px;">X-aws-ec2-metadata-token-ttl-seconds: 21600</span></div>
-            <div class="arch-arrow">›</div>
-            <div class="arch-node" style="background: #0f2a1e; color: #6ee7b7;"><span class="lang-en">Token returned</span><span class="lang-es">Token devuelto</span></div>
+        <div class="card">
+          <div class="card-title">
+            <span class="lang-en">Using MFA Authentication from the CLI</span
+            ><span class="lang-es">Usar autenticación MFA desde la CLI</span>
           </div>
-          <div class="arch-flow">
-            <div class="arch-node" style="background: #1e2d4a; color: #93c5fd;"><span class="lang-en">Step 2</span><span class="lang-es">Paso 2</span></div>
-            <div class="arch-arrow">›</div>
-            <div class="arch-node" style="background: #1e293b; color: #f8fafc; font-family: 'Fira Code', monospace; font-size: 13px;">GET /latest/meta-data/<br><span style="color: #94a3b8; font-size: 13px;">X-aws-ec2-metadata-token: &lt;token&gt;</span></div>
-            <div class="arch-arrow">›</div>
-            <div class="arch-node" style="background: #0f2a1e; color: #6ee7b7;"><span class="lang-en">Metadata returned</span><span class="lang-es">Metadatos devueltos</span></div>
+
+          <div
+            style="
+              display: flex;
+              flex-direction: column;
+              gap: 12px;
+              margin-bottom: 20px;
+            "
+          >
+            <div class="callout info">
+              <strong
+                ><span class="lang-en">Key mechanism:</span
+                ><span class="lang-es">Mecanismo clave:</span></strong
+              >
+              <span class="lang-en"
+                >To make CLI calls that require MFA, you must call
+                <strong>STS GetSessionToken</strong>. This returns temporary
+                credentials you use for subsequent calls. Your long-term
+                credentials alone are not enough.</span
+              ><span class="lang-es"
+                >Para hacer llamadas CLI que requieren MFA, debes llamar a
+                <strong>STS GetSessionToken</strong>. Esto devuelve credenciales
+                temporales que usas para llamadas posteriores. Tus credenciales
+                a largo plazo por sí solas no son suficientes.</span
+              >
+            </div>
+          </div>
+
+          <div
+            style="
+              display: flex;
+              flex-direction: column;
+              gap: 10px;
+              margin-bottom: 20px;
+            "
+          >
+            <div class="mfa-step">
+              <div class="mfa-step-num">1</div>
+              <div class="mfa-step-text">
+                <span class="lang-en"
+                  >Call <code>aws sts get-session-token</code> with
+                  <code>--serial-number &lt;MFA-device-ARN&gt;</code> and
+                  <code>--token-code &lt;6-digit-code&gt;</code></span
+                ><span class="lang-es"
+                  >Llama a <code>aws sts get-session-token</code> con
+                  <code>--serial-number &lt;ARN-dispositivo-MFA&gt;</code> y
+                  <code>--token-code &lt;código-6-dígitos&gt;</code></span
+                >
+              </div>
+            </div>
+            <div class="mfa-step">
+              <div class="mfa-step-num">2</div>
+              <div class="mfa-step-text">
+                <span class="lang-en"
+                  >STS returns: <strong>AccessKeyId</strong> +
+                  <strong>SecretAccessKey</strong> +
+                  <strong>SessionToken</strong> +
+                  <strong>Expiration</strong></span
+                ><span class="lang-es"
+                  >STS devuelve: <strong>AccessKeyId</strong> +
+                  <strong>SecretAccessKey</strong> +
+                  <strong>SessionToken</strong> +
+                  <strong>Expiration</strong></span
+                >
+              </div>
+            </div>
+            <div class="mfa-step">
+              <div class="mfa-step-num">3</div>
+              <div class="mfa-step-text">
+                <span class="lang-en"
+                  >Set <code>AWS_ACCESS_KEY_ID</code>,
+                  <code>AWS_SECRET_ACCESS_KEY</code>,
+                  <code>AWS_SESSION_TOKEN</code> from the response and make your
+                  API calls</span
+                ><span class="lang-es"
+                  >Establece <code>AWS_ACCESS_KEY_ID</code>,
+                  <code>AWS_SECRET_ACCESS_KEY</code>,
+                  <code>AWS_SESSION_TOKEN</code> de la respuesta e haz tus
+                  llamadas API</span
+                >
+              </div>
+            </div>
+          </div>
+
+          <div class="callout warning">
+            <strong
+              ><span class="lang-en">Exam pattern:</span
+              ><span class="lang-es">Patrón del examen:</span></strong
+            >
+            <span class="lang-en"
+              >"MFA with CLI" always points to
+              <strong>STS GetSessionToken</strong>. The serial number is the ARN
+              of the virtual MFA device registered with the IAM user.</span
+            ><span class="lang-es"
+              >"MFA con CLI" siempre apunta a
+              <strong>STS GetSessionToken</strong>. El número de serie es el ARN
+              del dispositivo MFA virtual registrado con el usuario de
+              IAM.</span
+            >
           </div>
         </div>
-      </div>
-    </div>
-  </section>
+      </section>
 
-  <!-- ═══════════════════════════════════════ 2. CLI + MFA ═══ -->
-  <section>
-    <div class="section-label"><span class="lang-en">Topic 2 — AWS CLI with MFA</span><span class="lang-es">Tema 2 — AWS CLI con MFA</span></div>
-    <div class="card">
-      <div class="card-title"><span class="lang-en">Using MFA Authentication from the CLI</span><span class="lang-es">Usar autenticación MFA desde la CLI</span></div>
-
-      <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px;">
-        <div class="callout info">
-          <strong><span class="lang-en">Key mechanism:</span><span class="lang-es">Mecanismo clave:</span></strong> <span class="lang-en">To make CLI calls that require MFA, you must call <strong>STS GetSessionToken</strong>. This returns temporary credentials you use for subsequent calls. Your long-term credentials alone are not enough.</span><span class="lang-es">Para hacer llamadas CLI que requieren MFA, debes llamar a <strong>STS GetSessionToken</strong>. Esto devuelve credenciales temporales que usas para llamadas posteriores. Tus credenciales a largo plazo por sí solas no son suficientes.</span>
+      <!-- ════════════════════════════ 3. Exponential Backoff — ANIMATED ═══ -->
+      <section>
+        <div class="section-label">
+          <span class="lang-en"
+            >Topic 3 — Exponential Backoff &amp; Service Limits</span
+          ><span class="lang-es"
+            >Tema 3 — Retroceso exponencial y límites de servicio</span
+          >
         </div>
-      </div>
-
-      <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px;">
-        <div class="mfa-step">
-          <div class="mfa-step-num">1</div>
-          <div class="mfa-step-text"><span class="lang-en">Call <code>aws sts get-session-token</code> with <code>--serial-number &lt;MFA-device-ARN&gt;</code> and <code>--token-code &lt;6-digit-code&gt;</code></span><span class="lang-es">Llama a <code>aws sts get-session-token</code> con <code>--serial-number &lt;ARN-dispositivo-MFA&gt;</code> y <code>--token-code &lt;código-6-dígitos&gt;</code></span></div>
-        </div>
-        <div class="mfa-step">
-          <div class="mfa-step-num">2</div>
-          <div class="mfa-step-text"><span class="lang-en">STS returns: <strong>AccessKeyId</strong> + <strong>SecretAccessKey</strong> + <strong>SessionToken</strong> + <strong>Expiration</strong></span><span class="lang-es">STS devuelve: <strong>AccessKeyId</strong> + <strong>SecretAccessKey</strong> + <strong>SessionToken</strong> + <strong>Expiration</strong></span></div>
-        </div>
-        <div class="mfa-step">
-          <div class="mfa-step-num">3</div>
-          <div class="mfa-step-text"><span class="lang-en">Set <code>AWS_ACCESS_KEY_ID</code>, <code>AWS_SECRET_ACCESS_KEY</code>, <code>AWS_SESSION_TOKEN</code> from the response and make your API calls</span><span class="lang-es">Establece <code>AWS_ACCESS_KEY_ID</code>, <code>AWS_SECRET_ACCESS_KEY</code>, <code>AWS_SESSION_TOKEN</code> de la respuesta e haz tus llamadas API</span></div>
-        </div>
-      </div>
-
-      <div class="callout warning">
-        <strong><span class="lang-en">Exam pattern:</span><span class="lang-es">Patrón del examen:</span></strong> <span class="lang-en">"MFA with CLI" always points to <strong>STS GetSessionToken</strong>. The serial number is the ARN of the virtual MFA device registered with the IAM user.</span><span class="lang-es">"MFA con CLI" siempre apunta a <strong>STS GetSessionToken</strong>. El número de serie es el ARN del dispositivo MFA virtual registrado con el usuario de IAM.</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- ════════════════════════════ 3. Exponential Backoff — ANIMATED ═══ -->
-  <section>
-    <div class="section-label"><span class="lang-en">Topic 3 — Exponential Backoff &amp; Service Limits</span><span class="lang-es">Tema 3 — Retroceso exponencial y límites de servicio</span></div>
-    <div class="card">
-      <div class="card-title"><span class="lang-en">API Rate Limits, Service Quotas &amp; Retry Strategy</span><span class="lang-es">Límites de velocidad de API, cuotas de servicio y estrategia de reintentos</span></div>
-      <p style="color: #94a3b8; font-size: 14px; margin-bottom: 16px;"><span class="lang-en">Step through each concept below. Understanding the difference between limit types determines the correct solution.</span><span class="lang-es">Recorre cada concepto a continuación. Comprender la diferencia entre tipos de límites determina la solución correcta.</span></p>
-
-      <div class="anim-demo" id="backoff-demo"></div>
-      <div class="anim-controls">
-        <button class="nav-btn" id="backoff-demo-prev" onclick="prev('backoff-demo')">&#8592; <span class="lang-en">Prev</span><span class="lang-es">Anterior</span></button>
-        <button class="nav-btn" id="backoff-demo-next" onclick="next('backoff-demo')"><span class="lang-en">Next</span><span class="lang-es">Siguiente</span> &#8594;</button>
-        <div class="step-dots" id="backoff-demo-dots"></div>
-        <span class="step-counter" id="backoff-demo-counter"></span>
-        <button class="restart-btn" onclick="restart('backoff-demo')">&#8635; <span class="lang-en">Restart</span><span class="lang-es">Reiniciar</span></button>
-      </div>
-    </div>
-  </section>
-
-  <!-- ════════════════════════ 4. Credentials Provider Chain — ANIMATED ═══ -->
-  <section>
-    <div class="section-label"><span class="lang-en">Topic 4 — AWS Credentials Provider Chain</span><span class="lang-es">Tema 4 — Cadena de proveedores de credenciales AWS</span></div>
-    <div class="card">
-      <div class="card-title"><span class="lang-en">Credential Resolution Order (First Match Wins)</span><span class="lang-es">Orden de resolución de credenciales (gana el primero que coincide)</span></div>
-      <p style="color: #94a3b8; font-size: 14px; margin-bottom: 16px;"><span class="lang-en">The CLI and SDK check sources in a fixed order. The first source that provides credentials wins — step through to see each level.</span><span class="lang-es">La CLI y el SDK verifican fuentes en un orden fijo. La primera fuente que proporciona credenciales gana — recorre para ver cada nivel.</span></p>
-
-      <div class="anim-demo" id="creds-demo"></div>
-      <div class="anim-controls">
-        <button class="nav-btn" id="creds-demo-prev" onclick="prev('creds-demo')">&#8592; <span class="lang-en">Prev</span><span class="lang-es">Anterior</span></button>
-        <button class="nav-btn" id="creds-demo-next" onclick="next('creds-demo')"><span class="lang-en">Next</span><span class="lang-es">Siguiente</span> &#8594;</button>
-        <div class="step-dots" id="creds-demo-dots"></div>
-        <span class="step-counter" id="creds-demo-counter"></span>
-        <button class="restart-btn" onclick="restart('creds-demo')">&#8635; <span class="lang-en">Restart</span><span class="lang-es">Reiniciar</span></button>
-      </div>
-    </div>
-  </section>
-
-  <!-- ═══════════════════════════════════════════ 5. SigV4 ═══ -->
-  <section>
-    <div class="section-label"><span class="lang-en">Topic 5 — AWS Signature Version 4 (SigV4)</span><span class="lang-es">Tema 5 — Versión de firma AWS 4 (SigV4)</span></div>
-    <div class="card">
-      <div class="card-title"><span class="lang-en">How Every AWS API Request Gets Authenticated</span><span class="lang-es">Cómo se autentica cada solicitud de API de AWS</span></div>
-
-      <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px;">
-        <div class="callout info">
-          <strong><span class="lang-en">What is SigV4?</span><span class="lang-es">¿Qué es SigV4?</span></strong> <span class="lang-en">Every request to AWS APIs must be <strong>cryptographically signed</strong> using SigV4. The AWS CLI and SDKs handle this automatically — you only need to understand it for custom HTTP clients and pre-signed URLs.</span><span class="lang-es">Cada solicitud a las API de AWS debe ser <strong>firmada criptográficamente</strong> usando SigV4. La CLI de AWS y los SDK manejan esto automáticamente — solo necesitas entenderlo para clientes HTTP personalizados y URLs prefirmadas.</span>
-        </div>
-      </div>
-
-      <div class="grid-2" style="margin-bottom: 16px;">
-        <div class="sigv4-box">
-          <div class="sigv4-method"><span class="lang-en">Method 1 — Authorization HTTP Header</span><span class="lang-es">Método 1 — Encabezado HTTP de autorización</span></div>
-          <div style="font-family: 'Fira Code', monospace; font-size: 13px; color: #fb923c; background: #1a1a2e; padding: 10px 14px; border-radius: 8px; line-height: 1.7; overflow-x: auto;">
-            Authorization: AWS4-HMAC-SHA256<br>
-            Credential=AKID/20231201/us-east-1/s3/aws4_request,<br>
-            SignedHeaders=host;x-amz-date,<br>
-            Signature=abc123...
+        <div class="card">
+          <div class="card-title">
+            <span class="lang-en"
+              >API Rate Limits, Service Quotas &amp; Retry Strategy</span
+            ><span class="lang-es"
+              >Límites de velocidad de API, cuotas de servicio y estrategia de
+              reintentos</span
+            >
           </div>
-          <div class="sigv4-detail"><span class="lang-en">Used by the AWS CLI and SDK for all regular API calls.</span><span class="lang-es">Utilizado por la CLI de AWS y el SDK para todas las llamadas API regulares.</span></div>
-        </div>
-        <div class="sigv4-box">
-          <div class="sigv4-method"><span class="lang-en">Method 2 — Query String Parameter</span><span class="lang-es">Método 2 — Parámetro de cadena de consulta</span></div>
-          <div style="font-family: 'Fira Code', monospace; font-size: 13px; color: #fb923c; background: #1a1a2e; padding: 10px 14px; border-radius: 8px; line-height: 1.7; overflow-x: auto;">
-            https://bucket.s3.amazonaws.com/file.pdf<br>
-            ?X-Amz-Algorithm=AWS4-HMAC-SHA256<br>
-            &amp;X-Amz-Credential=...&amp;X-Amz-Expires=3600<br>
-            &amp;X-Amz-Signature=abc123...
+          <p style="color: #94a3b8; font-size: 14px; margin-bottom: 16px">
+            <span class="lang-en"
+              >Step through each concept below. Understanding the difference
+              between limit types determines the correct solution.</span
+            ><span class="lang-es"
+              >Recorre cada concepto a continuación. Comprender la diferencia
+              entre tipos de límites determina la solución correcta.</span
+            >
+          </p>
+
+          <div class="anim-demo" id="backoff-demo"></div>
+          <div class="anim-controls">
+            <button
+              class="nav-btn"
+              id="backoff-demo-prev"
+              onclick="prev('backoff-demo')"
+            >
+              &#8592; <span class="lang-en">Prev</span
+              ><span class="lang-es">Anterior</span>
+            </button>
+            <button
+              class="nav-btn"
+              id="backoff-demo-next"
+              onclick="next('backoff-demo')"
+            >
+              <span class="lang-en">Next</span
+              ><span class="lang-es">Siguiente</span> &#8594;
+            </button>
+            <div class="step-dots" id="backoff-demo-dots"></div>
+            <span class="step-counter" id="backoff-demo-counter"></span>
+            <button class="restart-btn" onclick="restart('backoff-demo')">
+              &#8635; <span class="lang-en">Restart</span
+              ><span class="lang-es">Reiniciar</span>
+            </button>
           </div>
-          <div class="sigv4-detail"><span class="lang-en">Used by <strong>S3 pre-signed URLs</strong>. The signature is embedded directly in the URL.</span><span class="lang-es">Utilizado por <strong>URLs prefirmadas de S3</strong>. La firma está incrustada directamente en la URL.</span></div>
         </div>
-      </div>
+      </section>
 
-      <div class="callout success">
-        <strong><span class="lang-en">Exam shortcut:</span><span class="lang-es">Atajo del examen:</span></strong> <span class="lang-en">"Pre-signed URL" → always uses <code>X-Amz-Signature</code> in the query string (Method 2). Regular SDK/CLI calls → always use the <code>Authorization</code> HTTP header (Method 1).</span><span class="lang-es">"URL prefirmada" → siempre usa <code>X-Amz-Signature</code> en la cadena de consulta (Método 2). Llamadas SDK/CLI regulares → siempre usa el encabezado HTTP <code>Authorization</code> (Método 1).</span>
-      </div>
-    </div>
-  </section>
+      <!-- ════════════════════════ 4. Credentials Provider Chain — ANIMATED ═══ -->
+      <section>
+        <div class="section-label">
+          <span class="lang-en">Topic 4 — AWS Credentials Provider Chain</span
+          ><span class="lang-es"
+            >Tema 4 — Cadena de proveedores de credenciales AWS</span
+          >
+        </div>
+        <div class="card">
+          <div class="card-title">
+            <span class="lang-en"
+              >Credential Resolution Order (First Match Wins)</span
+            ><span class="lang-es"
+              >Orden de resolución de credenciales (gana el primero que
+              coincide)</span
+            >
+          </div>
+          <p style="color: #94a3b8; font-size: 14px; margin-bottom: 16px">
+            <span class="lang-en"
+              >The CLI and SDK check sources in a fixed order. The first source
+              that provides credentials wins — step through to see each
+              level.</span
+            ><span class="lang-es"
+              >La CLI y el SDK verifican fuentes en un orden fijo. La primera
+              fuente que proporciona credenciales gana — recorre para ver cada
+              nivel.</span
+            >
+          </p>
 
-  <!-- ═══════════════════════════════════════ EXAM TIPS ═══ -->
-  <section>
-    <div class="section-label"><span class="lang-en">Exam Quick-Fire Tips</span><span class="lang-es">Consejos para el Examen - Rápida Sucesión</span></div>
-    <div class="tips-grid">
+          <div class="anim-demo" id="creds-demo"></div>
+          <div class="anim-controls">
+            <button
+              class="nav-btn"
+              id="creds-demo-prev"
+              onclick="prev('creds-demo')"
+            >
+              &#8592; <span class="lang-en">Prev</span
+              ><span class="lang-es">Anterior</span>
+            </button>
+            <button
+              class="nav-btn"
+              id="creds-demo-next"
+              onclick="next('creds-demo')"
+            >
+              <span class="lang-en">Next</span
+              ><span class="lang-es">Siguiente</span> &#8594;
+            </button>
+            <div class="step-dots" id="creds-demo-dots"></div>
+            <span class="step-counter" id="creds-demo-counter"></span>
+            <button class="restart-btn" onclick="restart('creds-demo')">
+              &#8635; <span class="lang-en">Restart</span
+              ><span class="lang-es">Reiniciar</span>
+            </button>
+          </div>
+        </div>
+      </section>
 
-      <div class="tip-card">
-        <div class="tip-trigger"><span class="lang-en">Scenario: "What is the IMDS URL?"</span><span class="lang-es">Escenario: "¿Cuál es la URL de IMDS?"</span></div>
-        <hr class="divider" />
-        <div class="tip-answer">&#8594; <span class="lang-en">169.254.169.254 (link-local, instance-only)</span><span class="lang-es">169.254.169.254 (link-local, solo para instancias)</span></div>
-      </div>
+      <!-- ═══════════════════════════════════════════ 5. SigV4 ═══ -->
+      <section>
+        <div class="section-label">
+          <span class="lang-en">Topic 5 — AWS Signature Version 4 (SigV4)</span
+          ><span class="lang-es">Tema 5 — Versión de firma AWS 4 (SigV4)</span>
+        </div>
+        <div class="card">
+          <div class="card-title">
+            <span class="lang-en"
+              >How Every AWS API Request Gets Authenticated</span
+            ><span class="lang-es"
+              >Cómo se autentica cada solicitud de API de AWS</span
+            >
+          </div>
 
-      <div class="tip-card">
-        <div class="tip-trigger"><span class="lang-en">Scenario: "IMDS returns the role — can it return the policy?"</span><span class="lang-es">Escenario: "IMDS devuelve el rol — ¿puede devolver la política?"</span></div>
-        <hr class="divider" />
-        <div class="tip-answer">&#8594; <span class="lang-en">NO. Role name only — never the policy document.</span><span class="lang-es">NO. Solo el nombre del rol — nunca el documento de política.</span></div>
-      </div>
+          <div
+            style="
+              display: flex;
+              flex-direction: column;
+              gap: 12px;
+              margin-bottom: 20px;
+            "
+          >
+            <div class="callout info">
+              <strong
+                ><span class="lang-en">What is SigV4?</span
+                ><span class="lang-es">¿Qué es SigV4?</span></strong
+              >
+              <span class="lang-en"
+                >Every request to AWS APIs must be
+                <strong>cryptographically signed</strong> using SigV4. The AWS
+                CLI and SDKs handle this automatically — you only need to
+                understand it for custom HTTP clients and pre-signed URLs.</span
+              ><span class="lang-es"
+                >Cada solicitud a las API de AWS debe ser
+                <strong>firmada criptográficamente</strong> usando SigV4. La CLI
+                de AWS y los SDK manejan esto automáticamente — solo necesitas
+                entenderlo para clientes HTTP personalizados y URLs
+                prefirmadas.</span
+              >
+            </div>
+          </div>
 
-      <div class="tip-card">
-        <div class="tip-trigger"><span class="lang-en">Scenario: "IMDSv2 requires…"</span><span class="lang-es">Escenario: "IMDSv2 requiere..."</span></div>
-        <hr class="divider" />
-        <div class="tip-answer">&#8594; <span class="lang-en">PUT to get session token first, then GET with X-aws-ec2-metadata-token header</span><span class="lang-es">PUT para obtener token de sesión primero, luego GET con encabezado X-aws-ec2-metadata-token</span></div>
-      </div>
+          <div class="grid-2" style="margin-bottom: 16px">
+            <div class="sigv4-box">
+              <div class="sigv4-method">
+                <span class="lang-en">Method 1 — Authorization HTTP Header</span
+                ><span class="lang-es"
+                  >Método 1 — Encabezado HTTP de autorización</span
+                >
+              </div>
+              <div
+                style="
+                  font-family: &quot;Fira Code&quot;, monospace;
+                  font-size: 13px;
+                  color: #fb923c;
+                  background: #1a1a2e;
+                  padding: 10px 14px;
+                  border-radius: 8px;
+                  line-height: 1.7;
+                  overflow-x: auto;
+                "
+              >
+                Authorization: AWS4-HMAC-SHA256<br />
+                Credential=AKID/20231201/us-east-1/s3/aws4_request,<br />
+                SignedHeaders=host;x-amz-date,<br />
+                Signature=abc123...
+              </div>
+              <div class="sigv4-detail">
+                <span class="lang-en"
+                  >Used by the AWS CLI and SDK for all regular API calls.</span
+                ><span class="lang-es"
+                  >Utilizado por la CLI de AWS y el SDK para todas las llamadas
+                  API regulares.</span
+                >
+              </div>
+            </div>
+            <div class="sigv4-box">
+              <div class="sigv4-method">
+                <span class="lang-en">Method 2 — Query String Parameter</span
+                ><span class="lang-es"
+                  >Método 2 — Parámetro de cadena de consulta</span
+                >
+              </div>
+              <div
+                style="
+                  font-family: &quot;Fira Code&quot;, monospace;
+                  font-size: 13px;
+                  color: #fb923c;
+                  background: #1a1a2e;
+                  padding: 10px 14px;
+                  border-radius: 8px;
+                  line-height: 1.7;
+                  overflow-x: auto;
+                "
+              >
+                https://bucket.s3.amazonaws.com/file.pdf<br />
+                ?X-Amz-Algorithm=AWS4-HMAC-SHA256<br />
+                &amp;X-Amz-Credential=...&amp;X-Amz-Expires=3600<br />
+                &amp;X-Amz-Signature=abc123...
+              </div>
+              <div class="sigv4-detail">
+                <span class="lang-en"
+                  >Used by <strong>S3 pre-signed URLs</strong>. The signature is
+                  embedded directly in the URL.</span
+                ><span class="lang-es"
+                  >Utilizado por <strong>URLs prefirmadas de S3</strong>. La
+                  firma está incrustada directamente en la URL.</span
+                >
+              </div>
+            </div>
+          </div>
 
-      <div class="tip-card">
-        <div class="tip-trigger"><span class="lang-en">Scenario: "Use MFA with CLI"</span><span class="lang-es">Escenario: "Usar MFA con CLI"</span></div>
-        <hr class="divider" />
-        <div class="tip-answer">&#8594; <span class="lang-en">Call STS GetSessionToken with --serial-number + --token-code</span><span class="lang-es">Llama a STS GetSessionToken con --serial-number + --token-code</span></div>
-      </div>
+          <div class="callout success">
+            <strong
+              ><span class="lang-en">Exam shortcut:</span
+              ><span class="lang-es">Atajo del examen:</span></strong
+            >
+            <span class="lang-en"
+              >"Pre-signed URL" → always uses <code>X-Amz-Signature</code> in
+              the query string (Method 2). Regular SDK/CLI calls → always use
+              the <code>Authorization</code> HTTP header (Method 1).</span
+            ><span class="lang-es"
+              >"URL prefirmada" → siempre usa <code>X-Amz-Signature</code> en la
+              cadena de consulta (Método 2). Llamadas SDK/CLI regulares →
+              siempre usa el encabezado HTTP <code>Authorization</code> (Método
+              1).</span
+            >
+          </div>
+        </div>
+      </section>
 
-      <div class="tip-card">
-        <div class="tip-trigger"><span class="lang-en">Scenario: "App gets ThrottlingException"</span><span class="lang-es">Escenario: "La aplicación recibe ThrottlingException"</span></div>
-        <hr class="divider" />
-        <div class="tip-answer">&#8594; <span class="lang-en">Implement Exponential Backoff (doubles wait: 1s → 2s → 4s...)</span><span class="lang-es">Implementa retroceso exponencial (duplica espera: 1s → 2s → 4s...)</span></div>
-      </div>
+      <!-- ═══════════════════════════════════════ EXAM TIPS ═══ -->
+      <section>
+        <div class="section-label">
+          <span class="lang-en">Exam Quick-Fire Tips</span
+          ><span class="lang-es"
+            >Consejos para el Examen - Rápida Sucesión</span
+          >
+        </div>
+        <div class="tips-grid">
+          <div class="tip-card">
+            <div class="tip-trigger">
+              <span class="lang-en">Scenario: "What is the IMDS URL?"</span
+              ><span class="lang-es"
+                >Escenario: "¿Cuál es la URL de IMDS?"</span
+              >
+            </div>
+            <hr class="divider" />
+            <div class="tip-answer">
+              &#8594;
+              <span class="lang-en"
+                >169.254.169.254 (link-local, instance-only)</span
+              ><span class="lang-es"
+                >169.254.169.254 (link-local, solo para instancias)</span
+              >
+            </div>
+          </div>
 
-      <div class="tip-card">
-        <div class="tip-trigger"><span class="lang-en">Scenario: "When should I retry?"</span><span class="lang-es">Escenario: "¿Cuándo debo reintentar?"</span></div>
-        <hr class="divider" />
-        <div class="tip-answer">&#8594; <span class="lang-en">Retry on 5XX errors and ThrottlingException. NEVER retry 4XX (fix the code).</span><span class="lang-es">Reintenta en errores 5XX y ThrottlingException. NUNCA reintentas 4XX (corrige el código).</span></div>
-      </div>
+          <div class="tip-card">
+            <div class="tip-trigger">
+              <span class="lang-en"
+                >Scenario: "IMDS returns the role — can it return the
+                policy?"</span
+              ><span class="lang-es"
+                >Escenario: "IMDS devuelve el rol — ¿puede devolver la
+                política?"</span
+              >
+            </div>
+            <hr class="divider" />
+            <div class="tip-answer">
+              &#8594;
+              <span class="lang-en"
+                >NO. Role name only — never the policy document.</span
+              ><span class="lang-es"
+                >NO. Solo el nombre del rol — nunca el documento de
+                política.</span
+              >
+            </div>
+          </div>
 
-      <div class="tip-card">
-        <div class="tip-trigger"><span class="lang-en">Scenario: "SDK vs custom HTTP — who handles backoff?"</span><span class="lang-es">Escenario: "SDK vs HTTP personalizado — ¿quién maneja el retroceso?"</span></div>
-        <hr class="divider" />
-        <div class="tip-answer">&#8594; <span class="lang-en">SDK has it built-in. Custom HTTP calls = you implement it yourself.</span><span class="lang-es">SDK lo tiene integrado. Llamadas HTTP personalizadas = lo implementas tú mismo.</span></div>
-      </div>
+          <div class="tip-card">
+            <div class="tip-trigger">
+              <span class="lang-en">Scenario: "IMDSv2 requires…"</span
+              ><span class="lang-es">Escenario: "IMDSv2 requiere..."</span>
+            </div>
+            <hr class="divider" />
+            <div class="tip-answer">
+              &#8594;
+              <span class="lang-en"
+                >PUT to get session token first, then GET with
+                X-aws-ec2-metadata-token header</span
+              ><span class="lang-es"
+                >PUT para obtener token de sesión primero, luego GET con
+                encabezado X-aws-ec2-metadata-token</span
+              >
+            </div>
+          </div>
 
-      <div class="tip-card">
-        <div class="tip-trigger"><span class="lang-en">Scenario: "EC2 app has too many IAM permissions"</span><span class="lang-es">Escenario: "Aplicación EC2 tiene demasiados permisos de IAM"</span></div>
-        <hr class="divider" />
-        <div class="tip-answer">&#8594; <span class="lang-en">Leftover environment variables (AWS_ACCESS_KEY_ID etc.) override Instance Profile — unset them.</span><span class="lang-es">Las variables de entorno restantes (AWS_ACCESS_KEY_ID etc.) anulan el perfil de instancia — deshabilítalas.</span></div>
-      </div>
+          <div class="tip-card">
+            <div class="tip-trigger">
+              <span class="lang-en">Scenario: "Use MFA with CLI"</span
+              ><span class="lang-es">Escenario: "Usar MFA con CLI"</span>
+            </div>
+            <hr class="divider" />
+            <div class="tip-answer">
+              &#8594;
+              <span class="lang-en"
+                >Call STS GetSessionToken with --serial-number +
+                --token-code</span
+              ><span class="lang-es"
+                >Llama a STS GetSessionToken con --serial-number +
+                --token-code</span
+              >
+            </div>
+          </div>
 
-      <div class="tip-card">
-        <div class="tip-trigger"><span class="lang-en">Scenario: "Credentials from env vars vs Instance Profile"</span><span class="lang-es">Escenario: "Credenciales de variables de entorno vs Perfil de instancia"</span></div>
-        <hr class="divider" />
-        <div class="tip-answer">&#8594; <span class="lang-en">Env vars WIN (higher priority). Instance Profile is lowest priority.</span><span class="lang-es">Las variables de entorno GANAN (prioridad más alta). Perfil de instancia es prioridad más baja.</span></div>
-      </div>
+          <div class="tip-card">
+            <div class="tip-trigger">
+              <span class="lang-en"
+                >Scenario: "App gets ThrottlingException"</span
+              ><span class="lang-es"
+                >Escenario: "La aplicación recibe ThrottlingException"</span
+              >
+            </div>
+            <hr class="divider" />
+            <div class="tip-answer">
+              &#8594;
+              <span class="lang-en"
+                >Implement Exponential Backoff (doubles wait: 1s → 2s →
+                4s...)</span
+              ><span class="lang-es"
+                >Implementa retroceso exponencial (duplica espera: 1s → 2s →
+                4s...)</span
+              >
+            </div>
+          </div>
 
-      <div class="tip-card">
-        <div class="tip-trigger"><span class="lang-en">Scenario: "App running inside AWS — where to put credentials?"</span><span class="lang-es">Escenario: "Aplicación ejecutándose dentro de AWS — ¿dónde poner credenciales?"</span></div>
-        <hr class="divider" />
-        <div class="tip-answer">&#8594; <span class="lang-en">IAM Roles (never store keys in code or env vars inside AWS)</span><span class="lang-es">Roles de IAM (nunca almacenes claves en código o variables de entorno dentro de AWS)</span></div>
-      </div>
+          <div class="tip-card">
+            <div class="tip-trigger">
+              <span class="lang-en">Scenario: "When should I retry?"</span
+              ><span class="lang-es"
+                >Escenario: "¿Cuándo debo reintentar?"</span
+              >
+            </div>
+            <hr class="divider" />
+            <div class="tip-answer">
+              &#8594;
+              <span class="lang-en"
+                >Retry on 5XX errors and ThrottlingException. NEVER retry 4XX
+                (fix the code).</span
+              ><span class="lang-es"
+                >Reintenta en errores 5XX y ThrottlingException. NUNCA
+                reintentas 4XX (corrige el código).</span
+              >
+            </div>
+          </div>
 
-      <div class="tip-card">
-        <div class="tip-trigger"><span class="lang-en">Scenario: "App running outside AWS — where to put credentials?"</span><span class="lang-es">Escenario: "Aplicación ejecutándose fuera de AWS — ¿dónde poner credenciales?"</span></div>
-        <hr class="divider" />
-        <div class="tip-answer">&#8594; <span class="lang-en">Environment variables or named profiles (~/.aws/credentials)</span><span class="lang-es">Variables de entorno o perfiles nombrados (~/.aws/credentials)</span></div>
-      </div>
+          <div class="tip-card">
+            <div class="tip-trigger">
+              <span class="lang-en"
+                >Scenario: "SDK vs custom HTTP — who handles backoff?"</span
+              ><span class="lang-es"
+                >Escenario: "SDK vs HTTP personalizado — ¿quién maneja el
+                retroceso?"</span
+              >
+            </div>
+            <hr class="divider" />
+            <div class="tip-answer">
+              &#8594;
+              <span class="lang-en"
+                >SDK has it built-in. Custom HTTP calls = you implement it
+                yourself.</span
+              ><span class="lang-es"
+                >SDK lo tiene integrado. Llamadas HTTP personalizadas = lo
+                implementas tú mismo.</span
+              >
+            </div>
+          </div>
 
-      <div class="tip-card">
-        <div class="tip-trigger"><span class="lang-en">Scenario: "Pre-signed URL — what signature mechanism?"</span><span class="lang-es">Escenario: "URL prefirmada — ¿qué mecanismo de firma?"</span></div>
-        <hr class="divider" />
-        <div class="tip-answer">&#8594; <span class="lang-en">SigV4 with X-Amz-Signature in the query string (not in header)</span><span class="lang-es">SigV4 con X-Amz-Signature en la cadena de consulta (no en encabezado)</span></div>
-      </div>
+          <div class="tip-card">
+            <div class="tip-trigger">
+              <span class="lang-en"
+                >Scenario: "EC2 app has too many IAM permissions"</span
+              ><span class="lang-es"
+                >Escenario: "Aplicación EC2 tiene demasiados permisos de
+                IAM"</span
+              >
+            </div>
+            <hr class="divider" />
+            <div class="tip-answer">
+              &#8594;
+              <span class="lang-en"
+                >Leftover environment variables (AWS_ACCESS_KEY_ID etc.)
+                override Instance Profile — unset them.</span
+              ><span class="lang-es"
+                >Las variables de entorno restantes (AWS_ACCESS_KEY_ID etc.)
+                anulan el perfil de instancia — deshabilítalas.</span
+              >
+            </div>
+          </div>
 
-    </div>
-  </section>
+          <div class="tip-card">
+            <div class="tip-trigger">
+              <span class="lang-en"
+                >Scenario: "Credentials from env vars vs Instance Profile"</span
+              ><span class="lang-es"
+                >Escenario: "Credenciales de variables de entorno vs Perfil de
+                instancia"</span
+              >
+            </div>
+            <hr class="divider" />
+            <div class="tip-answer">
+              &#8594;
+              <span class="lang-en"
+                >Env vars WIN (higher priority). Instance Profile is lowest
+                priority.</span
+              ><span class="lang-es"
+                >Las variables de entorno GANAN (prioridad más alta). Perfil de
+                instancia es prioridad más baja.</span
+              >
+            </div>
+          </div>
 
-</main>
+          <div class="tip-card">
+            <div class="tip-trigger">
+              <span class="lang-en"
+                >Scenario: "App running inside AWS — where to put
+                credentials?"</span
+              ><span class="lang-es"
+                >Escenario: "Aplicación ejecutándose dentro de AWS — ¿dónde
+                poner credenciales?"</span
+              >
+            </div>
+            <hr class="divider" />
+            <div class="tip-answer">
+              &#8594;
+              <span class="lang-en"
+                >IAM Roles (never store keys in code or env vars inside
+                AWS)</span
+              ><span class="lang-es"
+                >Roles de IAM (nunca almacenes claves en código o variables de
+                entorno dentro de AWS)</span
+              >
+            </div>
+          </div>
 
-<!-- ═══════════════════════════════════════ JAVASCRIPT ═══ -->
-<script>
-var DEMOS = {
-  'backoff-demo': {
-    steps: [
-      {
-        body: '<div style="display:flex;flex-direction:column;gap:16px;">' +
-          '<div class="step-title"><span class="lang-en">Two Types of AWS Limits</span><span class="lang-es">Dos tipos de límites de AWS</span></div>' +
-          '<div class="grid-2">' +
-            '<div style="background:#1e293b;border:1px solid #334155;border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:8px;">' +
-              '<div style="font-size:14px;font-weight:700;color:#93c5fd;"><span class="lang-en">API Rate Limits</span><span class="lang-es">Límites de velocidad de API</span></div>' +
-              '<div style="font-size:13px;color:#94a3b8;"><span class="lang-en">Limit on how many API calls per second. Example: <code>DescribeInstances</code> = 100 calls/sec for EC2.</span><span class="lang-es">Límite de cuántas llamadas API por segundo. Ejemplo: <code>DescribeInstances</code> = 100 llamadas/seg para EC2.</span></div>' +
-              '<div style="font-size:13px;color:#94a3b8;"><span class="lang-en">When exceeded: you receive <span style="color:#fca5a5;font-weight:700;">ThrottlingException</span></span><span class="lang-es">Cuando se excede: recibes <span style="color:#fca5a5;font-weight:700;">ThrottlingException</span></span></div>' +
-              '<div style="font-size:13px;color:#6ee7b7;font-weight:600;"><span class="lang-en">Solution: Exponential Backoff</span><span class="lang-es">Solución: Retroceso Exponencial</span></div>' +
-            '</div>' +
-            '<div style="background:#1e293b;border:1px solid #334155;border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:8px;">' +
-              '<div style="font-size:14px;font-weight:700;color:#c084fc;"><span class="lang-en">Service Quotas</span><span class="lang-es">Cuotas de servicio</span></div>' +
-              '<div style="font-size:13px;color:#94a3b8;"><span class="lang-en">Limit on number of resources. Example: 1,150 on-demand EC2 instances per region.</span><span class="lang-es">Límite en número de recursos. Ejemplo: 1.150 instancias EC2 bajo demanda por región.</span></div>' +
-              '<div style="font-size:13px;color:#94a3b8;"><span class="lang-en">These are <strong style="color:#f8fafc;">soft limits</strong> — can be increased.</span><span class="lang-es">Estos son <strong style="color:#f8fafc;">límites blandos</strong> — pueden ser aumentados.</span></div>' +
-              '<div style="font-size:13px;color:#6ee7b7;font-weight:600;"><span class="lang-en">Solution: Request increase via Support or Service Quotas API</span><span class="lang-es">Solución: Solicita aumento vía Support o Service Quotas API</span></div>' +
-            '</div>' +
-          '</div>' +
-          '<div style="background:rgba(99,102,241,0.08);border-left:4px solid #6366f1;border-radius:10px;padding:14px 18px;font-size:13px;color:#c7d2fe;">These are <strong>different problems with different solutions</strong>. Confusing them is a common exam trap.</div>' +
-        '</div>'
-      },
-      {
-        body: '<div style="display:flex;flex-direction:column;gap:16px;">' +
-          '<div class="step-title"><span class="lang-en">Exponential Backoff — API Rate Limit Solution</span><span class="lang-es">Retroceso Exponencial — Solución de límite de velocidad API</span></div>' +
-          '<div style="font-size:13px;color:#94a3b8;margin-bottom:4px;"><span class="lang-en">Each retry waits <strong style="color:#f8fafc;">twice as long</strong> as the previous. This prevents overwhelming the service while retrying.</span><span class="lang-es">Cada reintento espera <strong style="color:#f8fafc;">el doble de tiempo</strong> que el anterior. Esto evita sobrecargar el servicio mientras se reintenta.</span></div>' +
-          '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">' +
-            '<div style="background:#f97316;color:#0f172a;font-weight:700;padding:10px 16px;border-radius:8px;font-size:13px;text-align:center;"><span class="lang-en">Attempt 1</span><span class="lang-es">Intento 1</span><br><span style="font-size:13px;"><span class="lang-en">0s wait</span><span class="lang-es">0s espera</span></span></div>' +
-            '<div style="color:#475569;font-size:16px;">›</div>' +
-            '<div style="background:#ea580c;color:#fff;font-weight:700;padding:10px 16px;border-radius:8px;font-size:13px;text-align:center;"><span class="lang-en">Retry 1</span><span class="lang-es">Reintento 1</span><br><span style="font-size:13px;"><span class="lang-en">1s wait</span><span class="lang-es">1s espera</span></span></div>' +
-            '<div style="color:#475569;font-size:16px;">›</div>' +
-            '<div style="background:#c2410c;color:#fff;font-weight:700;padding:10px 16px;border-radius:8px;font-size:13px;text-align:center;"><span class="lang-en">Retry 2</span><span class="lang-es">Reintento 2</span><br><span style="font-size:13px;"><span class="lang-en">2s wait</span><span class="lang-es">2s espera</span></span></div>' +
-            '<div style="color:#475569;font-size:16px;">›</div>' +
-            '<div style="background:#9a3412;color:#fff;font-weight:700;padding:10px 16px;border-radius:8px;font-size:13px;text-align:center;"><span class="lang-en">Retry 3</span><span class="lang-es">Reintento 3</span><br><span style="font-size:13px;"><span class="lang-en">4s wait</span><span class="lang-es">4s espera</span></span></div>' +
-            '<div style="color:#475569;font-size:16px;">›</div>' +
-            '<div style="background:#7c2d12;color:#fed7aa;font-weight:700;padding:10px 16px;border-radius:8px;font-size:13px;text-align:center;"><span class="lang-en">Retry 4</span><span class="lang-es">Reintento 4</span><br><span style="font-size:13px;"><span class="lang-en">8s wait</span><span class="lang-es">8s espera</span></span></div>' +
-            '<div style="color:#475569;font-size:16px;">›</div>' +
-            '<div style="background:#1e293b;color:#94a3b8;font-weight:700;padding:10px 16px;border-radius:8px;font-size:13px;text-align:center;border:1px dashed #475569;"><span class="lang-en">Retry N</span><span class="lang-es">Reintento N</span><br><span style="font-size:13px;"><span class="lang-en">2^N seconds</span><span class="lang-es">2^N segundos</span></span></div>' +
-          '</div>' +
-          '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:4px;">' +
-            '<div style="background:rgba(16,185,129,0.08);border-left:4px solid #10b981;border-radius:10px;padding:12px 16px;font-size:13px;color:#6ee7b7;"><strong><span class="lang-en">DO retry on:</span><span class="lang-es">SÍ reintenta en:</span></strong> <span class="lang-en">5XX server errors, ThrottlingException</span><span class="lang-es">Errores del servidor 5XX, ThrottlingException</span></div>' +
-            '<div style="background:rgba(239,68,68,0.08);border-left:4px solid #ef4444;border-radius:10px;padding:12px 16px;font-size:13px;color:#fca5a5;"><strong><span class="lang-en">NEVER retry on:</span><span class="lang-es">NUNCA reintentas en:</span></strong> <span class="lang-en">4XX client errors — these mean your request is wrong. Fix the code.</span><span class="lang-es">Errores del cliente 4XX — significan que tu solicitud es incorrecta. Corrige el código.</span></div>' +
-          '</div>' +
-        '</div>'
-      },
-      {
-        body: '<div style="display:flex;flex-direction:column;gap:16px;">' +
-          '<div class="step-title"><span class="lang-en">Implementation &amp; Quota Increases</span><span class="lang-es">Implementación y aumentos de cuota</span></div>' +
-          '<div class="grid-2">' +
-            '<div style="background:#1e293b;border:1px solid #334155;border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:8px;">' +
-              '<div style="font-size:14px;font-weight:700;color:#6ee7b7;"><span class="lang-en">AWS SDK</span><span class="lang-es">AWS SDK</span></div>' +
-              '<div style="font-size:13px;color:#94a3b8;"><span class="lang-en">Exponential Backoff is <strong style="color:#f8fafc;">built-in automatically</strong>. You do not need to implement it. The SDK retries on ThrottlingException and 5XX errors by default.</span><span class="lang-es">Retroceso Exponencial está <strong style="color:#f8fafc;">integrado automáticamente</strong>. No necesitas implementarlo. El SDK reintenta en ThrottlingException y errores 5XX por defecto.</span></div>' +
-            '</div>' +
-            '<div style="background:#1e293b;border:1px solid #334155;border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:8px;">' +
-              '<div style="font-size:14px;font-weight:700;color:#fbbf24;"><span class="lang-en">Custom HTTP Client</span><span class="lang-es">Cliente HTTP personalizado</span></div>' +
-              '<div style="font-size:13px;color:#94a3b8;"><span class="lang-en">You are responsible for implementing Exponential Backoff yourself. AWS does not inject it automatically outside of the SDK.</span><span class="lang-es">Eres responsable de implementar Retroceso Exponencial tú mismo. AWS no lo inyecta automáticamente fuera del SDK.</span></div>' +
-            '</div>' +
-          '</div>' +
-          '<div style="background:#1e293b;border:1px solid #334155;border-radius:10px;padding:18px;">' +
-            '<div style="font-size:14px;font-weight:700;color:#c084fc;margin-bottom:8px;"><span class="lang-en">Service Quota Increase</span><span class="lang-es">Aumento de cuota de servicio</span></div>' +
-            '<div style="display:flex;flex-direction:column;gap:8px;">' +
-              '<div style="font-size:13px;color:#94a3b8;padding-left:14px;position:relative;"><span style="position:absolute;left:0;color:#f97316;">›</span> <span class="lang-en">Open an AWS Support ticket requesting the limit increase for a specific service and region</span><span class="lang-es">Abre un ticket de AWS Support solicitando el aumento de límite para un servicio y región específicos</span></div>' +
-              '<div style="font-size:13px;color:#94a3b8;padding-left:14px;position:relative;"><span style="position:absolute;left:0;color:#f97316;">›</span> <span class="lang-en">Programmatically: use the <strong style="color:#f8fafc;">Service Quotas API</strong> (<code>request-service-quota-increase</code>)</span><span class="lang-es">Programáticamente: usa la <strong style="color:#f8fafc;">API de Cuotas de servicio</strong> (<code>request-service-quota-increase</code>)</span></div>' +
-            '</div>' +
-          '</div>' +
-        '</div>'
+          <div class="tip-card">
+            <div class="tip-trigger">
+              <span class="lang-en"
+                >Scenario: "App running outside AWS — where to put
+                credentials?"</span
+              ><span class="lang-es"
+                >Escenario: "Aplicación ejecutándose fuera de AWS — ¿dónde poner
+                credenciales?"</span
+              >
+            </div>
+            <hr class="divider" />
+            <div class="tip-answer">
+              &#8594;
+              <span class="lang-en"
+                >Environment variables or named profiles
+                (~/.aws/credentials)</span
+              ><span class="lang-es"
+                >Variables de entorno o perfiles nombrados
+                (~/.aws/credentials)</span
+              >
+            </div>
+          </div>
+
+          <div class="tip-card">
+            <div class="tip-trigger">
+              <span class="lang-en"
+                >Scenario: "Pre-signed URL — what signature mechanism?"</span
+              ><span class="lang-es"
+                >Escenario: "URL prefirmada — ¿qué mecanismo de firma?"</span
+              >
+            </div>
+            <hr class="divider" />
+            <div class="tip-answer">
+              &#8594;
+              <span class="lang-en"
+                >SigV4 with X-Amz-Signature in the query string (not in
+                header)</span
+              ><span class="lang-es"
+                >SigV4 con X-Amz-Signature en la cadena de consulta (no en
+                encabezado)</span
+              >
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- ═══════════════════════════════════════ JAVASCRIPT ═══ -->
+    <script>
+      var DEMOS = {
+        "backoff-demo": {
+          steps: [
+            {
+              body:
+                '<div style="display:flex;flex-direction:column;gap:16px;">' +
+                '<div class="step-title"><span class="lang-en">Two Types of AWS Limits</span><span class="lang-es">Dos tipos de límites de AWS</span></div>' +
+                '<div class="grid-2">' +
+                '<div style="background:#1e293b;border:1px solid #334155;border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:8px;">' +
+                '<div style="font-size:14px;font-weight:700;color:#93c5fd;"><span class="lang-en">API Rate Limits</span><span class="lang-es">Límites de velocidad de API</span></div>' +
+                '<div style="font-size:13px;color:#94a3b8;"><span class="lang-en">Limit on how many API calls per second. Example: <code>DescribeInstances</code> = 100 calls/sec for EC2.</span><span class="lang-es">Límite de cuántas llamadas API por segundo. Ejemplo: <code>DescribeInstances</code> = 100 llamadas/seg para EC2.</span></div>' +
+                '<div style="font-size:13px;color:#94a3b8;"><span class="lang-en">When exceeded: you receive <span style="color:#fca5a5;font-weight:700;">ThrottlingException</span></span><span class="lang-es">Cuando se excede: recibes <span style="color:#fca5a5;font-weight:700;">ThrottlingException</span></span></div>' +
+                '<div style="font-size:13px;color:#6ee7b7;font-weight:600;"><span class="lang-en">Solution: Exponential Backoff</span><span class="lang-es">Solución: Retroceso Exponencial</span></div>' +
+                "</div>" +
+                '<div style="background:#1e293b;border:1px solid #334155;border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:8px;">' +
+                '<div style="font-size:14px;font-weight:700;color:#c084fc;"><span class="lang-en">Service Quotas</span><span class="lang-es">Cuotas de servicio</span></div>' +
+                '<div style="font-size:13px;color:#94a3b8;"><span class="lang-en">Limit on number of resources. Example: 1,150 on-demand EC2 instances per region.</span><span class="lang-es">Límite en número de recursos. Ejemplo: 1.150 instancias EC2 bajo demanda por región.</span></div>' +
+                '<div style="font-size:13px;color:#94a3b8;"><span class="lang-en">These are <strong style="color:#f8fafc;">soft limits</strong> — can be increased.</span><span class="lang-es">Estos son <strong style="color:#f8fafc;">límites blandos</strong> — pueden ser aumentados.</span></div>' +
+                '<div style="font-size:13px;color:#6ee7b7;font-weight:600;"><span class="lang-en">Solution: Request increase via Support or Service Quotas API</span><span class="lang-es">Solución: Solicita aumento vía Support o Service Quotas API</span></div>' +
+                "</div>" +
+                "</div>" +
+                '<div style="background:rgba(99,102,241,0.08);border-left:4px solid #6366f1;border-radius:10px;padding:14px 18px;font-size:13px;color:#c7d2fe;">These are <strong>different problems with different solutions</strong>. Confusing them is a common exam trap.</div>' +
+                "</div>",
+            },
+            {
+              body:
+                '<div style="display:flex;flex-direction:column;gap:16px;">' +
+                '<div class="step-title"><span class="lang-en">Exponential Backoff — API Rate Limit Solution</span><span class="lang-es">Retroceso Exponencial — Solución de límite de velocidad API</span></div>' +
+                '<div style="font-size:13px;color:#94a3b8;margin-bottom:4px;"><span class="lang-en">Each retry waits <strong style="color:#f8fafc;">twice as long</strong> as the previous. This prevents overwhelming the service while retrying.</span><span class="lang-es">Cada reintento espera <strong style="color:#f8fafc;">el doble de tiempo</strong> que el anterior. Esto evita sobrecargar el servicio mientras se reintenta.</span></div>' +
+                '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">' +
+                '<div style="background:#f97316;color:#0f172a;font-weight:700;padding:10px 16px;border-radius:8px;font-size:13px;text-align:center;"><span class="lang-en">Attempt 1</span><span class="lang-es">Intento 1</span><br><span style="font-size:13px;"><span class="lang-en">0s wait</span><span class="lang-es">0s espera</span></span></div>' +
+                '<div style="color:#475569;font-size:16px;">›</div>' +
+                '<div style="background:#ea580c;color:#fff;font-weight:700;padding:10px 16px;border-radius:8px;font-size:13px;text-align:center;"><span class="lang-en">Retry 1</span><span class="lang-es">Reintento 1</span><br><span style="font-size:13px;"><span class="lang-en">1s wait</span><span class="lang-es">1s espera</span></span></div>' +
+                '<div style="color:#475569;font-size:16px;">›</div>' +
+                '<div style="background:#c2410c;color:#fff;font-weight:700;padding:10px 16px;border-radius:8px;font-size:13px;text-align:center;"><span class="lang-en">Retry 2</span><span class="lang-es">Reintento 2</span><br><span style="font-size:13px;"><span class="lang-en">2s wait</span><span class="lang-es">2s espera</span></span></div>' +
+                '<div style="color:#475569;font-size:16px;">›</div>' +
+                '<div style="background:#9a3412;color:#fff;font-weight:700;padding:10px 16px;border-radius:8px;font-size:13px;text-align:center;"><span class="lang-en">Retry 3</span><span class="lang-es">Reintento 3</span><br><span style="font-size:13px;"><span class="lang-en">4s wait</span><span class="lang-es">4s espera</span></span></div>' +
+                '<div style="color:#475569;font-size:16px;">›</div>' +
+                '<div style="background:#7c2d12;color:#fed7aa;font-weight:700;padding:10px 16px;border-radius:8px;font-size:13px;text-align:center;"><span class="lang-en">Retry 4</span><span class="lang-es">Reintento 4</span><br><span style="font-size:13px;"><span class="lang-en">8s wait</span><span class="lang-es">8s espera</span></span></div>' +
+                '<div style="color:#475569;font-size:16px;">›</div>' +
+                '<div style="background:#1e293b;color:#94a3b8;font-weight:700;padding:10px 16px;border-radius:8px;font-size:13px;text-align:center;border:1px dashed #475569;"><span class="lang-en">Retry N</span><span class="lang-es">Reintento N</span><br><span style="font-size:13px;"><span class="lang-en">2^N seconds</span><span class="lang-es">2^N segundos</span></span></div>' +
+                "</div>" +
+                '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:4px;">' +
+                '<div style="background:rgba(16,185,129,0.08);border-left:4px solid #10b981;border-radius:10px;padding:12px 16px;font-size:13px;color:#6ee7b7;"><strong><span class="lang-en">DO retry on:</span><span class="lang-es">SÍ reintenta en:</span></strong> <span class="lang-en">5XX server errors, ThrottlingException</span><span class="lang-es">Errores del servidor 5XX, ThrottlingException</span></div>' +
+                '<div style="background:rgba(239,68,68,0.08);border-left:4px solid #ef4444;border-radius:10px;padding:12px 16px;font-size:13px;color:#fca5a5;"><strong><span class="lang-en">NEVER retry on:</span><span class="lang-es">NUNCA reintentas en:</span></strong> <span class="lang-en">4XX client errors — these mean your request is wrong. Fix the code.</span><span class="lang-es">Errores del cliente 4XX — significan que tu solicitud es incorrecta. Corrige el código.</span></div>' +
+                "</div>" +
+                "</div>",
+            },
+            {
+              body:
+                '<div style="display:flex;flex-direction:column;gap:16px;">' +
+                '<div class="step-title"><span class="lang-en">Implementation &amp; Quota Increases</span><span class="lang-es">Implementación y aumentos de cuota</span></div>' +
+                '<div class="grid-2">' +
+                '<div style="background:#1e293b;border:1px solid #334155;border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:8px;">' +
+                '<div style="font-size:14px;font-weight:700;color:#6ee7b7;"><span class="lang-en">AWS SDK</span><span class="lang-es">AWS SDK</span></div>' +
+                '<div style="font-size:13px;color:#94a3b8;"><span class="lang-en">Exponential Backoff is <strong style="color:#f8fafc;">built-in automatically</strong>. You do not need to implement it. The SDK retries on ThrottlingException and 5XX errors by default.</span><span class="lang-es">Retroceso Exponencial está <strong style="color:#f8fafc;">integrado automáticamente</strong>. No necesitas implementarlo. El SDK reintenta en ThrottlingException y errores 5XX por defecto.</span></div>' +
+                "</div>" +
+                '<div style="background:#1e293b;border:1px solid #334155;border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:8px;">' +
+                '<div style="font-size:14px;font-weight:700;color:#fbbf24;"><span class="lang-en">Custom HTTP Client</span><span class="lang-es">Cliente HTTP personalizado</span></div>' +
+                '<div style="font-size:13px;color:#94a3b8;"><span class="lang-en">You are responsible for implementing Exponential Backoff yourself. AWS does not inject it automatically outside of the SDK.</span><span class="lang-es">Eres responsable de implementar Retroceso Exponencial tú mismo. AWS no lo inyecta automáticamente fuera del SDK.</span></div>' +
+                "</div>" +
+                "</div>" +
+                '<div style="background:#1e293b;border:1px solid #334155;border-radius:10px;padding:18px;">' +
+                '<div style="font-size:14px;font-weight:700;color:#c084fc;margin-bottom:8px;"><span class="lang-en">Service Quota Increase</span><span class="lang-es">Aumento de cuota de servicio</span></div>' +
+                '<div style="display:flex;flex-direction:column;gap:8px;">' +
+                '<div style="font-size:13px;color:#94a3b8;padding-left:14px;position:relative;"><span style="position:absolute;left:0;color:#f97316;">›</span> <span class="lang-en">Open an AWS Support ticket requesting the limit increase for a specific service and region</span><span class="lang-es">Abre un ticket de AWS Support solicitando el aumento de límite para un servicio y región específicos</span></div>' +
+                '<div style="font-size:13px;color:#94a3b8;padding-left:14px;position:relative;"><span style="position:absolute;left:0;color:#f97316;">›</span> <span class="lang-en">Programmatically: use the <strong style="color:#f8fafc;">Service Quotas API</strong> (<code>request-service-quota-increase</code>)</span><span class="lang-es">Programáticamente: usa la <strong style="color:#f8fafc;">API de Cuotas de servicio</strong> (<code>request-service-quota-increase</code>)</span></div>' +
+                "</div>" +
+                "</div>" +
+                "</div>",
+            },
+          ],
+        },
+
+        "creds-demo": {
+          steps: [
+            {
+              body:
+                '<div style="display:flex;flex-direction:column;gap:14px;">' +
+                '<div class="step-title"><span class="lang-en">Priority 1 (Highest) — Command Line Options</span><span class="lang-es">Prioridad 1 (Más alta) — Opciones de línea de comandos</span></div>' +
+                '<div style="background:#1e293b;border:2px solid #f97316;border-radius:10px;padding:18px;">' +
+                "<div style=\"font-family:'Fira Code',monospace;font-size:13px;color:#fb923c;background:#0f172a;padding:10px 14px;border-radius:8px;margin-bottom:10px;\">aws s3 ls --region us-east-1 --profile myprofile</div>" +
+                '<div style="font-size:13px;color:#94a3b8;"><span class="lang-en">Flags passed directly on the CLI override everything else: <code>--region</code>, <code>--output</code>, <code>--profile</code>. These always win when explicitly specified.</span><span class="lang-es">Banderas pasadas directamente en la CLI anulan todo lo demás: <code>--region</code>, <code>--output</code>, <code>--profile</code>. Siempre ganan cuando se especifican explícitamente.</span></div>' +
+                "</div>" +
+                '<div style="background:rgba(249,115,22,0.08);border-left:4px solid #f97316;border-radius:10px;padding:14px 18px;font-size:13px;color:#fed7aa;"><strong><span class="lang-en">Remember:</span><span class="lang-es">Recuerda:</span></strong> <span class="lang-en">First match wins — if you pass <code>--profile</code> on the command line, all lower-priority sources are ignored for this invocation.</span><span class="lang-es">El primero que coincide gana — si pasas <code>--profile</code> en la línea de comandos, todas las fuentes de menor prioridad se ignoran en esta invocación.</span></div>' +
+                "</div>",
+            },
+            {
+              body:
+                '<div style="display:flex;flex-direction:column;gap:14px;">' +
+                '<div class="step-title"><span class="lang-en">Priority 2 — Environment Variables</span><span class="lang-es">Prioridad 2 — Variables de entorno</span></div>' +
+                '<div style="background:#1e293b;border:2px solid #6366f1;border-radius:10px;padding:18px;">' +
+                "<div style=\"display:flex;flex-direction:column;gap:6px;font-family:'Fira Code',monospace;font-size:13px;color:#a5b4fc;background:#0f172a;padding:10px 14px;border-radius:8px;margin-bottom:10px;\">" +
+                "<div>export AWS_ACCESS_KEY_ID=AKIAIOSFODNN7EXAMPLE</div>" +
+                "<div>export AWS_SECRET_ACCESS_KEY=wJalrXUtnFEMI/K7MDENG/...</div>" +
+                '<div>export AWS_SESSION_TOKEN=FwoGZXIvYXdz...  <span style="color:#475569;"># for temp creds</span></div>' +
+                "</div>" +
+                '<div style="font-size:13px;color:#94a3b8;"><span class="lang-en">Set in the shell environment. Commonly used in CI/CD pipelines and container environments. Used by both CLI and SDK.</span><span class="lang-es">Establecido en el entorno shell. Comúnmente utilizado en tuberías CI/CD y entornos de contenedor. Utilizado por CLI y SDK.</span></div>' +
+                "</div>" +
+                '<div style="background:rgba(239,68,68,0.08);border-left:4px solid #ef4444;border-radius:10px;padding:14px 18px;font-size:13px;color:#fca5a5;"><strong>Exam trap:</strong> An EC2 instance with env vars set + an Instance Profile attached → the env vars WIN. The Instance Profile (lowest priority) is completely ignored.</div>' +
+                "</div>",
+            },
+            {
+              body:
+                '<div style="display:flex;flex-direction:column;gap:14px;">' +
+                '<div class="step-title"><span class="lang-en">Priority 3 — CLI Credentials File</span><span class="lang-es">Prioridad 3 — Archivo de credenciales CLI</span></div>' +
+                '<div style="background:#1e293b;border:2px solid #334155;border-radius:10px;padding:18px;">' +
+                '<div style="font-size:13px;color:#94a3b8;margin-bottom:10px;"><span class="lang-en">File: <code>~/.aws/credentials</code> — shared across AWS CLI and all AWS SDKs</span><span class="lang-es">Archivo: <code>~/.aws/credentials</code> — compartido entre AWS CLI y todos los SDKs de AWS</span></div>' +
+                "<div style=\"font-family:'Fira Code',monospace;font-size:13px;color:#6ee7b7;background:#0f172a;padding:10px 14px;border-radius:8px;\">" +
+                "[default]<br>aws_access_key_id = AKIAIOSFODNN7EXAMPLE<br>aws_secret_access_key = wJalrXUtnFEMI...<br><br>[myprofile]<br>aws_access_key_id = AKIAI44QH8DHBEXAMPLE<br>aws_secret_access_key = je7MtGbClwBF..." +
+                "</div>" +
+                "</div>" +
+                '<div style="font-size:13px;color:#94a3b8;padding:10px 14px;background:#0f172a;border-radius:8px;border:1px solid #334155;">Select a profile with <code>--profile myprofile</code> or <code>AWS_PROFILE=myprofile</code></div>' +
+                "</div>",
+            },
+            {
+              body:
+                '<div style="display:flex;flex-direction:column;gap:14px;">' +
+                '<div class="step-title"><span class="lang-en">Priority 4 — CLI Config File</span><span class="lang-es">Prioridad 4 — Archivo de configuración CLI</span></div>' +
+                '<div style="background:#1e293b;border:2px solid #334155;border-radius:10px;padding:18px;">' +
+                '<div style="font-size:13px;color:#94a3b8;margin-bottom:10px;"><span class="lang-en">File: <code>~/.aws/config</code> — stores region, output format, and optionally credentials</span><span class="lang-es">Archivo: <code>~/.aws/config</code> — almacena región, formato de salida y opcionalmente credenciales</span></div>' +
+                "<div style=\"font-family:'Fira Code',monospace;font-size:13px;color:#6ee7b7;background:#0f172a;padding:10px 14px;border-radius:8px;\">" +
+                "[default]<br>region = us-east-1<br>output = json<br><br>[profile myprofile]<br>region = eu-west-1<br>output = table" +
+                "</div>" +
+                "</div>" +
+                '<div style="font-size:13px;color:#94a3b8;padding:10px 14px;background:#0f172a;border-radius:8px;border:1px solid #334155;"><span class="lang-en">Note: profile sections in config use <code>[profile name]</code> (with "profile" prefix), while credentials file uses <code>[name]</code> directly.</span><span class="lang-es">Nota: las secciones de perfil en config usan <code>[profile name]</code> (con prefijo "profile"), mientras que el archivo de credenciales usa <code>[name]</code> directamente.</span></div>' +
+                "</div>",
+            },
+            {
+              body:
+                '<div style="display:flex;flex-direction:column;gap:14px;">' +
+                '<div class="step-title"><span class="lang-en">Priority 5 — Container Credentials (ECS)</span><span class="lang-es">Prioridad 5 — Credenciales de contenedor (ECS)</span></div>' +
+                '<div style="background:#1e293b;border:2px solid #334155;border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:8px;">' +
+                '<div style="font-size:13px;color:#94a3b8;"><span class="lang-en">When running inside an <strong style="color:#f8fafc;">ECS task</strong>, the SDK fetches credentials from the task IAM Role via the container credentials endpoint.</span><span class="lang-es">Cuando se ejecuta dentro de una <strong style="color:#f8fafc;">tarea de ECS</strong>, el SDK obtiene credenciales del Rol de IAM de la tarea a través del punto final de credenciales del contenedor.</span></div>' +
+                '<div class="arch-flow" style="margin-bottom:0;">' +
+                '<div class="arch-node" style="background:#0f2a1e;color:#6ee7b7;">ECS Task</div>' +
+                '<div class="arch-arrow">›</div>' +
+                '<div class="arch-node" style="background:#1e293b;color:#f8fafc;"><span class="lang-en">Task IAM Role</span><span class="lang-es">Rol IAM de Tarea</span></div>' +
+                '<div class="arch-arrow">›</div>' +
+                '<div class="arch-node" style="background:#0f2a1e;color:#6ee7b7;"><span class="lang-en">Temp Credentials</span><span class="lang-es">Credenciales Temp.</span></div>' +
+                "</div>" +
+                "</div>" +
+                '<div style="background:rgba(16,185,129,0.08);border-left:4px solid #10b981;border-radius:10px;padding:14px 18px;font-size:13px;color:#6ee7b7;"><span class="lang-en">Best practice for ECS: always use a Task IAM Role instead of passing credentials via environment variables.</span><span class="lang-es">Mejor práctica para ECS: siempre usa un Rol de IAM de tarea en lugar de pasar credenciales a través de variables de entorno.</span></div>' +
+                "</div>",
+            },
+            {
+              body:
+                '<div style="display:flex;flex-direction:column;gap:14px;">' +
+                '<div class="step-title"><span class="lang-en">Priority 6 (Lowest) — EC2 Instance Profile</span><span class="lang-es">Prioridad 6 (Más baja) — Perfil de instancia EC2</span></div>' +
+                '<div style="background:#1e293b;border:2px solid #334155;border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:8px;">' +
+                '<div style="font-size:13px;color:#94a3b8;"><span class="lang-en">The IAM Role attached to the EC2 instance. The SDK retrieves temporary credentials from IMDS automatically.</span><span class="lang-es">El Rol de IAM adjunto a la instancia EC2. El SDK recupera credenciales temporales de IMDS automáticamente.</span></div>' +
+                '<div class="arch-flow" style="margin-bottom:0;">' +
+                '<div class="arch-node" style="background:#1e2d4a;color:#93c5fd;"><span class="lang-en">EC2 Instance</span><span class="lang-es">Instancia EC2</span></div>' +
+                '<div class="arch-arrow">›</div>' +
+                '<div class="arch-node" style="background:#1e293b;color:#f8fafc;">IMDS 169.254.169.254</div>' +
+                '<div class="arch-arrow">›</div>' +
+                '<div class="arch-node" style="background:#0f2a1e;color:#6ee7b7;"><span class="lang-en">Role Credentials</span><span class="lang-es">Credenciales del Rol</span></div>' +
+                "</div>" +
+                "</div>" +
+                '<div style="background:rgba(249,115,22,0.08);border-left:4px solid #f97316;border-radius:10px;padding:14px 18px;font-size:13px;color:#fed7aa;"><strong><span class="lang-en">Classic exam scenario:</span><span class="lang-es">Escenario clásico del examen:</span></strong> <span class="lang-en">EC2 has both env vars (broad permissions) and an Instance Profile (restricted role) → env vars win → app has too many permissions → <strong>FIX: unset the environment variables</strong>.</span><span class="lang-es">EC2 tiene tanto variables de entorno (permisos amplios) como un Perfil de instancia (rol restringido) → ganan las variables de entorno → la aplicación tiene demasiados permisos → <strong>SOLUCIÓN: desabilita las variables de entorno</strong>.</span></div>' +
+                '<div style="background:rgba(16,185,129,0.08);border-left:4px solid #10b981;border-radius:10px;padding:14px 18px;font-size:13px;color:#6ee7b7;"><strong><span class="lang-en">Best practice:</span><span class="lang-es">Mejor práctica:</span></strong> <span class="lang-en">Inside AWS → always use IAM Roles. Outside AWS → env vars or named profiles. Never hardcode credentials.</span><span class="lang-es">Dentro de AWS → siempre usa Roles de IAM. Fuera de AWS → variables de entorno o perfiles nombrados. Nunca codifiques credenciales.</span></div>' +
+                "</div>",
+            },
+          ],
+        },
+      };
+
+      var states = {};
+
+      function renderStep(id, step) {
+        var demo = DEMOS[id];
+        var total = demo.steps.length;
+        document.getElementById(id).innerHTML = demo.steps[step].body;
+        document.getElementById(id + "-counter").textContent =
+          "Step " + (step + 1) + " / " + total;
+        document
+          .querySelectorAll('[id^="' + id + '-dot-"]')
+          .forEach(function (d, i) {
+            d.classList.toggle("active", i === step);
+          });
+        document.getElementById(id + "-prev").disabled = step === 0;
+        document.getElementById(id + "-next").disabled = step === total - 1;
+        states[id] = step;
       }
-    ]
-  },
 
-  'creds-demo': {
-    steps: [
-      {
-        body: '<div style="display:flex;flex-direction:column;gap:14px;">' +
-          '<div class="step-title"><span class="lang-en">Priority 1 (Highest) — Command Line Options</span><span class="lang-es">Prioridad 1 (Más alta) — Opciones de línea de comandos</span></div>' +
-          '<div style="background:#1e293b;border:2px solid #f97316;border-radius:10px;padding:18px;">' +
-            '<div style="font-family:\'Fira Code\',monospace;font-size:13px;color:#fb923c;background:#0f172a;padding:10px 14px;border-radius:8px;margin-bottom:10px;">aws s3 ls --region us-east-1 --profile myprofile</div>' +
-            '<div style="font-size:13px;color:#94a3b8;"><span class="lang-en">Flags passed directly on the CLI override everything else: <code>--region</code>, <code>--output</code>, <code>--profile</code>. These always win when explicitly specified.</span><span class="lang-es">Banderas pasadas directamente en la CLI anulan todo lo demás: <code>--region</code>, <code>--output</code>, <code>--profile</code>. Siempre ganan cuando se especifican explícitamente.</span></div>' +
-          '</div>' +
-          '<div style="background:rgba(249,115,22,0.08);border-left:4px solid #f97316;border-radius:10px;padding:14px 18px;font-size:13px;color:#fed7aa;"><strong><span class="lang-en">Remember:</span><span class="lang-es">Recuerda:</span></strong> <span class="lang-en">First match wins — if you pass <code>--profile</code> on the command line, all lower-priority sources are ignored for this invocation.</span><span class="lang-es">El primero que coincide gana — si pasas <code>--profile</code> en la línea de comandos, todas las fuentes de menor prioridad se ignoran en esta invocación.</span></div>' +
-        '</div>'
-      },
-      {
-        body: '<div style="display:flex;flex-direction:column;gap:14px;">' +
-          '<div class="step-title"><span class="lang-en">Priority 2 — Environment Variables</span><span class="lang-es">Prioridad 2 — Variables de entorno</span></div>' +
-          '<div style="background:#1e293b;border:2px solid #6366f1;border-radius:10px;padding:18px;">' +
-            '<div style="display:flex;flex-direction:column;gap:6px;font-family:\'Fira Code\',monospace;font-size:13px;color:#a5b4fc;background:#0f172a;padding:10px 14px;border-radius:8px;margin-bottom:10px;">' +
-              '<div>export AWS_ACCESS_KEY_ID=AKIAIOSFODNN7EXAMPLE</div>' +
-              '<div>export AWS_SECRET_ACCESS_KEY=wJalrXUtnFEMI/K7MDENG/...</div>' +
-              '<div>export AWS_SESSION_TOKEN=FwoGZXIvYXdz...  <span style="color:#475569;"># for temp creds</span></div>' +
-            '</div>' +
-            '<div style="font-size:13px;color:#94a3b8;"><span class="lang-en">Set in the shell environment. Commonly used in CI/CD pipelines and container environments. Used by both CLI and SDK.</span><span class="lang-es">Establecido en el entorno shell. Comúnmente utilizado en tuberías CI/CD y entornos de contenedor. Utilizado por CLI y SDK.</span></div>' +
-          '</div>' +
-          '<div style="background:rgba(239,68,68,0.08);border-left:4px solid #ef4444;border-radius:10px;padding:14px 18px;font-size:13px;color:#fca5a5;"><strong>Exam trap:</strong> An EC2 instance with env vars set + an Instance Profile attached → the env vars WIN. The Instance Profile (lowest priority) is completely ignored.</div>' +
-        '</div>'
-      },
-      {
-        body: '<div style="display:flex;flex-direction:column;gap:14px;">' +
-          '<div class="step-title"><span class="lang-en">Priority 3 — CLI Credentials File</span><span class="lang-es">Prioridad 3 — Archivo de credenciales CLI</span></div>' +
-          '<div style="background:#1e293b;border:2px solid #334155;border-radius:10px;padding:18px;">' +
-            '<div style="font-size:13px;color:#94a3b8;margin-bottom:10px;"><span class="lang-en">File: <code>~/.aws/credentials</code> — shared across AWS CLI and all AWS SDKs</span><span class="lang-es">Archivo: <code>~/.aws/credentials</code> — compartido entre AWS CLI y todos los SDKs de AWS</span></div>' +
-            '<div style="font-family:\'Fira Code\',monospace;font-size:13px;color:#6ee7b7;background:#0f172a;padding:10px 14px;border-radius:8px;">' +
-              '[default]<br>aws_access_key_id = AKIAIOSFODNN7EXAMPLE<br>aws_secret_access_key = wJalrXUtnFEMI...<br><br>[myprofile]<br>aws_access_key_id = AKIAI44QH8DHBEXAMPLE<br>aws_secret_access_key = je7MtGbClwBF...'+
-            '</div>' +
-          '</div>' +
-          '<div style="font-size:13px;color:#94a3b8;padding:10px 14px;background:#0f172a;border-radius:8px;border:1px solid #334155;">Select a profile with <code>--profile myprofile</code> or <code>AWS_PROFILE=myprofile</code></div>' +
-        '</div>'
-      },
-      {
-        body: '<div style="display:flex;flex-direction:column;gap:14px;">' +
-          '<div class="step-title"><span class="lang-en">Priority 4 — CLI Config File</span><span class="lang-es">Prioridad 4 — Archivo de configuración CLI</span></div>' +
-          '<div style="background:#1e293b;border:2px solid #334155;border-radius:10px;padding:18px;">' +
-            '<div style="font-size:13px;color:#94a3b8;margin-bottom:10px;"><span class="lang-en">File: <code>~/.aws/config</code> — stores region, output format, and optionally credentials</span><span class="lang-es">Archivo: <code>~/.aws/config</code> — almacena región, formato de salida y opcionalmente credenciales</span></div>' +
-            '<div style="font-family:\'Fira Code\',monospace;font-size:13px;color:#6ee7b7;background:#0f172a;padding:10px 14px;border-radius:8px;">' +
-              '[default]<br>region = us-east-1<br>output = json<br><br>[profile myprofile]<br>region = eu-west-1<br>output = table' +
-            '</div>' +
-          '</div>' +
-          '<div style="font-size:13px;color:#94a3b8;padding:10px 14px;background:#0f172a;border-radius:8px;border:1px solid #334155;"><span class="lang-en">Note: profile sections in config use <code>[profile name]</code> (with "profile" prefix), while credentials file uses <code>[name]</code> directly.</span><span class="lang-es">Nota: las secciones de perfil en config usan <code>[profile name]</code> (con prefijo "profile"), mientras que el archivo de credenciales usa <code>[name]</code> directamente.</span></div>' +
-        '</div>'
-      },
-      {
-        body: '<div style="display:flex;flex-direction:column;gap:14px;">' +
-          '<div class="step-title"><span class="lang-en">Priority 5 — Container Credentials (ECS)</span><span class="lang-es">Prioridad 5 — Credenciales de contenedor (ECS)</span></div>' +
-          '<div style="background:#1e293b;border:2px solid #334155;border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:8px;">' +
-            '<div style="font-size:13px;color:#94a3b8;"><span class="lang-en">When running inside an <strong style="color:#f8fafc;">ECS task</strong>, the SDK fetches credentials from the task IAM Role via the container credentials endpoint.</span><span class="lang-es">Cuando se ejecuta dentro de una <strong style="color:#f8fafc;">tarea de ECS</strong>, el SDK obtiene credenciales del Rol de IAM de la tarea a través del punto final de credenciales del contenedor.</span></div>' +
-            '<div class="arch-flow" style="margin-bottom:0;">' +
-              '<div class="arch-node" style="background:#0f2a1e;color:#6ee7b7;">ECS Task</div>' +
-              '<div class="arch-arrow">›</div>' +
-              '<div class="arch-node" style="background:#1e293b;color:#f8fafc;"><span class="lang-en">Task IAM Role</span><span class="lang-es">Rol IAM de Tarea</span></div>' +
-              '<div class="arch-arrow">›</div>' +
-              '<div class="arch-node" style="background:#0f2a1e;color:#6ee7b7;"><span class="lang-en">Temp Credentials</span><span class="lang-es">Credenciales Temp.</span></div>' +
-            '</div>' +
-          '</div>' +
-          '<div style="background:rgba(16,185,129,0.08);border-left:4px solid #10b981;border-radius:10px;padding:14px 18px;font-size:13px;color:#6ee7b7;"><span class="lang-en">Best practice for ECS: always use a Task IAM Role instead of passing credentials via environment variables.</span><span class="lang-es">Mejor práctica para ECS: siempre usa un Rol de IAM de tarea en lugar de pasar credenciales a través de variables de entorno.</span></div>' +
-        '</div>'
-      },
-      {
-        body: '<div style="display:flex;flex-direction:column;gap:14px;">' +
-          '<div class="step-title"><span class="lang-en">Priority 6 (Lowest) — EC2 Instance Profile</span><span class="lang-es">Prioridad 6 (Más baja) — Perfil de instancia EC2</span></div>' +
-          '<div style="background:#1e293b;border:2px solid #334155;border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:8px;">' +
-            '<div style="font-size:13px;color:#94a3b8;"><span class="lang-en">The IAM Role attached to the EC2 instance. The SDK retrieves temporary credentials from IMDS automatically.</span><span class="lang-es">El Rol de IAM adjunto a la instancia EC2. El SDK recupera credenciales temporales de IMDS automáticamente.</span></div>' +
-            '<div class="arch-flow" style="margin-bottom:0;">' +
-              '<div class="arch-node" style="background:#1e2d4a;color:#93c5fd;"><span class="lang-en">EC2 Instance</span><span class="lang-es">Instancia EC2</span></div>' +
-              '<div class="arch-arrow">›</div>' +
-              '<div class="arch-node" style="background:#1e293b;color:#f8fafc;">IMDS 169.254.169.254</div>' +
-              '<div class="arch-arrow">›</div>' +
-              '<div class="arch-node" style="background:#0f2a1e;color:#6ee7b7;"><span class="lang-en">Role Credentials</span><span class="lang-es">Credenciales del Rol</span></div>' +
-            '</div>' +
-          '</div>' +
-          '<div style="background:rgba(249,115,22,0.08);border-left:4px solid #f97316;border-radius:10px;padding:14px 18px;font-size:13px;color:#fed7aa;"><strong><span class="lang-en">Classic exam scenario:</span><span class="lang-es">Escenario clásico del examen:</span></strong> <span class="lang-en">EC2 has both env vars (broad permissions) and an Instance Profile (restricted role) → env vars win → app has too many permissions → <strong>FIX: unset the environment variables</strong>.</span><span class="lang-es">EC2 tiene tanto variables de entorno (permisos amplios) como un Perfil de instancia (rol restringido) → ganan las variables de entorno → la aplicación tiene demasiados permisos → <strong>SOLUCIÓN: desabilita las variables de entorno</strong>.</span></div>' +
-          '<div style="background:rgba(16,185,129,0.08);border-left:4px solid #10b981;border-radius:10px;padding:14px 18px;font-size:13px;color:#6ee7b7;"><strong><span class="lang-en">Best practice:</span><span class="lang-es">Mejor práctica:</span></strong> <span class="lang-en">Inside AWS → always use IAM Roles. Outside AWS → env vars or named profiles. Never hardcode credentials.</span><span class="lang-es">Dentro de AWS → siempre usa Roles de IAM. Fuera de AWS → variables de entorno o perfiles nombrados. Nunca codifiques credenciales.</span></div>' +
-        '</div>'
+      function prev(id) {
+        if (states[id] > 0) renderStep(id, states[id] - 1);
       }
-    ]
-  }
-};
+      function next(id) {
+        if (states[id] < DEMOS[id].steps.length - 1)
+          renderStep(id, states[id] + 1);
+      }
+      function restart(id) {
+        renderStep(id, 0);
+      }
 
-var states = {};
-
-function renderStep(id, step) {
-  var demo = DEMOS[id];
-  var total = demo.steps.length;
-  document.getElementById(id).innerHTML = demo.steps[step].body;
-  document.getElementById(id + '-counter').textContent = 'Step ' + (step + 1) + ' / ' + total;
-  document.querySelectorAll('[id^="' + id + '-dot-"]').forEach(function(d, i) { d.classList.toggle('active', i === step); });
-  document.getElementById(id + '-prev').disabled = step === 0;
-  document.getElementById(id + '-next').disabled = step === total - 1;
-  states[id] = step;
-}
-
-function prev(id) { if (states[id] > 0) renderStep(id, states[id] - 1); }
-function next(id) { if (states[id] < DEMOS[id].steps.length - 1) renderStep(id, states[id] + 1); }
-function restart(id) { renderStep(id, 0); }
-
-Object.keys(DEMOS).forEach(function(id) {
-  states[id] = 0;
-  var dotsEl = document.getElementById(id + '-dots');
-  dotsEl.innerHTML = DEMOS[id].steps.map(function(_, i) { return '<div class="dot" id="' + id + '-dot-' + i + '"></div>'; }).join('');
-  renderStep(id, 0);
-});
-</script>
-
-</body>
+      Object.keys(DEMOS).forEach(function (id) {
+        states[id] = 0;
+        var dotsEl = document.getElementById(id + "-dots");
+        dotsEl.innerHTML = DEMOS[id].steps
+          .map(function (_, i) {
+            return '<div class="dot" id="' + id + "-dot-" + i + '"></div>';
+          })
+          .join("");
+        renderStep(id, 0);
+      });
+    </script>
+  </body>
 </html>

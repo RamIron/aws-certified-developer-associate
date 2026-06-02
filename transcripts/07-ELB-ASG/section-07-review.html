@@ -3,9 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title><span class="lang-en">Section 7 — ELB + ASG</span><span class="lang-es">Sección 7 — ELB + ASG</span></title>
+    <title>Sección 7 — ELB + ASG</title>
 
-    <link rel="stylesheet" href="../shared/summary.css">
+    <link rel="stylesheet" href="../shared/summary.css" />
     <script src="../shared/summary.js"></script>
     <style>
       @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap");
@@ -28,7 +28,12 @@
 
       /* ── HERO ── */
       .hero {
-        background: linear-gradient(135deg, #1e293b 0%, #0f172a 60%, #1a1a2e 100%);
+        background: linear-gradient(
+          135deg,
+          #1e293b 0%,
+          #0f172a 60%,
+          #1a1a2e 100%
+        );
         border-bottom: 1px solid #334155;
         padding: 48px 32px 40px;
         text-align: center;
@@ -172,9 +177,15 @@
         font-weight: 700;
         margin-bottom: 0.25rem;
       }
-      .lb-card.alb h4 { color: #60a5fa; }
-      .lb-card.nlb h4 { color: #34d399; }
-      .lb-card.gwlb h4 { color: #c084fc; }
+      .lb-card.alb h4 {
+        color: #60a5fa;
+      }
+      .lb-card.nlb h4 {
+        color: #34d399;
+      }
+      .lb-card.gwlb h4 {
+        color: #c084fc;
+      }
       .lb-card .lb-sub {
         font-size: 13px;
         color: #64748b;
@@ -196,9 +207,27 @@
       .lb-card ul li:last-child {
         border-bottom: none;
       }
-      .lb-card.alb ul li::before { content: "›"; position: absolute; left: 0; color: #3b82f6; font-weight: 700; }
-      .lb-card.nlb ul li::before { content: "›"; position: absolute; left: 0; color: #10b981; font-weight: 700; }
-      .lb-card.gwlb ul li::before { content: "›"; position: absolute; left: 0; color: #a855f7; font-weight: 700; }
+      .lb-card.alb ul li::before {
+        content: "›";
+        position: absolute;
+        left: 0;
+        color: #3b82f6;
+        font-weight: 700;
+      }
+      .lb-card.nlb ul li::before {
+        content: "›";
+        position: absolute;
+        left: 0;
+        color: #10b981;
+        font-weight: 700;
+      }
+      .lb-card.gwlb ul li::before {
+        content: "›";
+        position: absolute;
+        left: 0;
+        color: #a855f7;
+        font-weight: 700;
+      }
       .lb-chip-row {
         margin-top: 0.9rem;
       }
@@ -239,21 +268,50 @@
         border-radius: 4px;
         white-space: nowrap;
       }
-      .chip.red   { background: #7f1d1d; color: #fca5a5; }
-      .chip.green { background: #064e3b; color: #6ee7b7; }
-      .chip.yellow{ background: #422006; color: #fcd34d; }
-      .chip.blue  { background: #1e3a5f; color: #93c5fd; }
-      .chip.purple{ background: #3b0764; color: #d8b4fe; }
-      .chip.gray  { background: #1e293b; color: #64748b; }
+      .chip.red {
+        background: #7f1d1d;
+        color: #fca5a5;
+      }
+      .chip.green {
+        background: #064e3b;
+        color: #6ee7b7;
+      }
+      .chip.yellow {
+        background: #422006;
+        color: #fcd34d;
+      }
+      .chip.blue {
+        background: #1e3a5f;
+        color: #93c5fd;
+      }
+      .chip.purple {
+        background: #3b0764;
+        color: #d8b4fe;
+      }
+      .chip.gray {
+        background: #1e293b;
+        color: #64748b;
+      }
 
       /* ── INSTANCE BOXES ── */
       @keyframes fadeScale {
-        from { opacity: 0; transform: scale(0.75); }
-        to   { opacity: 1; transform: scale(1); }
+        from {
+          opacity: 0;
+          transform: scale(0.75);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
       }
       @keyframes blink {
-        0%, 100% { opacity: 1; }
-        50%       { opacity: 0.35; }
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.35;
+        }
       }
       .inst {
         width: 52px;
@@ -317,11 +375,21 @@
         letter-spacing: 0.1em;
         margin-bottom: 0.65rem;
       }
-      .asg-label.main  { color: #60a5fa; }
-      .asg-label.temp  { color: #34d399; }
-      .asg-label.blue  { color: #93c5fd; }
-      .asg-label.green { color: #34d399; }
-      .asg-label.orange{ color: #fb923c; }
+      .asg-label.main {
+        color: #60a5fa;
+      }
+      .asg-label.temp {
+        color: #34d399;
+      }
+      .asg-label.blue {
+        color: #93c5fd;
+      }
+      .asg-label.green {
+        color: #34d399;
+      }
+      .asg-label.orange {
+        color: #fb923c;
+      }
       .dual-asg {
         display: flex;
         gap: 1rem;
@@ -370,11 +438,26 @@
         line-height: 1.5;
         transition: border-color 0.3s;
       }
-      .hl-v1  { color: #60a5fa; font-weight: 700; }
-      .hl-v2  { color: #fb923c; font-weight: 700; }
-      .hl-d   { color: #f87171; font-weight: 700; }
-      .hl-ok  { color: #34d399; font-weight: 700; }
-      .hl-tmp { color: #a78bfa; font-weight: 700; }
+      .hl-v1 {
+        color: #60a5fa;
+        font-weight: 700;
+      }
+      .hl-v2 {
+        color: #fb923c;
+        font-weight: 700;
+      }
+      .hl-d {
+        color: #f87171;
+        font-weight: 700;
+      }
+      .hl-ok {
+        color: #34d399;
+        font-weight: 700;
+      }
+      .hl-tmp {
+        color: #a78bfa;
+        font-weight: 700;
+      }
 
       .anim-controls {
         display: flex;
@@ -398,8 +481,13 @@
         font-family: "Inter", sans-serif;
         white-space: nowrap;
       }
-      .nav-btn:hover:not(:disabled) { background: #f9731618; }
-      .nav-btn:disabled { opacity: 0.22; cursor: default; }
+      .nav-btn:hover:not(:disabled) {
+        background: #f9731618;
+      }
+      .nav-btn:disabled {
+        opacity: 0.22;
+        cursor: default;
+      }
       .restart-btn {
         background: transparent;
         color: #475569;
@@ -408,20 +496,33 @@
         padding: 0.4rem 0.75rem;
         font-size: 13px;
         cursor: pointer;
-        transition: color 0.2s, border-color 0.2s;
+        transition:
+          color 0.2s,
+          border-color 0.2s;
         font-family: "Inter", sans-serif;
         margin-left: auto;
       }
-      .restart-btn:hover { color: #94a3b8; border-color: #334155; }
-      .step-dots { display: flex; gap: 5px; }
+      .restart-btn:hover {
+        color: #94a3b8;
+        border-color: #334155;
+      }
+      .step-dots {
+        display: flex;
+        gap: 5px;
+      }
       .sdot {
         width: 7px;
         height: 7px;
         border-radius: 50%;
         background: #1e293b;
-        transition: background 0.3s, transform 0.3s;
+        transition:
+          background 0.3s,
+          transform 0.3s;
       }
-      .sdot.active { background: #f97316; transform: scale(1.3); }
+      .sdot.active {
+        background: #f97316;
+        transform: scale(1.3);
+      }
       .step-counter {
         font-size: 13px;
         color: #d2d2d2;
@@ -484,8 +585,12 @@
         font-weight: 700;
         color: #94a3b8;
       }
-      .inst-pct.high { color: #f87171; }
-      .inst-pct.equal { color: #34d399; }
+      .inst-pct.high {
+        color: #f87171;
+      }
+      .inst-pct.equal {
+        color: #34d399;
+      }
 
       /* ── TABLE ── */
       .data-table {
@@ -510,7 +615,9 @@
         color: #d2d2d2;
         border-bottom: 1px solid #1e293b;
       }
-      .data-table tr:last-child td { border-bottom: none; }
+      .data-table tr:last-child td {
+        border-bottom: none;
+      }
 
       /* ── EXAM TIPS ── */
       .tips-grid {
@@ -525,9 +632,17 @@
         padding: 0.65rem 1rem;
         font-size: 0.83rem;
       }
-      .tip .trigger { color: #64748b; }
-      .tip .arrow   { color: #334155; margin: 0 0.25rem; }
-      .tip .answer  { color: #f8fafc; font-weight: 700; }
+      .tip .trigger {
+        color: #64748b;
+      }
+      .tip .arrow {
+        color: #334155;
+        margin: 0 0.25rem;
+      }
+      .tip .answer {
+        color: #f8fafc;
+        font-weight: 700;
+      }
 
       /* ── SCALING POLICIES GRID ── */
       .policy-grid {
@@ -561,33 +676,95 @@
       }
 
       @media (max-width: 680px) {
-        body { padding: 1rem; }
-        h1   { font-size: 1.6rem; }
+        body {
+          padding: 1rem;
+        }
+        h1 {
+          font-size: 1.6rem;
+        }
         .az-layout,
-        .dual-asg { flex-direction: column; }
-        .lb-grid { grid-template-columns: 1fr; }
+        .dual-asg {
+          flex-direction: column;
+        }
+        .lb-grid {
+          grid-template-columns: 1fr;
+        }
       }
     </style>
   </head>
   <body>
-    <script>initHeader("<span class='lang-en'>Section 7 — ELB + ASG</span><span class='lang-es'>Sección 7 — ELB + ASG</span>")</script>
+    <script>
+      initHeader(
+        "<span class='lang-en'>Section 7 — ELB + ASG</span><span class='lang-es'>Sección 7 — ELB + ASG</span>",
+      );
+    </script>
     <div class="container">
-
       <!-- ══════════════ WEAK POINTS ══════════════ -->
-      <div class="callout danger" style="margin-bottom: 2rem;">
-        <strong style="color:#f87171; display:block; margin-bottom:0.5rem;"><span class="lang-en">⚠ Weak Points — Review Before Exam</span><span class="lang-es">⚠ Puntos débiles — Revisar antes del examen</span></strong>
-        <ul style="list-style:none; padding:0; display:flex; flex-direction:column; gap:0.4rem;">
+      <div class="callout danger" style="margin-bottom: 2rem">
+        <strong style="color: #f87171; display: block; margin-bottom: 0.5rem"
+          ><span class="lang-en">⚠ Weak Points — Review Before Exam</span
+          ><span class="lang-es"
+            >⚠ Puntos débiles — Revisar antes del examen</span
+          ></strong
+        >
+        <ul
+          style="
+            list-style: none;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+          "
+        >
           <li>
-            <strong style="color:#fca5a5;"><span class="lang-en">7.15 ASG Overview — 67%</span><span class="lang-es">7.15 Descripción general de ASG — 67%</span></strong>
-            <span style="color:#fca5a5; font-size:0.82rem;"><span class="lang-en"> · Confused where to update AMI — answer: <strong>launch template</strong>, not the running instances</span><span class="lang-es"> · Confundido dónde actualizar AMI — respuesta: <strong>plantilla de lanzamiento</strong>, no las instancias en ejecución</span></span>
+            <strong style="color: #fca5a5"
+              ><span class="lang-en">7.15 ASG Overview — 67%</span
+              ><span class="lang-es"
+                >7.15 Descripción general de ASG — 67%</span
+              ></strong
+            >
+            <span style="color: #fca5a5; font-size: 0.82rem"
+              ><span class="lang-en">
+                · Confused where to update AMI — answer:
+                <strong>launch template</strong>, not the running
+                instances</span
+              ><span class="lang-es">
+                · Confundido dónde actualizar AMI — respuesta:
+                <strong>plantilla de lanzamiento</strong>, no las instancias en
+                ejecución</span
+              ></span
+            >
           </li>
           <li>
-            <strong style="color:#fca5a5;"><span class="lang-en">7.19 ASG Instance Refresh — 50%</span><span class="lang-es">7.19 Actualización de instancia de ASG — 50%</span></strong>
-            <span style="color:#fca5a5; font-size:0.82rem;"><span class="lang-en"> · Confused warm-up time behavior — it is <strong>fixed</strong>, does NOT auto-extend</span><span class="lang-es"> · Confundido el comportamiento del tiempo de calentamiento — es <strong>fijo</strong>, NO se extiende automáticamente</span></span>
+            <strong style="color: #fca5a5"
+              ><span class="lang-en">7.19 ASG Instance Refresh — 50%</span
+              ><span class="lang-es"
+                >7.19 Actualización de instancia de ASG — 50%</span
+              ></strong
+            >
+            <span style="color: #fca5a5; font-size: 0.82rem"
+              ><span class="lang-en">
+                · Confused warm-up time behavior — it is <strong>fixed</strong>,
+                does NOT auto-extend</span
+              ><span class="lang-es">
+                · Confundido el comportamiento del tiempo de calentamiento — es
+                <strong>fijo</strong>, NO se extiende automáticamente</span
+              ></span
+            >
           </li>
           <li>
-            <strong style="color:#fca5a5;"><span class="lang-en">Udemy quiz — 14/20</span><span class="lang-es">Quiz de Udemy — 14/20</span></strong>
-            <span style="color:#fca5a5; font-size:0.82rem;"><span class="lang-en"> · Below 75% threshold — section marked REVIEW</span><span class="lang-es"> · Por debajo del umbral del 75% — sección marcada para REVISIÓN</span></span>
+            <strong style="color: #fca5a5"
+              ><span class="lang-en">Udemy quiz — 14/20</span
+              ><span class="lang-es">Quiz de Udemy — 14/20</span></strong
+            >
+            <span style="color: #fca5a5; font-size: 0.82rem"
+              ><span class="lang-en">
+                · Below 75% threshold — section marked REVIEW</span
+              ><span class="lang-es">
+                · Por debajo del umbral del 75% — sección marcada para
+                REVISIÓN</span
+              ></span
+            >
           </li>
         </ul>
       </div>
@@ -596,24 +773,62 @@
       <div class="card">
         <div class="card-header">
           <span class="badge">1</span>
-          <h2><span class="lang-en">Scalability &amp; High Availability</span><span class="lang-es">Escalabilidad y alta disponibilidad</span></h2>
+          <h2>
+            <span class="lang-en">Scalability &amp; High Availability</span
+            ><span class="lang-es">Escalabilidad y alta disponibilidad</span>
+          </h2>
         </div>
 
         <div class="concept-grid">
           <div class="concept-card">
             <div class="icon">📈</div>
-            <h4><span class="lang-en">Vertical Scaling</span><span class="lang-es">Escalado vertical</span></h4>
-            <p><span class="lang-en">Bigger instance (scale up / down). Limited by hardware ceiling. Example: t2.micro → t2.large.</span><span class="lang-es">Instancia más grande (escalar arriba/abajo). Limitado por el techo de hardware. Ejemplo: t2.micro → t2.large.</span></p>
+            <h4>
+              <span class="lang-en">Vertical Scaling</span
+              ><span class="lang-es">Escalado vertical</span>
+            </h4>
+            <p>
+              <span class="lang-en"
+                >Bigger instance (scale up / down). Limited by hardware ceiling.
+                Example: t2.micro → t2.large.</span
+              ><span class="lang-es"
+                >Instancia más grande (escalar arriba/abajo). Limitado por el
+                techo de hardware. Ejemplo: t2.micro → t2.large.</span
+              >
+            </p>
           </div>
           <div class="concept-card">
             <div class="icon">🖥</div>
-            <h4><span class="lang-en">Horizontal Scaling</span><span class="lang-es">Escalado horizontal</span></h4>
-            <p><span class="lang-en">More instances (scale out / in). No hardware limit. Enabled by <strong>ASG + ELB</strong>.</span><span class="lang-es">Más instancias (escalar hacia afuera/adentro). Sin límite de hardware. Habilitado por <strong>ASG + ELB</strong>.</span></p>
+            <h4>
+              <span class="lang-en">Horizontal Scaling</span
+              ><span class="lang-es">Escalado horizontal</span>
+            </h4>
+            <p>
+              <span class="lang-en"
+                >More instances (scale out / in). No hardware limit. Enabled by
+                <strong>ASG + ELB</strong>.</span
+              ><span class="lang-es"
+                >Más instancias (escalar hacia afuera/adentro). Sin límite de
+                hardware. Habilitado por <strong>ASG + ELB</strong>.</span
+              >
+            </p>
           </div>
           <div class="concept-card">
             <div class="icon">🏛</div>
-            <h4><span class="lang-en">High Availability</span><span class="lang-es">Alta disponibilidad</span></h4>
-            <p><span class="lang-en">Multi-AZ deployment — survives an AZ failure. Enabled by <strong>ASG multi-AZ</strong> + <strong>ELB multi-AZ</strong>.</span><span class="lang-es">Implementación multi-AZ — sobrevive a un fallo de AZ. Habilitado por <strong>ASG multi-AZ</strong> + <strong>ELB multi-AZ</strong>.</span></p>
+            <h4>
+              <span class="lang-en">High Availability</span
+              ><span class="lang-es">Alta disponibilidad</span>
+            </h4>
+            <p>
+              <span class="lang-en"
+                >Multi-AZ deployment — survives an AZ failure. Enabled by
+                <strong>ASG multi-AZ</strong> +
+                <strong>ELB multi-AZ</strong>.</span
+              ><span class="lang-es"
+                >Implementación multi-AZ — sobrevive a un fallo de AZ.
+                Habilitado por <strong>ASG multi-AZ</strong> +
+                <strong>ELB multi-AZ</strong>.</span
+              >
+            </p>
           </div>
         </div>
       </div>
@@ -622,59 +837,171 @@
       <div class="card">
         <div class="card-header">
           <span class="badge">2</span>
-          <h2><span class="lang-en">Load Balancer Comparison</span><span class="lang-es">Comparación de balanceadores de carga</span></h2>
+          <h2>
+            <span class="lang-en">Load Balancer Comparison</span
+            ><span class="lang-es">Comparación de balanceadores de carga</span>
+          </h2>
         </div>
 
         <div class="lb-grid">
-
           <!-- ALB -->
           <div class="lb-card alb">
-            <h4><span class="lang-en">ALB — Application Load Balancer</span><span class="lang-es">ALB — Balanceador de carga de aplicaciones</span></h4>
-            <div class="lb-sub"><span class="lang-en">Layer 7 · HTTP / HTTPS / WebSocket</span><span class="lang-es">Capa 7 · HTTP / HTTPS / WebSocket</span></div>
+            <h4>
+              <span class="lang-en">ALB — Application Load Balancer</span
+              ><span class="lang-es"
+                >ALB — Balanceador de carga de aplicaciones</span
+              >
+            </h4>
+            <div class="lb-sub">
+              <span class="lang-en">Layer 7 · HTTP / HTTPS / WebSocket</span
+              ><span class="lang-es">Capa 7 · HTTP / HTTPS / WebSocket</span>
+            </div>
             <ul>
-              <li><span class="lang-en">Web apps, microservices, containers</span><span class="lang-es">Aplicaciones web, microservicios, contenedores</span></li>
-              <li><span class="lang-en">Routing: URL path, hostname, query string, headers</span><span class="lang-es">Enrutamiento: ruta URL, nombre de host, cadena de consulta, encabezados</span></li>
-              <li><span class="lang-en">No static IP — DNS name only</span><span class="lang-es">Sin IP estática — solo nombre DNS</span></li>
-              <li><span class="lang-en">Targets: EC2, ECS, Lambda, private IPs</span><span class="lang-es">Objetivos: EC2, ECS, Lambda, IPs privadas</span></li>
-              <li><span class="lang-en">Real client IP via <strong>X-Forwarded-For</strong> header</span><span class="lang-es">IP del cliente real a través del encabezado <strong>X-Forwarded-For</strong></span></li>
+              <li>
+                <span class="lang-en">Web apps, microservices, containers</span
+                ><span class="lang-es"
+                  >Aplicaciones web, microservicios, contenedores</span
+                >
+              </li>
+              <li>
+                <span class="lang-en"
+                  >Routing: URL path, hostname, query string, headers</span
+                ><span class="lang-es"
+                  >Enrutamiento: ruta URL, nombre de host, cadena de consulta,
+                  encabezados</span
+                >
+              </li>
+              <li>
+                <span class="lang-en">No static IP — DNS name only</span
+                ><span class="lang-es">Sin IP estática — solo nombre DNS</span>
+              </li>
+              <li>
+                <span class="lang-en"
+                  >Targets: EC2, ECS, Lambda, private IPs</span
+                ><span class="lang-es"
+                  >Objetivos: EC2, ECS, Lambda, IPs privadas</span
+                >
+              </li>
+              <li>
+                <span class="lang-en"
+                  >Real client IP via
+                  <strong>X-Forwarded-For</strong> header</span
+                ><span class="lang-es"
+                  >IP del cliente real a través del encabezado
+                  <strong>X-Forwarded-For</strong></span
+                >
+              </li>
             </ul>
             <div class="lb-chip-row">
-              <span class="chip blue"><span class="lang-en">Layer 7</span><span class="lang-es">Capa 7</span></span>
+              <span class="chip blue"
+                ><span class="lang-en">Layer 7</span
+                ><span class="lang-es">Capa 7</span></span
+              >
             </div>
           </div>
 
           <!-- NLB -->
           <div class="lb-card nlb">
-            <h4><span class="lang-en">NLB — Network Load Balancer</span><span class="lang-es">NLB — Balanceador de carga de red</span></h4>
-            <div class="lb-sub"><span class="lang-en">Layer 4 · TCP / UDP / TLS</span><span class="lang-es">Capa 4 · TCP / UDP / TLS</span></div>
+            <h4>
+              <span class="lang-en">NLB — Network Load Balancer</span
+              ><span class="lang-es">NLB — Balanceador de carga de red</span>
+            </h4>
+            <div class="lb-sub">
+              <span class="lang-en">Layer 4 · TCP / UDP / TLS</span
+              ><span class="lang-es">Capa 4 · TCP / UDP / TLS</span>
+            </div>
             <ul>
-              <li><span class="lang-en">Extreme performance, ultra-low latency</span><span class="lang-es">Rendimiento extremo, latencia ultra baja</span></li>
-              <li><span class="lang-en">Static IPs per AZ (Elastic IP support)</span><span class="lang-es">IPs estáticas por AZ (soporte de IP elástica)</span></li>
-              <li><span class="lang-en">Can be placed in front of ALB</span><span class="lang-es">Puede colocarse frente a ALB</span></li>
-              <li><span class="lang-en">Targets: EC2, private IPs, ALB</span><span class="lang-es">Objetivos: EC2, IPs privadas, ALB</span></li>
-              <li><span class="lang-en">Sticky sessions via source IP (no cookies)</span><span class="lang-es">Sesiones adhesivas por IP de origen (sin cookies)</span></li>
+              <li>
+                <span class="lang-en"
+                  >Extreme performance, ultra-low latency</span
+                ><span class="lang-es"
+                  >Rendimiento extremo, latencia ultra baja</span
+                >
+              </li>
+              <li>
+                <span class="lang-en"
+                  >Static IPs per AZ (Elastic IP support)</span
+                ><span class="lang-es"
+                  >IPs estáticas por AZ (soporte de IP elástica)</span
+                >
+              </li>
+              <li>
+                <span class="lang-en">Can be placed in front of ALB</span
+                ><span class="lang-es">Puede colocarse frente a ALB</span>
+              </li>
+              <li>
+                <span class="lang-en">Targets: EC2, private IPs, ALB</span
+                ><span class="lang-es">Objetivos: EC2, IPs privadas, ALB</span>
+              </li>
+              <li>
+                <span class="lang-en"
+                  >Sticky sessions via source IP (no cookies)</span
+                ><span class="lang-es"
+                  >Sesiones adhesivas por IP de origen (sin cookies)</span
+                >
+              </li>
             </ul>
             <div class="lb-chip-row">
-              <span class="chip green"><span class="lang-en">Layer 4</span><span class="lang-es">Capa 4</span></span>
+              <span class="chip green"
+                ><span class="lang-en">Layer 4</span
+                ><span class="lang-es">Capa 4</span></span
+              >
             </div>
           </div>
 
           <!-- GWLB -->
           <div class="lb-card gwlb">
-            <h4><span class="lang-en">GWLB — Gateway Load Balancer</span><span class="lang-es">GWLB — Balanceador de carga de puerta de enlace</span></h4>
-            <div class="lb-sub"><span class="lang-en">Layer 3 · IP Packets · GENEVE port 6081</span><span class="lang-es">Capa 3 · Paquetes IP · Puerto GENEVE 6081</span></div>
+            <h4>
+              <span class="lang-en">GWLB — Gateway Load Balancer</span
+              ><span class="lang-es"
+                >GWLB — Balanceador de carga de puerta de enlace</span
+              >
+            </h4>
+            <div class="lb-sub">
+              <span class="lang-en"
+                >Layer 3 · IP Packets · GENEVE port 6081</span
+              ><span class="lang-es"
+                >Capa 3 · Paquetes IP · Puerto GENEVE 6081</span
+              >
+            </div>
             <ul>
-              <li><span class="lang-en">Network traffic inspection (firewalls, IDS/IPS)</span><span class="lang-es">Inspección de tráfico de red (cortafuegos, IDS/IPS)</span></li>
-              <li><span class="lang-en">Routes every packet through 3rd-party appliances</span><span class="lang-es">Enruta cada paquete a través de dispositivos de terceros</span></li>
-              <li><span class="lang-en">Uses GENEVE protocol, port 6081</span><span class="lang-es">Utiliza protocolo GENEVE, puerto 6081</span></li>
-              <li><span class="lang-en">Targets: EC2, private IPs</span><span class="lang-es">Objetivos: EC2, IPs privadas</span></li>
-              <li><span class="lang-en">Transparent to the application</span><span class="lang-es">Transparente para la aplicación</span></li>
+              <li>
+                <span class="lang-en"
+                  >Network traffic inspection (firewalls, IDS/IPS)</span
+                ><span class="lang-es"
+                  >Inspección de tráfico de red (cortafuegos, IDS/IPS)</span
+                >
+              </li>
+              <li>
+                <span class="lang-en"
+                  >Routes every packet through 3rd-party appliances</span
+                ><span class="lang-es"
+                  >Enruta cada paquete a través de dispositivos de
+                  terceros</span
+                >
+              </li>
+              <li>
+                <span class="lang-en">Uses GENEVE protocol, port 6081</span
+                ><span class="lang-es"
+                  >Utiliza protocolo GENEVE, puerto 6081</span
+                >
+              </li>
+              <li>
+                <span class="lang-en">Targets: EC2, private IPs</span
+                ><span class="lang-es">Objetivos: EC2, IPs privadas</span>
+              </li>
+              <li>
+                <span class="lang-en">Transparent to the application</span
+                ><span class="lang-es">Transparente para la aplicación</span>
+              </li>
             </ul>
             <div class="lb-chip-row">
-              <span class="chip purple"><span class="lang-en">Layer 3</span><span class="lang-es">Capa 3</span></span>
+              <span class="chip purple"
+                ><span class="lang-en">Layer 3</span
+                ><span class="lang-es">Capa 3</span></span
+              >
             </div>
           </div>
-
         </div>
       </div>
 
@@ -682,38 +1009,110 @@
       <div class="card">
         <div class="card-header">
           <span class="badge">3</span>
-          <h2><span class="lang-en">Sticky Sessions</span><span class="lang-es">Sesiones adhesivas</span></h2>
+          <h2>
+            <span class="lang-en">Sticky Sessions</span
+            ><span class="lang-es">Sesiones adhesivas</span>
+          </h2>
         </div>
 
         <div class="concept-grid">
           <div class="concept-card">
             <div class="icon">📌</div>
-            <h4><span class="lang-en">What it does</span><span class="lang-es">Qué hace</span></h4>
-            <p><span class="lang-en">Same client always routes to the same backend instance across requests.</span><span class="lang-es">El mismo cliente siempre se enruta a la misma instancia de backend en todas las solicitudes.</span></p>
+            <h4>
+              <span class="lang-en">What it does</span
+              ><span class="lang-es">Qué hace</span>
+            </h4>
+            <p>
+              <span class="lang-en"
+                >Same client always routes to the same backend instance across
+                requests.</span
+              ><span class="lang-es"
+                >El mismo cliente siempre se enruta a la misma instancia de
+                backend en todas las solicitudes.</span
+              >
+            </p>
           </div>
           <div class="concept-card">
             <div class="icon">🍪</div>
-            <h4><span class="lang-en">ALB — Cookie-based</span><span class="lang-es">ALB — Basado en cookies</span></h4>
-            <p><span class="lang-en"><strong>Application-based</strong> (custom cookie) or <strong>duration-based</strong> (LB-generated). Configured at target group level.</span><span class="lang-es"><strong>Basado en aplicación</strong> (cookie personalizada) o <strong>basado en duración</strong> (generado por LB). Configurado a nivel de grupo objetivo.</span></p>
+            <h4>
+              <span class="lang-en">ALB — Cookie-based</span
+              ><span class="lang-es">ALB — Basado en cookies</span>
+            </h4>
+            <p>
+              <span class="lang-en"
+                ><strong>Application-based</strong> (custom cookie) or
+                <strong>duration-based</strong> (LB-generated). Configured at
+                target group level.</span
+              ><span class="lang-es"
+                ><strong>Basado en aplicación</strong> (cookie personalizada) o
+                <strong>basado en duración</strong> (generado por LB).
+                Configurado a nivel de grupo objetivo.</span
+              >
+            </p>
           </div>
           <div class="concept-card">
             <div class="icon">🌐</div>
-            <h4><span class="lang-en">NLB — Source IP hash</span><span class="lang-es">NLB — Hash de IP de origen</span></h4>
-            <p><span class="lang-en">No cookies — uses source IP to route consistently. Simpler but less flexible.</span><span class="lang-es">Sin cookies — usa IP de origen para enrutar consistentemente. Más simple pero menos flexible.</span></p>
+            <h4>
+              <span class="lang-en">NLB — Source IP hash</span
+              ><span class="lang-es">NLB — Hash de IP de origen</span>
+            </h4>
+            <p>
+              <span class="lang-en"
+                >No cookies — uses source IP to route consistently. Simpler but
+                less flexible.</span
+              ><span class="lang-es"
+                >Sin cookies — usa IP de origen para enrutar consistentemente.
+                Más simple pero menos flexible.</span
+              >
+            </p>
           </div>
           <div class="concept-card">
             <div class="icon">⚙️</div>
-            <h4><span class="lang-en">Config level</span><span class="lang-es">Nivel de configuración</span></h4>
-            <p><span class="lang-en">Sticky sessions are configured at the <strong>TARGET GROUP level</strong>, not the listener or LB itself.</span><span class="lang-es">Las sesiones adhesivas se configuran a nivel de <strong>GRUPO OBJETIVO</strong>, no en el listener o LB mismo.</span></p>
+            <h4>
+              <span class="lang-en">Config level</span
+              ><span class="lang-es">Nivel de configuración</span>
+            </h4>
+            <p>
+              <span class="lang-en"
+                >Sticky sessions are configured at the
+                <strong>TARGET GROUP level</strong>, not the listener or LB
+                itself.</span
+              ><span class="lang-es"
+                >Las sesiones adhesivas se configuran a nivel de
+                <strong>GRUPO OBJETIVO</strong>, no en el listener o LB
+                mismo.</span
+              >
+            </p>
           </div>
         </div>
 
-        <div class="callout info" style="margin-top:1rem;">
-          <strong><span class="lang-en">Reserved cookie names:</span><span class="lang-es">Nombres de cookies reservadas:</span></strong> <span class="lang-en">AWSALB, AWSALBAPP, AWSALBTG — do not use these names in your own cookies.</span><span class="lang-es">AWSALB, AWSALBAPP, AWSALBTG — no use estos nombres en sus propias cookies.</span>
+        <div class="callout info" style="margin-top: 1rem">
+          <strong
+            ><span class="lang-en">Reserved cookie names:</span
+            ><span class="lang-es">Nombres de cookies reservadas:</span></strong
+          >
+          <span class="lang-en"
+            >AWSALB, AWSALBAPP, AWSALBTG — do not use these names in your own
+            cookies.</span
+          ><span class="lang-es"
+            >AWSALB, AWSALBAPP, AWSALBTG — no use estos nombres en sus propias
+            cookies.</span
+          >
         </div>
 
         <div class="callout warning">
-          <span class="lang-en">⚠ <strong>Trade-off:</strong> Sticky sessions can cause load imbalance if some users generate significantly more load than others. A "heavy" user stays pinned to one instance, overloading it while others are idle.</span><span class="lang-es">⚠ <strong>Compensación:</strong> Las sesiones adhesivas pueden causar desbalance de carga si algunos usuarios generan significativamente más carga que otros. Un usuario "pesado" se mantiene fijado a una instancia, sobrecargándola mientras otros están inactivos.</span>
+          <span class="lang-en"
+            >⚠ <strong>Trade-off:</strong> Sticky sessions can cause load
+            imbalance if some users generate significantly more load than
+            others. A "heavy" user stays pinned to one instance, overloading it
+            while others are idle.</span
+          ><span class="lang-es"
+            >⚠ <strong>Compensación:</strong> Las sesiones adhesivas pueden
+            causar desbalance de carga si algunos usuarios generan
+            significativamente más carga que otros. Un usuario "pesado" se
+            mantiene fijado a una instancia, sobrecargándola mientras otros
+            están inactivos.</span
+          >
         </div>
       </div>
 
@@ -721,52 +1120,125 @@
       <div class="card">
         <div class="card-header">
           <span class="badge">4</span>
-          <h2><span class="lang-en">Cross-Zone Load Balancing</span><span class="lang-es">Balanceo de carga entre zonas</span></h2>
+          <h2>
+            <span class="lang-en">Cross-Zone Load Balancing</span
+            ><span class="lang-es">Balanceo de carga entre zonas</span>
+          </h2>
         </div>
 
-        <p><span class="lang-en">Controls whether an ELB node in one AZ can distribute traffic to instances in <em>other</em> AZs.</span><span class="lang-es">Controla si un nodo ELB en una AZ puede distribuir tráfico a instancias en <em>otras</em> AZs.</span></p>
+        <p>
+          <span class="lang-en"
+            >Controls whether an ELB node in one AZ can distribute traffic to
+            instances in <em>other</em> AZs.</span
+          ><span class="lang-es"
+            >Controla si un nodo ELB en una AZ puede distribuir tráfico a
+            instancias en <em>otras</em> AZs.</span
+          >
+        </p>
 
         <div class="demo-wrap">
           <div class="demo-title">
-            <div class="mode-dot" style="background:#f97316;"></div>
-            <h4><span class="lang-en">Cross-Zone — Interactive Demo</span><span class="lang-es">Entre zonas — Demostración interactiva</span></h4>
+            <div class="mode-dot" style="background: #f97316"></div>
+            <h4>
+              <span class="lang-en">Cross-Zone — Interactive Demo</span
+              ><span class="lang-es"
+                >Entre zonas — Demostración interactiva</span
+              >
+            </h4>
           </div>
 
           <div id="cz" class="anim-body"></div>
 
-          <div class="anim-controls" style="margin-top:0.75rem;">
-            <button class="nav-btn" id="cz-prev" onclick="prev('cz')">&#8592; <span class="lang-en">Prev</span><span class="lang-es">Anterior</span></button>
+          <div class="anim-controls" style="margin-top: 0.75rem">
+            <button class="nav-btn" id="cz-prev" onclick="prev('cz')">
+              &#8592; <span class="lang-en">Prev</span
+              ><span class="lang-es">Anterior</span>
+            </button>
             <div class="step-dots" id="cz-dots"></div>
-            <button class="nav-btn" id="cz-next" onclick="next('cz')"><span class="lang-en">Next</span><span class="lang-es">Siguiente</span> &#8594;</button>
+            <button class="nav-btn" id="cz-next" onclick="next('cz')">
+              <span class="lang-en">Next</span
+              ><span class="lang-es">Siguiente</span> &#8594;
+            </button>
             <span class="step-counter" id="cz-counter"></span>
-            <button class="restart-btn" onclick="restart('cz')">&#8635; <span class="lang-en">Restart</span><span class="lang-es">Reiniciar</span></button>
+            <button class="restart-btn" onclick="restart('cz')">
+              &#8635; <span class="lang-en">Restart</span
+              ><span class="lang-es">Reiniciar</span>
+            </button>
           </div>
         </div>
 
-        <h3><span class="lang-en">Defaults by LB Type</span><span class="lang-es">Valores predeterminados por tipo de LB</span></h3>
+        <h3>
+          <span class="lang-en">Defaults by LB Type</span
+          ><span class="lang-es">Valores predeterminados por tipo de LB</span>
+        </h3>
         <table class="data-table">
           <thead>
             <tr>
-              <th><span class="lang-en">Load Balancer</span><span class="lang-es">Balanceador de carga</span></th>
-              <th><span class="lang-en">Cross-Zone Default</span><span class="lang-es">Valor predeterminado entre zonas</span></th>
-              <th><span class="lang-en">Inter-AZ Charges</span><span class="lang-es">Cargos entre AZs</span></th>
+              <th>
+                <span class="lang-en">Load Balancer</span
+                ><span class="lang-es">Balanceador de carga</span>
+              </th>
+              <th>
+                <span class="lang-en">Cross-Zone Default</span
+                ><span class="lang-es">Valor predeterminado entre zonas</span>
+              </th>
+              <th>
+                <span class="lang-en">Inter-AZ Charges</span
+                ><span class="lang-es">Cargos entre AZs</span>
+              </th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td><span style="color:#60a5fa; font-weight:700;">ALB</span></td>
-              <td><span class="chip green"><span class="lang-en">ON by default</span><span class="lang-es">ACTIVADO de forma predeterminada</span></span></td>
-              <td><span class="lang-en">No charges</span><span class="lang-es">Sin cargos</span></td>
+              <td><span style="color: #60a5fa; font-weight: 700">ALB</span></td>
+              <td>
+                <span class="chip green"
+                  ><span class="lang-en">ON by default</span
+                  ><span class="lang-es"
+                    >ACTIVADO de forma predeterminada</span
+                  ></span
+                >
+              </td>
+              <td>
+                <span class="lang-en">No charges</span
+                ><span class="lang-es">Sin cargos</span>
+              </td>
             </tr>
             <tr>
-              <td><span style="color:#34d399; font-weight:700;">NLB</span></td>
-              <td><span class="chip gray"><span class="lang-en">OFF by default</span><span class="lang-es">DESACTIVADO de forma predeterminada</span></span></td>
-              <td><span class="lang-en">Charges apply when enabled</span><span class="lang-es">Se aplican cargos cuando está habilitado</span></td>
+              <td><span style="color: #34d399; font-weight: 700">NLB</span></td>
+              <td>
+                <span class="chip gray"
+                  ><span class="lang-en">OFF by default</span
+                  ><span class="lang-es"
+                    >DESACTIVADO de forma predeterminada</span
+                  ></span
+                >
+              </td>
+              <td>
+                <span class="lang-en">Charges apply when enabled</span
+                ><span class="lang-es"
+                  >Se aplican cargos cuando está habilitado</span
+                >
+              </td>
             </tr>
             <tr>
-              <td><span style="color:#c084fc; font-weight:700;">GWLB</span></td>
-              <td><span class="chip gray"><span class="lang-en">OFF by default</span><span class="lang-es">DESACTIVADO de forma predeterminada</span></span></td>
-              <td><span class="lang-en">Charges apply when enabled</span><span class="lang-es">Se aplican cargos cuando está habilitado</span></td>
+              <td>
+                <span style="color: #c084fc; font-weight: 700">GWLB</span>
+              </td>
+              <td>
+                <span class="chip gray"
+                  ><span class="lang-en">OFF by default</span
+                  ><span class="lang-es"
+                    >DESACTIVADO de forma predeterminada</span
+                  ></span
+                >
+              </td>
+              <td>
+                <span class="lang-en">Charges apply when enabled</span
+                ><span class="lang-es"
+                  >Se aplican cargos cuando está habilitado</span
+                >
+              </td>
             </tr>
           </tbody>
         </table>
@@ -776,24 +1248,67 @@
       <div class="card">
         <div class="card-header">
           <span class="badge">5</span>
-          <h2><span class="lang-en">SSL / TLS Certificates</span><span class="lang-es">Certificados SSL / TLS</span></h2>
+          <h2>
+            <span class="lang-en">SSL / TLS Certificates</span
+            ><span class="lang-es">Certificados SSL / TLS</span>
+          </h2>
         </div>
 
         <div class="concept-grid">
           <div class="concept-card">
             <div class="icon">🔐</div>
-            <h4><span class="lang-en">SSL Termination</span><span class="lang-es">Terminación SSL</span></h4>
-            <p><span class="lang-en">LB decrypts HTTPS traffic, then forwards plain HTTP to backend instances. Instances don't need to hold SSL certs.</span><span class="lang-es">LB descifra tráfico HTTPS, luego reenvía HTTP simple a instancias de backend. Las instancias no necesitan contener certificados SSL.</span></p>
+            <h4>
+              <span class="lang-en">SSL Termination</span
+              ><span class="lang-es">Terminación SSL</span>
+            </h4>
+            <p>
+              <span class="lang-en"
+                >LB decrypts HTTPS traffic, then forwards plain HTTP to backend
+                instances. Instances don't need to hold SSL certs.</span
+              ><span class="lang-es"
+                >LB descifra tráfico HTTPS, luego reenvía HTTP simple a
+                instancias de backend. Las instancias no necesitan contener
+                certificados SSL.</span
+              >
+            </p>
           </div>
           <div class="concept-card">
             <div class="icon">📜</div>
-            <h4><span class="lang-en">ACM — AWS Certificate Manager</span><span class="lang-es">ACM — Gestor de certificados de AWS</span></h4>
-            <p><span class="lang-en">Manages SSL/TLS certificates. Supports auto-renewal. Integrates natively with ALB and NLB.</span><span class="lang-es">Gestiona certificados SSL/TLS. Soporta renovación automática. Se integra nativamente con ALB y NLB.</span></p>
+            <h4>
+              <span class="lang-en">ACM — AWS Certificate Manager</span
+              ><span class="lang-es">ACM — Gestor de certificados de AWS</span>
+            </h4>
+            <p>
+              <span class="lang-en"
+                >Manages SSL/TLS certificates. Supports auto-renewal. Integrates
+                natively with ALB and NLB.</span
+              ><span class="lang-es"
+                >Gestiona certificados SSL/TLS. Soporta renovación automática.
+                Se integra nativamente con ALB y NLB.</span
+              >
+            </p>
           </div>
           <div class="concept-card">
             <div class="icon">🏷</div>
-            <h4><span class="lang-en">SNI — Server Name Indication</span><span class="lang-es">SNI — Indicación del nombre del servidor</span></h4>
-            <p><span class="lang-en">Allows <strong>multiple SSL certs</strong> on a single load balancer listener. Supported by <strong>ALB &amp; NLB only</strong> — Classic LB does NOT support SNI.</span><span class="lang-es">Permite <strong>múltiples certificados SSL</strong> en un único listener del balanceador de carga. Soportado por <strong>ALB y NLB únicamente</strong> — Classic LB NO soporta SNI.</span></p>
+            <h4>
+              <span class="lang-en">SNI — Server Name Indication</span
+              ><span class="lang-es"
+                >SNI — Indicación del nombre del servidor</span
+              >
+            </h4>
+            <p>
+              <span class="lang-en"
+                >Allows <strong>multiple SSL certs</strong> on a single load
+                balancer listener. Supported by
+                <strong>ALB &amp; NLB only</strong> — Classic LB does NOT
+                support SNI.</span
+              ><span class="lang-es"
+                >Permite <strong>múltiples certificados SSL</strong> en un único
+                listener del balanceador de carga. Soportado por
+                <strong>ALB y NLB únicamente</strong> — Classic LB NO soporta
+                SNI.</span
+              >
+            </p>
           </div>
         </div>
       </div>
@@ -802,30 +1317,482 @@
       <div class="card">
         <div class="card-header">
           <span class="badge">6</span>
-          <h2><span class="lang-en">Connection Draining</span><span class="lang-es">Drenado de conexiones</span></h2>
+          <h2>
+            <span class="lang-en"
+              >Connection Draining / Deregistration Delay</span
+            ><span class="lang-es"
+              >Drenado de conexiones / Retraso de cancelación de registro</span
+            >
+          </h2>
         </div>
 
-        <div class="concept-grid">
+        <p>
+          <span class="lang-en"
+            >When an instance is taken out of service — due to a deployment,
+            scale-in event, or a failed health check — there may be
+            <strong>requests already in progress</strong> on that instance.
+            Without draining, those connections would be cut immediately,
+            causing errors for users mid-request. Connection Draining tells the
+            ELB:
+            <em
+              >"stop sending new traffic to this instance, but give it time to
+              finish what it's already handling."</em
+            ></span
+          >
+          <span class="lang-es"
+            >Cuando una instancia se retira del servicio — por un despliegue, un
+            evento de reducción de escala o un health check fallido — puede
+            haber <strong>solicitudes ya en curso</strong> en esa instancia. Sin
+            drenado, esas conexiones se cortarían inmediatamente, causando
+            errores a los usuarios. Connection Draining le dice al ELB:
+            <em
+              >"deja de enviar tráfico nuevo a esta instancia, pero dale tiempo
+              para terminar lo que ya está procesando."</em
+            ></span
+          >
+        </p>
+
+        <!-- SVG Flow Diagram -->
+        <h3 style="margin-top: 1.5rem">
+          <span class="lang-en">How it works</span
+          ><span class="lang-es">Cómo funciona</span>
+        </h3>
+        <p>
+          <span class="lang-en"
+            >The diagram below shows what happens when an instance enters
+            draining state. New requests go to healthy instances; existing
+            in-flight requests are allowed to finish.</span
+          ><span class="lang-es"
+            >El diagrama muestra qué ocurre cuando una instancia entra en estado
+            de drenado. Las nuevas solicitudes van a instancias saludables; las
+            solicitudes en curso pueden terminar.</span
+          >
+        </p>
+
+        <div
+          style="
+            background: #0f172a;
+            border-radius: 12px;
+            padding: 1.2rem;
+            margin: 0.75rem 0 1.25rem;
+            overflow-x: auto;
+          "
+        >
+          <svg
+            viewBox="0 0 680 210"
+            xmlns="http://www.w3.org/2000/svg"
+            style="
+              width: 100%;
+              max-width: 680px;
+              display: block;
+              margin: 0 auto;
+              font-family: &quot;Inter&quot;, sans-serif;
+            "
+          >
+            <!-- ELB -->
+            <rect
+              x="10"
+              y="80"
+              width="110"
+              height="50"
+              rx="8"
+              fill="#1e3a5f"
+              stroke="#3b82f6"
+              stroke-width="1.5"
+            />
+            <text
+              x="65"
+              y="101"
+              text-anchor="middle"
+              font-size="13"
+              font-weight="700"
+              fill="#60a5fa"
+            >
+              ELB
+            </text>
+            <text
+              x="65"
+              y="118"
+              text-anchor="middle"
+              font-size="12"
+              fill="#93c5fd"
+            >
+              Load Balancer
+            </text>
+
+            <!-- Healthy instance -->
+            <rect
+              x="270"
+              y="20"
+              width="130"
+              height="50"
+              rx="8"
+              fill="#064e3b"
+              stroke="#10b981"
+              stroke-width="1.5"
+            />
+            <text
+              x="335"
+              y="42"
+              text-anchor="middle"
+              font-size="13"
+              font-weight="700"
+              fill="#34d399"
+            >
+              Instance A
+            </text>
+            <text
+              x="335"
+              y="59"
+              text-anchor="middle"
+              font-size="12"
+              fill="#6ee7b7"
+            >
+              ✓ Healthy
+            </text>
+
+            <!-- Draining instance -->
+            <rect
+              x="270"
+              y="140"
+              width="130"
+              height="50"
+              rx="8"
+              fill="#422006"
+              stroke="#f59e0b"
+              stroke-width="1.5"
+              stroke-dasharray="5,3"
+            />
+            <text
+              x="335"
+              y="162"
+              text-anchor="middle"
+              font-size="13"
+              font-weight="700"
+              fill="#fcd34d"
+            >
+              Instance B
+            </text>
+            <text
+              x="335"
+              y="179"
+              text-anchor="middle"
+              font-size="12"
+              fill="#fbbf24"
+            >
+              ⏳ Draining
+            </text>
+
+            <!-- Arrow: ELB → Instance A (new requests) -->
+            <line
+              x1="120"
+              y1="90"
+              x2="268"
+              y2="50"
+              stroke="#10b981"
+              stroke-width="2"
+              marker-end="url(#arr-green)"
+            />
+            <text
+              x="185"
+              y="58"
+              text-anchor="middle"
+              font-size="12"
+              fill="#34d399"
+            >
+              ① New requests
+            </text>
+
+            <!-- Blocked arrow: ELB → Instance B (no new) -->
+            <line
+              x1="120"
+              y1="115"
+              x2="268"
+              y2="158"
+              stroke="#ef4444"
+              stroke-width="2"
+              stroke-dasharray="5,3"
+              marker-end="url(#arr-red)"
+            />
+            <text
+              x="180"
+              y="152"
+              text-anchor="middle"
+              font-size="12"
+              fill="#f87171"
+            >
+              ✗ No new requests
+            </text>
+
+            <!-- Arrow: Instance B → completes -->
+            <rect
+              x="440"
+              y="140"
+              width="130"
+              height="50"
+              rx="8"
+              fill="#1e293b"
+              stroke="#334155"
+              stroke-width="1"
+            />
+            <text
+              x="505"
+              y="162"
+              text-anchor="middle"
+              font-size="13"
+              font-weight="700"
+              fill="#94a3b8"
+            >
+              In-flight
+            </text>
+            <text
+              x="505"
+              y="179"
+              text-anchor="middle"
+              font-size="12"
+              fill="#64748b"
+            >
+              requests finish
+            </text>
+            <line
+              x1="400"
+              y1="165"
+              x2="438"
+              y2="165"
+              stroke="#f59e0b"
+              stroke-width="2"
+              marker-end="url(#arr-yellow)"
+            />
+            <text
+              x="419"
+              y="158"
+              text-anchor="middle"
+              font-size="12"
+              fill="#fcd34d"
+            >
+              ② Drain
+            </text>
+
+            <!-- Timer -->
+            <rect
+              x="440"
+              y="20"
+              width="220"
+              height="50"
+              rx="8"
+              fill="#1e293b"
+              stroke="#334155"
+              stroke-width="1"
+            />
+            <text
+              x="550"
+              y="40"
+              text-anchor="middle"
+              font-size="12"
+              font-weight="700"
+              fill="#94a3b8"
+            >
+              ⏱ Drain timeout
+            </text>
+            <text
+              x="550"
+              y="57"
+              text-anchor="middle"
+              font-size="12"
+              fill="#64748b"
+            >
+              Deregister when done OR timeout
+            </text>
+
+            <!-- Arrow markers -->
+            <defs>
+              <marker
+                id="arr-green"
+                markerWidth="8"
+                markerHeight="8"
+                refX="6"
+                refY="3"
+                orient="auto"
+              >
+                <path d="M0,0 L0,6 L8,3 z" fill="#10b981" />
+              </marker>
+              <marker
+                id="arr-red"
+                markerWidth="8"
+                markerHeight="8"
+                refX="6"
+                refY="3"
+                orient="auto"
+              >
+                <path d="M0,0 L0,6 L8,3 z" fill="#ef4444" />
+              </marker>
+              <marker
+                id="arr-yellow"
+                markerWidth="8"
+                markerHeight="8"
+                refX="6"
+                refY="3"
+                orient="auto"
+              >
+                <path d="M0,0 L0,6 L8,3 z" fill="#f59e0b" />
+              </marker>
+            </defs>
+          </svg>
+        </div>
+
+        <!-- Two-column: naming + timing -->
+        <div
+          class="concept-grid"
+          style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr))"
+        >
           <div class="concept-card">
             <div class="icon">💧</div>
-            <h4><span class="lang-en">Also called</span><span class="lang-es">También llamado</span></h4>
-            <p><span class="lang-en"><strong>Deregistration Delay</strong> — same feature, different names depending on context.</span><span class="lang-es"><strong>Retraso de cancelación de registro</strong> — la misma característica, diferentes nombres según el contexto.</span></p>
+            <h4>
+              <span class="lang-en">Two names, same feature</span
+              ><span class="lang-es">Dos nombres, misma función</span>
+            </h4>
+            <p>
+              <span class="lang-en"
+                ><strong>Connection Draining</strong> is the name used with
+                Classic Load Balancers. <strong>Deregistration Delay</strong> is
+                the name used with ALB, NLB, and GWLB (target groups). They work
+                identically.</span
+              >
+              <span class="lang-es"
+                ><strong>Connection Draining</strong> es el nombre usado con
+                Classic Load Balancers. <strong>Deregistration Delay</strong> es
+                el nombre usado con ALB, NLB y GWLB (grupos objetivo). Funcionan
+                igual.</span
+              >
+            </p>
           </div>
           <div class="concept-card">
             <div class="icon">⏳</div>
-            <h4><span class="lang-en">What it does</span><span class="lang-es">Qué hace</span></h4>
-            <p><span class="lang-en">In-flight requests get time to complete when an instance is deregistered or marked unhealthy. ELB stops sending NEW requests to the draining instance.</span><span class="lang-es">Las solicitudes en vuelo tienen tiempo para completarse cuando una instancia se cancela del registro o se marca como no saludable. ELB deja de enviar NUEVAS solicitudes a la instancia que se drena.</span></p>
+            <h4>
+              <span class="lang-en">What the timer controls</span
+              ><span class="lang-es">Qué controla el temporizador</span>
+            </h4>
+            <p>
+              <span class="lang-en"
+                >The timer is a <strong>maximum wait</strong>. ELB waits up to
+                this long for in-flight requests to complete. If all requests
+                finish sooner, the instance deregisters immediately — no need to
+                wait out the full timer.</span
+              >
+              <span class="lang-es"
+                >El temporizador es una <strong>espera máxima</strong>. ELB
+                espera como máximo este tiempo para que las solicitudes en curso
+                finalicen. Si terminan antes, la instancia se cancela
+                inmediatamente — no hace falta esperar todo el tiempo.</span
+              >
+            </p>
           </div>
-          <div class="concept-card">
-            <div class="icon">⚙️</div>
-            <h4><span class="lang-en">Timing</span><span class="lang-es">Temporización</span></h4>
-            <p><span class="lang-en"><strong>Default:</strong> 300 seconds | <strong>Range:</strong> 1–3,600 s | <strong>Disable:</strong> set to 0</span><span class="lang-es"><strong>Predeterminado:</strong> 300 segundos | <strong>Rango:</strong> 1–3.600 s | <strong>Deshabilitado:</strong> establecer en 0</span></p>
-          </div>
-          <div class="concept-card">
-            <div class="icon">🎯</div>
-            <h4><span class="lang-en">Best practice</span><span class="lang-es">Mejor práctica</span></h4>
-            <p><span class="lang-en">Low value for short requests. High value for long uploads or connections. Set to 0 to deregister instantly.</span><span class="lang-es">Valor bajo para solicitudes cortas. Valor alto para descargas o conexiones largas. Establecer en 0 para cancelar el registro instantáneamente.</span></p>
-          </div>
+        </div>
+
+        <!-- Timing guide table -->
+        <h3>
+          <span class="lang-en">Choosing the right timeout value</span
+          ><span class="lang-es">Elegir el valor de timeout correcto</span>
+        </h3>
+        <p>
+          <span class="lang-en"
+            >The default is 300 s (5 min). The right value depends on how long
+            your typical requests take.</span
+          ><span class="lang-es"
+            >El valor predeterminado es 300 s (5 min). El valor correcto depende
+            de cuánto tardan tus solicitudes típicas.</span
+          >
+        </p>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>
+                <span class="lang-en">Scenario</span
+                ><span class="lang-es">Escenario</span>
+              </th>
+              <th>
+                <span class="lang-en">Recommended value</span
+                ><span class="lang-es">Valor recomendado</span>
+              </th>
+              <th>
+                <span class="lang-en">Why</span
+                ><span class="lang-es">Por qué</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <span class="lang-en">REST API, web pages (fast requests)</span
+                ><span class="lang-es"
+                  >API REST, páginas web (solicitudes rápidas)</span
+                >
+              </td>
+              <td><span class="chip green">Low — e.g. 30 s</span></td>
+              <td>
+                <span class="lang-en"
+                  >Requests finish in milliseconds; no point waiting 5 min.
+                  Faster deployments.</span
+                ><span class="lang-es"
+                  >Las solicitudes terminan en milisegundos; no tiene sentido
+                  esperar 5 min. Despliegues más rápidos.</span
+                >
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span class="lang-en"
+                  >File uploads, video streaming, long polling</span
+                ><span class="lang-es"
+                  >Subida de archivos, streaming, long polling</span
+                >
+              </td>
+              <td><span class="chip yellow">High — e.g. 900–3600 s</span></td>
+              <td>
+                <span class="lang-en"
+                  >Requests can run for minutes; cutting them short causes
+                  upload failures or broken streams.</span
+                ><span class="lang-es"
+                  >Las solicitudes pueden durar minutos; cortarlas genera fallos
+                  de subida o streams rotos.</span
+                >
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span class="lang-en"
+                  >Emergency deregistration (don't care about connections)</span
+                ><span class="lang-es"
+                  >Cancelación de emergencia (no importan las conexiones)</span
+                >
+              </td>
+              <td><span class="chip red">0 — disabled</span></td>
+              <td>
+                <span class="lang-en"
+                  >Instance deregisters instantly. Existing connections are
+                  dropped. Use with caution.</span
+                ><span class="lang-es"
+                  >La instancia se cancela instantáneamente. Las conexiones
+                  existentes se cortan. Usar con precaución.</span
+                >
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="callout info" style="margin-top: 0.75rem">
+          <span class="lang-en"
+            ><strong>Range:</strong> 1 – 3,600 seconds &nbsp;|&nbsp;
+            <strong>Default:</strong> 300 s &nbsp;|&nbsp;
+            <strong>Disable:</strong> set to 0 &nbsp;|&nbsp; Configured at the
+            <strong>target group level</strong>.</span
+          >
+          <span class="lang-es"
+            ><strong>Rango:</strong> 1 – 3.600 segundos &nbsp;|&nbsp;
+            <strong>Predeterminado:</strong> 300 s &nbsp;|&nbsp;
+            <strong>Deshabilitado:</strong> establecer en 0 &nbsp;|&nbsp; Se
+            configura a nivel de <strong>grupo objetivo</strong>.</span
+          >
         </div>
       </div>
 
@@ -833,35 +1800,106 @@
       <div class="card">
         <div class="card-header">
           <span class="badge">7</span>
-          <h2><span class="lang-en">Auto Scaling Groups (ASG)</span><span class="lang-es">Grupos de auto escalado (ASG)</span></h2>
+          <h2>
+            <span class="lang-en">Auto Scaling Groups (ASG)</span
+            ><span class="lang-es">Grupos de auto escalado (ASG)</span>
+          </h2>
         </div>
 
         <div class="concept-grid">
           <div class="concept-card">
             <div class="icon">📋</div>
-            <h4><span class="lang-en">Launch Template</span><span class="lang-es">Plantilla de lanzamiento</span></h4>
-            <p><span class="lang-en">Blueprint for new EC2 instances — AMI, instance type, user data, security groups, key pair, etc. <strong>Never</strong> the running instance config.</span><span class="lang-es">Plantilla para nuevas instancias EC2 — AMI, tipo de instancia, datos de usuario, grupos de seguridad, par de claves, etc. <strong>Nunca</strong> la configuración de la instancia en ejecución.</span></p>
+            <h4>
+              <span class="lang-en">Launch Template</span
+              ><span class="lang-es">Plantilla de lanzamiento</span>
+            </h4>
+            <p>
+              <span class="lang-en"
+                >Blueprint for new EC2 instances — AMI, instance type, user
+                data, security groups, key pair, etc. <strong>Never</strong> the
+                running instance config.</span
+              ><span class="lang-es"
+                >Plantilla para nuevas instancias EC2 — AMI, tipo de instancia,
+                datos de usuario, grupos de seguridad, par de claves, etc.
+                <strong>Nunca</strong> la configuración de la instancia en
+                ejecución.</span
+              >
+            </p>
           </div>
           <div class="concept-card">
             <div class="icon">📊</div>
-            <h4><span class="lang-en">Min / Desired / Max</span><span class="lang-es">Mín / Deseado / Máx</span></h4>
-            <p><span class="lang-en">Capacity boundaries. <strong>Min</strong>: floor, <strong>Desired</strong>: target ASG tries to maintain, <strong>Max</strong>: ceiling for scaling out.</span><span class="lang-es">Límites de capacidad. <strong>Mín</strong>: piso, <strong>Deseado</strong>: objetivo que ASG intenta mantener, <strong>Máx</strong>: techo para escalar hacia afuera.</span></p>
+            <h4>
+              <span class="lang-en">Min / Desired / Max</span
+              ><span class="lang-es">Mín / Deseado / Máx</span>
+            </h4>
+            <p>
+              <span class="lang-en"
+                >Capacity boundaries. <strong>Min</strong>: floor,
+                <strong>Desired</strong>: target ASG tries to maintain,
+                <strong>Max</strong>: ceiling for scaling out.</span
+              ><span class="lang-es"
+                >Límites de capacidad. <strong>Mín</strong>: piso,
+                <strong>Deseado</strong>: objetivo que ASG intenta mantener,
+                <strong>Máx</strong>: techo para escalar hacia afuera.</span
+              >
+            </p>
           </div>
           <div class="concept-card">
             <div class="icon">🔄</div>
-            <h4><span class="lang-en">Self-Healing</span><span class="lang-es">Auto-curación</span></h4>
-            <p><span class="lang-en">Unhealthy instances are terminated and replaced automatically. New instances are registered with the ELB target group.</span><span class="lang-es">Las instancias no saludables se terminan y se reemplazan automáticamente. Las nuevas instancias se registran con el grupo objetivo de ELB.</span></p>
+            <h4>
+              <span class="lang-en">Self-Healing</span
+              ><span class="lang-es">Auto-curación</span>
+            </h4>
+            <p>
+              <span class="lang-en"
+                >Unhealthy instances are terminated and replaced automatically.
+                New instances are registered with the ELB target group.</span
+              ><span class="lang-es"
+                >Las instancias no saludables se terminan y se reemplazan
+                automáticamente. Las nuevas instancias se registran con el grupo
+                objetivo de ELB.</span
+              >
+            </p>
           </div>
           <div class="concept-card">
             <div class="icon">💸</div>
-            <h4><span class="lang-en">ASGs are FREE</span><span class="lang-es">Los ASG son GRATUITOS</span></h4>
-            <p><span class="lang-en">The ASG itself costs nothing. You only pay for the EC2 instances it launches.</span><span class="lang-es">El ASG en sí no cuesta nada. Solo pagas las instancias EC2 que lanza.</span></p>
+            <h4>
+              <span class="lang-en">ASGs are FREE</span
+              ><span class="lang-es">Los ASG son GRATUITOS</span>
+            </h4>
+            <p>
+              <span class="lang-en"
+                >The ASG itself costs nothing. You only pay for the EC2
+                instances it launches.</span
+              ><span class="lang-es"
+                >El ASG en sí no cuesta nada. Solo pagas las instancias EC2 que
+                lanza.</span
+              >
+            </p>
           </div>
         </div>
 
-        <div class="callout danger" style="margin-top:1.25rem;">
-          <strong style="color:#f87171;"><span class="lang-en">⚠ Weak point — AMI Update</span><span class="lang-es">⚠ Punto débil — Actualización de AMI</span></strong><br>
-          <span class="lang-en">To change the AMI for <em>future</em> instances: update the <strong>Launch Template</strong> (not the running instances). Running instances keep their original config until they are terminated and replaced. The ASG does not automatically restart existing instances after a template change.</span><span class="lang-es">Para cambiar la AMI de instancias <em>futuras</em>: actualiza la <strong>plantilla de lanzamiento</strong> (no las instancias en ejecución). Las instancias en ejecución mantienen su configuración original hasta que se terminan y se reemplazan. El ASG no reinicia automáticamente las instancias existentes después de un cambio de plantilla.</span>
+        <div class="callout danger" style="margin-top: 1.25rem">
+          <strong style="color: #f87171"
+            ><span class="lang-en">⚠ Weak point — AMI Update</span
+            ><span class="lang-es"
+              >⚠ Punto débil — Actualización de AMI</span
+            ></strong
+          ><br />
+          <span class="lang-en"
+            >To change the AMI for <em>future</em> instances: update the
+            <strong>Launch Template</strong> (not the running instances).
+            Running instances keep their original config until they are
+            terminated and replaced. The ASG does not automatically restart
+            existing instances after a template change.</span
+          ><span class="lang-es"
+            >Para cambiar la AMI de instancias <em>futuras</em>: actualiza la
+            <strong>plantilla de lanzamiento</strong> (no las instancias en
+            ejecución). Las instancias en ejecución mantienen su configuración
+            original hasta que se terminan y se reemplazan. El ASG no reinicia
+            automáticamente las instancias existentes después de un cambio de
+            plantilla.</span
+          >
         </div>
       </div>
 
@@ -869,34 +1907,115 @@
       <div class="card">
         <div class="card-header">
           <span class="badge">8</span>
-          <h2><span class="lang-en">Scaling Policies</span><span class="lang-es">Políticas de escalado</span></h2>
+          <h2>
+            <span class="lang-en">Scaling Policies</span
+            ><span class="lang-es">Políticas de escalado</span>
+          </h2>
         </div>
 
         <div class="policy-grid">
           <div class="policy-card">
-            <h4><span class="lang-en">Target Tracking</span><span class="lang-es">Seguimiento de objetivos</span></h4>
-            <p><span class="lang-en">Set a metric and a target value. ASG continuously adjusts capacity to keep the metric at target.</span><span class="lang-es">Establece una métrica y un valor objetivo. ASG ajusta continuamente la capacidad para mantener la métrica en el objetivo.</span></p>
-            <div class="example"><span class="lang-en">"Keep average CPU at 40%"</span><span class="lang-es">"Mantener CPU promedio en 40%"</span></div>
+            <h4>
+              <span class="lang-en">Target Tracking</span
+              ><span class="lang-es">Seguimiento de objetivos</span>
+            </h4>
+            <p>
+              <span class="lang-en"
+                >Set a metric and a target value. ASG continuously adjusts
+                capacity to keep the metric at target.</span
+              ><span class="lang-es"
+                >Establece una métrica y un valor objetivo. ASG ajusta
+                continuamente la capacidad para mantener la métrica en el
+                objetivo.</span
+              >
+            </p>
+            <div class="example">
+              <span class="lang-en">"Keep average CPU at 40%"</span
+              ><span class="lang-es">"Mantener CPU promedio en 40%"</span>
+            </div>
           </div>
           <div class="policy-card">
-            <h4><span class="lang-en">Simple / Step Scaling</span><span class="lang-es">Escalado simple / por pasos</span></h4>
-            <p><span class="lang-en">CloudWatch alarm triggers a fixed change: add or remove N instances. Step scaling supports tiered thresholds.</span><span class="lang-es">La alarma CloudWatch activa un cambio fijo: agrega o elimina N instancias. El escalado por pasos admite umbrales por niveles.</span></p>
-            <div class="example"><span class="lang-en">"CPU &gt; 70% → add 2 instances"</span><span class="lang-es">"CPU &gt; 70% → agregar 2 instancias"</span></div>
+            <h4>
+              <span class="lang-en">Simple / Step Scaling</span
+              ><span class="lang-es">Escalado simple / por pasos</span>
+            </h4>
+            <p>
+              <span class="lang-en"
+                >CloudWatch alarm triggers a fixed change: add or remove N
+                instances. Step scaling supports tiered thresholds.</span
+              ><span class="lang-es"
+                >La alarma CloudWatch activa un cambio fijo: agrega o elimina N
+                instancias. El escalado por pasos admite umbrales por
+                niveles.</span
+              >
+            </p>
+            <div class="example">
+              <span class="lang-en">"CPU &gt; 70% → add 2 instances"</span
+              ><span class="lang-es"
+                >"CPU &gt; 70% → agregar 2 instancias"</span
+              >
+            </div>
           </div>
           <div class="policy-card">
-            <h4><span class="lang-en">Scheduled Scaling</span><span class="lang-es">Escalado programado</span></h4>
-            <p><span class="lang-en">Scale at specific times for predictable patterns. Useful for known load spikes.</span><span class="lang-es">Escala en tiempos específicos para patrones predecibles. Útil para picos de carga conocidos.</span></p>
-            <div class="example"><span class="lang-en">"Every Friday at 5pm → min 10"</span><span class="lang-es">"Cada viernes a las 5pm → mín 10"</span></div>
+            <h4>
+              <span class="lang-en">Scheduled Scaling</span
+              ><span class="lang-es">Escalado programado</span>
+            </h4>
+            <p>
+              <span class="lang-en"
+                >Scale at specific times for predictable patterns. Useful for
+                known load spikes.</span
+              ><span class="lang-es"
+                >Escala en tiempos específicos para patrones predecibles. Útil
+                para picos de carga conocidos.</span
+              >
+            </p>
+            <div class="example">
+              <span class="lang-en">"Every Friday at 5pm → min 10"</span
+              ><span class="lang-es">"Cada viernes a las 5pm → mín 10"</span>
+            </div>
           </div>
           <div class="policy-card">
-            <h4><span class="lang-en">Predictive Scaling</span><span class="lang-es">Escalado predictivo</span></h4>
-            <p><span class="lang-en">ML model analyzes historical CloudWatch data. Forecasts load ahead of time and schedules proactive scaling.</span><span class="lang-es">El modelo ML analiza datos históricos de CloudWatch. Pronostica carga por adelantado y programa escalado proactivo.</span></p>
-            <div class="example"><span class="lang-en">"Forecasts next week's traffic pattern"</span><span class="lang-es">"Pronostica el patrón de tráfico de la próxima semana"</span></div>
+            <h4>
+              <span class="lang-en">Predictive Scaling</span
+              ><span class="lang-es">Escalado predictivo</span>
+            </h4>
+            <p>
+              <span class="lang-en"
+                >ML model analyzes historical CloudWatch data. Forecasts load
+                ahead of time and schedules proactive scaling.</span
+              ><span class="lang-es"
+                >El modelo ML analiza datos históricos de CloudWatch. Pronostica
+                carga por adelantado y programa escalado proactivo.</span
+              >
+            </p>
+            <div class="example">
+              <span class="lang-en"
+                >"Forecasts next week's traffic pattern"</span
+              ><span class="lang-es"
+                >"Pronostica el patrón de tráfico de la próxima semana"</span
+              >
+            </div>
           </div>
         </div>
 
-        <div class="callout info" style="margin-top:1.25rem;">
-          <strong><span class="lang-en">Scaling Cooldown (default: 300 s)</span><span class="lang-es">Período de enfriamiento de escalado (predeterminado: 300 s)</span></strong> <span class="lang-en">— After a scaling action, no new scaling activity occurs during the cooldown period. Gives metrics time to stabilize before the ASG makes another decision.</span><span class="lang-es">— Después de una acción de escalado, no ocurre nueva actividad de escalado durante el período de enfriamiento. Da tiempo a las métricas para estabilizarse antes de que ASG tome otra decisión.</span>
+        <div class="callout info" style="margin-top: 1.25rem">
+          <strong
+            ><span class="lang-en">Scaling Cooldown (default: 300 s)</span
+            ><span class="lang-es"
+              >Período de enfriamiento de escalado (predeterminado: 300 s)</span
+            ></strong
+          >
+          <span class="lang-en"
+            >— After a scaling action, no new scaling activity occurs during the
+            cooldown period. Gives metrics time to stabilize before the ASG
+            makes another decision.</span
+          ><span class="lang-es"
+            >— Después de una acción de escalado, no ocurre nueva actividad de
+            escalado durante el período de enfriamiento. Da tiempo a las
+            métricas para estabilizarse antes de que ASG tome otra
+            decisión.</span
+          >
         </div>
       </div>
 
@@ -904,31 +2023,81 @@
       <div class="card">
         <div class="card-header">
           <span class="badge">9</span>
-          <h2><span class="lang-en">ASG Instance Refresh</span><span class="lang-es">Actualización de instancia de ASG</span></h2>
+          <h2>
+            <span class="lang-en">ASG Instance Refresh</span
+            ><span class="lang-es">Actualización de instancia de ASG</span>
+          </h2>
         </div>
 
-        <p><span class="lang-en">Allows rolling replacement of all instances in an ASG — triggered via the <strong>StartInstanceRefresh API</strong>. Useful when you update the launch template with a new AMI and need all running instances replaced.</span><span class="lang-es">Permite la sustitución gradual de todas las instancias en un ASG — activada a través de la <strong>API StartInstanceRefresh</strong>. Útil cuando actualiza la plantilla de lanzamiento con una nueva AMI y necesita reemplazar todas las instancias en ejecución.</span></p>
+        <p>
+          <span class="lang-en"
+            >Allows rolling replacement of all instances in an ASG — triggered
+            via the <strong>StartInstanceRefresh API</strong>. Useful when you
+            update the launch template with a new AMI and need all running
+            instances replaced.</span
+          ><span class="lang-es"
+            >Permite la sustitución gradual de todas las instancias en un ASG —
+            activada a través de la <strong>API StartInstanceRefresh</strong>.
+            Útil cuando actualiza la plantilla de lanzamiento con una nueva AMI
+            y necesita reemplazar todas las instancias en ejecución.</span
+          >
+        </p>
 
         <div class="demo-wrap">
           <div class="demo-title">
-            <div class="mode-dot" style="background:#10b981;"></div>
-            <h4><span class="lang-en">Instance Refresh — Rolling Replacement</span><span class="lang-es">Actualización de instancia — Reemplazo gradual</span></h4>
+            <div class="mode-dot" style="background: #10b981"></div>
+            <h4>
+              <span class="lang-en">Instance Refresh — Rolling Replacement</span
+              ><span class="lang-es"
+                >Actualización de instancia — Reemplazo gradual</span
+              >
+            </h4>
           </div>
 
           <div id="ir" class="anim-body"></div>
 
-          <div class="anim-controls" style="margin-top:0.75rem;">
-            <button class="nav-btn" id="ir-prev" onclick="prev('ir')">&#8592; <span class="lang-en">Prev</span><span class="lang-es">Anterior</span></button>
+          <div class="anim-controls" style="margin-top: 0.75rem">
+            <button class="nav-btn" id="ir-prev" onclick="prev('ir')">
+              &#8592; <span class="lang-en">Prev</span
+              ><span class="lang-es">Anterior</span>
+            </button>
             <div class="step-dots" id="ir-dots"></div>
-            <button class="nav-btn" id="ir-next" onclick="next('ir')"><span class="lang-en">Next</span><span class="lang-es">Siguiente</span> &#8594;</button>
+            <button class="nav-btn" id="ir-next" onclick="next('ir')">
+              <span class="lang-en">Next</span
+              ><span class="lang-es">Siguiente</span> &#8594;
+            </button>
             <span class="step-counter" id="ir-counter"></span>
-            <button class="restart-btn" onclick="restart('ir')">&#8635; <span class="lang-en">Restart</span><span class="lang-es">Reiniciar</span></button>
+            <button class="restart-btn" onclick="restart('ir')">
+              &#8635; <span class="lang-en">Restart</span
+              ><span class="lang-es">Reiniciar</span>
+            </button>
           </div>
         </div>
 
         <div class="callout danger">
-          <strong style="color:#f87171;"><span class="lang-en">⚠ Weak point — Warm-up time</span><span class="lang-es">⚠ Punto débil — Tiempo de calentamiento</span></strong><br>
-          <span class="lang-en">Warm-up time does <strong>NOT auto-extend</strong>. If a new instance fails health checks during a refresh, the refresh <strong>PAUSES</strong> (because it cannot maintain the minimum healthy percentage). It does <strong>NOT</strong> extend the warm-up timer. The timer is fixed — once it expires, that instance is considered done regardless of health.</span><span class="lang-es">El tiempo de calentamiento <strong>NO se extiende automáticamente</strong>. Si una nueva instancia falla las verificaciones de estado durante una actualización, la actualización se <strong>PAUSA</strong> (porque no puede mantener el porcentaje mínimo saludable). <strong>NO</strong> extiende el temporizador de calentamiento. El temporizador es fijo — una vez que vence, esa instancia se considera completada independientemente de su estado de salud.</span>
+          <strong style="color: #f87171"
+            ><span class="lang-en">⚠ Weak point — Warm-up time</span
+            ><span class="lang-es"
+              >⚠ Punto débil — Tiempo de calentamiento</span
+            ></strong
+          ><br />
+          <span class="lang-en"
+            >Warm-up time does <strong>NOT auto-extend</strong>. If a new
+            instance fails health checks during a refresh, the refresh
+            <strong>PAUSES</strong> (because it cannot maintain the minimum
+            healthy percentage). It does <strong>NOT</strong> extend the warm-up
+            timer. The timer is fixed — once it expires, that instance is
+            considered done regardless of health.</span
+          ><span class="lang-es"
+            >El tiempo de calentamiento
+            <strong>NO se extiende automáticamente</strong>. Si una nueva
+            instancia falla las verificaciones de estado durante una
+            actualización, la actualización se <strong>PAUSA</strong> (porque no
+            puede mantener el porcentaje mínimo saludable).
+            <strong>NO</strong> extiende el temporizador de calentamiento. El
+            temporizador es fijo — una vez que vence, esa instancia se considera
+            completada independientemente de su estado de salud.</span
+          >
         </div>
       </div>
 
@@ -936,95 +2105,272 @@
       <div class="card">
         <div class="card-header">
           <span class="badge">10</span>
-          <h2><span class="lang-en">Exam Quick Reference</span><span class="lang-es">Referencia rápida del examen</span></h2>
+          <h2>
+            <span class="lang-en">Exam Quick Reference</span
+            ><span class="lang-es">Referencia rápida del examen</span>
+          </h2>
         </div>
 
         <div class="tips-grid">
           <div class="tip">
-            <span class="trigger"><span class="lang-en">"Static IP / firewall whitelist"</span><span class="lang-es">"IP estática / lista blanca del cortafuegos"</span></span>
+            <span class="trigger"
+              ><span class="lang-en">"Static IP / firewall whitelist"</span
+              ><span class="lang-es"
+                >"IP estática / lista blanca del cortafuegos"</span
+              ></span
+            >
             <span class="arrow">→</span>
-            <span class="answer"><span class="lang-en">NLB (Elastic IP per AZ)</span><span class="lang-es">NLB (IP elástica por AZ)</span></span>
+            <span class="answer"
+              ><span class="lang-en">NLB (Elastic IP per AZ)</span
+              ><span class="lang-es">NLB (IP elástica por AZ)</span></span
+            >
           </div>
           <div class="tip">
-            <span class="trigger"><span class="lang-en">"HTTP routing / microservices"</span><span class="lang-es">"Enrutamiento HTTP / microservicios"</span></span>
+            <span class="trigger"
+              ><span class="lang-en">"HTTP routing / microservices"</span
+              ><span class="lang-es"
+                >"Enrutamiento HTTP / microservicios"</span
+              ></span
+            >
             <span class="arrow">→</span>
             <span class="answer">ALB</span>
           </div>
           <div class="tip">
-            <span class="trigger"><span class="lang-en">"Network inspection / GENEVE / port 6081"</span><span class="lang-es">"Inspección de red / GENEVE / puerto 6081"</span></span>
+            <span class="trigger"
+              ><span class="lang-en"
+                >"Network inspection / GENEVE / port 6081"</span
+              ><span class="lang-es"
+                >"Inspección de red / GENEVE / puerto 6081"</span
+              ></span
+            >
             <span class="arrow">→</span>
             <span class="answer">GWLB</span>
           </div>
           <div class="tip">
-            <span class="trigger"><span class="lang-en">"Multiple SSL certs on one listener"</span><span class="lang-es">"Múltiples certificados SSL en un listener"</span></span>
+            <span class="trigger"
+              ><span class="lang-en">"Multiple SSL certs on one listener"</span
+              ><span class="lang-es"
+                >"Múltiples certificados SSL en un listener"</span
+              ></span
+            >
             <span class="arrow">→</span>
-            <span class="answer"><span class="lang-en">SNI — ALB &amp; NLB only (not Classic LB)</span><span class="lang-es">SNI — solo ALB y NLB (no Classic LB)</span></span>
+            <span class="answer"
+              ><span class="lang-en"
+                >SNI — ALB &amp; NLB only (not Classic LB)</span
+              ><span class="lang-es"
+                >SNI — solo ALB y NLB (no Classic LB)</span
+              ></span
+            >
           </div>
           <div class="tip">
-            <span class="trigger"><span class="lang-en">"EC2 sees ___ IP from ALB"</span><span class="lang-es">"EC2 ve ___ IP del ALB"</span></span>
+            <span class="trigger"
+              ><span class="lang-en">"EC2 sees ___ IP from ALB"</span
+              ><span class="lang-es">"EC2 ve ___ IP del ALB"</span></span
+            >
             <span class="arrow">→</span>
-            <span class="answer"><span class="lang-en">ALB's private IP — use X-Forwarded-For for real client IP</span><span class="lang-es">IP privada del ALB — usa X-Forwarded-For para la IP del cliente real</span></span>
+            <span class="answer"
+              ><span class="lang-en"
+                >ALB's private IP — use X-Forwarded-For for real client IP</span
+              ><span class="lang-es"
+                >IP privada del ALB — usa X-Forwarded-For para la IP del cliente
+                real</span
+              ></span
+            >
           </div>
           <div class="tip">
-            <span class="trigger"><span class="lang-en">"Cross-zone ON by default"</span><span class="lang-es">"Entre zonas ACTIVADO por defecto"</span></span>
+            <span class="trigger"
+              ><span class="lang-en">"Cross-zone ON by default"</span
+              ><span class="lang-es"
+                >"Entre zonas ACTIVADO por defecto"</span
+              ></span
+            >
             <span class="arrow">→</span>
-            <span class="answer"><span class="lang-en">ALB only (free). NLB &amp; GWLB off by default (charges apply)</span><span class="lang-es">Solo ALB (gratis). NLB y GWLB desactivados por defecto (se aplican cargos)</span></span>
+            <span class="answer"
+              ><span class="lang-en"
+                >ALB only (free). NLB &amp; GWLB off by default (charges
+                apply)</span
+              ><span class="lang-es"
+                >Solo ALB (gratis). NLB y GWLB desactivados por defecto (se
+                aplican cargos)</span
+              ></span
+            >
           </div>
           <div class="tip">
-            <span class="trigger"><span class="lang-en">"Sticky sessions on NLB"</span><span class="lang-es">"Sesiones adhesivas en NLB"</span></span>
+            <span class="trigger"
+              ><span class="lang-en">"Sticky sessions on NLB"</span
+              ><span class="lang-es">"Sesiones adhesivas en NLB"</span></span
+            >
             <span class="arrow">→</span>
-            <span class="answer"><span class="lang-en">Source IP hash (no cookies)</span><span class="lang-es">Hash de IP de origen (sin cookies)</span></span>
+            <span class="answer"
+              ><span class="lang-en">Source IP hash (no cookies)</span
+              ><span class="lang-es"
+                >Hash de IP de origen (sin cookies)</span
+              ></span
+            >
           </div>
           <div class="tip">
-            <span class="trigger"><span class="lang-en">"Sticky sessions on ALB"</span><span class="lang-es">"Sesiones adhesivas en ALB"</span></span>
+            <span class="trigger"
+              ><span class="lang-en">"Sticky sessions on ALB"</span
+              ><span class="lang-es">"Sesiones adhesivas en ALB"</span></span
+            >
             <span class="arrow">→</span>
-            <span class="answer"><span class="lang-en">Cookies (application-based or duration-based)</span><span class="lang-es">Cookies (basadas en aplicación o duración)</span></span>
+            <span class="answer"
+              ><span class="lang-en"
+                >Cookies (application-based or duration-based)</span
+              ><span class="lang-es"
+                >Cookies (basadas en aplicación o duración)</span
+              ></span
+            >
           </div>
           <div class="tip">
-            <span class="trigger"><span class="lang-en">"Connection draining default"</span><span class="lang-es">"Valor predeterminado de drenado de conexiones"</span></span>
+            <span class="trigger"
+              ><span class="lang-en">"Connection draining default"</span
+              ><span class="lang-es"
+                >"Valor predeterminado de drenado de conexiones"</span
+              ></span
+            >
             <span class="arrow">→</span>
-            <span class="answer"><span class="lang-en">300 seconds (range: 1–3,600 s, 0 = disabled)</span><span class="lang-es">300 segundos (rango: 1–3.600 s, 0 = deshabilitado)</span></span>
+            <span class="answer"
+              ><span class="lang-en"
+                >300 seconds (range: 1–3,600 s, 0 = disabled)</span
+              ><span class="lang-es"
+                >300 segundos (rango: 1–3.600 s, 0 = deshabilitado)</span
+              ></span
+            >
           </div>
           <div class="tip">
-            <span class="trigger"><span class="lang-en">"ASG launch template vs running instance"</span><span class="lang-es">"Plantilla de lanzamiento de ASG vs instancia en ejecución"</span></span>
+            <span class="trigger"
+              ><span class="lang-en"
+                >"ASG launch template vs running instance"</span
+              ><span class="lang-es"
+                >"Plantilla de lanzamiento de ASG vs instancia en
+                ejecución"</span
+              ></span
+            >
             <span class="arrow">→</span>
-            <span class="answer"><span class="lang-en">Update launch template for NEW instances; running instances unaffected</span><span class="lang-es">Actualiza plantilla de lanzamiento para NUEVAS instancias; instancias en ejecución no afectadas</span></span>
+            <span class="answer"
+              ><span class="lang-en"
+                >Update launch template for NEW instances; running instances
+                unaffected</span
+              ><span class="lang-es"
+                >Actualiza plantilla de lanzamiento para NUEVAS instancias;
+                instancias en ejecución no afectadas</span
+              ></span
+            >
           </div>
           <div class="tip">
-            <span class="trigger"><span class="lang-en">"Instance Refresh trigger"</span><span class="lang-es">"Desencadenante de actualización de instancia"</span></span>
+            <span class="trigger"
+              ><span class="lang-en">"Instance Refresh trigger"</span
+              ><span class="lang-es"
+                >"Desencadenante de actualización de instancia"</span
+              ></span
+            >
             <span class="arrow">→</span>
-            <span class="answer"><span class="lang-en">StartInstanceRefresh API</span><span class="lang-es">API StartInstanceRefresh</span></span>
+            <span class="answer"
+              ><span class="lang-en">StartInstanceRefresh API</span
+              ><span class="lang-es">API StartInstanceRefresh</span></span
+            >
           </div>
           <div class="tip">
-            <span class="trigger"><span class="lang-en">"Warm-up time behavior"</span><span class="lang-es">"Comportamiento del tiempo de calentamiento"</span></span>
+            <span class="trigger"
+              ><span class="lang-en">"Warm-up time behavior"</span
+              ><span class="lang-es"
+                >"Comportamiento del tiempo de calentamiento"</span
+              ></span
+            >
             <span class="arrow">→</span>
-            <span class="answer"><span class="lang-en">Fixed — does NOT auto-extend</span><span class="lang-es">Fijo — NO se extiende automáticamente</span></span>
+            <span class="answer"
+              ><span class="lang-en">Fixed — does NOT auto-extend</span
+              ><span class="lang-es"
+                >Fijo — NO se extiende automáticamente</span
+              ></span
+            >
           </div>
           <div class="tip">
-            <span class="trigger"><span class="lang-en">"ASG self-healing"</span><span class="lang-es">"Auto-curación de ASG"</span></span>
+            <span class="trigger"
+              ><span class="lang-en">"ASG self-healing"</span
+              ><span class="lang-es">"Auto-curación de ASG"</span></span
+            >
             <span class="arrow">→</span>
-            <span class="answer"><span class="lang-en">Terminates unhealthy instances, replaces automatically</span><span class="lang-es">Termina instancias no saludables, reemplaza automáticamente</span></span>
+            <span class="answer"
+              ><span class="lang-en"
+                >Terminates unhealthy instances, replaces automatically</span
+              ><span class="lang-es"
+                >Termina instancias no saludables, reemplaza
+                automáticamente</span
+              ></span
+            >
           </div>
           <div class="tip">
-            <span class="trigger"><span class="lang-en">"Predictive scaling uses"</span><span class="lang-es">"Uso de escalado predictivo"</span></span>
+            <span class="trigger"
+              ><span class="lang-en">"Predictive scaling uses"</span
+              ><span class="lang-es">"Uso de escalado predictivo"</span></span
+            >
             <span class="arrow">→</span>
-            <span class="answer"><span class="lang-en">ML model, historical CloudWatch data, forecasts ahead</span><span class="lang-es">Modelo ML, datos históricos de CloudWatch, pronósticos adelantados</span></span>
+            <span class="answer"
+              ><span class="lang-en"
+                >ML model, historical CloudWatch data, forecasts ahead</span
+              ><span class="lang-es"
+                >Modelo ML, datos históricos de CloudWatch, pronósticos
+                adelantados</span
+              ></span
+            >
           </div>
         </div>
       </div>
 
-    </div><!-- /container -->
+      <!-- ══════════════ TRICKY QUIZ QUESTIONS ══════════════ -->
+      <div class="card" style="border-color:#7c3aed; background:#13102a;">
+        <div class="card-header">
+          <span class="badge" style="background:#7c3aed;">🧩</span>
+          <h2 style="color:#c4b5fd;">
+            <span class="lang-en">Tricky Quiz Questions</span>
+            <span class="lang-es">Preguntas Tricky del Quiz</span>
+          </h2>
+        </div>
+
+        <div style="border:1px solid #4c1d95;border-radius:8px;padding:0.85rem;margin-bottom:0.75rem;background:#0f172a">
+          <p style="color:#c4b5fd;font-weight:600;margin-bottom:0.5rem;">
+            <span class="lang-en">Q: An organization wants to analyze incoming ALB requests to study latencies and client IP patterns. Which feature helps collect this data?</span>
+            <span class="lang-es">P: Una organización quiere analizar las solicitudes entrantes del ALB para estudiar latencias y patrones de IPs de clientes. ¿Qué característica ayuda a recopilar esta información?</span>
+          </p>
+          <p style="color:#a78bfa;margin-bottom:0.4rem;">
+            <strong><span class="lang-en">✅ Answer: ALB Access Logs (stored in S3)</span><span class="lang-es">✅ Respuesta: Logs de acceso del ALB (almacenados en S3)</span></strong>
+          </p>
+          <p style="color:#94a3b8;font-size:0.88rem;margin:0;">
+            <span class="lang-en">
+              <strong>Why not the others?</strong>
+              CloudWatch Metrics gives aggregates (counts, average latency) — not per-request detail.
+              CloudTrail logs API calls to AWS (e.g. CreateLoadBalancer) — not HTTP traffic.
+              ALB Request Tracing adds an X-Amzn-Trace-Id header to individual requests for tracing through backends, but does not store or aggregate data for analysis.
+              <strong>Access Logs</strong> capture every request (timestamp, client IP, latencies, request path, response code) and store them in S3 — the only option for per-request analysis at scale.
+            </span>
+            <span class="lang-es">
+              <strong>¿Por qué no las otras?</strong>
+              CloudWatch Metrics da agregados (conteos, latencia promedio) — no detalle por solicitud.
+              CloudTrail registra llamadas a la API de AWS (ej. CreateLoadBalancer) — no el tráfico HTTP.
+              El rastreo de solicitudes del ALB agrega un header X-Amzn-Trace-Id para rastrear a través de backends, pero no almacena ni agrega datos para análisis.
+              Los <strong>Logs de acceso</strong> capturan cada solicitud (timestamp, IP del cliente, latencias, ruta, código de respuesta) y los guardan en S3 — la única opción para análisis por solicitud a escala.
+            </span>
+          </p>
+        </div>
+      </div>
+
+    </div>
+    <!-- /container -->
 
     <script>
       const states = {};
       const I = (lbl, cls) => `<div class="inst ${cls}">${lbl}</div>`;
-      const R = (...a) => `<div class="instance-row">${a.join('')}</div>`;
-      const ASG = (lbl, cls, content) => `<div class="asg-box"><div class="asg-label ${cls}">${lbl}</div>${content}</div>`;
-      const DUAL = (...a) => `<div class="dual-asg">${a.join('')}</div>`;
-      const DESC = (html, color='#334155') => `<div class="step-desc" style="border-left-color:${color}">${html}</div>`;
+      const R = (...a) => `<div class="instance-row">${a.join("")}</div>`;
+      const ASG = (lbl, cls, content) =>
+        `<div class="asg-box"><div class="asg-label ${cls}">${lbl}</div>${content}</div>`;
+      const DUAL = (...a) => `<div class="dual-asg">${a.join("")}</div>`;
+      const DESC = (html, color = "#334155") =>
+        `<div class="step-desc" style="border-left-color:${color}">${html}</div>`;
 
       // Helper: instance block with traffic pct label
-      const IB = (lbl, cls, pct, pctClass='') =>
+      const IB = (lbl, cls, pct, pctClass = "") =>
         `<div class="inst-block">
            <div class="inst ${cls}">${lbl}</div>
            <div class="inst-pct ${pctClass}">${pct}</div>
@@ -1036,94 +2382,113 @@
            <div class="az-zone-label">${azLabel}</div>
            <div class="az-elb-box">
              <span>ELB Node</span>
-             <span class="traffic-pct" style="color:${elbColor || '#f97316'}">${elbPct}</span>
+             <span class="traffic-pct" style="color:${elbColor || "#f97316"}">${elbPct}</span>
            </div>
            <div class="az-instances">${instances}</div>
          </div>`;
 
       const DEMOS = {
         cz: {
-          color: '#f97316',
+          color: "#f97316",
           steps: [
             {
               body: `
                 <div class="az-layout">
-                  ${AZ('AZ-1 · 2 instances',
-                    '50% from Route 53',
-                    IB('i-1','v1','25%','') + IB('i-2','v1','25%',''),
-                    '#f97316'
+                  ${AZ(
+                    "AZ-1 · 2 instances",
+                    "50% from Route 53",
+                    IB("i-1", "v1", "25%", "") + IB("i-2", "v1", "25%", ""),
+                    "#f97316",
                   )}
-                  ${AZ('AZ-2 · 1 instance',
-                    '50% from Route 53',
-                    IB('i-3','v2','50%','high'),
-                    '#f87171'
+                  ${AZ(
+                    "AZ-2 · 1 instance",
+                    "50% from Route 53",
+                    IB("i-3", "v2", "50%", "high"),
+                    "#f87171",
                   )}
                 </div>
-                ${DESC('<span class="hl-d">⚠ Without cross-zone:</span> AZ-2\'s single instance handles <span class="hl-d">50%</span> of all traffic! AZ-1\'s two instances each get only <span class="hl-v1">25%</span>. Severe load imbalance.', '#f87171')}
-              `
+                ${DESC('<span class="hl-d">⚠ Without cross-zone:</span> AZ-2\'s single instance handles <span class="hl-d">50%</span> of all traffic! AZ-1\'s two instances each get only <span class="hl-v1">25%</span>. Severe load imbalance.', "#f87171")}
+              `,
             },
             {
               body: `
                 <div class="az-layout">
-                  ${AZ('AZ-1 · 2 instances',
-                    '50% from Route 53',
-                    IB('i-1','v1','33.3%','equal') + IB('i-2','v1','33.3%','equal'),
-                    '#34d399'
+                  ${AZ(
+                    "AZ-1 · 2 instances",
+                    "50% from Route 53",
+                    IB("i-1", "v1", "33.3%", "equal") +
+                      IB("i-2", "v1", "33.3%", "equal"),
+                    "#34d399",
                   )}
-                  ${AZ('AZ-2 · 1 instance',
-                    '50% from Route 53',
-                    IB('i-3','v2','33.3%','equal'),
-                    '#34d399'
+                  ${AZ(
+                    "AZ-2 · 1 instance",
+                    "50% from Route 53",
+                    IB("i-3", "v2", "33.3%", "equal"),
+                    "#34d399",
                   )}
                 </div>
-                ${DESC('<span class="hl-ok">✓ With cross-zone enabled:</span> Traffic distributed equally across <span class="hl-ok">ALL 3 instances</span> in ALL AZs. Each instance handles <span class="hl-ok">33.3%</span> regardless of AZ distribution.', '#10b981')}
-              `
-            }
-          ]
+                ${DESC('<span class="hl-ok">✓ With cross-zone enabled:</span> Traffic distributed equally across <span class="hl-ok">ALL 3 instances</span> in ALL AZs. Each instance handles <span class="hl-ok">33.3%</span> regardless of AZ distribution.', "#10b981")}
+              `,
+            },
+          ],
         },
 
         ir: {
-          color: '#10b981',
+          color: "#10b981",
           steps: [
             {
               body: `
                 ${DUAL(
-                  ASG('ASG — All instances (old AMI)', 'main',
+                  ASG(
+                    "ASG — All instances (old AMI)",
+                    "main",
                     R(
-                      I('old','v1'), I('old','v1'), I('old','v1'), I('old','v1')
-                    )
-                  )
+                      I("old", "v1"),
+                      I("old", "v1"),
+                      I("old", "v1"),
+                      I("old", "v1"),
+                    ),
+                  ),
                 )}
-                ${DESC('All <span class="hl-v1">4 instances</span> running old AMI (launch template v1). Instance Refresh not yet triggered.', '#3b82f6')}
-              `
+                ${DESC('All <span class="hl-v1">4 instances</span> running old AMI (launch template v1). Instance Refresh not yet triggered.', "#3b82f6")}
+              `,
             },
             {
               body: `
                 ${DUAL(
-                  ASG('ASG — Refresh in progress (min healthy: 50%)', 'blue',
+                  ASG(
+                    "ASG — Refresh in progress (min healthy: 50%)",
+                    "blue",
                     R(
-                      I('old','v1'), I('old','v1'),
-                      I('new','temp'), I('new','temp')
-                    )
-                  )
+                      I("old", "v1"),
+                      I("old", "v1"),
+                      I("new", "temp"),
+                      I("new", "temp"),
+                    ),
+                  ),
                 )}
-                ${DESC('Instance Refresh replaces <span class="hl-ok">2 instances</span> at a time (respects min healthy %: 50%). Old instances still serving traffic. New instances are in warm-up period.', '#f97316')}
-              `
+                ${DESC('Instance Refresh replaces <span class="hl-ok">2 instances</span> at a time (respects min healthy %: 50%). Old instances still serving traffic. New instances are in warm-up period.', "#f97316")}
+              `,
             },
             {
               body: `
                 ${DUAL(
-                  ASG('ASG — Refresh complete (new AMI)', 'green',
+                  ASG(
+                    "ASG — Refresh complete (new AMI)",
+                    "green",
                     R(
-                      I('new','temp'), I('new','temp'), I('new','temp'), I('new','temp')
-                    )
-                  )
+                      I("new", "temp"),
+                      I("new", "temp"),
+                      I("new", "temp"),
+                      I("new", "temp"),
+                    ),
+                  ),
                 )}
-                ${DESC('<span class="hl-ok">All 4 instances</span> replaced with new AMI. Warm-up time is <span class="hl-d">FIXED</span> — it does <span class="hl-d">NOT auto-extend</span> if an instance is slow to start.', '#10b981')}
-              `
-            }
-          ]
-        }
+                ${DESC('<span class="hl-ok">All 4 instances</span> replaced with new AMI. Warm-up time is <span class="hl-d">FIXED</span> — it does <span class="hl-d">NOT auto-extend</span> if an instance is slow to start.', "#10b981")}
+              `,
+            },
+          ],
+        },
       };
 
       function initDemo(id) {
@@ -1133,10 +2498,10 @@
       }
 
       function buildDots(id, count) {
-        document.getElementById(`${id}-dots`).innerHTML =
-          Array.from({length: count}, (_, i) =>
-            `<div class="sdot" id="${id}-dot-${i}"></div>`
-          ).join('');
+        document.getElementById(`${id}-dots`).innerHTML = Array.from(
+          { length: count },
+          (_, i) => `<div class="sdot" id="${id}-dot-${i}"></div>`,
+        ).join("");
       }
 
       function renderStep(id, step) {
@@ -1144,11 +2509,12 @@
         const total = demo.steps.length;
         const body = document.getElementById(id);
         body.innerHTML = demo.steps[step].body;
-        document.getElementById(`${id}-counter`).textContent = `Step ${step + 1} / ${total}`;
-        document.querySelectorAll(`[id^="${id}-dot-"]`).forEach((d, i) =>
-          d.classList.toggle('active', i === step)
-        );
-        const desc = body.querySelector('.step-desc');
+        document.getElementById(`${id}-counter`).textContent =
+          `Step ${step + 1} / ${total}`;
+        document
+          .querySelectorAll(`[id^="${id}-dot-"]`)
+          .forEach((d, i) => d.classList.toggle("active", i === step));
+        const desc = body.querySelector(".step-desc");
         if (desc) desc.style.borderLeftColor = demo.color;
         const prevBtn = document.getElementById(`${id}-prev`);
         const nextBtn = document.getElementById(`${id}-next`);
@@ -1161,7 +2527,8 @@
         if (states[id] > 0) renderStep(id, states[id] - 1);
       }
       function next(id) {
-        if (states[id] < DEMOS[id].steps.length - 1) renderStep(id, states[id] + 1);
+        if (states[id] < DEMOS[id].steps.length - 1)
+          renderStep(id, states[id] + 1);
       }
       function restart(id) {
         renderStep(id, 0);

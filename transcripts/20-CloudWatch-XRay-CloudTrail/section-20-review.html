@@ -539,6 +539,13 @@
               <span class="lang-en">Max Dimensions</span
               ><span class="lang-es">Max Dimensiones</span>
             </h4>
+            <p style="font-size:0.78rem;color:#94a3b8;margin-bottom:0.3rem;">
+              <span class="lang-en">A <strong>dimension</strong> is a key-value pair that identifies a metric — it tells CloudWatch <em>which resource</em> a data point belongs to.</span
+              ><span class="lang-es">Una <strong>dimensión</strong> es un par clave-valor que identifica una métrica — le dice a CloudWatch <em>a qué recurso</em> pertenece cada dato.</span>
+            </p>
+            <pre style="font-size:0.75rem;background:#0f172a;border:1px solid #334155;border-radius:6px;padding:0.6rem 0.8rem;color:#94a3b8;margin:0.3rem 0 0.4rem;line-height:1.6;overflow-x:auto;">CPUUtilization  InstanceId=<span style="color:#4ade80">i-001</span>  →  45%
+CPUUtilization  InstanceId=<span style="color:#facc15">i-002</span>  →  80%
+CPUUtilization  InstanceId=<span style="color:#38bdf8">i-003</span>  →  12%</pre>
             <p>
               <strong>30</strong> <span class="lang-en">per metric</span
               ><span class="lang-es">por metrica</span>
@@ -546,6 +553,10 @@
           </div>
           <div class="concept-card">
             <h4>RAM/Memory</h4>
+            <p style="font-size:0.78rem;color:#94a3b8;margin-bottom:0.3rem;">
+              <span class="lang-en">AWS does <strong>not</strong> collect RAM usage by default — requires the <strong>CloudWatch Unified Agent</strong> installed on the instance.</span
+              ><span class="lang-es">AWS <strong>no</strong> recolecta uso de RAM por defecto — requiere el <strong>CloudWatch Unified Agent</strong> instalado en la instancia.</span>
+            </p>
             <p>
               <span class="chip red"
                 ><span class="lang-en">NOT default</span
@@ -568,33 +579,37 @@
             dimensiones y valores.</span
           >
         </p>
+        <p style="font-size:0.82rem;color:#94a3b8;margin-bottom:0.4rem;">
+          <span class="lang-en">When publishing a custom metric, <code>StorageResolution</code> controls the <strong>granularity CloudWatch stores your data at</strong>. Think of it as "how fine-grained are the buckets". Because <strong>you can only query at the same or coarser granularity than how it was stored</strong>, standard (<code>60</code>) only lets you read at ≥60 s intervals, while high-res (<code>1</code>) lets you read at 1 s, 5 s, 10 s, 30 s, or 60 s+. The trade-off: high-res data is only kept for 3 hours before rolling up.</span
+          ><span class="lang-es">Al publicar una métrica personalizada, <code>StorageResolution</code> controla la <strong>granularidad con la que CloudWatch almacena tus datos</strong>. Funciona como "qué tan pequeños son los bloques de tiempo". Como <strong>solo podés leer con la misma granularidad o menor que como fue almacenado</strong>, el estándar (<code>60</code>) solo permite leer en intervalos ≥60 s, mientras que high-res (<code>1</code>) permite leer a 1 s, 5 s, 10 s, 30 s o 60 s+. El trade-off: los datos high-res solo se retienen 3 horas antes de ser agregados.</span>
+        </p>
         <table class="data-table">
           <tr>
-            <th><span class="lang-en">StorageResolution</span><span class="lang-es">Resolución de almacenamiento</span></th>
+            <th><span class="lang-en">StorageResolution value</span><span class="lang-es">Valor StorageResolution</span></th>
             <th>
-              <span class="lang-en">Stores at</span
-              ><span class="lang-es">Almacena cada</span>
+              <span class="lang-en">Data stored every</span
+              ><span class="lang-es">Dato almacenado cada</span>
             </th>
             <th>
-              <span class="lang-en">Read Periods</span
-              ><span class="lang-es">Periodos de Lectura</span>
+              <span class="lang-en">Min query granularity</span
+              ><span class="lang-es">Granularidad mínima de consulta</span>
             </th>
             <th>
               <span class="lang-en">Retention</span
-              ><span class="lang-es">Retencion</span>
+              ><span class="lang-es">Retención</span>
             </th>
           </tr>
           <tr>
-            <td><code>60</code> (standard)</td>
+            <td><code>60</code> — standard</td>
             <td>1 min</td>
-            <td>60s+</td>
-            <td><span class="lang-en">Normal</span><span class="lang-es">Normal</span></td>
+            <td><span style="color:#94a3b8;">≥ 60 s only</span></td>
+            <td><span class="lang-en">Normal (15 mo)</span><span class="lang-es">Normal (15 meses)</span></td>
           </tr>
           <tr>
-            <td><code>1</code> (high-res)</td>
+            <td><code>1</code> — high-res</td>
             <td>1 sec</td>
-            <td><strong>1s, 5s, 10s, 30s</strong>, 60s+</td>
-            <td><span class="chip yellow">3 hours</span></td>
+            <td><strong>1 s, 5 s, 10 s, 30 s</strong>, 60 s+</td>
+            <td><span class="chip yellow">3 hours</span> <span style="font-size:0.75rem;color:#94a3b8;"><span class="lang-en">then collapses into 1-min points (kept 15 days)</span><span class="lang-es">luego se colapsa en puntos de 1 min (se retienen 15 días)</span></span></td>
           </tr>
         </table>
         <div class="callout warning">
@@ -607,6 +622,10 @@
             <strong>2 horas futuro</strong>. Asegurate que el reloj de EC2 sea
             correcto!</span
           >
+          <div style="margin-top:0.5rem;font-size:0.8rem;color:#fbbf24;">
+            <span class="lang-en">⚠️ For <strong>high-res metrics</strong> this is critical: CloudWatch will accept a timestamp from 4 hours ago, but that window already collapsed to 1-minute resolution — your 1-second data point silently loses precision. A drifted clock kills high-res value.</span
+            ><span class="lang-es">⚠️ Para <strong>métricas high-res</strong> esto es crítico: CloudWatch acepta un timestamp de hace 4 horas, pero esa ventana ya colapsó a resolución de 1 minuto — tu dato de 1 segundo pierde precisión silenciosamente. Un reloj desfasado anula el valor del high-res.</span>
+          </div>
         </div>
       </div>
 
@@ -630,13 +649,13 @@
         </p>
         <p>
           <span class="lang-en"
-            ><strong>Log Group</strong> = application.
-            <strong>Log Stream</strong> = instance/container. Retention:
-            <strong>1 day to 10 years</strong>.</span
+            >A <strong>Log Group</strong> is the top-level container — you create one per application or service (e.g. <code>/my-app/prod</code>). Retention policy is set at this level.<br>
+            A <strong>Log Stream</strong> is a sequence of log events from a <em>single source</em> within that group — one stream per EC2 instance, Lambda execution environment, or container. Think of it as: if 3 instances run the same app, they share one Log Group but each writes to its own Log Stream.<br>
+            Retention: <strong>1 day to 10 years</strong> (or never expire).</span
           ><span class="lang-es"
-            ><strong>Log Group</strong> = aplicacion.
-            <strong>Log Stream</strong> = instancia/contenedor. Retencion:
-            <strong>1 dia a 10 anos</strong>.</span
+            >Un <strong>Log Group</strong> es el contenedor de nivel superior — se crea uno por aplicación o servicio (ej: <code>/my-app/prod</code>). La política de retención se configura a este nivel.<br>
+            Un <strong>Log Stream</strong> es una secuencia de eventos de log de una <em>única fuente</em> dentro de ese grupo — un stream por instancia EC2, entorno de ejecución Lambda, o contenedor. Si 3 instancias corren la misma app, comparten un Log Group pero cada una escribe en su propio Log Stream.<br>
+            Retención: <strong>1 día a 10 años</strong> (o nunca expirar).</span
           >
         </p>
 
@@ -782,21 +801,36 @@
           <span class="lang-en">Metric Filters Chain</span
           ><span class="lang-es">Cadena de Filtros de Metricas</span>
         </h3>
-        <div class="code-block">
-          <span class="ck">Logs</span> <span class="cc">&rarr;</span>
-          <span class="cv">Metric Filter</span> <span class="cc">&rarr;</span>
-          <span class="cs">CloudWatch Metric</span>
-          <span class="cc">&rarr;</span> <span class="ck">Alarm</span>
-          <span class="cc">&rarr;</span> <span class="cv">SNS</span>
+        <p style="font-size:0.82rem;color:#94a3b8;margin-bottom:0.75rem;">
+          <span class="lang-en">A Metric Filter scans incoming log events for a pattern (e.g. <code>[ERROR]</code>) and converts matches into a numeric CloudWatch metric — which can then trigger an alarm.</span
+          ><span class="lang-es">Un Metric Filter escanea los eventos de log entrantes buscando un patrón (ej: <code>[ERROR]</code>) y convierte las coincidencias en una métrica numérica de CloudWatch — que luego puede disparar una alarma.</span>
+        </p>
+        <div style="display:flex;align-items:center;gap:0;flex-wrap:wrap;margin-bottom:1rem;">
+          <div style="background:#1e293b;border:1px solid #475569;border-radius:8px;padding:0.5rem 0.9rem;font-size:0.82rem;color:#e2e8f0;white-space:nowrap;">📄 <strong><span class="lang-en">Log Events</span><span class="lang-es">Log Events</span></strong></div>
+          <div style="color:#64748b;font-size:1.1rem;padding:0 0.4rem;">→</div>
+          <div style="background:#1e293b;border:1px solid #7c3aed;border-radius:8px;padding:0.5rem 0.9rem;font-size:0.82rem;color:#c4b5fd;white-space:nowrap;">🔍 <strong>Metric Filter</strong><div style="font-size:0.72rem;color:#94a3b8;"><span class="lang-en">pattern match</span><span class="lang-es">busca patrón</span></div></div>
+          <div style="color:#64748b;font-size:1.1rem;padding:0 0.4rem;">→</div>
+          <div style="background:#1e293b;border:1px solid #0ea5e9;border-radius:8px;padding:0.5rem 0.9rem;font-size:0.82rem;color:#7dd3fc;white-space:nowrap;">📊 <strong>CW Metric</strong><div style="font-size:0.72rem;color:#94a3b8;"><span class="lang-en">increments counter</span><span class="lang-es">incrementa contador</span></div></div>
+          <div style="color:#64748b;font-size:1.1rem;padding:0 0.4rem;">→</div>
+          <div style="background:#1e293b;border:1px solid #f59e0b;border-radius:8px;padding:0.5rem 0.9rem;font-size:0.82rem;color:#fcd34d;white-space:nowrap;">🔔 <strong>Alarm</strong><div style="font-size:0.72rem;color:#94a3b8;"><span class="lang-en">threshold breached</span><span class="lang-es">umbral superado</span></div></div>
+          <div style="color:#64748b;font-size:1.1rem;padding:0 0.4rem;">→</div>
+          <div style="background:#1e293b;border:1px solid #ef4444;border-radius:8px;padding:0.5rem 0.9rem;font-size:0.82rem;color:#fca5a5;white-space:nowrap;">📣 <strong>SNS</strong><div style="font-size:0.72rem;color:#94a3b8;"><span class="lang-en">notify team</span><span class="lang-es">notifica al equipo</span></div></div>
         </div>
         <div class="callout warning">
           <span class="lang-en"
-            >Metric Filters are <strong>NOT retroactive</strong> — only new
-            events after creation. Max <strong>3 dimensions</strong>.</span
+            >Metric Filters are <strong>NOT retroactive</strong> — the filter only starts counting from the moment it's created. Past log events are ignored, even if they match the pattern. Max <strong>3 dimensions</strong> per filter (vs 30 for custom metrics).</span
           ><span class="lang-es"
-            >Los Metric Filters <strong>NO son retroactivos</strong> — solo
-            eventos nuevos. Max <strong>3 dimensiones</strong>.</span
+            >Los Metric Filters <strong>NO son retroactivos</strong> — el filtro solo empieza a contar desde el momento en que se crea. Los eventos anteriores se ignoran, aunque coincidan con el patrón. Máximo <strong>3 dimensiones</strong> por filtro (vs 30 para métricas personalizadas).</span
           >
+          <pre style="font-size:0.75rem;background:#0f172a;border:1px solid #334155;border-radius:6px;padding:0.6rem 0.8rem;color:#94a3b8;margin-top:0.6rem;line-height:1.8;overflow-x:auto;"><span class="lang-en"><span style="color:#94a3b8;"># Filter: count [ERROR] lines → metric "ErrorCount" with these dimensions:</span>
+Environment = <span style="color:#4ade80;">prod</span>       <span style="color:#64748b;">✓ dim 1</span>
+Service     = <span style="color:#4ade80;">auth-service</span>  <span style="color:#64748b;">✓ dim 2</span>
+Region      = <span style="color:#4ade80;">us-east-1</span>    <span style="color:#64748b;">✓ dim 3</span>
+InstanceId  = <span style="color:#ef4444;">i-001</span>        <span style="color:#ef4444;">✗ would be dim 4 — not allowed</span></span><span class="lang-es"><span style="color:#94a3b8;"># Filtro: contar líneas [ERROR] → métrica "ErrorCount" con estas dimensiones:</span>
+Environment = <span style="color:#4ade80;">prod</span>       <span style="color:#64748b;">✓ dim 1</span>
+Service     = <span style="color:#4ade80;">auth-service</span>  <span style="color:#64748b;">✓ dim 2</span>
+Region      = <span style="color:#4ade80;">us-east-1</span>    <span style="color:#64748b;">✓ dim 3</span>
+InstanceId  = <span style="color:#ef4444;">i-001</span>        <span style="color:#ef4444;">✗ sería dim 4 — no permitido</span></span></pre>
         </div>
 
         <h3>
@@ -817,8 +851,8 @@
           </div>
           <div class="concept-card">
             <h4>
-              <span class="lang-en">3 Targets</span
-              ><span class="lang-es">3 Destinos</span>
+              <span class="lang-en">3 Main Targets</span
+              ><span class="lang-es">3 Destinos Principales</span>
             </h4>
             <p>
               <span class="lang-en">EC2 Actions, Auto Scaling, SNS</span
@@ -860,6 +894,42 @@
               >
             </p>
           </div>
+        </div>
+
+        <!-- Examples block -->
+        <div style="display:flex;flex-direction:column;gap:0.75rem;margin-top:0.9rem;">
+
+          <!-- 3 States example -->
+          <div style="background:#0f172a;border:1px solid #334155;border-radius:8px;padding:0.8rem 1rem;">
+            <p style="font-size:0.78rem;color:#64748b;margin:0 0 0.5rem;text-transform:uppercase;letter-spacing:0.05em;"><span class="lang-en">Example — 3 States</span><span class="lang-es">Ejemplo — 3 Estados</span></p>
+            <div style="display:flex;flex-direction:column;gap:0.35rem;font-size:0.82rem;">
+              <div><span class="chip green" style="font-size:0.72rem;">OK</span> <span style="color:#e2e8f0;"><span class="lang-en">CPU alarm threshold = 80%. Current CPU = 40%.</span><span class="lang-es">Umbral de alarma CPU = 80%. CPU actual = 40%.</span></span></div>
+              <div><span class="chip yellow" style="font-size:0.72rem;">INSUFFICIENT_DATA</span> <span style="color:#e2e8f0;"><span class="lang-en">Alarm just created — no data points collected yet. Also happens if the instance was stopped.</span><span class="lang-es">Alarma recién creada — aún no hay datos. También ocurre si la instancia está apagada.</span></span></div>
+              <div><span class="chip red" style="font-size:0.72rem;">ALARM</span> <span style="color:#e2e8f0;"><span class="lang-en">CPU = 95% for 3 consecutive evaluation periods → threshold breached → action fires.</span><span class="lang-es">CPU = 95% por 3 períodos consecutivos → umbral superado → acción disparada.</span></span></div>
+            </div>
+          </div>
+
+          <!-- 3 Targets example -->
+          <div style="background:#0f172a;border:1px solid #334155;border-radius:8px;padding:0.8rem 1rem;">
+            <p style="font-size:0.78rem;color:#64748b;margin:0 0 0.5rem;text-transform:uppercase;letter-spacing:0.05em;"><span class="lang-en">Example — 3 Main Targets</span><span class="lang-es">Ejemplo — 3 Destinos Principales</span></p>
+            <div style="display:flex;flex-direction:column;gap:0.35rem;font-size:0.82rem;color:#e2e8f0;">
+              <div>🖥️ <strong><span class="lang-en">EC2 Action:</span><span class="lang-es">Acción EC2:</span></strong> <span style="color:#94a3b8;"><span class="lang-en">StatusCheckFailed → reboot or recover the instance automatically.</span><span class="lang-es">StatusCheckFailed → reiniciar o recuperar la instancia automáticamente.</span></span></div>
+              <div>📈 <strong>Auto Scaling:</strong> <span style="color:#94a3b8;"><span class="lang-en">CPU > 80% for 5 min → scale out (add 2 instances).</span><span class="lang-es">CPU > 80% por 5 min → escalar (agregar 2 instancias).</span></span></div>
+              <div>📣 <strong>SNS:</strong> <span style="color:#94a3b8;"><span class="lang-en">Error rate > 5% → SNS topic → email to on-call engineer.</span><span class="lang-es">Tasa de errores > 5% → topic SNS → email al ingeniero de guardia.</span></span></div>
+            </div>
+          </div>
+
+          <!-- Composite Alarm example -->
+          <div style="background:#0f172a;border:1px solid #334155;border-radius:8px;padding:0.8rem 1rem;">
+            <p style="font-size:0.78rem;color:#64748b;margin:0 0 0.5rem;text-transform:uppercase;letter-spacing:0.05em;"><span class="lang-en">Example — Composite Alarm</span><span class="lang-es">Ejemplo — Alarma Compuesta</span></p>
+            <p style="font-size:0.82rem;color:#94a3b8;margin:0 0 0.4rem;"><span class="lang-en">CPU can spike to 100% briefly during a deploy — that alone shouldn't wake you at 3am. But if CPU is high <em>and</em> memory is also high, that's a real problem.</span><span class="lang-es">La CPU puede subir al 100% brevemente durante un deploy — eso solo no debería despertarte a las 3am. Pero si la CPU está alta <em>y</em> la memoria también, eso sí es un problema real.</span></p>
+            <pre style="font-size:0.75rem;background:#020617;border:1px solid #1e293b;border-radius:6px;padding:0.5rem 0.75rem;color:#94a3b8;margin:0;line-height:1.7;overflow-x:auto;">ALARM_CPU    = CPU > 80%
+ALARM_MEMORY = Memory > 85%
+
+<span style="color:#c4b5fd;">COMPOSITE</span> = ALARM_CPU <span style="color:#fbbf24;">AND</span> ALARM_MEMORY
+             <span style="color:#64748b;"><span class="lang-en">↑ only fires when BOTH are breached → less noise</span><span class="lang-es">↑ solo dispara cuando AMBOS superan el umbral → menos ruido</span></span></pre>
+          </div>
+
         </div>
 
         <h3>
@@ -1173,6 +1243,10 @@
               <span class="lang-en">Meaning</span
               ><span class="lang-es">Significado</span>
             </th>
+            <th>
+              <span class="lang-en">Example</span
+              ><span class="lang-es">Ejemplo</span>
+            </th>
           </tr>
           <tr>
             <td><strong>Trace</strong></td>
@@ -1180,12 +1254,20 @@
               <span class="lang-en">End-to-end journey of one request</span
               ><span class="lang-es">Viaje completo de un request</span>
             </td>
+            <td style="color:#94a3b8;font-size:0.8rem;">
+              <span class="lang-en">User clicks "Buy" → API GW → Lambda → DynamoDB → response</span
+              ><span class="lang-es">Usuario hace clic en "Comprar" → API GW → Lambda → DynamoDB → respuesta</span>
+            </td>
           </tr>
           <tr>
             <td><strong>Segment</strong></td>
             <td>
               <span class="lang-en">One service's contribution</span
               ><span class="lang-es">Contribucion de un servicio</span>
+            </td>
+            <td style="color:#94a3b8;font-size:0.8rem;">
+              <span class="lang-en">The Lambda function's slice: started at 10ms, ended at 45ms</span
+              ><span class="lang-es">El tramo de la función Lambda: empezó en 10ms, terminó en 45ms</span>
             </td>
           </tr>
           <tr>
@@ -1196,6 +1278,10 @@
                 >Detalle granular dentro de un segmento</span
               >
             </td>
+            <td style="color:#94a3b8;font-size:0.8rem;">
+              <span class="lang-en">Inside that Lambda: the DynamoDB <code>GetItem</code> call took 20ms</span
+              ><span class="lang-es">Dentro de esa Lambda: la llamada <code>GetItem</code> a DynamoDB tardó 20ms</span>
+            </td>
           </tr>
           <tr>
             <td><strong>Annotations</strong></td>
@@ -1205,6 +1291,9 @@
                 ><span class="lang-es">Indexadas — buscables</span></span
               >
             </td>
+            <td style="color:#94a3b8;font-size:0.8rem;">
+              <code>userId=42</code> — <span class="lang-en">filter all traces for that user</span><span class="lang-es">filtrá todas las trazas de ese usuario</span>
+            </td>
           </tr>
           <tr>
             <td><strong>Metadata</strong></td>
@@ -1213,6 +1302,10 @@
                 ><span class="lang-en">NOT indexed — not searchable</span
                 ><span class="lang-es">NO indexada — no buscable</span></span
               >
+            </td>
+            <td style="color:#94a3b8;font-size:0.8rem;">
+              <span class="lang-en">Full request payload stored for debugging — too large to index</span
+              ><span class="lang-es">Payload completo del request guardado para debug — demasiado grande para indexar</span>
             </td>
           </tr>
         </table>
@@ -1241,16 +1334,28 @@
           <span class="lang-en">Default Sampling Rule</span
           ><span class="lang-es">Regla de Muestreo por Defecto</span>
         </h3>
+        <p style="font-size:0.82rem;color:#94a3b8;margin-bottom:0.75rem;">
+          <span class="lang-en">X-Ray doesn't trace <em>every</em> request — that would be too expensive and noisy at scale. Sampling rules define how many requests get traced. The default rule has two parts that work together:</span
+          ><span class="lang-es">X-Ray no rastrea <em>cada</em> request — a escala sería demasiado costoso y ruidoso. Las reglas de muestreo definen cuántos requests se rastrean. La regla por defecto tiene dos partes que trabajan juntas:</span>
+        </p>
         <div class="concept-grid">
           <div class="concept-card">
             <h4>Reservoir</h4>
             <p><strong>1 req/s</strong></p>
+            <p style="font-size:0.76rem;color:#94a3b8;margin-top:0.3rem;">
+              <span class="lang-en">Guaranteed traces per second — always traced regardless of traffic volume. Like a "floor": even under heavy load, at least 1 req/s gets a full trace.</span
+              ><span class="lang-es">Trazas garantizadas por segundo — siempre se rastrean sin importar el volumen de tráfico. Como un "piso": aunque haya mucha carga, al menos 1 req/s tiene traza completa.</span>
+            </p>
           </div>
           <div class="concept-card">
             <h4>Rate</h4>
             <p>
               <strong>5%</strong> <span class="lang-en">of additional</span
               ><span class="lang-es">del resto</span>
+            </p>
+            <p style="font-size:0.76rem;color:#94a3b8;margin-top:0.3rem;">
+              <span class="lang-en">Of all requests <em>beyond</em> the reservoir, only 5% get traced. e.g. if you get 100 req/s: 1 is guaranteed (reservoir) + 5 more from the remaining 99 (5% rate) = ~6 traces/s total.</span
+              ><span class="lang-es">De todos los requests <em>más allá</em> del reservoir, solo el 5% se rastrea. Ej: si recibís 100 req/s: 1 está garantizado (reservoir) + 5 más del resto de 99 (rate 5%) = ~6 trazas/s en total.</span>
             </p>
           </div>
           <div class="concept-card">
@@ -1276,6 +1381,10 @@
               ><span class="lang-es"
                 >Menor # = mayor prioridad. Default = 10,000</span
               >
+            </p>
+            <p style="font-size:0.76rem;color:#94a3b8;margin-top:0.3rem;">
+              <span class="lang-en">If you create a custom rule (e.g. "trace 100% of <code>/checkout</code> requests"), give it priority <strong>1</strong> so it's evaluated before the default rule (10,000). First matching rule wins.</span
+              ><span class="lang-es">Si creás una regla personalizada (ej: "rastrear 100% de los requests a <code>/checkout</code>"), dale prioridad <strong>1</strong> para que se evalúe antes que la regla por defecto (10,000). Gana la primera regla que coincide.</span>
             </p>
           </div>
         </div>
@@ -1611,21 +1720,28 @@
           <span class="lang-en">Retention</span
           ><span class="lang-es">Retencion</span>
         </h3>
-        <div class="code-block">
-          <span class="lang-en"
-            ><span class="ck">CloudTrail</span>
-            <span class="cc">(90 days)</span> <span class="cc">&rarr;</span>
-            <span class="cv">S3</span> <span class="cc">(long-term)</span>
-            <span class="cc">&rarr;</span> <span class="cs">Athena</span>
-            <span class="cc">(query/analyze)</span></span
-          >
-          <span class="lang-es"
-            ><span class="ck">CloudTrail</span>
-            <span class="cc">(90 dias)</span> <span class="cc">&rarr;</span>
-            <span class="cv">S3</span> <span class="cc">(largo plazo)</span>
-            <span class="cc">&rarr;</span> <span class="cs">Athena</span>
-            <span class="cc">(consultar/analizar)</span></span
-          >
+        <p style="font-size:0.82rem;color:#94a3b8;margin-bottom:0.75rem;">
+          <span class="lang-en">CloudTrail keeps events for <strong>90 days</strong> by default — after that they're gone. If you need to audit events older than 90 days (e.g. "who deleted that bucket 6 months ago?"), you must export to S3 and query with Athena.</span
+          ><span class="lang-es">CloudTrail guarda los eventos por <strong>90 días</strong> por defecto — después se pierden. Si necesitás auditar eventos de más de 90 días (ej: "¿quién borró ese bucket hace 6 meses?"), tenés que exportar a S3 y consultar con Athena.</span>
+        </p>
+        <div style="display:flex;align-items:stretch;gap:0;flex-wrap:wrap;margin-bottom:0.5rem;">
+          <div style="background:#1e293b;border:1px solid #475569;border-radius:8px;padding:0.6rem 0.9rem;font-size:0.82rem;color:#e2e8f0;min-width:120px;">
+            🔍 <strong>CloudTrail</strong>
+            <div style="font-size:0.72rem;color:#94a3b8;margin-top:0.2rem;"><span class="lang-en">records every API call</span><span class="lang-es">registra cada llamada API</span></div>
+            <div style="font-size:0.72rem;color:#fbbf24;margin-top:0.15rem;"><span class="lang-en">⏱ free for 90 days</span><span class="lang-es">⏱ gratis 90 días</span></div>
+          </div>
+          <div style="color:#64748b;font-size:1.1rem;padding:0 0.4rem;display:flex;align-items:center;">→</div>
+          <div style="background:#1e293b;border:1px solid #0ea5e9;border-radius:8px;padding:0.6rem 0.9rem;font-size:0.82rem;color:#7dd3fc;min-width:120px;">
+            🪣 <strong>S3</strong>
+            <div style="font-size:0.72rem;color:#94a3b8;margin-top:0.2rem;"><span class="lang-en">export trail → store as long as you want</span><span class="lang-es">exportá el trail → guardalo el tiempo que quieras</span></div>
+            <div style="font-size:0.72rem;color:#4ade80;margin-top:0.15rem;"><span class="lang-en">✓ beyond 90 days</span><span class="lang-es">✓ más de 90 días</span></div>
+          </div>
+          <div style="color:#64748b;font-size:1.1rem;padding:0 0.4rem;display:flex;align-items:center;">→</div>
+          <div style="background:#1e293b;border:1px solid #a855f7;border-radius:8px;padding:0.6rem 0.9rem;font-size:0.82rem;color:#d8b4fe;min-width:120px;">
+            🔎 <strong>Athena</strong>
+            <div style="font-size:0.72rem;color:#94a3b8;margin-top:0.2rem;"><span class="lang-en">SQL queries directly on S3 logs</span><span class="lang-es">consultas SQL directo sobre los logs en S3</span></div>
+            <div style="font-size:0.72rem;color:#94a3b8;margin-top:0.15rem;"><span class="lang-en">e.g. <code style="font-size:0.7rem;">WHERE eventName='DeleteBucket'</code></span><span class="lang-es">ej: <code style="font-size:0.7rem;">WHERE eventName='DeleteBucket'</code></span></div>
+          </div>
         </div>
       </div>
 
@@ -1679,10 +1795,43 @@
           </tr>
           <tr>
             <td>
-              <span class="lang-en">High-res data retention</span
-              ><span class="lang-es">Retencion datos alta-res</span>
+              <span class="lang-en">High-res alarm period</span
+              ><span class="lang-es">Periodo alarma alta-res</span>
             </td>
-            <td><strong>3 hours</strong></td>
+            <td>
+              <span class="lang-en"><strong>10 s</strong> or <strong>30 s</strong></span
+              ><span class="lang-es"><strong>10 s</strong> o <strong>30 s</strong></span>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <span class="lang-en">Standard alarm period</span
+              ><span class="lang-es">Periodo alarma standard</span>
+            </td>
+            <td>
+              <span class="lang-en">Multiples of <strong>60 s</strong> only</span
+              ><span class="lang-es">Solo multiplos de <strong>60 s</strong></span>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <span class="lang-en">High-res data retention (1 s granularity)</span
+              ><span class="lang-es">Retencion alta-res (granularidad 1 s)</span>
+            </td>
+            <td>
+              <span class="lang-en"><strong>3 hours</strong>, then collapses to 1-min points (kept 15 days)</span
+              ><span class="lang-es"><strong>3 horas</strong>, luego colapsa a puntos de 1 min (se retienen 15 días)</span>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <span class="lang-en">Metric retention range</span
+              ><span class="lang-es">Rango de retencion de metricas</span>
+            </td>
+            <td>
+              <span class="lang-en"><strong>1 day</strong> → <strong>15 months</strong> (or never expire)</span
+              ><span class="lang-es"><strong>1 día</strong> → <strong>15 meses</strong> (o nunca expirar)</span>
+            </td>
           </tr>
           <tr>
             <td>

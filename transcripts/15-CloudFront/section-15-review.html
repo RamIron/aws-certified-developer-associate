@@ -222,8 +222,25 @@
           <span class="lang-en">Adding more dimensions (headers, cookies, query strings) creates a more granular cache key but reduces your cache hit ratio.</span><span class="lang-es">Agregar más dimensiones (encabezados, cookies, cadenas de consulta) crea una clave de caché más granular pero reduce su relación de acierto de caché.</span>
         </div>
 
-        <!-- <span class="lang-en">Cache Policy vs Origin Request Policy</span><span class="lang-es">Política de caché vs Política de solicitud de origen</span> -->
+        <!-- Cache Policy vs Origin Request Policy -->
         <div style="font-size: 14px; font-weight: 700; color: #f8fafc; margin-bottom: 12px;"><span class="lang-en">Cache Policy vs Origin Request Policy</span><span class="lang-es">Política de caché vs Política de solicitud de origen</span></div>
+
+        <p style="font-size: 14px; color: #94a3b8; margin-bottom: 12px;">
+          <span class="lang-en">Both policies control what gets <em>forwarded to the origin</em>, but only Cache Policy controls what goes into the <em>cache key</em> (i.e., what makes two requests count as different cached objects).</span>
+          <span class="lang-es">Ambas políticas controlan qué se <em>reenvía al origen</em>, pero solo la Cache Policy controla qué entra en la <em>clave de caché</em> (es decir, qué hace que dos solicitudes se consideren objetos distintos en caché).</span>
+        </p>
+        <div class="callout warning" style="margin-bottom: 16px;">
+          <strong><span class="lang-en">Concrete example:</span><span class="lang-es">Ejemplo concreto:</span></strong><br>
+          <span class="lang-en">Imagine your site serves content in English and Spanish based on the <code>Accept-Language</code> header, and users are also authenticated via a <code>Authorization</code> token.</span>
+          <span class="lang-es">Imaginá que tu sitio devuelve contenido en inglés o español según el header <code>Accept-Language</code>, y los usuarios también se autentican con un token <code>Authorization</code>.</span>
+          <br><br>
+          <span class="lang-en">• <strong>Cache Policy — include <code>Accept-Language</code>:</strong> CloudFront caches one version per language. Two users with different languages = two separate cache entries. The language IS part of "what makes this object unique."</span>
+          <span class="lang-es">• <strong>Cache Policy — incluir <code>Accept-Language</code>:</strong> CloudFront cachea una versión por idioma. Dos usuarios con distinto idioma = dos entradas de caché distintas. El idioma SÍ forma parte de "qué hace único a este objeto".</span>
+          <br><br>
+          <span class="lang-en">• <strong>Origin Request Policy — include <code>Authorization</code>:</strong> The token is sent to your origin so it can verify the user — but it is NOT added to the cache key. If it were in the cache key, every single user would have their own cache entry and your cache hit ratio would collapse to near zero.</span>
+          <span class="lang-es">• <strong>Origin Request Policy — incluir <code>Authorization</code>:</strong> El token se envía al origen para que verifique al usuario — pero NO se agrega a la clave de caché. Si estuviera en la clave de caché, cada usuario tendría su propia entrada y el cache hit ratio caería casi a cero.</span>
+        </div>
+
         <div class="table-wrapper" style="margin-bottom: 20px;">
           <table class="data-table">
             <thead>

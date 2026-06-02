@@ -1122,6 +1122,87 @@
           </div>
         </div>
       </div>
+
+      <!-- ══════════════ IAM COMPLETE GLOSSARY ══════════════ -->
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">📖</span>
+          <h2>
+            <span class="lang-en">IAM Complete Glossary — Every "Thing" AWS Invented</span>
+            <span class="lang-es">Glosario Completo de IAM — Cada "cosa" que inventó AWS</span>
+          </h2>
+        </div>
+        <p><span class="lang-en">IAM has many overlapping concepts that are easy to confuse on the exam. This card defines each one in one line.</span><span class="lang-es">IAM tiene muchos conceptos que se superponen y se confunden en el examen. Esta card define cada uno en una línea.</span></p>
+
+        <h3><span class="lang-en">Identities (who acts)</span><span class="lang-es">Identidades (quién actúa)</span></h3>
+        <p><span class="lang-en">AWS officially classifies Users, Groups, and Roles as IAM identities. However, <strong>Groups are a special case</strong>: they cannot act on their own (no API calls, no role assumption) — they only exist to assign policies to Users in bulk. The exam sometimes treats "identity" as Users + Groups + Roles, and sometimes as Users + Roles only, depending on context.</span><span class="lang-es">AWS clasifica oficialmente a Users, Groups y Roles como identidades IAM. Sin embargo, <strong>Groups son un caso especial</strong>: no pueden actuar por sí solos (sin llamadas API, sin asumir roles) — solo existen para asignar policies a Users en masa. El examen a veces trata "identity" como Users + Groups + Roles, y a veces como Users + Roles, dependiendo del contexto.</span></p>
+        <table class="data-table">
+          <thead><tr><th><span class="lang-en">Concept</span><span class="lang-es">Concepto</span></th><th><span class="lang-en">What it is</span><span class="lang-es">Qué es</span></th><th><span class="lang-en">Can act?</span><span class="lang-es">¿Puede actuar?</span></th></tr></thead>
+          <tbody>
+            <tr><td><strong>IAM User</strong></td><td><span class="lang-en">A person or app with permanent credentials (password + access keys)</span><span class="lang-es">Una persona o app con credenciales permanentes (contraseña + access keys)</span></td><td style="color:#4ade80">✅</td></tr>
+            <tr><td><strong>IAM Group</strong></td><td><span class="lang-en">Container for Users only — assign policies once, all members inherit them. Cannot contain other groups or roles. <strong>Listed as an IAM identity by AWS, but cannot make API calls or assume roles.</strong></span><span class="lang-es">Contenedor solo para Users — asignás policies una vez, todos los miembros las heredan. No puede contener otros groups ni roles. <strong>AWS lo lista como identidad IAM, pero no puede hacer llamadas API ni asumir roles.</strong></span></td><td style="color:#f87171">❌</td></tr>
+            <tr><td><strong>IAM Role</strong></td><td><span class="lang-en">An identity assumed temporarily by AWS services, users, or external accounts. No permanent credentials — issues temporary ones via STS.</span><span class="lang-es">Una identidad que asumen temporalmente servicios de AWS, usuarios o cuentas externas. Sin credenciales permanentes — emite credenciales temporales vía STS.</span></td><td style="color:#4ade80">✅</td></tr>
+          </tbody>
+        </table>
+        <p style="font-size:0.88rem;color:#94a3b8;"><span class="lang-en">⚠ <strong>Exam trap:</strong> Permissions Boundary only applies to Users and Roles — NOT Groups, even though Groups are officially identities.</span><span class="lang-es">⚠ <strong>Trampa del examen:</strong> Permissions Boundary solo aplica a Users y Roles — NO a Groups, aunque Groups sean oficialmente identidades.</span></p>
+
+        <h3><span class="lang-en">Policy types (what's allowed)</span><span class="lang-es">Tipos de políticas (qué está permitido)</span></h3>
+        <p><span class="lang-en">Policies are JSON documents that define permissions. They differ in <em>what they attach to</em> and <em>what they control</em>.</span><span class="lang-es">Las políticas son documentos JSON que definen permisos. Difieren en <em>a qué se adjuntan</em> y <em>qué controlan</em>.</span></p>
+        <table class="data-table">
+          <thead><tr><th><span class="lang-en">Policy type</span><span class="lang-es">Tipo de policy</span></th><th><span class="lang-en">Attaches to</span><span class="lang-es">Se adjunta a</span></th><th><span class="lang-en">What it controls</span><span class="lang-es">Qué controla</span></th></tr></thead>
+          <tbody>
+            <tr><td><strong>AWS Managed Policy</strong></td><td><span class="lang-en">Users, Groups, Roles</span><span class="lang-es">Users, Groups, Roles</span></td><td><span class="lang-en">Reusable policy created and maintained by AWS (e.g. AmazonS3ReadOnlyAccess)</span><span class="lang-es">Policy reutilizable creada y mantenida por AWS</span></td></tr>
+            <tr><td><strong>Customer Managed Policy</strong></td><td><span class="lang-en">Users, Groups, Roles</span><span class="lang-es">Users, Groups, Roles</span></td><td><span class="lang-en">Reusable policy you create and control</span><span class="lang-es">Policy reutilizable que vos creás y controlás</span></td></tr>
+            <tr><td><strong>Inline Policy</strong></td><td><span class="lang-en">One specific User, Group, or Role</span><span class="lang-es">Un User, Group o Role específico</span></td><td><span class="lang-en">1-to-1 policy — deleted if the identity is deleted</span><span class="lang-es">Policy 1 a 1 — se elimina si se elimina la identidad</span></td></tr>
+            <tr><td><strong>Resource-based Policy</strong></td><td><span class="lang-en">A resource (S3 bucket, SQS queue, etc.)</span><span class="lang-es">Un recurso (bucket S3, cola SQS, etc.)</span></td><td><span class="lang-en">Who can access that resource and how. Has a <code>Principal</code> field. Supported by S3, SQS, SNS, Lambda, KMS, etc.</span><span class="lang-es">Quién puede acceder a ese recurso y cómo. Tiene campo <code>Principal</code>. Soportado por S3, SQS, SNS, Lambda, KMS, etc.</span></td></tr>
+            <tr><td><strong>Trust Policy</strong></td><td><span class="lang-en">An IAM Role (only)</span><span class="lang-es">Un IAM Role (únicamente)</span></td><td><span class="lang-en"><strong>The only resource-based policy IAM supports.</strong> Defines who can <em>assume</em> the role (which principal can call sts:AssumeRole). Every role has exactly one.</span><span class="lang-es"><strong>La única policy resource-based que soporta IAM.</strong> Define quién puede <em>asumir</em> el role (qué principal puede llamar sts:AssumeRole). Cada role tiene exactamente una.</span></td></tr>
+            <tr><td><strong>Permissions Boundary</strong></td><td><span class="lang-en">A User or Role (not Groups)</span><span class="lang-es">Un User o Role (no Groups)</span></td><td><span class="lang-en">Sets the <em>maximum</em> permissions an identity can have — even if policies grant more. Does NOT grant permissions on its own.</span><span class="lang-es">Define el <em>máximo</em> de permisos que puede tener una identidad — aunque las policies otorguen más. NO otorga permisos por sí sola.</span></td></tr>
+            <tr><td><strong>SCP (Service Control Policy)</strong></td><td><span class="lang-en">AWS Organization accounts or OUs</span><span class="lang-es">Cuentas u OUs de AWS Organizations</span></td><td><span class="lang-en">Sets the maximum permissions for entire AWS accounts — not IAM itself. Does NOT grant permissions.</span><span class="lang-es">Define el máximo de permisos para cuentas AWS enteras — no es de IAM. NO otorga permisos.</span></td></tr>
+            <tr><td><strong>ACL (Access Control List)</strong></td><td><span class="lang-en">Resources like S3 buckets/objects</span><span class="lang-es">Recursos como buckets/objetos de S3</span></td><td><span class="lang-en">Legacy cross-account access control. Not IAM — predates it. Avoid in new designs.</span><span class="lang-es">Control de acceso cross-account legacy. No es de IAM — es anterior. Evitar en diseños nuevos.</span></td></tr>
+          </tbody>
+        </table>
+
+        <h3><span class="lang-en">Quick rule for the exam</span><span class="lang-es">Regla rápida para el examen</span></h3>
+        <p><span class="lang-en">"Which is the only resource-based policy IAM supports?" → <strong>Trust Policy</strong>. Everything else in IAM (managed, inline, boundary) is identity-based.</span><span class="lang-es">"¿Cuál es la única policy resource-based que soporta IAM?" → <strong>Trust Policy</strong>. Todo lo demás en IAM (managed, inline, boundary) es identity-based.</span></p>
+      </div>
+
+      <!-- ══════════════ TRICKY QUIZ QUESTIONS ══════════════ -->
+      <div class="card" style="border-color:#7c3aed; background:#13102a;">
+        <div class="card-header">
+          <span class="badge" style="background:#7c3aed;">🧩</span>
+          <h2 style="color:#c4b5fd;">
+            <span class="lang-en">Tricky Quiz Questions</span>
+            <span class="lang-es">Preguntas Tricky del Quiz</span>
+          </h2>
+        </div>
+
+        <div style="border:1px solid #4c1d95;border-radius:8px;padding:0.85rem;margin-bottom:0.75rem;background:#0f172a">
+          <p style="color:#c4b5fd;font-weight:600;margin-bottom:0.5rem;">
+            <span class="lang-en">Q: Which is the only resource-based policy that the IAM service supports?</span>
+            <span class="lang-es">P: ¿Cuál es la única policy basada en recursos que soporta el servicio IAM?</span>
+          </p>
+          <p style="color:#a78bfa;margin-bottom:0.4rem;">
+            <strong><span class="lang-en">✅ Answer: Trust Policy</span><span class="lang-es">✅ Respuesta: Trust Policy</span></strong>
+          </p>
+          <p style="color:#94a3b8;font-size:0.88rem;margin:0;">
+            <span class="lang-en">
+              <strong>Why not the others?</strong>
+              ACL → resource-based but belongs to S3/VPC, not IAM.
+              SCP → AWS Organizations, not IAM, limits entire accounts.
+              Permissions Boundary → attaches to a User or Role (identity-based), defines max permissions but does NOT grant them.
+              Trust Policy is the one policy that lives on a Role as a resource and defines who can assume it.
+            </span>
+            <span class="lang-es">
+              <strong>¿Por qué no las otras?</strong>
+              ACL → basada en recursos pero pertenece a S3/VPC, no a IAM.
+              SCP → es de AWS Organizations, no de IAM, limita cuentas enteras.
+              Permissions Boundary → se adjunta a un User o Role (identity-based), define permisos máximos pero NO los otorga.
+              La Trust Policy es la única que vive en un Role como recurso y define quién puede asumirlo.
+            </span>
+          </p>
+        </div>
+      </div>
+
     </div>
   </body>
 </html>

@@ -426,7 +426,7 @@
             >Standard queues offer <strong>unlimited throughput</strong> (no cap on how many messages per second you can send or receive) and <strong>at-least-once delivery</strong> — meaning the same message <em>can</em> arrive more than once (your consumer must handle duplicates). Ordering is best-effort, not guaranteed.</span
           >
           <span class="lang-es"
-            >Las colas Standard ofrecen <strong>throughput ilimitado</strong> (sin limite de mensajes por segundo que podés enviar o recibir) y entrega <strong>al-menos-una-vez</strong> — el mismo mensaje <em>puede</em> llegar mas de una vez (el consumidor debe manejar duplicados). El orden es de mejor esfuerzo, no garantizado.</span
+            >Las colas Standard ofrecen <strong>velocidad de transferencia ilimitada</strong> (sin limite de mensajes por segundo que podés enviar o recibir) y entrega <strong>al-menos-una-vez</strong> — el mismo mensaje <em>puede</em> llegar mas de una vez (el consumidor debe manejar duplicados). El orden es de mejor esfuerzo, no garantizado.</span
           >
         </p>
 
@@ -789,14 +789,14 @@
             >FIFO (First-In-First-Out) queues guarantee that messages are <strong>processed in the exact order they were sent</strong> and that each message is processed <strong>exactly once</strong> — solving both problems of Standard queues (no guaranteed order, possible duplicates). Use FIFO when order matters: financial transactions, event sequencing, or any workflow where step B must happen after step A. The trade-off is lower throughput. The queue name must end with <code>.fifo</code>.</span
           >
           <span class="lang-es"
-            >Las colas FIFO garantizan que los mensajes se <strong>procesen en el orden exacto en que fueron enviados</strong> y que cada mensaje se procese <strong>exactamente una vez</strong> — resolviendo ambos problemas de las colas Standard (sin orden garantizado, posibles duplicados). Usar FIFO cuando el orden importa: transacciones financieras, secuenciacion de eventos, o cualquier flujo donde B debe ocurrir despues de A. El trade-off es menor throughput. El nombre debe terminar en <code>.fifo</code>.</span
+            >Las colas FIFO garantizan que los mensajes se <strong>procesen en el orden exacto en que fueron enviados</strong> y que cada mensaje se procese <strong>exactamente una vez</strong> — resolviendo ambos problemas de las colas Standard (sin orden garantizado, posibles duplicados). Usar FIFO cuando el orden importa: transacciones financieras, secuenciacion de eventos, o cualquier flujo donde B debe ocurrir despues de A. El trade-off es menor velocidad de transferencia. El nombre debe terminar en <code>.fifo</code>.</span
           >
         </p>
         <div class="concept-grid">
           <div class="concept-card">
             <h4>
               <span class="lang-en">Throughput</span
-              ><span class="lang-es">Throughput</span>
+              ><span class="lang-es">Velocidad de transferencia</span>
             </h4>
             <p>
               <strong>300 msg/s</strong>
@@ -983,7 +983,7 @@
         <h3><span class="lang-en">What is a Shard?</span><span class="lang-es">¿Que es un Shard?</span></h3>
         <p>
           <span class="lang-en">A stream is divided into <strong>shards</strong> — the basic unit of capacity. Each shard handles 1 MB/s write and 2 MB/s read independently. You provision the number of shards you need; more shards = more throughput. Records are assigned to shards using a <strong>partition key</strong>: all records with the same partition key always go to the same shard, which is how ordering is preserved (records within a shard are strictly ordered).</span>
-          <span class="lang-es">Un stream se divide en <strong>shards</strong> — la unidad basica de capacidad. Cada shard maneja 1 MB/s de escritura y 2 MB/s de lectura de forma independiente. Se provisiona el numero de shards necesarios; mas shards = mas throughput. Los registros se asignan a shards usando una <strong>partition key</strong>: todos los registros con la misma partition key siempre van al mismo shard, que es como se preserva el orden (los registros dentro de un shard estan estrictamente ordenados).</span>
+          <span class="lang-es">Un stream se divide en <strong>shards</strong> — la unidad basica de capacidad. Cada shard maneja 1 MB/s de escritura y 2 MB/s de lectura de forma independiente. Se provisiona el numero de shards necesarios; mas shards = mas velocidad de transferencia. Los registros se asignan a shards usando una <strong>partition key</strong>: todos los registros con la misma partition key siempre van al mismo shard, que es como se preserva el orden (los registros dentro de un shard estan estrictamente ordenados).</span>
         </p>
 
         <div class="concept-grid">
@@ -1071,7 +1071,7 @@
         </h3>
         <p>
           <span class="lang-en">KDS offers two capacity modes that determine how throughput is provisioned and how you scale when traffic grows. The example 1 → 2 → 4 → 8 illustrates the rule starting from 1 shard, but the rule applies to any starting number: if you have 6 shards, you can go to 12, then 24, etc. — you just can't more than double in a single operation.</span>
-          <span class="lang-es">KDS ofrece dos modos de capacidad que determinan como se provisiona el throughput y como se escala cuando crece el trafico. El ejemplo 1 → 2 → 4 → 8 ilustra la regla arrancando de 1 shard, pero aplica a cualquier punto de partida: si tenes 6 shards, podes ir a 12, luego a 24, etc. — simplemente no podes mas que duplicar en una sola operacion.</span>
+          <span class="lang-es">KDS ofrece dos modos de capacidad que determinan como se provisiona la velocidad de transferencia y como se escala cuando crece el trafico. El ejemplo 1 → 2 → 4 → 8 ilustra la regla arrancando de 1 shard, pero aplica a cualquier punto de partida: si tenes 6 shards, podes ir a 12, luego a 24, etc. — simplemente no podes mas que duplicar en una sola operacion.</span>
         </p>
         <div class="callout info">
           <span class="lang-en"
@@ -1080,7 +1080,7 @@
           >
           <span class="lang-es"
             ><strong>Modo Provisioned:</strong> Vos definís la cantidad de shards de antemano y pagás por shard por hora. Hay dos operaciones de resharding:<br>• <strong>Shard Splitting</strong> — divide un shard en dos, aumentando la capacidad. Cada operacion puede como máximo duplicar el total (1 → 2 → 4 → 8…).<br>• <strong>Shard Merging</strong> — combina dos shards adyacentes en uno, reduciendo capacidad y costo cuando baja el tráfico.<br>No hay forma de saltar directamente a cualquier número en un solo paso.<br><br>
-            <strong>Modo On-Demand:</strong> Sin decisiones de capacidad de antemano. KDS monitorea tu throughput y escala automaticamente basandose en el pico de uso de los <strong>ultimos 30 dias</strong>. Capacidad por defecto: 4 MB/s entrada. Se paga por GB de datos procesados en lugar de por shard — mas simple para cargas de trabajo impredecibles.</span
+            <strong>Modo On-Demand:</strong> Sin decisiones de capacidad de antemano. KDS monitorea tu velocidad de transferencia y escala automaticamente basandose en el pico de uso de los <strong>ultimos 30 dias</strong>. Capacidad por defecto: 4 MB/s entrada. Se paga por GB de datos procesados en lugar de por shard — mas simple para cargas de trabajo impredecibles.</span
           >
         </div>
         <h3>
@@ -1097,7 +1097,7 @@
             <strong>KCL (Kinesis Client Library):</strong> A library that simplifies building consumers — it handles shard enumeration, checkpointing (tracking which records were already processed), and load balancing across multiple consumer instances automatically.</span
           >
           <span class="lang-es"
-            ><strong>KPL (Kinesis Producer Library):</strong> Libreria Java que optimiza escrituras agrupando (<strong>batching</strong>) multiples registros en una sola llamada API (agregacion), maximizando el throughput del shard y reduciendo costos. Usarla cuando controlas el codigo del productor.<br><br>
+            ><strong>KPL (Kinesis Producer Library):</strong> Libreria Java que optimiza escrituras agrupando (<strong>batching</strong>) multiples registros en una sola llamada API (agregacion), maximizando la velocidad de transferencia del shard y reduciendo costos. Usarla cuando controlas el codigo del productor.<br><br>
             <strong>KCL (Kinesis Client Library):</strong> Libreria que simplifica la construccion de consumidores — maneja automaticamente la enumeracion de shards, el checkpointing (rastrear cuales registros ya fueron procesados) y el balanceo de carga entre multiples instancias consumidoras.</span
           >
         </div>
@@ -1415,7 +1415,7 @@
               </li>
               <li>
                 <span class="lang-en">Unlimited throughput</span
-                ><span class="lang-es">Throughput ilimitado</span>
+                ><span class="lang-es">Velocidad de transferencia ilimitada</span>
               </li>
               <li>
                 <span class="lang-en">FIFO ordering optional</span
@@ -1473,7 +1473,7 @@
               </li>
               <li>
                 <span class="lang-en">Shard-based throughput</span
-                ><span class="lang-es">Throughput basado en shards</span>
+                ><span class="lang-es">Velocidad de transferencia basada en shards</span>
               </li>
               <li>
                 <span class="lang-en">Ordering at shard level</span
@@ -1556,7 +1556,7 @@
             <tr>
               <td>
                 <span class="lang-en">SQS FIFO throughput</span
-                ><span class="lang-es">Throughput FIFO SQS</span>
+                ><span class="lang-es">Velocidad de transferencia FIFO SQS</span>
               </td>
               <td><strong>300 msg/s</strong> (3,000 with batch)</td>
             </tr>
@@ -1795,7 +1795,7 @@
           </p>
           <p style="color:#94a3b8;margin:0">
             <span class="lang-en">SQS Standard queues have <strong>unlimited throughput</strong> (you can send and receive as many messages per second as you need, with no cap) by design — there's no capacity to configure, no pre-warming, and no Auto Scaling to enable. The distractors borrow concepts from other services: pre-warming applies to ALB or ElastiCache, Auto Scaling applies to EC2 consumers (not the queue itself), and "increasing capacity" is not a concept in SQS. The queue side is always ready; if anything needs scaling, it's the consumers processing the messages.</span>
-            <span class="lang-es">Las colas SQS Standard tienen <strong>throughput ilimitado</strong> (podés enviar y recibir tantos mensajes por segundo como necesites, sin limite) por diseño — no hay capacidad que configurar, ni pre-warming, ni Auto Scaling que habilitar en la cola. Los distractores usan conceptos de otros servicios: pre-warming aplica a ALB o ElastiCache, Auto Scaling aplica a los consumidores EC2 (no a la cola), y "aumentar capacidad" no es un concepto de SQS. La cola siempre esta lista; si algo necesita escalar, son los consumidores que procesan los mensajes.</span>
+            <span class="lang-es">Las colas SQS Standard tienen <strong>velocidad de transferencia ilimitada</strong> (podés enviar y recibir tantos mensajes por segundo como necesites, sin limite) por diseño — no hay capacidad que configurar, ni pre-warming, ni Auto Scaling que habilitar en la cola. Los distractores usan conceptos de otros servicios: pre-warming aplica a ALB o ElastiCache, Auto Scaling aplica a los consumidores EC2 (no a la cola), y "aumentar capacidad" no es un concepto de SQS. La cola siempre esta lista; si algo necesita escalar, son los consumidores que procesan los mensajes.</span>
           </p>
         </div>
 

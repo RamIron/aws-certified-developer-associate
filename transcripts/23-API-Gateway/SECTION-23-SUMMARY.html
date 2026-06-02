@@ -15,56 +15,6 @@
 
     <div class="container">
 
-      <!-- ══════════════ WEAK POINTS ══════════════ -->
-      <div class="callout danger" style="margin-bottom: 2rem;">
-        <strong style="color:#f87171; display:block; margin-bottom:0.5rem;">
-          <span class="lang-en">⚠ Udemy Quiz — Tricky Questions</span
-          ><span class="lang-es">⚠ Quiz de Udemy — Preguntas difíciles</span>
-        </strong>
-        <ul style="list-style:none; padding:0; display:flex; flex-direction:column; gap:0.6rem;">
-          <li>
-            <strong style="color:#fca5a5;">
-              <span class="lang-en">Q: Serverless app (API GW + Lambda + DynamoDB) has exceptions and delays — what to use to detect where?</span
-              ><span class="lang-es">Q: App serverless (API GW + Lambda + DynamoDB) tiene excepciones y delays — ¿qué usás para detectar dónde?</span>
-            </strong>
-            <span style="color:#fca5a5; font-size:0.82rem;">
-              <span class="lang-en"> · Answer: <strong>X-Ray</strong> — CloudWatch Logs/Metrics tell you <em>what</em> went wrong, X-Ray tells you <em>where</em>. Key phrase: "detect where". Note: X-Ray works natively with serverless — no SDK needed for the basic flow. API GW: enable tracing on the stage. Lambda: enable "Active Tracing" in config. DynamoDB: traced automatically. The SDK is only needed for custom subsegments inside your own code.</span
-              ><span class="lang-es"> · Respuesta: <strong>X-Ray</strong> — CloudWatch te dice <em>qué</em> salió mal, X-Ray te dice <em>dónde</em>. Frase clave: "detect where". Nota: X-Ray funciona de forma nativa con serverless — no hace falta SDK para el flujo básico. API GW: activar tracing en el stage. Lambda: activar "Active Tracing" en config. DynamoDB: se traza automáticamente. El SDK solo es necesario para subsegmentos custom dentro de tu propio código.</span>
-            </span>
-          </li>
-          <li>
-            <strong style="color:#fca5a5;">
-              <span class="lang-en">Q: Authenticate users via Facebook before they can call your API Gateway — what to use?</span
-              ><span class="lang-es">Q: Autenticar usuarios via Facebook antes de llamar a API Gateway — ¿qué usás?</span>
-            </strong>
-            <span style="color:#fca5a5; font-size:0.82rem;">
-              <span class="lang-en"> · Answer: <strong>Cognito User Pools</strong> — User Pools supports Facebook/Google as federated IdPs internally: user logs in with Facebook, Cognito processes it and issues its own <strong>JWT token</strong>. API Gateway validates that JWT natively → seamless. <strong>Identity Pools</strong> returns temporary <em>AWS credentials</em> (not JWT) — used to access AWS resources directly (S3, DynamoDB), not ideal for API GW which expects tokens. <strong>Cognito Sync</strong> = sync user data across devices, not auth.</span
-              ><span class="lang-es"> · Respuesta: <strong>Cognito User Pools</strong> — User Pools soporta Facebook/Google como IdPs federados internos: el usuario hace login con Facebook, Cognito lo procesa y emite su propio <strong>JWT token</strong>. API Gateway valida ese JWT nativamente → seamless. <strong>Identity Pools</strong> devuelve <em>credenciales AWS temporales</em> (no JWT) — para acceder a recursos AWS directamente (S3, DynamoDB), no es el fit para API GW que espera tokens. <strong>Cognito Sync</strong> = sincroniza datos entre dispositivos, no es auth.</span>
-            </span>
-          </li>
-          <li>
-            <strong style="color:#fca5a5;">
-              <span class="lang-en">Q: You want to mask fields in Lambda output — what should you use?</span
-              ><span class="lang-es">Q: Querés enmascarar campos en la salida de Lambda — ¿qué usás?</span>
-            </strong>
-            <span style="color:#fca5a5; font-size:0.82rem;">
-              <span class="lang-en"> · Answer: <strong>Mapping Templates</strong> — they run at the gateway layer before the response reaches the client, and can strip, rename, or reshape any field using VTL. Lambda returns the full object; the template decides what gets through.</span
-              ><span class="lang-es"> · Respuesta: <strong>Mapping Templates</strong> — se ejecutan en la capa del gateway antes de que la respuesta llegue al cliente, y pueden eliminar, renombrar o reformatear campos con VTL. Lambda devuelve el objeto completo; el template decide qué pasa.</span>
-            </span>
-          </li>
-          <li>
-            <strong style="color:#fca5a5;">
-              <span class="lang-en">Q: API GW integrates with the following, EXCEPT…</span
-              ><span class="lang-es">Q: API GW se integra con todos, EXCEPTO…</span>
-            </strong>
-            <span style="color:#fca5a5; font-size:0.82rem;">
-              <span class="lang-en"> · Answer: <strong>AWS CloudShell</strong> — CloudShell is a browser-based CLI shell for developers, not an invocable backend. API GW can target Lambda, HTTP endpoints, and AWS services (SQS, SNS, DynamoDB, Kinesis…) — but not CloudShell, which has no invoke API.</span
-              ><span class="lang-es"> · Respuesta: <strong>AWS CloudShell</strong> — CloudShell es una shell CLI en el browser para desarrolladores, no un backend invocable. API GW puede apuntar a Lambda, endpoints HTTP y servicios AWS (SQS, SNS, DynamoDB, Kinesis…) — pero no a CloudShell, que no tiene API de invocación.</span>
-            </span>
-          </li>
-        </ul>
-      </div>
-
       <!-- ═══════════════════ CARD 1: OVERVIEW ═══════════════════ -->
       <div class="card">
         <div class="card-header">
@@ -1345,28 +1295,57 @@
         </div>
 
         <p>
-          <span class="lang-en"
-            >API key sent via
-            <code style="color: #93c5fd">x-api-key</code> header. Usage plan
-            sets <strong>throttle</strong> (req/sec) +
-            <strong>quota</strong> (req/period) per key.</span
-          ><span class="lang-es"
-            >API key enviada via header
-            <code style="color: #93c5fd">x-api-key</code>. Usage plan define
-            <strong>throttle</strong> + <strong>quota</strong> por key.</span
-          >
+          <span class="lang-en">API Gateway lets you monetize or control access
+            to your API by issuing <strong>API keys</strong> to clients. A client
+            attaches their key to every request using the HTTP header
+            <code style="color:#93c5fd">x-api-key: abc123…</code> — API Gateway
+            reads that header, identifies the caller, and decides whether to
+            allow the request based on the <strong>Usage Plan</strong> linked to
+            that key.</span>
+          <span class="lang-es">API Gateway te permite monetizar o controlar el
+            acceso a tu API emitiendo <strong>API keys</strong> a los clientes.
+            El cliente adjunta su key en cada request usando el header HTTP
+            <code style="color:#93c5fd">x-api-key: abc123…</code> — API Gateway
+            lee ese header, identifica al caller, y decide si permite el request
+            según el <strong>Usage Plan</strong> asociado a esa key.</span>
         </p>
+
+        <p>
+          <span class="lang-en">A <strong>Usage Plan</strong> is a contract that
+            caps how much a given API key can use your API:
+            <strong>throttle</strong> limits the <em>rate</em> (e.g. max 500
+            req/s with a burst of 1,000), and <strong>quota</strong> limits the
+            <em>total volume</em> over a period (e.g. max 10,000 requests per
+            month). Example: you sell a "Basic" plan (100 req/s, 50k req/month)
+            and a "Pro" plan (1,000 req/s, 1M req/month) — each customer gets
+            a different API key linked to the matching plan.</span>
+          <span class="lang-es">Un <strong>Usage Plan</strong> es un contrato
+            que limita cuánto puede usar tu API una key determinada:
+            <strong>throttle</strong> limita la <em>tasa</em> (ej: máx 500
+            req/s con burst de 1,000), y <strong>quota</strong> limita el
+            <em>volumen total</em> en un período (ej: máx 10,000 requests por
+            mes). Ejemplo: vendés un plan "Basic" (100 req/s, 50k req/mes) y
+            uno "Pro" (1,000 req/s, 1M req/mes) — cada cliente recibe una API
+            key distinta ligada al plan correspondiente.</span>
+        </p>
+
         <div class="callout danger">
           🚨
-          <span class="lang-en"
-            ><strong>Setup order:</strong> 1) Create API + require key on
-            methods + deploy → 2) Generate API keys → 3) Create usage plan → 4)
-            <strong>Associate stages + keys to usage plan</strong> ← easy to
-            forget!</span
-          ><span class="lang-es"
-            ><strong>Orden de setup:</strong> 1) API → 2) Keys → 3) Usage plan →
-            4) <strong>Asociar stages + keys</strong> ← ¡fácil de olvidar!</span
-          >
+          <span class="lang-en"><strong>Setup order — 4 steps, all required:</strong><br>
+            <strong>1)</strong> Create the API, mark methods as "API key required", deploy to a stage.<br>
+            <strong>2)</strong> Generate API keys (one per client/tier).<br>
+            <strong>3)</strong> Create a Usage Plan (set throttle + quota values).<br>
+            <strong>4)</strong> <strong>Associate the stage AND the keys to the Usage Plan.</strong><br>
+            Step 4 is the one people forget — without it the key exists but isn't
+            enforced by any plan, so limits don't apply and access may be denied.</span>
+          <span class="lang-es"><strong>Orden de setup — 4 pasos, todos necesarios:</strong><br>
+            <strong>1)</strong> Crear la API, marcar métodos como "API key required", deployar a un stage.<br>
+            <strong>2)</strong> Generar API keys (una por cliente/tier).<br>
+            <strong>3)</strong> Crear el Usage Plan (definir throttle + quota).<br>
+            <strong>4)</strong> <strong>Asociar el stage Y las keys al Usage Plan.</strong><br>
+            El paso 4 es el que se olvida — sin él la key existe pero no está
+            vinculada a ningún plan, los límites no se aplican y el acceso puede
+            ser denegado.</span>
         </div>
 
         <h3>
@@ -2742,266 +2721,191 @@
           ><span class="lang-es">WebSocket API</span>
         </h3>
         <p>
-          <span class="lang-en"
-            >Two-way persistent connection. Server can push to client without a
-            request. Use cases: chat apps, multiplayer games, live
-            trading.</span
-          ><span class="lang-es"
-            >Conexión persistente bidireccional. El servidor puede enviar datos
-            sin que el cliente los solicite.</span
-          >
+          <span class="lang-en">Unlike REST (one request → one response → done), a WebSocket keeps a <strong>persistent two-way connection</strong> open. API Gateway sits in the middle and manages every connection for you — it calls your Lambda only when something happens (connect, message, disconnect). Your Lambda is passive: it never listens, API Gateway wakes it up. Each connection gets a unique <strong>connectionId</strong> (e.g. <code style="color:#93c5fd">"abc123"</code>) assigned by API Gateway at connect time. It stays the same for the whole session, so your Lambda can use it later to push messages back to that specific client.</span>
+          <span class="lang-es">A diferencia de REST (un request → una respuesta → fin), un WebSocket mantiene una <strong>conexión persistente bidireccional</strong>. API Gateway actúa de intermediario y gestiona cada conexión — llama a tu Lambda solo cuando ocurre algo (conectar, mensaje, desconectar). Tu Lambda es pasiva: no escucha, API Gateway la despierta. Cada conexión recibe un <strong>connectionId</strong> único (ej. <code style="color:#93c5fd">"abc123"</code>) asignado por API Gateway al conectar. Se mantiene igual durante toda la sesión, así tu Lambda puede usarlo después para enviarle mensajes a ese cliente específico.</span>
         </p>
 
         <div class="vd">
-          <div
-            style="
-              display: flex;
-              flex-direction: column;
-              gap: 14px;
-              padding: 20px;
-            "
-          >
-            <!-- Row 1: connect -->
-            <div
-              style="
-                display: flex;
-                align-items: center;
-                gap: 10px;
-                flex-wrap: wrap;
-              "
-            >
-              <div
-                style="
-                  background: #0f172a;
-                  border: 1.5px solid #3b82f6;
-                  border-radius: 8px;
-                  padding: 7px 14px;
-                  color: #93c5fd;
-                  font-weight: 600;
-                  font-size: 13px;
-                  white-space: nowrap;
-                "
-              >
-                Client connects
-              </div>
-              <span style="color: #64748b; font-size: 16px; flex-shrink: 0"
-                >→</span
-              >
-              <div
-                style="
-                  background: #0f172a;
-                  border: 1.5px solid #34d399;
-                  border-radius: 8px;
-                  padding: 7px 14px;
-                  color: #34d399;
-                  font-weight: 600;
-                  font-size: 13px;
-                  white-space: nowrap;
-                "
-              >
-                $connect Lambda
-              </div>
-              <span style="color: #64748b; font-size: 16px; flex-shrink: 0"
-                >→</span
-              >
-              <div
-                style="
-                  background: #0f172a;
-                  border: 1.5px solid #fcd34d;
-                  border-radius: 8px;
-                  padding: 7px 14px;
-                  color: #fcd34d;
-                  font-weight: 600;
-                  font-size: 13px;
-                "
-              >
-                Store connectionId → DynamoDB
-              </div>
-            </div>
-            <!-- Row 2: send -->
-            <div
-              style="
-                display: flex;
-                align-items: center;
-                gap: 10px;
-                flex-wrap: wrap;
-              "
-            >
-              <div
-                style="
-                  background: #0f172a;
-                  border: 1.5px solid #3b82f6;
-                  border-radius: 8px;
-                  padding: 7px 14px;
-                  color: #93c5fd;
-                  font-weight: 600;
-                  font-size: 13px;
-                  white-space: nowrap;
-                "
-              >
-                Client sends frame
-              </div>
-              <span style="color: #64748b; font-size: 16px; flex-shrink: 0"
-                >→</span
-              >
-              <div
-                style="
-                  background: #0f172a;
-                  border: 1.5px solid #34d399;
-                  border-radius: 8px;
-                  padding: 7px 14px;
-                  color: #34d399;
-                  font-weight: 600;
-                  font-size: 13px;
-                "
-              >
-                sendMessage Lambda
-                <div
-                  style="
-                    color: #94a3b8;
-                    font-weight: 400;
-                    font-size: 11px;
-                    margin-top: 2px;
-                  "
-                >
-                  (same connectionId throughout)
-                </div>
-              </div>
-            </div>
-            <!-- Row 3: disconnect -->
-            <div
-              style="
-                display: flex;
-                align-items: center;
-                gap: 10px;
-                flex-wrap: wrap;
-              "
-            >
-              <div
-                style="
-                  background: #0f172a;
-                  border: 1.5px solid #3b82f6;
-                  border-radius: 8px;
-                  padding: 7px 14px;
-                  color: #93c5fd;
-                  font-weight: 600;
-                  font-size: 13px;
-                  white-space: nowrap;
-                "
-              >
-                Client leaves
-              </div>
-              <span style="color: #64748b; font-size: 16px; flex-shrink: 0"
-                >→</span
-              >
-              <div
-                style="
-                  background: #0f172a;
-                  border: 1.5px solid #f87171;
-                  border-radius: 8px;
-                  padding: 7px 14px;
-                  color: #fca5a5;
-                  font-weight: 600;
-                  font-size: 13px;
-                  white-space: nowrap;
-                "
-              >
-                $disconnect Lambda
-              </div>
-            </div>
-          </div>
+          <svg viewBox="0 0 780 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block">
+            <defs>
+              <marker id="wsA-blue"   markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#3b82f6"/></marker>
+              <marker id="wsA-green"  markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#34d399"/></marker>
+              <marker id="wsA-yellow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#fcd34d"/></marker>
+              <marker id="wsA-red"    markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#f87171"/></marker>
+            </defs>
+
+            <!-- ── Column headers ── -->
+            <rect x="5"   y="6" width="175" height="30" rx="5" fill="#1e293b" stroke="#3b82f6" stroke-width="1.5"/>
+            <text x="92"  y="26" text-anchor="middle" fill="#93c5fd" font-family="Inter,sans-serif" font-size="13" font-weight="700">CLIENT</text>
+
+            <rect x="260" y="6" width="255" height="30" rx="5" fill="#1e293b" stroke="#8b5cf6" stroke-width="1.5"/>
+            <text x="387" y="26" text-anchor="middle" fill="#c4b5fd" font-family="Inter,sans-serif" font-size="13" font-weight="700">API GATEWAY</text>
+
+            <rect x="590" y="6" width="185" height="30" rx="5" fill="#1e293b" stroke="#34d399" stroke-width="1.5"/>
+            <text x="682" y="20" text-anchor="middle" fill="#6ee7b7" font-family="Inter,sans-serif" font-size="12" font-weight="700">YOUR CODE</text>
+            <text x="682" y="32" text-anchor="middle" fill="#6ee7b7" font-family="Inter,sans-serif" font-size="10">Lambda + DynamoDB</text>
+
+            <!-- ── PHASE 1: CONNECT ── -->
+            <rect x="0" y="48" width="780" height="20" fill="#1e3a5f" opacity="0.85"/>
+            <text x="390" y="62" text-anchor="middle" fill="#93c5fd" font-family="Inter,sans-serif" font-size="11" font-weight="700" letter-spacing="1">PHASE 1 — CONNECT</text>
+
+            <!-- ① Client opens WebSocket → API GW -->
+            <line x1="182" y1="92" x2="258" y2="92" stroke="#3b82f6" stroke-width="1.5" marker-end="url(#wsA-blue)"/>
+            <text x="257" y="83" text-anchor="end" fill="#93c5fd" font-family="Inter,sans-serif" font-size="12">① opens WebSocket</text>
+            <!-- API GW assigns connectionId -->
+            <rect x="262" y="80" width="250" height="24" rx="4" fill="#0f172a" stroke="#8b5cf6" stroke-width="1"/>
+            <text x="387" y="96" text-anchor="middle" fill="#c4b5fd" font-family="Inter,sans-serif" font-size="12">assigns connectionId = "abc123"</text>
+
+            <!-- ② API GW → Lambda ($connect) -->
+            <line x1="514" y1="122" x2="588" y2="122" stroke="#34d399" stroke-width="1.5" marker-end="url(#wsA-green)"/>
+            <text x="589" y="103" text-anchor="end" fill="#6ee7b7" font-family="Inter,sans-serif" font-size="12">② $connect Lambda</text>
+            <!-- ③ Lambda saves to DDB -->
+            <rect x="590" y="110" width="185" height="24" rx="4" fill="#0f172a" stroke="#34d399" stroke-width="1"/>
+            <text x="682" y="126" text-anchor="middle" fill="#6ee7b7" font-family="Inter,sans-serif" font-size="12">③ save "abc123" → DynamoDB</text>
+
+            <!-- ── PHASE 2: CLIENT SENDS A MESSAGE ── -->
+            <rect x="0" y="148" width="780" height="20" fill="#052e16" opacity="0.85"/>
+            <text x="390" y="162" text-anchor="middle" fill="#6ee7b7" font-family="Inter,sans-serif" font-size="11" font-weight="700" letter-spacing="1">PHASE 2 — CLIENT SENDS A MESSAGE</text>
+
+            <!-- ④ Client → API GW with JSON -->
+            <line x1="182" y1="196" x2="258" y2="196" stroke="#3b82f6" stroke-width="1.5" marker-end="url(#wsA-blue)"/>
+            <text x="257" y="190" text-anchor="end" fill="#93c5fd" font-family="Inter,sans-serif" font-size="12">④ JSON frame</text>
+            <!-- JSON payload inside client col -->
+            <rect x="5" y="202" width="175" height="26" rx="4" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+            <text x="92" y="219" text-anchor="middle" fill="#94a3b8" font-family="'Fira Code',monospace" font-size="12">{"action":"sendMsg"}</text>
+
+            <!-- API GW routing box -->
+            <rect x="262" y="182" width="250" height="40" rx="4" fill="#0f172a" stroke="#8b5cf6" stroke-width="1"/>
+            <text x="387" y="198" text-anchor="middle" fill="#c4b5fd" font-family="Inter,sans-serif" font-size="12">reads action = "sendMsg"</text>
+            <text x="387" y="214" text-anchor="middle" fill="#c4b5fd" font-family="Inter,sans-serif" font-size="12">→ looks up route table → routes</text>
+
+            <!-- ⑤ API GW → Lambda (sendMsg) -->
+            <line x1="514" y1="238" x2="588" y2="238" stroke="#34d399" stroke-width="1.5" marker-end="url(#wsA-green)"/>
+            <text x="589" y="232" text-anchor="end" fill="#6ee7b7" font-family="Inter,sans-serif" font-size="12">⑤ sendMsg Lambda</text>
+
+            <!-- ⑥ Lambda pushes back to client (dashed) -->
+            <line x1="588" y1="260" x2="184" y2="260" stroke="#fcd34d" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#wsA-yellow)"/>
+            <text x="387" y="255" text-anchor="middle" fill="#fcd34d" font-family="Inter,sans-serif" font-size="12">⑥ POST @connections/abc123  (push to this client)</text>
+
+            <!-- ── PHASE 3: DISCONNECT ── -->
+            <rect x="0" y="280" width="780" height="20" fill="#3b0a0a" opacity="0.75"/>
+            <text x="390" y="294" text-anchor="middle" fill="#fca5a5" font-family="Inter,sans-serif" font-size="11" font-weight="700" letter-spacing="1">PHASE 3 — DISCONNECT</text>
+
+            <!-- ⑦ Client → API GW (closes) -->
+            <line x1="182" y1="328" x2="258" y2="328" stroke="#f87171" stroke-width="1.5" marker-end="url(#wsA-red)"/>
+            <text x="257" y="322" text-anchor="end" fill="#fca5a5" font-family="Inter,sans-serif" font-size="12">⑦ closes tab / drops</text>
+
+            <!-- ⑧ API GW → Lambda ($disconnect) -->
+            <line x1="514" y1="348" x2="588" y2="348" stroke="#f87171" stroke-width="1.5" marker-end="url(#wsA-red)"/>
+            <text x="589" y="342" text-anchor="end" fill="#fca5a5" font-family="Inter,sans-serif" font-size="12">⑧ $disconnect Lambda</text>
+            <!-- ⑨ Lambda deletes from DDB -->
+            <rect x="590" y="358" width="185" height="24" rx="4" fill="#0f172a" stroke="#f87171" stroke-width="1"/>
+            <text x="682" y="374" text-anchor="middle" fill="#fca5a5" font-family="Inter,sans-serif" font-size="12">⑨ delete "abc123" from DynamoDB</text>
+          </svg>
         </div>
 
         <div class="formula-block">
           <div class="f-label">
-            <span class="lang-en"
-              >Server → Client (Connection Callback URL)</span
-            ><span class="lang-es">Servidor → Cliente (URL de Callback)</span>
+            <span class="lang-en">Lambda → Client: how to push (step ⑥ above)</span>
+            <span class="lang-es">Lambda → Cliente: cómo enviar (paso ⑥ arriba)</span>
           </div>
-          <div class="f-expr">
-            POST
-            https://{id}.execute-api.{region}.amazonaws.com/{stage}/@connections/{connectionId}
-          </div>
-          <div class="f-note">
-            GET = check status · DELETE = disconnect client · Must sign with IAM
-            Sig v4
-          </div>
+          <div class="f-expr">POST https://{id}.execute-api.{region}.amazonaws.com/{stage}/@connections/{connectionId}</div>
+          <div class="f-note">GET = check if client still connected · DELETE = force-disconnect · Must sign with IAM Sig v4</div>
         </div>
 
         <h3>
-          <span class="lang-en">WebSocket Routing</span
-          ><span class="lang-es">Routing de WebSocket</span>
+          <span class="lang-en">WebSocket Routing — How API Gateway decides which Lambda to call</span>
+          <span class="lang-es">Routing de WebSocket — Cómo API Gateway decide qué Lambda llamar</span>
         </h3>
+
         <p>
-          <span class="lang-en">Each incoming WebSocket message gets <strong>routed</strong> based on a field in its JSON body. You define a <strong>Route Selection Expression</strong> (e.g. <code style="color:#93c5fd">$request.body.action</code>) — API GW reads that field from the message and looks for a matching <strong>route key</strong>. The matched route key determines which Lambda to invoke. There are two kinds of route keys: <strong>built-in</strong> (prefixed with <code style="color:#93c5fd">$</code>) and <strong>custom</strong> (your app-defined actions).</span
-          ><span class="lang-es">Cada mensaje WebSocket entrante se <strong>enruta</strong> según un campo de su JSON. Definís una <strong>expresión de selección de ruta</strong> (ej. <code style="color:#93c5fd">$request.body.action</code>) — API GW lee ese campo y busca un <strong>route key</strong> que coincida. El route key determinado indica a qué Lambda invocar. Hay dos tipos: <strong>built-in</strong> (prefijados con <code style="color:#93c5fd">$</code>) y <strong>custom</strong> (acciones definidas por tu app).</span>
+          <span class="lang-en">During phase 2, the client can send many different types of messages over the same persistent connection — join a room, send a message, leave, etc. Routing is the mechanism that tells API Gateway which Lambda to invoke for each message type. It works in 3 steps:</span>
+          <span class="lang-es">Durante la fase 2, el cliente puede enviar muchos tipos de mensajes distintos por la misma conexión persistente — unirse a una sala, enviar un mensaje, salir, etc. El routing es el mecanismo que le dice a API Gateway qué Lambda invocar para cada tipo. Funciona en 3 pasos:</span>
         </p>
+
+        <!-- Step 1 -->
+        <div class="callout info" style="margin-bottom:0.6rem">
+          <strong>Paso 1 — <span class="lang-en">The CLIENT sends a JSON message (the client writes this)</span><span class="lang-es">El CLIENTE envía un JSON (el cliente lo escribe)</span></strong><br><br>
+          <span class="lang-en">The browser/app sends a text frame over the WebSocket. You (the dev) agree with the frontend on a convention: include an <code style="color:#93c5fd">action</code> field that identifies the intent.<br>
+          Example: <code style="color:#93c5fd">{"action": "join", "room": "room42"}</code><br>
+          API Gateway receives this raw text. It does NOT know what to do with it yet.</span>
+          <span class="lang-es">El browser/app envía un texto por el WebSocket. Vos (el dev) acordás con el frontend una convención: incluir un campo <code style="color:#93c5fd">action</code> que identifique la intención.<br>
+          Ejemplo: <code style="color:#93c5fd">{"action": "join", "room": "room42"}</code><br>
+          API Gateway recibe este texto. Todavía no sabe qué hacer con él.</span>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="callout info" style="margin-bottom:0.6rem">
+          <strong>Paso 2 — <span class="lang-en">YOU configure a Route Selection Expression in API Gateway (done once, in AWS Console)</span><span class="lang-es">VOS configurás una Route Selection Expression en API Gateway (se hace una vez, en la consola de AWS)</span></strong><br><br>
+          <span class="lang-en">This tells API Gateway which JSON field to read from every incoming message. The typical value is <code style="color:#93c5fd">$request.body.action</code>.<br>
+          So when the message <code style="color:#93c5fd">{"action":"join",...}</code> arrives, API Gateway reads the <code style="color:#93c5fd">action</code> field and gets the value <code style="color:#93c5fd">"join"</code>. Now it knows what to look for.</span>
+          <span class="lang-es">Esto le dice a API Gateway qué campo JSON leer en cada mensaje entrante. El valor típico es <code style="color:#93c5fd">$request.body.action</code>.<br>
+          Entonces cuando llega el mensaje <code style="color:#93c5fd">{"action":"join",...}</code>, API Gateway lee el campo <code style="color:#93c5fd">action</code> y obtiene el valor <code style="color:#93c5fd">"join"</code>. Ahora sabe qué buscar.</span>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="callout info" style="margin-bottom:0.6rem">
+          <strong>Paso 3 — <span class="lang-en">YOU define a Route Key Table in API Gateway (also in AWS Console)</span><span class="lang-es">VOS definís una Route Key Table en API Gateway (también en la consola de AWS)</span></strong><br><br>
+          <span class="lang-en">This is a list of entries: <em>"if the action field equals X, invoke Lambda Y."</em> The route key name (<code style="color:#93c5fd">join</code>, <code style="color:#93c5fd">sendMessage</code>, <code style="color:#93c5fd">pepito</code>) is just a label — it has nothing to do with the Lambda function name. You map each label to any Lambda ARN you want.<br><br>
+          <strong>Example:</strong> route key <code style="color:#93c5fd">join</code> → Lambda ARN <code style="color:#93c5fd">arn:aws:lambda:us-east-1:123:function:HandleRoomJoin</code>. The route key is "join", the Lambda is "HandleRoomJoin" — no connection between the names.</span>
+          <span class="lang-es">Es una lista de entradas: <em>"si el campo action es igual a X, invocar el Lambda Y."</em> El nombre del route key (<code style="color:#93c5fd">join</code>, <code style="color:#93c5fd">sendMessage</code>, <code style="color:#93c5fd">pepito</code>) es solo un label — no tiene nada que ver con el nombre de la función Lambda. Mapeás cada label al ARN del Lambda que quieras.<br><br>
+          <strong>Ejemplo:</strong> route key <code style="color:#93c5fd">join</code> → Lambda ARN <code style="color:#93c5fd">arn:aws:lambda:us-east-1:123:function:HandleRoomJoin</code>. El route key es "join", el Lambda es "HandleRoomJoin" — no hay relación entre los nombres.</span>
+        </div>
+
         <div class="route-wrap">
           <div>
             <div class="route-label">
-              <span class="lang-en">Route Selection Expression</span
-              ><span class="lang-es">Expresión de selección de ruta</span>
+              <span class="lang-en">How the pieces fit together</span>
+              <span class="lang-es">Cómo encajan las piezas</span>
             </div>
-            <div class="formula-block" style="margin: 0">
-              <div class="f-expr" style="font-size: 12px">
-                $request.body.action → "join"
-              </div>
-              <div class="f-note" style="margin-top: 6px">
-                <span class="lang-en">Incoming: </span
-                ><span class="lang-es">Entrante: </span
-                ><code
-                  style="
-                    color: #93c5fd;
-                    font-family: &quot;Fira Code&quot;, monospace;
-                  "
-                  >{ "action": "join", "data": { "room": "room1234" } }</code
-                >
+            <div class="formula-block" style="margin:0">
+              <div class="f-expr" style="font-size:12px">Route Selection Expression: $request.body.action</div>
+              <div class="f-note" style="margin-top:6px">
+                <span class="lang-en">Client sends: </span><span class="lang-es">Cliente envía: </span>
+                <code style="color:#93c5fd;font-family:'Fira Code',monospace">{"action": "join", "room": "room42"}</code><br>
+                <span style="color:#6ee7b7">→ API GW reads action = "join" → looks up route table → invokes the Lambda mapped to "join"</span>
               </div>
             </div>
           </div>
           <div>
-            <div class="route-label">Route Key Table</div>
+            <div class="route-label">
+              <span class="lang-en">Route Key Table (you configure this in AWS Console)</span>
+              <span class="lang-es">Route Key Table (configurada por vos en la consola de AWS)</span>
+            </div>
             <div class="route-table">
               <div class="route-row mandatory">
                 <div class="route-key">$connect</div>
                 <div class="route-desc">
-                  <span class="lang-en">built-in — fires when client opens connection</span
-                  ><span class="lang-es">built-in — se dispara al abrir la conexión</span>
+                  <span class="lang-en"><strong>Built-in / reserved.</strong> Fires when any client opens the WebSocket — NOT triggered by the JSON body. API Gateway invokes this automatically.</span>
+                  <span class="lang-es"><strong>Built-in / reservado.</strong> Se dispara cuando un cliente abre el WebSocket — NO es disparado por el JSON body. API Gateway lo invoca automáticamente.</span>
                 </div>
               </div>
               <div class="route-row mandatory">
                 <div class="route-key">$disconnect</div>
                 <div class="route-desc">
-                  <span class="lang-en">built-in — fires when connection closes</span
-                  ><span class="lang-es">built-in — se dispara al cerrar la conexión</span>
+                  <span class="lang-en"><strong>Built-in / reserved.</strong> Fires when the connection closes (client closed tab, network drop, timeout). Also NOT triggered by JSON.</span>
+                  <span class="lang-es"><strong>Built-in / reservado.</strong> Se dispara cuando se cierra la conexión (tab cerrada, caída de red, timeout). Tampoco es disparado por JSON.</span>
                 </div>
               </div>
               <div class="route-row mandatory">
                 <div class="route-key">$default</div>
                 <div class="route-desc">
-                  <span class="lang-en">fallback — invoked when the action field doesn't match any route key (e.g. unknown action, missing field, malformed message). Use it to return a generic error or log unexpected traffic</span
-                  ><span class="lang-es">fallback — se invoca cuando el campo action no coincide con ningún route key (ej. acción desconocida, campo ausente, mensaje malformado). Usalo para devolver un error genérico o loguear tráfico inesperado</span>
+                  <span class="lang-en"><strong>Built-in / reserved.</strong> Fallback — fires when the action field value doesn't match any custom route key, or when the action field is missing entirely. Use it to return an error or log unexpected traffic.</span>
+                  <span class="lang-es"><strong>Built-in / reservado.</strong> Fallback — se dispara cuando el valor del campo action no coincide con ningún route key custom, o cuando el campo action no existe. Usalo para devolver un error o loguear tráfico inesperado.</span>
                 </div>
               </div>
               <div class="route-row custom">
                 <div class="route-key">join</div>
                 <div class="route-desc">
-                  <span class="lang-en">custom — wired to a Lambda ✅ (handles the join action)</span
-                  ><span class="lang-es">custom — conectado a un Lambda ✅ (maneja la acción join)</span>
+                  <span class="lang-en"><strong>Custom — you invented this name.</strong> Mapped to Lambda "HandleRoomJoin". Fires when client sends <code style="color:#93c5fd">{"action":"join",...}</code>. Could be called "pepito" — API GW doesn't care.</span>
+                  <span class="lang-es"><strong>Custom — vos inventaste este nombre.</strong> Mapeado al Lambda "HandleRoomJoin". Se dispara cuando el cliente envía <code style="color:#93c5fd">{"action":"join",...}</code>. Podría llamarse "pepito" — a API GW no le importa.</span>
                 </div>
               </div>
               <div class="route-row custom">
-                <div class="route-key">quit</div>
+                <div class="route-key">sendMessage</div>
                 <div class="route-desc">
-                  <span class="lang-en">custom — defined but no integration yet</span
-                  ><span class="lang-es">custom — definido pero sin integración aún</span>
-                </div>
-              </div>
-              <div class="route-row custom">
-                <div class="route-key">delete</div>
-                <div class="route-desc">
-                  <span class="lang-en">custom — defined but no integration yet</span
-                  ><span class="lang-es">custom — definido pero sin integración aún</span>
+                  <span class="lang-en"><strong>Custom — you invented this name.</strong> Mapped to Lambda "BroadcastToRoom". The Lambda name and the route key name are completely independent.</span>
+                  <span class="lang-es"><strong>Custom — vos inventaste este nombre.</strong> Mapeado al Lambda "BroadcastToRoom". El nombre del Lambda y el nombre del route key son completamente independientes.</span>
                 </div>
               </div>
             </div>
@@ -3620,6 +3524,75 @@
           </div>
         </div>
       </div>
+
+      <!-- WEAK POINTS -->
+      <div class="card" style="border-color:#7c3aed; background:#13102a;">
+        <div class="card-header">
+          <span class="badge" style="background:#7c3aed;">🧩</span>
+          <h2 style="color:#c4b5fd;"><span class="lang-en">Tricky Quiz Questions</span><span class="lang-es">Preguntas Tricky del Quiz</span></h2>
+        </div>
+        <p style="color:#94a3b8;font-size:0.85rem;margin-bottom:0.75rem">
+          <span class="lang-en">Questions from the Udemy section quiz that were tricky or required extra thought.</span>
+          <span class="lang-es">Preguntas del quiz de Udemy que fueron tricky o requirieron más análisis.</span>
+        </p>
+
+        <!-- Q1 -->
+        <div style="border:1px solid #4c1d95;border-radius:8px;padding:0.85rem;margin-bottom:0.75rem;background:#0f172a">
+          <p style="color:#fcd34d;font-weight:600;margin:0 0 0.4rem">
+            <span class="lang-en">Q: Serverless app (API GW + Lambda + DynamoDB) has exceptions and delays — what to use to detect where?</span>
+            <span class="lang-es">Q: App serverless (API GW + Lambda + DynamoDB) tiene excepciones y delays — ¿qué usás para detectar dónde?</span>
+          </p>
+          <p style="color:#f87171;margin:0 0 0.2rem">✗ <span class="lang-en">CloudWatch Logs/Metrics</span><span class="lang-es">CloudWatch Logs/Metrics</span> — <span style="font-size:0.85rem"><span class="lang-en">tells you <em>what</em> went wrong, not <em>where</em></span><span class="lang-es">te dice <em>qué</em> salió mal, no <em>dónde</em></span></span></p>
+          <p style="color:#4ade80;margin:0 0 0.4rem">✅ <strong>X-Ray</strong></p>
+          <p style="color:#94a3b8;font-size:0.85rem;margin:0">
+            <span class="lang-en">X-Ray traces the full request across services. Key phrase: "detect where". Works natively with serverless — API GW: enable tracing on the stage. Lambda: enable "Active Tracing". DynamoDB: traced automatically. SDK only needed for custom subsegments in your own code.</span>
+            <span class="lang-es">X-Ray traza el request completo entre servicios. Frase clave: "detect where". Funciona de forma nativa con serverless — API GW: activar tracing en el stage. Lambda: activar "Active Tracing". DynamoDB: se traza automáticamente. El SDK solo es necesario para subsegmentos custom en tu propio código.</span>
+          </p>
+        </div>
+
+        <!-- Q2 -->
+        <div style="border:1px solid #4c1d95;border-radius:8px;padding:0.85rem;margin-bottom:0.75rem;background:#0f172a">
+          <p style="color:#fcd34d;font-weight:600;margin:0 0 0.4rem">
+            <span class="lang-en">Q: Authenticate users via Facebook before they can call your API Gateway — what to use?</span>
+            <span class="lang-es">Q: Autenticar usuarios via Facebook antes de llamar a API Gateway — ¿qué usás?</span>
+          </p>
+          <p style="color:#f87171;margin:0 0 0.2rem">✗ <span class="lang-en">Cognito Identity Pools</span><span class="lang-es">Cognito Identity Pools</span> — <span style="font-size:0.85rem"><span class="lang-en">returns temporary AWS credentials, not JWT — for direct AWS resource access (S3, DynamoDB), not API GW</span><span class="lang-es">devuelve credenciales AWS temporales, no JWT — para acceso directo a recursos AWS (S3, DynamoDB), no para API GW</span></span></p>
+          <p style="color:#f87171;margin:0 0 0.2rem">✗ <span class="lang-en">Cognito Sync</span><span class="lang-es">Cognito Sync</span> — <span style="font-size:0.85rem"><span class="lang-en">syncs user data across devices, not auth</span><span class="lang-es">sincroniza datos entre dispositivos, no es auth</span></span></p>
+          <p style="color:#4ade80;margin:0 0 0.4rem">✅ <strong><span class="lang-en">Cognito User Pools</span><span class="lang-es">Cognito User Pools</span></strong></p>
+          <p style="color:#94a3b8;font-size:0.85rem;margin:0">
+            <span class="lang-en">User Pools supports Facebook/Google as federated IdPs: user logs in with Facebook, Cognito issues its own JWT. API Gateway validates that JWT natively.</span>
+            <span class="lang-es">User Pools soporta Facebook/Google como IdPs federados: el usuario hace login con Facebook, Cognito emite su propio JWT. API Gateway valida ese JWT nativamente.</span>
+          </p>
+        </div>
+
+        <!-- Q3 -->
+        <div style="border:1px solid #4c1d95;border-radius:8px;padding:0.85rem;margin-bottom:0.75rem;background:#0f172a">
+          <p style="color:#fcd34d;font-weight:600;margin:0 0 0.4rem">
+            <span class="lang-en">Q: You want to mask fields in Lambda output before returning to client — what should you use?</span>
+            <span class="lang-es">Q: Querés enmascarar campos en la salida de Lambda antes de devolver al cliente — ¿qué usás?</span>
+          </p>
+          <p style="color:#4ade80;margin:0 0 0.4rem">✅ <strong><span class="lang-en">Mapping Templates</span><span class="lang-es">Mapping Templates</span></strong></p>
+          <p style="color:#94a3b8;font-size:0.85rem;margin:0">
+            <span class="lang-en">Mapping Templates run at the gateway layer before the response reaches the client. Can strip, rename, or reshape any field using VTL. Lambda returns the full object; the template decides what gets through.</span>
+            <span class="lang-es">Los Mapping Templates se ejecutan en la capa del gateway antes de que la respuesta llegue al cliente. Pueden eliminar, renombrar o reformatear campos con VTL. Lambda devuelve el objeto completo; el template decide qué pasa.</span>
+          </p>
+        </div>
+
+        <!-- Q4 -->
+        <div style="border:1px solid #4c1d95;border-radius:8px;padding:0.85rem;margin-bottom:0.75rem;background:#0f172a">
+          <p style="color:#fcd34d;font-weight:600;margin:0 0 0.4rem">
+            <span class="lang-en">Q: API Gateway integrates with the following services, EXCEPT…</span>
+            <span class="lang-es">Q: API Gateway se integra con todos estos servicios, EXCEPTO…</span>
+          </p>
+          <p style="color:#4ade80;margin:0 0 0.4rem">✅ <strong>AWS CloudShell</strong></p>
+          <p style="color:#94a3b8;font-size:0.85rem;margin:0">
+            <span class="lang-en">CloudShell is a browser-based CLI shell for developers — it has no invoke API. API GW can target Lambda, HTTP endpoints, and AWS services (SQS, SNS, DynamoDB, Kinesis…) but not CloudShell.</span>
+            <span class="lang-es">CloudShell es una shell CLI en el browser para desarrolladores — no tiene API de invocación. API GW puede apuntar a Lambda, endpoints HTTP y servicios AWS (SQS, SNS, DynamoDB, Kinesis…) pero no a CloudShell.</span>
+          </p>
+        </div>
+
+      </div>
+
     </div>
   </body>
 </html>

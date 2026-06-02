@@ -126,6 +126,7 @@
       <table class="svc-table" id="svcTable">
         <thead>
           <tr>
+            <th><span class="lang-en">Section</span><span class="lang-es">Sección</span></th>
             <th>Service</th>
             <th>
               <span class="lang-en">What it does</span
@@ -150,6 +151,7 @@
     </div>
     <script>
       var rows = [
+        // §04 IAM
         {
           n: "IAM",
           c: "Security",
@@ -271,6 +273,36 @@
           u: "transcripts/11-S3/section-11-review.html",
         },
         {
+          n: "AWS CLI & SDK",
+          c: "Dev Tools",
+          ce: "Herramientas Dev",
+          d: "CLI config, credentials provider chain (env vars → profile → instance role). Signature v4 signing. IMDS v1/v2. Exponential backoff + jitter for ThrottlingException.",
+          de: "Config de CLI, cadena de proveedores de credenciales (env vars → perfil → instance role). Firma Signature v4. IMDS v1/v2. Backoff exponencial + jitter para ThrottlingException.",
+          t: "Credentials priority order, Signature v4, ThrottlingException, IMDS",
+          te: "Orden de prioridad de credenciales, Signature v4, ThrottlingException, IMDS",
+          u: "transcripts/12-AWS-CLI-SDK-IAM-Roles-Policies/section-12-review.html",
+        },
+        {
+          n: "S3 (Advanced)",
+          c: "Storage",
+          ce: "Almacenamiento",
+          d: "Lifecycle rules (transitions between storage classes). Replication: CRR and SRR. Event Notifications to SQS/SNS/Lambda/EventBridge. Transfer Acceleration. Multipart Upload. Object Tags & Metadata.",
+          de: "Reglas de ciclo de vida (transiciones entre clases). Replicacion: CRR y SRR. Notificaciones de eventos a SQS/SNS/Lambda/EventBridge. Transfer Acceleration. Multipart Upload.",
+          t: "Lifecycle transitions, CRR/SRR replication, S3 event notifications, multipart upload",
+          te: "Transiciones de ciclo de vida, replicacion CRR/SRR, notificaciones de eventos, multipart upload",
+          u: "transcripts/13-Advanced-S3/section-13-review.html",
+        },
+        {
+          n: "S3 Security",
+          c: "Storage",
+          ce: "Almacenamiento",
+          d: "Encryption: SSE-S3, SSE-KMS, SSE-C, Client-side. CORS, MFA Delete, Access Logs, Presigned URLs (time-limited access), Access Points, S3 Object Lambda (transform on read).",
+          de: "Cifrado: SSE-S3, SSE-KMS, SSE-C, lado cliente. CORS, MFA Delete, Access Logs, URLs pre-firmadas, Access Points, S3 Object Lambda (transformar al leer).",
+          t: "S3 encryption, presigned URLs, CORS, S3 Object Lambda, Access Points",
+          te: "Cifrado S3, URLs pre-firmadas, CORS, S3 Object Lambda, Access Points",
+          u: "transcripts/14-S3-Security/section-14-review.html",
+        },
+        {
           n: "CloudFront",
           c: "Networking",
           ce: "Redes",
@@ -300,6 +332,17 @@
           te: "Registro Docker, imagenes de contenedores",
           u: "transcripts/16-ECS-ECR-Fargate/section-16-review.html",
         },
+        {
+          n: "EKS",
+          c: "Containers",
+          ce: "Contenedores",
+          d: "Managed Kubernetes. AWS manages the control plane. Run K8s workloads on EC2 nodes or Fargate (serverless). Standard K8s tooling (kubectl, Helm) works as-is.",
+          de: "Kubernetes administrado. AWS gestiona el plano de control. Workloads K8s en EC2 o Fargate (serverless). Herramientas K8s estandar (kubectl, Helm) funcionan igual.",
+          t: "Kubernetes, K8s, container orchestration, Helm",
+          te: "Kubernetes, K8s, orquestacion de contenedores, Helm",
+          u: "transcripts/16-ECS-ECR-Fargate/section-16-review.html",
+        },
+        // §17
         {
           n: "Elastic Beanstalk",
           c: "Compute",
@@ -411,6 +454,17 @@
           u: "transcripts/22-DynamoDB/SECTION-22-SUMMARY.html",
         },
         {
+          n: "DAX",
+          c: "Database",
+          ce: "Base de datos",
+          d: "DynamoDB Accelerator. In-memory cache for DynamoDB. Microsecond read latency. No application code change needed. Write-through cache.",
+          de: "Acelerador de DynamoDB. Cache en memoria para DynamoDB. Latencia de lectura en microsegundos. Sin cambios en el codigo de la aplicacion. Cache write-through.",
+          t: "Cache for DynamoDB, microsecond latency, reduce DynamoDB read cost",
+          te: "Cache para DynamoDB, latencia microsegundos, reducir lecturas",
+          u: "transcripts/22-DynamoDB/SECTION-22-SUMMARY.html",
+        },
+        // §23
+        {
           n: "API Gateway",
           c: "Serverless",
           ce: "Serverless",
@@ -460,6 +514,37 @@
           te: "Orquestacion completa de pipeline CI/CD",
           u: "transcripts/24-CICD/SECTION-24-SUMMARY.html",
         },
+        {
+          n: "CodeArtifact",
+          c: "CI/CD",
+          ce: "CI/CD",
+          d: "Managed artifact/package repository (npm, PyPI, Maven, NuGet, Gradle). Caches packages from public repos. Integrates with CodeBuild.",
+          de: "Repositorio de artefactos/paquetes administrado (npm, PyPI, Maven, NuGet, Gradle). Cachea paquetes de repos publicos. Se integra con CodeBuild.",
+          t: "Package repository, npm/Maven/PyPI proxy, artifact management",
+          te: "Repositorio de paquetes, proxy npm/Maven/PyPI, gestion de artefactos",
+          u: "transcripts/24-CICD/SECTION-24-SUMMARY.html",
+        },
+        {
+          n: "CodeGuru",
+          c: "CI/CD",
+          ce: "CI/CD",
+          d: "ML-powered code analysis. Reviewer: automated PR reviews, finds bugs and security issues. Profiler: runtime performance bottlenecks and expensive code paths.",
+          de: "Analisis de codigo con ML. Reviewer: revisiones de PR automatizadas, encuentra bugs y problemas de seguridad. Profiler: cuellos de botella en runtime y rutas de codigo costosas.",
+          t: "Automated code review, ML code analysis, performance profiling",
+          te: "Revision de codigo automatica, analisis ML, profiling de performance",
+          u: "transcripts/24-CICD/SECTION-24-SUMMARY.html",
+        },
+        {
+          n: "Cloud9",
+          c: "Dev Tools",
+          ce: "Herramientas Dev",
+          d: "Browser-based cloud IDE. Pre-configured with AWS CLI and SDKs. Shareable for pair programming. Direct terminal access to its EC2 instance.",
+          de: "IDE en la nube basado en navegador. Pre-configurado con AWS CLI y SDKs. Compartible para pair programming. Acceso directo a terminal de su instancia EC2.",
+          t: "Cloud IDE, collaborative coding, no local setup",
+          te: "IDE en la nube, codificacion colaborativa, sin configuracion local",
+          u: "transcripts/24-CICD/SECTION-24-SUMMARY.html",
+        },
+        // §25
         {
           n: "SAM",
           c: "Serverless / IaC",
@@ -521,6 +606,17 @@
           u: "transcripts/28-StepFunctions-AppSync/SECTION-28-SUMMARY.html",
         },
         {
+          n: "Amplify",
+          c: "Frontend / Full-Stack",
+          ce: "Frontend / Full-Stack",
+          d: "Full-stack web & mobile platform. Amplify Hosting (CI/CD for static sites + SSR), Auth (Cognito-backed), API (AppSync/REST), DataStore (offline sync with DynamoDB).",
+          de: "Plataforma full-stack para web y mobile. Amplify Hosting (CI/CD para sitios estaticos + SSR), Auth (basado en Cognito), API (AppSync/REST), DataStore (sync offline con DynamoDB).",
+          t: "Full-stack app on AWS, static/SSR site with CI/CD, mobile backend",
+          te: "App full-stack en AWS, sitio estatico/SSR con CI/CD, backend mobile",
+          u: "transcripts/28-StepFunctions-AppSync/SECTION-28-SUMMARY.html",
+        },
+        // §29
+        {
           n: "STS",
           c: "Security",
           ce: "Seguridad",
@@ -530,6 +626,17 @@
           te: "Credenciales temporales, AssumeRole, cross-account",
           u: "transcripts/29-Advanced-Identity/SECTION-29-SUMMARY.html",
         },
+        {
+          n: "Directory Services",
+          c: "Security",
+          ce: "Seguridad",
+          d: "Three options: AWS Managed Microsoft AD (full AD in cloud, MFA, trusts), AD Connector (proxy to on-prem AD, no data in cloud), Simple AD (lightweight Samba-based, no MFA).",
+          de: "Tres opciones: AWS Managed Microsoft AD (AD completo en la nube, MFA, trusts), AD Connector (proxy al AD on-prem, sin datos en nube), Simple AD (liviano basado en Samba, sin MFA).",
+          t: "Active Directory in AWS, on-prem AD integration, Microsoft AD",
+          te: "Active Directory en AWS, integracion AD on-prem, Microsoft AD",
+          u: "transcripts/29-Advanced-Identity/SECTION-29-SUMMARY.html",
+        },
+        // §30
         {
           n: "KMS",
           c: "Security",
@@ -570,6 +677,17 @@
           te: "HSM dedicado, FIPS 140-2 Level 3, control total de claves",
           u: "transcripts/30-Security-Encryption/SECTION-30-SUMMARY.html",
         },
+        {
+          n: "Nitro Enclaves",
+          c: "Security",
+          ce: "Seguridad",
+          d: "Isolated compute environments inside EC2 with no persistent storage, no network, no interactive access. For processing highly sensitive data (PII, healthcare, financial). Only KMS can interact via attestation.",
+          de: "Entornos de computo aislados dentro de EC2 sin almacenamiento persistente, red ni acceso interactivo. Para procesar datos altamente sensibles (PII, salud, finanzas). Solo KMS puede interactuar via atestacion.",
+          t: "Isolated sensitive processing, confidential compute, no network EC2",
+          te: "Procesamiento aislado sensible, computo confidencial, EC2 sin red",
+          u: "transcripts/30-Security-Encryption/SECTION-30-SUMMARY.html",
+        },
+        // §31
         {
           n: "SES",
           c: "Other",
@@ -648,6 +766,46 @@
           de: "Config dinamica sin redeploy. Feature flags, rollout gradual, rollback via CloudWatch.",
           t: "Feature flags, dynamic config without redeploy",
           te: "Feature flags, config dinamica sin redeploy",
+          u: "transcripts/31-Other-Services/SECTION-31-SUMMARY.html",
+        },
+        {
+          n: "EventBridge",
+          c: "Messaging",
+          ce: "Mensajeria",
+          d: "Serverless event bus. Routes events from AWS services, custom apps, SaaS partners. Rules match event patterns and route to targets (Lambda, SQS, SNS, Step Functions). Scheduled events via cron.",
+          de: "Bus de eventos serverless. Enruta eventos de servicios AWS, apps custom y socios SaaS. Reglas filtran por patron y dirigen a destinos (Lambda, SQS, SNS). Eventos programados via cron.",
+          t: "Event-driven architecture, cron/schedule trigger, route AWS events",
+          te: "Arquitectura orientada a eventos, cron, enrutar eventos de AWS",
+          u: "transcripts/31-Other-Services/SECTION-31-SUMMARY.html",
+        },
+        {
+          n: "QuickSight",
+          c: "Analytics",
+          ce: "Analitica",
+          d: "Serverless BI service. Interactive dashboards and ML-powered insights. SPICE in-memory engine for fast queries. Sources: RDS, Athena, S3, Redshift, OpenSearch.",
+          de: "Servicio de BI serverless. Dashboards interactivos e insights con ML. Motor SPICE en memoria para consultas rapidas. Fuentes: RDS, Athena, S3, Redshift, OpenSearch.",
+          t: "Business intelligence, dashboards, BI visualizations",
+          te: "Business intelligence, dashboards, visualizaciones de BI",
+          u: "transcripts/31-Other-Services/SECTION-31-SUMMARY.html",
+        },
+        {
+          n: "Glue",
+          c: "Analytics",
+          ce: "Analitica",
+          d: "Serverless ETL service. Glue Data Catalog: metadata store used by Athena and Redshift. Crawlers auto-discover schema. Spark-based transformation jobs.",
+          de: "Servicio ETL serverless. Glue Data Catalog: catalogo de metadatos usado por Athena y Redshift. Crawlers descubren esquema automaticamente. Jobs de transformacion basados en Spark.",
+          t: "ETL, Data Catalog for Athena/Redshift, schema discovery",
+          te: "ETL, Data Catalog para Athena/Redshift, descubrimiento de esquema",
+          u: "transcripts/31-Other-Services/SECTION-31-SUMMARY.html",
+        },
+        {
+          n: "Kinesis Data Analytics",
+          c: "Streaming",
+          ce: "Streaming",
+          d: "Real-time stream processing using Apache Flink or SQL. Sources: Kinesis Data Streams or MSK. Windowed aggregations, anomaly detection, data enrichment.",
+          de: "Procesamiento de streams en tiempo real usando Apache Flink o SQL. Fuentes: Kinesis Data Streams o MSK. Agregaciones con ventana, deteccion de anomalias, enriquecimiento de datos.",
+          t: "Real-time stream processing, Flink, windowed aggregation",
+          te: "Procesamiento de streams en tiempo real, Flink, agregacion con ventana",
           u: "transcripts/31-Other-Services/SECTION-31-SUMMARY.html",
         },
       ];
@@ -815,8 +973,13 @@
 
       var tbody = document.getElementById("svcBody");
       rows.forEach(function (r) {
+        var secMatch = r.u.match(/\/(\d+)-/);
+        var secLabel = secMatch ? "§" + secMatch[1] : "";
         var tr = document.createElement("tr");
         tr.innerHTML =
+          '<td style="white-space:nowrap;font-size:0.78rem;font-weight:700;color:#a78bfa;letter-spacing:0.04em;">' +
+          secLabel +
+          "</td>" +
           '<td><div class="svc-name">' +
           r.n +
           '</div><div class="svc-cat"><span class="lang-en">' +
